@@ -11,9 +11,6 @@
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
         var parent, child;
 
-        analyseHierReqCtrl.PENDING_REQUEST = true;
-        analyseHierReqCtrl.PROCESSING_HIERARCHY_VIEW = false;
-
         (function loadInstitutions() { 
             switch(request.type_of_invite){
                 case REQUEST_PARENT:
@@ -48,6 +45,10 @@
             MessageService.showToast('Solicitação aceita com sucesso');
         };
 
+        analyseHierReqCtrl.showProcessingMessage = function showProcessingMessage() {
+            return request.status === 'accepted' && request.type_of_invite === REQUEST_PARENT;
+        };
+
         function confirmLinkRemoval() {
             const isParent = true;
             InstitutionService.removeLink(child.key, parent.key, isParent).then(
@@ -59,7 +60,7 @@
         function acceptRequest() {
             acceptRequestInstitution().then(function success() {
                 request.status = 'accepted';
-                if(!analyseHierReqCtrl.PROCESSING_HIERARCHY_VIEW) {
+                if(!analyseHierReqCtrl.showProcessingMessage()) {
                     analyseHierReqCtrl.close();
                 }
             });
@@ -68,8 +69,6 @@
         function acceptRequestInstitution() {
             switch(request.type_of_invite) {
                 case REQUEST_PARENT:
-                    analyseHierReqCtrl.PROCESSING_HIERARCHY_VIEW = true;
-                    analyseHierReqCtrl.PENDING_REQUEST = false;
                     return RequestInvitationService.acceptInstParentRequest(request.key);
                 case REQUEST_CHILDREN:
                     return RequestInvitationService.acceptInstChildrenRequest(request.key);

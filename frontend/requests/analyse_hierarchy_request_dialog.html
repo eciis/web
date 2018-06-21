@@ -1,6 +1,6 @@
 <md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
     <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;"
-    ng-if="analyseHierReqCtrl.PENDING_REQUEST">
+    ng-if="!analyseHierReqCtrl.showProcessingMessage()">
         <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
             <h3> Confirmar vínculo </h3>
             <p>
@@ -77,7 +77,7 @@
             </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions ng-if="analyseHierReqCtrl.PENDING_REQUEST"
+    <md-dialog-actions ng-if="!analyseHierReqCtrl.showProcessingMessage()"
         layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
             md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
@@ -87,7 +87,7 @@
 
     <!-- ACCEPTED -->
     <md-dialog-content layout="row" layout-align="center center" 
-        ng-if="analyseHierReqCtrl.PROCESSING_HIERARCHY_VIEW">
+        ng-if="analyseHierReqCtrl.showProcessingMessage()">
         <div layout="column" flex="90">
             <h3>Vínculo confirmado</h3>
             <div layout="row" layout-align="center center">
@@ -99,7 +99,7 @@
             </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions ng-if="analyseHierReqCtrl.PROCESSING_HIERARCHY_VIEW">
+    <md-dialog-actions ng-if="analyseHierReqCtrl.showProcessingMessage()">
         <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="analyseHierReqCtrl.close()">
             FECHAR
         </md-button>

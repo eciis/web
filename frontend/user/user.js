@@ -187,6 +187,10 @@ User.prototype.isInstitutionRequested = function isInstitutionRequested(institut
     return this.institutions_requested.includes(institutionKey);
 };
 
+User.prototype.updateUser = function updateUser(data) {
+    return Object.assign(this, data);
+};
+
 function updateFollowInstitution(follows, institution) {
     var index = _.findIndex(follows, ['key', institution.key]);
     follows[index].acronym = institution.acronym;

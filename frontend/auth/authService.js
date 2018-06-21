@@ -150,11 +150,8 @@
         service.reload = function reload() {
             var deferred = $q.defer();
             UserService.load().then(function success(userLoaded) {
-                var firebaseUser = {
-                    accessToken: userInfo.accessToken,
-                    emailVerified: userInfo.emailVerified
-                };
-                configUser(userLoaded, firebaseUser);
+                service.updateUser(userLoaded);
+                service.save();
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
@@ -162,6 +159,10 @@
             });
             return deferred.promise;
         };
+
+        service.updateUser = function updateUser(data){
+            return Object.assign(userInfo, data);
+        }
 
         service.sendEmailVerification = function sendEmailVerification(user) {
             var auth_user = user || authObj.$getAuth();

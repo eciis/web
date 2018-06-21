@@ -15,7 +15,7 @@
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-            console.log("--------------------------------");
+
             var deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {

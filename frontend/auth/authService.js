@@ -162,7 +162,7 @@
 
         service.updateUser = function updateUser(data){
             return Object.assign(userInfo, data);
-        }
+        };
 
         service.sendEmailVerification = function sendEmailVerification(user) {
             var auth_user = user || authObj.$getAuth();

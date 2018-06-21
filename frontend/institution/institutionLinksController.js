@@ -40,7 +40,7 @@
         };
 
         instLinksCtrl.childStatus = function childStatus(institution) {
-            return institution.parent_institution ? "confirmado" : "não confirmado";
+            return institution.parent_institution && institution.parent_institution === instLinksCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
         function loadInstitution() {

@@ -2,8 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(MessageService, EventService,
-            $state, $mdDialog, AuthService, $q) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
         var content = document.getElementById("content");
 
@@ -16,8 +15,8 @@
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-            var deferred = $q.defer();
 
+            var deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
                     loadEvents(deferred, EventService.getInstEvents);

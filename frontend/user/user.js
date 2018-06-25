@@ -90,9 +90,8 @@ User.prototype.isValid = function isValid() {
  * that are processed on the new_invite page
  */
 User.prototype.getPendingInvitation = function getPendingInvitation(){
-    console.log(this.invites);
     return _.find(this.invites, function(invite) {
-        if (invite.status === SENT && invite.type_of_invite !== 'INVITE_USER_ADM' && !invite.replyLater) {
+        if (invite.status === SENT && invite.type_of_invite !== 'INVITE_USER_ADM' && !invite.answerLater) {
             return invite;
         }
     });

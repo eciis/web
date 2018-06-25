@@ -123,10 +123,10 @@
             return instObj.getFullAddress();
         };
 
-        newInviteCtrl.replyLater = function replyLater() {
+        newInviteCtrl.answerLater = function answerLater() {
             newInviteCtrl.user.invites.forEach(invite => {
                 if(invite.key === newInviteCtrl.invite.key){
-                    invite.replyLater = true;
+                    invite.answerLater = true;
                 }
             });
             AuthService.save();

@@ -52,8 +52,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         id_not = request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')
 
-        import pdb
-        pdb.set_trace()
         enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe(), 'id': id_not})
 
         self.response.write(json.dumps(request.make()))

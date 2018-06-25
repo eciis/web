@@ -22,10 +22,16 @@ def get_notification_id(notification_type):
     
     return "00"
 
-notifications_tasks = []
+def find_task(notification_type, task_id, num_fetchs=0):
+    num_tasks = queue.fetch_statistics().tasks
+    
+    if num_fetchs <= num_tasks:
+        tasks = queue.lease_tasks_by_tag(0, 100, notification_type)
+        task = reduce(lambda found, task: task if task.name == task_id else found, tasks, None)
+        
+        return task if task else find_task(notification_type, task_id, num_fetchs+100)
 
-def get_notification_tasks(notification_type, notifications_tasks):
-    notifications_tasks += queue.lease_tasks_by_tag(10, 100, notification_type)
+    return None
 
 class NotificationsQueueManager:
     
@@ -48,15 +54,12 @@ class NotificationsQueueManager:
     @staticmethod
     def resolve_notification_task(task_id):
         notification_type = notification_id[task_id[:2]]
-        task = reduce(lambda found, task: task if task.name == task_id else found, notifications_tasks, None)
+        task = find_task(notification_type,task_id)
 
         if task:
             notification = Notification(**json.loads(task.payload))
             send_message_notification(**notification.format_notification())
             queue.delete_tasks([task])
-        else:
-            get_notification_tasks(notification_type, notifications_tasks)
-            NotificationsQueueManager.resolve_notification_task(task_id)
 
 
 class Notification(object):

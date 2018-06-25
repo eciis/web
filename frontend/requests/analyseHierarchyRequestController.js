@@ -3,25 +3,24 @@
 (function() {
     const app = angular.module('app');
 
-    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(requestedInstitution, request,
+    app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(request,
          RequestInvitationService, InstitutionService, MessageService, $mdDialog) {
         const analyseHierReqCtrl = this;
-
+    
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
         var parent, child;
 
-        
-        (function loadInstitutions() {
+        (function loadInstitutions() { 
             switch(request.type_of_invite){
                 case REQUEST_PARENT:
-                    parent = requestedInstitution;
+                    parent = request.requested_institution;
                     child = request.institution;    
                     break;
                 case REQUEST_CHILDREN:
                     parent = request.institution;
-                    child = requestedInstitution;
-                    analyseHierReqCtrl.hasToRemoveLink = child.parent_institution !== null;
+                    child = request.requested_institution;
+                    analyseHierReqCtrl.hasToRemoveLink = child.parent_institution;
             }
 
             analyseHierReqCtrl.parent = parent;
@@ -38,30 +37,33 @@
                     request.status = 'rejected';
                     $mdDialog.cancel();
                     MessageService.showToast('Solicitação rejeitada com sucesso');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
+        };
+
+        analyseHierReqCtrl.close = function close() {
+            $mdDialog.hide();
+            MessageService.showToast('Solicitação aceita com sucesso');
+        };
+
+        analyseHierReqCtrl.showProcessingMessage = function showProcessingMessage() {
+            return request.status === 'accepted' && request.type_of_invite === REQUEST_PARENT;
         };
 
         function confirmLinkRemoval() {
             const isParent = true;
-            InstitutionService.removeLink(child.key, parent.key, isParent).then(
-                function success(data) {
+            const currentParentKey = child.parent_institution.key;
+            InstitutionService.removeLink(child.key, currentParentKey, isParent).then(
+                function success() {
                     acceptRequest();
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-                }
-            );
+                });
         }
 
         function acceptRequest() {
             acceptRequestInstitution().then(function success() {
                 request.status = 'accepted';
-                $mdDialog.hide();
-                MessageService.showToast('Solicitação aceita com sucesso');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);   
+                if(!analyseHierReqCtrl.showProcessingMessage()) {
+                    analyseHierReqCtrl.close();
+                }
             });
         }
 

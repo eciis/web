@@ -2,8 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(MessageService, EventService,
-            $state, $mdDialog, AuthService, $q) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q) {
         var eventCtrl = this;
         var content = document.getElementById("content");
 
@@ -16,8 +15,8 @@
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-            var deferred = $q.defer();
 
+            var deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
                     loadEvents(deferred, EventService.getInstEvents);
@@ -36,16 +35,15 @@
         function loadEvents(deferred, getEvents) {
             getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
                 actualPage += 1;
-                moreEvents = response.data.next;
+                moreEvents = response.next;
 
-                _.forEach(response.data.events, function(event) {
+                _.forEach(response.events, function(event) {
                     eventCtrl.events.push(event);
                 });
 
                 eventCtrl.isLoadingEvents = false;
                 deferred.resolve();
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+            }, function error() {
                 deferred.reject();
                 $state.go("app.user.home");
             });

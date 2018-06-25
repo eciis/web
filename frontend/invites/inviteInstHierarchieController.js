@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, $q) {
+        MessageService, RequestInvitationService, RequestDialogService, $q) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -48,7 +48,7 @@
                 var suggestionInstName = inviteInstHierCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
                 promise.then(function success(response) {
-                    inviteInstHierCtrl.processInvite(response.data, ev);
+                    inviteInstHierCtrl.processInvite(response, ev);
                 });
                 return promise;
             }
@@ -97,8 +97,7 @@
                     deferred.resolve();
                     inviteInstHierCtrl.isLoadingSubmission = false;
                     MessageService.showToast('Convite enviado com sucesso!');
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
+                }, function error() {
                     deferred.reject();
                     inviteInstHierCtrl.isLoadingSubmission = false;
                 });
@@ -146,7 +145,7 @@
         function addParentInstitution(institutionRequestedKey) {
             var promise = InstitutionService.getInstitution(institutionRequestedKey);
             promise.then(function(response) {
-                inviteInstHierCtrl.institution.addParentInst(response.data);
+                inviteInstHierCtrl.institution.addParentInst(response);
                 inviteInstHierCtrl.hasParent = true;
             });
             return promise;
@@ -160,7 +159,7 @@
         function addChildrenInstitution(institutionRequestedKey) {
             var promise = InstitutionService.getInstitution(institutionRequestedKey);
             promise.then(function(response) {
-                inviteInstHierCtrl.institution.addChildInst(response.data);
+                inviteInstHierCtrl.institution.addChildInst(response);
             });
             return promise;
         }
@@ -176,9 +175,9 @@
             var promise = InstitutionService.getInstitution(sending_inst_key);
             promise.then(function(response) {
                if (type_of_invite === REQUEST_PARENT) {
-                    inviteInstHierCtrl.institution.addChildInst(response.data);
+                    inviteInstHierCtrl.institution.addChildInst(response);
                } else {
-                    inviteInstHierCtrl.institution.addParentInst(response.data);
+                    inviteInstHierCtrl.institution.addParentInst(response);
                     inviteInstHierCtrl.hasParent = true;
                }
             });
@@ -209,12 +208,11 @@
         function loadInstitution() {
             var promise;
             promise = InstitutionService.getInstitution(institutionKey).then(function success(response) {
-                inviteInstHierCtrl.institution = new Institution(response.data);
+                inviteInstHierCtrl.institution = new Institution(response);
                 inviteInstHierCtrl.hasParent = !_.isEmpty(inviteInstHierCtrl.institution.parent_institution);
                 getRequests();
-            }, function error(response) {
+            }, function error() {
                 $state.go('app.institution.timeline', {institutionKey: institutionKey});
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }
@@ -357,8 +355,8 @@
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
-            RequestInvitationService
-                .analyseReqDialog(event, inviteInstHierCtrl.institution, request)
+            RequestDialogService
+                .showHierarchyDialog(request, event)
                 .then(function accepted() {
                     addInstitutionToHierarchy(request);
                 });

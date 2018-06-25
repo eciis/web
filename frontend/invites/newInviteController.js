@@ -3,7 +3,7 @@
 (function() {
    var app = angular.module('app');
 
-   app.controller('NewInviteController', function NewInviteController(InstitutionService, AuthService, UserService, InviteService, $mdToast,
+   app.controller('NewInviteController', function NewInviteController(AuthService, InviteService,
     $mdDialog, MessageService, ObserverRecorderService, $state) {
         var newInviteCtrl = this;
 
@@ -64,8 +64,8 @@
                     AuthService.save();
                     $state.go("app.user.home");
                     _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
+                }, function error() {
+                    redirectFromError();
                 });
             return promise;
         };
@@ -134,8 +134,6 @@
                 } else {
                     $state.go("app.user.home");
                 }
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }
@@ -159,18 +157,18 @@
         function loadInvite(){
             observer = ObserverRecorderService.register(newInviteCtrl.user);
             newInviteCtrl.checkUserName();
-            InviteService.getInvite(newInviteCtrl.inviteKey).then(function success(response) {
-                newInviteCtrl.invite = new Invite(response.data);
-                if(newInviteCtrl.invite.status === 'sent') {
-                    institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
-                    newInviteCtrl.institution = newInviteCtrl.invite.institution;
-                } else {
-                    newInviteCtrl.isAlreadyProcessed = true;
-                }
-                newInviteCtrl.loading = false;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
-                newInviteCtrl.loading = true;
+            InviteService.getInvite(newInviteCtrl.inviteKey).then(
+                function success(response) {
+                    newInviteCtrl.invite = new Invite(response);
+                    if(newInviteCtrl.invite.status === 'sent') {
+                        institutionKey = (newInviteCtrl.invite.type_of_invite === "USER") ? newInviteCtrl.invite.institution_key : newInviteCtrl.invite.stub_institution.key;
+                        newInviteCtrl.institution = newInviteCtrl.invite.institution;
+                    } else {
+                        newInviteCtrl.isAlreadyProcessed = true;
+                    }
+                    newInviteCtrl.loading = false;
+                }, function error() {
+                    newInviteCtrl.loading = true;
             });
         }
 
@@ -198,6 +196,10 @@
             });
             return userIsMember;
         }
+
+       function redirectFromError() {
+           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go("app.user.home");
+       }
 
         loadInvite();
    });

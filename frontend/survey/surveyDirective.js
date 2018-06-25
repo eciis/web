@@ -4,8 +4,8 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, $scope, $mdDialog, $state,
-        SubmitFormListenerService) {
+    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
+                    $scope, $mdDialog, $state, SubmitFormListenerService) {
 
         var surveyCtrl = this;
         surveyCtrl.options = $scope.options;
@@ -39,6 +39,10 @@
             return surveyCtrl.post.title;
         };
 
+        surveyCtrl.isSmallScreen = function() {
+            return screen.width < 600;
+        };
+
         /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
             let id = 0;
@@ -67,15 +71,16 @@
                 var survey = createSurvey();
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
-                    surveyCtrl.posts.push(new Post(response.data));
+                    surveyCtrl.posts.push(new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
+                    const postAuthorPermissions = ["remove_post"];
+                    surveyCtrl.user.addPermissions(postAuthorPermissions, response.key);
                     $mdDialog.hide();
                     unobserveNewPost();
-                }, function error(response) {
+                }, function error() {
                     AuthService.reload().then(function success() {
                         $mdDialog.hide();
-                        MessageService.showToast(response.data.msg);
                         $state.go("app.user.home");
                     });
                 });

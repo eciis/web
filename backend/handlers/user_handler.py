@@ -3,13 +3,13 @@
 
 import json
 
-from models import Invite
+from models import Invite, RequestUser
 from utils import Utils
 from util import login_required
 from models import User
 from utils import json_response
 from models import InstitutionProfile
-
+from service_messages import send_message_notification
 from util import JsonPatch
 
 from . import BaseHandler
@@ -29,6 +29,13 @@ def get_invites(user_email):
 
     return invites
 
+def get_requests(user_key):
+    """Query to return the list of requests that this user sent to institutions."""
+    institutions_requested = []
+    queryRequests = RequestUser.query(RequestUser.sender_key == user_key, RequestUser.status == 'sent')
+    institutions_requested = [request.institution_key.urlsafe() for request in queryRequests]
+
+    return institutions_requested
 
 def define_entity(dictionary):
     """Method of return entity class for create object in JasonPacth."""
@@ -36,10 +43,23 @@ def define_entity(dictionary):
 
 def remove_user_from_institutions(user):
     """Remove user from all your institutions."""
-    for institution_key in user.institutions:
+    for i in range(len(user.institutions) -1, -1, -1):
+        institution_key = user.institutions[i]
         institution = institution_key.get()
         institution.remove_member(user)
-        institution.unfollow(user.key)
+
+def notify_admins(user):
+    """Notify the admins about the user removal."""
+    for institution_key in user.institutions:
+        admin_key = institution_key.get().admin
+        notification_message = user.create_notification_message(
+            user.key, institution_key)
+        send_message_notification(
+            receiver_key=admin_key.urlsafe(),
+            notification_type='DELETED_USER',
+            entity_key=institution_key.urlsafe(),
+            message=notification_message
+        )
 
 
 class UserHandler(BaseHandler):
@@ -58,6 +78,7 @@ class UserHandler(BaseHandler):
 
         user_json = user.make(self.request)
         user_json['invites'] = get_invites(user.email)
+        user_json['institutions_requested'] = get_requests(user.key)
 
         self.response.write(json.dumps(user_json))
 
@@ -71,6 +92,7 @@ class UserHandler(BaseHandler):
         """
         user.state = 'inactive'
 
+        notify_admins(user)
         remove_user_from_institutions(user)
         user.disable_account()
 

@@ -11,9 +11,8 @@
 
         function loadEvent(eventKey) {
             EventService.getEvent(eventKey).then(function success(response) {
-                eventCtrl.event = response.data;
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                eventCtrl.event = response;
+            }, function error() {
                 $state.go("app.user.home");
             });
         }
@@ -23,10 +22,8 @@
             post.shared_event = event.key;
             PostService.createPost(post).then(function success(response) {
                 if(eventCtrl.posts)
-                    eventCtrl.posts.push(response.data);
+                    eventCtrl.posts.push(response);
                 MessageService.showToast('Evento compartilhado com sucesso!');
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
         };
 

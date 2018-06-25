@@ -84,8 +84,8 @@ class InstitutionHandler(BaseHandler):
         """Handle GET Requests."""
         obj_key = ndb.Key(urlsafe=url_string)
         obj = obj_key.get()
-        Utils._assert(obj.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(obj.state == "inactive",
+                      "This institution is not active", NotAuthorizedException)
         assert type(obj) is Institution, "Key is not an Institution"
         institution_json = Utils.toJson(obj, host=self.request.host)
         if(obj.admin):
@@ -112,8 +112,8 @@ class InstitutionHandler(BaseHandler):
         data = self.request.body
         institution = ndb.Key(urlsafe=institution_key).get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         JsonPatch.load(data, institution)
         institution.put()

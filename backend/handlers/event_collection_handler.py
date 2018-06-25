@@ -50,8 +50,8 @@ class EventCollectionHandler(BaseHandler):
         institution_key = ndb.Key(urlsafe=data['institution_key'])
         institution = institution_key.get()
 
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted", NotAuthorizedException)
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active", NotAuthorizedException)
 
         event = Event.create(data, user, institution)
         event.put()

@@ -76,10 +76,14 @@ class PostHandler(BaseHandler):
         """Handler PATCH Requests."""
         data = self.request.body
 
+        user.check_permission("edit_post",	
+                                "User is not allowed to edit this post",	
+                               post_urlsafe)
+
         post = ndb.Key(urlsafe=post_urlsafe).get()
 
-        Utils._assert(not post.can_edit(user),
-                        "The user can not update this post",
+        Utils._assert(not post.can_edit(),
+                        "This post cannot be updated",
                         NotAuthorizedException)
 
         """Apply patch."""

@@ -62,8 +62,8 @@ class Comment(ndb.Model):
             raise FieldException("Institution can not be empty")
 
         institution = ndb.Key(urlsafe=data['institution_key']).get()
-        Utils._assert(institution.state == 'inactive',
-                      "The institution has been deleted",
+        Utils._assert(not institution.is_active(),
+                      "This institution is not active",
                       NotAuthorizedException)
         comment = Comment()
         comment.text = data['text']
@@ -340,13 +340,12 @@ class Post(PolyModel):
         has_likes = len(self.likes) > 0
         return has_comments or has_likes
     
-    def can_edit(self, user):
+    def can_edit(self):
         """Check if the post can be edit by the user."""
         is_published = self.state == 'published'
         is_inst_active = self.institution.get().state == 'active'
-        user_has_permission = user.has_permission("edit_post",
-                                self.key.urlsafe())        
-        return not has_activity and is_published and is_inst_active and user_has_permission
+                                
+        return (not self.has_activity()) and is_published and is_inst_active
 
     def add_subscriber(self, user):
         """Add a subscriber."""

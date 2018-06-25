@@ -21,15 +21,17 @@
         </div>
     </md-input-container>
   </div> 
-  <md-actions layout="row" layout-align="space-between-center" ng-if="surveyCtrl.isTyping()">
-      <md-switch ng-model="surveyCtrl.multipleChoice" required> MULTIPLA ESCOLHA
-      </md-switch>
-      <div style="right: 0">
-        <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'default-teal-500'}">CANCELAR
-        </md-button>
-        <md-button title="Enviar" type="submit" md-colors="{background: 'default-teal-500'}">POSTAR
-        </md-button>
-      </div>
-  </md-actions>
+  <md-card-actions style="text-align: right;"
+  layout="column" ng-if="surveyCtrl.isTyping()">
+    <md-switch ng-model="surveyCtrl.multipleChoice" style="margin-top: -25px; margin-left: -8px;" required>
+      <p ng-class="surveyCtrl.isSmallScreen() ? 'sm-multiple-choice': ''">MULTIPLA ESCOLHA</p>
+    </md-switch>
+    <div layout="row" style="margin-left: auto;" layout-align="end end">
+      <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" md-colors="{color: 'default-teal-500'}">CANCELAR
+      </md-button>
+      <md-button title="Enviar" type="submit" md-colors="{background: 'default-teal-500'}">POSTAR
+      </md-button>
+    </div>
+  </md-card-actions>
 </form>
 

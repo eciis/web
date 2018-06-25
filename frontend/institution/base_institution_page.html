@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 11em; overflow: hidden;">
-                    <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%;"/>
+                    <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
                     <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
                         layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>
                 </div>
@@ -85,9 +85,11 @@
                                     <div layout="row">
                                         <md-button flex class="md-primary md-raised md-hue-2" md-colors="{background: 'teal-500'}"
                                         ng-if="!institutionCtrl.isMember" style="text-align: left; margin: 8px;"
+                                        ng-disabled="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)"
                                         ng-click="institutionCtrl.requestInvitation($event)">
                                             <md-icon>add_to_photos</md-icon>
-                                            Solicitar vínculo
+                                            <span ng-if="!institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Solicitar vínculo</span>
+                                            <span ng-if="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Vínculo pendente</span>
                                         </md-button>
                                     </div>
                                     <!-- Menu -->

@@ -21,8 +21,6 @@
         */
         var onLogoutListeners = [];
 
-        var REFRESH_USER_EVENT = 'ACCEPTED_LINK';
-
         var versionAvailable = false;
 
         Object.defineProperty(service, 'user', {
@@ -152,17 +150,18 @@
         service.reload = function reload() {
             var deferred = $q.defer();
             UserService.load().then(function success(userLoaded) {
-                var firebaseUser = {
-                    accessToken: userInfo.accessToken,
-                    emailVerified: userInfo.emailVerified
-                };
-                configUser(userLoaded, firebaseUser);
+                service.updateUser(userLoaded);
+                service.save();
                 deferred.resolve(userInfo);
             }, function error(error) {
                 MessageService.showToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
+        };
+
+        service.updateUser = function updateUser(data){
+            return Object.assign(userInfo, data);
         };
 
         service.sendEmailVerification = function sendEmailVerification(user) {
@@ -192,12 +191,6 @@
             if (userInfo) return userInfo.emailVerified;
             return false;
         };
-
-        function eventListener() {
-            $rootScope.$on(REFRESH_USER_EVENT, function (event) {
-                service.reload();
-            })
-        }
         
         /**
         * Execute each function stored to be thriggered when user logout
@@ -244,6 +237,5 @@
         }
 
         init();
-        eventListener();
     });
 })();

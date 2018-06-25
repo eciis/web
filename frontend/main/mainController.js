@@ -2,9 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $mdDialog, $mdToast, $state,
-            AuthService, $rootScope, $q, RequestInvitationService,
-            InviteService, $mdMenu, $window) {
+    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
+            RequestInvitationService, $mdMenu, $window) {
         var mainCtrl = this;
         var url_report = "http://support.plataformacis.org/report";
 

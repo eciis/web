@@ -1,0 +1,63 @@
+<md-dialog flex-gt-sm="{{requestCtrl.getSizeGtSmDialog()}}" flex-sm="80" flex-xs="100">
+    <md-dialog-content ng-if="!requestCtrl.isRejecting" class="md-dialog-content" layout-gt-sm="column" layout-padding>
+      <h4 style="margin: 0;">Confirmar Vínculo</h4>
+      <p style="margin: 0;">
+        {{requestCtrl.isRequestUser() ? "Um usuário da plataforma" : "Uma instituição"}} solicitou vincular-se a uma das instituições que você administra.
+         Clique em confirmar para aceitar ou rejeitar para recusar vinculo.
+      </p>
+      <div layout="column">
+        <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
+          <div>
+            <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{requestCtrl.parent.photo_url || 'app/images/institution.png'}}" 
+              alt="{{requestCtrl.parent.name}}"></img>
+          </div>
+          <div layout="column" layout-align="center start">
+            <b>{{ requestCtrl.parent.name }}</b>
+            <span>{{ requestCtrl.parent.email }}</span>
+          </div>
+        </div>
+        <div layout="row">
+          <div flex="5" layout="row" layout-align="center">
+            <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
+          </div>
+          <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
+              <div>
+                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ requestCtrl.children.photo_url || 'app/images/avatar.png'}}"
+                  alt="{{ requestCtrl.children.name }}"></img>
+              </div>
+              <div layout="column" layout-align="center start">
+                <b hide-gt-xs> {{ requestCtrl.getChildrenInstName(25)}}</b>
+                <b hide-xs>{{ requestCtrl.getChildrenInstName(60)}}</b>
+                <span hide-gt-xs>{{ requestCtrl.getChildrenInstEmail(20) }}</span>
+                <span hide-xs>{{ requestCtrl.getChildrenInstEmail(50) }}</span>
+                <span>{{ requestCtrl.children.office }}</span>
+              </div>
+          </div>
+        </div>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions ng-if="!requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
+      <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-primary" md-colors="{color: 'default-teal-500'}">
+        Cancelar
+      </md-button>
+      <md-button ng-click="requestCtrl.acceptRequest()" class="md-primary"
+        md-colors="{color: 'default-teal-500'}">
+        Confirmar
+      </md-button>
+    </md-dialog-actions>
+
+    <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content" layout-gt-sm="column" layout-padding>
+      <h4 style="margin: 0;">Rejeitar Vínculo</h4>
+      <p>Tem certeza que deseja rejeitar?</p>
+    </md-card-content>
+    <md-dialog-actions ng-if="requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
+      <md-button class="md-primary" ng-click="requestCtrl.cancelReject()"
+        md-colors="{color: 'default-teal-500'}">
+        Cancelar
+      </md-button>
+      <md-button class="md-primary" ng-click="requestCtrl.confirmReject()"
+        md-colors="{color: 'default-teal-500'}">
+        Confirmar
+      </md-button>
+    </md-dialog-actions>
+</md-dialog>

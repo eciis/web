@@ -40,19 +40,18 @@
         };
 
         instLinksCtrl.childStatus = function childStatus(institution) {
-            return institution.parent_institution ? "confirmado" : "não confirmado";
+            return institution.parent_institution && institution.parent_institution === instLinksCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
-                instLinksCtrl.institution = response.data;
-                var parentInstitution = response.data.parent_institution;
+                instLinksCtrl.institution = response;
+                var parentInstitution = response.parent_institution;
                 instLinksCtrl.parentInstitution = parentInstitution && parentInstitution.state === "active" ? parentInstitution : {};
-                instLinksCtrl.childrenInstitutions = response.data.children_institutions.filter(inst => inst.state === "active");
+                instLinksCtrl.childrenInstitutions = response.children_institutions.filter(inst => inst.state === "active");
                 instLinksCtrl.isLoadingInsts = false;
-            }, function error(response) {
+            }, function error() {
                 instLinksCtrl.isLoadingInsts = true;
-                MessageService.showToast(response.data.msg);
             });
         }
 

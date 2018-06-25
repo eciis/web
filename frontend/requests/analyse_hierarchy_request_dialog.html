@@ -1,13 +1,19 @@
 <md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
-    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1.5em;">
-        <h3 ng-if="!analyseHierReqCtrl.hasToRemoveLink">
-            Confirmar vínculo
-        </h3>
+    <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;"
+    ng-if="!analyseHierReqCtrl.showProcessingMessage()">
+        <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
+            <h3> Confirmar vínculo </h3>
+            <p>
+                Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de
+                <b>{{ analyseHierReqCtrl.parent.name }}</b>, clique em Confirmar. Caso queira rejeitar, clique em cancelar.
+            </p>
+        </div>
         <div ng-if="analyseHierReqCtrl.hasToRemoveLink">
             <h3>Confirmar remoção de vínculo existente</h3>
             <p>
                 Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de <b>{{ analyseHierReqCtrl.parent.name }}</b>
-                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito.
+                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito. Clique em Confirmar,
+                para prosseguir, ou em Cancelar, para rejeitar o pedido. 
             </p>
             <h4>Vínculo Atual</h4>
             <div layout="column">
@@ -18,7 +24,7 @@
                 </div>
                 <div layout="column" layout-align="center start">
                     <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b>
-                    <span>{{ analyseHierReqCtrl.child.institutional_email }}</span>
+                    <span>{{ analyseHierReqCtrl.child.parent_institution.institutional_email }}</span>
             </div>
                 </div>
                 <div layout="row">
@@ -71,10 +77,31 @@
             </div>
         </div>
     </md-dialog-content>
-    <md-dialog-actions layout="row" layout-align="end center" layout-wrap>
+    <md-dialog-actions ng-if="!analyseHierReqCtrl.showProcessingMessage()"
+        layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
-            md-colors="{color: 'default-teal-500'}"> Rejeitar </md-button>
+            md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
             md-colors="{color: 'default-teal-500'}"> Confirmar </md-button>
+    </md-dialog-actions>
+
+    <!-- ACCEPTED -->
+    <md-dialog-content layout="row" layout-align="center center" 
+        ng-if="analyseHierReqCtrl.showProcessingMessage()">
+        <div layout="column" flex="90">
+            <h3>Vínculo confirmado</h3>
+            <div layout="row" layout-align="center center">
+                <div style="margin-right: 16px;">
+                    <img title="{{analyseHierReqCtrl.invite.institution.name}}" ng-src="{{analyseHierReqCtrlanalyseHierReqCtrl.invite.institution.photo_url || '/app/images/institution.png'}}" class="md-avatar" style="width: 80px; height: 80px; max-width: 100px;"/>
+                </div>
+                <span>Estamos processando suas permissões. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição
+                    e toda sua hierarquia na Plataforma Virtual CIS.</span>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions ng-if="analyseHierReqCtrl.showProcessingMessage()">
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="analyseHierReqCtrl.close()">
+            FECHAR
+        </md-button>
     </md-dialog-actions>
 </md-dialog>

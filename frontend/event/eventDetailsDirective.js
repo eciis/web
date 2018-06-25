@@ -46,8 +46,6 @@
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
                 eventCtrl.event.state = "deleted";
-            }, function error(response) {
-                MessageService.showToast(response.data.msg);
             });
             return promise;
         }

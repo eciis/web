@@ -35,7 +35,6 @@
 
             <md-radio-button value="INSTITUTION_PARENT" class="md-primary">É a instituição superior</md-radio-button>
             <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma subordinada de {{inviteInstHierCtrl.institution.name}}</md-radio-button>
-            <md-radio-button ng-disabled="true" value="suggestion_invite" class="md-primary">Nenhuma</md-radio-button>
 
           </md-radio-group>
           <section layout="row" layout="column" layout-align="end center" layout-wrap>
@@ -197,7 +196,7 @@
                     <h3 style="color: red">{{inviteInstHierCtrl.showMessage(request)}}</h3>
                   </div>
                 </div>
-                <div flex layout-align="end center" hide show-gt-xs>
+                <div layout="row" flex layout-align="end center" hide show-gt-xs>
                   <p class="hollow-button" md-colors="{color: 'teal-500'}">ANALISAR</p>
                 </div>
               </md-list-item>

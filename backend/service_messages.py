@@ -39,6 +39,25 @@ def create_message(sender_key, current_institution_key=None, receiver_institutio
 
     return json.dumps(message)
 
+def create_system_message(receiver_institution_key=None):
+    """Create a message of system notification.
+
+        Keyword arguments:
+        receiver_institution_key -- the institution that will receive the notification
+    """
+
+    message = {
+        'from': {
+            'name': 'Plataforma Virtual CIS',
+            'photo_url': 'https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/admin_email%2FLOGo.png?alt=media&token=fbb74261-4b24-42aa-b67f-be36577c48df',
+        },
+        'to': {
+            'institution_name': (receiver_institution_key and receiver_institution_key.get().name) or ''
+        },
+    }
+
+    return json.dumps(message)
+
 def create_entity(entity_key):
     """Create a short entity with only key."""    
     entity = {

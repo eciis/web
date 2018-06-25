@@ -10,7 +10,6 @@
             "auth/email-already-in-use": "Email informado já está cadastrado.",
             "auth/wrong-password": "Senha incorreta ou usuário não possui senha.",
             "auth/user-not-found": "Usuário não existe.",
-            "Error! The institution has been deleted": "A instituição está inativa.",
             "Error! The user must be interested at his post": "O autor deve ser interessado em seu post.",
             "Error! The end time must be after the current time": "A data final do evento deve ser posterior a data atual!",
             "Error! The event basic data can not be changed after it has ended": "As informações básicas do evento não podem ser alteradas após sua data de termino!",
@@ -20,7 +19,7 @@
             "Error! This post has been deleted": "Esse post foi removido.",
             "Error! User already liked this comment.": "O usuário já curtiu esse comentário.",
             "The invites are being processed.": "Os convites estão sendo processados.",
-            "Error! The institution is not active.": "Essa instituição não está ativa.",
+            "Error! This institution is not active.": "Essa instituição não está ativa.",
             "Error! Invalid Current Institution! User is not an active member.": "Usuário não é um membro ativo.",
             "Error! This invitation has already been processed": "Esse convite já foi processado.",
             "Error! Invitation type not allowed": "Tipo de convite não permitido.",
@@ -36,7 +35,10 @@
             "Error! Circular hierarchy not allowed": "Não é permitido criar dependencia circular entre instituições.",
             "Error! The requested institution has already been invited": "Esta instituição já foi convidada, mas seu convite está pendente",
             "Error! You've already voted in this survey": "Você já votou nessa enquete",
-            "Error! The user can not update this post": "O usuário não pode editar o post"
+            "Error! User is not allowed to edit this post": "O usuário não tem permissão para editar essa publicação.",
+            "Error! This post cannot be updated": "A publicação não pode ser editada.",
+            "Error! You don't have permission to publish post.": "Você não tem permissão para publicar post nesta instituição",
+            "Error! The user can not remove this post": "Você não tem permissão para remover esse post"
         };
 
         service.showToast = function showToast(message) {

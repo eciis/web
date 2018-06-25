@@ -79,7 +79,7 @@
             var deferred = $q.defer();
 
             InstitutionService.getInstitution(institution.id).then(function success(response) {
-                userInactiveCtrl.institutionSelect = response.data;
+                userInactiveCtrl.institutionSelect = response;
                 userInactiveCtrl.hasInstSelect = true;
                 userInactiveCtrl.showFullInformation(institution);
                 userInactiveCtrl.request = {
@@ -140,7 +140,7 @@
             var deferred = $q.defer();
             clearProperties();
             InstitutionService.searchInstitutions(userInactiveCtrl.finalSearch, ACTIVE, 'institution').then(function success(response) {
-                userInactiveCtrl.institutions = response.data;
+                userInactiveCtrl.institutions = response;
                 deferred.resolve(response);
             });
             return deferred.promise;

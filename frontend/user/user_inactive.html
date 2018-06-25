@@ -17,11 +17,13 @@
                         Busque uma instituição que você faz parte.</p>
                     <div md-theme="input" class="search-field" style="margin: 0px; height: 48"
                         ng-if="!userInactiveCtrl.choicedInst">
-                        <form ng-submit="userInactiveCtrl.showMenu($event)" style="margin-bottom: 0px; height: 48">
+                        <form ng-submit="userInactiveCtrl.showMenu($event)" layout="row" style="margin-bottom: 0px; height: 48">
                             <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48">
-                            <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off">
-                            <md-icon class="material-icons">&#xE8B6;</md-icon>
+                                <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off" required>
                             </md-input-container>
+                            <md-button type="submit" class="md-fab md-mini md-primary" md-colors="{'background': 'grey-50'}">
+                                <md-icon md-colors="{'background': 'grey-100'}">&#xE8B6;</md-icon>
+                            </md-button>
                         </form>
                     </div>
                     <md-content style="max-height: 300px;" class="custom-scrollbar" layout="column"
@@ -98,7 +100,7 @@
                     <!-- End page of request -->
                     <div layout="column" ng-if="userInactiveCtrl.isFinished">
                         <div style="font-weight: 500; text-align: center;">
-                            <p>Sua solicitação de convite foi enviada e esta em análise pelo administrador
+                            <p>Sua solicitação de convite foi enviada e está em análise pelo administrador
                             de sua instituição na Plataforma CIS.</p>
                             <p>Você receberá a confirmação em seu email.</p>
                         </div>

@@ -79,8 +79,7 @@
                     .then(function success() {
                         $mdDialog.hide(event);
                         MessageService.showToast('Evento editado com sucesso.');
-                    }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                    }, function error() {
                         $mdDialog.hide(event);
                     });
             } else {
@@ -301,13 +300,12 @@
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
                     $mdDialog.hide();
-                    dialogCtrl.events.push(response.data);
+                    dialogCtrl.events.push(response);
                     MessageService.showToast('Evento criado com sucesso!');
-                    dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.data.key);
-                }, function error(response) {
+                    dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
+                }, function error() {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;
-                    MessageService.showToast(response.data.msg);
                     $state.go("app.user.events");
                 });
             } else {

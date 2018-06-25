@@ -31,9 +31,10 @@
           </p>
           <p style="margin: 0">
             {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
-            <md-button class="sm-icon-button xs-icon-button xs-edit-icon-justify"
-            ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}"
-            style="margin-top: 4px; margin-left: 4px;">
+            <md-button ng-if="postDetailsCtrl.showButtonEdit()"  
+              class="sm-icon-button xs-icon-button xs-edit-icon-justify"
+              ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}"
+              style="margin-top: 4px; margin-left: 4px;">
               <md-icon>edit</md-icon>
             </md-button>
           </p>
@@ -133,9 +134,9 @@
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>
       <p></p>
-      <a ng-if="!postDetailsCtrl.isSharedSurvey()"
-      href class="md-text hyperlink" ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
-        <span>{{ postDetailsCtrl.post.shared_post.title }}</span>
+      <a ng-if="!postDetailsCtrl.isSharedSurvey()" href class="md-title hyperlink" 
+        ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
+        <span class="md-headline">{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
       <p class="text" ng-if="postDetailsCtrl.showSharedPostText()"
         ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>

@@ -149,6 +149,7 @@ class RequestInstitutionChildrenTest(TestBase):
             'type_of_invite': 'REQUEST_INSTITUTION_CHILDREN',
             'institution_key': self.institution.key.urlsafe(),
             'institution': self.institution.make(RequestInstitutionChildren.INST_PROPS_TO_MAKE),
+            'requested_institution': self.other_institution.make(RequestInstitutionChildren.INST_PROPS_TO_MAKE),
             'institution_admin': {
                 'name': self.institution.name
             },

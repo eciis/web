@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, UserService, request, $state, $mdDialog) {
+        MessageService, InstitutionService, request, $state, $mdDialog) {
         var requestController = this;
 
         var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
@@ -27,10 +27,7 @@
         };
 
         function refreshUser() {
-            UserService.load().then(function success(response) {
-                requestController.user.permissions = response.permissions;
-                AuthService.save();
-            });
+            AuthService.reload();
         }
 
         function resolveRequest() {

@@ -13,7 +13,7 @@
 
     var requestInvitationService, inviteService, mdDialog,
     service, request, event, notification, dialogProperties,
-    httpBackend;
+    httpBackend, institution, requestedInst;
 
     beforeEach(module('app'));
 
@@ -25,7 +25,18 @@
         inviteService = InviteService;
         mdDialog = $mdDialog;
         httpBackend = $httpBackend;
+
         event = {};
+
+        institution = {
+            key: 'inst-key',
+            state: 'active'
+        };
+
+        requestedInst = {
+            key: 'requestedInst-key',
+            state: 'active'
+        };
 
         dialogProperties = {
             locals: {}
@@ -33,8 +44,11 @@
 
         request = new Invite({
             status: 'sent',
-            type_of_invite: '',
-            key: 'request-key'
+            type_of_invite: 'SOME_TYPE',
+            key: 'request-key',
+            institution: institution,
+            requested_institution: requestedInst,
+            invitee: "invitee"
         });
 
         notification = {
@@ -42,6 +56,11 @@
             entity: request,
         };
     }));
+
+    afterEach(function() {
+        httpBackend.verifyNoOutstandingExpectation();
+        httpBackend.verifyNoOutstandingRequest();
+    });
 
     describe('Test showHierarchyDialog', function () {
 

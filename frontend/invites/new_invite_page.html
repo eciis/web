@@ -1,6 +1,11 @@
 <md-content layout="row" layout-fill layout-align="center center" md-colors="{background: 'teal-500'}">
   <div layout="column" layout-align="center center">
     <div layout="row" layout-align="center center">
+      <md-button class="md-fab md-primary" aria-label="Responder depois." style="margin-right: 45px;"
+          ng-click="newInviteCtrl.replyLater()" md-colors="{background: 'light-green-500'}" 
+          ng-if="!newInviteCtrl.loading" hide-xs hide-sm>
+          <md-icon>keyboard_arrow_left</md-icon>
+      </md-button>
       <div layout="row" flex-xs="20" flex-sm="60" flex-gt-sm="40" layout-align="center start">
         <load-circle ng-show="newInviteCtrl.loading"></load-circle>
         <md-card ng-if="!newInviteCtrl.isAlreadyProcessed" ng-show="!newInviteCtrl.loading" class="new-invite-page-card">
@@ -72,7 +77,7 @@
               <md-card-actions layout="row" layout-align="end center">
                 <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)"
                   md-colors="{background: 'teal-500'}">
-                  Cancelar
+                  Rejeitar
                 </md-button>
                 <md-button ng-if="!newInviteCtrl.acceptedInvite" type="submit" md-colors="{background: 'teal-500'}">
                   {{newInviteCtrl.isInviteUser() ? 'Enviar' : 'Próximo'}}

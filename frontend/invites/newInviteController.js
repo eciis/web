@@ -123,6 +123,16 @@
             return instObj.getFullAddress();
         };
 
+        newInviteCtrl.replyLater = function replyLater() {
+            newInviteCtrl.user.invites.forEach(invite => {
+                if(invite.key === newInviteCtrl.invite.key){
+                    invite.replyLater = true;
+                }
+            });
+            AuthService.save();
+            $state.go("app.user.home");
+        };
+
         newInviteCtrl.deleteInvite = function deleteInvite() {
             const inviteFunction = getInviteFunction();
             var promise = inviteFunction(newInviteCtrl.inviteKey);

@@ -6,6 +6,8 @@ from . import Request
 from google.appengine.ext import ndb
 from send_email_hierarchy import RequestLinkEmailSender
 from util import get_subject
+from util import Notification
+from util import NotificationsQueueManager
 
 __all__ = ['RequestInstitutionChildren']
 
@@ -98,13 +100,16 @@ class RequestInstitutionChildren(Request):
             sender_institution_key=self.institution_requested_key
         )
 
-        super(RequestInstitutionChildren, self).send_notification(
-            current_institution=current_institution, 
-            sender_key=invitee_key, 
-            receiver_key=self.sender_key or self.admin_key,
+        notification = Notification(
+            entity_key=self.key.urlsafe(), 
+            receiver_key=self.admin_key.urlsafe(), 
             notification_type=notification_type,
             message=notification_message
         )
+
+        id_not = NotificationsQueueManager.create_notification_task(notification)
+
+        return id_not
 
     def make(self):
         """Create json of request to institution children."""

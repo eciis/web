@@ -18,6 +18,7 @@ from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
+from util import NotificationsQueueManager
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -360,16 +361,11 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
                 admin.add_permission(permission, institution_key)
             add_permission_to_children(institution, admins, permission)
 
-        send_message_notification(
-            receiver_key=institution.parent_institution.get().admin.urlsafe(),
-            notification_type='ADD_ADM_PERMISSIONS',
-            entity_key=institution.key.urlsafe(),
-            message=create_system_message(institution.key),
-        )
-
     def post(self):
         institution_key = self.request.get('institution_key')
+        id_not = self.request.get('id')
         self.addAdminPermissions(institution_key)
+        NotificationsQueueManager.resolve_notification_task(id_not)
 
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):

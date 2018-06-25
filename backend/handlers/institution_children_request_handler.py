@@ -49,10 +49,12 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children = request.institution_requested_key.get()
         institution_children.set_parent(request.institution_key)
 
-        request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
+        id_not = request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')
 
-        enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
+        import pdb
+        pdb.set_trace()
+        enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe(), 'id': id_not})
 
         self.response.write(json.dumps(request.make()))
 

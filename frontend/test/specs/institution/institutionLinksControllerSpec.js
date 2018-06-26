@@ -13,12 +13,18 @@
         children_institutions: [{key: '987654321'}]
     };
 
+    var institution = {
+        acronym: 'institution',
+        key: '987654321',
+        parent_institution: parentInstitutionTest
+    };
+
     var childrenInstitutionsTest = [
         {
             name: 'childrenInst1',
             key: 'chldKey1',
             state: 'active',
-            parent_institution: parentInstitutionTest
+            parent_institution: institution.key
         },
         {
             name: 'childrenInst2',
@@ -28,12 +34,7 @@
         }
     ];
 
-    var institution = {
-        acronym: 'institution',
-        key: '987654321',
-        parent_institution: parentInstitutionTest,
-        children_institutions: childrenInstitutionsTest
-    };
+    institution.children_institutions = childrenInstitutionsTest;
 
     beforeEach(module('app'));
 

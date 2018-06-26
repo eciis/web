@@ -12,9 +12,7 @@ function Invite(data) {
 Invite.prototype.isValid = function isValid() {
     const hasType = isValueValid(this.type_of_invite);
     const hasInviteeWhenNeeded = this.type_of_invite == 'USER' || isValueValid(this.invitee);
-    const areInstitutionsValid = this.isInstitutionActive() && this.isRequestedInstActive();
-    
-    return hasType && hasInviteeWhenNeeded && areInstitutionsValid; 
+    return hasType && hasInviteeWhenNeeded; 
 };
 
 Invite.prototype.isStatusOn = function isStatusOn(value) {
@@ -29,17 +27,11 @@ Invite.prototype.setType = function (typeOfInvite) {
     this.type_of_invite = typeOfInvite;
 };
 
-Invite.prototype.isSent = function () {
-    return this.isStatusOn('sent');
-};
-
-Invite.prototype.isInstitutionActive = function () {
-    return this.institution.isStateOn('active');
-};
-
-Invite.prototype.isRequestedInstActive = function () {
-    return this.requested_institution ? this.requested_institution.isStateOn('active') : true;
-};
+Invite.prototype.areInstitutionsValid = function () {
+    const isInstitutionActive = this.institution.isStateOn('active');
+    const isRequestedInstActive = this.requested_institution ? this.requested_institution.isStateOn('active') : true;
+    return isInstitutionActive && isRequestedInstActive;
+}
 
 function isValueValid(value) {
     return  !(_.isUndefined(value) || _.isEmpty(value));

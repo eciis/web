@@ -32,7 +32,7 @@
         service.showRequestDialog = function showRequestDialog(notification, event, dialogProperties) {
             getRequest(notification.entity.key, notification.entity_type).then(
                 function success(data) {
-                    var request = new Invite(data);                    
+                    var request = new Invite(data);
                     selectDialogToShow(request, event, dialogProperties);
                 }, function error(response) {
                     MessageService.showToast(response.data.msg);
@@ -66,9 +66,9 @@
 
         function selectDialogToShow(request, event, dialogProperties) {
             let requestType = request.type_of_invite;
-            requestType = request.isValid() ? requestType : INVALID_REQUEST;
-            requestType = request.isSent() ? requestType : RESOLVED_REQUEST;
-            
+            requestType = request.isStatusOn('sent') ? requestType : RESOLVED_REQUEST;
+            requestType = request.areInstitutionsValid() ? requestType : INVALID_REQUEST;
+
             switch(requestType) {
                 case RESOLVED_REQUEST:
                     service.showResolvedReqDialog(event); break;

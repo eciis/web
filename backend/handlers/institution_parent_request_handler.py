@@ -9,6 +9,9 @@ from custom_exceptions import NotAuthorizedException
 from . import BaseHandler
 from service_entities import enqueue_task
 from google.appengine.ext import ndb
+from util import Notification
+from util import NotificationsQueueManager
+from service_messages import create_system_message
 
 __all__ = ['InstitutionParentRequestHandler']
 
@@ -47,7 +50,15 @@ class InstitutionParentRequestHandler(BaseHandler):
         request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
         request.send_response_email('ACCEPT')
 
-        enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe()})
+        notification = Notification(
+            entity_key=institution_children.key.urlsafe(), 
+            receiver_key=user.key.urlsafe(), 
+            notification_type='ADD_ADM_PERMISSIONS',
+            message=create_system_message(institution_children.key)
+        )
+
+        id_not = NotificationsQueueManager.create_notification_task(notification)
+        enqueue_task('add-admin-permissions', {'institution_key': institution_children.key.urlsafe(), 'id': id_not})
 
         self.response.write(json.dumps(request.make()))
 

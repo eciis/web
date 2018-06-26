@@ -5,14 +5,16 @@ import time
 from google.appengine.api import taskqueue
 from service_messages import send_message_notification
 
-__all__ = ['NotificationsQueueManager', 'Notification']
+__all__ = ['NotificationsQueueManager', 'Notification', 'NotificationNIL']
 
 queue = taskqueue.Queue('notifications-manage-pull')
 notification_id = {
     "00": "ALL_NOTIFICATIONS",
-    "01": "ACCEPT_INSTITUTION_LINK",
-    "02": "ACCEPT_INVITE_HIERARCHY",
-    "03": "ACCEPT_INVITE_USER_ADM"
+    "01": "NOTIFICATION_NIL",
+    "02": "ACCEPT_INSTITUTION_LINK",
+    "03": "ACCEPT_INVITE_HIERARCHY",
+    "04": "ACCEPT_INVITE_USER_ADM",
+    "05": "ADD_ADM_PERMISSIONS"
 }
 
 def get_notification_id(notification_type):
@@ -58,7 +60,7 @@ class NotificationsQueueManager:
 
         if task:
             notification = Notification(**json.loads(task.payload))
-            send_message_notification(**notification.format_notification())
+            notification.send_notification()
             queue.delete_tasks([task])
 
 
@@ -68,7 +70,7 @@ class Notification(object):
         self.entity_key = entity_key
         self.notification_type = notification_type
         self.receiver_key = receiver_key
-        self.key = self._gererate_key()
+        self.key = self._generate_key()
     
     def format_notification(self):
         return {
@@ -78,7 +80,7 @@ class Notification(object):
             'entity_key': self.entity_key
         }
     
-    def _gererate_key(self):
+    def _generate_key(self):
         id = get_notification_id(self.notification_type)
         entity_hash = hash(self.entity_key)
         receiver_hash = hash(self.receiver_key)
@@ -88,3 +90,18 @@ class Notification(object):
         key = key.replace(".", "")
         return key
     
+    def send_notification(self):
+        send_message_notification(**self.format_notification())
+
+
+class NotificationNIL(Notification):
+    def __init__(self):
+        super(NotificationNIL, self).__init__(
+            message='NIL',
+            entity_key='NIL',
+            notification_type='NOTIFICATION_NIL',
+            receiver_key='NIL'
+        )
+    
+    def send_notification(self):
+        pass

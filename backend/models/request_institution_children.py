@@ -100,16 +100,24 @@ class RequestInstitutionChildren(Request):
             sender_institution_key=self.institution_requested_key
         )
 
-        notification = Notification(
-            entity_key=self.key.urlsafe(), 
-            receiver_key=self.admin_key.urlsafe(), 
-            notification_type=notification_type,
-            message=notification_message
-        )
+        if action == 'ACCEPT':
+            notification = Notification(
+                entity_key=self.key.urlsafe(), 
+                receiver_key=self.sender_key.urlsafe() if self.sender_key else self.admin_key.urlsafe(), 
+                notification_type=notification_type,
+                message=notification_message
+            )
 
-        id_not = NotificationsQueueManager.create_notification_task(notification)
-
-        return id_not
+            id_not = NotificationsQueueManager.create_notification_task(notification)
+            return id_not
+        else:
+            super(RequestInstitutionChildren, self).send_notification(
+                current_institution=current_institution, 
+                sender_key=invitee_key, 
+                receiver_key=self.sender_key or self.admin_key,
+                notification_type=notification_type,
+                message=notification_message
+            )
 
     def make(self):
         """Create json of request to institution children."""

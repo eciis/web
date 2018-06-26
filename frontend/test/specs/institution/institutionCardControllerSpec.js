@@ -31,9 +31,6 @@
 
         authService.login(user);
 
-        httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.when('GET', "app/").respond(200);
-
         createCtrl = function () {
             return $controller('InstitutionCardController', {
                 scope: scope,
@@ -133,7 +130,70 @@
 
     describe('unfollow()', function () {
         it('should unfollow the inst', function () {
-            
+            spyOn(instService, 'unfollow').and.callFake(function () {
+                return {
+                    then: function (callback) {
+                        return callback();
+                    }
+                };
+            });
+            spyOn(instCardCtrl.user, 'unfollow').and.callThrough();
+            spyOn(authService, 'save');
+
+            instCardCtrl.unfollow();
+
+            expect(instService.unfollow).toHaveBeenCalledWith(inst.key);
+            expect(instCardCtrl.user.unfollow).toHaveBeenCalled();
+            expect(instCardCtrl.user.follows.length).toEqual(0);
+            expect(authService.save).toHaveBeenCalled();
         });
+
+        it('should not unfollow the inst', function () {
+            instCardCtrl.user.addInstitution(inst);
+            instCardCtrl.user.follow(inst);
+            expect(instCardCtrl.user.follows.length).toEqual(1);
+            instCardCtrl.unfollow();
+            expect(instCardCtrl.user.follows.length).toEqual(1);
+        });
+    });
+
+    describe('isUserMember', function () {
+        beforeEach(function() {
+            spyOn(instCardCtrl.user, 'isMember').and.callThrough();
+        });
+
+        it('should return true', function () {
+            instCardCtrl.user.addInstitution(inst);
+            var result = instCardCtrl.isUserMember();
+            expect(result).toBeTruthy();
+        });
+
+        it('should return false', function () {
+            instCardCtrl.user.removeInstitution(inst.key);
+            var result = instCardCtrl.isUserMember();
+            expect(result).toBeFalsy();
+        });
+    });
+
+    describe('requestInvitation', function () {
+        it('should open a dialog', function () {
+            spyOn(mdDialog, 'show');
+            instCardCtrl.requestInvitation('event');
+            expect(mdDialog.show).toHaveBeenCalled();
+        })
+    });
+
+    describe('hasCover', function () {
+        it('should return true', function () {
+            inst.cover_photo = 'apsdpokadkkpodokpdasoo';
+            expect(instCardCtrl.hasCover()).toBeTruthy();
+        });
+
+        it('should return false', function () {
+          delete inst.cover_photo;
+          expect(instCardCtrl.hasCover()).toBeFalsy();
+          inst.cover_photo = '';
+          expect(instCardCtrl.hasCover()).toBeFalsy();
+        }); 
     });
 }));

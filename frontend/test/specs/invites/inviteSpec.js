@@ -1,6 +1,6 @@
 "use strict";
 
-(fdescribe("Test Invite model", function () {
+(describe("Test Invite model", function () {
 
     let invite, institution, requestedInstitution;
 

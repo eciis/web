@@ -134,8 +134,10 @@
         };
 
         newInviteCtrl.canAnswerLater = function canAnswerLater() {
-            return !newInviteCtrl.loading && !newInviteCtrl.isAlreadyProcessed;
+            var userActive = newInviteCtrl.user.state === 'active';
+            return !newInviteCtrl.loading && !newInviteCtrl.isAlreadyProcessed && userActive;
         };
+
 
         newInviteCtrl.deleteInvite = function deleteInvite() {
             const inviteFunction = getInviteFunction();

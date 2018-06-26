@@ -132,7 +132,7 @@
 
         describe("Test selectDialog", function () {
             
-            describe("Test select resolved request dialog", function () {
+            describe("Test showResolvedReqDialog", function () {
 
                 beforeEach(function () {
                     spyOn(service, 'showResolvedReqDialog');       
@@ -145,18 +145,43 @@
                     request.setStatus('rejected');
                     service.showRequestDialog(notification, event, dialogProperties);
                     httpBackend.flush();
-                    expect(service.showResolvedReqDialog).toHaveBeenCalled();
+                    service.showResolvedReqDialog(event);
+                    expect(service.showResolvedReqDialog).toHaveBeenCalledWith(event);
                 });
 
                 it("should show the dialog for accepted request", function () {
                     request.setStatus('accepted');
                     service.showRequestDialog(notification, event, dialogProperties);
                     httpBackend.flush();
-                    expect(service.showResolvedReqDialog).toHaveBeenCalled();
+                    expect(service.showResolvedReqDialog).toHaveBeenCalledWith(event);
+                });
+            });
+
+            describe("Test showInvalidReqDialog", function () {
+
+                beforeEach(function () {
+                    spyOn(service, 'showInvalidReqDialog');       
+                    request.setType(REQUEST_CHILDREN);
+                    setNotificationType(REQUEST_CHILDREN);
+                    httpBackend.when('GET', REQUEST_URI + request.key + "/institution_children").respond(request);
+                });
+                
+                it("should show the dialog when the request institution is inactive", function () {
+                    request.institution.state = 'inactive';
+                    service.showRequestDialog(notification, event, dialogProperties);
+                    httpBackend.flush();
+                    expect(service.showInvalidReqDialog).toHaveBeenCalledWith(event);
+                });
+
+                it("should show the dialog when the request requested_institution is inactive", function () {
+                    request.requested_institution.state = 'inactive';
+                    service.showRequestDialog(notification, event, dialogProperties);
+                    httpBackend.flush();
+                    expect(service.showInvalidReqDialog).toHaveBeenCalledWith(event);
                 });
             });
             
-            describe("Test select showHierarchyDialog", function () {
+            describe("Test showHierarchyDialog", function () {
 
                 beforeEach(function () {
                     spyOn(service, 'showHierarchyDialog');
@@ -183,7 +208,7 @@
                 });
             });
 
-            describe("Test select pending request dialog", function () {
+            describe("Test showPendingReqDialog", function () {
 
                 beforeEach(function () {
                     spyOn(service, 'showPendingReqDialog');

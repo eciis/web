@@ -8,8 +8,10 @@
 
         var USER_URI = "/api/user";
 
-        service.NOTIFICATIONS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER",
-                                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS"];
+
+        service.NOTIFICATIONS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
+                                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
+                                                "REMOVED_ADM_PERMISSIONS"];
 
         service.deleteAccount = function deleteAccount() {
             return HttpService.delete(USER_URI);

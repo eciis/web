@@ -179,8 +179,12 @@ User.prototype.getProfileColor = function getProfileColor() {
     const instKey = this.current_institution.key;
     return this.institution_profiles.reduce(
         (color, profile) => (profile.institution_key === instKey) ? profile.color : color, 
-        'grey'
+        'teal'
     );
+};
+
+User.prototype.isInstitutionRequested = function isInstitutionRequested(institutionKey) {
+    return this.institutions_requested.includes(institutionKey);
 };
 
 function updateFollowInstitution(follows, institution) {

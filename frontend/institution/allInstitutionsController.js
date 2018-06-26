@@ -15,16 +15,8 @@
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
 
-        allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions(reload) {
+        allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
             var deferred = $q.defer();
-
-            if (reload) { 
-                allInstitutionsCtrl.loadMoreInstitutions
-                actualPage = 0;
-                moreInstitutions = true;
-                allInstitutionsCtrl.institutions.splice(0, allInstitutionsCtrl.institutions.length);
-                allInstitutionsCtrl.isLoadingInstitutions = true;
-            }
 
             if (moreInstitutions) {
                 loadInstitutions(deferred);
@@ -53,7 +45,7 @@
             InstitutionService.getNextInstitutions(actualPage).then(function success(response) {
                 actualPage += 1;
                 moreInstitutions = response.next;
-
+                
                 _.forEach(response.institutions, function(institution) {
                     allInstitutionsCtrl.institutions.push(institution);
                 });

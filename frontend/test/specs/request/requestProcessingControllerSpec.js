@@ -4,8 +4,6 @@
     var INSTITUTIONS_URI = "/api/institutions";
     var USER_URI = "/api/user";
     var INST_KEY = "inst-key";
-    var REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
-    var REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
     var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
     var REQUEST_USER = "REQUEST_USER";
 
@@ -21,7 +19,7 @@
         "PRIVATE_COMPANY": "Empresa Privada",
     };
 
-    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend, deferred, createCtrl;
+    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend;
     var authService, userService, messageService, request;
 
     var newRequest = {
@@ -69,7 +67,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService,
-         RequestInvitationService, InstitutionService, UserService, MessageService, $q) {
+         RequestInvitationService, InstitutionService, UserService, MessageService) {
         
         requestInvitationService = RequestInvitationService;
         institutionService = InstitutionService;
@@ -78,7 +76,6 @@
         httpBackend = $httpBackend;
         authService = AuthService;
         scope = $rootScope.$new();
-        deferred = $q.defer();
         AuthService.login(user);
         request = Object.assign({}, newRequest);
 
@@ -127,20 +124,6 @@
             spyOn(requestInvitationService, 'acceptRequestInst').and.callFake(callFake);
             requestCtrl.acceptRequest();
             expect(requestInvitationService.acceptRequestInst).toHaveBeenCalledWith(request.key);
-        });
-
-        it('Should accept children institution request', function() {
-            request.type_of_invite = REQUEST_CHILDREN;
-            spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(callFake);
-            requestCtrl.acceptRequest();
-            expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
-        });
-
-        it('Should accept parent institution request', function() {
-            request.type_of_invite = REQUEST_PARENT;
-            spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(callFake);
-            requestCtrl.acceptRequest();
-            expect(requestInvitationService.acceptInstParentRequest).toHaveBeenCalledWith(request.key);
         });
     });
 
@@ -212,22 +195,6 @@
             requestCtrl.confirmReject();
             scope.$apply();
             expect(requestInvitationService.rejectRequestInst).toHaveBeenCalledWith(request.key);
-        });
-
-        it('Should reject children institution request', function() {
-            request.type_of_invite = REQUEST_CHILDREN;
-            spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(callFake);
-            requestCtrl.confirmReject();
-            scope.$apply();
-            expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalledWith(request.key);
-        });
-
-        it('Should reject parent institution request', function() {
-            request.type_of_invite = REQUEST_PARENT;
-            spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(callFake);
-            requestCtrl.confirmReject();
-            scope.$apply();
-            expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalledWith(request.key);
         });
     });
 

@@ -30,6 +30,9 @@
             "TRANSFER_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
             },
+            "REMOVED_ADM_PERMISSIONS": {
+                icon: "clear"
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"
@@ -240,13 +243,7 @@
         }
 
         notificationCtrl.refreshUser = function refreshUser() {
-            UserService.load().then(function success(response) {
-                notificationCtrl.user.institutions = response.institutions;
-                notificationCtrl.user.follows = response.follows;	
-                notificationCtrl.user.institution_profiles = response.institution_profiles;	
-                notificationCtrl.user.permissions = response.permissions;
-                AuthService.save();
-            });
+            AuthService.reload();
         };
 
         function notificationListener() {

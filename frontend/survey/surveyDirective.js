@@ -79,7 +79,7 @@
                     $mdDialog.hide();
                     unobserveNewPost();
                 }, function error() {
-                    AuthService.reload().then(function success(responseUser) {
+                    AuthService.reload().then(function success() {
                         $mdDialog.hide();
                         $state.go("app.user.home");
                     });

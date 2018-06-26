@@ -11,7 +11,6 @@
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
         var parent, child;
 
-        
         (function loadInstitutions() { 
             switch(request.type_of_invite){
                 case REQUEST_PARENT:
@@ -41,9 +40,19 @@
                 });
         };
 
+        analyseHierReqCtrl.close = function close() {
+            $mdDialog.hide();
+            MessageService.showToast('Solicitação aceita com sucesso');
+        };
+
+        analyseHierReqCtrl.showProcessingMessage = function showProcessingMessage() {
+            return request.status === 'accepted' && request.type_of_invite === REQUEST_PARENT;
+        };
+
         function confirmLinkRemoval() {
             const isParent = true;
-            InstitutionService.removeLink(child.key, parent.key, isParent).then(
+            const currentParentKey = child.parent_institution.key;
+            InstitutionService.removeLink(child.key, currentParentKey, isParent).then(
                 function success() {
                     acceptRequest();
                 });
@@ -52,8 +61,9 @@
         function acceptRequest() {
             acceptRequestInstitution().then(function success() {
                 request.status = 'accepted';
-                $mdDialog.hide();
-                MessageService.showToast('Solicitação aceita com sucesso');
+                if(!analyseHierReqCtrl.showProcessingMessage()) {
+                    analyseHierReqCtrl.close();
+                }
             });
         }
 

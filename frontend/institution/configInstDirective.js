@@ -235,7 +235,7 @@
                 },
                 office: 'Administrador',
                 phone: null,
-                color: 'grey'
+                color: 'teal'
             };
         }
 

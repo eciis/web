@@ -3,10 +3,11 @@
 (describe('Test NotificationController', function() {
 
     var notCtrl, httpBackend, scope, createCtrl, state, notificationService
-    var authService, notificationListenerService, userService, http;
+    var authService, notificationListenerService, http;
 
-    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER",
-                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS"];
+    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
+                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
+                                "REMOVED_ADM_PERMISSIONS"];
     
     var institution = {
         name: 'institution',
@@ -48,11 +49,10 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, NotificationService,
-            $state, AuthService, NotificationListenerService, UserService) {
+            $state, AuthService, NotificationListenerService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
-        userService = UserService;
         authService = AuthService;
         notificationService = NotificationService;
         notificationListenerService = NotificationListenerService;
@@ -169,38 +169,38 @@
 
     describe('Main Controller listenners', function(){
         it("Should call userService load when event 'DELETED_INSTITUTION' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
+            spyOn(authService, 'reload').and.callThrough();
             spyOn(notCtrl, 'refreshUser').and.callThrough();
 
             scope.$emit("DELETED_INSTITUTION", {});
-            expect(userService.load).toHaveBeenCalled();
+            expect(authService.reload).toHaveBeenCalled();
             expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
 
         it("Should call userService load when event 'DELETE_MEMBER' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
+            spyOn(authService, 'reload').and.callThrough();
             spyOn(notCtrl, 'refreshUser').and.callThrough();
 
             scope.$emit("DELETE_MEMBER", {});
-            expect(userService.load).toHaveBeenCalled();
+            expect(authService.reload).toHaveBeenCalled();
             expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
 
         it("Should call userService load when event 'ACCEPT_INSTITUTION_LINK' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
+            spyOn(authService, 'reload').and.callThrough();
             spyOn(notCtrl, 'refreshUser').and.callThrough();
 
             scope.$emit("ACCEPT_INSTITUTION_LINK", {});
-            expect(userService.load).toHaveBeenCalled();
+            expect(authService.reload).toHaveBeenCalled();
             expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
 
         it("Should NOT call userService load when event 'EVENT' was create.", function(){
-            spyOn(userService, 'load').and.callThrough();
+            spyOn(authService, 'reload').and.callThrough();
             spyOn(notCtrl, 'refreshUser').and.callThrough();
 
             scope.$emit("EVENT", {});
-            expect(userService.load).not.toHaveBeenCalled();
+            expect(authService.reload).not.toHaveBeenCalled();
             expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
     });

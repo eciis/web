@@ -133,6 +133,10 @@
             $state.go("app.user.home");
         };
 
+        newInviteCtrl.canAnswerLater = function canAnswerLater() {
+            return !newInviteCtrl.loading && !newInviteCtrl.isAlreadyProcessed;
+        };
+
         newInviteCtrl.deleteInvite = function deleteInvite() {
             const inviteFunction = getInviteFunction();
             var promise = inviteFunction(newInviteCtrl.inviteKey);

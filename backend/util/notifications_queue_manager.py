@@ -103,6 +103,15 @@ class Notification(object):
     
     def send_notification(self):
         send_message_notification(**self.format_notification())
+    
+    def __str__(self):
+        formated_notification = self.format_notification()
+        formated_notification['key'] = self.key
+
+        return self.__class__.__name__ + " " + str(formated_notification)
+    
+    def __repr__(self):
+        return str(self)
 
 
 class NotificationNIL(Notification):

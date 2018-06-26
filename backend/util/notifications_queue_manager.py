@@ -35,6 +35,14 @@ def find_task(notification_type, task_id, num_fetchs=0):
 
     return None
 
+def create_notification(notification_id, **kwords):
+    switch = {
+        "01": NotificationNIL,
+        "OTHERWISE": Notification
+    }
+
+    return switch.get(notification_id, switch['OTHERWISE'])(**kwords)
+
 class NotificationsQueueManager:
     
     @staticmethod
@@ -59,7 +67,7 @@ class NotificationsQueueManager:
         task = find_task(notification_type,task_id)
 
         if task:
-            notification = Notification(**json.loads(task.payload))
+            notification = create_notification(task_id[:2], **json.loads(task.payload))
             notification.send_notification()
             queue.delete_tasks([task])
 
@@ -68,7 +76,7 @@ class Notification(object):
     def __init__(self, message, entity_key, notification_type, receiver_key):
         self.message = message
         self.entity_key = entity_key
-        self.notification_type = notification_type
+        self.notification_type = self._get_notification_type(notification_type)
         self.receiver_key = receiver_key
         self.key = self._generate_key()
     
@@ -89,6 +97,9 @@ class Notification(object):
         key = id + '-' + str(entity_hash) + str(receiver_hash) + str(timestamp)
         key = key.replace(".", "")
         return key
+    
+    def _get_notification_type(self, notification_type):
+        return notification_type if notification_type in notification_id.values() else "ALL_NOTIFICATIONS"
     
     def send_notification(self):
         send_message_notification(**self.format_notification())

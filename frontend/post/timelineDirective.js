@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('TimelineController', function(AuthService, MessageService, NotificationService, $rootScope) {
+    app.controller('TimelineController', function(AuthService, $rootScope) {
         var timelineCtrl = this;
         var content = document.getElementById("content");
 
@@ -36,7 +36,7 @@
         }
 
         function eventListener() {
-            $rootScope.$on(DELETED_POST_EVENT, function (event, post) {
+            $rootScope.$on(DELETED_POST_EVENT, function (post) {
                 deletePost(post);
             });
         }

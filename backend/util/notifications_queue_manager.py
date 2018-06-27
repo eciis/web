@@ -18,6 +18,14 @@ notification_id = {
 }
 
 def get_notification_id(notification_type):
+    """
+    Method that takes the id of a given notification in 
+    the notification_id dictionary, if the notification 
+    does not exist in the dictionary, returns the id '00'.
+
+    Keyword arguments:
+    notification_type - Type of notification to get id.
+    """
     for key, value in notification_id.items():
         if value == notification_type:
             return key
@@ -25,6 +33,16 @@ def get_notification_id(notification_type):
     return "00"
 
 def find_task(notification_type, task_id, num_fetchs=0):
+    """
+    Method to find tasks in the queue, based on the task 
+    id and the grouping (notification_type), both passed by parameter.
+    If it does not find it, returns None.
+    
+    Keyword arguments:
+    notification_type - Notification type to catch of just task of specified type.
+    task_id - Id of the task to be found.
+    num_fetchs - (Optional) Current number of tasks that have already been taken from the queue.
+    """
     num_tasks = queue.fetch_statistics().tasks
     
     if num_fetchs <= num_tasks:
@@ -36,6 +54,13 @@ def find_task(notification_type, task_id, num_fetchs=0):
     return None
 
 def create_notification(notification_id, **kwords):
+    """
+    Method to create notification according to your id.
+
+    Keyword arguments:
+    notification_id - Notification Id to be created.
+    kwords - Dictionary of arguments to create the notification.
+    """
     switch = {
         "01": NotificationNIL,
         "OTHERWISE": Notification
@@ -44,15 +69,25 @@ def create_notification(notification_id, **kwords):
     return switch.get(notification_id, switch['OTHERWISE'])(**kwords)
 
 class NotificationsQueueManager:
+    """
+    Class to manage the notification queue.
+    """
     
     @staticmethod
-    def create_notification_task(notification_message):
-        notification_type = notification_message.notification_type
-        notification_key = notification_message.key
+    def create_notification_task(notification):
+        """
+        Method for creating a task from the notification and 
+        trigger it in the queue. Returns the task key.
+
+        Keyword arguments:
+        notification - Notification that will be used to create the task.
+        """
+        notification_type = notification.notification_type
+        notification_key = notification.key
 
         task = taskqueue.Task(
             name=notification_key,
-            payload=json.dumps(notification_message.format_notification()),
+            payload=json.dumps(notification.format_notification()),
             tag=notification_type,
             method='PULL'
         )
@@ -63,6 +98,13 @@ class NotificationsQueueManager:
     
     @staticmethod
     def resolve_notification_task(task_id):
+        """
+        Method to get a queue task, if any, re-create the 
+        notification, resolve it and delete the queue task.
+
+        Keyword arguments:
+        task_id - Task id to be resolved.
+        """
         notification_type = notification_id[task_id[:2]]
         task = find_task(notification_type,task_id)
 

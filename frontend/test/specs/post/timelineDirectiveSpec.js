@@ -74,6 +74,14 @@
         });
     });
 
+    describe('Should not call delete post function', function() {
+        it("should do nothing.", function() {
+            rootScope.$emit("DELETED_INSTITUTION", {});
+            expect(timelineCtrl.posts.length).toEqual(2);
+            expect(timelineCtrl.posts).toEqual(posts);
+        });
+    });
+
     describe('Should call delete post function', function() {
         
         it("should not delete post because it isn't in timeline.", function() {
@@ -84,12 +92,6 @@
             };
 
             rootScope.$emit("DELETED_POST", post_not_timeline);
-            expect(timelineCtrl.posts.length).toEqual(2);
-            expect(timelineCtrl.posts).toEqual(posts);
-        });
-
-        it("should do nothing.", function() {
-            rootScope.$emit("DELETED_INSTITUTION", {});
             expect(timelineCtrl.posts.length).toEqual(2);
             expect(timelineCtrl.posts).toEqual(posts);
         });

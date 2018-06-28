@@ -3,8 +3,7 @@
 import random
 from google.appengine.api import taskqueue
 from ..test_base import TestBase
-from util import NotificationsQueueManager, Notification, NotificationNIL, notification_id
-from util.notification import get_notification_id
+from util import NotificationsQueueManager, Notification, notification_id
 from service_messages import create_message
 from .. import mocks
 from mock import patch

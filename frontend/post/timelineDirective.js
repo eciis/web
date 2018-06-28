@@ -36,7 +36,7 @@
         }
 
         function eventListener() {
-            $rootScope.$on(DELETED_POST_EVENT, function (post) {
+            $rootScope.$on(DELETED_POST_EVENT, function (event, post) {
                 deletePost(post);
             });
         }

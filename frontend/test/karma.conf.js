@@ -92,7 +92,7 @@ module.exports = function (config) {
 
     // if true, it shows console logs
     client: {
-      captureConsole: false
+      captureConsole: true
     }
   })
 }

@@ -34,7 +34,7 @@
                     'options' : options
                     };
 
-    var posts = [];
+    var posts = [survey, post];
 
     beforeEach(inject(function($controller, $httpBackend, AuthService, $rootScope) {
         httpBackend = $httpBackend;
@@ -52,23 +52,24 @@
         timelineCtrl = createController();
 
         timelineCtrl.user = new User(user);
-        timelineCtrl.posts = [];
-
-        httpBackend.when('GET', 'main/main.html').respond(200);
-        httpBackend.when('GET', 'home/home.html').respond(200);
-        httpBackend.when('GET', 'auth/login.html').respond(200);
+        timelineCtrl.posts = posts;
     }));
-
-    afterEach(function() {
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
-    });
 
     describe('Should create observer', function() {
         it('should call root scope to create observer', function() {
             spyOn(rootScope, '$on').and.callThrough();
             timelineCtrl = createController();
             expect(rootScope.$on).toHaveBeenCalled();
+        });
+    });
+
+    describe('Should delete post', function() {
+        it('should call delete post function', function() {
+            expect(timelineCtrl.posts).toEqual(posts);
+            rootScope.$emit("DELETED_POST", post);
+            expect(timelineCtrl.posts.length).toEqual(1);
+            expect(timelineCtrl.posts).toEqual([survey]);
+
         });
     });
 }));

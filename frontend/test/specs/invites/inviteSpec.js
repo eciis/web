@@ -18,9 +18,9 @@
             institution: institution,
             requested_isntitution: requestedInstitution,
             type_of_invite: 'USER',
-            invitee: 'user@email'
+            invitee: 'user@email',
+            status: 'sent'
         });
-
     });
 
     describe('Test isValid', function () {
@@ -55,6 +55,51 @@
         it('should be false, when request requested_institution is not active', function () {
             requestedInstitution.state = "inactive";
             expect(invite.areInstitutionsValid()).toBe(true);
+        });
+    });
+
+    describe('Test setStatus', function () {
+        
+        it('should be on status rejected', function () {
+            invite.setStatus('rejected');
+            expect(invite.status).toEqual('rejected');
+        });
+
+        it('should be on status accepted', function () {
+            invite.setStatus('accepted');
+            expect(invite.status).toEqual('accepted');
+        });
+
+        it('should be on status sent', function () {
+            invite.setStatus('sent');
+            expect(invite.status).toEqual('sent');
+        });
+    });
+
+    describe('Test isStatusOn', function () {
+
+        it('should be on status sent', function () {
+            expect(invite.isStatusOn('sent')).toBeTruthy();
+        });
+
+        it('should be on status rejected', function () {
+            invite.setStatus('rejected');
+            expect(invite.isStatusOn('rejected')).toBeTruthy();
+        });
+
+        it('should be on status rejected', function () {
+            invite.setStatus('accepted');
+            expect(invite.isStatusOn('accepted')).toBeTruthy();
+        });
+    });
+
+    describe('Test setType', function () {
+
+        it('should change the invite type', function () {
+            invite.setType('type A');
+            expect(invite.type_of_invite).toEqual('type A');
+            invite.setType('type B');
+            expect(invite.type_of_invite).toEqual('type B');
         });
     });
 

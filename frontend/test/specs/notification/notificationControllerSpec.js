@@ -6,7 +6,8 @@
     var authService, notificationListenerService, http;
 
     var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
-                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS"];
+                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
+                                "REMOVED_ADM_PERMISSIONS"];
     
     var institution = {
         name: 'institution',

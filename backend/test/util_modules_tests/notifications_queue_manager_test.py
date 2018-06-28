@@ -3,8 +3,8 @@
 import random
 from google.appengine.api import taskqueue
 from ..test_base import TestBase
-from util import NotificationsQueueManager, Notification, NotificationNIL
-from util.notifications_queue_manager import notification_id, get_notification_id
+from util import NotificationsQueueManager, Notification, NotificationNIL, notification_id
+from util.notification import get_notification_id
 from service_messages import create_message
 from .. import mocks
 from mock import patch
@@ -46,7 +46,7 @@ class NotificationsQueueManagerTest(TestBase):
 
         return notification_type
     
-    @patch('util.notifications_queue_manager.time')
+    @patch('util.notification.time')
     def test_create_notification(self, time):
         """Test create new notification."""
         timeMock = TimeMock()
@@ -105,7 +105,7 @@ class NotificationsQueueManagerTest(TestBase):
 
         self.assertEqual(notification.notification_type, 'ALL_NOTIFICATIONS')
     
-    @patch('util.notifications_queue_manager.send_message_notification')
+    @patch('util.notification.send_message_notification')
     def test_send_notification(self, send_message_notification):
         """Test send notification."""
         user = mocks.create_user()
@@ -187,7 +187,7 @@ class NotificationsQueueManagerTest(TestBase):
         self.assertEqual(num_tasks, 1)
         self.assertEqual(id_notification, notification.key)
     
-    @patch('util.notifications_queue_manager.send_message_notification')
+    @patch('util.notification.send_message_notification')
     def test_resolve_notification_task(self, send_message_notification):
         """Test resolve notification task."""
         user = mocks.create_user()

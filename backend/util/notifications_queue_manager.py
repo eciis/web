@@ -24,7 +24,7 @@ def get_notification_id(notification_type):
     does not exist in the dictionary, returns the id '00'.
 
     Keyword arguments:
-    notification_type - Type of notification to get id.
+    notification_type -- Type of notification to get id.
     """
     for key, value in notification_id.items():
         if value == notification_type:
@@ -40,8 +40,8 @@ def find_task(notification_type, task_id, num_fetchs=0):
     
     Keyword arguments:
     notification_type - Notification type to catch of just task of specified type.
-    task_id - Id of the task to be found.
-    num_fetchs - (Optional) Current number of tasks that have already been taken from the queue.
+    task_id -- Id of the task to be found.
+    num_fetchs -- (Optional) Current number of tasks that have already been taken from the queue.
     """
     num_tasks = queue.fetch_statistics().tasks
     
@@ -58,8 +58,8 @@ def create_notification(notification_id, **kwords):
     Method to create notification according to your id.
 
     Keyword arguments:
-    notification_id - Notification Id to be created.
-    kwords - Dictionary of arguments to create the notification.
+    notification_id -- Notification Id to be created.
+    kwords -- Dictionary of arguments to create the notification.
     """
     switch = {
         "01": NotificationNIL,
@@ -80,7 +80,7 @@ class NotificationsQueueManager:
         trigger it in the queue. Returns the task key.
 
         Keyword arguments:
-        notification - Notification that will be used to create the task.
+        notification -- Notification that will be used to create the task.
         """
         notification_type = notification.notification_type
         notification_key = notification.key
@@ -103,7 +103,7 @@ class NotificationsQueueManager:
         notification, resolve it and delete the queue task.
 
         Keyword arguments:
-        task_id - Task id to be resolved.
+        task_id -- Task id to be resolved.
         """
         notification_type = notification_id[task_id[:2]]
         task = find_task(notification_type,task_id)
@@ -115,7 +115,20 @@ class NotificationsQueueManager:
 
 
 class Notification(object):
+    """
+    Class to create notification.
+    """
+
     def __init__(self, message, entity_key, notification_type, receiver_key):
+        """
+        Constructor of class Notification.
+
+        Keyword arguments:
+        message -- Message dictionary of notification.
+        entity_key -- entity key of type invite.
+        notification_type -- type of notification. 
+        receiver_key -- Urlsafe of the user who will receive the notification.
+        """
         self.message = message
         self.entity_key = entity_key
         self.notification_type = self._get_notification_type(notification_type)
@@ -123,6 +136,9 @@ class Notification(object):
         self.key = self._generate_key()
     
     def format_notification(self):
+        """
+        Method that returns a dictionary with the attributes needed to send the notification.
+        """
         return {
             'receiver_key': self.receiver_key,
             'message': self.message,
@@ -131,6 +147,12 @@ class Notification(object):
         }
     
     def _generate_key(self):
+        """
+        Method that generates a unique key for the created notification. 
+        Using to generate the key the notification type id, the hash 
+        of the entity_key, the hash of the receiver_key, and the current 
+        date in seconds.
+        """
         id = get_notification_id(self.notification_type)
         entity_hash = hash(self.entity_key)
         receiver_hash = hash(self.receiver_key)
@@ -141,23 +163,43 @@ class Notification(object):
         return key
     
     def _get_notification_type(self, notification_type):
+        """
+        Method to get the notification type according to the notifications_id dictionary. 
+        If the notification type already exists in the dictionary, it is returned, 
+        otherwise the default type 'ALL_NOTIFICATIONS' is returned.
+        """
         return notification_type if notification_type in notification_id.values() else "ALL_NOTIFICATIONS"
     
     def send_notification(self):
+        """
+        Method to send notification.
+        """
         send_message_notification(**self.format_notification())
     
     def __str__(self):
+        """
+        Method to generate string representation of notification object.
+        """
         formated_notification = self.format_notification()
         formated_notification['key'] = self.key
 
         return self.__class__.__name__ + " " + str(formated_notification)
     
     def __repr__(self):
+        """
+        Method to generate string representation of notification object.
+        """
         return str(self)
 
 
 class NotificationNIL(Notification):
+    """
+    Class to create empty notification.
+    """
     def __init__(self):
+        """
+        Constructor of class NotificationNIL.
+        """
         super(NotificationNIL, self).__init__(
             message='NIL',
             entity_key='NIL',
@@ -166,4 +208,8 @@ class NotificationNIL(Notification):
         )
     
     def send_notification(self):
+        """
+        Method to send notifications.
+        In empty notifications, this method should have no action.
+        """
         pass

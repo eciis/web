@@ -110,7 +110,7 @@
                 emails: emails
             };
             
-            if (manageMemberCtrl.isValidAllEmails(emails) && manageMemberCtrl.isUserInviteValid(invite)) {
+            if (manageMemberCtrl.isValidAllEmails(emails) && invite.isValid()) {
                 manageMemberCtrl.isLoadingInvite = true;
                 var promise = InviteService.sendInviteUser(requestBody);
                 promise.then(function success(responseData) {
@@ -124,6 +124,8 @@
                     manageMemberCtrl.isLoadingInvite = false;
                 });
                 return promise;
+            } else if(!invite.isValid()) {
+                MessageService.showToast('Convite inválido!');
             }
         };
 
@@ -216,15 +218,6 @@
 
         manageMemberCtrl.toggleElement = function toggleElement(flagName) {
             manageMemberCtrl[flagName] = !manageMemberCtrl[flagName];
-        };
-
-        manageMemberCtrl.isUserInviteValid = function isUserInviteValid(invite) {
-            var isValid = true;
-            if (! invite.isValid()) {
-                isValid = false;
-                MessageService.showToast('Convite inválido!');
-            }
-            return isValid;
         };
 
         manageMemberCtrl.resendInvite = function resendInvite(inviteKey, event) {

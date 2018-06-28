@@ -69,5 +69,26 @@
 
             return $mdDialog.show(confirm);
         };
+
+        service.showMessageDialog = function (event, message) {
+
+            function MessageController ($mdDialog) {
+                const controll = this;
+                controll.message = message;
+    
+                controll.hide = function hide() {
+                    $mdDialog.hide();
+                };
+            }
+        
+            $mdDialog.show({
+                templateUrl: "app/utils/message_dialog.html",
+                controller: MessageController,
+                controllerAs: 'ctrl',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true
+            });
+        }
     });
 })();

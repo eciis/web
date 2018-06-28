@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("ManagementMembersController", function InviteUserController(
-        InviteService, $mdToast, $state, $mdDialog, InstitutionService, AuthService, MessageService,
+        InviteService, $state, $mdDialog, InstitutionService, AuthService, MessageService,
         RequestInvitationService, ProfileService) {
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
@@ -120,7 +120,7 @@
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
                     MessageService.showToast(responseData.msg);
-                }, function error(response) {
+                }, function error() {
                     manageMemberCtrl.isLoadingInvite = false;
                 });
                 return promise;
@@ -288,7 +288,8 @@
                 controllerAs: "selectEmailsCtrl",
                 locals: {
                     emails: _.uniq(emails),
-                    manageMemberCtrl: manageMemberCtrl
+                    removePendingAndMembersEmails: manageMemberCtrl.removePendingAndMembersEmails,
+                    sendUserInvite: manageMemberCtrl.sendUserInvite
                 },
                 bindToController: true,
                 targetEvent: ev,

@@ -65,7 +65,7 @@ def create_notification(notification_id, **kwords):
         "01": NotificationNIL,
         "OTHERWISE": Notification
     }
-
+    
     return switch.get(notification_id, switch['OTHERWISE'])(**kwords)
 
 class NotificationsQueueManager:
@@ -196,7 +196,7 @@ class NotificationNIL(Notification):
     """
     Class to create empty notification.
     """
-    def __init__(self):
+    def __init__(self, **kwords):
         """
         Constructor of class NotificationNIL.
         """

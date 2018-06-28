@@ -4,7 +4,7 @@ function Invite(data) {
     data = data || {};
     _.extend(this, data);
 
-    this.institution = new Institution(this.institution);
+    this.institution = this.institution && new Institution(this.institution);
     this.requested_institution = this.requested_institution &&
         new Institution(this.requested_institution);
 }

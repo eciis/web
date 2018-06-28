@@ -55,7 +55,7 @@ class NotificationsQueueManager:
     def create_notification_task(notification):
         """
         Method for creating a task from the notification and 
-        trigger it in the queue. Returns the task key.
+        add it to the queue. Returns the task key.
 
         Keyword arguments:
         notification -- Notification that will be used to create the task.

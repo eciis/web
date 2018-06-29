@@ -257,11 +257,11 @@
                 });
 
             var membersEmails = manageMemberCtrl.members.reduce((emails, member) => [...emails, ...member.email], []);
-
+            
             var emailsNotMembersAndNotInvited = emails.filter(email =>
                     !invitedEmails.includes(email) && !membersEmails.includes(email) 
                         && !requestedEmails.includes(email));
-
+            
             return _.uniq(emailsNotMembersAndNotInvited);
         }
 

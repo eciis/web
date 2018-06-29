@@ -6,6 +6,7 @@ from google.appengine.api import taskqueue
 from service_messages import send_message_notification
 from . import Notification, NotificationNIL, notification_id
 from utils import Utils
+from custom_exceptions import QueueException
 
 __all__ = ['NotificationsQueueManager']
 
@@ -23,12 +24,13 @@ def find_task(notification_type, task_id, num_fetchs=0):
     num_fetchs -- (Optional) Current number of tasks that have already been taken from the queue.
     """
     num_tasks = queue.fetch_statistics().tasks
+    fetchs = 100
     
     if num_fetchs <= num_tasks:
-        tasks = queue.lease_tasks_by_tag(0, 100, notification_type)
+        tasks = queue.lease_tasks_by_tag(0, fetchs, notification_type)
         task = reduce(lambda found, task: task if task.name == task_id else found, tasks, None)
         
-        return task if task else find_task(notification_type, task_id, num_fetchs+100)
+        return task if task else find_task(notification_type, task_id, num_fetchs+fetchs)
 
     return None
 
@@ -82,7 +84,7 @@ class NotificationsQueueManager:
 
     
     @staticmethod
-    def resolve_notification_task(task_id):
+    def resolve_notification_task(task_key):
         """
         Method to get a queue task, if any, re-create the 
         notification, resolve it and delete the queue task.
@@ -90,10 +92,19 @@ class NotificationsQueueManager:
         Keyword arguments:
         task_id -- Task id to be resolved.
         """
-        notification_type = notification_id[task_id[:2]]
-        task = find_task(notification_type,task_id)
+        task_id = task_key[:2]
+        Utils._assert(
+            not task_id in notification_id,
+            'Invalid task key.',
+            QueueException
+        )
+
+        notification_type = notification_id[task_id]
+        task = find_task(notification_type,task_key)
 
         if task:
-            notification = create_notification(task_id[:2], **json.loads(task.payload))
+            notification = create_notification(task_id, **json.loads(task.payload))
             notification.send_notification()
             queue.delete_tasks([task])
+        else:
+            raise QueueException('Task not found.')

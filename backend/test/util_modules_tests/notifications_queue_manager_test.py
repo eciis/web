@@ -3,8 +3,9 @@
 import random
 from google.appengine.api import taskqueue
 from ..test_base import TestBase
-from util import NotificationsQueueManager, Notification, notification_id
+from util import NotificationsQueueManager, Notification, NotificationNIL, notification_id
 from service_messages import create_message
+from custom_exceptions import QueueException
 from .. import mocks
 from mock import patch
 
@@ -66,6 +67,13 @@ class NotificationsQueueManagerTest(TestBase):
         self.assertEqual(num_tasks, 1)
         self.assertEqual(id_notification, notification.key)
     
+    def test_create_notification_task_with_invalid_notification(self):
+        """Test create notification task wiht invalid notification."""
+        with self.assertRaises(TypeError) as raises_context:
+            NotificationsQueueManager.create_notification_task("Notification")
+
+        self.assertEqual(str(raises_context.exception), 'Expected type Notification but got str.')
+    
     @patch('util.notification.send_message_notification')
     def test_resolve_notification_task(self, send_message_notification):
         """Test resolve notification task."""
@@ -100,3 +108,34 @@ class NotificationsQueueManagerTest(TestBase):
         send_message_notification.assert_called_with(**notification.format_notification())
         num_tasks = self.queue.fetch_statistics().tasks
         self.assertEqual(num_tasks, 0)
+    
+    @patch('util.notification.send_message_notification')
+    def test_resolve_notification_task_with_notification_nil(self, send_message_notification):
+        """Test resolve notification task with notification nil."""
+        notification = NotificationNIL()
+
+        num_tasks = self.queue.fetch_statistics().tasks
+        self.assertEqual(num_tasks, 0)
+
+        id_notification = NotificationsQueueManager.create_notification_task(notification)
+
+        num_tasks = self.queue.fetch_statistics().tasks
+        self.assertEqual(num_tasks, 1)
+
+        NotificationsQueueManager.resolve_notification_task(id_notification)
+
+        send_message_notification.assert_not_called()
+        num_tasks = self.queue.fetch_statistics().tasks
+        self.assertEqual(num_tasks, 0)
+    
+    def test_resolve_notification_task_with_invalid_id(self):
+        """Test resolve notification task with invalid id."""
+        with self.assertRaises(QueueException) as raises_context:
+            NotificationsQueueManager.resolve_notification_task('03-jksahdjkasjksahdshadkjsdhjksakjdhsajhkdhsajkdhas')
+        
+        self.assertEqual(str(raises_context.exception), 'Task not found.')
+
+        with self.assertRaises(QueueException) as raises_context:
+            NotificationsQueueManager.resolve_notification_task('ab-jksahdjkasjksahdshadkjsdhjksakjdhsajhkdhsajkdhas')
+        
+        self.assertEqual(str(raises_context.exception), 'Invalid task key.')          

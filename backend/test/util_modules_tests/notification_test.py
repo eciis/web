@@ -103,6 +103,15 @@ class NotificationTest(TestBase):
 
         self.assertEqual(notification.notification_type, 'ALL_NOTIFICATIONS')
     
+    def test_create_notification_nil(self):
+        """Test create notification nil."""
+        notification = NotificationNIL()
+
+        self.assertEqual(notification.message, 'NIL')
+        self.assertEqual(notification.entity_key, 'NIL')
+        self.assertEqual(notification.notification_type, 'NOTIFICATION_NIL')
+        self.assertEqual(notification.receiver_key, 'NIL')
+    
     @patch('util.notification.send_message_notification')
     def test_send_notification(self, send_message_notification):
         """Test send notification."""
@@ -126,6 +135,14 @@ class NotificationTest(TestBase):
 
         notification.send_notification()
         send_message_notification.assert_called_with(**notification.format_notification())
+    
+    @patch('util.notification.send_message_notification')
+    def test_send_notification_with_notification_nil(self, send_message_notification):
+        """Test send notification with notificatin NIL."""
+        notification = NotificationNIL()
+        notification.send_notification()
+
+        send_message_notification.assert_not_called()
     
     def test_format_notification(self):
         """Test format notification."""

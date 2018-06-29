@@ -3,7 +3,7 @@
 (describe('Test TimelineController', function() {
     beforeEach(module('app'));
 
-    var timelineCtrl, httpBackend, createController, rootScope;
+    var timelineCtrl, createController, rootScope;
     var user = {
         name: 'name',
         key : 'key',
@@ -45,14 +45,30 @@
                     'key': '654321'
                     };
 
+    var callback = function(){
+        return {
+            then : {}
+        }
+    };
+
+    var content = {
+        'scrollTop': 1,
+        'offsetHeight': 3,
+        'maxHeight': 5
+    }
+
     var posts = [survey, post];
 
-    beforeEach(inject(function($controller, $httpBackend, AuthService, $rootScope) {
-        httpBackend = $httpBackend;
+    beforeEach(inject(function($controller, AuthService, $rootScope) {
         rootScope = $rootScope;
         AuthService.login(user);
 
-        spyOn(Utils, 'setScrollListener').and.callFake(function() {});
+        spyOn(document, 'getElementById').and.callFake(function () {
+            return content
+            
+        });
+
+        spyOn(Utils, 'setScrollListener').and.callThrough();
 
         createController = function(){
             return $controller('TimelineController', {
@@ -61,6 +77,9 @@
         }
 
         timelineCtrl = createController();
+
+        timelineCtrl.content = content;
+        timelineCtrl.loadMorePosts = callback;
 
         timelineCtrl.user = new User(user);
         timelineCtrl.posts = posts;
@@ -73,6 +92,14 @@
             expect(rootScope.$on).toHaveBeenCalled();
         });
     });
+
+    // describe('Should call loadMorePosts', function() {
+    //     it('should call root scope to create observer', function() {
+    //         spyOn(timelineCtrl, 'loadMorePosts').and.callThrough();
+    //         timelineCtrl = createController();
+    //         expect(timelineCtrl.loadMorePosts).toHaveBeenCalled();
+    //     });
+    // });
 
     describe('Should not call delete post function', function() {
         it("should do nothing.", function() {

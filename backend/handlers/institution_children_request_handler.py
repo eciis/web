@@ -49,7 +49,7 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         institution_children = request.institution_requested_key.get()
         institution_children.set_parent(request.institution_key)
 
-        notification_id = request.send_response_notification(user.current_institution, user.key, 'ACCEPT')
+        notification_id = request.create_accept_response_notification(user.current_institution, user.key)
         request.send_response_email('ACCEPT')
 
         enqueue_task('add-admin-permissions', {
@@ -74,6 +74,6 @@ class InstitutionChildrenRequestHandler(BaseHandler):
         if institution_children.parent_institution == request.institution_key:
             institution_children.set_parent(None)
 
-        request.send_response_notification(user.current_institution, user.key, 'REJECT')
+        request.send_reject_response_notification(user.current_institution, user.key)
         request.send_response_email('REJECT')
         

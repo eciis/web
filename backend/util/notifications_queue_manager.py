@@ -90,7 +90,7 @@ class NotificationsQueueManager:
         notification, resolve it and delete the queue task.
 
         Keyword arguments:
-        task_id -- Task id to be resolved.
+        task_key -- Task id to be resolved.
         """
         task_id = task_key[:2]
         Utils._assert(
@@ -102,9 +102,12 @@ class NotificationsQueueManager:
         notification_type = notification_id[task_id]
         task = find_task(notification_type,task_key)
 
-        if task:
-            notification = create_notification(task_id, **json.loads(task.payload))
-            notification.send_notification()
-            queue.delete_tasks([task])
-        else:
-            raise QueueException('Task not found.')
+        Utils._assert(
+            not task,
+            'Task not found.',
+            QueueException
+        )
+
+        notification = create_notification(task_id, **json.loads(task.payload))
+        notification.send_notification()
+        queue.delete_tasks([task])

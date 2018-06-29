@@ -75,11 +75,31 @@ class NotificationTest(TestBase):
 
         expected_key = id + '-' + str(entity_hash) + str(receiver_hash) + str(timestamp)
         
-        self.assertEqual(notification.key, expected_key)
-        self.assertEqual(notification.message, message)
-        self.assertEqual(notification.entity_key, institution.key.urlsafe())
-        self.assertEqual(notification.notification_type, notification_type)
-        self.assertEqual(notification.receiver_key, user.key.urlsafe())
+        self.assertEqual(
+            notification.key, 
+            expected_key,
+            'Notification key must be the same as expected.'
+        )
+        self.assertEqual(
+            notification.message, 
+            message,
+            'Notification message must be the same as expected.'
+        )
+        self.assertEqual(
+            notification.entity_key, 
+            institution.key.urlsafe(),
+            'entity_key must be equal to institution key.'
+        )
+        self.assertEqual(
+            notification.notification_type, 
+            notification_type,
+            'notification_type must be the same as expected.'
+        )
+        self.assertEqual(
+            notification.receiver_key, 
+            user.key.urlsafe(),
+            'receiver_key must be equal to user key.'
+        )
     
     def test_create_notification_with_unregistred_type(self):
         """Test create notification with unregistred_type."""
@@ -101,16 +121,36 @@ class NotificationTest(TestBase):
             receiver_key=user.key.urlsafe()
         )
 
-        self.assertEqual(notification.notification_type, 'ALL_NOTIFICATIONS')
+        self.assertEqual(
+            notification.notification_type, 
+            'ALL_NOTIFICATIONS',
+            'notification_type must be the same as expected.'
+        )
     
     def test_create_notification_nil(self):
         """Test create notification nil."""
         notification = NotificationNIL()
 
-        self.assertEqual(notification.message, 'NIL')
-        self.assertEqual(notification.entity_key, 'NIL')
-        self.assertEqual(notification.notification_type, 'NOTIFICATION_NIL')
-        self.assertEqual(notification.receiver_key, 'NIL')
+        self.assertEqual(
+            notification.message, 
+            'NIL',
+            'Notification message must be the same as expected.'
+        )
+        self.assertEqual(
+            notification.entity_key, 
+            'NIL',
+            'entity_key must be equal to NIL.'
+        )
+        self.assertEqual(
+            notification.notification_type, 
+            'NOTIFICATION_NIL',
+            'notification_type must be the same as expected.'
+        )
+        self.assertEqual(
+            notification.receiver_key, 
+            'NIL',
+            'receiver_key must be equal to NIL.'
+        )
     
     @patch('util.notification.send_message_notification')
     def test_send_notification(self, send_message_notification):
@@ -171,4 +211,8 @@ class NotificationTest(TestBase):
             'entity_key': institution.key.urlsafe()
         }
 
-        self.assertEqual(notification.format_notification(), expected_format)
+        self.assertEqual(
+            notification.format_notification(), 
+            expected_format,
+            'Formated notification must be the same as expected.'
+        )

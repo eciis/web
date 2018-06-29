@@ -189,9 +189,11 @@ class RequestInstitutionChildrenTest(TestBase):
         )
 
 
+    @patch('models.request_institution_children.NotificationsQueueManager')
+    @patch('models.request_institution_children.Notification', return_value='Mocked_notification')
     @patch.object(Invite, 'send_notification')
     @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
-    def test_send_response_notification(self, create_notification_message, send_notification):
+    def test_send_response_notification(self, create_notification_message, send_notification, Notification, NotificationQueueManager):
         """Test send response notification."""
         request = generate_request(
             self.admin, self.institution, 
@@ -213,13 +215,26 @@ class RequestInstitutionChildrenTest(TestBase):
             )
 
             notification_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
-            send_notification.assert_called_with(
-                current_institution=self.other_institution.key, 
-                sender_key=self.other_institution.admin, 
-                receiver_key=self.admin.key, 
-                notification_type=notification_type,
-                message='mocked_message'
-            )
+
+            if action == 'ACCEPT':
+                Notification.assert_called_with(
+                    entity_key=request.key.urlsafe(), 
+                    receiver_key=self.admin.key.urlsafe(), 
+                    notification_type=notification_type,
+                    message='mocked_message'
+                )
+
+                NotificationQueueManager.create_notification_task.assert_called_with(
+                    'Mocked_notification'
+                )
+            else:
+                send_notification.assert_called_with(
+                    current_institution=self.other_institution.key, 
+                    sender_key=self.other_institution.admin, 
+                    receiver_key=self.admin.key, 
+                    notification_type=notification_type,
+                    message='mocked_message'
+                )
 
 
     @patch.object(EmailSender, 'send_email')

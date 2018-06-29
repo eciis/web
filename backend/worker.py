@@ -363,10 +363,13 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
     def post(self):
         institution_key = self.request.get('institution_key')
-        id_not = self.request.get('id')
+        id_nototification = self.request.get('id_notification')
         
         self.addAdminPermissions(institution_key)
-        NotificationsQueueManager.resolve_notification_task(id_not)
+        
+        # TODO Remove this 'if' when all handler notifications passed through this queue have been resolved.
+        if id_nototification:
+            NotificationsQueueManager.resolve_notification_task(id_nototification)
 
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):

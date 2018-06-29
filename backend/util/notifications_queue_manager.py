@@ -5,6 +5,7 @@ import time
 from google.appengine.api import taskqueue
 from service_messages import send_message_notification
 from . import Notification, NotificationNIL, notification_id
+from utils import Utils
 
 __all__ = ['NotificationsQueueManager']
 
@@ -60,6 +61,12 @@ class NotificationsQueueManager:
         Keyword arguments:
         notification -- Notification that will be used to create the task.
         """
+        Utils._assert(
+            not isinstance(notification, Notification),
+            "Expected type Notification but got %s." %(type(notification).__name__),
+            TypeError
+        )
+
         notification_type = notification.notification_type
         notification_key = notification.key
 

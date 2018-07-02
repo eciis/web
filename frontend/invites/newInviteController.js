@@ -125,7 +125,6 @@
 
         newInviteCtrl.answerLater = function answerLater() {
             newInviteCtrl.user.invites.forEach(invite => {
-                console.log(invite.key, newInviteCtrl.invite.key);
                 if(invite.key === newInviteCtrl.inviteKey){
                     invite.answerLater = true;
                     AuthService.save();

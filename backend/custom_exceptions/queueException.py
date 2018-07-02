@@ -3,7 +3,7 @@
 __all__ = ['QueueException']
 
 class QueueException(Exception):
-    """Entity Exception."""
+    """Queue Exception."""
 
     def __init__(self, msg=None):
         """Init method."""

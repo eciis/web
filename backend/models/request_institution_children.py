@@ -91,7 +91,7 @@ class RequestInstitutionChildren(Request):
         )
     
     def create_accept_response_notification(self, current_institution, invitee_key):
-        """Send accept notification to sender of invite"""
+        """Create accept notification to sender of invite"""
         notification_message = self.create_notification_message(
             user_key=invitee_key, 
             current_institution_key=current_institution,

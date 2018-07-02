@@ -45,16 +45,10 @@
                     'key': '654321'
                     };
 
-    var callback = function(){
-        return {
-            then : {}
-        }
-    };
-
     var content = {
         'scrollTop': 1,
         'offsetHeight': 3,
-        'maxHeight': 5
+        'scrollHeight': 5
     }
 
     var posts = [survey, post];
@@ -77,10 +71,7 @@
         }
 
         timelineCtrl = createController();
-
         timelineCtrl.content = content;
-        timelineCtrl.loadMorePosts = callback;
-
         timelineCtrl.user = new User(user);
         timelineCtrl.posts = posts;
     }));
@@ -93,13 +84,29 @@
         });
     });
 
-    // describe('Should call loadMorePosts', function() {
-    //     it('should call root scope to create observer', function() {
-    //         spyOn(timelineCtrl, 'loadMorePosts').and.callThrough();
-    //         timelineCtrl = createController();
-    //         expect(timelineCtrl.loadMorePosts).toHaveBeenCalled();
-    //     });
-    // });
+    describe('Should call loadMorePosts', function() {
+        it('should set variable testLoadMorePosts to true.' +
+            ' This variable was create to test if function that was' +
+            ' passed through bind Controller is called', function() {
+
+            var callbackLoadMorePost = function(){
+                return {
+                    then : function(){
+                        timelineCtrl.testLoadMorePosts = true;
+                        return timelineCtrl.testLoadMorePosts
+                    }
+                }
+            };
+            expect(timelineCtrl.testLoadMorePosts).toEqual(undefined);
+            
+            timelineCtrl = createController();
+            timelineCtrl.loadMorePosts = callbackLoadMorePost;
+            timelineCtrl.content = content;
+
+            timelineCtrl.content.onscroll();
+            expect(timelineCtrl.testLoadMorePosts).toEqual(true);
+        });
+    });
 
     describe('Should not call delete post function', function() {
         it("should do nothing.", function() {

@@ -74,11 +74,8 @@ var Utils = {
     
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
-        console.log("-------------------------");
 
         content.onscroll = function onscroll() {
-
-            console.log("definy onscroll");
             var screenPosition = content.scrollTop + content.offsetHeight;
             var maxHeight = content.scrollHeight;
             var proportion = screenPosition/maxHeight;

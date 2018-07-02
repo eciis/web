@@ -95,6 +95,27 @@
 
     describe('NewInviteController functions', function() {
 
+        describe('answerLater', function () {
+            it('should redirect to home', function () {
+                spyOn(state, 'go');
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(undefined);
+
+                newInviteCtrl.answerLater();
+
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(true);
+                expect(state.go).toHaveBeenCalledWith("app.user.home");
+            });
+
+            it('should not redirect to home', function () {
+                spyOn(state, 'go');
+                newInviteCtrl.inviteKey = "notExist";
+                newInviteCtrl.answerLater();
+                expect(state.go).not.toHaveBeenCalled();
+            });
+        });
+
         describe('addInstitution()', function() {
 
             var promise;

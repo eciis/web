@@ -125,12 +125,14 @@
 
         newInviteCtrl.answerLater = function answerLater() {
             newInviteCtrl.user.invites.forEach(invite => {
+                console.log(invite.key, newInviteCtrl.invite.key);
                 if(invite.key === newInviteCtrl.invite.key){
+                    console.log(">>>>>>>>>>>>>>>> entrou no invite");
                     invite.answerLater = true;
+                    AuthService.save();
+                    $state.go("app.user.home");
                 }
             });
-            AuthService.save();
-            $state.go("app.user.home");
         };
 
         newInviteCtrl.canAnswerLater = function canAnswerLater() {

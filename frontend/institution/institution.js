@@ -66,3 +66,7 @@ Institution.prototype.getFullAddress = function getFullAddress() {
         return fullAddress;
     }
 };
+
+Institution.prototype.isStateOn = function (state) {
+    return this.state === state;
+};

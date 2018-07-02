@@ -30,6 +30,9 @@
             "TRANSFER_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
             },
+            "REMOVED_ADM_PERMISSIONS": {
+                icon: "clear"
+            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"
@@ -168,6 +171,9 @@
             },
             "DELETED_USER": {
                 icon: "clear"
+            },
+            "ADD_ADM_PERMISSIONS": {
+                icon: "check_circle_outline"
             }
         };
 

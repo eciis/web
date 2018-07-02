@@ -154,7 +154,8 @@
                     institution_key: '987654321',
                     admin_key: '54321',
                     sender_name: 'User',
-                    key: '123'
+                    key: '123',
+                    invitee: 'invitee@email'
                 };
                 manageMemberCtrl.emails = [{ email: "teste@gmail.com" }]
                 var newInvite = new Invite(manageMemberCtrl.invite);
@@ -178,15 +179,6 @@
             });
         });
 
-        describe('isUserInviteValid()', function() {
-
-            it('should be true with new invite', function() {
-                var newInvite = new Invite({type_of_invite: 'USER',
-                                            institution_key: '987654321',
-                                            admin_key: '12345'});
-                expect(manageMemberCtrl.isUserInviteValid(newInvite)).toBe(true);
-            });
-        });
 
         describe('isValidAllEmails()', function() {
 

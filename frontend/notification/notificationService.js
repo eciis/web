@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("NotificationService", function NotificationService($firebaseArray,  MessageService, AuthService, $rootScope,
+    app.service("NotificationService", function NotificationService($firebaseArray, AuthService, $rootScope,
         NotificationMessageCreatorService) {
         var service = this;
 

@@ -6,17 +6,17 @@
         mdDialog, authService;
     var INVITES_URI = "/api/invites/";
 
-    var institution = {
-            name: 'institution',
-            key: '987654321',
-            institutions_admin: [],
-            sent_invitations: []
-    };
-    var otherInstitution = {
+    var institution = new Institution({
+        name: 'institution',
+        key: '987654321',
+        institutions_admin: [],
+        sent_invitations: []
+    });
+    var otherInstitution = new Institution({
         name: 'otherInstitution',
         key: '123456789',
         sent_invitations: []
-    };
+    });
     var inviteData = {
         invitee: "user@gmail.com",
         key: 'xyzcis',
@@ -81,7 +81,7 @@
         });
 
         it('should exist institution', function() {
-            expect(newInviteCtrl.institution).toEqual(otherInstitution);
+            expect(newInviteCtrl.institution).toEqual(new Institution(otherInstitution));
         });
 
         it('inviteKey should be "xyzcis"', function() {

@@ -9,7 +9,8 @@
         key: "institutuion_key",
         admin: user,
         members: [user],
-        name: 'institution'
+        name: 'institution',
+        trusted: true
     };
 
     var processInviteUserAdmCtrl, messageService, inviteService, mdDialog, authService, controller;

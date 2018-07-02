@@ -90,7 +90,7 @@ class NotificationsQueueManager:
         notification, resolve it and delete the queue task.
 
         Keyword arguments:
-        task_key -- Task id to be resolved.
+        task_key -- Task key to be resolved.
         """
         task_id = task_key[:2]
         Utils._assert(

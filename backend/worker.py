@@ -18,6 +18,7 @@ from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
+from util import NotificationsQueueManager
 
 
 def should_remove(user, institution_key, current_inst_key):
@@ -362,7 +363,14 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
     def post(self):
         institution_key = self.request.get('institution_key')
+        notification_id = self.request.get('id_notification')
+        
         self.addAdminPermissions(institution_key)
+        
+        # TODO Remove this 'if' when all handler notifications passed through this queue have been resolved.
+        # Author: Luiz Silva - 29/06/18
+        if notification_id:
+            NotificationsQueueManager.resolve_notification_task(notification_id)
 
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):

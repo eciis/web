@@ -1,8 +1,8 @@
 'use strict';
 
-(describe('Test AcceptInviteController', function () {
+(describe('Test RedirectInviteInstitutionController', function () {
 
-    var acceptInviteCtrl, scope, httpBackend, inviteService, state, authService;
+    var redirectInviteCtrl, scope, httpBackend, inviteService, state, authService;
 
     var invite = new Invite({
         'key': '12300'
@@ -26,7 +26,7 @@
         });
 
         $stateParams.id = invite.key;
-        acceptInviteCtrl = $controller('AcceptInviteController', {
+        redirectInviteCtrl = $controller('RedirectInviteInstitutionController', {
             InviteService: inviteService,
             state: state,
             $stateParams: $stateParams,
@@ -43,17 +43,17 @@
 
     describe('displayLoading()', function () {
         it('should call cancelSignup', function () {
-            spyOn(acceptInviteCtrl, 'cancelSignup');
-            acceptInviteCtrl.displayLoading();
-            expect(acceptInviteCtrl.loading).toBeTruthy();
-            expect(acceptInviteCtrl.cancelSignup).toHaveBeenCalled();
+            spyOn(redirectInviteCtrl, 'cancelSignup');
+            redirectInviteCtrl.displayLoading();
+            expect(redirectInviteCtrl.loading).toBeTruthy();
+            expect(redirectInviteCtrl.cancelSignup).toHaveBeenCalled();
         });
     });
 
     describe('goToHome', function () {
         it('should call state.go', function () {
             spyOn(state, 'go');
-            acceptInviteCtrl.goToHome();
+            redirectInviteCtrl.goToHome();
             expect(state.go).toHaveBeenCalledWith('app.user.home');
         });
     });
@@ -65,14 +65,14 @@
         });
 
         it('should go to new_invite', function () {
-            acceptInviteCtrl.signin();
+            redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalledWith("new_invite", {key: invite.key});
         });
 
         it('should go to signin', function () {
             authService.logout();
-            acceptInviteCtrl.signin();
+            redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalledWith("signin");
         });
@@ -80,15 +80,15 @@
 
     describe('cancelSignup()', function() {
         it('should set signup to false', function () {
-            acceptInviteCtrl.cancelSignup();
-            expect(acceptInviteCtrl.signup).toBeFalsy();
+            redirectInviteCtrl.cancelSignup();
+            expect(redirectInviteCtrl.signup).toBeFalsy();
         });
     });
 
     describe('errorHandler()', function() {
         it('should set loading to false', function() {
-            acceptInviteCtrl.errorHandler();
-            expect(acceptInviteCtrl.loading).toBeFalsy();
+            redirectInviteCtrl.errorHandler();
+            expect(redirectInviteCtrl.loading).toBeFalsy();
         });
     });
 }));

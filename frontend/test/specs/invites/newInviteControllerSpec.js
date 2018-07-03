@@ -95,6 +95,51 @@
 
     describe('NewInviteController functions', function() {
 
+        describe('answerLater', function () {
+            it('should redirect to home', function () {
+                spyOn(state, 'go');
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(undefined);
+
+                newInviteCtrl.answerLater();
+
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(true);
+                expect(state.go).toHaveBeenCalledWith("app.user.home");
+            });
+
+            it('should not redirect to home', function () {
+                spyOn(state, 'go');
+                newInviteCtrl.inviteKey = "notExist";
+                newInviteCtrl.answerLater();
+                expect(state.go).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('canAnswerLater', function () {
+            it("the user can answer later.", function () {
+                expect(newInviteCtrl.canAnswerLater()).toEqual(true);
+            });
+
+            it("the user can't answer later because he is inactive", function () {
+                newInviteCtrl.user.state = "inactive";
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it("the user can't answer later because the invite was processed", function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it("the user can't answer later because is loading the invite.", function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = false;
+                newInviteCtrl.loading = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+        });
+
         describe('addInstitution()', function() {
 
             var promise;

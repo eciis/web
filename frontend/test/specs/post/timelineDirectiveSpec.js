@@ -98,8 +98,6 @@
                 }
             };
             expect(timelineCtrl.testLoadMorePosts).toEqual(undefined);
-            
-            timelineCtrl = createController();
             timelineCtrl.loadMorePosts = callbackLoadMorePost;
             timelineCtrl.content = content;
 

@@ -2,7 +2,13 @@
 
 var Utils = {
 
-    addHttpsToUrl :  function addHttpsToUrl(text, urls) {
+    /**
+     * Adds the HTTP protocol name at the begin of all specified urls inside the text
+     * @param {string} text that contains urls
+     * @param {[string]} urls that occur inside the text
+     * @returns {string} text with the altered urls
+     */
+    addHttpsToUrl : function addHttpsToUrl(text, urls) {
         if(urls) {
             var http = "http://";
             for (var i = 0; i < urls.length; i++) {
@@ -14,6 +20,11 @@ var Utils = {
         return text;
     },
 
+    /**
+     * Extract an object key from the specified url
+     * @param {string} url that contains the key
+     * @returns the key if it exists, or the url, otherwise
+     */
     getKeyFromUrl : function getKeyFromUrl(url) {
         var key = url;
         if(url.indexOf("/api/key/") != -1) {
@@ -23,6 +34,11 @@ var Utils = {
         return key;
     },
 
+    /**
+     * Recognize all urls inside a text and makes them accessible
+     * @param {string} text that may contain urls
+     * @returns {string} text with accessible urls
+     */
     recognizeUrl : function recognizeUrl(text) {
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
@@ -33,6 +49,10 @@ var Utils = {
         return text;
     },
 
+    /**
+     * Replaces the original backend domain by the local one
+     * @param {object} config configutarion object
+     */
     updateBackendUrl : function updateBackendUrl(config) {
         var restApiUrl = Config.BACKEND_URL;
 
@@ -41,11 +61,17 @@ var Utils = {
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
 
-    getIndexesOf : function getIndexesOf(substring, string) {
+    /**
+     * Identify all the indexes where a substring occurs inside another string
+     * @param {string} substring to be searched
+     * @param {string} fullString that contains the searched substring
+     * @returns {[number]} a list of indexes where the substring occurs
+     */
+    getIndexesOf : function getIndexesOf(substring, fullString) {
         var indexes = [];
         if (substring.length !== 0) {
             var startIndex = 0, index;
-            while((index = string.indexOf(substring, startIndex)) > -1) {
+            while((index = fullString.indexOf(substring, startIndex)) > -1) {
                 indexes.push(index);
                 startIndex = index + substring.length;
             }
@@ -53,25 +79,41 @@ var Utils = {
         return indexes;
     },
 
-    limitString : function limitString(string, limit) {
-        if(string && string.length > limit) {
+    /**
+     * Limit the specified string if its size is bigger than the specified limit
+     * @param {string} stringToLimit string that will be limited if necessary
+     * @param {number} limit max string size
+     * @returns {string} the sliced string, followed by ellipsis, or the original one
+     */
+    limitString : function limitString(stringToLimit, limit) {
+        if(stringToLimit && stringToLimit.length > limit) {
             var undefinedIndex = -1;
-            var endIndexesOfLast = this.getIndexesOf("</a>", string);
+            var endIndexesOfLast = this.getIndexesOf("</a>", stringToLimit);
             var indexOfLastAboveLimit = endIndexesOfLast.findIndex((index) => index >= limit);
             if(indexOfLastAboveLimit !== undefinedIndex) {
                 var shiftToCloseTag = 4;
                 limit = endIndexesOfLast[indexOfLastAboveLimit] + shiftToCloseTag;
             }
-            return string.substring(0, limit+1) + "...";
+            return stringToLimit.substring(0, limit+1) + "...";
         } else {
-            return string;
+            return stringToLimit;
         }
     },
 
-    generateLink : function generateLink(url){
-        return window.location.host + url;
+    /**
+     * Create a new url based on the current location host and the path received as parameter
+     * @param {string} path the portion of the url to be appended to the current host
+     * @returns {string} the url generated with the current host and the specified path
+     */
+    generateLink : function generateLink(path){
+        return window.location.host + path;
     },
     
+    /**
+     * Set a function to be called when the content scroll ratio is equal or over 0.75
+     * @param {htmlElement} content a scrollable element
+     * @param {function} callback a function to be called
+     */
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 
@@ -94,9 +136,9 @@ var Utils = {
     },
 
     /**
-     * Verify if email is a valid email.
-     * @param {string} email the email that be verified.
-     * @returns {boolean} True if is a valid email or false if is invalid.
+     * Verify if email is valid.
+     * @param {string} email the email that will be verified.
+     * @returns {boolean} true if the email is valid or false otherwise.
      */
     validateEmail: function validateEmail(email) {
         var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

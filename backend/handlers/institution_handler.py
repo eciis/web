@@ -161,11 +161,23 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        notification_id = invite.create_accept_notification(user, institution.key)
+        notification_id = invite.create_notification(
+            'ACCEPT_INVITE_INSTITUTION',
+            institution.key, 
+            invite.admin_key.urlsafe(),
+            user
+        )
+
+        system_notification_id = invite.create_notification(
+            'ADD_ADM_PERMISSIONS',
+            institution_key=institution.key, 
+            receiver_key_urlsafe=user.key.urlsafe()
+        )
 
         enqueue_task('add-admin-permissions', {
             'institution_key': institution_key,
-            'id_notification': notification_id
+            'id_notification': notification_id,
+            'system_notification_id': system_notification_id
         })
 
         institution_json = Utils.toJson(institution)

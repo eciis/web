@@ -7,6 +7,7 @@ from send_email_hierarchy import InviteInstitutionEmailSender
 from util import get_subject
 from util import Notification
 from util import NotificationsQueueManager
+from service_messages import create_system_message
 
 __all__ = ['InviteInstitution']
 
@@ -77,29 +78,39 @@ class InviteInstitution(Invite):
             message=message
         )
  
-    def create_accept_notification(self, user, institution_key):
+    def create_notification(self, notification_type, institution_key, receiver_key_urlsafe, user=None):
         """Create the accept notification and insert it into the pull queue.
         
         Params:
         user -- the user who accepted the invite
         institution_key -- the key of the institution created by the user
         """
-        message = self.create_notification_message(
-            user.key,
-            institution_key,
-            user.current_institution,
-            self.institution_requested_key
-        )
+        message = self.get_notification_message(institution_key, user)
 
         notification = Notification(
             entity_key=self.key.urlsafe(),
-            receiver_key=self.admin_key.urlsafe(),
-            notification_type='ACCEPT_INVITE_INSTITUTION',
+            receiver_key=receiver_key_urlsafe,
+            notification_type=notification_type,
             message=message
         )
 
         return NotificationsQueueManager.create_notification_task(
             notification)
+    
+    def get_notification_message(self, institution_key, user=None):
+        """Returns the correct notification's message by chosing between system_messages
+        or regular messages.
+        
+        Params:
+        institution_key -- the key of the institution that the user has created.
+        user -- the user who is sending notification, if it is not none.
+        """
+        return self.create_notification_message(
+                    user.key,
+                    institution_key,
+                    user.current_institution,
+                    self.institution_requested_key
+                ) if user else create_system_message(institution_key)
 
     def make(self):
         """Create json of invite to institution."""

@@ -364,6 +364,7 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
     def post(self):
         institution_key = self.request.get('institution_key')
         notification_id = self.request.get('id_notification')
+        system_notification_id = self.request.get('system_notification_id')
         
         self.addAdminPermissions(institution_key)
         
@@ -371,6 +372,8 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
         # Author: Luiz Silva - 29/06/18
         if notification_id:
             NotificationsQueueManager.resolve_notification_task(notification_id)
+        if system_notification_id:
+            NotificationsQueueManager.resolve_notification_task(system_notification_id)
 
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):

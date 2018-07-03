@@ -3,14 +3,13 @@
 
     var app = angular.module('app');
 
-    app.controller("AcceptInviteController", function AcceptInviteController(
+    app.controller("RedirectInviteInstitutionController", function RedirectInviteInstitutionController(
             InviteService, $stateParams, $state, AuthService) {
         var controller = this;
 
         var inviteId = $stateParams.id;
 
         controller.invite = {};
-
         controller.loading = false;
 
         controller.displayLoading = function displayLoading() {

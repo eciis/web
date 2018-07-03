@@ -4,7 +4,8 @@ from invite_user import InviteUser
 from utils import Utils
 from custom_exceptions import NotAuthorizedException
 from send_email_hierarchy import TransferAdminEmailSender
-from util.strings_pt_br import get_subject
+from util import get_subject
+from util import Notification, NotificationsQueueManager
 
 __all__ = ['InviteUserAdm']
 
@@ -62,6 +63,24 @@ class InviteUserAdm(InviteUser):
             receiver_key=self.invitee_key,
             notification_type=notification_type
         )
+    
+    def create_accept_notification(self, current_institution):
+        """."""
+        message = self.create_notification_message(
+            user_key=self.invitee_key,
+            current_institution_key=current_institution,
+            receiver_institution_key=self.institution_key
+        )
+
+        notification = Notification(
+            message,
+            self.key.urlsafe(),
+            "ACCEPT_INVITE_USER_ADM",
+            self.invitee_key.urlsafe()
+        )
+
+        notification_id = NotificationsQueueManager.create_notification_task(notification)
+        return notification_id
     
     def send_response_notification(self, current_institution, action):
         """Send notification to sender of invite when invite is accepted or rejected."""

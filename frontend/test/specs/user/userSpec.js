@@ -194,9 +194,22 @@
 
         describe('getPendingInvitation', function() {
 
-          it('should return some invite', function() {
+          it('should return the firts invite', function() {
             user = createUser();
             expect(user.getPendingInvitation().should.not.be.empty);
+            expect(user.getPendingInvitation()).toEqual(inviteUser);
+          });
+
+          it('should return the second invite', function() {
+            user = createUser();
+            user.invites[0].answerLater = true;
+            expect(user.getPendingInvitation().should.not.be.empty);
+            expect(user.getPendingInvitation()).toEqual(inviteInstitution);
+          });
+
+          it('should return none', function() {
+            user.invites[1].answerLater = true;
+            expect(user.getPendingInvitation()).toEqual(undefined);
           });
         });
 

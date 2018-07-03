@@ -116,6 +116,30 @@
             });
         });
 
+        describe('canAnswerLater', function () {
+            it('should redirect to home', function () {
+                expect(newInviteCtrl.canAnswerLater()).toEqual(true);
+            });
+
+            it('should redirect to home', function () {
+                newInviteCtrl.user.state = "inactive";
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it('should redirect to home', function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it('should redirect to home', function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = false;
+                newInviteCtrl.loading = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+        });
+
         describe('addInstitution()', function() {
 
             var promise;

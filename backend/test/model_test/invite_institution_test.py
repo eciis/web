@@ -8,6 +8,7 @@ from models import InviteInstitution
 from models import User
 
 from custom_exceptions import FieldException
+from mock import patch
 
 
 class InviteInstitutionTest(TestBase):
@@ -79,6 +80,17 @@ class InviteInstitutionTest(TestBase):
             expected_maked_invite,
             "The maked invite should be equal to the expected one"
         )
+    
+    @patch('models.invite_institution.NotificationsQueueManager.create_notification_task')
+    def test_create_accept_notification(self, mock_method):
+        invite = InviteInstitution.create(self.data)
+        invite.put()
+        self.user.current_institution = self.institution.key
+        self.user.put()
+        id = invite.create_accept_notification(self.user, self.institution.key)
+        mock_method.assert_called()
+        self.assertTrue(id != None)
+
 
 
 def initModels(cls):

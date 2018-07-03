@@ -161,9 +161,12 @@ class InstitutionHandler(BaseHandler):
         user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         user.put()
 
-        invite.send_response_notification(institution.key, user.key, 'ACCEPT')
+        notification_id = invite.create_accept_notification(user, institution.key)
 
-        enqueue_task('add-admin-permissions', {'institution_key': institution_key})
+        enqueue_task('add-admin-permissions', {
+            'institution_key': institution_key,
+            'id_notification': notification_id
+        })
 
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(

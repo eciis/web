@@ -5,6 +5,8 @@ from custom_exceptions import FieldException
 from . import User
 from send_email_hierarchy import InviteInstitutionEmailSender
 from util import get_subject
+from util import Notification
+from util import NotificationsQueueManager
 
 __all__ = ['InviteInstitution']
 
@@ -74,6 +76,30 @@ class InviteInstitution(Invite):
             notification_type=notification_type,
             message=message
         )
+ 
+    def create_accept_notification(self, user, institution_key):
+        """Create the accept notification and insert it into the pull queue.
+        
+        Params:
+        user -- the user who accepted the invite
+        institution_key -- the key of the institution created by the user
+        """
+        message = self.create_notification_message(
+            user.key,
+            institution_key,
+            user.current_institution,
+            self.institution_requested_key
+        )
+
+        notification = Notification(
+            entity_key=self.key.urlsafe(),
+            receiver_key=self.admin_key.urlsafe(),
+            notification_type='ACCEPT_INVITE_INSTITUTION',
+            message=message
+        )
+
+        return NotificationsQueueManager.create_notification_task(
+            notification)
 
     def make(self):
         """Create json of invite to institution."""

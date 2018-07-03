@@ -194,7 +194,7 @@
 
         describe('getPendingInvitation', function() {
 
-          it('should return the firts invite', function() {
+          it('should return the first invite', function() {
             user = createUser();
             expect(user.getPendingInvitation().should.not.be.empty);
             expect(user.getPendingInvitation()).toEqual(inviteUser);

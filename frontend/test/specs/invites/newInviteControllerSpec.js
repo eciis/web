@@ -117,22 +117,22 @@
         });
 
         describe('canAnswerLater', function () {
-            it('should redirect to home', function () {
+            it("the user can answer later.", function () {
                 expect(newInviteCtrl.canAnswerLater()).toEqual(true);
             });
 
-            it('should redirect to home', function () {
+            it("the user can't answer later because he is inactive", function () {
                 newInviteCtrl.user.state = "inactive";
                 expect(newInviteCtrl.canAnswerLater()).toEqual(false);
             });
 
-            it('should redirect to home', function () {
+            it("the user can't answer later because the invite was processed", function () {
                 newInviteCtrl.user.state = "active";
                 newInviteCtrl.isAlreadyProcessed = true;
                 expect(newInviteCtrl.canAnswerLater()).toEqual(false);
             });
 
-            it('should redirect to home', function () {
+            it("the user can't answer later because is loading the invite.", function () {
                 newInviteCtrl.user.state = "active";
                 newInviteCtrl.isAlreadyProcessed = false;
                 newInviteCtrl.loading = true;

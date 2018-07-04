@@ -128,9 +128,9 @@
                 if(invite.key === newInviteCtrl.inviteKey){
                     invite.answerLater = true;
                     AuthService.save();
-                    $state.go("app.user.home");
                 }
             });
+            $state.go("app.user.home");
         };
 
         newInviteCtrl.canAnswerLater = function canAnswerLater() {

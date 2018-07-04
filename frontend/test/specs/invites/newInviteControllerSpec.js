@@ -107,13 +107,6 @@
                 expect(newInviteCtrl.user.invites[0].answerLater).toEqual(true);
                 expect(state.go).toHaveBeenCalledWith("app.user.home");
             });
-
-            it('should not redirect to home', function () {
-                spyOn(state, 'go');
-                newInviteCtrl.inviteKey = "notExist";
-                newInviteCtrl.answerLater();
-                expect(state.go).not.toHaveBeenCalled();
-            });
         });
 
         describe('canAnswerLater', function () {

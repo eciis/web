@@ -85,7 +85,9 @@ def get_all_parent_admins(child_institution, admins=[]):
     The admins' list starts empty and as passed by reference is the same over the recursion's stack.
     child_institution is used to get the parent and so on go up in the hierarchy.
     """
-    admins.append(child_institution.admin.get())
+    child_inst_admin = child_institution.admin.get()
+    if child_inst_admin not in admins:
+        admins.append(child_inst_admin)
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()

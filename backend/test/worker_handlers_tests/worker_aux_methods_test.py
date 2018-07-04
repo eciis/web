@@ -10,7 +10,7 @@ from worker import get_all_parent_admins
 class WorkerAuxMethodsTest(TestBase):
     """Test worker aux methods."""
     
-    def get_all_parent_admins(self):
+    def test_get_all_parent_admins(self):
         """Test get_all_parent_admins method."""
         first_user = mocks.create_user()
         second_user = mocks.create_user()
@@ -22,48 +22,50 @@ class WorkerAuxMethodsTest(TestBase):
         fourth_inst = mocks.create_institution()
 
         first_inst.add_member(first_user)
-        first_inst.set_admin(first_user.key)
-        third_inst.add_member(first_user)
-        third_inst.set_admin(first_user.key)
-
         second_inst.add_member(second_user)
-        second_inst.set_admin(second_user.key)
-
+        third_inst.add_member(first_user)
         fourth_inst.add_member(third_user)
+
+        first_inst.set_admin(first_user.key)
+        second_inst.set_admin(second_user.key)
+        third_inst.set_admin(first_user.key)
         fourth_inst.set_admin(third_user.key)
 
-        first_user.institutions_admin.append(first_inst.key)
-        first_user.institutions_admin.append(third_inst.key)
-        second_user.institutions_admin.append(second_inst.key)
-        third_user.institutions_admin.append(fourth_inst.key)
+        first_user.add_institution(first_inst.key)
+        first_user.add_institution(third_inst.key)
+        second_user.add_institution(second_inst.key)
+        third_user.add_institution(fourth_inst.key)
 
-        # Hierarchy
+        first_user.add_institution_admin(first_inst.key)
+        first_user.add_institution_admin(third_inst.key)
+        second_user.add_institution_admin(second_inst.key)
+        third_user.add_institution_admin(fourth_inst.key)
+
+        # Hierarchy (top to bottom)
         #   first_inst -> second_inst -> third_inst -> fourth_inst
         #   (first_user)  (second_user)   (first_user)  (third_user)
-        second_inst.parent_institution = first_inst.key
-        third_inst.parent_institution = second_inst.key
-        fourth_inst.parent_institution = third_inst.key
+        first_inst.add_child(second_inst.key)
+        second_inst.add_child(third_inst.key)
+        third_inst.add_child(fourth_inst.key)
 
-        first_inst.children_institutions.append(second_inst.key)
-        third_inst.children_institutions.append(fourth_inst.key)
+        second_inst.set_parent(first_inst.key)
+        fourth_inst.set_parent(third_inst.key)
 
-        first_inst.put()
-        second_inst.put()
-        third_inst.put()
-        fourth_inst.put()
+        admins = get_all_parent_admins(fourth_inst) 
 
-        first_user.put()
-        second_user.put()
-        third_user.put()
-
-        admins = get_all_parent_admins(fourth_inst, [])
-
+        self.assertEquals(len(admins), 2)
+        # should be true, because the third_inst has not
+        # confirmed the link with second_inst
         self.assertTrue(second_user not in admins)
-        self.assertEquals([first_user, third_user], admins)
+        self.assertTrue(first_user in admins)
+        self.assertTrue(third_user in admins)
 
-        second_inst.children_institutions.append(third_inst.key)
+        # now the link between second_inst and third_inst is confirmed
+        third_inst.set_parent(second_inst.key)
 
         admins = get_all_parent_admins(fourth_inst, [])
 
+        self.assertEquals(len(admins), 3)
+        self.assertTrue(first_user in admins)
         self.assertTrue(second_user in admins)
-        self.assertEquals([first_user, second_user, third_user], admins)
+        self.assertTrue(third_user in admins)

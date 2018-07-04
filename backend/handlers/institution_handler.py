@@ -168,11 +168,13 @@ class InstitutionHandler(BaseHandler):
             user
         )
 
-        system_notification_id = invite.create_notification(
-            'ADD_ADM_PERMISSIONS',
-            institution_key=institution.key, 
-            receiver_key_urlsafe=user.key.urlsafe()
-        )
+        system_notification_id = None
+        if invite.__class__.__name__ == 'InviteInstitutionParent':
+            system_notification_id = invite.create_notification(
+                'ADD_ADM_PERMISSIONS',
+                institution_key=institution.key, 
+                receiver_key_urlsafe=user.key.urlsafe()
+            )
 
         enqueue_task('add-admin-permissions', {
             'institution_key': institution_key,

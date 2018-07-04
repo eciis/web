@@ -66,7 +66,10 @@ class InviteUserAdm(InviteUser):
         )
     
     def create_system_notification(self):
-        """Create a new system notification to transfer admin permissions."""
+        """
+        Create a new system notification for the new administrator 
+        to inform you that administrative permissions have been transferred.
+        """
         message = create_system_message(self.institution_key)
 
         notification = Notification(
@@ -104,7 +107,7 @@ class InviteUserAdm(InviteUser):
         return notification_id
     
     def send_reject_response_notification(self, current_institution):
-        """Send notification to sender of invite when invite is accepted or rejected."""
+        """Send notification to sender of invite when invite is rejected."""
         notification_type = "REJECT_INVITE_USER_ADM"
         notification_message= self.create_notification_message(
             user_key=self.invitee_key,

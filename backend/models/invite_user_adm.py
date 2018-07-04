@@ -66,7 +66,7 @@ class InviteUserAdm(InviteUser):
         )
     
     def create_system_notification(self):
-        """."""
+        """Create a new system notification to transfer admin permissions."""
         message = create_system_message(self.institution_key)
 
         notification = Notification(
@@ -80,7 +80,12 @@ class InviteUserAdm(InviteUser):
         return notification_id
     
     def create_accept_response_notification(self, current_institution):
-        """."""
+        """
+        Create a new accept response notification.
+        
+        Keyword arguments:
+        current_institution -- Current institution of user.
+        """
         admin = self.institution_key.get().admin
         message = self.create_notification_message(
             user_key=self.invitee_key,

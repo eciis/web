@@ -123,8 +123,14 @@ class NotificationTest(TestBase):
 
         self.assertEqual(
             notification.notification_type, 
-            'ALL_NOTIFICATIONS',
+            'ANY_NOTIFICATIONS',
             'notification_type must be the same as expected.'
+        )
+
+        self.assertEqual(
+            notification.notification_group, 
+            'ALL_NOTIFICATIONS',
+            'notification_group must be the same as expected.'
         )
     
     def test_create_notification_nil(self):

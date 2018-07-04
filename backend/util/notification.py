@@ -3,7 +3,7 @@
 import time
 from service_messages import send_message_notification
 
-__all__ = ['Notification', 'NotificationNIL', 'notification_id']
+__all__ = ['Notification', 'notification_id']
 
 notification_id = {
     "00": "ALL_NOTIFICATIONS",
@@ -108,26 +108,3 @@ class Notification(object):
         Method to generate string representation of notification object.
         """
         return str(self)
-
-
-class NotificationNIL(Notification):
-    """
-    Class to create empty notification.
-    """
-    def __init__(self, **kwords):
-        """
-        Constructor of class NotificationNIL.
-        """
-        super(NotificationNIL, self).__init__(
-            message='NIL',
-            entity_key='NIL',
-            notification_type='NOTIFICATION_NIL',
-            receiver_key='NIL'
-        )
-    
-    def send_notification(self):
-        """
-        Method to send notifications.
-        In empty notifications, this method should have no action.
-        """
-        pass

@@ -3,7 +3,7 @@
 import random
 from google.appengine.api import taskqueue
 from ..test_base import TestBase
-from util import NotificationsQueueManager, Notification, NotificationNIL, notification_id
+from util import NotificationsQueueManager, Notification, notification_id
 from service_messages import create_message
 from custom_exceptions import QueueException
 from .. import mocks
@@ -130,37 +130,6 @@ class NotificationsQueueManagerTest(TestBase):
         NotificationsQueueManager.resolve_notification_task(id_notification)
 
         send_message_notification.assert_called_with(**notification.format_notification())
-        num_tasks = self.queue.fetch_statistics().tasks
-        self.assertEqual(
-            num_tasks, 
-            0,
-            'num_tasks must be equal to 0'
-        )
-    
-    @patch('util.notification.send_message_notification')
-    def test_resolve_notification_task_with_notification_nil(self, send_message_notification):
-        """Test resolve notification task with notification nil."""
-        notification = NotificationNIL()
-
-        num_tasks = self.queue.fetch_statistics().tasks
-        self.assertEqual(
-            num_tasks, 
-            0,
-            'num_tasks must be equal to 0'
-        )
-
-        id_notification = NotificationsQueueManager.create_notification_task(notification)
-
-        num_tasks = self.queue.fetch_statistics().tasks
-        self.assertEqual(
-            num_tasks, 
-            1,
-            'num_tasks must be equal to 1'
-        )
-
-        NotificationsQueueManager.resolve_notification_task(id_notification)
-
-        send_message_notification.assert_not_called()
         num_tasks = self.queue.fetch_statistics().tasks
         self.assertEqual(
             num_tasks, 

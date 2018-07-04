@@ -2,7 +2,7 @@
 
 import random
 from ..test_base import TestBase
-from util import notification_id, Notification, NotificationNIL
+from util import notification_id, Notification
 from util.notification import get_notification_id
 from service_messages import create_message
 from mock import patch
@@ -133,31 +133,6 @@ class NotificationTest(TestBase):
             'notification_group must be the same as expected.'
         )
     
-    def test_create_notification_nil(self):
-        """Test create notification nil."""
-        notification = NotificationNIL()
-
-        self.assertEqual(
-            notification.message, 
-            'NIL',
-            'Notification message must be the same as expected.'
-        )
-        self.assertEqual(
-            notification.entity_key, 
-            'NIL',
-            'entity_key must be equal to NIL.'
-        )
-        self.assertEqual(
-            notification.notification_type, 
-            'NOTIFICATION_NIL',
-            'notification_type must be the same as expected.'
-        )
-        self.assertEqual(
-            notification.receiver_key, 
-            'NIL',
-            'receiver_key must be equal to NIL.'
-        )
-    
     @patch('util.notification.send_message_notification')
     def test_send_notification(self, send_message_notification):
         """Test send notification."""
@@ -181,14 +156,6 @@ class NotificationTest(TestBase):
 
         notification.send_notification()
         send_message_notification.assert_called_with(**notification.format_notification())
-    
-    @patch('util.notification.send_message_notification')
-    def test_send_notification_with_notification_nil(self, send_message_notification):
-        """Test send notification with notificatin NIL."""
-        notification = NotificationNIL()
-        notification.send_notification()
-
-        send_message_notification.assert_not_called()
     
     def test_format_notification(self):
         """Test format notification."""

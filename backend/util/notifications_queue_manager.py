@@ -4,7 +4,7 @@ import json
 import time
 from google.appengine.api import taskqueue
 from service_messages import send_message_notification
-from . import Notification, NotificationNIL, notification_id
+from . import Notification, notification_id
 from utils import Utils
 from custom_exceptions import QueueException
 
@@ -33,21 +33,6 @@ def find_task(notification_type, task_id, num_fetchs=0):
         return task if task else find_task(notification_type, task_id, num_fetchs+fetchs)
 
     return None
-
-def create_notification(notification_id, **kwords):
-    """
-    Method to create notification according to your id.
-
-    Keyword arguments:
-    notification_id -- Notification Id to be created.
-    kwords -- Dictionary of arguments to create the notification.
-    """
-    switch = {
-        "01": NotificationNIL,
-        "OTHERWISE": Notification
-    }
-    
-    return switch.get(notification_id, switch['OTHERWISE'])(**kwords)
 
 class NotificationsQueueManager:
     """
@@ -108,6 +93,6 @@ class NotificationsQueueManager:
             QueueException
         )
 
-        notification = create_notification(task_id, **json.loads(task.payload))
+        notification = Notification(**json.loads(task.payload))
         notification.send_notification()
         queue.delete_tasks([task])

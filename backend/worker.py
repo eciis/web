@@ -442,13 +442,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 user.permissions[permission].update(permissions[permission])
             else:
                 user.permissions.update({permission: permissions[permission]})
-
-        #send_message_notification(
-        #    receiver_key=user.key.urlsafe(),
-        #    notification_type='TRANSFER_ADM_PERMISSIONS',
-        #    entity_key=institution.key.urlsafe(),
-        #    message=create_system_message(institution.key),
-        #)
     
     def remove_permissions(self, user, institution):
         """    
@@ -467,13 +460,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
         for permission, institution_keys in permissions_filtered.items():
             for instition_key in institution_keys:
                 user.remove_permission(permission, instition_key)
-
-        #send_message_notification(
-        #    receiver_key=user.key.urlsafe(),
-        #    notification_type='REMOVED_ADM_PERMISSIONS',
-        #    entity_key=institution.key.urlsafe(),
-        #    message=create_system_message(institution.key),
-        #)
 
 
     def post(self):

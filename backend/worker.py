@@ -445,13 +445,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 user.permissions[permission].update(permissions[permission])
             else:
                 user.permissions.update({permission: permissions[permission]})
-
-        send_message_notification(
-            receiver_key=user.key.urlsafe(),
-            notification_type='TRANSFER_ADM_PERMISSIONS',
-            entity_key=institution.key.urlsafe(),
-            message=create_system_message(institution.key),
-        )
     
     def remove_permissions(self, user, institution):
         """    
@@ -471,13 +464,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
             for instition_key in institution_keys:
                 user.remove_permission(permission, instition_key)
 
-        send_message_notification(
-            receiver_key=user.key.urlsafe(),
-            notification_type='REMOVED_ADM_PERMISSIONS',
-            entity_key=institution.key.urlsafe(),
-            message=create_system_message(institution.key),
-        )
-
 
     def post(self):
         """
@@ -492,9 +478,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
+        notifications_ids = self.request.get_all('notifications_ids')
         
         @ndb.transactional(xg=True, retries=10)
-        def save_changes(admin, new_admin, institution):
+        def save_changes(admin, new_admin, institution, notifications_ids):
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, institution)
             
@@ -508,8 +495,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
             new_admin.put()
             admin.put()
             institution.put()
+
+            map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
         
-        save_changes(admin, new_admin, institution)
+        save_changes(admin, new_admin, institution, notifications_ids)
 
 
 app = webapp2.WSGIApplication([

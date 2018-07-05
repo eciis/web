@@ -41,14 +41,18 @@ class InviteUserAdmHandler(BaseHandler):
             actual_admin.remove_institution_admin(institution.key)
             invite.change_status('accepted')
             
+            system_notification_id = invite.create_system_notification()
+            notification_id = invite.create_accept_response_notification(user.current_institution)
+
             enqueue_task(
                 'transfer-admin-permissions', 
                 {
                     'institution_key': institution.key.urlsafe(), 
-                    'user_key': user.key.urlsafe()
+                    'user_key': user.key.urlsafe(),
+                    'notifications_ids': [system_notification_id, notification_id]
                 }
             )
-            invite.send_response_notification(current_institution=user.current_institution, action='ACCEPT')
+
         save_changes(user, actual_admin, invite, institution)
         self.response.write(json.dumps(user.make(self.request)))
 
@@ -58,4 +62,4 @@ class InviteUserAdmHandler(BaseHandler):
         invite = ndb.Key(urlsafe=invite_key).get()
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(current_institution=user.current_institution, action='REJECT')
+        invite.send_reject_response_notification(current_institution=user.current_institution)

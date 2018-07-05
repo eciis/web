@@ -3,7 +3,7 @@
 import time
 from service_messages import send_message_notification
 
-__all__ = ['Notification', 'NotificationNIL', 'notification_id']
+__all__ = ['Notification', 'notification_id']
 
 notification_id = {
     "00": "ALL_NOTIFICATIONS",
@@ -12,7 +12,8 @@ notification_id = {
     "03": "ACCEPT_INVITE_HIERARCHY",
     "04": "ACCEPT_INVITE_USER_ADM",
     "05": "ADD_ADM_PERMISSIONS",
-    "06": "ACCEPT_INVITE_INSTITUTION"
+    "06": "ACCEPT_INVITE_INSTITUTION",
+    "07": "TRANSFER_ADM_PERMISSIONS"
 }
 
 def get_notification_id(notification_type):
@@ -48,7 +49,8 @@ class Notification(object):
         """
         self.message = message
         self.entity_key = entity_key
-        self.notification_type = self._get_notification_type(notification_type)
+        self.notification_type = notification_type
+        self.notification_group = self._get_notification_group(notification_type)
         self.receiver_key = receiver_key
         self.key = self._generate_key()
     
@@ -70,7 +72,7 @@ class Notification(object):
         of the entity_key, the hash of the receiver_key, and the current 
         date in seconds.
         """
-        id = get_notification_id(self.notification_type)
+        id = get_notification_id(self.notification_group)
         entity_hash = hash(self.entity_key)
         receiver_hash = hash(self.receiver_key)
         timestamp = time.time()
@@ -79,9 +81,9 @@ class Notification(object):
         key = key.replace(".", "")
         return key
     
-    def _get_notification_type(self, notification_type):
+    def _get_notification_group(self, notification_type):
         """
-        Method to get the notification type according to the notifications_id dictionary. 
+        Method to get the notification group according to the notifications_id dictionary. 
         If the notification type already exists in the dictionary, it is returned, 
         otherwise the default type 'ALL_NOTIFICATIONS' is returned.
         """
@@ -107,26 +109,3 @@ class Notification(object):
         Method to generate string representation of notification object.
         """
         return str(self)
-
-
-class NotificationNIL(Notification):
-    """
-    Class to create empty notification.
-    """
-    def __init__(self, **kwords):
-        """
-        Constructor of class NotificationNIL.
-        """
-        super(NotificationNIL, self).__init__(
-            message='NIL',
-            entity_key='NIL',
-            notification_type='NOTIFICATION_NIL',
-            receiver_key='NIL'
-        )
-    
-    def send_notification(self):
-        """
-        Method to send notifications.
-        In empty notifications, this method should have no action.
-        """
-        pass

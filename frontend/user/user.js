@@ -91,7 +91,7 @@ User.prototype.isValid = function isValid() {
  */
 User.prototype.getPendingInvitation = function getPendingInvitation(){
     return _.find(this.invites, function(invite) {
-        if (invite.status === SENT && invite.type_of_invite !== 'INVITE_USER_ADM') {
+        if (invite.status === SENT && invite.type_of_invite !== 'INVITE_USER_ADM' && !invite.answerLater) {
             return invite;
         }
     });

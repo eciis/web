@@ -6,17 +6,17 @@
         mdDialog, authService;
     var INVITES_URI = "/api/invites/";
 
-    var institution = {
-            name: 'institution',
-            key: '987654321',
-            institutions_admin: [],
-            sent_invitations: []
-    };
-    var otherInstitution = {
+    var institution = new Institution({
+        name: 'institution',
+        key: '987654321',
+        institutions_admin: [],
+        sent_invitations: []
+    });
+    var otherInstitution = new Institution({
         name: 'otherInstitution',
         key: '123456789',
         sent_invitations: []
-    };
+    });
     var inviteData = {
         invitee: "user@gmail.com",
         key: 'xyzcis',
@@ -81,7 +81,7 @@
         });
 
         it('should exist institution', function() {
-            expect(newInviteCtrl.institution).toEqual(otherInstitution);
+            expect(newInviteCtrl.institution).toEqual(new Institution(otherInstitution));
         });
 
         it('inviteKey should be "xyzcis"', function() {
@@ -94,6 +94,44 @@
     });
 
     describe('NewInviteController functions', function() {
+
+        describe('answerLater', function () {
+            it('should redirect to home', function () {
+                spyOn(state, 'go');
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(undefined);
+
+                newInviteCtrl.answerLater();
+
+                expect(newInviteCtrl.user.invites).toEqual([invite]);
+                expect(newInviteCtrl.user.invites[0].answerLater).toEqual(true);
+                expect(state.go).toHaveBeenCalledWith("app.user.home");
+            });
+        });
+
+        describe('canAnswerLater', function () {
+            it("the user can answer later.", function () {
+                expect(newInviteCtrl.canAnswerLater()).toEqual(true);
+            });
+
+            it("the user can't answer later because he is inactive", function () {
+                newInviteCtrl.user.state = "inactive";
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it("the user can't answer later because the invite was processed", function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+
+            it("the user can't answer later because is loading the invite.", function () {
+                newInviteCtrl.user.state = "active";
+                newInviteCtrl.isAlreadyProcessed = false;
+                newInviteCtrl.loading = true;
+                expect(newInviteCtrl.canAnswerLater()).toEqual(false);
+            });
+        });
 
         describe('addInstitution()', function() {
 

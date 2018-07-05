@@ -4,7 +4,9 @@ from invite_user import InviteUser
 from utils import Utils
 from custom_exceptions import NotAuthorizedException
 from send_email_hierarchy import TransferAdminEmailSender
-from util.strings_pt_br import get_subject
+from util import get_subject
+from util import Notification, NotificationsQueueManager
+from service_messages import create_system_message
 
 __all__ = ['InviteUserAdm']
 
@@ -63,9 +65,50 @@ class InviteUserAdm(InviteUser):
             notification_type=notification_type
         )
     
-    def send_response_notification(self, current_institution, action):
-        """Send notification to sender of invite when invite is accepted or rejected."""
-        notification_type = "ACCEPT_INVITE_USER_ADM" if action == 'ACCEPT' else "REJECT_INVITE_USER_ADM"
+    def create_system_notification(self):
+        """
+        Create a new system notification for the new administrator 
+        to inform you that administrative permissions have been transferred.
+        """
+        message = create_system_message(self.institution_key)
+
+        notification = Notification(
+            message=message,
+            entity_key=self.institution_key.urlsafe(),
+            notification_type="TRANSFER_ADM_PERMISSIONS",
+            receiver_key=self.invitee_key.urlsafe()
+        )
+
+        notification_id = NotificationsQueueManager.create_notification_task(notification)
+        return notification_id
+    
+    def create_accept_response_notification(self, current_institution):
+        """
+        Create a new accept response notification.
+        
+        Keyword arguments:
+        current_institution -- Current institution of user.
+        """
+        admin = self.institution_key.get().admin
+        message = self.create_notification_message(
+            user_key=self.invitee_key,
+            current_institution_key=current_institution,
+            receiver_institution_key=self.institution_key
+        )
+
+        notification = Notification(
+            message=message,
+            entity_key=self.key.urlsafe(),
+            notification_type="ACCEPT_INVITE_USER_ADM",
+            receiver_key=admin.urlsafe()
+        )
+
+        notification_id = NotificationsQueueManager.create_notification_task(notification)
+        return notification_id
+    
+    def send_reject_response_notification(self, current_institution):
+        """Send notification to sender of invite when invite is rejected."""
+        notification_type = "REJECT_INVITE_USER_ADM"
         notification_message= self.create_notification_message(
             user_key=self.invitee_key,
             current_institution_key=current_institution,

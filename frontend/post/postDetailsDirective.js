@@ -167,7 +167,8 @@
 
         postDetailsCtrl.showButtonEdit = function showButtonEdit() {
             const hasPermission = postDetailsCtrl.user.hasPermission(EDIT_POST_PERMISSION, postDetailsCtrl.post.key);
-            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+            var isActiveInst = postDetailsCtrl.post.institution_state == "active";
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && isActiveInst &&
                     !postDetailsCtrl.postHasActivity() && !postDetailsCtrl.isShared() && !postDetailsCtrl.showSurvey();
         };
 

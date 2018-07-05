@@ -123,6 +123,22 @@
             return instObj.getFullAddress();
         };
 
+        newInviteCtrl.answerLater = function answerLater() {
+            newInviteCtrl.user.invites.forEach(invite => {
+                if(invite.key === newInviteCtrl.inviteKey){
+                    invite.answerLater = true;
+                    AuthService.save();
+                }
+            });
+            $state.go("app.user.home");
+        };
+
+        newInviteCtrl.canAnswerLater = function canAnswerLater() {
+            var userActive = newInviteCtrl.user.state === 'active';
+            return !newInviteCtrl.loading && !newInviteCtrl.isAlreadyProcessed && userActive;
+        };
+
+
         newInviteCtrl.deleteInvite = function deleteInvite() {
             const inviteFunction = getInviteFunction();
             var promise = inviteFunction(newInviteCtrl.inviteKey);

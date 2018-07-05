@@ -38,7 +38,7 @@ describe('Test Institution Model:', function() {
             key: 'instKey'
         };
 
-        institution = new Institution(data, {});
+        institution = new Institution(data);
     });
 
     describe('isValidAddress()', function() {
@@ -195,6 +195,22 @@ describe('Test Institution Model:', function() {
             var sameInst = Object.assign({}, testInst);
             institution.addChildInst(sameInst);
             expect(institution.children_institutions.length).toEqual(1);
+        });
+    });
+
+    describe('isStateOn()', function () {
+
+        it('should be on active state', function () {
+            expect(institution.isStateOn('active')).toBeTruthy();
+        });
+
+        it('should be not be on inactive state', function () {
+            expect(institution.isStateOn('inactive')).toBeFalsy();
+        });
+
+        it('should be on pending state', function () {
+            institution.state = 'pending';
+            expect(institution.isStateOn('pending')).toBeTruthy();
         });
     });
 });

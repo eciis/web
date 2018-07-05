@@ -18,65 +18,61 @@ from jinja2 import Environment, FileSystemLoader
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
+from util import NotificationsQueueManager
 
 
-def should_remove(user, institution_key, current_inst_key):
+def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
     """
-    This method checks whether or not a permission should be removed from the user. 
-    If the user is an administrator of the institution and this institution is 
-    not the one in which the transfer of permissions is being done (Current_inst_key), 
-    it returns false because the permission should not be removed, otherwise it returns true.
+    This method checks if a permission should be removed from the user. 
+    It will be True if the user is no more admin of the institution (inst_key_urlsafe)
+    or if this institution is the one he is trasfering the administration (transfer_inst_key_urlsafe).
 
     Arguments:
     user -- User to verify permission
-    institution_key -- Institution key to verify that permissions must be removed
-    current_inst_key -- Key of the institution from which the transfer of permissions is being made.
+    inst_key_urlsafe -- Urlsafe key of the institution that must be verifyed
+    transfer_inst_key_urlsafe -- Urlsafe key of the institution he is transfering to another user
     """
-    is_current_inst = institution_key == current_inst_key
-    is_not_admin = (not is_current_inst) and ndb.Key(urlsafe=institution_key) not in user.institutions_admin
-    
-    return is_not_admin or is_current_inst
+    is_current_inst = inst_key_urlsafe == transfer_inst_key_urlsafe
+    return is_current_inst or is_not_admin(user, inst_key_urlsafe)
 
-def filter_permissions_to_remove(user, permissions, institution_key, should_remove):
+
+def filter_permissions_to_remove(user, permissions, inst_key_urlsafe, filter):
     """
     This method filters the permissions passed as a parameter and 
     returns a dictionary of filtered permissions that must be removed 
-    from the user according to the rules applied in the 'should_remove' method.
+    from the user according to the rules applied in the 'filter' method.
 
     Arguments:
     user -- User to verify if permission must be removed
     permissions -- Permissions to filter
-    institution_key -- Key of the institution from which the transfer of permissions is being made.
+    inst_key_urlsafe -- Urlsafe key of the institution that is being trasferred.
     """
     permissions_filtered = {}
     for permission, institutions in permissions.items():
-            institution_keys = [inst for inst in institutions if should_remove(user, inst, institution_key)]
+            institution_keys = [inst for inst in institutions if filter(user, inst, inst_key_urlsafe)]
             permissions_filtered[permission] = institution_keys
     return  permissions_filtered
 
-def is_admin_of_parent_inst(user, institution_parent_key):
+
+def is_admin_of_parent_inst(user, parent_key_urlsafe):
     """
-    This method checks if the user is an administrator of some parent institution.
+    This method checks if the user is an administrator 
+    of some of his parent institutions.
 
     Arguments:
-    user -- User to verify if is admin of some parent institution
-    institution_parent_key -- Key of parent institution for check if user is admin 
+    user -- User object
+    parent_key_urlsafe -- Urlsafe key of parent institution 
     """
-    if ndb.Key(urlsafe=institution_parent_key) in user.institutions_admin:
-        return True
-    
-    parent_inst = ndb.Key(urlsafe=institution_parent_key).get()
+    parent_key = ndb.Key(urlsafe=parent_key_urlsafe)
+    is_admin = user.is_admin(parent_key)
+    grantparent = parent_key.get().parent_institution
 
-    if parent_inst.parent_institution:
-        return is_admin_of_parent_inst(user, parent_inst.parent_institution.urlsafe())
-    else:
-        return False
+    return is_admin or grantparent and is_admin_of_parent_inst(user, grantparent.urlsafe())
 
 
-def is_not_admin(user, institution_key, *args):
-    """This function acts as a should_remove function of filter_permissions_to_remove 
-    when the worker removes the admin permissions."""
-    return not user.is_admin(ndb.Key(urlsafe=institution_key))
+def is_not_admin(user, inst_key_urlsafe, *args):
+    """Check if user is not admin of the specified institution."""
+    return not user.is_admin(ndb.Key(urlsafe=inst_key_urlsafe))
 
 
 def get_all_parent_admins(child_institution, admins=[]):
@@ -85,7 +81,9 @@ def get_all_parent_admins(child_institution, admins=[]):
     The admins' list starts empty and as passed by reference is the same over the recursion's stack.
     child_institution is used to get the parent and so on go up in the hierarchy.
     """
-    admins.append(child_institution.admin.get())
+    child_inst_admin = child_institution.admin.get()
+    if child_inst_admin not in admins:
+        admins.append(child_inst_admin)
     parent_institution = child_institution.parent_institution
     if parent_institution:
         parent_institution = parent_institution.get()
@@ -362,7 +360,14 @@ class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
 
     def post(self):
         institution_key = self.request.get('institution_key')
+        notification_id = self.request.get('id_notification')
+        
         self.addAdminPermissions(institution_key)
+        
+        # TODO Remove this 'if' when all handler notifications passed through this queue have been resolved.
+        # Author: Luiz Silva - 29/06/18
+        if notification_id:
+            NotificationsQueueManager.resolve_notification_task(notification_id)
 
 
 class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
@@ -434,13 +439,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
                 user.permissions[permission].update(permissions[permission])
             else:
                 user.permissions.update({permission: permissions[permission]})
-
-        send_message_notification(
-            receiver_key=user.key.urlsafe(),
-            notification_type='TRANSFER_ADM_PERMISSIONS',
-            entity_key=institution.key.urlsafe(),
-            message=create_system_message(institution.key),
-        )
     
     def remove_permissions(self, user, institution):
         """    
@@ -460,13 +458,6 @@ class TransferAdminPermissionsHandler(BaseHandler):
             for instition_key in institution_keys:
                 user.remove_permission(permission, instition_key)
 
-        send_message_notification(
-            receiver_key=user.key.urlsafe(),
-            notification_type='REMOVED_ADM_PERMISSIONS',
-            entity_key=institution.key.urlsafe(),
-            message=create_system_message(institution.key),
-        )
-
 
     def post(self):
         """
@@ -481,9 +472,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
         institution = ndb.Key(urlsafe=institution_key).get()
         admin = institution.admin.get()
         new_admin = ndb.Key(urlsafe=user_key).get()
+        notifications_ids = self.request.get_all('notifications_ids')
         
         @ndb.transactional(xg=True, retries=10)
-        def save_changes(admin, new_admin, institution):
+        def save_changes(admin, new_admin, institution, notifications_ids):
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, institution)
             
@@ -497,8 +489,10 @@ class TransferAdminPermissionsHandler(BaseHandler):
             new_admin.put()
             admin.put()
             institution.put()
+
+            map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
         
-        save_changes(admin, new_admin, institution)
+        save_changes(admin, new_admin, institution, notifications_ids)
 
 
 app = webapp2.WSGIApplication([

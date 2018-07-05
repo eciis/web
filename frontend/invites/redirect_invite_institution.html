@@ -1,9 +1,9 @@
 <md-content layout-fill layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
     <div flex flex-sm="80" flex-md="50" flex-lg="40" flex-gt-lg="30"
-        ng-if="!acceptInviteCtrl.signup">      
+        ng-if="!redirectInviteCtrl.signup">      
         <md-card>
             <md-card-content>
-                <div layout="column" flex style="padding: 2%" ng-hide="acceptInviteCtrl.loading">
+                <div layout="column" flex style="padding: 2%" ng-hide="redirectInviteCtrl.loading">
                     <div layout="row" layout-align="center center">
                         <img src="/app/images/logowithname.png" style="margin-top: 20px; margin-bottom: 20px; width: 75%;"/>
                     </div>
@@ -12,36 +12,36 @@
                     </div>
                     <md-list class="reduce-distance">
                         <md-list-item class="md-3-line" style="background-color:#F5F5F5;">
-                            <img ng-src="{{ acceptInviteCtrl.invite.institution.photo_url }}" class="md-avatar" 
-                                alt="{{acceptInviteCtrl.invite.institution.name}}" />
+                            <img ng-src="{{ redirectInviteCtrl.invite.institution.photo_url }}" class="md-avatar" 
+                                alt="{{redirectInviteCtrl.invite.institution.name}}" />
                             <div class="md-list-item-text" layout="column">
-                                <h3><b>{{ acceptInviteCtrl.invite.institution.name }}</b></h3>
+                                <h3><b>{{ redirectInviteCtrl.invite.institution.name }}</b></h3>
                                 <p>
-                                    {{ acceptInviteCtrl.invite.institution.institutional_email? acceptInviteCtrl.invite.institution.institutional_email : acceptInviteCtrl.invite.institution.email }}
+                                    {{ redirectInviteCtrl.invite.institution.institutional_email? redirectInviteCtrl.invite.institution.institutional_email : redirectInviteCtrl.invite.institution.email }}
                                 </p>
-                                <p>Convidado por : {{ acceptInviteCtrl.invite.admin_name }}</p>
+                                <p>Convidado por : {{ redirectInviteCtrl.invite.admin_name }}</p>
                             </div>
                         </md-list-item>
                     </md-list>
-                    <div layout="row" ng-if="acceptInviteCtrl.invite.suggestion_institution_name">
+                    <div layout="row" ng-if="redirectInviteCtrl.invite.suggestion_institution_name">
                         <p class="small-text md-title green-text">PARA CADASTRAR A INSTITUIÇÃO:</p>
                     </div>
-                    <md-list flex ng-if="acceptInviteCtrl.invite.suggestion_institution_name">
+                    <md-list flex ng-if="redirectInviteCtrl.invite.suggestion_institution_name">
                         <md-list-item style="background-color:#F5F5F5;">
                           <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
                             <md-icon style="color: white;">account_balance</md-icon>
                           </md-button>
                           <div class="md-list-item-text" layout="column">
-                            <h3><b>{{ acceptInviteCtrl.invite.suggestion_institution_name }}</b></h3>
+                            <h3><b>{{ redirectInviteCtrl.invite.suggestion_institution_name }}</b></h3>
                           </div>
                         </md-list-item>
                     </md-list>
                     <div layout="column" layout-gt-xs="row">
-                        <md-button flex ng-click="acceptInviteCtrl.signup = true" md-colors="{background: 'teal-500'}">NÃO POSSUO CONTA</md-button>
-                        <md-button flex ng-click="acceptInviteCtrl.signin()" md-colors="{background: 'teal-500'}">POSSUO CONTA</md-button>
+                        <md-button flex ng-click="redirectInviteCtrl.signup = true" md-colors="{background: 'teal-500'}">NÃO POSSUO CONTA</md-button>
+                        <md-button flex ng-click="redirectInviteCtrl.signin()" md-colors="{background: 'teal-500'}">POSSUO CONTA</md-button>
                     </div>
                 </div>
-                <div layout="column" flex layout-align="center center" ng-show="acceptInviteCtrl.loading">
+                <div layout="column" flex layout-align="center center" ng-show="redirectInviteCtrl.loading">
                     <div layout="row">
                         <p class="small-text md-title green-text">Processando seu convite.</p>
                     </div>
@@ -51,11 +51,11 @@
         </md-card>
     </div>
 
-    <signup return-action="acceptInviteCtrl.cancelSignup" 
+    <signup return-action="redirectInviteCtrl.cancelSignup" 
         card-title="Preencha o formulário para criar uma conta"
-        email-disabled="true" email="acceptInviteCtrl.invite.invitee"
-        before-start="acceptInviteCtrl.displayLoading"
-        callback="acceptInviteCtrl.goToHome"
-        error-handler="acceptInviteCtrl.errorHandler"
-        ng-if="acceptInviteCtrl.signup"></signup>
+        email-disabled="true" email="redirectInviteCtrl.invite.invitee"
+        before-start="redirectInviteCtrl.displayLoading"
+        callback="redirectInviteCtrl.goToHome"
+        error-handler="redirectInviteCtrl.errorHandler"
+        ng-if="redirectInviteCtrl.signup"></signup>
 </md-content>

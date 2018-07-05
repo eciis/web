@@ -285,8 +285,8 @@
                 url: "/accept_invite?id",
                 views: {
                     main: {
-                        templateUrl: "app/invites/accept_invite.html",
-                        controller: "AcceptInviteController as acceptInviteCtrl"
+                        templateUrl: "app/invites/redirect_invite_institution.html",
+                        controller: "RedirectInviteInstitutionController as redirectInviteCtrl"
                     }
                 }
             })

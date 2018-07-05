@@ -234,28 +234,28 @@ class User(ndb.Model):
         self.state = state
         self.put()
 
-    def add_permission(self, permission_type, entity_key):
+    def add_permission(self, permission_type, entity_key_url):
         """Add new permission.key to the user permissions list.
 
         Arguments:
         permission_type -- permission name that will be used to verify authorization
-        entity_key -- ndb urlsafe of the object binded to the permission
+        entity_key_url -- ndb urlsafe of the object binded to the permission
         """
         if self.permissions.get(permission_type, None):
-            self.permissions[permission_type][entity_key] = True
+            self.permissions[permission_type][entity_key_url] = True
         else:
-            self.permissions[permission_type] = {entity_key: True}
+            self.permissions[permission_type] = {entity_key_url: True}
         self.put()
 
-    def add_permissions(self, list_permissions, entity_key):
+    def add_permissions(self, list_permissions, entity_key_url):
         """Add new permissions to the user permissions list.
 
         Arguments:
         list_permissions -- permissions list to be added
-        entity_key -- ndb urlsafe of the object binded to the permission
+        entity_key_url -- ndb urlsafe of the object binded to the permission
         """
         for permission in list_permissions:
-            self.add_permission(permission, entity_key)
+            self.add_permission(permission, entity_key_url)
 
     def remove_permission(self, permission_type, entity_key):
         """Remove permission.key from the user permissions list.

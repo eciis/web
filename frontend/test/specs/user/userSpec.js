@@ -6,7 +6,8 @@
    var inst = {
         color: 'blue',
         name: 'inst',
-        key: '987654321'
+        key: '987654321',
+        photo_url: 'pokaasodsok'
    };
 
    var other_inst = {
@@ -193,9 +194,22 @@
 
         describe('getPendingInvitation', function() {
 
-          it('should return some invite', function() {
+          it('should return the first invite', function() {
             user = createUser();
             expect(user.getPendingInvitation().should.not.be.empty);
+            expect(user.getPendingInvitation()).toEqual(inviteUser);
+          });
+
+          it('should return the second invite', function() {
+            user = createUser();
+            user.invites[0].answerLater = true;
+            expect(user.getPendingInvitation().should.not.be.empty);
+            expect(user.getPendingInvitation()).toEqual(inviteInstitution);
+          });
+
+          it('should return none', function() {
+            user.invites[1].answerLater = true;
+            expect(user.getPendingInvitation()).toEqual(undefined);
           });
         });
 
@@ -316,6 +330,103 @@
             user.institutions_requested = [other_inst_info.key];
             expect(user.isInstitutionRequested(other_inst_info.key)).toBeTruthy();
           });
+        });
+
+        describe('getProfileColor()', function () {
+            beforeEach(() => {
+                user = createUser(userData);
+            });
+
+            it('should return the profile color', function () {
+                user.institution_profiles = [{institution_key: inst.key, color: 'teal'}];
+                user.current_institution = inst;
+                let color = user.getProfileColor();
+                expect(color).toEqual('teal');
+            });
+        });
+
+        describe('updateInstProfile()', function () {
+            it('should update the profile', function () {
+                user = createUser(userData);
+                user.institution_profiles = [{institution_key: inst.key, 
+                  institution: _.clone(inst)}];
+                inst.name = 'test';
+                inst.photo_url = 'opsakdoskaopd';
+                expect(user.institution_profiles[0].institution.name).toEqual('inst');
+                expect(user.institution_profiles[0].institution.photo_url).toEqual('pokaasodsok');
+
+                user.updateInstProfile(inst);
+                expect(user.institution_profiles[0].institution.name).toEqual('test');
+                expect(user.institution_profiles[0].institution.photo_url).toEqual('opsakdoskaopd');
+            }); 
+        });
+
+        describe('hasPermission()', function () {
+            beforeEach(() => {
+                user = createUser(userData);
+            });
+
+            it('should return true', function () {
+                let instKey = inst.key;
+                user.permissions = {};
+                user.permissions['test'] = {};
+                user.permissions['test'][instKey] = true;
+                expect(user.hasPermission('test', instKey)).toBeTruthy();
+            });
+
+            it('should return false', function () {
+                let instKey = inst.key;
+                user.permissions = {};
+                expect(user.hasPermission('test', instKey)).toBeFalsy();
+
+                user.permissions['test'] = {};
+                user.permissions['test']['opakdo-OPSDKAP'] = true;
+                expect(user.hasPermission('test', instKey)).toBeFalsy();
+            });
+        });
+
+        describe('isInactive()', function () {
+            beforeEach(() => {
+              user = createUser(userData);
+            });
+
+            it('should return true', function () {
+                expect(user.isInactive()).toBeTruthy();
+            });
+
+            it('should return false', function () {
+                user.state = 'active';
+                expect(user.isInactive()).toBeFalsy();
+            });
+        });
+
+        describe('addProfile()', function () {
+            beforeEach(() => {
+              user = createUser(userData);
+            });
+
+            it('should create institution_profiles and add the profile', function () {
+                delete user.institution_profiles;
+                expect(user.institution_profiles).toEqual(undefined);
+                user.addProfile({});
+                expect(user.institution_profiles.length).toEqual(1);
+            });
+
+            it('should add the profile', function () {
+                expect(user.institution_profiles).toEqual([]);
+                user.addProfile({});
+                expect(user.institution_profiles.length).toEqual(1);
+            });
+        });
+
+        describe('updateInstitutions()', function () {
+            it('should update the institution', function () {
+                user = createUser(userData);
+                inst.name = "newName";
+                user.updateInstitutions(inst);
+                expect(user.institutions[0].name).toEqual("newName");
+                expect(user.follows[0].name).toEqual("newName");
+            });
         });
    });
 }));

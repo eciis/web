@@ -29,7 +29,7 @@
         };
 
         selectEmailsCtrl.selectAllEmails = function selectAllEmails() {
-            var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));
+            var filteredEmails = selectEmailsCtrl.emails.filter(email => selectEmailsCtrl.validateEmail(email));            
             if (selectEmailsCtrl.emails && selectEmailsCtrl.selectedEmails.length === filteredEmails.length) {
                 selectEmailsCtrl.selectedEmails = [];
             } else if (filteredEmails && selectEmailsCtrl.selectedEmails.length >= 0) {
@@ -50,9 +50,9 @@
 
         selectEmailsCtrl.sendInvite = function sendInvite() {
             if (!_.isEmpty(selectEmailsCtrl.selectedEmails) && _.size(selectEmailsCtrl.selectedEmails) <= MAX_EMAILS_QUANTITY) {
-                var emails = selectEmailsCtrl.manageMemberCtrl.removePendingAndMembersEmails(selectEmailsCtrl.selectedEmails)
+                var emails = selectEmailsCtrl.removePendingAndMembersEmails(selectEmailsCtrl.selectedEmails);
                 if (!_.isEmpty(emails)) {
-                    selectEmailsCtrl.manageMemberCtrl.sendUserInvite(emails);
+                    selectEmailsCtrl.sendUserInvite(emails);
                 } else {
                     MessageService.showToast("E-mails selecionados já foram convidados, requisitaram ser membro ou pertencem a algum membro da instituição.");
                 }

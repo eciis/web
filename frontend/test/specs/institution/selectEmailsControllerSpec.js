@@ -12,32 +12,25 @@
     };
 
     var emails = ["test1@example.com", "test2@example.com", "test3@example.com"];
-    var members = [{name: "Member 1", email: ["member1@example.com"]},{name: "Member 2", email: ["member2@example.com"]}];
-    var sentInvitations = [{invitee: "test4@example.com"}];
-    var requestedMembers = [{institutional_email: "test5@example.com"}];
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $state, $rootScope, $mdDialog, AuthService, InstitutionService, InviteService) {
+    beforeEach(inject(function($controller, $state, $rootScope, $mdDialog, AuthService) {
         mdDialog = $mdDialog;
         scope = $rootScope.$new();
         state = $state;
         newCtrl = $controller;
         AuthService.login(user);
         state.params.institutionKey = '123456789';
-        manageMemberCtrl = newCtrl('ManagementMembersController', {
-                    scope: scope,
-                    inviteService: InviteService,
-                    institutionService: InstitutionService
-        });
-        manageMemberCtrl.members = members;
-        manageMemberCtrl.sent_invitations = sentInvitations;
-        manageMemberCtrl.requests = requestedMembers;
-        selectEmailsCtrl = newCtrl('SelectEmailsController', {
-            scope: scope,
-        }, {
-          emails: emails,
-          manageMemberCtrl: manageMemberCtrl
-        });
+        manageMemberCtrl = newCtrl('ManagementMembersController');
+        selectEmailsCtrl = newCtrl(
+            'SelectEmailsController', {
+                scope: scope,
+            }, {
+                emails: emails,
+                removePendingAndMembersEmails: manageMemberCtrl.removePendingAndMembersEmails,
+                sendUserInvite: manageMemberCtrl.sendUserInvite
+            }
+        );
     }));
 
     describe('SelectEmailsController properties', function() {
@@ -119,12 +112,14 @@
         });
     });
 
-    describe('sendInvite()', function() {
-        it('Should call sendUserInvite() in ManagementMembersController', function() {
-            spyOn(manageMemberCtrl, 'sendUserInvite');
+    describe('Test sendInvite()', function() {
+        it('Should call removePendingAndMembersEmails and sendUserInvite', function() {
+            spyOn(selectEmailsCtrl, 'removePendingAndMembersEmails').and.callThrough();
+            spyOn(selectEmailsCtrl, 'sendUserInvite');
             selectEmailsCtrl.selectAllEmails();
             selectEmailsCtrl.sendInvite();
-            expect(manageMemberCtrl.sendUserInvite).toHaveBeenCalledWith(selectEmailsCtrl.selectedEmails);
+            expect(selectEmailsCtrl.removePendingAndMembersEmails).toHaveBeenCalledWith(emails);
+            expect(selectEmailsCtrl.sendUserInvite).toHaveBeenCalledWith(selectEmailsCtrl.selectedEmails);
         });
     });
 

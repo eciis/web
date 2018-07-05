@@ -7,6 +7,15 @@
     MessageService) {
         var service = this;
 
+        const REQUEST_USER = 'REQUEST_USER';
+        const REQUEST_INSTITUTION = 'REQUEST_INSTITUTION';
+        const REQUEST_PARENT = 'REQUEST_INSTITUTION_PARENT';
+        const REQUEST_CHILDREN = 'REQUEST_INSTITUTION_CHILDREN';
+        const ACCEPT_USER_ADM = 'ACCEPT_INVITE_USER_ADM';
+        const USER_ADM = 'USER_ADM';
+        const RESOLVED_REQUEST = 'RESOLVED_REQUEST';
+        const INVALID_REQUEST = 'INVALID_REQUEST';
+
         service.showHierarchyDialog = function showHierarchyDialog(request, event) {
             var promise = $mdDialog.show({
                 controller: 'AnalyseHierarchyRequestController',
@@ -31,41 +40,14 @@
             );
         };
 
-        function selectDialogToShow(request, event, dialogProperties) {
-            var isRequestResolved = request.isStatusOn('rejected') || request.isStatusOn('accepted');
-            
-            if(isRequestResolved) {
-                service.showResolvedReqDialog(event);
-                return;
-            }
-
-            switch(request.type_of_invite) {
-                case "REQUEST_INSTITUTION_PARENT":
-                case "REQUEST_INSTITUTION_CHILDREN":
-                    service.showHierarchyDialog(request, event);
-                    break;
-                default:
-                    dialogProperties.locals.request = request;
-                    service.showPendingReqDialog(dialogProperties, event);
-            }
-        }
-
         service.showResolvedReqDialog = function (event) {
-            function ResolvedRequesCtrl($mdDialog) {
-                var controll = this;
-                controll.hide = function hide() {
-                    $mdDialog.hide();
-                };
-            }
+            const message = "Esta solicitação já foi resolvida";
+            MessageService.showMessageDialog(event, message);
+        };
 
-            $mdDialog.show({
-                templateUrl: "app/requests/resolved_request_dialog.html",
-                controller: ResolvedRequesCtrl,
-                controllerAs: 'ctrl',
-                parent: angular.element(document.body),
-                targetEvent: event,
-                clickOutsideToClose:true
-            });
+        service.showInvalidReqDialog = function (event) {
+            const message = "Esta solicitação não é mais válida";
+            MessageService.showMessageDialog(event, message);
         };
 
         service.showPendingReqDialog = function (dialogProperties, event) {
@@ -82,18 +64,37 @@
             });
         };
 
+        function selectDialogToShow(request, event, dialogProperties) {
+            let requestType = request.type_of_invite;
+            requestType = request.isStatusOn('sent') ? requestType : RESOLVED_REQUEST;
+            requestType = request.areInstitutionsValid() ? requestType : INVALID_REQUEST;
+
+            switch(requestType) {
+                case RESOLVED_REQUEST:
+                    service.showResolvedReqDialog(event); break;
+                case INVALID_REQUEST:
+                    service.showInvalidReqDialog(event); break;
+                case REQUEST_PARENT:
+                case REQUEST_CHILDREN:
+                    service.showHierarchyDialog(request, event); break;
+                default:
+                    dialogProperties.locals.request = request;
+                    service.showPendingReqDialog(dialogProperties, event);
+            }
+        }
+
         function getRequest(invitekey, entityType) {
             switch(entityType) {
-                case 'REQUEST_USER':
+                case REQUEST_USER:
                     return RequestInvitationService.getRequest(invitekey);
-                case 'REQUEST_INSTITUTION':
+                case REQUEST_INSTITUTION:
                     return RequestInvitationService.getRequestInst(invitekey);
-                case 'REQUEST_INSTITUTION_CHILDREN':
+                case REQUEST_CHILDREN:
                     return RequestInvitationService.getInstChildrenRequest(invitekey);
-                case 'REQUEST_INSTITUTION_PARENT':
+                case REQUEST_PARENT:
                     return RequestInvitationService.getInstParentRequest(invitekey);
-                case 'USER_ADM':
-                case 'ACCEPT_INVITE_USER_ADM':
+                case USER_ADM:
+                case ACCEPT_USER_ADM:
                     return InviteService.getInvite(invitekey);
             } 
         }

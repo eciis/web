@@ -189,38 +189,68 @@ class RequestInstitutionChildrenTest(TestBase):
         )
 
 
+    @patch('models.request_institution_children.NotificationsQueueManager')
+    @patch('models.request_institution_children.Notification', return_value='Mocked_notification')
     @patch.object(Invite, 'send_notification')
     @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
-    def test_send_response_notification(self, create_notification_message, send_notification):
-        """Test send response notification."""
+    def test_create_accept_response_notification(self, create_notification_message, send_notification, Notification, NotificationQueueManager):
+        """Test create accept response notification."""
         request = generate_request(
             self.admin, self.institution, 
             self.other_institution
         )
 
-        for action in ['ACCEPT', 'REJECT']:
-            request.send_response_notification(
-                current_institution=self.other_institution.key, 
-                invitee_key=self.other_institution.admin,
-                action=action
-            )
-            
-            create_notification_message.assert_called_with(
-                user_key=self.other_institution.admin, 
-                current_institution_key=self.other_institution.key,
-                sender_institution_key=self.other_institution.key,
-                receiver_institution_key=self.institution.key
-            )
+        request.create_accept_response_notification(
+            current_institution=self.other_institution.key, 
+            invitee_key=self.other_institution.admin,
+        )
+        
+        create_notification_message.assert_called_with(
+            user_key=self.other_institution.admin, 
+            current_institution_key=self.other_institution.key,
+            sender_institution_key=self.other_institution.key,
+            receiver_institution_key=self.institution.key
+        )
 
-            notification_type = 'ACCEPT_INSTITUTION_LINK' if action == 'ACCEPT' else 'REJECT_INSTITUTION_LINK'
-            send_notification.assert_called_with(
-                current_institution=self.other_institution.key, 
-                sender_key=self.other_institution.admin, 
-                receiver_key=self.admin.key, 
-                notification_type=notification_type,
-                message='mocked_message'
-            )
+        Notification.assert_called_with(
+            entity_key=request.key.urlsafe(), 
+            receiver_key=self.admin.key.urlsafe(), 
+            notification_type='ACCEPT_INSTITUTION_LINK',
+            message='mocked_message'
+        )
 
+        NotificationQueueManager.create_notification_task.assert_called_with(
+            'Mocked_notification'
+        )
+    
+    @patch.object(Invite, 'send_notification')
+    @patch.object(Invite, 'create_notification_message', return_value='mocked_message')
+    def test_send_reject_response_notification(self, create_notification_message, send_notification):
+        """Test send reject response notification."""
+        request = generate_request(
+            self.admin, self.institution, 
+            self.other_institution
+        )
+
+        request.send_reject_response_notification(
+            current_institution=self.other_institution.key, 
+            invitee_key=self.other_institution.admin,
+        )
+        
+        create_notification_message.assert_called_with(
+            user_key=self.other_institution.admin, 
+            current_institution_key=self.other_institution.key,
+            sender_institution_key=self.other_institution.key,
+            receiver_institution_key=self.institution.key
+        )
+
+        send_notification.assert_called_with(
+            current_institution=self.other_institution.key, 
+            sender_key=self.other_institution.admin, 
+            receiver_key=self.admin.key, 
+            notification_type='REJECT_INSTITUTION_LINK',
+            message='mocked_message'
+        )
 
     @patch.object(EmailSender, 'send_email')
     def test_send_email(self, send_email):

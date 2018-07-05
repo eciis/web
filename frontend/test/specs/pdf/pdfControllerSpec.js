@@ -1,138 +1,74 @@
 'use strict';
 
-(describe('Test pdfController', function() {
+(describe('Test PdfController', function() {
 
-    var requestInvCtrl, httpBackend, scope, institutionService, createCtrl, requestService, mdDialog, messageService, authService;
+    var pdfController, scope, createCtrl, mdDialog;
 
-    var certbio = {
-        name: 'CERTBIO',
-        key: '123456789',
-        id: '123456789',
-        photo_url: "photo_url"
-    };
-
-    var user = {
-        name: 'User',
-        key: '12107',
-        email: 'user@ccc.ufcg.edu.br',
-        state: 'active'
-    };
-
-    var fakeCallback = function fakeCallback() {
-        return {
-            then: function (callback) {
-                return callback({});
-            }
-        };
-    };
+    var fileExample = new File([''], 'example.pdf');
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $mdDialog,
-            InstitutionService, AuthService, RequestInvitationService, MessageService) {
-        httpBackend = $httpBackend;
+    beforeEach(inject(function($controller, $rootScope, $mdDialog) {
         scope = $rootScope.$new();
-        institutionService = InstitutionService;
-        requestService = RequestInvitationService;
         mdDialog = $mdDialog;
-        messageService = MessageService;
-        authService = AuthService;
-
-        httpBackend.when('GET', 'institution/institution_page.html').respond(200);
-        httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.when('GET', "home/home.html").respond(200);
-        user = new User(user);
-        AuthService.login(user);
 
         createCtrl = function() {
-            return $controller('RequestInvitationController',
+            return $controller('PdfController',
                 {
                     scope: scope,
-                    institutionService: institutionService
                 });
         };
-        requestInvCtrl = createCtrl();
+        pdfController = createCtrl();
+        pdfController.pdfFiles = [fileExample];
     }));
 
-    afterEach(function() {
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
-    });
+    describe('PdfController functions', function() {
 
-    describe('RequestInvitationController functions', function() {
+        describe('showFiles()', function() {
 
-        describe('verifyAndSendRequest()', function() {
-            beforeEach(function() {
-                requestInvCtrl.requestsOfSelectedInst = [{sender_key: user.key, status: 'sent'}];
-                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}};
-                requestInvCtrl.request = {name: 'User'};
+            it('Should return false if has no files', function() {
+                pdfController.pdfFiles = [];
+                expect(pdfController.showFiles()).toBeFalsy();
             });
 
-            it('Should be call filter', function() {
-                spyOn(requestInvCtrl.requestsOfSelectedInst, 'filter').and.callThrough();
-                requestInvCtrl.verifyAndSendRequest();
-                expect(requestInvCtrl.requestsOfSelectedInst.filter).toHaveBeenCalled();
-            });
-
-            it('Should be call sendRequest', function() {
-                requestInvCtrl.requestsOfSelectedInst = [];                
-                spyOn(requestInvCtrl, 'sendRequest');
-                requestInvCtrl.verifyAndSendRequest();
-                expect(requestInvCtrl.sendRequest).toHaveBeenCalled();
+            it('Should return true if has files', function() {
+                expect(pdfController.showFiles()).toBeTruthy();
             });
         });
 
-        describe('sendRequest()', function() {
-            var promise;
+        describe('pdfDialog()', function() {
 
-            beforeEach(function() {
-                requestInvCtrl.institutionSelect = {key: certbio.key, admin: {key: '12345'}};
-                requestInvCtrl.request = {
-                    sender_name: 'User Test',
-                    office: 'Test',
-                    institutional_email: 'test@example.com'
-                };
-                requestInvCtrl.currentUser.institutions_requested = [];
-                spyOn(requestService, 'sendRequest').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback({});
-                        }
-                    };
-                });
-                spyOn(requestInvCtrl.currentUser.institutions_requested, 'push');
-                spyOn(mdDialog, 'hide').and.callFake(fakeCallback);
-                spyOn(authService, 'save').and.callFake(fakeCallback);
-                spyOn(messageService, 'showToast').and.callFake(fakeCallback);
-                promise = requestInvCtrl.sendRequest();
+            it('Should call mdDialog.show() if is not editing', function() {
+                pdfController.isEditing = false;
+                spyOn(mdDialog, 'show');
+                pdfController.pdfDialog("$event", fileExample);
+                expect(mdDialog.show).toHaveBeenCalled();
             });
 
-            it('Should add a key of the institution in user.institutions_requested', function(done) {
-                promise.then(function() {
-                    expect(requestInvCtrl.currentUser.institutions_requested.push).toHaveBeenCalledWith(certbio.key);
-                    done();
-                });
+            it('Should not call mdDialog.show() if is editing', function() {
+                pdfController.isEditing = true;
+                spyOn(mdDialog, 'show');
+                pdfController.pdfDialog("$event", fileExample);
+                expect(mdDialog.show).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('hideFile()', function() {
+            var indexExample = 0;
+
+            it('Should call deletedFiles.push() if the pdf_files includes selected index', function() {
+                pdfController.pdf_files = [fileExample];
+                pdfController.deletedFiles = [];
+                spyOn(pdfController.deletedFiles, 'push');
+                pdfController.hideFile(indexExample);
+                expect(pdfController.deletedFiles.push).toHaveBeenCalledWith(fileExample);
             });
 
-            it('Should call mdDialog.hide()', function(done) {
-                promise.then(function() {
-                    expect(mdDialog.hide).toHaveBeenCalled();
-                    done();
-                });
-            });
-
-            it('Should call AuthService.save()', function(done) {
-                promise.then(function() {
-                    expect(authService.save).toHaveBeenCalled();
-                    done();
-                });
-            });
-
-            it('Should call MessageService.showToast()', function(done) {
-                promise.then(function() {
-                    expect(messageService.showToast).toHaveBeenCalledWith("Pedido enviado com sucesso!");
-                    done();
-                });
+            it('Should call only pdfFiles.splice() if the pdf_files not includes selected index', function() {
+                pdfController.pdf_files = [];
+                spyOn(pdfController.pdfFiles, 'splice');
+                pdfController.hideFile(indexExample);
+                expect(pdfController.pdfFiles.splice).toHaveBeenCalledWith(indexExample, 1);
             });
         });
     });

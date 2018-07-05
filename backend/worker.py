@@ -312,8 +312,9 @@ class EmailMembersHandler(BaseHandler):
                 '%s'
                 """ % justification
             
+            FIRST_EMAIL = 0
             mail.send_mail(sender="Plataforma Virtual CIS <plataformavirtualcis@gmail.com>",
-                        to="<%s>" % member.email,
+                        to="<%s>" % member.email[FIRST_EMAIL],
                         subject=subject,
                         body="",
                         html=template.render(json.loads(message)))

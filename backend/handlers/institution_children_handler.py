@@ -1,4 +1,4 @@
-"""Instituion Parent Handler."""
+"""Institution Children handler."""
 
 from google.appengine.ext import ndb
 
@@ -11,39 +11,43 @@ from send_email_hierarchy import RequestLinkEmailSender
 
 from models import Institution
 
-from service_messages import send_message_notification, create_system_message
+from service_messages import send_message_notification
 from service_entities import enqueue_task
 from util import get_subject
 
 from . import BaseHandler
 
-__all__ = ['InstitutionParentHandler']
+__all__ = ['InstitutionChildrenHandler']
 
-def create_system_notification(receiver_institution_key, receiver_key, notification_type):
-    message = create_system_message(receiver_institution_key)
+def create_notification(user, receiver_institution, sender_institution, create_message):
+    message = create_message(
+        user_key=user.key, 
+        current_institution_key=user.current_institution, 
+        receiver_institution_key=receiver_institution.key, 
+        sender_institution_key=sender_institution.key)
 
     notification = Notification(
         message=message,
-        entity_key=receiver_institution_key.urlsafe(),
-        notification_type='ADD_ADM_PERMISSIONS',
-        receiver_key=receiver_key
+        entity_key=receiver_institution.key.urlsafe(),
+        notification_type='REMOVE_INSTITUTION_LINK',
+        receiver_key=receiver_institution.admin.urlsafe()
     )
 
     notification_id = NotificationsQueueManager.create_notification_task(notification)
     return notification_id
 
 
-class InstitutionParentHandler(BaseHandler):
-    """Institution Parent Handler."""
+class InstitutionChildrenHandler(BaseHandler):
+    """Institution Children Handler."""
 
     @json_response
     @login_required
     @ndb.transactional(xg=True)
     def delete(self, user, institution_key, institution_link):
         """
-        Handle delete parent link between institutions.
+        Handle delete children link between institutions.
 
-        This handler remove the parent link between two institutions. 
+        This handler remove the children link between two institutions. 
         If the parameter isParent is true, it means that the removal 
         request has been made from a child institution, otherwise 
         the request has been made by a parent institution.
@@ -53,9 +57,9 @@ class InstitutionParentHandler(BaseHandler):
                               "User is not allowed to remove link between institutions",
                               institution_key)
 
-        # holds the reference of the parent intitution.
-        institution = ndb.Key(urlsafe=institution_key).get() 
         # holds the reference of the child intitution.
+        institution = ndb.Key(urlsafe=institution_key).get() 
+        # holds the reference of the parent intitution.
         institution_link = ndb.Key(urlsafe=institution_link).get()
 
         Utils._assert(not type(institution) is Institution,
@@ -63,40 +67,31 @@ class InstitutionParentHandler(BaseHandler):
         Utils._assert(not type(institution_link) is Institution,
                       "Key is not an institution", EntityException)
 
-        is_parent = False
+        is_parent = True
         institution.remove_link(institution_link, is_parent)
         admin = institution_link.admin
-
-        notification_type = 'REMOVE_INSTITUTION_LINK'
-        notification_id = create_system_notification(
-            institution_link.key,
-            user.key.urlsafe(),
-            notification_type
+        
+        notification_id = create_notification(
+            user=user,
+            receiver_institution=institution_link,
+            sender_institution=institution,
+            create_message=institution.create_notification_message
         )
 
         enqueue_task('remove-admin-permissions', {
-            'institution_key': institution_link.key.urlsafe(), 
-            'parent_key': institution.key.urlsafe(),
+            'institution_key': institution.key.urlsafe(), 
+            'parent_key': institution_link.key.urlsafe(),
             'notification_id': notification_id
         })
 
         email_sender = RequestLinkEmailSender(**{
-            'institution_parent_name': institution.name,
-            'institution_parent_email': institution.institutional_email,
+            'institution_parent_name': institution_link.name,
+            'institution_parent_email': institution_link.institutional_email,
             'institution_requested_key': institution_link.key.urlsafe(),
-            'institution_child_name': institution_link.name,
-            'institution_child_email': institution_link.institutional_email,
+            'institution_child_name': institution.name,
+            'institution_child_email': institution.institutional_email,
             'subject': get_subject('REMOVED_LINK_EMAIL'),
             'receiver': admin.get().email[0],
             'html': 'removed_institutional_link.html'
         })
         email_sender.send_email()
-
-        notification_message = institution.create_notification_message(user_key=user.key, current_institution_key=user.current_institution, 
-            receiver_institution_key=institution_link.key, sender_institution_key=institution.key)
-        send_message_notification(
-            receiver_key=admin.urlsafe(),
-            notification_type=notification_type,
-            entity_key=institution_link.key.urlsafe(),
-            message=notification_message
-        )

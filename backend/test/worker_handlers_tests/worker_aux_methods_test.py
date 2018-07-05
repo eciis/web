@@ -25,13 +25,16 @@ class WorkerAuxMethodsTest(TestBase):
         second_inst_urlsafe = second_inst.key.urlsafe()
         third_inst_urlsafe = third_inst.key.urlsafe()
 
-        # should be false, because user is admin of fist_inst
-        self.assertFalse(should_remove(user, first_inst_urlsafe, second_inst_urlsafe))
-        # should be true, because second_inst is the institution the user is transfering
-        # to another admin
-        self.assertTrue(should_remove(user, second_inst_urlsafe, second_inst_urlsafe))
-        # should be true, because user is not admin of third_inst
-        self.assertTrue(should_remove(user, third_inst_urlsafe, second_inst_urlsafe))
+        self.assertFalse(
+            should_remove(user, first_inst_urlsafe, second_inst_urlsafe),
+            "It should be false, because user is admin of fist_inst")
+        self.assertTrue(
+            should_remove(user, second_inst_urlsafe, second_inst_urlsafe),
+            """It should be true, because second_inst is the institution
+            the user is transfering to another admin""")
+        self.assertTrue(
+            should_remove(user, third_inst_urlsafe, second_inst_urlsafe),
+            "It should be true, because user is not admin of third_inst")
 
 
     def test_filter_permissions_to_remove(self):
@@ -74,7 +77,9 @@ class WorkerAuxMethodsTest(TestBase):
         )
 
         # assert filtered permissions using should_remove method
-        self.assertEquals(permissions_to_remove, expected_permissions)
+        self.assertEquals(
+            permissions_to_remove, expected_permissions,
+            "The permissions to remove should be of second_inst and third_inst")
 
         # make user admin of second_inst
         set_admin(user, second_inst)
@@ -88,7 +93,9 @@ class WorkerAuxMethodsTest(TestBase):
             expected_permissions[permission_type] = [third_inst_urlsafe]
         
         # assert filtered permissions using is_not_admin method
-        self.assertEquals(permissions_to_remove, expected_permissions)
+        self.assertEquals(
+            permissions_to_remove, expected_permissions,
+            "The permissions to remove should be of third_inst")
 
 
     def test_is_admin_of_parent_inst(self):
@@ -134,9 +141,17 @@ class WorkerAuxMethodsTest(TestBase):
         third_inst.set_parent(second_inst.key)
         fourth_inst.set_parent(third_inst.key)
 
-        self.assertTrue(is_admin_of_parent_inst(first_user, second_inst.key.urlsafe()))
-        self.assertFalse(is_admin_of_parent_inst(second_user, first_inst.key.urlsafe()))
-        self.assertFalse(is_admin_of_parent_inst(third_user, third_inst.key.urlsafe()))
+        self.assertTrue(
+            is_admin_of_parent_inst(first_user, second_inst.key.urlsafe()),
+            "It should be true, because first_user is also admin of first_inst")
+        self.assertFalse(
+            is_admin_of_parent_inst(second_user, first_inst.key.urlsafe()),
+            """It should be False, because second_user is not admin of any
+            institution above second_inst""")
+        self.assertFalse(
+            is_admin_of_parent_inst(third_user, third_inst.key.urlsafe()),
+            """It should be False, because third_user is not admin of any
+            institution above fourth_inst""")
 
 
     def test_is_not_admin(self):
@@ -157,11 +172,19 @@ class WorkerAuxMethodsTest(TestBase):
         first_inst_urlsafe = first_inst.key.urlsafe()
         second_inst_urlsafe = second_inst.key.urlsafe()
 
-        self.assertFalse(is_not_admin(first_user, first_inst_urlsafe))
-        self.assertTrue(is_not_admin(first_user, second_inst_urlsafe))
+        self.assertFalse(
+            is_not_admin(first_user, first_inst_urlsafe),
+            """It should be False, because fist_user is admin of first_inst""")
+        self.assertTrue(
+            is_not_admin(first_user, second_inst_urlsafe),
+            """It should be True, because fist_user is not admin of second_inst""")
 
-        self.assertFalse(is_not_admin(second_user, second_inst_urlsafe))
-        self.assertTrue(is_not_admin(second_user, first_inst_urlsafe))
+        self.assertFalse(
+            is_not_admin(second_user, second_inst_urlsafe),
+            """It should be False, because second_user is admin of second_inst""")
+        self.assertTrue(
+            is_not_admin(second_user, first_inst_urlsafe),
+            """It should be False, because second_user is not admin of first_inst""")
 
 
     def test_get_all_parent_admins(self):
@@ -208,19 +231,38 @@ class WorkerAuxMethodsTest(TestBase):
 
         admins = get_all_parent_admins(fourth_inst) 
 
-        self.assertEquals(len(admins), 2)
-        # should be true, because the third_inst has not
-        # confirmed the link with second_inst
-        self.assertTrue(second_user not in admins)
-        self.assertTrue(first_user in admins)
-        self.assertTrue(third_user in admins)
+        self.assertEquals(
+            len(admins), 2,
+            """It should be two, because only third_user and first_user
+            have permissions over fourth_inst""")
+        self.assertTrue(
+            second_user not in admins,
+            """It should be true, because the third_inst has not 
+            confirmed the link with second_inst""")
+        self.assertTrue(
+            first_user in admins, 
+            """It should be True, because first_user is admin of
+            third_inst that is parent of fourth_inst""")
+        self.assertTrue(
+            third_user in admins,
+            """It should be True, because third_user is admin of fourth_inst""")
 
         # now the link between second_inst and third_inst is confirmed
         third_inst.set_parent(second_inst.key)
 
         admins = get_all_parent_admins(fourth_inst, [])
 
-        self.assertEquals(len(admins), 3)
-        self.assertTrue(first_user in admins)
-        self.assertTrue(second_user in admins)
-        self.assertTrue(third_user in admins)
+        self.assertEquals(
+            len(admins), 3,
+            """It should be three, because first_user, second_user
+            and third_user have permissions over fourth_inst""")
+        self.assertTrue(
+            first_user in admins,
+            "It should be True, because first_user have permissions over fourth_inst")
+        self.assertTrue(
+            second_user in admins,
+            "It should be True, because second_user have permissions over fourth_inst")
+        self.assertTrue(
+            third_user in admins,
+            "It should be True, because third_user have permissions over fourth_inst")
+

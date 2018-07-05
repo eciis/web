@@ -27,7 +27,7 @@ class WorkerAuxMethodsTest(TestBase):
 
         self.assertFalse(
             should_remove(user, first_inst_urlsafe, second_inst_urlsafe),
-            "It should be false, because user is admin of fist_inst")
+            "It should be false, because user is admin of first_inst")
         self.assertTrue(
             should_remove(user, second_inst_urlsafe, second_inst_urlsafe),
             """It should be true, because second_inst is the institution
@@ -174,10 +174,10 @@ class WorkerAuxMethodsTest(TestBase):
 
         self.assertFalse(
             is_not_admin(first_user, first_inst_urlsafe),
-            """It should be False, because fist_user is admin of first_inst""")
+            """It should be False, because first_user is admin of first_inst""")
         self.assertTrue(
             is_not_admin(first_user, second_inst_urlsafe),
-            """It should be True, because fist_user is not admin of second_inst""")
+            """It should be True, because first_user is not admin of second_inst""")
 
         self.assertFalse(
             is_not_admin(second_user, second_inst_urlsafe),

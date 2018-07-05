@@ -394,7 +394,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         child_admin_key = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
-        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key, notifcation_id):
+        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key, notification_id):
             """This method is responsible for getting the permissions involved
             in the link and go up in the hierarchy removing the permissions from
             the admins that have to lose it, based in a condition that checks if 
@@ -408,7 +408,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
                     self.removeAdminPermissions(
                         current_admin, permissions)
             
-            NotificationsQueueManager.resolve_notification_task(notifcation_id)
+            NotificationsQueueManager.resolve_notification_task(notification_id)
 
         apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key, notification_id)
 

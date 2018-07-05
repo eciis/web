@@ -14,7 +14,6 @@ from models import Institution
 from service_messages import send_message_notification, create_system_message
 from service_entities import enqueue_task
 from util import get_subject
-import json
 
 from . import BaseHandler
 
@@ -25,8 +24,8 @@ def create_system_notification(receiver_institution_key, receiver_key, notificat
 
     notification = Notification(
         message=message,
-        entity_key=receiver_institution_key,
-        notification_type=notification_type,
+        entity_key=receiver_institution_key.urlsafe(),
+        notification_type='ADD_ADM_PERMISSIONS',
         receiver_key=receiver_key
     )
 
@@ -64,27 +63,29 @@ class InstitutionParentHandler(BaseHandler):
         Utils._assert(not type(institution_link) is Institution,
                       "Key is not an institution", EntityException)
 
-        is_parent = True
+        is_parent = False
         institution.remove_link(institution_link, is_parent)
         admin = institution_link.admin
 
         notification_type = 'REMOVE_INSTITUTION_LINK'
-        notidication_id = create_system_notification(
-            institution_link,
+        notification_id = create_system_notification(
+            institution_link.key,
             user.key.urlsafe(),
             notification_type
         )
 
         enqueue_task('remove-admin-permissions', {
-                        'institution_key': institution.key.urlsafe(), 'parent_key': institution_link.key.urlsafe(),
-                        'notification_id': notidication_id})
+            'institution_key': institution_link.key.urlsafe(), 
+            'parent_key': institution.key.urlsafe(),
+            'notification_id': notification_id
+        })
 
         email_sender = RequestLinkEmailSender(**{
-            'institution_parent_name': institution_link.name,
-            'institution_parent_email': institution_link.institutional_email,
+            'institution_parent_name': institution.name,
+            'institution_parent_email': institution.institutional_email,
             'institution_requested_key': institution_link.key.urlsafe(),
-            'institution_child_name': institution.name,
-            'institution_child_email': institution.institutional_email,
+            'institution_child_name': institution_link.name,
+            'institution_child_email': institution_link.institutional_email,
             'subject': get_subject('REMOVED_LINK_EMAIL'),
             'receiver': admin.get().email[0],
             'html': 'removed_institutional_link.html'

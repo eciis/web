@@ -54,7 +54,7 @@ class NotificationsQueueManager:
             TypeError
         )
 
-        notification_type = notification.notification_type
+        notification_type = notification.notification_group
         notification_key = notification.key
 
         task = taskqueue.Task(

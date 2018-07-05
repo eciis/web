@@ -44,6 +44,7 @@ from handlers import InviteHierarchyCollectionHandler
 from handlers import InviteUserCollectionHandler
 from handlers import InviteInstitutionHandler
 from handlers import InviteHandler
+from handlers import InstitutionParentHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -75,6 +76,7 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_parent", InstitutionParentRequestCollectionHandler),
     ("/api/institutions/(.*)/requests/institution_children", InstitutionChildrenRequestCollectionHandler),
+    ("/api/institutions/(.*)/institution_parent", InstitutionParentHandler),
     ("/api/institutions/(.*)", InstitutionHandler),
     ("/api/key/(.*)", GetKeyHandler),
     ("/api/posts/(.*)/comments/(.*)/replies", ReplyCommentHandler),

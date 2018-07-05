@@ -7,12 +7,11 @@ __all__ = ['Notification', 'notification_id']
 
 notification_id = {
     "00": "ALL_NOTIFICATIONS",
-    "01": "NOTIFICATION_NIL",
-    "02": "ACCEPT_INSTITUTION_LINK",
-    "03": "ACCEPT_INVITE_HIERARCHY",
-    "04": "ACCEPT_INVITE_USER_ADM",
-    "05": "ADD_ADM_PERMISSIONS",
-    "07": "TRANSFER_ADM_PERMISSIONS"
+    "01": "ACCEPT_INSTITUTION_LINK",
+    "02": "ACCEPT_INVITE_HIERARCHY",
+    "03": "ACCEPT_INVITE_USER_ADM",
+    "04": "ADD_ADM_PERMISSIONS",
+    "05": "TRANSFER_ADM_PERMISSIONS"
 }
 
 def get_notification_id(notification_type):

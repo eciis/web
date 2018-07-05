@@ -73,11 +73,8 @@
         };
 
         service.removeLink = function removeLink(institutionKey, institutionLink, isParent) {
-            if (!isParent) {
-                return HttpService.delete(INSTITUTIONS_URI + "/" + institutionKey + "/hierarchy/" + institutionLink + '/institution_parent');
-            } else {
-                return HttpService.delete(INSTITUTIONS_URI + "/" + institutionKey + "/hierarchy/" + institutionLink + "?isParent=" + isParent);
-            }
+            const path = (isParent) ? 'institution_children' : 'institution_parent';
+            return HttpService.delete(INSTITUTIONS_URI + "/" + institutionKey + "/hierarchy/" + institutionLink + '/' + path);
         };
     });
 })();

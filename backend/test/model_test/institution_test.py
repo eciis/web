@@ -236,7 +236,7 @@ class InstitutionTest(TestBase):
         self.assertEqual(self.institution.parent_institution, parent_inst.key,
             "Institution should has a children institution")
 
-        self.institution.remove_link(parent_inst, "true")
+        self.institution.remove_link(parent_inst, True)
 
         self.assertTrue(self.institution.parent_institution is None,
             "institution should not has parent institution")

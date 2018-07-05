@@ -30,9 +30,6 @@
             "TRANSFER_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
             },
-            "REMOVED_ADM_PERMISSIONS": {
-                icon: "clear"
-            },
             "POST": {
                 icon: "inbox",
                 state: "app.post"

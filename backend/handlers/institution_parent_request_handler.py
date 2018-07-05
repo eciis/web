@@ -60,7 +60,7 @@ class InstitutionParentRequestHandler(BaseHandler):
         notification_id = NotificationsQueueManager.create_notification_task(notification)
         enqueue_task('add-admin-permissions', {
             'institution_key': institution_children.key.urlsafe(), 
-            'id_notification': notification_id
+            'notifications_ids': [notification_id]
         })
 
         self.response.write(json.dumps(request.make()))

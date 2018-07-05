@@ -269,26 +269,6 @@
             $state.go('app.user.home');
         }
 
-        function showHierarchyDialog(institution) {
-            console.log(institution);
-            console.log(hasChildren(institution));
-            if (hasChildren(institution)) {
-                $mdDialog.show({
-                    templateUrl: 'app/institution/created_hierarchical_institution_dialog.html',
-                    clickOutsideToClose: true,
-                    locals: {
-                        institution: institution
-                    },
-                    controller: 'HierarchicalInstitutionDialogController',
-                    controllerAs: 'hierCtrl'
-                });
-            }
-        }
-
-        function hasChildren(institution) {
-            return !_.isEmpty(institution.children_institutions);
-        }
-
         configInstCtrl.showImage = function showImage() {
             return configInstCtrl.newInstitution.photo_url !== "app/images/institution.png" && !_.isEmpty(configInstCtrl.newInstitution.photo_url);
         };
@@ -455,6 +435,24 @@
             configInstCtrl.isSubmission = true;
             configInstCtrl.newInstitution.admin = {};
             loadAddress();
+        }
+
+        function showHierarchyDialog(institution) {
+            if (hasChildren(institution)) {
+                $mdDialog.show({
+                    templateUrl: 'app/institution/created_hierarchical_institution_dialog.html',
+                    clickOutsideToClose: true,
+                    locals: {
+                        institution: institution
+                    },
+                    controller: 'HierarchicalInstitutionDialogController',
+                    controllerAs: 'hierCtrl'
+                });
+            }
+        }
+
+        function hasChildren(institution) {
+            return !_.isEmpty(institution.children_institutions);
         }
 
         configInstCtrl.initController = function initController() {

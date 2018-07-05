@@ -82,7 +82,8 @@ class InviteInstitution(Invite):
         """Create the accept notification and insert it into the pull queue.
         
         Params:
-        user -- the user who accepted the invite
+        receiver_key_urlsafe -- the urlsafe of notification's receiver's key
+        user -- the user who accepted the invite. Can be None in system's notification.
         institution_key -- the key of the institution created by the user
         """
         message = self.get_notification_message(institution_key, user)

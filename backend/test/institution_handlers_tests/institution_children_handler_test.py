@@ -137,3 +137,9 @@ class InstitutionChildrenHandlerTest(TestBaseHandler):
             'Error! Key is not an institution',
             'Exception message must be equal to Error! Key is not an institution'
         )
+    
+    @classmethod
+    def tearDown(cls):
+        """Deactivate the test."""
+        cls.test.deactivate()
+

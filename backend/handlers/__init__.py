@@ -11,7 +11,6 @@ from .institution_collection_handler import *
 from .institution_events_handler import *
 from .institution_followers_handler import *
 from .institution_handler import *
-from .institution_hierarchy_handler import *
 from .institution_members_handler import *
 from .institution_parent_request_collection_handler import *
 from .institution_parent_request_handler import *
@@ -49,8 +48,8 @@ handlers = [
     get_key_handler, institution_children_request_collection_handler,
     institution_children_request_handler, institution_collection_handler,
     institution_events_handler, institution_followers_handler,
-    institution_handler, institution_hierarchy_handler,
-    institution_members_handler, institution_parent_request_collection_handler,
+    institution_handler,institution_members_handler, 
+    institution_parent_request_collection_handler,
     institution_parent_request_handler, institution_request_collection_handler,
     institution_request_handler, institution_timeline_handler,
     invite_handler, invite_institution_collection_handler,

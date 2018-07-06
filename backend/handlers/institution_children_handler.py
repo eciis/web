@@ -20,6 +20,15 @@ from . import BaseHandler
 __all__ = ['InstitutionChildrenHandler']
 
 def create_notification(user, receiver_institution, sender_institution, create_message):
+    """
+    Create new notification and add in Queue.
+
+    Keyword arguments:
+    user -- Use to receive notification.
+    receiver_institution -- Institution key in which the notification is directed.
+    sender_institution --Institution in which the user took action.
+    create_message -- Message of notification.
+    """
     message = create_message(
         user_key=user.key, 
         current_institution_key=user.current_institution, 

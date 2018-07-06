@@ -19,7 +19,14 @@ from . import BaseHandler
 
 __all__ = ['InstitutionParentHandler']
 
-def create_system_notification(receiver_institution_key, receiver_key, notification_type):
+def create_system_notification(receiver_institution_key, receiver_key):
+    """
+    Create new system notification and add in queue.
+    
+    Keyword arguments:
+    receiver_institution_key -- Institution key in which the notification is directed.
+    receiver_key -- User key that notification will be sent.
+    """
     message = create_system_message(receiver_institution_key)
 
     notification = Notification(
@@ -70,7 +77,6 @@ class InstitutionParentHandler(BaseHandler):
         notification_id = create_system_notification(
             institution_link.key,
             user.key.urlsafe(),
-            notification_type
         )
 
         enqueue_task('remove-admin-permissions', {

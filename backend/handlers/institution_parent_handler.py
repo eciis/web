@@ -48,11 +48,6 @@ class InstitutionParentHandler(BaseHandler):
         request has been made from a child institution, otherwise 
         the request has been made by a parent institution.
         """
-
-        user.check_permission('remove_link',
-                              "User is not allowed to remove link between institutions",
-                              institution_key)
-
         # holds the reference of the parent intitution.
         institution = ndb.Key(urlsafe=institution_key).get() 
         # holds the reference of the child intitution.
@@ -62,6 +57,10 @@ class InstitutionParentHandler(BaseHandler):
                       "Key is not an institution", EntityException)
         Utils._assert(not type(institution_link) is Institution,
                       "Key is not an institution", EntityException)
+
+        user.check_permission('remove_link',
+                              "User is not allowed to remove link between institutions",
+                              institution_key)
 
         is_parent = False
         institution.remove_link(institution_link, is_parent)

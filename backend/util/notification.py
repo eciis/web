@@ -11,7 +11,8 @@ notification_id = {
     "02": "ACCEPT_INVITE_HIERARCHY",
     "03": "ACCEPT_INVITE_USER_ADM",
     "04": "ADD_ADM_PERMISSIONS",
-    "05": "TRANSFER_ADM_PERMISSIONS"
+    "05": "TRANSFER_ADM_PERMISSIONS",
+    "07": "REMOVE_INSTITUTION_LINK"
 }
 
 def get_notification_id(notification_type):

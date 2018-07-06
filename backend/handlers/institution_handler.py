@@ -74,6 +74,63 @@ def adminToJson(admin):
     }
     return Utils.toJson(admin_json)
 
+def config_user(user, data, institution):
+    """ This method setup the user according to
+    the new institution he has created.
+
+    Params:
+    user -- The user who accepted the invite to create the institution.
+    data -- The data that wraps the institution's creation process' information
+    institution -- The institution that has been created, when the invite was sent, 
+    as a stub and now is active.
+    """
+    user.name = data.get('sender_name')
+    data_profile = {
+        'office': 'Administrador',
+        'institution_key': institution.key.urlsafe(),
+        'institution_name': institution.name,
+        'institution_photo_url': institution.photo_url
+    }
+    user.create_and_add_profile(data_profile)
+
+    user.add_permissions(
+        permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+    user.put()
+
+def setup_enqueue_process(invite, institution, user):
+    """This method creates the notification and setups its
+    sending process properly by calling add-permissions handler.
+
+    Params:
+    invite -- The invite that has been accepted by the user to create
+    the new institution.
+    institution -- The institution that has been created, when the invite was sent, 
+    as a stub and now is active.
+    user -- The user who received the invite and accepted it creating the institution.
+    """
+    notification_id = invite.create_accept_response_notification(
+        'ACCEPT_INVITE_INSTITUTION',
+        institution.key,
+        invite.admin_key.urlsafe(),
+        user
+    )
+
+    if invite.__class__.__name__ == 'InviteInstitutionParent':
+        system_notification_id = invite.create_accept_response_notification(
+            'ADD_ADM_PERMISSIONS',
+            institution_key=institution.key,
+            receiver_key_urlsafe=user.key.urlsafe()
+        )
+        enqueue_task('add-admin-permissions', {
+            'institution_key': institution.key.urlsafe(),
+            'notifications_ids': [notification_id, system_notification_id]
+        })
+    else:
+        enqueue_task('add-admin-permissions', {
+            'institution_key': institution.key.urlsafe(),
+            'notifications_ids': [notification_id]
+        })
+
 
 class InstitutionHandler(BaseHandler):
     """Institution Handler."""
@@ -143,47 +200,16 @@ class InstitutionHandler(BaseHandler):
         Utils._assert(invite.status == 'accepted', 
             "This invitation has already been accepted", 
             NotAuthorizedException)
-
+        
         invite.status = 'accepted'
         invite.put()
 
         institution.createInstitutionWithStub(user, institution)
 
-        user.name = data.get('sender_name')
-        data_profile = {
-            'office': 'Administrador',
-            'institution_key': institution.key.urlsafe(),
-            'institution_name': institution.name,
-            'institution_photo_url': institution.photo_url
-        }
-        user.create_and_add_profile(data_profile)
+        config_user(user, data, institution)
 
-        user.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
-        user.put()
-
-        notification_id = invite.create_notification(
-            'ACCEPT_INVITE_INSTITUTION',
-            institution.key, 
-            invite.admin_key.urlsafe(),
-            user
-        )
-
-        if invite.__class__.__name__ == 'InviteInstitutionParent':
-            system_notification_id = invite.create_notification(
-                'ADD_ADM_PERMISSIONS',
-                institution_key=institution.key, 
-                receiver_key_urlsafe=user.key.urlsafe()
-            )
-            enqueue_task('add-admin-permissions', {
-                'institution_key': institution_key,
-                'notifications_ids': [notification_id, system_notification_id]
-            })
-        else:
-            enqueue_task('add-admin-permissions', {
-                'institution_key': institution_key,
-                'notifications_ids': [notification_id]
-            })
-
+        setup_enqueue_process(invite, institution, user)
+        
         institution_json = Utils.toJson(institution)
         self.response.write(json.dumps(
             institution_json))

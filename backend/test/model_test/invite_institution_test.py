@@ -83,22 +83,24 @@ class InviteInstitutionTest(TestBase):
     
     @patch('models.invite_institution.NotificationsQueueManager.create_notification_task')
     def test_create_accept_notification(self, mock_method):
+        """Test create a regular accept response notification."""
         invite = InviteInstitution.create(self.data)
         invite.put()
         self.user.current_institution = self.institution.key
         self.user.put()
-        id = invite.create_notification(
+        id = invite.create_accept_response_notification(
             'ACCEPT_INVITE_INSTITUTION', self.institution.key, invite.admin_key.urlsafe(), self.user)
         mock_method.assert_called()
         self.assertTrue(id != None)
     
     @patch('models.invite_institution.NotificationsQueueManager.create_notification_task')
     def test_create_system_notification(self, mock_method):
+        """Test create a system notification."""
         invite = InviteInstitution.create(self.data)
         invite.put()
         self.user.current_institution = self.institution.key
         self.user.put()
-        id = invite.create_notification(
+        id = invite.create_accept_response_notification(
             'ADD_ADM_PERMISSIONS', self.institution.key, self.user.key.urlsafe())
         mock_method.assert_called()
         self.assertTrue(id != None)

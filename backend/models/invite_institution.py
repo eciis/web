@@ -63,9 +63,9 @@ class InviteInstitution(Invite):
         })
         email_sender.send_email()
 
-    def send_response_notification(self, current_institution, invitee_key, action):
+    def send_reject_response_notification(self, current_institution, invitee_key):
         """Define the entity type of notification when the invite is accepted or rejected."""
-        notification_type = 'ACCEPT_INVITE_INSTITUTION' if action == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
+        notification_type = 'REJECT_INVITE_INSTITUTION'
         self.send_response(current_institution, invitee_key, notification_type)
 
     def send_response(self, current_institution, invitee_key, notification_type, message=None):
@@ -78,7 +78,7 @@ class InviteInstitution(Invite):
             message=message
         )
  
-    def create_notification(self, notification_type, institution_key, receiver_key_urlsafe, user=None):
+    def create_accept_response_notification(self, notification_type, institution_key, receiver_key_urlsafe, user=None):
         """Create the accept notification and insert it into the pull queue.
         
         Params:
@@ -99,12 +99,14 @@ class InviteInstitution(Invite):
             notification)
     
     def get_notification_message(self, institution_key, user=None):
-        """Returns the correct notification's message by chosing between system_messages
+        """Returns the correct notification's message by choosing between system_messages
         or regular messages.
         
         Params:
         institution_key -- the key of the institution that the user has created.
         user -- the user who is sending notification, if it is not none.
+        If it is None, it means that the notification is a system's notification which
+        doesn't have any user.
         """
         return self.create_notification_message(
                     user.key,

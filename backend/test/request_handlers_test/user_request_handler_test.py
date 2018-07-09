@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Request Handler Test."""
+"""User Request Handler Test."""
 
 import json
 from ..test_base_handler import TestBaseHandler
@@ -7,7 +7,7 @@ from models import User
 from models import Institution
 from models import Address
 from models import RequestUser
-from handlers.request_handler import RequestHandler
+from handlers.user_request_handler import UserRequestHandler
 from .. import mocks
 
 from mock import patch
@@ -17,23 +17,23 @@ ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
 
 
-class RequestHandlerTest(TestBaseHandler):
-    """Request Handler Test."""
+class UserRequestHandlerTest(TestBaseHandler):
+    """User Request Handler Test."""
 
     REQUEST_URI = "/api/requests/(.*)/user"
 
     @classmethod
     def setUp(cls):
         """Provide the base for the tests."""
-        super(RequestHandlerTest, cls).setUp()
+        super(UserRequestHandlerTest, cls).setUp()
         app = cls.webapp2.WSGIApplication(
-            [(RequestHandlerTest.REQUEST_URI, RequestHandler),
+            [(UserRequestHandlerTest.REQUEST_URI, UserRequestHandler),
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_get(self, verify_token):
-        """Test method get of RequestHandler."""
+        """Test method get of UserRequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         admin.institutions_admin = [institution.key]
@@ -76,7 +76,7 @@ class RequestHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_put(self, verify_token):
-        """Test method put of RequestHandler."""
+        """Test method put of UserRequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()	 
         institution.admin = admin.key
@@ -188,7 +188,7 @@ class RequestHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_delete(self, verify_token):
-        """Test method delete of RequestHandler."""
+        """Test method delete of UserRequestHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
         institution.admin = admin.key

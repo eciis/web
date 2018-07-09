@@ -174,6 +174,9 @@
             },
             "ADD_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
+            },
+            "RE_ADD_ADM_PERMISSIONS": {
+                icon: "check_circle_outline"
             }
         };
 

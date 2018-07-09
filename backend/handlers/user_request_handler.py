@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Request Handler."""
+"""User Request Handler."""
 
 import json
 from utils import Utils
@@ -27,7 +27,7 @@ def makeUser(user, request):
 
 
 class UserRequestHandler(BaseHandler):
-    """Request Handler."""
+    """User Request Handler."""
 
     @login_required
     @json_response

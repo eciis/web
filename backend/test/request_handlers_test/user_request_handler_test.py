@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Request Handler Test."""
+"""User Request Handler Test."""
 
 import json
 from ..test_base_handler import TestBaseHandler
@@ -18,7 +18,7 @@ USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
 
 
 class UserRequestHandlerTest(TestBaseHandler):
-    """Request Handler Test."""
+    """User Request Handler Test."""
 
     REQUEST_URI = "/api/requests/(.*)/user"
 

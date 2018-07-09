@@ -25,7 +25,7 @@ class InviteInstitutionChildren(InviteInstitution):
         return invite_children_json
 
     def send_reject_response_notification(self, current_institution, invitee_key):
-        """Define the notification type of notification when the invite is accepted or rejected."""
+        """Define the notification's entity type when the invite is rejected."""
         notification_type = 'REJECT_INSTITUTION_LINK'
         notification_message = self.create_notification_message(invitee_key, 
             current_institution_key=current_institution, sender_institution_key=self.stub_institution_key, 

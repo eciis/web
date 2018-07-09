@@ -64,7 +64,7 @@ class InviteInstitution(Invite):
         email_sender.send_email()
 
     def send_reject_response_notification(self, current_institution, invitee_key):
-        """Define the entity type of notification when the invite is accepted or rejected."""
+        """Define the notification's entity type when the invite is rejected."""
         notification_type = 'REJECT_INVITE_INSTITUTION'
         self.send_response(current_institution, invitee_key, notification_type)
 

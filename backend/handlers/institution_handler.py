@@ -74,28 +74,6 @@ def adminToJson(admin):
     }
     return Utils.toJson(admin_json)
 
-def config_user(user, data, institution):
-    """ This method setup the user according to
-    the new institution he has created.
-
-    Params:
-    user -- The user who accepted the invite to create the institution.
-    data -- The data that wraps the institution's creation process' information
-    institution -- The institution that has been created, when the invite was sent, 
-    as a stub and now is active.
-    """
-    user.name = data.get('sender_name')
-    data_profile = {
-        'office': 'Administrador',
-        'institution_key': institution.key.urlsafe(),
-        'institution_name': institution.name,
-        'institution_photo_url': institution.photo_url
-    }
-    user.create_and_add_profile(data_profile)
-
-    user.add_permissions(
-        permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
-    user.put()
 
 def setup_enqueue_process(invite, institution, user):
     """This method creates the notification and setups its
@@ -205,8 +183,9 @@ class InstitutionHandler(BaseHandler):
         invite.put()
 
         institution.createInstitutionWithStub(user, institution)
-
-        config_user(user, data, institution)
+        
+        user.name = data.get('sender_name')
+        user.config_user_adm(institution)
 
         setup_enqueue_process(invite, institution, user)
         

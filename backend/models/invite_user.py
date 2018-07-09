@@ -5,7 +5,7 @@ from custom_exceptions import FieldException
 from . import User
 from . import Institution
 from send_email_hierarchy import InviteUserEmailSender
-from util import get_subject
+from util import get_subject, Notification, NotificationsQueueManager
 
 __all__ = ['InviteUser']
 
@@ -48,6 +48,30 @@ class InviteUser(Invite):
             notification_type=notification_type,
             message=notification_message
         )
+
+    def create_sent_invites_notification(self, current_institution_key):
+        """
+        Create a notification and enqueue it to be be sent
+        when the invites are sent.
+        
+        Keyword arguments:
+        current_institution -- Current institution of user.
+        """
+
+        message = self.create_notification_message(
+            user_key=self.sender_key,
+            current_institution_key=current_institution_key
+        )
+
+        notification = Notification(
+            message=message,
+            entity_key=self.key.urlsafe(),
+            notification_type='USER_INVITES_SENT',
+            receiver_key=self.sender_key.urlsafe()
+        )
+
+        notification_id = NotificationsQueueManager.create_notification_task(notification)
+        return notification_id
 
     def make(self):
         """Create json of invite to user."""

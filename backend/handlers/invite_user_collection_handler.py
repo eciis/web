@@ -66,8 +66,18 @@ class InviteUserCollectionHandler(BaseHandler):
                 invites_keys.append(current_invite.key.urlsafe())
                 invites.append({'email': email, 'key': current_invite.key.urlsafe()})
 
-            enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
-                                         'current_institution': current_institution_key.urlsafe()})
+            invite = createInvite(invite)
+            notification_id = invite.create_sent_invites_notification(current_institution_key)
+
+            enqueue_task(
+                'send-invite', 
+                {
+                    'invites_keys': json.dumps(invites_keys),
+                    'host': host,
+                    'current_institution': current_institution_key.urlsafe(),
+                    'notification_id': notification_id
+                }
+            )
 
         # If the invitation was USER type, more than one invitation can be sent at the same time.
         if type_of_invite == 'USER':

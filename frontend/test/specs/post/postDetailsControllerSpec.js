@@ -554,7 +554,7 @@
 
     describe('showButtonEdit', function () {
         it('should return true', function () {
-            let post = new Post({key: 'akposdko-OADKAOP', state:'published', number_of_comments: 0, number_of_likes: 0});
+            let post = new Post({key: 'akposdko-OADKAOP', state:'published', institution_state: "active", number_of_comments: 0, number_of_likes: 0});
             postDetailsCtrl.post = post;
             postDetailsCtrl.user.permissions = {};
             postDetailsCtrl.user.permissions['edit_post'] = {};

@@ -5,6 +5,7 @@ from ..test_base_handler import TestBaseHandler, has_permissions
 from worker import RemoveAdminPermissionsInInstitutionHierarchy
 import permissions
 from .. import mocks
+from mock import patch
 
 REMOVE_ADMIN_PERMISSIONS_URI = '/api/queue/remove-admin-permissions'
 
@@ -21,7 +22,8 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
             ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    def test_post(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test_post(self, resolve_notification_task):
         """Test the post method."""
         # Verify the members
         """Test remove admin permissions in institution hierarchy."""
@@ -107,8 +109,11 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
             first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             first_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()
     
-    def test_no_permissions_removal(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test_no_permissions_removal(self, resolve_notification_task):
         """Test the post method."""
         # Verify the members
         """Test remove admin permissions in institution hierarchy."""
@@ -189,8 +194,11 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
             first_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             first_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()
     
-    def test_with_permissions_removal_in_the_top_of_the_hierarchy(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test_with_permissions_removal_in_the_top_of_the_hierarchy(self, resolve_notification_task):
         """Test the post method."""
         # Verify the members
         """Test remove admin permissions in institution hierarchy."""
@@ -284,8 +292,11 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
         
         self.assertTrue(has_permissions(
             third_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()
 
-    def test_simple_test(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test_simple_test(self, resolve_notification_task):
         """Test the post method."""
         # Verify the members
         """Test remove admin permissions in institution hierarchy."""
@@ -364,8 +375,11 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
 
         self.assertTrue(has_permissions(
             third_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()
 
-    def test(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test(self, resolve_notification_task):
         """Test the post method."""
         # Verify the members
         """Test remove admin permissions in institution hierarchy."""
@@ -450,9 +464,11 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
             second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             second_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()
 
-    
-    def test_to_keep_permissions_information(self):
+    @patch('worker.NotificationsQueueManager.resolve_notification_task')
+    def test_to_keep_permissions_information(self, resolve_notification_task):
         """apokdpos."""
         first_user = mocks.create_user()
         second_user = mocks.create_user()
@@ -548,3 +564,5 @@ class RemoveAdminPermissionsInInstitutionHierarchyTest(TestBaseHandler):
             third_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
         self.assertTrue(has_permissions(
             third_user, fourth_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
+        
+        resolve_notification_task.assert_called()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Request Handler."""
+"""User Request Handler."""
 
 import json
 from utils import Utils
@@ -9,7 +9,7 @@ from utils import json_response
 from . import BaseHandler
 from custom_exceptions import EntityException
 
-__all__ = ['RequestHandler']
+__all__ = ['UserRequestHandler']
 
 def makeUser(user, request):
     """Method of make user."""
@@ -26,8 +26,8 @@ def makeUser(user, request):
     return user_json
 
 
-class RequestHandler(BaseHandler):
-    """Request Handler."""
+class UserRequestHandler(BaseHandler):
+    """User Request Handler."""
 
     @login_required
     @json_response

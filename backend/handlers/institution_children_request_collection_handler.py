@@ -16,7 +16,7 @@ from models import RequestInstitutionChildren
 __all__ = ['InstitutionChildrenRequestCollectionHandler']
 
 class InstitutionChildrenRequestCollectionHandler(BaseHandler):
-    """Request Handler."""
+    """Institution Children Request Collection Handler."""
 
     @json_response
     @login_required

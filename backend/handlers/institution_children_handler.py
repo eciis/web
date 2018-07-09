@@ -71,8 +71,8 @@ class InstitutionChildrenHandler(BaseHandler):
                               "User is not allowed to remove link between institutions",
                               institution_children_urlsafe)
 
-        is_parent = True
-        institution_children.remove_link(institution_parent, is_parent)
+        # Remove Parent
+        institution_children.set_parent(None)
         admin = institution_parent.admin
         
         notification_id = create_notification(

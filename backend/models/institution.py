@@ -247,14 +247,6 @@ class Institution(ndb.Model):
             returned_method = self.set_parent_for_none
         return returned_method
 
-    def remove_link(self, institution_link, is_parent):
-        """Remove the connection between self and institution_link."""
-        if is_parent == True:
-            self.parent_institution = None
-        else:
-            self.children_institutions.remove(institution_link.key)
-        self.put()
-
     def remove_institution_hierarchy(self, remove_hierarchy, user):
         """Remove institution's hierarchy."""
         for child in self.children_institutions:

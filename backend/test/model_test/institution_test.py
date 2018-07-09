@@ -219,48 +219,6 @@ class InstitutionTest(TestBase):
         self.assertEqual(self.institution.state, 'inactive',
             "The state of institution should be inactive")
 
-
-    def test_remove_link(self):
-        # case 1: remove parent
-        parent_inst = mocks.create_institution()
-        invite = mocks.create_invite(self.user, parent_inst.key, 'INSTITUTION')
-
-        self.assertTrue(self.institution.key not in parent_inst.children_institutions,
-            "parent_inst should not be has a children institution")
-
-        self.assertTrue(self.institution.parent_institution is None,
-            "institution should not has parent institution")
-
-        self.institution.create_children_connection(invite)
-
-        self.assertEqual(self.institution.parent_institution, parent_inst.key,
-            "Institution should has a children institution")
-
-        self.institution.remove_link(parent_inst, True)
-
-        self.assertTrue(self.institution.parent_institution is None,
-            "institution should not has parent institution")
-
-        # case 2: remove children
-        child_inst = mocks.create_institution()
-        invite = mocks.create_invite(self.user, child_inst.key, 'INSTITUTION')
-
-        self.assertTrue(child_inst.key not in self.institution.children_institutions,
-            "Institution should not has a children institution")
-
-        self.assertTrue(child_inst.parent_institution is None,
-            "child_inst should not has parent institution")
-
-        self.institution.create_parent_connection(invite)
-
-        self.assertTrue(child_inst.key in self.institution.children_institutions,
-            "Institution should has a children institution")
-
-        self.institution.remove_link(child_inst, "false")
-
-        self.assertTrue(child_inst.key not in self.institution.children_institutions,
-            "Institution should not has a children institution")
-
     def test_get_hierarchy_admin_permissions(self):
         
         def generate_permissions(institution_key_url, permissions={}):

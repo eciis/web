@@ -3,6 +3,8 @@
 import operator
 from ..test_base_handler import TestBaseHandler
 from models import InviteInstitution
+from models import InviteInstitutionParent
+from models import InviteInstitutionChildren
 from models import User
 from models import Institution
 from handlers.institution_handler import InstitutionHandler
@@ -805,11 +807,60 @@ class InstitutionHandlerTest(TestBaseHandler):
         second_user = second_user.key.get()
         second_inst = second_inst.key.get()
         third_inst = third_inst.key.get()
+    
+    @patch('handlers.institution_handler.enqueue_task')
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
+    def test_put_invite_institution_parent(self, verify_token, mock_method):
+        """Test the put method."""
+        # Call the patch method and assert that  it raises an exception
+        self.invite = InviteInstitutionParent()
+        self.invite.invitee = 'other_user@example.com'
+        self.invite.institution_key = self.second_inst.key
+        self.invite.admin_key = self.user.key
+        self.invite.type_of_invite = 'institution'
+        self.invite.suggestion_institution_name = "Nova Inst"
+        self.invite.stub_institution_key = self.stub.key
+        self.invite.put()
+        self.body['data'] = {'sender_name': 'user name updated'}
 
-        self.assertTrue(has_permissions(
-            second_user, third_inst.key.urlsafe(), permissions.DEFAULT_ADMIN_PERMISSIONS))
-        self.assertTrue(second_inst.state == 'inactive')
-        self.assertFalse(third_inst.state == 'inactive')
+        self.testapp.put_json("/api/institutions/%s/invites/%s" %
+                              (self.stub.key.urlsafe(),
+                               self.invite.key.urlsafe()), self.body,
+                              headers={'institution-authorization': self.third_inst.key.urlsafe()})
+
+        self.invite = self.invite.key.get()
+
+        self.assertEqual(self.invite.status, "accepted",
+                         "The status expected was accepted")
+        
+        mock_method.assert_called()
+    
+    @patch('handlers.institution_handler.enqueue_task')
+    @patch('util.login_service.verify_token', return_value={'email': 'other_user@example.com'})
+    def test_put_invite_institution_children(self, verify_token, mock_method):
+        """Test the put method."""
+        # Call the patch method and assert that  it raises an exception
+        self.invite = InviteInstitutionChildren()
+        self.invite.invitee = 'other_user@example.com'
+        self.invite.institution_key = self.second_inst.key
+        self.invite.admin_key = self.user.key
+        self.invite.type_of_invite = 'institution'
+        self.invite.suggestion_institution_name = "Nova Inst"
+        self.invite.stub_institution_key = self.stub.key
+        self.invite.put()
+        self.body['data'] = {'sender_name': 'user name updated'}
+
+        self.testapp.put_json("/api/institutions/%s/invites/%s" %
+                              (self.stub.key.urlsafe(),
+                               self.invite.key.urlsafe()), self.body,
+                              headers={'institution-authorization': self.third_inst.key.urlsafe()})
+
+        self.invite = self.invite.key.get()
+
+        self.assertEqual(self.invite.status, "accepted",
+                         "The status expected was accepted")
+
+        mock_method.assert_called()
 
     def tearDown(cls):
         """Deactivate the test."""

@@ -57,14 +57,7 @@ class InstitutionRequestHandler(BaseHandler):
         sender.institutions_admin.append(institution.key)
         sender.change_state('active')
 
-        data_profile = {
-            'office': 'Administrador',
-            'institution_key': institution.key.urlsafe(),
-            'institution_name': institution.name,
-            'institution_photo_url': institution.photo_url
-        }
-        sender.create_and_add_profile(data_profile)
-        sender.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        sender.config_user_adm(institution)
 
         institution.follow(sender.key)
         institution.add_member(sender)

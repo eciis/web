@@ -5,6 +5,9 @@ from custom_exceptions import FieldException
 from . import User
 from send_email_hierarchy import InviteInstitutionEmailSender
 from util import get_subject
+from util import Notification
+from util import NotificationsQueueManager
+from service_messages import create_system_message
 
 __all__ = ['InviteInstitution']
 
@@ -60,9 +63,9 @@ class InviteInstitution(Invite):
         })
         email_sender.send_email()
 
-    def send_response_notification(self, current_institution, invitee_key, action):
-        """Define the entity type of notification when the invite is accepted or rejected."""
-        notification_type = 'ACCEPT_INVITE_INSTITUTION' if action == 'ACCEPT' else 'REJECT_INVITE_INSTITUTION'
+    def send_reject_response_notification(self, current_institution, invitee_key):
+        """Define the notification's entity type when the invite is rejected."""
+        notification_type = 'REJECT_INVITE_INSTITUTION'
         self.send_response(current_institution, invitee_key, notification_type)
 
     def send_response(self, current_institution, invitee_key, notification_type, message=None):
@@ -74,6 +77,43 @@ class InviteInstitution(Invite):
             notification_type=notification_type,
             message=message
         )
+ 
+    def create_accept_response_notification(self, notification_type, institution_key, receiver_key_urlsafe, user=None):
+        """Create the accept notification and insert it into the pull queue.
+        
+        Params:
+        receiver_key_urlsafe -- the urlsafe of notification's receiver's key
+        user -- the user who accepted the invite. Can be None in system's notification.
+        institution_key -- the key of the institution created by the user
+        """
+        message = self.get_notification_message(institution_key, user)
+
+        notification = Notification(
+            entity_key=self.key.urlsafe(),
+            receiver_key=receiver_key_urlsafe,
+            notification_type=notification_type,
+            message=message
+        )
+
+        return NotificationsQueueManager.create_notification_task(
+            notification)
+    
+    def get_notification_message(self, institution_key, user=None):
+        """Returns the correct notification's message by choosing between system_messages
+        or regular messages.
+        
+        Params:
+        institution_key -- the key of the institution that the user has created.
+        user -- the user who is sending notification, if it is not none.
+        If it is None, it means that the notification is a system's notification which
+        doesn't have any user.
+        """
+        return self.create_notification_message(
+                    user.key,
+                    institution_key,
+                    user.current_institution,
+                    self.institution_requested_key
+                ) if user else create_system_message(institution_key)
 
     def make(self):
         """Create json of invite to institution."""

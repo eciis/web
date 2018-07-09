@@ -35,7 +35,6 @@ from handlers import InstitutionRequestCollectionHandler
 from handlers import InstitutionRequestHandler
 from handlers import InstitutionParentRequestHandler
 from handlers import InstitutionChildrenRequestHandler
-from handlers import InstitutionHierarchyHandler
 from handlers import RequestHandler
 from handlers import InstitutionEventsHandler
 from handlers import ResendInviteHandler
@@ -73,7 +72,6 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/events", InstitutionEventsHandler),
     ("/api/institutions/(.*)/hierarchy/(.*)/institution_parent", InstitutionParentHandler),
     ("/api/institutions/(.*)/hierarchy/(.*)/institution_children", InstitutionChildrenHandler),
-    ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
     ("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),

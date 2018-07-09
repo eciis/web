@@ -386,7 +386,6 @@ class User(ndb.Model):
 
         Params:
         user -- The user who accepted the invite to create the institution.
-        data -- The data that wraps the institution's creation process' information
         institution -- The institution that has been created, when the invite was sent, 
         as a stub and now is active.
         """

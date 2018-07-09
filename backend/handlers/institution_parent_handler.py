@@ -50,11 +50,10 @@ class InstitutionParentHandler(BaseHandler):
         """
         Handle delete children link between institutions.
 
-        This handler remove the children link between two institutions. 
+        This handler remove the children link between two institutions.
+        This handler is called by parent institution to remove link with the children.
         """
-        # holds the reference of the parent intitution.
         institution_parent = ndb.Key(urlsafe=institution_parent_urlsafe).get() 
-        # holds the reference of the child intitution.
         institution_children = ndb.Key(urlsafe=institution_children_urlsafe).get()
 
         Utils._assert(not type(institution_parent) is Institution,

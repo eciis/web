@@ -177,7 +177,7 @@ def notify_institution_removal(institution, remove_hierarchy, user, current_inst
                 notify_institution_removal(child, remove_hierarchy, user, current_institution_key)
 
 
-class BaseHandler(webapp2.UserRequestHandler):
+class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""
 
     def handle_exception(self, exception, debug):

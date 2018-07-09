@@ -167,7 +167,7 @@ def clear_data_store():
     delete_all_in_index(index_user)
 
 
-class BaseHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.UserRequestHandler):
     """Base Handler."""
 
     def handle_exception(self, exception, debug):

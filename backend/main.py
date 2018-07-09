@@ -36,7 +36,7 @@ from handlers import InstitutionRequestHandler
 from handlers import InstitutionParentRequestHandler
 from handlers import InstitutionChildrenRequestHandler
 from handlers import InstitutionHierarchyHandler
-from handlers import RequestHandler
+from handlers import UserRequestHandler
 from handlers import InstitutionEventsHandler
 from handlers import ResendInviteHandler
 from handlers import InviteUserAdmHandler
@@ -50,7 +50,7 @@ methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
-    ("/api/requests/(.*)/user", RequestHandler),
+    ("/api/requests/(.*)/user", UserRequestHandler),
     ("/api/invites/institution_hierarchy", InviteHierarchyCollectionHandler),
     ("/api/invites/user", InviteUserCollectionHandler),
     ("/api/invites/institution", InviteInstitutionCollectionHandler),

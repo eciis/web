@@ -9,7 +9,7 @@ from utils import json_response
 from . import BaseHandler
 from custom_exceptions import EntityException
 
-__all__ = ['RequestHandler']
+__all__ = ['UserRequestHandler']
 
 def makeUser(user, request):
     """Method of make user."""
@@ -26,7 +26,7 @@ def makeUser(user, request):
     return user_json
 
 
-class RequestHandler(BaseHandler):
+class UserRequestHandler(BaseHandler):
     """Request Handler."""
 
     @login_required

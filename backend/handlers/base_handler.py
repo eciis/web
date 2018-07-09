@@ -9,7 +9,7 @@ from utils import json_response
 
 __all__ = ['BaseHandler']
 
-class BaseHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.UserRequestHandler):
     """Base Handler."""
 
     def decorateHeaders(self):

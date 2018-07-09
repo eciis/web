@@ -27,7 +27,7 @@ from .post_collection_handler import *
 from .post_comment_handler import *
 from .post_handler import *
 from .reply_comment_handler import *
-from .request_handler import *
+from .user_request_handler import *
 from .resend_invite_handler import *
 from .search_handler import *
 from .subscribe_post_handler import *
@@ -54,7 +54,7 @@ handlers = [
     invite_handler, invite_institution_collection_handler,
     invite_user_adm_handler, like_handler, login_logout_handler,
     post_collection_handler, post_comment_handler, post_handler,
-    reply_comment_handler, request_handler, resend_invite_handler,
+    reply_comment_handler, user_request_handler, resend_invite_handler,
     search_handler, subscribe_post_handler, user_handler,
     user_institutions_handler, user_profile_handler,
     user_request_collection_handler, user_timeline_handler, vote_handler,

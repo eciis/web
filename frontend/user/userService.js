@@ -11,7 +11,8 @@
 
         service.NOTIFICATIONS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
                                                 "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
-                                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_USER_ADM", "RE_ADD_ADM_PERMISSIONS"];
+                                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_USER_ADM", 
+                                                "REMOVE_INSTITUTION_LINK", "RE_ADD_ADM_PERMISSIONS"];
 
         service.deleteAccount = function deleteAccount() {
             return HttpService.delete(USER_URI);

@@ -35,8 +35,7 @@ from handlers import InstitutionRequestCollectionHandler
 from handlers import InstitutionRequestHandler
 from handlers import InstitutionParentRequestHandler
 from handlers import InstitutionChildrenRequestHandler
-from handlers import InstitutionHierarchyHandler
-from handlers import RequestHandler
+from handlers import UserRequestHandler
 from handlers import InstitutionEventsHandler
 from handlers import ResendInviteHandler
 from handlers import InviteUserAdmHandler
@@ -44,13 +43,15 @@ from handlers import InviteHierarchyCollectionHandler
 from handlers import InviteUserCollectionHandler
 from handlers import InviteInstitutionHandler
 from handlers import InviteHandler
+from handlers import InstitutionParentHandler
+from handlers import InstitutionChildrenHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
 webapp2.WSGIApplication.allowed_methods = frozenset(methods)
 
 app = webapp2.WSGIApplication([
-    ("/api/requests/(.*)/user", RequestHandler),
+    ("/api/requests/(.*)/user", UserRequestHandler),
     ("/api/invites/institution_hierarchy", InviteHierarchyCollectionHandler),
     ("/api/invites/user", InviteUserCollectionHandler),
     ("/api/invites/institution", InviteInstitutionCollectionHandler),
@@ -69,7 +70,8 @@ app = webapp2.WSGIApplication([
     ("/api/institutions/(.*)/members", InstitutionMembersHandler),
     ("/api/institutions/(.*)/followers", InstitutionFollowersHandler),
     ("/api/institutions/(.*)/events", InstitutionEventsHandler),
-    ("/api/institutions/(.*)/hierarchy/(.*)", InstitutionHierarchyHandler),
+    ("/api/institutions/(.*)/hierarchy/(.*)/institution_parent", InstitutionParentHandler),
+    ("/api/institutions/(.*)/hierarchy/(.*)/institution_children", InstitutionChildrenHandler),
     ("/api/institutions/(.*)/invites/(.*)", InstitutionHandler),
     ("/api/institutions/(.*)/requests/user", UserRequestCollectionHandler),
     ("/api/institutions/requests/institution/(.*)", InstitutionRequestCollectionHandler),

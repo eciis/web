@@ -68,14 +68,17 @@ class WorkerAuxMethodsTest(TestBase):
             'publish_survey': [],
             'publish_post': []
         }
-        for permission_type in PERMISSIONS:
-            expected_permissions[permission_type] = [second_inst_urlsafe, third_inst_urlsafe]
 
         permissions_to_remove = filter_permissions_to_remove(
             user, user.permissions,
             second_inst_urlsafe, should_remove
         )
 
+        for permission_type in PERMISSIONS:
+            expected_permissions[permission_type] = [second_inst_urlsafe, third_inst_urlsafe]
+            permissions_to_remove[permission_type].sort()
+            expected_permissions[permission_type].sort()
+        
         # assert filtered permissions using should_remove method
         permissions_list = ['PERMISSION_A', 'PERMISSION_B', 'PERMISSION_C']
         for current_permission in permissions_list:

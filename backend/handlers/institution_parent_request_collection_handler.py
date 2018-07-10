@@ -35,7 +35,7 @@ def remake_link(request, requested_inst_key, child_institution, user):
     notification_id = NotificationsQueueManager.create_notification_task(notification)
     enqueue_task('add-admin-permissions', {
         'institution_key': child_institution.key.urlsafe(),
-        'id_notification': notification_id
+        'notifications_ids': [notification_id]
     })
 
     request.change_status('accepted')

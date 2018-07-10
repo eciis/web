@@ -28,9 +28,9 @@ Invite.prototype.setType = function (typeOfInvite) {
 };
 
 Invite.prototype.areInstitutionsValid = function () {
-    const isInstitutionActive = this.institution.isStateOn('active');
-    const isRequestedInstActive = this.requested_institution ? this.requested_institution.isStateOn('active') : true;
-    return isInstitutionActive && isRequestedInstActive;
+    const isNotInstitutionInactive = ! this.institution.isStateOn('inactive');
+    const isNotRequestedInstInactive = this.requested_institution ? ! this.requested_institution.isStateOn('inactive') : true;
+    return isNotInstitutionInactive && isNotRequestedInstInactive;
 }
 
 function isValueValid(value) {

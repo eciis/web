@@ -265,6 +265,7 @@
             changeInstitution(institution);
             configInstCtrl.loadingSaveInstitution = false;
             MessageService.showToast('Dados da instituição salvos com sucesso.');
+            showHierarchyDialog(institution);
             $state.go('app.user.home');
         }
 
@@ -434,6 +435,24 @@
             configInstCtrl.isSubmission = true;
             configInstCtrl.newInstitution.admin = {};
             loadAddress();
+        }
+
+        function showHierarchyDialog(institution) {
+            if (hasChildren(institution)) {
+                $mdDialog.show({
+                    templateUrl: 'app/institution/created_hierarchical_institution_dialog.html',
+                    clickOutsideToClose: true,
+                    locals: {
+                        institution: institution
+                    },
+                    controller: 'HierarchicalInstitutionDialogController',
+                    controllerAs: 'hierCtrl'
+                });
+            }
+        }
+
+        function hasChildren(institution) {
+            return !_.isEmpty(institution.children_institutions);
         }
 
         configInstCtrl.initController = function initController() {

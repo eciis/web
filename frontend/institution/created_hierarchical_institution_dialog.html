@@ -1,0 +1,20 @@
+<md-dialog flex-gt-xs="50" flex-xs="90" flex layout-margin>
+    <md-dialog-content layout="row" layout-align="center center">
+        <div layout="column">
+            <h3>INSTITUIÇÃO CRIADA</h3>
+            <div layout="row" layout-align="center center">
+                <div style="margin-right: 16px;">
+                    <img title="{{hierCtrl.institution.name}}" ng-src="{{hierCtrl.institution.photo_url || '/app/images/institution.png'}}"
+                        class="md-avatar" style="width: 80px; height: 80px; max-width: 100px;" />
+                </div>
+                <span>Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar
+                    a instituição e toda sua hierarquia na Plataforma Virtual CIS.</span>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" layout-align="end center">
+        <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="hierCtrl.close()">
+            FECHAR
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

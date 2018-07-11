@@ -33,8 +33,8 @@ class InviteInstitutionHandler(BaseHandler):
 
         invite.change_status('rejected')
         invite.put()
-        invite.send_response_notification(
-            user.current_institution, user.key, 'REJECT')
+        invite.send_reject_response_notification(
+            user.current_institution, user.key)
 
         stub_institution = invite.stub_institution_key.get()
         stub_institution.change_state('inactive')

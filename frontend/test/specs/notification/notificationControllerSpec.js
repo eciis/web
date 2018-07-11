@@ -7,7 +7,7 @@
 
     var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
                                 "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
-                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_USER_ADM", "REMOVE_INSTITUTION_LINK"];
+                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_INSTITUTION", "ACCEPT_INVITE_USER_ADM", "REMOVE_INSTITUTION_LINK"];
     
     var institution = {
         name: 'institution',

@@ -8,6 +8,7 @@ from . import get_deciis
 from . import get_health_ministry
 from utils import Utils
 import random
+from permissions import DEFAULT_ADMIN_PERMISSIONS
 
 __all__ = ['InstitutionProfile', 'User']
 
@@ -378,3 +379,24 @@ class User(ndb.Model):
             receiver_institution_key=receiver_institution_key,
             sender_institution_key= sender_institution_key or current_institution_key
         )
+
+    def config_user_adm(self, institution):
+        """ This method setup the user according to
+        the new institution he has created.
+
+        Params:
+        user -- The user who accepted the invite to create the institution.
+        institution -- The institution that has been created, when the invite was sent, 
+        as a stub and now is active.
+        """
+        data_profile = {
+            'office': 'Administrador',
+            'institution_key': institution.key.urlsafe(),
+            'institution_name': institution.name,
+            'institution_photo_url': institution.photo_url
+        }
+        self.create_and_add_profile(data_profile)
+
+        self.add_permissions(
+            DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
+        self.put()

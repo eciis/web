@@ -272,3 +272,47 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(ex.exception.message)
         
         self.assertTrue(exception_message == "Error! The institution's already have a parent")
+
+    @patch('util.login_service.verify_token', return_value=ADMIN)
+    @patch('handlers.institution_parent_request_collection_handler.NotificationsQueueManager.create_notification_task', return_value='08-21879638')
+    @patch('handlers.institution_parent_request_collection_handler.enqueue_task')
+    def test_post_which_parent_already_has_child(self, verify_token, enqueue_task, create_notification_task):
+        """Test method post of InstitutionParentRequestCollectionHandler."""
+        admin = mocks.create_user(ADMIN['email'])
+        institution = mocks.create_institution()
+        admin.institutions_admin = [institution.key]
+        institution.admin = admin.key
+        admin.add_permission("send_link_inst_request", institution.key.urlsafe())
+        admin.put()
+        institution.put()
+        other_user = mocks.create_user(USER['email'])
+        inst_requested = mocks.create_institution()
+        admin_requested = mocks.create_user(ADMIN['email'])
+        admin.institutions_admin = [inst_requested.key]
+        admin_requested.put()
+        inst_requested.admin = admin_requested.key
+        inst_requested.add_child(institution.key)
+        data = {
+            'sender_key': admin.key.urlsafe(),
+            'is_request': True,
+            'admin_key': admin_requested.key.urlsafe(),
+            'institution_key': institution.key.urlsafe(),
+            'institution_requested_key': inst_requested.key.urlsafe(),
+            'type_of_invite': 'REQUEST_INSTITUTION_PARENT'
+        }
+        body = {
+            'data': data,
+            'currentInstitution': {'name': 'currentInstitution'}
+        }
+
+        request = self.testapp.post_json(
+            "/api/institutions/" + institution.key.urlsafe() + "/requests/institution_parent",
+            data)
+
+        request = json.loads(request._app_iter[0])
+
+        self.assertEqual(
+            request['status'], 'accepted',
+            'Request should be accepted automatically when the parent institutions already has child')
+
+        enqueue_task.assert_called()

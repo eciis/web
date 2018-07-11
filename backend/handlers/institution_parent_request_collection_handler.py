@@ -12,8 +12,7 @@ from models import Institution
 from models import InviteFactory
 from models import RequestInstitutionParent
 from custom_exceptions import NotAuthorizedException
-from util import Notification
-from util import NotificationsQueueManager
+from util import Notification, NotificationsQueueManager
 from service_entities import enqueue_task
 from service_messages import create_message
 
@@ -22,7 +21,8 @@ __all__ = ['InstitutionParentRequestCollectionHandler']
 
 def remake_link(request, requested_inst_key, child_institution, user):
     notification_message = create_message(sender_key=user.key,
-        current_institution_key=child_institution.key, receiver_institution_key=requested_inst_key,
+        current_institution_key=child_institution.key,
+        receiver_institution_key=requested_inst_key,
         sender_institution_key=child_institution.key)
 
     notification = Notification(

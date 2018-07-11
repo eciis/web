@@ -30,10 +30,10 @@ class RequestInstitution(Request):
 
     @staticmethod
     def isRequested(sender_inst_key, institution_requested_key):
-        request = Request.query(
-            Request.institution_requested_key == institution_requested_key,
-            Request.institution_key == sender_inst_key,
-            Request.status == 'sent')
+        request = RequestInstitution.query(
+            RequestInstitution.institution_requested_key == institution_requested_key,
+            RequestInstitution.institution_key == sender_inst_key,
+            RequestInstitution.status == 'sent')
 
         return request.count() > 0
 
@@ -45,9 +45,9 @@ class RequestInstitution(Request):
             raise FieldException("The request require sender_key")
         if not institution_requested:
             raise FieldException("The request require institution_requested")
-        if Request.isLinked(institution_key, institution_requested):
+        if RequestInstitution.isLinked(institution_key, institution_requested):
             raise FieldException("The institutions has already been connected.")
-        if Request.isRequested(institution_key, institution_requested.key):
+        if RequestInstitution.isRequested(institution_key, institution_requested.key):
             raise FieldException("The requested institution has already been invited")
 
     @staticmethod

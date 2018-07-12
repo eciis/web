@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Request institution Model."""
 
-from . import Invite
 from . import Request
 from google.appengine.ext import ndb
 from send_email_hierarchy import RequestInstitutionEmailSender
@@ -15,18 +14,51 @@ __all__ = ['RequestInstitution']
 class RequestInstitution(Request):
     """Request Institution Model."""
 
-    def isValid(self):
-        sender = self.sender_key
-        if not sender:
-            raise FieldException("The request require sender_key")
+    @staticmethod
+    def isLinked(institution_key, institution_requested):
+        institution = institution_key.get()
+        
+        is_parent_from_top_down_perspective = institution_requested.key in institution.children_institutions
+        is_parent_from_bottom_up_perspective = institution_key == institution_requested.parent_institution
+        is_parent = is_parent_from_top_down_perspective and is_parent_from_bottom_up_perspective
+
+        is_child_from_bottom_up_perspective = institution.parent_institution == institution_requested.key
+        is_child_from_top_down_perspective = institution_key in institution_requested.children_institutions
+        is_child = is_child_from_bottom_up_perspective and is_child_from_top_down_perspective
+
+        return is_parent or is_child
 
     @staticmethod
-    def create(data):
+    def isRequested(sender_inst_key, institution_requested_key):
+        request = RequestInstitution.query(
+            RequestInstitution.institution_requested_key == institution_requested_key,
+            RequestInstitution.institution_key == sender_inst_key,
+            RequestInstitution.status == 'sent')
+
+        return request.count() > 0
+
+    def isValid(self):
+        institution_key = self.institution_key
+        sender = self.sender_key
+        institution_requested = self.institution_requested_key.get()
+        if not sender:
+            raise FieldException("The request require sender_key")
+        if not institution_requested:
+            raise FieldException("The request require institution_requested")
+        if RequestInstitution.isLinked(institution_key, institution_requested):
+            raise FieldException("The institutions has already been connected.")
+        if RequestInstitution.isRequested(institution_key, institution_requested.key):
+            raise FieldException("The requested institution has already been invited")
+
+    @staticmethod
+    def create(data, request=None):
         """Create a post and check required fields."""
-        request = RequestInstitution()
+        if not request:
+            request = RequestInstitution()
+            request.institution_requested_key = get_deciis().key
+
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
-        request = Invite.create(data, request)
-        request.institution_requested_key = get_deciis().key
+        request = Request.create(data, request)
         request.isValid()
         return request
 
@@ -75,20 +107,22 @@ class RequestInstitution(Request):
         })
         email_sender.send_email()
 
-    def send_notification(self, current_institution):
+    def send_notification(self, current_institution, receiver_key=None, notification_type=None, message=None):
         """Method of send notification of request intitution."""
-        notification_type = 'REQUEST_INSTITUTION'
+        notification_type = notification_type or 'REQUEST_INSTITUTION'
 
         """
             The super user is the admin of 
             'Departamento do Complexo Industrial e Inovação em Saúde".
         """
-        super_user = get_deciis().admin.get()
-        notification_message = self.create_notification_message(user_key=self.sender_key, 
+        if not receiver_key:
+            super_user = get_deciis().admin.get()
+        
+        notification_message = message or self.create_notification_message(user_key=self.sender_key, 
         receiver_institution_key=self.institution_requested_key)
         super(RequestInstitution, self).send_notification(
             current_institution=current_institution, 
-            receiver_key=super_user.key,
+            receiver_key=receiver_key or super_user.key,
             notification_type=notification_type,
             message=notification_message
         )

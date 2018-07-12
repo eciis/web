@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """Request institution link model."""
 
-from . import Invite
-from . import Request
+from . import RequestInstitution
 from google.appengine.ext import ndb
 from send_email_hierarchy import RequestLinkEmailSender
 from util import get_subject
@@ -22,7 +21,7 @@ def get_subject_type(operation):
     reject_type = 'REJECT_LINK_EMAIL'
     return accept_type if operation == 'ACCEPT' else reject_type
 
-class RequestInstitutionChildren(Request):
+class RequestInstitutionChildren(RequestInstitution):
     """Model of request children institution."""
 
     @staticmethod
@@ -31,7 +30,7 @@ class RequestInstitutionChildren(Request):
         request = RequestInstitutionChildren()
         request.sender_key = ndb.Key(urlsafe=data.get('sender_key'))
         request.institution_requested_key = ndb.Key(urlsafe=data.get('institution_requested_key'))
-        request = Invite.create(data, request)
+        request = RequestInstitution.create(data, request)
         request.isValid()
         return request
 
@@ -120,7 +119,6 @@ class RequestInstitutionChildren(Request):
 
         super(RequestInstitutionChildren, self).send_notification(
             current_institution=current_institution, 
-            sender_key=invitee_key, 
             receiver_key=self.sender_key or self.admin_key,
             notification_type='REJECT_INSTITUTION_LINK',
             message=notification_message

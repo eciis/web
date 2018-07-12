@@ -2,14 +2,14 @@
 """Request institution parent link model."""
 
 from . import Invite
-from . import Request
+from . import RequestInstitution
 from google.appengine.ext import ndb
 from send_email_hierarchy import RequestLinkEmailSender
 from util import get_subject
 
 __all__ = ['RequestInstitutionParent']
 
-class RequestInstitutionParent(Request):
+class RequestInstitutionParent(RequestInstitution):
     """Model of request parent institution."""
 
     @staticmethod

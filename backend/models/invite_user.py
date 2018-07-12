@@ -57,9 +57,10 @@ class InviteUser(Invite):
         Keyword arguments:
         current_institution -- Current institution of user.
         """
+        sender_key = self.sender_key or self.admin_key
 
         message = self.create_notification_message(
-            user_key=self.sender_key,
+            user_key=sender_key,
             current_institution_key=current_institution_key
         )
 
@@ -67,7 +68,7 @@ class InviteUser(Invite):
             message=message,
             entity_key=self.key.urlsafe(),
             notification_type='USER_INVITES_SENT',
-            receiver_key=self.sender_key.urlsafe()
+            receiver_key=sender_key.urlsafe()
         )
 
         notification_id = NotificationsQueueManager.create_notification_task(notification)

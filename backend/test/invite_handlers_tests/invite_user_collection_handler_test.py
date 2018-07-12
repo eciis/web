@@ -7,7 +7,7 @@ from permissions import DEFAULT_ADMIN_PERMISSIONS
 from ..test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from handlers import InviteUserCollectionHandler
-from models import Invite
+from models import Invite, InviteUser
 from mock import patch
 
 
@@ -41,9 +41,10 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             [("/api/invites/user", InviteUserCollectionHandler)], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
     
+    @patch.object(InviteUser, 'create_sent_invites_notification', return_value='some_notification_id')
     @patch('util.login_service.verify_token')
     @patch('handlers.invite_user_collection_handler.enqueue_task')
-    def test_post_invite_user(self, enqueue_task, verify_token):
+    def test_post_invite_user(self, enqueue_task, verify_token, create_sent_invites_notification):
         """Test post invite user."""
 
         admin = mocks.create_user()
@@ -83,12 +84,15 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
         self.assertEqual(expected_make, invite.make())
 
+        create_sent_invites_notification.assert_called_with(institution.key)
+
         enqueue_task.assert_called_with(
             'send-invite',
             {
                 'invites_keys': json.dumps([invite.key.urlsafe()]), 
                 'host': response.request.host,
-                'current_institution': institution.key.urlsafe()
+                'current_institution': institution.key.urlsafe(),
+                'notification_id': 'some_notification_id'
             }
         )
 

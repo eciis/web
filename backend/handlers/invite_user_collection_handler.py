@@ -6,8 +6,7 @@ import json
 from google.appengine.ext import ndb
 from . import BaseHandler
 from util import login_required
-from utils import json_response
-from utils import Utils
+from utils import json_response, Utils
 from custom_exceptions import NotAuthorizedException
 from models import InviteFactory
 from service_entities import enqueue_task

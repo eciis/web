@@ -78,6 +78,7 @@
                 case REQUEST_CHILDREN:
                     service.showHierarchyDialog(request, event); break;
                 case REQUEST_INSTITUTION:
+                    dialogProperties.locals.request = request;
                     service.showPendingReqDialog(dialogProperties, event); break;
                 default:
                     dialogProperties.locals.request = request;

@@ -2,12 +2,12 @@
 
 from ..test_base import TestBase
 
-from models import Institution
-from models import InviteUser
-from models import User
-
+from models import Institution, InviteUser, User, Invite
+from service_messages import create_message
+from util import NotificationsQueueManager
 from custom_exceptions import FieldException
-
+from .. import mocks
+from mock import patch
 
 class InviteUserTest(TestBase):
     """Test invite model."""
@@ -21,12 +21,39 @@ class InviteUserTest(TestBase):
             probability=1)
         cls.test.init_datastore_v3_stub(consistency_policy=cls.policy)
         cls.test.init_memcache_stub()
-        initModels(cls)
+        
+        """Init models"""
+        cls.admin = mocks.create_user()
+        cls.user = mocks.create_user()
+
+        cls.institution = mocks.create_institution()
+        cls.institution.add_member(cls.admin)
+        cls.institution.set_admin(cls.admin.key)
+
+        # update admin
+        cls.admin.add_institution(cls.institution.key)
+        cls.admin.add_institution_admin(cls.institution.key)
+
+        cls.invite_user = InviteUser()
+        cls.invite_user.invitee = cls.user.email[0]
+        cls.invite_user.institution_key = cls.institution.key
+        cls.invite_user.admin_key = cls.admin.key
+        cls.invite_user.sender_name = cls.admin.name
+        cls.invite_user.status = 'sent'
+        cls.invite_user.put()
+
 
     def test_create(self):
         """Test create method."""
-        self.data["invitee"] = "other_user@email"
-        created_invite = InviteUser.create(self.data)
+        data = {
+            "invitee": "other_user@email",
+            "institution_key": self.institution.key.urlsafe(),
+            "admin_key": self.admin.key.urlsafe(),
+            "is_request": False,
+            "sender_key": self.admin.key.urlsafe(),
+            "sender_name": self.admin.name
+        }
+        created_invite = InviteUser.create(data)
 
         expected_invite = InviteUser()
         expected_invite.invitee = "other_user@email"
@@ -64,46 +91,21 @@ class InviteUserTest(TestBase):
             "The maked invite should be equal to the expected one"
         )
 
+    @patch.object(NotificationsQueueManager, 'create_notification_task')
+    @patch.object(InviteUser, 'create_notification_message')
+    def test_create_sent_invites_notification(self, create_notification_message, create_notification_task):
+        """Test method create_sent_invites_notification."""
+        
+        message = create_message(self.admin.key, self.institution.key)
+        create_notification_message.return_value = message
 
-def initModels(cls):
-    """Initialize the models."""
-    # admin
-    cls.admin = User()
-    cls.admin.name = "admin"
-    cls.admin.email = ["admin@email"]
-    cls.admin.put()
+        self.invite_user.create_sent_invites_notification(
+            self.institution.key
+        )
 
-    # user
-    cls.user = User()
-    cls.user.name = "user"
-    cls.user.email = ["user@email"]
-    cls.user.put()
+        create_notification_message.assert_called_with(
+            user_key=self.admin.key,
+            current_institution_key=self.institution.key            
+        )
 
-    # New institution
-    cls.institution = Institution()
-    cls.institution.name = "institution"
-    cls.institution.admin = cls.admin.key
-    cls.institution.members = [cls.admin.key]
-    cls.institution.followers = [cls.admin.key]
-    cls.institution.put()
-
-    # update admin
-    cls.admin.institutions_admin = [cls.institution.key]
-    cls.admin.put()
-
-    cls.invite_user = InviteUser()
-    cls.invite_user.invitee = cls.user.email[0]
-    cls.invite_user.institution_key = cls.institution.key
-    cls.invite_user.admin_key = cls.admin.key
-    cls.invite_user.sender_name = cls.admin.name
-    cls.invite_user.status = 'sent'
-    cls.invite_user.put()
-
-    cls.data = {
-        "invitee": cls.user.email[0],
-        "institution_key": cls.institution.key.urlsafe(),
-        "admin_key": cls.admin.key.urlsafe(),
-        "is_request": False,
-        "sender_key": cls.admin.key.urlsafe(),
-        "sender_name": cls.admin.name
-    }
+        create_notification_task.assert_called()

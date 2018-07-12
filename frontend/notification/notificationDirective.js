@@ -172,6 +172,9 @@
             "ADD_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
             },
+            "USER_INVITES_SENT": {
+                icon: "people"
+            },
             "RE_ADD_ADM_PERMISSIONS": {
                 icon: "check_circle_outline"
             }

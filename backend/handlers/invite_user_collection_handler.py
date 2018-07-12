@@ -6,8 +6,7 @@ import json
 from google.appengine.ext import ndb
 from . import BaseHandler
 from util import login_required
-from utils import json_response
-from utils import Utils
+from utils import json_response, Utils
 from custom_exceptions import NotAuthorizedException
 from models import InviteFactory
 from service_entities import enqueue_task
@@ -66,8 +65,18 @@ class InviteUserCollectionHandler(BaseHandler):
                 invites_keys.append(current_invite.key.urlsafe())
                 invites.append({'email': email, 'key': current_invite.key.urlsafe()})
 
-            enqueue_task('send-invite', {'invites_keys': json.dumps(invites_keys), 'host': host,
-                                         'current_institution': current_institution_key.urlsafe()})
+            invite = createInvite(invite)
+            notification_id = invite.create_sent_invites_notification(current_institution_key)
+
+            enqueue_task(
+                'send-invite', 
+                {
+                    'invites_keys': json.dumps(invites_keys),
+                    'host': host,
+                    'current_institution': current_institution_key.urlsafe(),
+                    'notification_id': notification_id
+                }
+            )
 
         # If the invitation was USER type, more than one invitation can be sent at the same time.
         if type_of_invite == 'USER':

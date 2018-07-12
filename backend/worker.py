@@ -390,7 +390,7 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
         child_admin_key = institution.admin
 
         @ndb.transactional(xg=True, retries=10)
-        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key, notification_id):
+        def apply_remove_operation(parent_admin, institution, should_remove, child_admin_key):
             """This method is responsible for getting the permissions involved
             in the link and go up in the hierarchy removing the permissions from
             the admins that have to lose it, based in a condition that checks if 
@@ -403,10 +403,9 @@ class RemoveAdminPermissionsInInstitutionHierarchy(BaseHandler):
                         get_all=False, admin_key=current_admin.key)
                     self.removeAdminPermissions(
                         current_admin, permissions)
-            
-            NotificationsQueueManager.resolve_notification_task(notification_id)
 
-        apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key, notification_id)
+        apply_remove_operation(parent_admin, institution, is_not_admin, child_admin_key)
+        NotificationsQueueManager.resolve_notification_task(notification_id)
 
 
 class SendInviteHandler(BaseHandler):
@@ -481,7 +480,7 @@ class TransferAdminPermissionsHandler(BaseHandler):
         notifications_ids = self.request.get_all('notifications_ids')
         
         @ndb.transactional(xg=True, retries=10)
-        def save_changes(admin, new_admin, institution, notifications_ids):
+        def save_changes(admin, new_admin, institution):
             institution.set_admin(new_admin.key)
             self.add_permissions(new_admin, institution)
             
@@ -495,10 +494,9 @@ class TransferAdminPermissionsHandler(BaseHandler):
             new_admin.put()
             admin.put()
             institution.put()
-
-            map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
         
-        save_changes(admin, new_admin, institution, notifications_ids)
+        save_changes(admin, new_admin, institution)
+        map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
 
 
 app = webapp2.WSGIApplication([

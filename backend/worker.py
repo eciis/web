@@ -421,8 +421,8 @@ class SendInviteHandler(BaseHandler):
             invite = ndb.Key(urlsafe=key).get()
             invite.send_invite(host, current_institution)
 
-        notification_id = self.request.get('notification_id')
-        NotificationsQueueManager.resolve_notification_task(notification_id)
+        notifications_ids = self.request.get_all('notifications_ids', [])
+        map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
 
 class TransferAdminPermissionsHandler(BaseHandler):
     """Handler of transfer admin permissions."""

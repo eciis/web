@@ -181,6 +181,7 @@ class RequestInstitutionParentTest(TestBase):
                 'name': self.institution.name
             },
             'institution': self.institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE),
+            'institution_name': self.institution.name,
             'requested_institution': self.other_institution.make(RequestInstitutionParent.INST_PROPS_TO_MAKE)
         }
 

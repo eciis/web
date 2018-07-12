@@ -153,6 +153,7 @@ class RequestInstitutionChildrenTest(TestBase):
             'institution_admin': {
                 'name': self.institution.name
             },
+            'institution_name': self.institution.name
         }
 
         made_request = request.make()
@@ -246,7 +247,6 @@ class RequestInstitutionChildrenTest(TestBase):
 
         send_notification.assert_called_with(
             current_institution=self.other_institution.key, 
-            sender_key=self.other_institution.admin, 
             receiver_key=self.admin.key, 
             notification_type='REJECT_INSTITUTION_LINK',
             message='mocked_message'

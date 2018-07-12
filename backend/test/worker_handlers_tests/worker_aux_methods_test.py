@@ -68,18 +68,23 @@ class WorkerAuxMethodsTest(TestBase):
             'publish_survey': [],
             'publish_post': []
         }
-        for permission_type in PERMISSIONS:
-            expected_permissions[permission_type] = [second_inst_urlsafe, third_inst_urlsafe]
 
         permissions_to_remove = filter_permissions_to_remove(
             user, user.permissions,
             second_inst_urlsafe, should_remove
         )
 
+        for permission_type in PERMISSIONS:
+            expected_permissions[permission_type] = [second_inst_urlsafe, third_inst_urlsafe]
+            permissions_to_remove[permission_type].sort()
+            expected_permissions[permission_type].sort()
+        
         # assert filtered permissions using should_remove method
-        self.assertEquals(
-            permissions_to_remove, expected_permissions,
-            "The permissions to remove should be of second_inst and third_inst")
+        permissions_list = ['PERMISSION_A', 'PERMISSION_B', 'PERMISSION_C']
+        for current_permission in permissions_list:
+            for permission in permissions_to_remove[current_permission]:
+                self.assertTrue(permission in expected_permissions[current_permission],
+                            'The permission should be in the expected_permissions')
 
         # make user admin of second_inst
         set_admin(user, second_inst)

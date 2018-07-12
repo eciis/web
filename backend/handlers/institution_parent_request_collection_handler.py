@@ -12,9 +12,33 @@ from models import Institution
 from models import InviteFactory
 from models import RequestInstitutionParent
 from custom_exceptions import NotAuthorizedException
+from util import Notification, NotificationsQueueManager
+from service_entities import enqueue_task
+from service_messages import create_message
 
 
 __all__ = ['InstitutionParentRequestCollectionHandler']
+
+def remake_link(request, requested_inst_key, child_institution, user):
+    notification_message = create_message(sender_key=user.key,
+        current_institution_key=child_institution.key,
+        receiver_institution_key=requested_inst_key,
+        sender_institution_key=child_institution.key)
+
+    notification = Notification(
+        entity_key=child_institution.key.urlsafe(),
+        receiver_key=requested_inst_key.get().admin.urlsafe(),
+        notification_type='RE_ADD_ADM_PERMISSIONS',
+        message=notification_message
+    )
+
+    notification_id = NotificationsQueueManager.create_notification_task(notification)
+    enqueue_task('add-admin-permissions', {
+        'institution_key': child_institution.key.urlsafe(),
+        'notifications_ids': [notification_id]
+    })
+
+    request.change_status('accepted')
 
 class InstitutionParentRequestCollectionHandler(BaseHandler):
     """Institution Parent Collectcion Request Handler."""
@@ -87,12 +111,15 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
         @ndb.transactional(retries=10, xg=True)
         def main_operations(request, requested_inst_key, child_institution, user, host):
-            request.put()
 
             child_institution.parent_institution = requested_inst_key
             child_institution.put()
 
-            request.send_invite(host, user.current_institution)
+            if child_institution.key in requested_inst_key.get().children_institutions:
+                remake_link(request, requested_inst_key, child_institution, user)
+            else:
+                request.put()
+                request.send_invite(host, user.current_institution)
 
             return request
 

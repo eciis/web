@@ -45,7 +45,8 @@
             'ACCEPT_INVITE_HIERARCHY': messageCreator('Aceitou seu convite e estabeleceu vínculo entre ', DOUBLE_INST),
             'TRANSFER_ADM_PERMISSIONS': messageCreator('Você agora possui permissões para administrar ', SINGLE_INST),
             'DELETED_USER': messageCreator('Removeu sua conta na Plataforma Virtual CIS', NO_INST),
-            'ADD_ADM_PERMISSIONS': messageCreator('Suas permissões hierárquicas foram atualizadas na instituição ', SINGLE_INST)
+            'ADD_ADM_PERMISSIONS': messageCreator('Suas permissões hierárquicas foram atualizadas na instituição ', SINGLE_INST),
+            'RE_ADD_ADM_PERMISSIONS': messageCreator('O vínculo foi restabelecido entre ', DOUBLE_INST)
         };
 
 

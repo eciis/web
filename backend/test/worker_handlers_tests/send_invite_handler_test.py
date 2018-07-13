@@ -49,7 +49,7 @@ class SendInviteHandlerTest(TestBaseHandler):
             second_invite.key.urlsafe()
         ]
 
-        request_url = '/api/queue/send-invite?invites_keys=%s&host=%s&current_institution=%s&notification_id=%s' % (
+        request_url = '/api/queue/send-invite?invites_keys=%s&host=%s&current_institution=%s&notifications_ids=%s' % (
             json.dumps(invites_keys), host, institution.key.urlsafe(), notification_id)
 
         self.testapp.post(request_url)

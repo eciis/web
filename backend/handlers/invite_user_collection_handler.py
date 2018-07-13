@@ -74,7 +74,7 @@ class InviteUserCollectionHandler(BaseHandler):
                     'invites_keys': json.dumps(invites_keys),
                     'host': host,
                     'current_institution': current_institution_key.urlsafe(),
-                    'notification_id': notification_id
+                    'notifications_ids': [notification_id]
                 }
             )
 

@@ -92,7 +92,7 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
                 'invites_keys': json.dumps([invite.key.urlsafe()]), 
                 'host': response.request.host,
                 'current_institution': institution.key.urlsafe(),
-                'notification_id': 'some_notification_id'
+                'notifications_ids': ['some_notification_id']
             }
         )
 

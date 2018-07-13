@@ -58,6 +58,7 @@ class InviteUserCollectionHandler(BaseHandler):
             invite -- Data of the invitation to be created.
             current_institution_key -- Institution in which the administrator was when he sent the invitation.
             """
+            current_invite = {}
             invites_keys = []
             for email in emails:
                 invite['invitee'] = email
@@ -65,8 +66,8 @@ class InviteUserCollectionHandler(BaseHandler):
                 invites_keys.append(current_invite.key.urlsafe())
                 invites.append({'email': email, 'key': current_invite.key.urlsafe()})
 
-            invite = createInvite(invite)
-            notification_id = invite.create_sent_invites_notification(current_institution_key)
+            current_invite = current_invite or createInvite(invite)
+            notification_id = current_invite.create_sent_invites_notification(current_institution_key)
 
             enqueue_task(
                 'send-invite', 

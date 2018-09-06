@@ -472,4 +472,12 @@
             ObserverRecorderService.unobserveAll();
         });
     });
+
+    (function main() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function() {
+                console.log("service registred");
+            });
+        }
+    })();
 })();

@@ -479,7 +479,7 @@
                 console.log("service registred");
                 const messaging = firebase.messaging();
                 messaging.useServiceWorker(registration);
-                messaging.usePublicVapidKey(KEY_PAIR);
+                //messaging.usePublicVapidKey(KEY_PAIR);
             });
         }
     })();

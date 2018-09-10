@@ -26,11 +26,11 @@
         };
 
         loginCtrl.requestPermission = function requestPermission() {
-            console.log(firebase.messaging().requestPermission);
             firebase.messaging().requestPermission().then(function (obj) {
+                console.log(firebase.messaging().getToken);
                 firebase.messaging().getToken().then(function(token) {
                     console.log(token);
-                })
+                });
             });
         };
 

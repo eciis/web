@@ -1,26 +1,15 @@
 'use strict';
 
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/4.10.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.10.0/firebase-messaging.js');
 importScripts('app/firebase-config.js');
 
-firebase.initializeApp(FIREBASE_CONFIG);
+var messaging;
 
-const messaging = firebase.messaging();
-console.log(messaging);
-
-const askForPermissionToReceiveNotifications = async () => {
-    try {
-        await messaging.requestPermission();
-        const token = await messaging.getToken();
-        console.log('token do usuário:', token);
-
-        return token;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
+(function setupFirebase() {
+    firebase.initializeApp(FIREBASE_CONFIG);
+    messaging = firebase.messaging();
+})();
 
 const STATIC_CACHE_NAME = "static-v3";
 const DATA_CACHE_NAME = "data-v3";

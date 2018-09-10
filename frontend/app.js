@@ -477,8 +477,9 @@
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').then(function(registration) {
                 console.log("service registred");
-                firebase.messaging().useServiceWorker(registration);
-                console.log(firebase.messaging());
+                const messaging = firebase.messaging();
+                messaging.useServiceWorker(registration);
+                messaging.usePublicVapidKey(KEY_PAIR);
             });
         }
     })();

@@ -2,15 +2,9 @@
 
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+importScripts('app/firebase-config.js');
 
-firebase.initializeApp({
-    apiKey: "AIzaSyBlpZudOyqMsSDIkZcPMmLCBxY5DWkoz14",
-    authDomain: "development-cis.firebaseapp.com",
-    databaseURL: "https://development-cis.firebaseio.com",
-    projectId: "development-cis",
-    storageBucket: "development-cis.appspot.com",
-    messagingSenderId: "531467954503"
-})
+firebase.initializeApp(FIREBASE_CONFIG);
 
 const messaging = firebase.messaging();
 console.log(messaging);

@@ -1,5 +1,33 @@
 'use strict';
 
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js');
+
+firebase.initializeApp({
+    apiKey: "AIzaSyBlpZudOyqMsSDIkZcPMmLCBxY5DWkoz14",
+    authDomain: "development-cis.firebaseapp.com",
+    databaseURL: "https://development-cis.firebaseio.com",
+    projectId: "development-cis",
+    storageBucket: "development-cis.appspot.com",
+    messagingSenderId: "531467954503"
+})
+
+const messaging = firebase.messaging();
+console.log(messaging);
+
+const askForPermissionToReceiveNotifications = async () => {
+    try {
+        await messaging.requestPermission();
+        const token = await messaging.getToken();
+        console.log('token do usuário:', token);
+
+        return token;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
 const STATIC_CACHE_NAME = "static-v3";
 const DATA_CACHE_NAME = "data-v3";
 

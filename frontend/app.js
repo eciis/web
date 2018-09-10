@@ -475,8 +475,10 @@
 
     (function main() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(function() {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
                 console.log("service registred");
+                firebase.messaging().useServiceWorker(registration);
+                console.log(firebase.messaging());
             });
         }
     })();

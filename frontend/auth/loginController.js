@@ -25,6 +25,15 @@
             loginCtrl.user = {};
         };
 
+        loginCtrl.requestPermission = function requestPermission() {
+            console.log(firebase.messaging().requestPermission);
+            firebase.messaging().requestPermission().then(function (obj) {
+                firebase.messaging().getToken().then(function(token) {
+                    console.log(token);
+                })
+            });
+        };
+
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {

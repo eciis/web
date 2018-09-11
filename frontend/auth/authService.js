@@ -8,7 +8,14 @@
         var service = this;
 
         var authObj = firebase.auth();
+        var userTest = null;
         var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              console.log(user);
+              userTest = user;
+            }
+          });
 
         var userInfo;
 
@@ -83,22 +90,29 @@
 
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.signInWithEmailAndPassword(email, password).then(function(response) {
-                let user = response.user;
-                if (user.emailVerified) {
-                    user.getIdToken(true).then(function(idToken) {
-                        service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            deferred.resolve(userInfo);
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL	).then(function() {
+                return authObj.signInWithEmailAndPassword(email, password).then(function(response) {
+                    let user = response.user;
+                    if (user.emailVerified) {
+                        user.getIdToken(true).then(function(idToken) {
+                            service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                                deferred.resolve(userInfo);
+                            });
                         });
-                    });
-                } else {
-                    service.sendEmailVerification(user);
-                    MessageService.showToast("Seu email precisa ser verificado.");
-                    deferred.reject("Email not verified.");
-                }
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
+                    } else {
+                        service.sendEmailVerification(user);
+                        MessageService.showToast("Seu email precisa ser verificado.");
+                        deferred.reject("Email not verified.");
+                    }
+                    return response;
+                }).then(function(response) {
+                    console.log(response);
+                    return response;
+                }).catch(function(error) {
+                    MessageService.showToast(error);
+                    deferred.reject(error);
+                    return error;
+                });
             });
             return deferred.promise;
         };
@@ -228,9 +242,8 @@
          * promises executing the same action.
          */
         function refreshTokenAsync() {
-            var auth = authObj;
-            if (auth && !refreshTokenPromise) {
-                refreshTokenPromise = auth.currentUser.getIdToken();
+            if (userTest && !refreshTokenPromise) {
+                refreshTokenPromise = user.getIdToken();
                 refreshTokenPromise.then(function(idToken) {
                     userInfo.accessToken = idToken;
                     service.save();

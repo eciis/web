@@ -243,7 +243,7 @@
          */
         function refreshTokenAsync() {
             if (userTest && !refreshTokenPromise) {
-                refreshTokenPromise = user.getIdToken();
+                refreshTokenPromise = userTest.getIdToken();
                 refreshTokenPromise.then(function(idToken) {
                     userInfo.accessToken = idToken;
                     service.save();

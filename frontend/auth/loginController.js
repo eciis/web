@@ -13,8 +13,8 @@
 
         var redirectPath = $stateParams.redirect;
 
-        loginCtrl.login = function login() {
-            var promise = AuthService.login();
+        loginCtrl.loginWithGoogle = function loginWithGoogle() {
+            var promise = AuthService.loginWithGoogle();
             promise.then(function success() {
                 redirectTo(redirectPath);
             });

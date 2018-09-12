@@ -8,16 +8,15 @@
         var service = this;
 
         var authObj = firebase.auth();
-        var userTest = null;
+        var userAuthenticated;
+        var userInfo;
         var provider = new firebase.auth.GoogleAuthProvider();
+
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
-              console.log(user);
-              userTest = user;
+                userAuthenticated = user;
             }
           });
-
-        var userInfo;
 
         /**
          * Store the last promise to refresh user authentication token.
@@ -73,26 +72,11 @@
             return deferred.promise;
         };
 
-        service.login = function login() {
+        function login(loginMethodPromisse) {
             var deferred = $q.defer();
-            authObj.signInWithPopup(provider).then(function(result) {
-                result.user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
-                        deferred.resolve(userInfo);
-                    });
-                });
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
-        service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
-            var deferred = $q.defer();
-            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL	).then(function() {
-                return authObj.signInWithEmailAndPassword(email, password).then(function(response) {
-                    let user = response.user;
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
+                return loginMethodPromisse.then(function(response) {
+                    const user = response.user;
                     if (user.emailVerified) {
                         user.getIdToken(true).then(function(idToken) {
                             service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
@@ -105,9 +89,6 @@
                         deferred.reject("Email not verified.");
                     }
                     return response;
-                }).then(function(response) {
-                    console.log(response);
-                    return response;
                 }).catch(function(error) {
                     MessageService.showToast(error);
                     deferred.reject(error);
@@ -115,6 +96,14 @@
                 });
             });
             return deferred.promise;
+        }
+
+        service.loginWithGoogle = function loginWithGoogle() {
+            return login(authObj.signInWithPopup(provider));
+        };
+
+        service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
+            return login(authObj.signInWithEmailAndPassword(email, password));
         };
 
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
@@ -242,8 +231,8 @@
          * promises executing the same action.
          */
         function refreshTokenAsync() {
-            if (userTest && !refreshTokenPromise) {
-                refreshTokenPromise = userTest.getIdToken();
+            if (userAuthenticated && !refreshTokenPromise) {
+                refreshTokenPromise = userAuthenticated.getIdToken();
                 refreshTokenPromise.then(function(idToken) {
                     userInfo.accessToken = idToken;
                     service.save();

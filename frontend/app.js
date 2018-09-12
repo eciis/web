@@ -476,7 +476,6 @@
     (function main() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').then(function(registration) {
-                console.log("service registred");
                 const messaging = firebase.messaging();
                 messaging.useServiceWorker(registration);
                 messaging.usePublicVapidKey(KEY_PAIR);

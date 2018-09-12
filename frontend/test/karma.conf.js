@@ -1,5 +1,4 @@
 // Karma configuration
-
 module.exports = function (config) {
     config.set({
 
@@ -38,7 +37,8 @@ module.exports = function (config) {
 
     // list of files to exclude
     exclude: [
-        "../landingPage/*"
+        "../landingPage/*",
+        "../sw.js"
     ],
 
 

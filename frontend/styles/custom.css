@@ -884,15 +884,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     min-height: 55px;
 }
 
-.toolbar-search form {
-    margin: 0px;
-}
-
-.toolbar-search md-input-container {
-    margin: 0px;
-    height: 32px;
-}
-
 .edit-profile-avatar-button {
     position: absolute;
     top: 50%;

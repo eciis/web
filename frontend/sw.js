@@ -9,10 +9,10 @@
 
     let messaging;
 
-    (function setupFirebase() {
+    function setupFirebase() {
         firebase.initializeApp(FIREBASE_CONFIG);
         messaging = firebase.messaging();
-    })();
+    };
 
     workbox.core.setCacheNameDetails({
         prefix: 'plataforma-cis',
@@ -26,8 +26,6 @@
         const myCache = await caches.open(precacheCacheName);
         await myCache.addAll(urls);
     }
-
-    addToCache(['/']);
 
     workbox.routing.registerRoute(
         ({ event }) => event.request.mode === 'navigate',
@@ -60,4 +58,9 @@
             cacheName: runtimeCacheName
         })
     );
+
+    (function initSw() {
+        setupFirebase();
+        addToCache(['/']);
+    })();
 })();

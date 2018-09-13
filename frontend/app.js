@@ -473,13 +473,17 @@
         });
     });
 
-    (function main() {
+    function initServiceWorker() {
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+            navigator.serviceWorker.register('/sw.js').then(function (registration) {
                 const messaging = firebase.messaging();
                 messaging.useServiceWorker(registration);
                 messaging.usePublicVapidKey(KEY_PAIR);
             });
         }
+    }
+
+    (function main() {
+        initServiceWorker();
     })();
 })();

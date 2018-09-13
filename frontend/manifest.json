@@ -2,23 +2,23 @@
   "name": "Plataforma Vitual CIS",
   "short_name": "CIS",
   "icons": [{
-    "src": "app/images/icons/icon-128x128.png",
+    "src": "app/images/icons/cis-64x64.png",
       "sizes": "128x128",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/icon-144x144.png",
+      "src": "app/images/icons/cis-64x64.png",
       "sizes": "144x144",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/icon-152x152.png",
+      "src": "app/images/icons/cis-64x64.png",
       "sizes": "152x152",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/icon-192x192.png",
+      "src": "app/images/icons/cis-64x64.png",
       "sizes": "192x192",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/icon-256x256.png",
+      "src": "app/images/icons/cis-64x64.png",
       "sizes": "256x256",
       "type": "image/png"
     }],

@@ -3,13 +3,20 @@
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $firebaseAuth, $window, UserService, 
-        MessageService, $rootScope) {
+    app.service("AuthService", function AuthService($q, $state, $window, UserService, 
+        MessageService) {
         var service = this;
 
-        var authObj = $firebaseAuth();
-
+        var authObj = firebase.auth();
+        var userAuthenticated;
         var userInfo;
+        var provider = new firebase.auth.GoogleAuthProvider();
+
+        authObj.onAuthStateChanged(function(user) {
+            if (user) {
+                userAuthenticated = user;
+            }
+          });
 
         /**
          * Store the last promise to refresh user authentication token.
@@ -65,46 +72,41 @@
             return deferred.promise;
         };
 
-        service.login = function login() {
-            var deferred = $q.defer();
-            authObj.$signInWithPopup("google").then(function(result) {
-                result.user.getIdToken(true).then(function(idToken) {
-                    service.setupUser(idToken, result.user.emailVerified).then(function success(userInfo) {
-                        deferred.resolve(userInfo);
-                    });
+        function login(loginMethodPromisse) {
+            return authObj.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
+                return loginMethodPromisse.then(function(response) {
+                    return response.user;
                 });
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
-        service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
-            var deferred = $q.defer();
-            authObj.$signInWithEmailAndPassword(email, password).then(function(user) {
+            }).then(function(user) {
                 if (user.emailVerified) {
-                    user.getIdToken(true).then(function(idToken) {
-                        service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            deferred.resolve(userInfo);
+                    return user.getIdToken(true).then(function(idToken) {
+                        return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                            return userInfo;
                         });
                     });
                 } else {
                     service.sendEmailVerification(user);
-                    MessageService.showToast("Seu email precisa ser verificado.");
-                    deferred.reject("Email not verified.");
+                    throw "Error! Email not verified.";
                 }
             }).catch(function(error) {
                 MessageService.showToast(error);
-                deferred.reject(error);
+                return error;
             });
-            return deferred.promise;
+        }
+
+        service.loginWithGoogle = function loginWithGoogle() {
+            return login(authObj.signInWithPopup(provider));
+        };
+
+        service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
+            return login(authObj.signInWithEmailAndPassword(email, password));
         };
 
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
-            authObj.$createUserWithEmailAndPassword(email, password).then(function(user) {
+            authObj.createUserWithEmailAndPassword(email, password).then(function(response) {
                 service.sendEmailVerification();
+                let user = response.user;
                 var idToken = user.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                     service.sendEmailVerification();
@@ -118,7 +120,7 @@
         };
 
         service.logout = function logout() {
-            authObj.$signOut();
+            authObj.signOut();
             delete $window.localStorage.userInfo;
             userInfo = undefined;
 
@@ -165,7 +167,7 @@
         };
 
         service.sendEmailVerification = function sendEmailVerification(user) {
-            var auth_user = user || authObj.$getAuth();
+            var auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
                 MessageService.showToast('Email de verificação enviado para o seu email.');
@@ -175,7 +177,7 @@
         };
 
         service.resetPassword = function resetPassword(email) {
-            authObj.$sendPasswordResetEmail(email).then(
+            authObj.sendPasswordResetEmail(email).then(
             function success() {
                 MessageService.showToast('Você receberá um email para resetar sua senha.');
             }, function error(error) {
@@ -225,9 +227,8 @@
          * promises executing the same action.
          */
         function refreshTokenAsync() {
-            var auth = authObj.$getAuth();
-            if (auth && !refreshTokenPromise) {
-                refreshTokenPromise = auth.getIdToken();
+            if (userAuthenticated && !refreshTokenPromise) {
+                refreshTokenPromise = userAuthenticated.getIdToken();
                 refreshTokenPromise.then(function(idToken) {
                     userInfo.accessToken = idToken;
                     service.save();

@@ -38,7 +38,8 @@
             "Error! User is not allowed to edit this post": "O usuário não tem permissão para editar essa publicação.",
             "Error! This post cannot be updated": "A publicação não pode ser editada.",
             "Error! You don't have permission to publish post.": "Você não tem permissão para publicar post nesta instituição",
-            "Error! The user can not remove this post": "Você não tem permissão para remover esse post"
+            "Error! The user can not remove this post": "Você não tem permissão para remover esse post",
+            "Error! Email not verified.": "Seu email precisa ser verificado."
         };
 
         service.showToast = function showToast(message) {

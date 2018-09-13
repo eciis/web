@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
-            $stateParams, $location, $window) {
+    app.controller("LoginController", function LoginController(AuthService, $state, $mdDialog, 
+            $stateParams, $window) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -58,7 +58,7 @@
 
         function redirectTo(path) {
             if (path) {
-                $location.path(path);
+                window.location.pathname = path;
             } else {
                 $state.go("app.user.home");
             }

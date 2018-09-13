@@ -12,7 +12,7 @@
         var userInfo;
         var provider = new firebase.auth.GoogleAuthProvider();
 
-        firebase.auth().onAuthStateChanged(function(user) {
+        authObj.onAuthStateChanged(function(user) {
             if (user) {
                 userAuthenticated = user;
             }
@@ -73,29 +73,25 @@
         };
 
         function login(loginMethodPromisse) {
-            var deferred = $q.defer();
-            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
+            return authObj.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
                 return loginMethodPromisse.then(function(response) {
-                    const user = response.user;
-                    if (user.emailVerified) {
-                        user.getIdToken(true).then(function(idToken) {
-                            service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                                deferred.resolve(userInfo);
-                            });
-                        });
-                    } else {
-                        service.sendEmailVerification(user);
-                        MessageService.showToast("Seu email precisa ser verificado.");
-                        deferred.reject("Email not verified.");
-                    }
-                    return response;
-                }).catch(function(error) {
-                    MessageService.showToast(error);
-                    deferred.reject(error);
-                    return error;
+                    return response.user;
                 });
+            }).then(function(user) {
+                if (user.emailVerified) {
+                    return user.getIdToken(true).then(function(idToken) {
+                        return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                            return userInfo;
+                        });
+                    });
+                } else {
+                    service.sendEmailVerification(user);
+                    throw "Error! Email not verified.";
+                }
+            }).catch(function(error) {
+                MessageService.showToast(error);
+                return error;
             });
-            return deferred.promise;
         }
 
         service.loginWithGoogle = function loginWithGoogle() {

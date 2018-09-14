@@ -99,7 +99,7 @@
                     </md-input-container>
                     <md-input-container style="margin: 0" flex="45">
                         <label>Pais</label>
-                        <md-select ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()"
+                        <md-select md-container-class="select-resp" ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()"
                           ng-disabled="controller.isEventOutdated()">
                             <md-option ng-repeat="country in controller.countries"
                               ng-value="country.nome_pais">{{country.nome_pais}}</md-option>

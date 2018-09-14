@@ -30,6 +30,16 @@
     #logo-full {
         display: none;
     }
+
+    .font-resp {
+        font-size: 12px;
+    }
+
+    .select-resp {
+        display: flex;
+        flex-wrap: wrap;
+        width: 80%;
+    }
 }
 
 @media screen and (min-width: 451px) {

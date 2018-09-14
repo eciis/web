@@ -69,10 +69,12 @@
             var promise = $firebaseStorage(image).$put(file, metadata);
 
             promise.$complete(function(snapshot) {
-                var data = {
-                    url: snapshot.downloadURL
-                };
-                deferred.resolve(data);
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    var data = {
+                        url: downloadURL
+                    };
+                    deferred.resolve(data);
+                });
             });
 
             promise.$error(function(error) {

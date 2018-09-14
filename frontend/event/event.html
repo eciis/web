@@ -31,7 +31,7 @@
               <h4>Nenhum evento a ser exibido.</h4>
             </md-content>
         </md-card>
-        <md-content flex id="content" class="body custom-scrollbar">
+        <md-content flex id="content" class="body custom-scrollbar flex-box">
           <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
             <div layout="row">

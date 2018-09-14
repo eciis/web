@@ -29,7 +29,7 @@
           <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
             <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
           </a>
-          <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+          <span style="color: white; margin-top: auto;" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
         <md-card-actions layout="row">

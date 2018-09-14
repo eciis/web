@@ -26,6 +26,12 @@
     width: auto;
 }
 
+.flex-box {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
 @media screen and (max-width: 450px) {
     #logo-full {
         display: none;

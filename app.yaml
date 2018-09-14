@@ -7,13 +7,16 @@ default_expiration: "1s"
 
 handlers:
 - url: /
+  secure: always
   static_files: landing/index.html
   upload: landing/index.html
 
 - url: /home-(.*)
+  secure: always
   static_files: landing/index.html
   upload: landing/index.html
 
 - url: /(.*)
+  secure: always
   static_files: landing/\1
   upload: landing/(.*)

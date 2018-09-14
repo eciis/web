@@ -54,7 +54,7 @@ function setup_app_version {
 
 function set_backend_url {
     if [ -z $1 ]; then
-        url="http://$BACKEND_DOMAIN"
+        url="https://$BACKEND_DOMAIN"
     else
         url="http://"$1
     fi
@@ -66,7 +66,7 @@ function set_backend_url {
 
 function set_landingpage_url {
     if [ -z $1 ]; then
-        url="http://$DOMAIN"
+        url="https://$DOMAIN"
     else
         url="http://"$1
     fi
@@ -246,7 +246,7 @@ case "$1" in
 
         DOMAIN="$APP_NAME.appspot.com"
 
-        BACKEND_DOMAIN="backend.$DOMAIN"
+        BACKEND_DOMAIN="backend-dot-$DOMAIN"
         
         ENVIRONMENT="development"
         read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT 

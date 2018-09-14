@@ -1,0 +1,25 @@
+
+.comment-header {
+    margin-left: 8px;
+}
+
+.user-name {
+    font-size: 15px;
+    color: #00796B;
+}
+
+.inst-name {
+    color: #7f7f7f;
+}
+
+.comment {
+    margin-top: 4px;
+    white-space: pre-line;
+}
+
+
+@media screen and (max-width: 500px) {
+    .inst-name {
+        display: none;
+    }
+}

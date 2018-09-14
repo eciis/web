@@ -1,19 +1,20 @@
-<md-list style="margin-top: 18px;">
-      <md-list-item class="md-2-line">
-        <img ng-src="{{commentCtrl.comment.author_img}}" alt="{{commentCtrl.comment.author_name}}"
-        class="user-picture" width="40px" height="40px"/>
-        <div class="md-list-item-text" layout="column" style="margin-left: 8px;">
-          <div layout="column">
+<head>
+  <link rel="stylesheet" href="app/post/comment.css">
+</head>
+
+<md-list>
+      <md-list-item class="md-3-line">
+        <img class="md-avatar" ng-src="{{commentCtrl.comment.author_img}}" alt="{{commentCtrl.comment.author_name}}" />
+        <div class="md-list-item-text">
+          <div layout="column" class="comment-header">
             <div>
               <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.comment.author_key, $event)">
                 {{commentCtrl.comment.author_name}}</a>
-              <small style="color: #7f7f7f;" class="md-caption">
-                | {{commentCtrl.comment.institution_name}}
-                <b class="xs-bullet">&bull;</b>
-                {{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
-              </small>
+              <small class="md-caption inst-name"> | {{commentCtrl.comment.institution_name}}</small>
+              <b class="xs-bullet">&bull;</b>
+              <small>{{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
             </div>
-            <p style="margin-top: 4px;white-space: pre-line;" ng-bind-html="commentCtrl.comment.text"></p>
+            <p ng-bind-html="commentCtrl.comment.text"></p>
           </div>
           <div layout="row" layout-align="start center" style="margin-top: 8px;">
             <div ng-if="commentCtrl.canDeleteComment()">
@@ -22,7 +23,7 @@
                 ng-click="commentCtrl.confirmCommentDeletion($event)">
                 <md-icon style="margin-bottom: 10px; margin-left: 1.2px;">delete</md-icon>
               </md-button>
-              <b style="font-size: 12px; margin-left: -4px;">EXCLUIR COMENTÁRIO</b>
+              <b style="font-size: 12px; margin-left: -4px;">EXCLUIR</b>
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>
@@ -60,19 +61,16 @@
       <!-- Replies -->
       <md-list-item class="md-3-line" style="margin-left: 70px; padding-bottom: 18px; border-left: 2px solid #8BC34A;"
         ng-show="commentCtrl.showReplies" ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
-        <img ng-src="{{reply.author_img}}" class="user-picture" width="40px" height="40px"
-          alt="{{reply.author_name}}" />
+        <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
         <div class="md-list-item-text" layout="column" style="margin-left: 8px;">
           <div layout="column">
             <div>
               <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(reply.author_key, $event)">
                 {{reply.author_name}}
               </a> 
-              <small style="color: #7f7f7f;" class="md-caption">
-                | {{reply.institution_name}}
-                <b class="xs-bullet">&bull;</b>
-                {{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}
-              </small>
+              <small class="inst-name md-caption"> | {{reply.institution_name}}</small>
+              <b class="xs-bullet">&bull;</b>
+              <small>{{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
             </div>
             <p style="margin-top: 4px; white-space: pre-line;" ng-bind-html="reply.text"></p>
           </div>
@@ -83,7 +81,7 @@
                 ng-click="commentCtrl.confirmCommentDeletion($event, reply)">
                 <md-icon style="margin-bottom: 10px; margin-left: 1.2px;">delete</md-icon>
               </md-button>
-              <b style="font-size: 12px; margin-left: -4px;">EXCLUIR RESPOSTA</b>
+              <b style="font-size: 12px; margin-left: -4px;">EXCLUIR</b>
             </div>
             <div layout="row" style="margin-left: auto;">
               <div>

@@ -25,6 +25,11 @@
             }
         };
         
+        /**
+         * If the current device has a width greater than 450px,
+         * then the search bar is shown, otherwise, the user is
+         * redirected to the search page
+         */
         mainCtrl.toogleSearch = function () {
             if(screen.width <= 450)  {
                 $state.go('app.user.search', {search_keyword: ''});

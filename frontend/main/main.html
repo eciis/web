@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="app/main/main.css">
 </head>
 <!-- TOOLBAR -->
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" style="width: 100%">
+<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}">
   <div class="md-toolbar-tools" >
 
     <md-button class="md-icon-button hide-gt-sm" aria-label="Menu" ng-click="mainCtrl.toggle()">
@@ -53,7 +53,7 @@
 <md-content ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}"></md-content>
 
 <div hide-xs hide-sm>
-  <md-button class="feedback-btn" ng-click="mainCtrl.goToReport()" style="z-index: 20";
+  <md-button class="feedback-btn" ng-click="mainCtrl.goToReport()"
       md-colors="{background: 'light-green-700', color: 'grey-50'}">
     Reportar problemas
   </md-button>

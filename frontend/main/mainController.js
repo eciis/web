@@ -6,16 +6,17 @@
             RequestInvitationService, $mdMenu, $window) {
         var mainCtrl = this;
         var url_report = "http://support.plataformacis.org/report";
-
+        
+        mainCtrl.showSearch = false;
         mainCtrl.search_keyword = "";
         mainCtrl.user = AuthService.getCurrentUser();
-
+        
         mainCtrl.pendingManagerMember = 0;
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
-
+        
         mainCtrl.APP_VERSION = Config.APP_VERSION;
-
+        
         mainCtrl.search = function search() {
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
@@ -23,6 +24,19 @@
                 $state.go('app.user.search', {search_keyword: search});
             }
         };
+        
+        /**
+         * If the current device has a width greater than 450px,
+         * then the search bar is shown, otherwise, the user is
+         * redirected to the search page
+         */
+        mainCtrl.toogleSearch = function () {
+            if(screen.width <= 450)  {
+                $state.go('app.user.search', {search_keyword: ''});
+            } else {
+                mainCtrl.showSearch = !mainCtrl.showSearch;
+            }
+        } 
 
         mainCtrl.newVersionAvailable = function newVersionAvailable() {
             return AuthService.newVersionAvailable();

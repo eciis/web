@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box {
+    width: 100%;
+}
+
+@media screen and (max-width: 450px) {
+    .font-resp {
+        font-size: 12px;
+    }
+
+    .select-resp {
+        width: 80%;
+    }
+}

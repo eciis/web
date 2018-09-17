@@ -26,25 +26,9 @@
     width: auto;
 }
 
-.flex-box {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-}
-
 @media screen and (max-width: 450px) {
     #logo-full {
         display: none;
-    }
-
-    .font-resp {
-        font-size: 12px;
-    }
-
-    .select-resp {
-        display: flex;
-        flex-wrap: wrap;
-        width: 80%;
     }
 }
 

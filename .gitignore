@@ -523,9 +523,9 @@ paket-files/
 
 # End of https://www.gitignore.io/api/vim,git,bower,grunt,python,intellij,appengine,sublimetext,visualstudio
 
-frontend/config.js
-support/config.js
-landing/config.js
+#frontend/config.js
+#support/config.js
+#landing/config.js
 
 frontend/firebase-config.js
 support/firebase-config.js

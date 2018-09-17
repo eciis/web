@@ -5,7 +5,8 @@
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
             RequestInvitationService, $mdMenu, $window) {
         var mainCtrl = this;
-        var url_report = "http://support.plataformacis.org/report";
+        var url_report = Config.SUPPORT_URL + "/report";
+        //var url_report = "http://support.plataformacis.org/report";
         
         mainCtrl.showSearch = false;
         mainCtrl.search_keyword = "";

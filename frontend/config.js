@@ -1,9 +1,9 @@
 "use strict";
 
 var Config = {
-    BACKEND_URL: 'http://localhost:8082',
-    LANDINGPAGE_URL: 'http://localhost:8080',
-    SUPPORT_URL: 'http://localhost:8083',
-    FRONTEND_URL: 'http://localhost:8081',
+    BACKEND_URL: 'http://localhost:8081',
+    LANDINGPAGE_URL: 'http://localhost:8082',
+    SUPPORT_URL: 'http://localhost:8080',
+    FRONTEND_URL: 'http://localhost:8083',
     APP_VERSION: 'master'
 };

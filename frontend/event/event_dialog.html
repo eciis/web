@@ -11,9 +11,9 @@
         <md-card-content style="padding: 8px;">
           <div layout="row" layout-align="space-between center" class="hide-scrollbar">
             <div layout="row" layout-align="center center">
-              <span class="green-circle" style="color: #FFFFFF; width: 20px; height: 20px;">
+              <span class="green-circle default-step">
                 <span layout="row" layout-algin="center">
-                  <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="!controller.getStep(1)">done</md-icon>
+                  <md-icon class="icon-step" ng-if="!controller.getStep(1)">done</md-icon>
                   <span style="margin: 3px auto; font-size: 12px;" ng-if="controller.getStep(1)">1</span>
                 </span>
               </span>
@@ -21,9 +21,9 @@
             </div>
             <hr style="min-width: 40px; width: 20%" layout-margin/>
             <div layout="row" layout-align="center center">
-              <span ng-class="controller.showGreenButton(2)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 20px; height: 20px;">
+              <span ng-class="controller.showGreenButton(2)? 'green-circle': 'grey-circle'" class="default-step">
                   <span layout="row" layout-algin="center">
-                    <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="controller.getStep(3)">done</md-icon>
+                    <md-icon class="icon-step" ng-if="controller.getStep(3)">done</md-icon>
                     <span style="margin: 3px auto; font-size: 12px;" ng-if="!controller.getStep(3)">2</span>
                   </span>
               </span>
@@ -31,9 +31,9 @@
             </div>
             <hr style="min-width: 40px; width: 20%" layout-margin/>
             <div layout="row" layout-align="center center">
-              <span ng-class="controller.showGreenButton(3)? 'green-circle': 'grey-circle'" style="color: #FFFFFF; width: 20px; height: 20px;">
+              <span ng-class="controller.showGreenButton(3)? 'green-circle': 'grey-circle'" class="default-step">
                   <span layout="row" layout-algin="center">
-                  <md-icon style="color: #FFFFFF; margin: 4px 4px; font-size: 12px;" ng-if="controller.getStep(3)">done</md-icon>
+                  <md-icon class="icon-step" ng-if="controller.getStep(3)">done</md-icon>
                   <span style="margin: 3px auto; font-size: 12px;" ng-if="!controller.getStep(3)">3</span>
                 </span>
               </span>
@@ -99,7 +99,7 @@
                     </md-input-container>
                     <md-input-container style="margin: 0" flex="45">
                         <label>Pais</label>
-                        <md-select md-container-class="container select-resp" ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()"
+                        <md-select md-container-class="container-resp select-resp" ng-model="controller.event.address.country" ng-change="controller.setAnotherCountry()"
                           ng-disabled="controller.isEventOutdated()">
                             <md-option ng-repeat="country in controller.countries"
                               ng-value="country.nome_pais">{{country.nome_pais}}</md-option>

@@ -1,10 +1,27 @@
-.container {
+.container-resp {
     display: flex;
     flex-wrap: wrap;
 }
 
 .box {
     width: 100%;
+}
+
+.default-step {
+    color: #FFFFFF;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-step {
+    color: #FFFFFF;
+    margin: 4px 4px;
+    font-size: 12px;
+}
+
+.create-event {
+    margin-left: 15px;
+    color: #03b3a1;
 }
 
 @media screen and (max-width: 450px) {

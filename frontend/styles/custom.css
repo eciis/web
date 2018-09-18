@@ -873,13 +873,15 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     margin-left: 2px;
 }
 
-.toolbar-search form {
-    margin: 0px;
+.user-name {
+    font-size: 15px;
+    color: #00796B;
 }
 
-.toolbar-search md-input-container {
-    margin: 0px;
-    height: 32px;
+.user-picture {
+    border-radius: 50%;
+    min-width: 55px;
+    min-height: 55px;
 }
 
 .edit-profile-avatar-button {
@@ -924,20 +926,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .option-selected-left-bar{
     color:#009688;
     background-color:#E0E0E0;
-}
-
-.feedback-btn {
-  position: fixed;
-  right: 4%;
-  bottom: -2%;
-  z-index: 10;
-  padding: 0 20px 10px 20px;
-  -webkit-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-     -moz-box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  background-color: #f5f5f5;
-  text-align: center;
-  font-size: 10px;
 }
 
 .post-inst-inactive {

@@ -1,0 +1,51 @@
+.info-user{
+    display: flex;
+    flex-wrap: wrap;
+    /* max-height: 100%; */
+}
+
+.image{
+    background: blue;
+}
+
+.layout-row{
+    display: flex;
+    /* -webkit-box-orient: horizontal; */
+    flex-direction: row;
+    max-height: 100%;
+}
+
+.layout-align-center-center{
+    max-width: 100%;
+    align-content: center;
+    -webkit-box-align: center;
+    justify-content: center;
+    -webkit-box-pack: center;
+}
+
+.layout-column{
+    max-width: 100%;
+}
+
+.buttons-align{
+    display: flex;
+    -webkit-box-orient: horizontal;
+    justify-content: flex-end;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-height: 100%;
+    max-width: 100%;
+    align-items: center;
+    align-content: center;
+}
+
+@media screen and (min-width: 600px){
+    .image{
+        width: 25%;
+    }
+
+    .input{
+        width: 75%;
+
+    }
+}

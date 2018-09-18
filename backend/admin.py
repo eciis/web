@@ -195,14 +195,14 @@ class ResetHandler(BaseHandler):
 
         # Initialize the datastore
         jsonList = []
-        # new User Mayza
-        mayza = User()
-        mayza.name = 'Mayza Nunes'
-        mayza.cpf = '089.675.908-90'
-        mayza.email = ['mayzabeel@gmail.com']
-        mayza.photo_url = getGravatar(mayza.email)
-        mayza.state = 'active'
-        mayza.put()
+        # new User Julie
+        julie = User()
+        julie.name = 'Julie Pessoa'
+        julie.cpf = '089.675.908-90'
+        julie.email = ['pessoajjulie@gmail.com']
+        julie.photo_url = getGravatar(julie.email)
+        julie.state = 'active'
+        julie.put()
 
         # new User Maiana
         maiana = User()
@@ -319,7 +319,7 @@ class ResetHandler(BaseHandler):
         deciis = createInstitution(data_deciis, admin)
         deciis.trusted = True
         
-        for user in [mayza, maiana, luiz, raoni, ruan, tiago, admin, other_admin]:
+        for user in [julie, maiana, luiz, raoni, ruan, tiago, admin, other_admin]:
             user.follow(deciis.key)
             user.follow(ms.key)
             deciis.follow(user.key)
@@ -363,12 +363,12 @@ class ResetHandler(BaseHandler):
         }
 
         certbio = createInstitution(data, other_admin)
-        for user in [mayza, other_admin]:
+        for user in [julie, other_admin]:
             certbio.add_member(user)
             user.add_institution(certbio.key)
             user.follow(certbio.key)
             create_profile(user, certbio)
-        for user in [mayza, maiana, luiz,
+        for user in [julie, maiana, luiz,
                      raoni, ruan, tiago, other_admin]:
             certbio.follow(user.key)
             user.follow(certbio.key)
@@ -440,13 +440,13 @@ class ResetHandler(BaseHandler):
         }
 
         eciis = createInstitution(data, other_admin)
-        for user in [maiana, luiz, raoni, ruan, tiago, mayza, other_admin]:
+        for user in [maiana, luiz, raoni, ruan, tiago, julie, other_admin]:
             eciis.add_member(user)
             user.add_institution(eciis.key)
             user.follow(eciis.key)
             create_profile(user, eciis)
 
-        for user in [mayza, maiana, luiz, raoni, ruan, tiago, other_admin]:
+        for user in [julie, maiana, luiz, raoni, ruan, tiago, other_admin]:
             eciis.follow(user.key)
 
         eciis.parent_institution = splab.key
@@ -465,38 +465,38 @@ class ResetHandler(BaseHandler):
         other_admin.add_permissions(permissions.DEFAULT_ADMIN_PERMISSIONS, eciis.key.urlsafe())
         other_admin.put()
 
-        # POST of Mayza To Certbio Institution
-        mayza_post = Post()
-        mayza_post.title = "Novo edital do CERTBIO"
-        mayza_post.text = TEXT
-        mayza_post.author = mayza.key
-        mayza_post.institution = certbio.key
-        mayza_post.last_modified_by = mayza.key
-        mayza_post.put()
-        add_comments_to_post(mayza,maiana, mayza_post, mayza.institutions[0], 2)
-        mayza.add_permissions(['edit_post', 'remove_post'], mayza_post.key.urlsafe())
+        # POST of Julie To Certbio Institution
+        julie_post = Post()
+        julie_post.title = "Novo edital do CERTBIO"
+        julie_post.text = TEXT
+        julie_post.author = julie.key
+        julie_post.institution = certbio.key
+        julie_post.last_modified_by = julie.key
+        julie_post.put()
+        add_comments_to_post(julie,maiana, julie_post, julie.institutions[0], 2)
+        julie.add_permissions(['edit_post', 'remove_post'], julie_post.key.urlsafe())
 
-        # POST of Mayza To Certbio Institution with image
+        # POST of Julie To Certbio Institution with image
         post_with_image = Post()
         post_with_image.title = "Post do CERTBIO com imagem"
         post_with_image.photo_url = "https://workingatbooking.com/content/uploads/2017/04/womenintech_heroimage.jpg"
         post_with_image.text = TEXT
-        post_with_image.author = mayza.key
+        post_with_image.author = julie.key
         post_with_image.institution = certbio.key
-        post_with_image.last_modified_by = mayza.key
+        post_with_image.last_modified_by = julie.key
         post_with_image.put()
-        add_comments_to_post(mayza,raoni, post_with_image,
-                             mayza.institutions[0], 1)
-        mayza.add_permissions(['edit_post', 'remove_post'], post_with_image.key.urlsafe())
+        add_comments_to_post(julie,raoni, post_with_image,
+                             julie.institutions[0], 1)
+        julie.add_permissions(['edit_post', 'remove_post'], post_with_image.key.urlsafe())
 
         # Side efect of a post
-        mayza.posts = [mayza_post.key, post_with_image.key]
-        mayza.put()
+        julie.posts = [julie_post.key, post_with_image.key]
+        julie.put()
 
         eciis.posts = []
         eciis.put()
 
-        certbio.posts = [mayza_post.key]
+        certbio.posts = [julie_post.key]
         certbio.put()
 
         splab.posts = []

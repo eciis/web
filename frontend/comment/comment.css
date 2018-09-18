@@ -1,7 +1,4 @@
 
-.comment-header {
-    margin-left: 8px;
-}
 
 .user-name {
     font-size: 15px;
@@ -15,6 +12,25 @@
 .comment {
     margin-top: 4px;
     white-space: pre-line;
+}
+
+.reply {
+    margin-left: 5px; 
+    border-left: 2px solid #8BC34A;
+}
+
+.reply-text {
+    margin-top: 4px;
+    white-space: pre-line;
+}
+
+.reply-btn-text {
+    font-size: 12px; 
+    margin-left: -8px;
+}
+
+.like-btn {
+    margin-left: auto;
 }
 
 

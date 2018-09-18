@@ -873,17 +873,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     margin-left: 2px;
 }
 
-.user-name {
-    font-size: 15px;
-    color: #00796B;
-}
-
-.user-picture {
-    border-radius: 50%;
-    min-width: 55px;
-    min-height: 55px;
-}
-
 .edit-profile-avatar-button {
     position: absolute;
     top: 50%;

@@ -5,17 +5,15 @@
 <md-list>
       <md-list-item class="md-3-line">
         <img class="md-avatar" ng-src="{{commentCtrl.comment.author_img}}" alt="{{commentCtrl.comment.author_name}}" />
-        <div class="md-list-item-text">
-          <div layout="column" class="comment-header">
-            <div>
-              <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.comment.author_key, $event)">
-                {{commentCtrl.comment.author_name}}</a>
-              <small class="md-caption inst-name"> | {{commentCtrl.comment.institution_name}}</small>
-              <b class="xs-bullet">&bull;</b>
-              <small>{{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
-            </div>
-            <p ng-bind-html="commentCtrl.comment.text"></p>
+        <div class="md-list-item-text" layout="column">
+          <div>
+            <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.comment.author_key, $event)">
+              {{commentCtrl.comment.author_name}}</a>
+            <small class="md-caption inst-name"> | {{commentCtrl.comment.institution_name}}</small>
+            <b class="xs-bullet">&bull;</b>
+            <small>{{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
           </div>
+          <p ng-bind-html="commentCtrl.comment.text"></p>
           <div layout="row" layout-align="start center" style="margin-top: 8px;">
             <div ng-if="commentCtrl.canDeleteComment()">
               <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify" aria-label="Delete"
@@ -59,52 +57,53 @@
         </div>
       </md-list-item>
       <!-- Replies -->
-      <md-list-item class="md-3-line" style="margin-left: 70px; padding-bottom: 18px; border-left: 2px solid #8BC34A;"
-        ng-show="commentCtrl.showReplies" ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
+      <md-list-item class="md-3-line reply" ng-show="commentCtrl.showReplies" 
+        ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
         <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
-        <div class="md-list-item-text" layout="column" style="margin-left: 8px;">
-          <div layout="column">
-            <div>
-              <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(reply.author_key, $event)">
-                {{reply.author_name}}
-              </a> 
-              <small class="inst-name md-caption"> | {{reply.institution_name}}</small>
-              <b class="xs-bullet">&bull;</b>
-              <small>{{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
-            </div>
-            <p style="margin-top: 4px; white-space: pre-line;" ng-bind-html="reply.text"></p>
+        <div class="md-list-item-text" layout="column">
+          <!-- header -->
+          <div>
+            <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(reply.author_key, $event)">
+              {{reply.author_name}}
+            </a> 
+            <small class="inst-name md-caption"> | {{reply.institution_name}}</small>
+            <b class="xs-bullet">&bull;</b>
+            <small>{{reply.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
           </div>
+          <p class="reply-text" ng-bind-html="reply.text"></p>
+          
+          <!-- Buttons -->
           <div layout="row" layout-align="start center">
-            <div ng-if="commentCtrl.canDeleteComment(reply)">
+            <!-- Delete -->
+            <md-button ng-if="commentCtrl.canDeleteComment(reply)" ng-click="commentCtrl.confirmCommentDeletion($event, reply)">
               <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify" aria-label="Delete"
-                title="Excluir resposta" md-colors="{background: 'light-green'}"
-                ng-click="commentCtrl.confirmCommentDeletion($event, reply)">
-                <md-icon style="margin-bottom: 10px; margin-left: 1.2px;">delete</md-icon>
+                title="Excluir resposta" md-colors="{background: 'light-green'}">
+                <md-icon>delete</md-icon>
               </md-button>
-              <b style="font-size: 12px; margin-left: -4px;">EXCLUIR</b>
-            </div>
-            <div layout="row" style="margin-left: auto;">
-              <div>
-                <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" ng-click="commentCtrl.likeOrDislike(reply)" 
-                    title="{{(commentCtrl.isLikedByUser(reply)) ? 'Descurtir' : 'Curtir'}}"
-                    ng-disabled="commentCtrl.disableButton()" md-colors="{background: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}">
-                  <md-icon>grade</md-icon>
-                </md-button>
-                <b style="font-size: 12px; margin-left: -8px;">
-                  <small md-colors="{color: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}"
-                  style="font-size: 13px;"
-                  title="{{ commentCtrl.numberOfLikesMessage(reply) }}">
-                    {{commentCtrl.numberOfLikes(reply)}}
-                  </small> 
-                  CURTIR
-                </b>
-              </div>    
-            </div>
+              <b class="reply-btn-text">
+                EXCLUIR
+              </b>
+            </md-button>
+            <!-- Like -->
+            <md-button class="like-btn" ng-click="commentCtrl.likeOrDislike(reply)" ng-disabled="commentCtrl.disableButton()">
+              <md-button class="sm-icon-button xs-icon-button" aria-label="Favorite" 
+                title="{{ commentCtrl.isLikedByUser(reply) ? 'Descurtir' : 'Curtir'}}" 
+                md-colors="{background: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}">
+                <md-icon>grade</md-icon>
+              </md-button>
+              <b class="reply-btn-text">
+                <small md-colors="{color: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}"
+                  style="font-size: 13px;" title="{{ commentCtrl.numberOfLikesMessage(reply) }}">
+                  {{commentCtrl.numberOfLikes(reply)}}
+                </small> 
+                CURTIR
+              </b>
+            </md-button>    
           </div>
         </div>
       </md-list-item>
       <!-- Reply input -->
-      <md-list-item class="md-3-line" ng-if="commentCtrl.canReply()" style="margin-left: 78px;">
+      <md-list-item class="md-3-line" ng-if="commentCtrl.canReply()" style="margin-left: 8px;">
         <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
         <div class="md-list-item-text" layout="row" layout-align="center center">
           <md-input-container style="font-size: 16px" flex>

@@ -24,7 +24,7 @@ FRONTEND_CONFIG_FILE="frontend/config.js"
 SUPPORT_CONFIG_FILE="support/config.js"
 LANDINGPAGE_CONFIG_FILE="landing/config.js"
 
-git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
+git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE
 
 PY_ENV=backend/py_env
 

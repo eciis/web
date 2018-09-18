@@ -39,13 +39,31 @@
     align-content: center;
 }
 
-@media screen and (min-width: 600px){
-    .image{
+@media screen and (min-width: 800px){
+    #user-imagem{
+        width:"200px";
+        height: "200px";
+    }
+}
+
+@media screen and (max-width: 600px){
+    #text{
+        width: 75%;
+    }
+    #inst-image{
         width: 25%;
     }
+    #user-imagem{
+        width:"100px";
+        height: "100px";
+    }
+}
 
-    .input{
-        width: 75%;
-
+@media screen and (min-width: 600px){
+    #text{
+        width: 65%;
+    }
+    #inst-image{
+        width: 25%;
     }
 }

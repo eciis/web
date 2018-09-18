@@ -60,6 +60,7 @@
     );
 
     (function initSw() {
+        self.skipWaiting();
         setupFirebase();
         addToCache(['/']);
     })();

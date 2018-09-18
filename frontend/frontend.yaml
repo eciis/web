@@ -7,17 +7,21 @@ default_expiration: "1s"
 
 handlers:
 - url: /app/(.*)
+  secure: always
   static_files: \1
   upload: (.*)
 
 - url: /sw.js
+  secure: always
   static_files: sw.js
   upload: sw.js
 
 - url: /manifest.json
+  secure: always
   static_files: manifest.json
   upload: manifest.json
 
 - url: /(.*)
+  secure: always
   static_files: index.html
   upload: index.html

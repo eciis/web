@@ -15,14 +15,16 @@ BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 SUPPORT_YAML=support/support.yaml
 
-BACKEND_LOCAL="localhost:8082"
-
 LANDINGPAGE_LOCAL="localhost:8080"
+FRONTEND_LOCAL="localhost:8081"
+BACKEND_LOCAL="localhost:8082"
+SUPPORT_LOCAL="localhost:8083"
 
 FRONTEND_CONFIG_FILE="frontend/config.js"
 SUPPORT_CONFIG_FILE="support/config.js"
+LANDINGPAGE_CONFIG_FILE="landing/config.js"
 
-git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE
+git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE
 
 PY_ENV=backend/py_env
 
@@ -52,28 +54,63 @@ function setup_app_version {
     catch_error $? "Setup APP VERSION with success"
 }
 
+function set_service_url {
+    case "$1" in
+        local)
+            echo "http://$2";
+        ;;
+        deploy)
+            echo "https://$2"
+        ;;
+        *) echo "inválid option"; exit 1;
+        ;;
+    esac
+}
+
+function set_config_file {
+    line=$1;
+    service=$2;
+    url=$3;
+    service_name=$4;
+
+    sed -i "$line s|.*|    $service: '$url',|" $FRONTEND_CONFIG_FILE
+    sed -i "$line s|.*|    $service: '$url',|" $SUPPORT_CONFIG_FILE
+    sed -i "$line s|.*|    $service: '$url',|" $LANDINGPAGE_CONFIG_FILE
+
+    catch_error $? "Frontend will use ${bold}$url${_bold} as $service_name."
+    catch_error $? "Support will use ${bold}$url${_bold} as $service_name."
+}
+
 function set_backend_url {
-    if [ -z $1 ]; then
-        url="http://$BACKEND_DOMAIN"
-    else
-        url="http://"$1
-    fi
-    sed -i "4s|.*|    BACKEND_URL: '$url',|" $FRONTEND_CONFIG_FILE
-    catch_error $? "Frontend will use ${bold}$url${_bold} as backend."
-    sed -i "4s|.*|    BACKEND_URL: '$url',|" $SUPPORT_CONFIG_FILE
-    catch_error $? "Support will use ${bold}$url${_bold} as backend."
+    url=$(set_service_url $1 $2);
+    service="BACKEND_URL";
+    line=4;
+    service_name="backend";
+    set_config_file $line $service $url $service_name; 
 }
 
 function set_landingpage_url {
-    if [ -z $1 ]; then
-        url="http://$DOMAIN"
-    else
-        url="http://"$1
-    fi
-    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $FRONTEND_CONFIG_FILE
-    catch_error $? "Frontend will use ${bold}$url${_bold} as landing page."
-    sed -i "5s|.*|    LANDINGPAGE_URL: '$url',|" $SUPPORT_CONFIG_FILE
-    catch_error $? "Support will use ${bold}$url${_bold} as landing page."
+    url=$(set_service_url $1 $2);
+    service="LANDINGPAGE_URL";
+    line=5;
+    service_name="landing page";
+    set_config_file $line $service $url $service_name;
+}
+
+function set_support_url {
+    url=$(set_service_url $1 $2);
+    service="SUPPORT_URL";
+    line=6;
+    service_name="support";
+    set_config_file $line $service $url $service_name;
+}
+
+function set_frontend_url {
+    url=$(set_service_url $1 $2);
+    service="FRONTEND_URL";
+    line=7;
+    service_name="frontend";
+    set_config_file $line $service $url $service_name;
 }
 
 # Usage [ --error ] <message_to_log>
@@ -103,10 +140,12 @@ function catch_error {
 case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
-        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
         catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
         catch_error $? "APP VERSION on Support $APP_VERSION"
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
+        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -139,9 +178,10 @@ case "$1" in
 
         setup_firebase_config development
 
-        set_backend_url $BACKEND_LOCAL
-
-        set_landingpage_url $LANDINGPAGE_LOCAL
+        set_backend_url local $BACKEND_LOCAL
+        set_landingpage_url local $LANDINGPAGE_LOCAL
+        set_support_url local $SUPPORT_LOCAL
+        set_frontend_url local $FRONTEND_LOCAL
 
         dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML $2
     ;;
@@ -204,10 +244,12 @@ case "$1" in
         git checkout tags/"$APP_VERSION"
         catch_error $? "Git checked out to tag $APP_VERSION"
 
-        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
         catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "6s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
         catch_error $? "APP VERSION on Support $APP_VERSION"
+        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
+        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")
@@ -216,10 +258,14 @@ case "$1" in
             case $opt in
                 "development-cis")
                     APP_NAME="development-cis"
+                    SUPPORT_DOMAIN="support-dot-$APP_NAME.appspot.com"
+                    FRONTEND_DOMAIN="frontend-dot-$APP_NAME.appspot.com"
                     break
                     ;;
                 "eciis-splab")
                     APP_NAME="eciis-splab"
+                    SUPPORT_DOMAIN="support.plataformacis.org"
+                    FRONTEND_DOMAIN="frontend.plataformacis.org"
                     break
                     ;;
                 "Other")
@@ -245,8 +291,7 @@ case "$1" in
         fi
 
         DOMAIN="$APP_NAME.appspot.com"
-
-        BACKEND_DOMAIN="backend.$DOMAIN"
+        BACKEND_DOMAIN="backend-dot-$DOMAIN"
         
         ENVIRONMENT="development"
         read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT 
@@ -263,10 +308,16 @@ case "$1" in
         if [ ! -z $2 ]; then
             version=$2
             url=$version"."$BACKEND_DOMAIN
-            set_backend_url $url
+            set_backend_url deploy $url
 
             url=$version"."$DOMAIN
-            set_landingpage_url $url
+            set_landingpage_url deploy $url
+
+            url=$version"."$SUPPORT_DOMAIN
+            set_support_url deploy $url
+
+            url=$version"."$FRONTEND_DOMAIN
+            set_frontend_url deploy $url
 
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
@@ -274,8 +325,10 @@ case "$1" in
                 gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML queue.yaml
             fi
         else
-            set_backend_url
-            set_landingpage_url
+            set_backend_url deploy $BACKEND_DOMAIN
+            set_landingpage_url deploy $DOMAIN
+            set_support_url deploy $SUPPORT_DOMAIN
+            set_frontend_url deploy $FRONTEND_DOMAIN
             gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML
         fi
 

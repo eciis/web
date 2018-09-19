@@ -15,11 +15,6 @@
     color: #03b3a1;
 }
 
-.author-info {
-    color: white;
-    margin-top: auto;
-}
-
 @media screen and (max-width: 450px) {
     .font-resp {
         font-size: 12px;

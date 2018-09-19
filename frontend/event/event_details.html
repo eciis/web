@@ -29,15 +29,15 @@
           <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
             <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
           </a>
-          <span class="font-resp author-info">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+          <span style="color: white; margin-top: auto;" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
-      <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
+      <md-card-content ng-if="eventDetailsCtrl.isEventPage">
         <md-card-actions layout="row">
           <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
-            <md-button class="md-icon-button" title="Opções" hide-xs
-            style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
-              <md-icon style="color: white;">more_vert</md-icon>
-            </md-button>
+              <md-button style="margin-top: 25px;" class="md-icon-button" title="Opções" hide-xs
+              ng-click="$mdMenu.open(ev)">
+                <md-icon style="color: white;">more_vert</md-icon>
+              </md-button>
             <md-menu-content>
               <md-menu-item ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
@@ -53,7 +53,7 @@
               </md-menu-item>
             </md-menu-content>
           </md-menu>
-          <md-button class="md-fab md-primary" title="Compartilhar"
+          <md-button class="md-fab md-primary" title="Compartilhar" hide-xs
           style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
           ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
             <md-icon>share</md-icon>

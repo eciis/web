@@ -1,16 +1,11 @@
 .info-user{
     display: flex;
     flex-wrap: wrap;
-    /* max-height: 100%; */
-}
-
-.image{
-    background: blue;
+    max-height: 100%;
 }
 
 .layout-row{
     display: flex;
-    /* -webkit-box-orient: horizontal; */
     flex-direction: row;
     max-height: 100%;
 }
@@ -37,13 +32,6 @@
     max-width: 100%;
     align-items: center;
     align-content: center;
-}
-
-@media screen and (min-width: 800px){
-    #user-imagem{
-        width:"200px";
-        height: "200px";
-    }
 }
 
 @media screen and (max-width: 600px){

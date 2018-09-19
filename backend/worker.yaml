@@ -5,6 +5,7 @@ service: worker
 
 handlers:
 - url: /api/queue/.*
+  secure: always
   script: worker.app
 # This line is to prevent users from accessing job URLs by restricting access to App Engine administrators
   login: admin

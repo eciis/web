@@ -7,6 +7,7 @@
         var ctrl = this;
 
         ctrl.mdMedia = $mdMedia;
+        ctrl.url_frontend = Config.FRONTEND_URL;
 
         var firebaseRef = firebase.database().ref();
 

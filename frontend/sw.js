@@ -16,7 +16,7 @@
 
     workbox.core.setCacheNameDetails({
         prefix: 'plataforma-cis',
-        suffix: 'v1'
+        suffix: 'v2'
     });
 
     const precacheCacheName = workbox.core.cacheNames.precache;
@@ -60,6 +60,7 @@
     );
 
     (function initSw() {
+        self.skipWaiting();
         setupFirebase();
         addToCache(['/']);
     })();

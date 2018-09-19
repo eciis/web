@@ -2,7 +2,7 @@
   <link rel="stylesheet" href="app/user/user.css">
 </head>
 
-<md-content class="body custom-scrollbar">
+<md-content class="body custom-scrollbar content">
   <div>
     <md-card>
       <md-toolbar md-colors="{background: 'teal-500'}">
@@ -11,21 +11,22 @@
             <md-icon>person</md-icon>
             Dados pessoais
           </h1>
-          <span flex md-truncate></span>
+          <span md-truncate></span>
         </div>
       </md-toolbar>
       <md-card-content >
         <form ng-submit="configProfileCtrl.finish()" prevent-state-change="configProfileCtrl.newUser">
           <div class="info-user">
             <div style="position: relative; margin: auto;">
-                <img style="border-radius: 50%;" ng-src="{{ configProfileCtrl.photo_url }}" id="user-imagem" width="200px" height="200px">
-                <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
-                  ngf-accept="'image/*'" ngf-max-size="5MB"
-                  ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
-                  class="md-icon-button edit-profile-avatar-button" style="width: 200px; height: 200px; margin-left: -1px;">
-                </md-button>
+                 <img id="user-image" ng-src="{{ configProfileCtrl.photo_url }}">
+                  <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
+                    class="md-icon-button edit-profile-avatar-button" title="Altere a imagem">
+                    <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
+                  </md-button>
             </div>
-            <div md-theme="input" class="input" style="max-width:100%; width: 550px; margin: auto;">
+            <div md-theme="input" class="input">
               <md-input-container style="width: 100%;">
                 <label>Nome</label>
                 <input ng-model="configProfileCtrl.newUser.name" required>
@@ -63,8 +64,8 @@
             <md-list class="md-dense">
                 <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
                 <md-list-item class="md-3-line info-user" ng-repeat="institution in configProfileCtrl.user.institutions track by institution.key">
-                  <img id="inst-image" style="border-radius: 50%; align-self:center; width: 50px; min-width: 50px;" ng-src="{{ institution.photo_url }}" height="50px" />
-                  <div style="margin-left: 10px; margin-top: 12px;" id="text" class="md-list-item-text layout-column">
+                  <img id="inst-image" ng-src="{{ institution.photo_url }}"/>
+                  <div id="text" class="md-list-item-text layout-column">
                     <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
                         {{ institution.acronym }}
                     </a>

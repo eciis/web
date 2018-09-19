@@ -4,6 +4,30 @@
     max-height: 100%;
 }
 
+#inst-image{
+    border-radius: 50%;
+    align-self:center;
+    width: 50px;
+    height: 50px;
+}
+
+#user-image{
+    border-radius: 50%;
+    width: 200px;
+    height:200px;
+}
+
+#text{
+    margin-left: 10px;
+    margin-top: 12px;
+}
+
+.input{
+    max-width:100%;
+    width: 550px;
+    margin: auto;
+}
+
 .layout-row{
     display: flex;
     flex-direction: row;
@@ -34,24 +58,71 @@
     align-content: center;
 }
 
-@media screen and (max-width: 600px){
+.edit-profile-avatar-icon {
+    color: white;
+    font-size: 25px;
+}
+
+.edit-profile-avatar-button:hover {
+   background-color: #80CBC4 !important ;
+}
+
+
+.edit-profile-avatar-button {
+    position: absolute;
+    top: 85%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    background: #009688;
+    width: 70px !important;
+    height: 70px !important;
+    margin-left: -1px;
+}
+
+@media screen and (min-width: 321px) and (max-width: 600px){
     #text{
         width: 75%;
     }
     #inst-image{
-        width: 25%;
+        width: 50px;
     }
-    #user-imagem{
-        width:"100px";
-        height: "100px";
+    #user-image{
+        border-radius: 50%;
+        width: 150px;
+        height:150px;
+    }
+
+    .edit-profile-avatar-button{
+        width:50px !important;
+        height: 50px !important;
     }
 }
 
 @media screen and (min-width: 600px){
+    .content{
+        margin-right: 2em;
+        margin-left:1em;
+    }
+}
+
+@media screen and (max-width: 320px){
     #text{
-        width: 65%;
+        width: 75%;
+        font-size:13px;
+        margin-top:2px;
     }
     #inst-image{
-        width: 25%;
+        width: 40px;
+        height: 40px;
+    }
+
+    #user-image{
+        width: 125px;
+        height:125px;
+    }
+
+    .edit-profile-avatar-button{
+        width:40px !important;
+        height: 40px !important;
     }
 }

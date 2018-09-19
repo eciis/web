@@ -102,8 +102,7 @@
                 views: {
                     user_content: {
                         templateUrl: "app/auth/config_profile.html",
-                        controller: "ConfigProfileController as configProfileCtrl",
-                        url: "app/user/user.css"
+                        controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
             })

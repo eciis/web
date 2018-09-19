@@ -47,7 +47,7 @@
         }
 
         function saveToken(token) {
-            notificationsRef = initFirebaseArray();
+            const notificationsRef = initFirebaseArray();
             setToken(token, notificationsRef);
         }
 
@@ -82,6 +82,7 @@
         }
 
         (function init() {
+            console.log(isMobile.any());
             if(!hasPermission() && isMobile.any()) {
                 requestPermission();
             }

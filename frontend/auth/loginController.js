@@ -13,15 +13,6 @@
 
         var redirectPath = $stateParams.redirect;
 
-        loginCtrl.requestPermission = () => {
-            let messaging = firebase.messaging();
-            messaging.requestPermission().then(() => {
-                messaging.getToken().then(token => {
-                    console.log(token);
-                });
-            });
-        }
-
         loginCtrl.loginWithGoogle = function loginWithGoogle() {
             var promise = AuthService.loginWithGoogle();
             promise.then(function success() {

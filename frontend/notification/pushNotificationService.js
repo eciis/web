@@ -3,14 +3,36 @@
 
     const app = angular.module('app');
 
-    app.service('PushNotificationService', function PushNotificationService($firebaseArray, AuthService, $rootScope) {
+    app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
+        AuthService, $firebaseObject) {
         const service = this;
 
         const messaging = firebase.messaging();
 
-        console.log("oi");
-
         const ref = firebase.database().ref();
+
+        const PUSH_NOTIFICATIONS_URL = "pushNotifications/";
+
+        const isMobile = {
+            Android: () => {
+                return navigator.userAgent.match(/Android/i);
+            },
+            BlackBerry: () => {
+                return navigator.userAgent.match(/BlackBerry/i);
+            },
+            iOS: () => {
+                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+            },
+            Opera: () => {
+                return navigator.userAgent.match(/Opera Mini/i);
+            },
+            Windows: () => {
+                return navigator.userAgent.match(/IEMobile/i);
+            },
+            any: () => {
+                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+            }
+        };
 
         service.firebaseArrayNotifications;
 
@@ -19,18 +41,39 @@
         function requestPermission() {
             messaging.requestPermission().then(() => {
                 messaging.getToken().then(token => {
-                    console.log('aeee');
                     saveToken(token);
                 });
             });
         }
 
         function saveToken(token) {
+            notificationsRef = initFirebaseArray();
+            setToken(token, notificationsRef);
+        }
+
+        function initFirebaseArray() {
+            const endPoint = `${PUSH_NOTIFICATIONS_URL}${service.currentUser.key}`;
+            const notificationsRef = ref.child(endPoint);
+
             if (!service.firebaseArrayNotifications) {
-                const notificationsRef = ref.child("pushNotifications/" + service.currentUser.key);
                 service.firebaseArrayNotifications = $firebaseArray(notificationsRef);
             }
-            service.firebaseArrayNotifications.$save(token);
+
+            return notificationsRef;
+        }
+
+        function setToken(token, notificationsRef) {
+            service.firebaseArrayNotifications.$loaded().then((data) => {
+                let currentTokenObject = data[0];
+                if (!currentTokenObject) {
+                    const tokenObject = $firebaseObject(notificationsRef);
+                    tokenObject.token = token;
+                    service.firebaseArrayNotifications.$add(tokenObject);
+                } else {
+                    currentTokenObject.token = token;
+                    service.firebaseArrayNotifications.$save(currentTokenObject);
+                }
+            });
         }
 
         function hasPermission() {
@@ -39,9 +82,7 @@
         }
 
         (function init() {
-            console.log("oi");
-            if(!hasPermission()) {
-                console.log("oi");
+            if(!hasPermission() && isMobile.any()) {
                 requestPermission();
             }
         })();

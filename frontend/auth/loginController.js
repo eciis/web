@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("LoginController", function LoginController(AuthService, MessageService, $state, $mdDialog, 
-            $stateParams, $location, $window) {
+    app.controller("LoginController", function LoginController(AuthService, $state, $mdDialog, 
+            $stateParams, $window) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -13,8 +13,8 @@
 
         var redirectPath = $stateParams.redirect;
 
-        loginCtrl.login = function login() {
-            var promise = AuthService.login();
+        loginCtrl.loginWithGoogle = function loginWithGoogle() {
+            var promise = AuthService.loginWithGoogle();
             promise.then(function success() {
                 redirectTo(redirectPath);
             });
@@ -58,7 +58,7 @@
 
         function redirectTo(path) {
             if (path) {
-                $location.path(path);
+                window.location.pathname = path;
             } else {
                 $state.go("app.user.home");
             }

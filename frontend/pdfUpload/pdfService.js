@@ -34,10 +34,12 @@
             var uploadTask = $firebaseStorage(fileReference).$put(file, metadata);
 
             uploadTask.$complete(function(snapshot) {
-                var data = {
-                    url: snapshot.downloadURL
-                };
-                deferred.resolve(data);
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    var data = {
+                        url: downloadURL
+                    };
+                    deferred.resolve(data);
+                });
             });
 
             uploadTask.$error(function(error) {

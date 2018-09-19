@@ -525,6 +525,7 @@ paket-files/
 
 frontend/config.js
 support/config.js
+landing/config.js
 
 frontend/firebase-config.js
 support/firebase-config.js
@@ -542,3 +543,6 @@ backend/Pipfile
 
 .env_cleaned
 .vscode/**
+
+#Frontend tests
+frontend/test/package-lock.json

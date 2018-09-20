@@ -33,8 +33,8 @@
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage">
         <md-card-actions layout="row">
-          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
-              <md-button style="margin-top: 25px;" class="md-icon-button" title="Opções" hide-xs
+          <md-menu style="margin-left: auto;" md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
+              <md-button style="margin-top: 25px;" class="md-icon-button" title="Opções"
               ng-click="$mdMenu.open(ev)">
                 <md-icon style="color: white;">more_vert</md-icon>
               </md-button>
@@ -43,6 +43,12 @@
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
                   <md-icon>edit</md-icon>
                   Editar evento
+                </md-button>
+              </md-menu-item>
+              <md-menu-item ng-if="eventDetailsCtrl.showShareOption()">
+                <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)"">
+                  <md-icon>share</md-icon>
+                  Compartilhar evento
                 </md-button>
               </md-menu-item>
               <md-menu-item>

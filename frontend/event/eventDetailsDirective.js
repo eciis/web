@@ -68,6 +68,10 @@
             return eventCtrl.user.hasPermission('edit_post', event.key);
         };
 
+        eventCtrl.showShareOption = function showShareOption() {
+            return screen.width < 600;
+        }
+
         eventCtrl.editEvent = function editEvent(ev, event) {
             $mdDialog.show({
                 controller: 'EventDialogController',

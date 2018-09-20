@@ -1,7 +1,7 @@
 .info-user{
     display: flex;
     flex-wrap: wrap;
-    max-height: 100%;
+    height: fit-content;
 }
 
 #inst-image{
@@ -102,6 +102,9 @@
     .content{
         margin-right: 2em;
         margin-left:1em;
+    }
+    #text{
+        width: 75%;
     }
 }
 

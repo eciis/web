@@ -93,7 +93,7 @@
               </md-button>
               <b class="reply-btn-text">
                 <small md-colors="{color: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}"
-                  style="font-size: 13px;" title="{{ commentCtrl.numberOfLikesMessage(reply) }}">
+                  class="like-counter" title="{{ commentCtrl.numberOfLikesMessage(reply) }}">
                   {{commentCtrl.numberOfLikes(reply)}}
                 </small> 
                 CURTIR
@@ -103,18 +103,22 @@
         </div>
       </md-list-item>
       <!-- Reply input -->
-      <md-list-item class="md-3-line" ng-if="commentCtrl.canReply()" style="margin-left: 8px;">
+      <md-list-item class="md-2-line reply" ng-if="commentCtrl.canReply()">
         <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
-        <div class="md-list-item-text" layout="row" layout-align="center center">
-          <md-input-container style="font-size: 16px" flex>
+        <div class="md-list-item-text">
+          <md-input-container class="reply-input-container" flex>
             <label>Responder</label>
-            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="commentCtrl.newReply" rows="1" md-select-on-focus
+            <textarea class="reply-input" ng-model="commentCtrl.newReply" rows="1" md-select-on-focus
               ng-disabled="commentCtrl.saving"></textarea>
           </md-input-container>
-          <md-button ng-if="commentCtrl.newReply" class="md-icon-button" ng-click="commentCtrl.replyComment();">
-            <md-icon>send</md-icon>
-          </md-button>
-          <b ng-if="commentCtrl.newReply" style="font-size: 12px;">ENVIAR</b>          
+          <div layout="row">
+            <md-button class="send-reply-btn" ng-click="commentCtrl.replyComment();" ng-disabled="!commentCtrl.newReply">
+              <md-button class="md-icon-button">
+                <md-icon>send</md-icon>
+              </md-button>
+              <b class="reply-btn-text">ENVIAR</b>          
+            </md-button>
+          </div>
         </div>
       </md-list-item>
   </md-list>

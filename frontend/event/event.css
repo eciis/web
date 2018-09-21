@@ -25,6 +25,12 @@
     }
 }
 
+@media screen and (min-width: 600px) {
+    #hide-share {
+        display: none !important;
+    }
+}
+
 @media screen and (max-width: 1640px) {
     .container-resp {
         display: flex;

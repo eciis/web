@@ -3,6 +3,7 @@
 import webapp2
 import json
 from firebase import send_notification
+from fcm import notify_single_user
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
@@ -344,6 +345,7 @@ class NotifyFollowersHandler(BaseHandler):
                     message=notification_message,
                     entity=entity
                 )
+            notify_single_user("bla", "blabla", follower.key.urlsafe())
 
 
 class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):

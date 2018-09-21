@@ -82,7 +82,6 @@
         }
 
         (function init() {
-            console.log(isMobile.any());
             if(!hasPermission() && isMobile.any()) {
                 requestPermission();
             }

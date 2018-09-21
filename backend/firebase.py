@@ -11,16 +11,10 @@ from oauth2client.client import GoogleCredentials
 
 from firebase_config import FIREBASE_URL
 
-from firebase_config import SERVER_KEY
-
-PUSH_NOTIFICATION_URL = 'https://fcm.googleapis.com/fcm/send'
-
 _FIREBASE_SCOPES = [
     'https://www.googleapis.com/auth/firebase.database',
-    'https://www.googleapis.com/auth/userinfo.email',
-    PUSH_NOTIFICATION_URL
+    'https://www.googleapis.com/auth/userinfo.email'
 ]
-
 
 @lru_cache()
 def _get_http():
@@ -51,28 +45,3 @@ def send_notification(user, message, entity_type, entity):
     message['entity_type'] = entity_type
     message['entity'] = entity
     firebase_post(url, value=json.dumps(message))
-    token = get_token(user)
-    push_notification({"title": "test"}, token)
-
-def push_notification(settings, token):
-    body = {
-        "notification": settings,
-        "to": token
-    }
-
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": "key=%s" %SERVER_KEY
-    }
-
-    response, content = _get_http().request(PUSH_NOTIFICATION_URL, method='POST', 
-        headers=headers, body=body)
-    return json.loads(content)
-
-
-def get_token(urlsafe_key):
-    url = "https://console.firebase.google.com/u/0/project/development-cis/database/development-cis/data/pushNotifications/%s" % urlsafe_key
-    response, content = _get_http().request(url, method='GET')
-    print response
-    print content
-    return json.loads(content)

@@ -226,6 +226,7 @@ case "$1" in
                 
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
+                echo 'SERVER_KEY = "SERVER_KEY"' >> firebase_config.py
 
                 TEST_NAME="*test.py"
                 if [ "$3" == "--name" ] && [ ! -z "$4" ]; then

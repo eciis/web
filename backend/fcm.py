@@ -12,12 +12,13 @@ ICON_URL = "https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/
 
 push_service = FCMNotification(api_key=SERVER_KEY)
 
-def notify_single_user(title, body, receiver_key):
+def notify_single_user(data, receiver_key):
     token = get_token(receiver_key)
     if token:
         result = push_service.notify_single_device(
-            registration_id=token, message_title=title, 
-            message_body=body, message_icon=ICON_URL
+            registration_id=token, message_title=data['title'], 
+            message_body=data['body'], message_icon=ICON_URL, 
+            data_message=data, click_action=data['click_action']
         )
         return result
 

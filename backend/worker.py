@@ -4,6 +4,7 @@ import webapp2
 import json
 from firebase import send_notification
 from fcm import notify_single_user
+from push_notification import get_notification_props
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
@@ -268,7 +269,9 @@ class PostNotificationHandler(BaseHandler):
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
-        is_first_like = post.get_number_of_likes() == 1
+        
+        is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE'
+        is_first_comment = post.get_number_of_comments() == 1 and entity_type == 'COMMENT'
 
         notification_message = post.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -288,10 +291,9 @@ class PostNotificationHandler(BaseHandler):
                     message=notification_message
                 )
                 
-                if is_first_like:
-                    title = "Primeira curtida"
-                    body = "O post pelo qual você deseja receber atualizações recebeu a primeira curtida."
-                    notify_single_user(title, body, subscriber)
+                if is_first_like or is_first_comment:
+                    notification_data = get_notification_props(entity_type, post)
+                    notify_single_user(notification_data, subscriber)
 
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""

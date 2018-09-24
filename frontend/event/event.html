@@ -10,7 +10,7 @@
                 <img ng-src="{{ eventCtrl.user.current_institution.photo_url }}"
                 title="{{eventCtrl.user.current_institution.name}}"
                 style="border-radius: 50%; margin-top: 7px" width="50px" height="50px"/>
-                <h4 style="margin-left: 15px; color: #03b3a1;">CRIAR EVENTO</h4>
+                <h4 class="font-resp create-event">CRIAR EVENTO</h4>
               </md-card-content>
               <div flex>
               </div>
@@ -31,7 +31,7 @@
               <h4>Nenhum evento a ser exibido.</h4>
             </md-content>
         </md-card>
-        <md-content flex id="content" class="body custom-scrollbar">
+        <md-content flex id="content" class="body custom-scrollbar container-resp box">
           <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
             <div layout="row">
@@ -42,9 +42,9 @@
                   <md-icon>share</md-icon>
                 </md-button>
               </div>
-              <div flex style="margin-left: -22px;">
+              <div flex class="container-resp" style="margin-left: -22px;">
                 <md-card>
-                    <event-details event="event" posts="eventCtrl.posts" is-event-page=false></event-details>
+                    <event-details class="box" event="event" posts="eventCtrl.posts" is-event-page=false></event-details>
                 </md-card>
               </div>
             </div>

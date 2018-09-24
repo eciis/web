@@ -116,21 +116,21 @@
             </div>
           </div>
         </md-card-content>
-        <div ng-if="eventDetailsCtrl.event.text">
+        <div class="box" ng-if="eventDetailsCtrl.event.text">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex class="text">
             <h2>Descrição</h2>
             <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)"></div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.programation">
+        <div class="box" ng-if="eventDetailsCtrl.event.programation">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex class="text">
             <h2>Programação</h2>
             <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)"></div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.video_url.length > 0">
+        <div class="box" ng-if="eventDetailsCtrl.event.video_url.length > 0">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex>
             <h2>Vídeos</h2>
@@ -142,7 +142,7 @@
             </div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.useful_links.length > 0">
+        <div class="box" ng-if="eventDetailsCtrl.event.useful_links.length > 0">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex>
             <h2>Links úteis</h2>

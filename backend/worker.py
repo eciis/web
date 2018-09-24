@@ -268,6 +268,7 @@ class PostNotificationHandler(BaseHandler):
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
+        is_first_like = post.get_number_of_likes() == 1
 
         notification_message = post.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -286,6 +287,11 @@ class PostNotificationHandler(BaseHandler):
                     entity_key=post_key,
                     message=notification_message
                 )
+                
+                if is_first_like:
+                    title = "Primeira curtida"
+                    body = "O post pelo qual você deseja receber atualizações recebeu a primeira curtida."
+                    notify_single_user(title, body, subscriber)
 
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""
@@ -345,7 +351,6 @@ class NotifyFollowersHandler(BaseHandler):
                     message=notification_message,
                     entity=entity
                 )
-            notify_single_user("bla", "blabla", follower.key.urlsafe())
 
 
 class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):

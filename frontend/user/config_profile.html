@@ -1,0 +1,87 @@
+<md-content class="body custom-scrollbar content">
+  <div>
+    <md-card>
+      <md-toolbar md-colors="{background: 'teal-500'}">
+        <div class="md-toolbar-tools">
+          <h1>
+            <md-icon>person</md-icon>
+            Dados pessoais
+          </h1>
+          <span md-truncate></span>
+        </div>
+      </md-toolbar>
+      <md-card-content >
+        <form ng-submit="configProfileCtrl.finish()" prevent-state-change="configProfileCtrl.newUser">
+          <div class="info-user">
+            <div style="position: relative; margin: auto;">
+                 <img id="user-image" ng-src="{{ configProfileCtrl.photo_url }}">
+                  <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                    ngf-accept="'image/*'" ngf-max-size="5MB"
+                    ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
+                    class="md-icon-button edit-profile-avatar-button" title="Altere a imagem">
+                    <md-icon class="edit-profile-avatar-icon">add_a_photo</md-icon>
+                  </md-button>
+            </div>
+            <div md-theme="input" class="input">
+              <md-input-container style="width: 100%;">
+                <label>Nome</label>
+                <input ng-model="configProfileCtrl.newUser.name" required>
+              </md-input-container>
+              <md-input-container style="width: 100%;">
+                <label>Email</label>
+                <input ng-model="configProfileCtrl.newUser.email" type="email" disabled>
+              </md-input-container>
+              <md-input-container style="width: 100%;">
+              <label>CPF</label>
+              <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+                mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
+              </md-input-container>
+            </div>
+          </div>
+          <load-circle ng-if="configProfileCtrl.loadingSubmission"></load-circle>
+          <section ng-if="!configProfileCtrl.loadingSubmission" class="buttons-align">
+            <md-button ng-click="configProfileCtrl.deleteAccount($event)" md-colors="{background: 'red-500'}">Excluir conta</md-button>
+            <md-button type="submit" md-colors="{background: 'teal-500'}">Concluir edição</md-button>
+          </section>
+        </form>
+      </md-card-content>
+    </md-card>
+    <md-card>
+        <md-toolbar md-colors="{background: 'teal-500'}">
+          <div class="md-toolbar-tools">
+            <h1>
+              <md-icon>account_balance</md-icon> 
+              Vínculos institucionais
+            </h1>
+            <span flex md-truncate></span>
+          </div>
+        </md-toolbar>
+        <md-card-content >
+            <md-list class="md-dense">
+                <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
+                <md-list-item class="md-3-line info-user" ng-repeat="institution in configProfileCtrl.user.institutions track by institution.key">
+                  <img id="inst-image" ng-src="{{ institution.photo_url }}"/>
+                  <div id="text" class="md-list-item-text layout-column">
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
+                        {{ institution.acronym }}
+                    </a>
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
+                        {{ institution.name }}
+                    </a>
+                  </div>
+                  <div>
+                    <md-button class="md-secondary sm-icon-button" title="Editar perfil institucional"
+                    ng-click="configProfileCtrl.editProfile(institution, $event)" md-colors="{background: 'light-green'}">
+                      <md-icon>edit</md-icon>
+                    </md-button>
+                    <md-button class="md-secondary sm-icon-button" title="Remover vínculo com a instituição"
+                    ng-click="configProfileCtrl.removeInstitution($event, institution)" md-colors="{background: 'light-green'}">
+                      <md-icon>delete</md-icon>
+                    </md-button>
+                  </div>
+                </md-list-item>
+              </md-list>
+        </md-card-content>
+    </md-card>
+  </div>
+</md-content>

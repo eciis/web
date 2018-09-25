@@ -1,0 +1,54 @@
+.default-step {
+    color: #FFFFFF;
+    width: 20px;
+    height: 20px;
+}
+
+.icon-step {
+    color: #FFFFFF;
+    margin: 4px 4px;
+    font-size: 12px;
+}
+
+.create-event {
+    margin-left: 15px;
+    color: #03b3a1;
+}
+
+@media screen and (max-width: 450px) {
+    .font-resp {
+        font-size: 12px;
+    }
+
+    .select-resp {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    #hide-share {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 1640px) {
+    .container-resp {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .box {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .container-resp {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .box {
+        width: 100%;
+    }
+}

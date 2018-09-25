@@ -101,7 +101,7 @@
                 url: "/config_profile",
                 views: {
                     user_content: {
-                        templateUrl: "app/auth/config_profile.html",
+                        templateUrl: "app/user/config_profile.html",
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }

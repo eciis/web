@@ -10,11 +10,47 @@
         var authObj = firebase.auth();
         var userAuthenticated;
         var userInfo;
+        var tokenLoaded = false;
+        var teste;
+        var teste2;
         var provider = new firebase.auth.GoogleAuthProvider();
+        
+        service.tokenLoaded = async () => {
+            if (!teste2) {
+                teste2 = new Promise((resolve) => {
+                    if (tokenLoaded) {
+                        resolve(userInfo.accessToken);
+                    } else {
+                        teste = resolve;
+                    }
+                });
+            }
+
+            return teste2;
+        };
+
+        function getIdToken(user) {
+            user.getIdToken().then(function(userToken) {
+                if (!userInfo) {
+                    var parse = JSON.parse($window.localStorage.userInfo);
+                    userInfo = new User(parse);
+                }
+                userInfo.accessToken = userToken;
+                service.save();
+
+                if (teste)
+                    teste(userToken);
+                tokenLoaded = true;
+            })
+        }
 
         authObj.onAuthStateChanged(function(user) {
             if (user) {
+                getIdToken(user);
                 userAuthenticated = user;
+                setInterval(() => {
+                    getIdToken(user);
+                }, 3500000);
             }
           });
 
@@ -134,7 +170,8 @@
         };
         
         service.getUserToken = function getUserToken() {
-            refreshTokenAsync();
+            //refreshTokenAsync();
+            console.log("ola mundo");
             return userInfo.accessToken;
         };
 

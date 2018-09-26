@@ -7,12 +7,9 @@
           <div layout="row" layout-align="center">
             <md-icon>send</md-icon>
           </div>
-          <h1 style="margin-left: 5px;" hide show-gt-xs>
+          <h1 id="manage-inst-titles" style="margin-left: 5px;">
             Convidar instituição
           </h1>
-          <h1 style="margin-left: 5px; font-size: 18px;" hide show-xs>
-              Convidar instituição
-            </h1>
           <span flex md-truncate></span>
           <md-button class="md-icon-button md-secondary">
             <md-icon>{{inviteInstHierCtrl.showSendInvite ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>
@@ -53,10 +50,7 @@
           <div layout="row" layout-align="center start">  
             <md-icon>account_balance</md-icon>
           </div>
-          <h1 style="margin-left: 5px;" hide show-gt-xs>
-            Instituição hierarquicamente superior
-          </h1>
-          <h1 style="margin-left: 5px; font-size: 18px;" hide show-xs>
+          <h1 id="manage-inst-titles" style="margin-left: 5px;">
             Instituição hierarquicamente superior
           </h1>
           <span flex md-truncate></span>
@@ -114,10 +108,7 @@
               <div layout="row" layout-align="center start">  
                   <md-icon>account_balance</md-icon>
                 </div>
-                <h1 style="margin-left: 5px;" hide show-gt-xs>
-                  Instituições hierarquicamente subordinadas
-                </h1>
-                <h1 style="margin-left: 5px; font-size: 18px;" hide show-xs>
+                <h1 id="manage-inst-titles" style="margin-left: 5px;">
                   Instituições hierarquicamente subordinadas
                 </h1>
             <span flex md-truncate></span>
@@ -171,12 +162,9 @@
             <div layout="row" layout-align="center">
               <md-icon ng-class="(inviteInstHierCtrl.hasRequested()) ? 'notification-badge' : ''" data-badge>feedback</md-icon>
             </div>
-            <h1 style="margin-left: 5px;" hide show-gt-xs>
+            <h1 id="manage-inst-titles" style="margin-left: 5px;">
               <span md-colors="{color: 'grey-50'}">Vinculos pendentes</span>
             </h1>
-            <h1 style="margin-left: 5px; font-size: 18px;" hide show-xs>
-                <span md-colors="{color: 'grey-50'}">Vinculos pendentes</span>
-              </h1>
             <span flex md-truncate></span>
             <md-button class="md-icon-button md-secondary">
               <md-icon>{{inviteInstHierCtrl.showRequestInvites ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</md-icon>

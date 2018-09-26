@@ -17,6 +17,10 @@
     #upload-csv-text {
         font-size: 14px;
     }
+
+    #manage-inst-titles {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 400px) {
@@ -36,5 +40,9 @@
 
     #invitee-text {
         font-size: 11px;
+    }
+
+    #manage-inst-titles {
+        font-size: 14px;
     }
 }

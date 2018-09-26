@@ -73,6 +73,13 @@
             return notificationsRef;
         }
 
+        /**
+         * It is responsible for check if the user already have a token.
+         * If it does, the token is replaced by the new one received as parameter.
+         * Otherwise the token is saved.
+         * @param {String} token 
+         * @param notificationsRef 
+         */
         function setToken(token, notificationsRef) {
             service.firebaseArrayNotifications.$loaded().then((data) => {
                 let currentTokenObject = data[0];

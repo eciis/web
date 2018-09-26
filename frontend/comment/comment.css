@@ -1,10 +1,13 @@
+.reply-container {
+    margin-top: 0.7em;
+}
 
 .comment-header {
     margin-bottom: 0.5em;
 }
 
 .user-name {
-    font-size: 15px;
+    font-size: 0.9em;
     color: #00796B;
 }
 
@@ -13,19 +16,20 @@
 }
 
 .comment-btn-text {
-    font-size: 0.7em; 
+    font-size: 0.7em;
 }
 
 .btns-row {
     margin-top: 0.5em;
 }
 
-.comment-btns {
+.comment-btn {
     background: none;
     border: 0;
+    padding-left: initial;
 }
 
-.comment-btns:hover {
+.comment-btn:hover {
     background-color: #efefef;
 }
 
@@ -38,21 +42,11 @@
 }
 
 .reply {
-    margin-left: 5px; 
-    border-left: 2px solid #8BC34A;
-}
-
-.reply-text {
-    margin-top: 4px;
-    white-space: pre-line;
-}
-
-.reply-input-item {
-    margin-left: 5px;
+    margin-left: 0.3em; 
+    border-left: 0.1em solid #8BC34A;
 }
 
 .reply-input-container {
-    font-size: 16px;
     width: 100%;
 }
 
@@ -62,20 +56,18 @@
     resize: none;
 }
 
+.reply-btn-container {
+    margin-top: -2em;
+}
+
 .send-reply-btn {
-    margin-top: -3em;
     margin-left: auto;
+    z-index: 3;
 }
 
 @media screen and (max-width: 350px) {
     .comment-btn-text {
         font-size: 0.6em;
-    }
-}
-
-@media screen and (min-width: 351px) and (max-width: 450px) {
-    .comment-btn-text {
-        font-size: 0.7em;
     }
 }
 
@@ -86,5 +78,11 @@
 
     .inst-name {
         display: none;
+    }
+}
+
+@media screen and (min-width: 451px) {
+    .comment-btn-text {
+        margin-left: -0.6em;        
     }
 }

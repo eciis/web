@@ -20,6 +20,13 @@
         userInactiveCtrl.institutionSelect = {};
         var ACTIVE = 'active';
 
+        window.addEventListener('popstate', function(event) {
+            // The popstate event is fired each time when the current history entry changes.
+            userInactiveCtrl.logout();
+            window.removeEventListener('popstate', ()=>{})
+        
+        }, false);
+
         userInactiveCtrl.logout = function logout() {
             AuthService.logout();
         };
@@ -126,6 +133,7 @@
         };
 
         userInactiveCtrl.createInst = function createInst() {
+            window.removeEventListener('popstate', ()=>{});
             $state.go("create_institution_form");
             $mdDialog.hide();
         };

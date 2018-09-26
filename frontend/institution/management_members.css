@@ -29,4 +29,12 @@
         font-size: 12px;
         margin-left: -16px;
     }
+
+    #invite-text {
+        font-size: 12px;
+    }
+
+    #invitee-text {
+        font-size: 11px;
+    }
 }

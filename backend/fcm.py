@@ -122,5 +122,6 @@ def token_filter(data, user_key):
         The filtered token.
     """
     token_object = data[user_key]
-    token_object = token_object[token_object.keys()[0]]
+    firebase_object = token_object.keys()[0]
+    token_object = token_object[firebase_object]
     return token_object['token']

@@ -5,8 +5,19 @@
 
     app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
         AuthService, $firebaseObject) {
+        /**
+         * Service responsible for send request permission
+         * to enable notifications to the user and for deal
+         * with the token resulted from this operation by saving
+         * or updating it in firebase database.
+         * Just in case the user is on a mobile device.
+         */
         const service = this;
-
+        
+        /**
+         * Retrieves the application instance of
+         * firebase messaging.
+         */
         const messaging = firebase.messaging();
 
         const ref = firebase.database().ref();

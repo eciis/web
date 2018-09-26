@@ -1,5 +1,9 @@
+.comment {
+    margin-bottom: -1.1em;
+}
+
 .reply-container {
-    margin-top: 0.7em;
+    margin-top: 1.2em;
 }
 
 .comment-header {
@@ -20,7 +24,7 @@
 }
 
 .btns-row {
-    margin-top: 0.5em;
+    margin: 0.5em 0 0.5em 0;
 }
 
 .comment-btn {
@@ -84,5 +88,9 @@
 @media screen and (min-width: 451px) {
     .comment-btn-text {
         margin-left: -0.6em;        
+    }
+
+    .reply {
+        margin-left: 3.5em; 
     }
 }

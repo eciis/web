@@ -888,6 +888,17 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     font-size: 100px;
 }
 
+.user-name {
+    font-size: 15px;
+    color: #00796B;
+}
+
+.user-picture {
+    border-radius: 50%;
+    min-width: 55px;
+    min-height: 55px;
+}
+
 .left-justify {
     display: flex;
     justify-content: flex-start;

@@ -29,20 +29,26 @@
           <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
             <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
           </a>
-          <span style="color: white; margin-top: auto;">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+          <span style="color: white; margin-top: auto;" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
       </md-card-content>
-      <md-card-content ng-if="eventDetailsCtrl.isEventPage" hide-xs>
+      <md-card-content ng-if="eventDetailsCtrl.isEventPage">
         <md-card-actions layout="row">
-          <md-menu md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
-            <md-button class="md-icon-button" title="Opções" hide-xs
-            style="margin-top: 25px;" ng-click="$mdMenu.open(ev)">
-              <md-icon style="color: white;">more_vert</md-icon>
-            </md-button>
+          <md-menu style="margin-left: auto;" md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
+              <md-button style="margin-top: 25px;" class="md-icon-button" title="Opções"
+              ng-click="$mdMenu.open(ev)">
+                <md-icon style="color: white;">more_vert</md-icon>
+              </md-button>
             <md-menu-content>
               <md-menu-item ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)">
                   <md-icon>edit</md-icon>
                   Editar evento
+                </md-button>
+              </md-menu-item>
+              <md-menu-item id="hide-share">
+                <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)"">
+                  <md-icon>share</md-icon>
+                  Compartilhar evento
                 </md-button>
               </md-menu-item>
               <md-menu-item>
@@ -53,7 +59,7 @@
               </md-menu-item>
             </md-menu-content>
           </md-menu>
-          <md-button class="md-fab md-primary" title="Compartilhar"
+          <md-button class="md-fab md-primary" title="Compartilhar" hide-xs
           style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
           ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
             <md-icon>share</md-icon>
@@ -62,10 +68,10 @@
       </md-card-content>
     </div>
     <div ng-if="eventDetailsCtrl.isEventPage" md-colors="{background: 'default-grey-50'}">
-      <div style="margin-left: 20px; margin-right: 20px;">
-        <md-card-content flex>
+      <div style="margin-left: 20px; margin-right: 20px;" class="container-resp">
+        <md-card-content>
           <h4 style="color: #03b3a1;">Endereço</h4>
-          <div layout="row" class="left-justify">
+          <div layout="row" class="box">
             <p>
               <md-icon style="font-size: 40px;">location_on</md-icon>
             </p>
@@ -81,56 +87,50 @@
               </span>
             </div>
           </div>
-          <div layout="row" layout-xs="column" layout-align="space-between center">
-            <div layout="column" style="margin-right: 25px">
-              <h4 style="color: #03b3a1;">Horário</h4>
-              <div layout="row" class="left-justify">
-                <p>
-                  <md-icon style="font-size: 40px;">access_time</md-icon>
-                </p>
-                <div layout="column" style="margin-left: 40px;">
-                  <h3>
-                      De {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-                  </h3>
-                  <span style="margin-top: -15px; color: #959796;">
-                      até {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
-                  </span>
-                </div>
-              </div>
+          <h4 style="color: #03b3a1;">Horário</h4>
+          <div layout="row" class="box">
+            <p>
+              <md-icon style="font-size: 40px;">access_time</md-icon>
+            </p>
+            <div layout="column" style="margin-left: 40px;">
+              <h3>
+                  De {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+              </h3>
+              <span style="margin-top: -15px; color: #959796;">
+                  até {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amCalendar:referenceTime:formats }}
+              </span>
             </div>
-            <div layout="column">
-              <h4 style="color: #03b3a1;">Site oficial</h4>
-              <div layout="row" class="left-justify">
-                <p>
-                  <md-icon style="font-size: 40px;">public</md-icon>
-                </p>
-                <div layout="column" class="break" style="margin-left: 40px;">
-                  <h3>
-                    <a ng-if"eventDetailsCtrl.event.official_site" target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
-                      {{ eventDetailsCtrl.getOfficialSite() }}
-                    </a>
-                    <b ng-if="!eventDetailsCtrl.event.official_site">Não definido</b>
-                  </h3>
-                </div>
-              </div>
+          </div>
+          <h4 style="color: #03b3a1;">Site oficial</h4>
+          <div layout="row" class="box">
+            <p>
+              <md-icon style="font-size: 40px;">public</md-icon>
+            </p>
+            <div layout="column" class="break" style="margin-left: 40px;">
+              <h3>
+                <a ng-if="eventDetailsCtrl.event.official_site" target="_blank" href="{{eventDetailsCtrl.event.official_site}}">
+                  {{ eventDetailsCtrl.getOfficialSite() }}
+                </a>
+                <b ng-if="!eventDetailsCtrl.event.official_site">Não definido</b>
+              </h3>
             </div>
           </div>
         </md-card-content>
-        <div ng-if="eventDetailsCtrl.event.text">
+        <div class="box" ng-if="eventDetailsCtrl.event.text">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex class="text">
             <h2>Descrição</h2>
             <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)"></div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.programation">
+        <div class="box" ng-if="eventDetailsCtrl.event.programation">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex class="text">
             <h2>Programação</h2>
             <div ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)"></div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.video_url.length > 0">
+        <div class="box" ng-if="eventDetailsCtrl.event.video_url.length > 0">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex>
             <h2>Vídeos</h2>
@@ -142,7 +142,7 @@
             </div>
           </md-card-content>
         </div>
-        <div ng-if="eventDetailsCtrl.event.useful_links.length > 0">
+        <div class="box" ng-if="eventDetailsCtrl.event.useful_links.length > 0">
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex>
             <h2>Links úteis</h2>

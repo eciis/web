@@ -874,20 +874,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     margin-left: 2px;
 }
 
-.edit-profile-avatar-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.edit-profile-avatar-icon {
-    color: white;
-    height: 100px;
-    width: 100px;
-    font-size: 100px;
-}
-
 .user-name {
     font-size: 15px;
     color: #00796B;

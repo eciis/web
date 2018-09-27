@@ -8,7 +8,7 @@
     importScripts('app/config.js');
 
     let messaging;
-    const CACHE_SUFIX = 'dev';
+    const CACHE_SUFIX = '10';
 
     function setupFirebase() {
         firebase.initializeApp(FIREBASE_CONFIG);

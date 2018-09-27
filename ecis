@@ -114,6 +114,17 @@ function set_frontend_url {
     set_config_file $line $service $url $service_name;
 }
 
+function set_app_version_config_sw {
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE
+    catch_error $? "APP VERSION on Frontend $1"
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE
+    catch_error $? "APP VERSION on Support $1"
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE
+    catch_error $? "APP VERSION on LandingPage $1"
+    sed -i "11s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+    catch_error $? "APP VERSION on SW $1"
+}
+
 # Usage [ --error ] <message_to_log>
 function log_message {
     if [ "$1" == "--error" ]; then
@@ -141,14 +152,7 @@ function catch_error {
 case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
-        catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
-        catch_error $? "APP VERSION on Support $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
-        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
-        sed -i "11s|.*|    const CACHE_SUFIX = '$APP_VERSION';|" $SW_FILE
-        catch_error $? "APP VERSION on SW $APP_VERSION"
+        set_app_version_config_sw $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -247,14 +251,7 @@ case "$1" in
         git checkout tags/"$APP_VERSION"
         catch_error $? "Git checked out to tag $APP_VERSION"
 
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
-        catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
-        catch_error $? "APP VERSION on Support $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
-        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
-        sed -i "11s|.*|    const CACHE_SUFIX = '$APP_VERSION';|" $SW_FILE
-        catch_error $? "APP VERSION on SW $APP_VERSION"
+        set_app_version_config_sw $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")

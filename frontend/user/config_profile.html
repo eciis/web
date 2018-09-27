@@ -61,7 +61,7 @@
                 <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
                 <md-list-item class="md-3-line info-user" ng-repeat="institution in configProfileCtrl.user.institutions track by institution.key">
                   <img id="inst-image" ng-src="{{ institution.photo_url }}"/>
-                  <div id="text" class="md-list-item-text layout-column">
+                  <div id="text" class="md-list-item-text column-responsive">
                     <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
                         {{ institution.acronym }}
                     </a>

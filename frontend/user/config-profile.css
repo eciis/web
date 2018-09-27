@@ -28,21 +28,7 @@
     margin: auto;
 }
 
-.layout-row{
-    display: flex;
-    flex-direction: row;
-    max-height: 100%;
-}
-
-.layout-align-center-center{
-    max-width: 100%;
-    align-content: center;
-    -webkit-box-align: center;
-    justify-content: center;
-    -webkit-box-pack: center;
-}
-
-.layout-column{
+.column-responsive{
     max-width: 100%;
 }
 

@@ -55,7 +55,7 @@
 }
 
 .reply-input {
-    max-height: 400px;
+    max-height: 10em;
     overflow-y: auto;
     resize: none;
 }

@@ -8,7 +8,8 @@
     importScripts('app/config.js');
 
     let messaging;
-    const CACHE_SUFIX = '10';
+    // if the line above is moved, change the /ecis script.
+    const CACHE_SUFIX = 'master';
 
     function setupFirebase() {
         firebase.initializeApp(FIREBASE_CONFIG);

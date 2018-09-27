@@ -114,15 +114,19 @@ function set_frontend_url {
     set_config_file $line $service $url $service_name;
 }
 
-function set_app_version_config_sw {
+function set_app_version_config {
     sed -i "8s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE
     catch_error $? "APP VERSION on Frontend $1"
     sed -i "8s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE
     catch_error $? "APP VERSION on Support $1"
     sed -i "8s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE
     catch_error $? "APP VERSION on LandingPage $1"
-    sed -i "11s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
-    catch_error $? "APP VERSION on SW $1"
+
+}
+
+function set_cache_suffix_sw {
+   sed -i "12s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+   catch_error $? "CACHE_SUFIX on SW $1"
 }
 
 # Usage [ --error ] <message_to_log>
@@ -150,9 +154,20 @@ function catch_error {
 }
 
 case "$1" in
+
+    commit)
+        set_cache_suffix_sw "master"
+
+        read -p "${bold}Commit message${_bold} " MSG
+        current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
+        git commit -m "$MSG"
+        git push origin current_branch
+    ;;
+
     run)
         APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
-        set_app_version_config_sw $APP_VERSION
+        set_cache_suffix_sw $APP_VERSION
+        set_app_version_config $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -251,7 +266,8 @@ case "$1" in
         git checkout tags/"$APP_VERSION"
         catch_error $? "Git checked out to tag $APP_VERSION"
 
-        set_app_version_config_sw $APP_VERSION
+        set_cache_suffix_sw $APP_VERSION
+        set_app_version_config $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")

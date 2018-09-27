@@ -12,7 +12,7 @@
       <p ng-bind-html="commentCtrl.comment.text"></p>
       <!-- buttons -->
       <div layout="row" class="btns-row">
-
+        <!-- delete -->
         <button ng-if="commentCtrl.canDeleteComment()" class="comment-btn"
           ng-click="commentCtrl.confirmCommentDeletion($event)">
           <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" 
@@ -21,7 +21,7 @@
           </md-button>
           <b class="comment-btn-text">EXCLUIR</b>
         </button>
-        
+        <!-- like -->
         <button class="left-align comment-btn" ng-click="commentCtrl.likeOrDislike()"
           ng-disabled="commentCtrl.disableButton()">
           <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite"
@@ -37,7 +37,7 @@
             CURTIR
           </b>
         </button>
-
+        <!-- reply -->
         <button ng-click="commentCtrl.toggleReplies()" class="comment-btn"
           ng-disabled="commentCtrl.hideReplies()">
           <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply" title="Responder"
@@ -52,7 +52,6 @@
             RESPONDER
           </b>
         </button>
-
       </div>
     </div>
   </md-list-item>
@@ -60,7 +59,6 @@
   <div class="reply-container">
     <md-list-item class="md-3-line reply" ng-show="commentCtrl.showReplies" 
       ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'" id="{{reply.id}}">
-  
       <img ng-src="{{reply.author_img}}" class="md-avatar" alt="{{reply.author_name}}" />
       <div class="md-list-item-text" layout="column">
         <div class="comment-header">

@@ -7,11 +7,14 @@ default_expiration: "1s"
 
 handlers:
 - url: /(login|logout)
+  secure: always
   script: main.app
 
 - url: /api.*
+  secure: always
   script: main.app
 
 - url: /admin.*
+  secure: always
   script: admin.app
   login: admin

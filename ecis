@@ -161,7 +161,7 @@ case "$1" in
         read -p "${bold}Commit message${_bold} " MSG
         current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
         git commit -m "$MSG"
-        git push origin current_branch
+        git push origin $current_branch
     ;;
 
     run)

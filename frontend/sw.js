@@ -8,6 +8,7 @@
     importScripts('app/config.js');
 
     let messaging;
+    const CACHE_SUFIX = 'dev';
 
     function setupFirebase() {
         firebase.initializeApp(FIREBASE_CONFIG);
@@ -16,7 +17,7 @@
 
     workbox.core.setCacheNameDetails({
         prefix: 'plataforma-cis',
-        suffix: 'v2'
+        suffix: CACHE_SUFIX
     });
 
     const precacheCacheName = workbox.core.cacheNames.precache;
@@ -26,6 +27,17 @@
         const myCache = await caches.open(precacheCacheName);
         await myCache.addAll(urls);
     }
+
+    /**
+     * Clear old version caches.
+     */
+    function clearOldCache() {
+        caches.keys().then((keys) => {keys.filter((key) => !key.includes(CACHE_SUFIX)).map((key) => caches.delete(key))});
+    }
+
+    self.addEventListener('activate', () => {
+        clearOldCache();
+    });
 
     workbox.routing.registerRoute(
         ({ event }) => event.request.mode === 'navigate',

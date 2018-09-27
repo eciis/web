@@ -23,6 +23,7 @@ SUPPORT_LOCAL="localhost:8083"
 FRONTEND_CONFIG_FILE="frontend/config.js"
 SUPPORT_CONFIG_FILE="support/config.js"
 LANDINGPAGE_CONFIG_FILE="landing/config.js"
+SW_FILE="frontend/sw.js"
 
 git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE
 
@@ -146,6 +147,8 @@ case "$1" in
         catch_error $? "APP VERSION on Support $APP_VERSION"
         sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
         catch_error $? "APP VERSION on LandingPage $APP_VERSION"
+        sed -i "11s|.*|    const CACHE_SUFIX = '$APP_VERSION';|" $SW_FILE
+        catch_error $? "APP VERSION on SW $APP_VERSION"
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -250,6 +253,8 @@ case "$1" in
         catch_error $? "APP VERSION on Support $APP_VERSION"
         sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
         catch_error $? "APP VERSION on LandingPage $APP_VERSION"
+        sed -i "11s|.*|    const CACHE_SUFIX = '$APP_VERSION';|" $SW_FILE
+        catch_error $? "APP VERSION on SW $APP_VERSION"
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")

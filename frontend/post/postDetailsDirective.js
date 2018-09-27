@@ -148,7 +148,7 @@
             const hasInstitutionPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_INST_PERMISSION, postDetailsCtrl.post.institution_key);
             const hasPostPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_POST_PERMISSION, postDetailsCtrl.post.key);
             const hasPermission = hasInstitutionPermission || hasPostPermission;
-            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
         };
 
         postDetailsCtrl.showActivityButtons = function showActivityButtons() {

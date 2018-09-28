@@ -209,7 +209,7 @@
         title="Apagar o post">
         <md-icon>delete</md-icon>
       </md-button>
-      <b class="post-btn-text">EXCLUIR</b>
+      <b id="delete-btn-text" class="post-btn-text">EXCLUIR</b>
     </button>
     <div class="post-right-btns" ng-if="postDetailsCtrl.showActivityButtons()">
       <!-- like -->
@@ -221,7 +221,7 @@
           <md-icon>grade</md-icon>
         </md-button>
         <span class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
-        <b class="post-btn-text like-btn-text">CURTIR</b>
+        <b class="post-btn-text">CURTIR</b>
       </button>
       <!-- comments -->
       <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()">
@@ -230,7 +230,7 @@
           <md-icon>comments</md-icon>
         </md-button>
         <span class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
-        <b class="post-btn-text like-btn-text">COMENTAR</b>
+        <b class="post-btn-text">COMENTAR</b>
       </button>
     </div>
   </md-card-actions>
@@ -257,21 +257,24 @@
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
   </div>
   
-
-  <md-list ng-if="!postDetailsCtrl.showSurvey() && postDetailsCtrl.showCommentInput()">
+  <md-list ng-if="postDetailsCtrl.showCommentInput()">
     <md-list-item class="md-3-line">
-      <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
+      <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}"/>
       <div class="md-list-item-text">
         <md-input-container class="md-block">
-          <form ng-submit="postDetailsCtrl.createComment()" layout="column">
+          <div layout="column">
             <label>Comentar</label>
-            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.newComment" rows="1" md-select-on-focus
-            ng-disabled="postDetailsCtrl.savingComment"></textarea>
+            <textarea class="input-text-area" ng-model="postDetailsCtrl.newComment"
+              rows="1" md-select-on-focus ng-disabled="postDetailsCtrl.savingComment">
+            </textarea>
             <div layout="row" layout-align="end center">
-              <md-button ng-show="postDetailsCtrl.newComment"
-              class="md-raised md-primary" aria-label="postar" type="submit" md-colors="{background: 'teal-500'}">Enviar</md-button>
+              <md-button ng-show="postDetailsCtrl.newComment" class="md-raised md-primary"
+                ng-click="postDetailsCtrl.createComment()" aria-label="postar"
+                type="submit" md-colors="{background: 'teal-500'}">
+                Enviar
+              </md-button>
             </div>
-          </form>
+          </div>
         </md-input-container>
       </div>
     </md-list-item>

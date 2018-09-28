@@ -1092,3 +1092,9 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .flat-btn:hover {
     background-color: #efefef;
 }
+
+.input-text-area {
+    max-height: 10em;
+    overflow-y: auto;
+    resize: none;
+}

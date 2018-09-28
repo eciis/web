@@ -132,7 +132,10 @@
         };
 
         postDetailsCtrl.showCommentInput = function showCommentInput() {
-            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
+            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && 
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+                !postDetailsCtrl.isInstInactive() && 
+                !postDetailsCtrl.showSurvey();
         };
 
         postDetailsCtrl.showPost = function showPost() {

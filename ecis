@@ -125,7 +125,7 @@ function set_app_version_config {
 }
 
 function set_cache_suffix_sw {
-   sed -i "12s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+   sed -i "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
    catch_error $? "CACHE_SUFIX on SW $1"
 }
 
@@ -157,11 +157,10 @@ case "$1" in
 
     commit)
         set_cache_suffix_sw "master"
+        git add frontend/sw.js
 
-        read -p "${bold}Commit message${_bold} " MSG
-        current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
+        read -p "${bold}$(echo -e 'Type commit message \n\b')${bold}" MSG
         git commit -m "$MSG"
-        git push origin $current_branch
     ;;
 
     run)

@@ -169,8 +169,7 @@ case "$1" in
         git add .
         git_commit
         current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
-        read -p "${bold}$(echo -e 'Type commit message \n\b> ')${reset} $current_branch" OLAR
-        git push origin current_branch
+        git push origin $current_branch
     ;;
 
     run)

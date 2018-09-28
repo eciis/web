@@ -159,7 +159,7 @@ case "$1" in
         set_cache_suffix_sw "master"
         git add frontend/sw.js
 
-        read -p "${bold}$(echo -e 'Type commit message \n\b')${bold}" MSG
+        read -p "${bold}$(echo -e 'Type commit message \n\b> ')${reset}" MSG
         git commit -m "$MSG"
     ;;
 

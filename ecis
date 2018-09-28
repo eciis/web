@@ -168,12 +168,12 @@ case "$1" in
     git-all)
         git add .
         git_commit
-        current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
+        current_branch=$(git branch | grep "*" | awk '{print $2}')
         git push origin $current_branch
     ;;
 
     run)
-        APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
+        APP_VERSION=$(git branch | grep "*" | awk '{print $2}')
         set_cache_suffix_sw $APP_VERSION
         set_app_version_config $APP_VERSION
 

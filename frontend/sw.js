@@ -33,11 +33,11 @@
      * Clear old version caches.
      */
     function clearOldCache() {
-        caches.keys().then((keys) => {keys.filter((key) => !key.includes(CACHE_SUFIX)).map((key) => caches.delete(key))});
+        return caches.keys().then((keys) => {keys.filter((key) => !key.includes(CACHE_SUFIX)).map((key) => caches.delete(key))});
     }
 
-    self.addEventListener('activate', () => {
-        clearOldCache();
+    self.addEventListener('activate', (event) => {
+        event.waitUntil(clearOldCache());
     });
 
     workbox.routing.registerRoute(

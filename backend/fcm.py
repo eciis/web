@@ -17,26 +17,19 @@ ICON_URL = "https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/
 push_service = FCMNotification(api_key=SERVER_KEY)
 
 
-def notify_single_user(title, body, receiver_key):
+def notify_single_user(title, body, user_key):
     """Notify a single user.
+    It sends a notification to each user's device.
 
     Args:
         title: A string that represents the notification's title.
         body: The body message of the notification, the information
-        you want pass to the user.
-        receiver_key: The user's key.urlsafe(). It is the key
-        that identifies the user in the firebase's database.
-
-    Returns:
-        The result of the send notification request.
+        you want pass to the users.
+        user_key: user's urlsafe key.
     """
-    token = get_token(receiver_key)
-    if token:
-        result = push_service.notify_single_device(
-            registration_id=token, message_title=title, 
-            message_body=body, message_icon=ICON_URL
-        )
-        return result
+    tokens = get_single_user_tokens(user_key)
+    send_push_notifications(title, body, tokens)
+
 
 def notify_multiple_users(title, body, user_keys):
     """Notify multiple users.
@@ -49,56 +42,63 @@ def notify_multiple_users(title, body, user_keys):
         you want pass to the users.
         user_keys: A list with all users' urlsafe keys that will
         receive the notification.
-
-    Returns:
-        The result of the send notification request.
     """
-    tokens = get_tokens(user_keys)
+    tokens = get_multiple_user_tokens(user_keys)
+    send_push_notifications(title, body, tokens)
+
+
+def send_push_notifications(title, body, tokens):
+    """It wraps the call to pyfcm notify function.
+    
+    Args:
+        title: A string that represents the notification's title.
+        body: The body message of the notification, the information
+        you want pass to the users.
+        tokens: The devices' tokens that will receive
+        the notification.
+    """
     if tokens:
         result = push_service.notify_multiple_devices(
-            registration_ids=tokens, message_title=title, message_body=body
+            registration_ids=tokens, message_title=title,
+            message_body=body, message_icon=ICON_URL
         )
         return result
 
-def get_token(user_key):
+
+def get_single_user_tokens(user_key):
     """Calls get_tokens_from_firebase() 
-    to get all the tokens and then filter them with the user_key
-    using the token_filter function.
+    to get all the tokens and then filter them.
 
     Args:
         user_key: The user ndb key.urlsafe().
     
     Returns:
-        The user's token or None when the user hasn't
+        The user's tokens or an empty list when the user hasn't
         enabled notifications yet.
     """
-    data = get_tokens_from_firebase()
-    if not user_key in data.keys():
-        return None
-    return token_filter(data, user_key)
+    data = get_tokens_from_firebase(user_key)
+    tokens = filter_single_user_tokens(data)
+    return tokens
 
-def get_tokens(user_keys):
-    """This function calls get_tokens_from_firebase() 
-    to get all the tokens and then filter them with the user_keys
-    by looping for the keys and using the token_filter function.
+
+def get_multiple_user_tokens(users_keys):
+    """This function calls get_all_tokens_from_firebase() 
+    to get all the tokens and then filter them using
+    filter_multiple_user_tokens function.
 
     Args:
-        user_keys: The users ndb key.urlsafe().
+        users_keys: The users ndb key.urlsafe().
     
     Returns:
         The users' token or an empty list when None 
         of the users haven't enabled notifications yet.
     """
-    data = get_tokens_from_firebase()
-    data_keys = data.keys()
-    tokens = []
-    for key in user_keys:
-        if key in data_keys:
-            current_token = token_filter(data, key)
-            tokens.append(current_token)
+    data = get_all_tokens_from_firebase()
+    tokens = filter_multiple_user_tokens(data, users_keys)
     return tokens
 
-def get_tokens_from_firebase():
+
+def get_all_tokens_from_firebase():
     """This function only wraps the logic of 
     make a request to firebase to retrieve all 
     the tokens from the database.
@@ -108,20 +108,56 @@ def get_tokens_from_firebase():
     """
     response, content = _get_http().request(FIREBASE_TOKENS_ENDPOINT, method='GET')
     return json.loads(content)
-    
-def token_filter(data, user_key):
-    """Receives all the data retrieved
-    from firebase and filter it to get the
-    token of the user whose key is user_key.
+
+
+def get_tokens_from_firebase(user_key):
+    """It gets all tokens from the firebase 
+    of the user whose key is user_key received as parameter.
 
     Args:
-        data: All the data retrieved from firebase.
-        user_key: The user ndb key.urlsafe().
-
+        user_key: The user's urlsafe key.
+    
     Returns:
-        The filtered token.
+        The request's content parsed to json.
     """
-    token_object = data[user_key]
-    firebase_object = token_object.keys()[0]
-    token_object = token_object[firebase_object]
-    return token_object['token']
+    firebase_endpoint = "%s/pushNotifications/%s.json" %(FIREBASE_URL, user_key)
+    response, content = _get_http().request(firebase_endpoint, method='GET')
+    return json.loads(content)
+
+
+def filter_single_user_tokens(content):
+    """It loops through the content keys
+    and for each object it appends the 
+    token property to the token's list.
+
+    Args:
+        content: A json returned from firebase.
+    
+    Returns:
+        The user's tokens.
+    """
+    tokens = []
+    for key in content.keys():
+        tokens.append(content[key]['token'])
+    return tokens
+
+
+def filter_multiple_user_tokens(content, users_keys):
+    """For each user, represented by user_key
+    It get the user's firebase objects and loops through
+    each object getting the token.
+
+    Args:
+        content: The json returned from firebase
+        users_keys: The users' keys who will receive the
+        notification. 
+    
+    Returns:
+        The users' tokens.
+    """
+    tokens = []
+    for user_key in users_keys:
+        current_firebase_objects = content[user_key]
+        for firebase_object in current_firebase_objects:
+            tokens.append(firebase_object['token'])
+    return tokens

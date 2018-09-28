@@ -81,16 +81,10 @@
          * @param notificationsRef 
          */
         function setToken(token, notificationsRef) {
-            service.firebaseArrayNotifications.$loaded().then((data) => {
-                let currentTokenObject = data[0];
-                if (!currentTokenObject) {
-                    const tokenObject = $firebaseObject(notificationsRef);
-                    tokenObject.token = token;
-                    service.firebaseArrayNotifications.$add(tokenObject);
-                } else {
-                    currentTokenObject.token = token;
-                    service.firebaseArrayNotifications.$save(currentTokenObject);
-                }
+            service.firebaseArrayNotifications.$loaded().then(() => {
+                const tokenObject = $firebaseObject(notificationsRef);
+                tokenObject.token = token;
+                service.firebaseArrayNotifications.$add(tokenObject);
             });
         }
 

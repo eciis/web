@@ -166,7 +166,7 @@ case "$1" in
     ;;
 
     git-all)
-        git add .
+        git add -A
         git_commit
         current_branch=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
         git push origin $current_branch

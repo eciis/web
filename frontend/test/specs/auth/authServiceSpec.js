@@ -43,9 +43,11 @@
             expect(user).toEqual(new_user);
         });
 
-        it('should authService.getUserToken()', function() {
-            var userToken = authService.getUserToken();
-            expect(userToken).toEqual(userTest.accessToken);
+        it('should authService.getUserToken()', function(done) {
+            authService.getUserToken().then(userToken => {
+                expect(userToken).toEqual(userTest.accessToken);
+                done();
+            });
         });
 
         it('should authService.isLoggedIn()', function() {

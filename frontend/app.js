@@ -356,8 +356,8 @@
                 var AuthService = $injector.get('AuthService');
                 config.headers = config.headers || {};
                 if (AuthService.isLoggedIn()) {
-                    return AuthService.tokenLoaded().then(token => {
-                        config.headers.Authorization = 'Bearer ' + token;
+                    return AuthService.getUserToken().then(token => {
+                        config.headers.Authorization = 'Bearer ' + token;                        
                         
                         var API_URL = "/api/";
                         var FIRST_POSITION = 0;

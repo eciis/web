@@ -32,6 +32,12 @@
             AuthService.setupUser(idToken, true);
         };
 
+        AuthService.getUserToken = () => {
+            return {
+                then: (callback) => callback(idToken)
+            };
+        }
+
         AuthService.login(user);
 
         Config.BACKEND_URL = '';

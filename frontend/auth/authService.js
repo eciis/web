@@ -8,49 +8,48 @@
         var service = this;
 
         var authObj = firebase.auth();
-        var userAuthenticated;
         var userInfo;
-        var tokenLoaded = false;
-        var teste;
-        var teste2;
-        var provider = new firebase.auth.GoogleAuthProvider();
+        let tokenLoaded = false;
+        let resolveTokenPromise;
+        let loadTokenPromise;
+        let refreshInterval;
+        let provider = new firebase.auth.GoogleAuthProvider();
         
-        service.tokenLoaded = async () => {
-            if (!teste2) {
-                teste2 = new Promise((resolve) => {
-                    if (tokenLoaded) {
-                        resolve(userInfo.accessToken);
-                    } else {
-                        teste = resolve;
-                    }
+        service.getUserToken = async () => {
+            if (!tokenLoaded && !loadTokenPromise) {
+                loadTokenPromise = new Promise((resolve) => {
+                    resolveTokenPromise = resolve;
                 });
+            } else if (tokenLoaded) {
+                return userInfo.accessToken;
             }
 
-            return teste2;
+            return loadTokenPromise;
         };
 
         function getIdToken(user) {
             user.getIdToken().then(function(userToken) {
-                if (!userInfo) {
-                    var parse = JSON.parse($window.localStorage.userInfo);
-                    userInfo = new User(parse);
+                if (userInfo) {
+                    userInfo.accessToken = userToken;
+                    service.save();
+                    console.log(userToken);
                 }
-                userInfo.accessToken = userToken;
-                service.save();
 
-                if (teste)
-                    teste(userToken);
+                if (resolveTokenPromise)
+                    resolveTokenPromise(userToken);
+                    resolveTokenPromise = null;
+
                 tokenLoaded = true;
             })
         }
 
         authObj.onAuthStateChanged(function(user) {
+            const timeToRefresh = 3500000;
             if (user) {
                 getIdToken(user);
-                userAuthenticated = user;
-                setInterval(() => {
+                refreshInterval = setInterval(() => {
                     getIdToken(user);
-                }, 3500000);
+                }, timeToRefresh);
             }
           });
 
@@ -159,6 +158,7 @@
             authObj.signOut();
             delete $window.localStorage.userInfo;
             userInfo = undefined;
+            clearInterval(refreshInterval);
 
             executeLogoutListeners();
 
@@ -169,11 +169,11 @@
             return userInfo;
         };
         
-        service.getUserToken = function getUserToken() {
-            //refreshTokenAsync();
-            console.log("ola mundo");
-            return userInfo.accessToken;
-        };
+        // service.getUserToken = function getUserToken() {
+        //     //refreshTokenAsync();
+        //     console.log("ola mundo");
+        //     return userInfo.accessToken;
+        // };
 
         service.isLoggedIn = function isLoggedIn() {
             if (userInfo) {

@@ -270,8 +270,8 @@ class PostNotificationHandler(BaseHandler):
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
         
-        is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE'
-        is_first_comment = post.get_number_of_comments() == 1 and entity_type == 'COMMENT'
+        is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE_POST'
+        is_first_comment = post.get_number_of_comment() == 1 and entity_type == 'COMMENT'
 
         notification_message = post.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -290,7 +290,7 @@ class PostNotificationHandler(BaseHandler):
                     entity_key=post_key,
                     message=notification_message
                 )
-                
+
                 if is_first_like or is_first_comment:
                     notification_data = get_notification_props(entity_type, post)
                     notify_single_user(notification_data, subscriber)

@@ -13,8 +13,14 @@
         let resolveTokenPromise;
         let loadTokenPromise;
         let refreshInterval;
-        let provider = new firebase.auth.GoogleAuthProvider();
+        const provider = new firebase.auth.GoogleAuthProvider();
         
+        /**
+         * Function to get token of logged user.
+         * If the first token has not yet been loaded, it returns a promise 
+         * that will be resolved as soon as the token is loaded. 
+         * If the token has already been loaded, it returns the token.
+         */
         service.getUserToken = async () => {
             if (!tokenLoaded && !loadTokenPromise) {
                 loadTokenPromise = new Promise((resolve) => {
@@ -27,12 +33,15 @@
             return loadTokenPromise;
         };
 
+        /**
+         * Function to get token id of user and update object userInfo
+         * @param {firebaseUser} user 
+         */
         function getIdToken(user) {
-            user.getIdToken(true). then(function(userToken) {
+            user.getIdToken(true).then(function(userToken) {
                 if (userInfo) {
                     userInfo.accessToken = userToken;
                     service.save();
-                    console.log(userToken);
                 }
 
                 if (resolveTokenPromise)

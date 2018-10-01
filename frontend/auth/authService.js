@@ -44,9 +44,10 @@
                     service.save();
                 }
 
-                if (resolveTokenPromise)
+                if (resolveTokenPromise) {
                     resolveTokenPromise(userToken);
                     resolveTokenPromise = null;
+                }
 
                 tokenLoaded = true;
             })

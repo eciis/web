@@ -157,7 +157,9 @@ def filter_multiple_user_tokens(content, users_keys):
     """
     tokens = []
     for user_key in users_keys:
-        current_firebase_objects = content[user_key]
-        for firebase_object in current_firebase_objects:
-            tokens.append(firebase_object['token'])
+        if user_key in content:
+            current_firebase_objects = content[user_key]
+            for firebase_object_key in current_firebase_objects:
+                firebase_object = current_firebase_objects[firebase_object_key]
+                tokens.append(firebase_object['token'])
     return tokens

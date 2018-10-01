@@ -19,7 +19,6 @@
     // Create mock of authentication
     angular.module('app').run(function (AuthService, UserService) {
         var idToken = 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk';
-
         AuthService.login = function(user) {
             UserService.load = function() {
                 return {
@@ -29,14 +28,20 @@
                 };
             };
 
+            AuthService.getUserToken = () => {
+                return {
+                    then: (callback) => callback(idToken)
+                };
+            }
+
             AuthService.setupUser(idToken, true);
         };
 
-        AuthService.getUserToken = () => {
-            return {
-                then: (callback) => callback(idToken)
-            };
-        }
+        const originalGetUserToken = AuthService.getUserToken;
+
+        AuthService.useOriginalGetUserToken = () => {
+            AuthService.getUserToken = originalGetUserToken;
+        };
 
         AuthService.login(user);
 

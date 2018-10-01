@@ -5,15 +5,30 @@
 
     var userTest = {
         name : 'User',
-        accessToken: 'jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
+        accessToken: 'gfdfggfdjdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
         emailVerified: true
     };
+
+    var firebaseUser = {
+        accessToken: 'gfdfggfdjdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
+        getIdToken: async () => firebaseUser.accessToken
+    }
 
     beforeEach(module('app'));
 
     beforeEach(inject(function(AuthService, UserService) {
         authService = AuthService;
         userService = UserService;
+
+        firebase.auth = () => {
+            return {
+                onAuthStateChanged: (callback) => callback(firebaseUser),
+                signOut: function signOut() {}
+            };
+        }
+
+        firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
+        AuthService.useOriginalGetUserToken();
     }));
 
     describe('AuthService  setupUser', function() {
@@ -44,8 +59,10 @@
         });
 
         it('should authService.getUserToken()', function(done) {
+            spyOn(authService, 'save');
             authService.getUserToken().then(userToken => {
                 expect(userToken).toEqual(userTest.accessToken);
+                expect(authService.save).toHaveBeenCalled();
                 done();
             });
         });

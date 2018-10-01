@@ -28,7 +28,7 @@
         };
 
         function getIdToken(user) {
-            user.getIdToken().then(function(userToken) {
+            user.getIdToken(true). then(function(userToken) {
                 if (userInfo) {
                     userInfo.accessToken = userToken;
                     service.save();
@@ -52,11 +52,6 @@
                 }, timeToRefresh);
             }
           });
-
-        /**
-         * Store the last promise to refresh user authentication token.
-         */
-        var refreshTokenPromise = null;
 
         /**
         * Store listeners to be executed when user logout is called.
@@ -168,12 +163,6 @@
         service.getCurrentUser = function getCurrentUser() {
             return userInfo;
         };
-        
-        // service.getUserToken = function getUserToken() {
-        //     //refreshTokenAsync();
-        //     console.log("ola mundo");
-        //     return userInfo.accessToken;
-        // };
 
         service.isLoggedIn = function isLoggedIn() {
             if (userInfo) {
@@ -251,26 +240,6 @@
             if ($window.localStorage.userInfo) {
                 var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
-            }
-        }
-
-        /**
-         * Refreshes the user token asynchronously and store in the browser
-         * cache to maintain the section active, during the time that 
-         * the user is using the system. 
-         * 
-         * This function uses a global variable (refreshTokenPromise)
-         * to synchronize the token API call's, preventing multiples
-         * promises executing the same action.
-         */
-        function refreshTokenAsync() {
-            if (userAuthenticated && !refreshTokenPromise) {
-                refreshTokenPromise = userAuthenticated.getIdToken();
-                refreshTokenPromise.then(function(idToken) {
-                    userInfo.accessToken = idToken;
-                    service.save();
-                    refreshTokenPromise = null;
-                });
             }
         }
 

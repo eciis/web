@@ -21,9 +21,9 @@
         const messaging = firebase.messaging();
 
         const ref = firebase.database().ref();
-
+        
         const PUSH_NOTIFICATIONS_URL = "pushNotifications/";
-
+        
         const isMobile = {
             Android: () => {
                 return navigator.userAgent.match(/Android/i);
@@ -49,7 +49,13 @@
 
         service.currentUser = AuthService.getCurrentUser();
 
-        function requestPermission() {
+        /**
+         * Ask permission to the user to send push notifications
+         * and if the permission is conceded the user's new token
+         * is retrieved and saveToken is called passing the token
+         * as parameter.
+         */
+        function requestNotificationPermission() {
             messaging.requestPermission().then(() => {
                 messaging.getToken().then(token => {
                     saveToken(token);
@@ -57,11 +63,22 @@
             });
         }
 
+        /**
+         * It receives a token, starts a reference to
+         * firebase's database and save the token.
+         * @param {String} token 
+         */
         function saveToken(token) {
             const notificationsRef = initFirebaseArray();
             setToken(token, notificationsRef);
         }
 
+        /**
+         * Instantiate a reference to the database
+         * based on the userKey, starts a firebaseArray
+         * in case of it hasn't been started before, and
+         * return the reference.
+         */
         function initFirebaseArray() {
             const endPoint = `${PUSH_NOTIFICATIONS_URL}${service.currentUser.key}`;
             const notificationsRef = ref.child(endPoint);
@@ -88,14 +105,18 @@
             });
         }
 
-        function hasPermission() {
+        /**
+         * Check if the user has already conceded the permission
+         * using Notification object.
+         */
+        function hasNotificationPermission() {
             const { permission } = Notification;
             return permission === "granted";
         }
 
         (function init() {
-            if(!hasPermission() && isMobile.any()) {
-                requestPermission();
+            if (!hasNotificationPermission() && isMobile.any()) {
+                requestNotificationPermission();
             }
         })();
     });

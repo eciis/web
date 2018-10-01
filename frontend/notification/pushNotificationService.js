@@ -55,23 +55,23 @@
          * is retrieved and saveToken is called passing the token
          * as parameter.
          */
-        function requestNotificationPermission() {
+        service._requestNotificationPermission = function requestNotificationPermission() {
             messaging.requestPermission().then(() => {
                 messaging.getToken().then(token => {
-                    saveToken(token);
+                    service._saveToken(token);
                 });
             });
-        }
+        };
 
         /**
          * It receives a token, starts a reference to
          * firebase's database and save the token.
          * @param {String} token 
          */
-        function saveToken(token) {
-            const notificationsRef = initFirebaseArray();
-            setToken(token, notificationsRef);
-        }
+        service._saveToken = function saveToken(token) {
+            const notificationsRef = service._initFirebaseArray();
+            service._setToken(token, notificationsRef);
+        };
 
         /**
          * Instantiate a reference to the database
@@ -79,7 +79,7 @@
          * in case of it hasn't been started before, and
          * return the reference.
          */
-        function initFirebaseArray() {
+        service._initFirebaseArray = function initFirebaseArray() {
             const endPoint = `${PUSH_NOTIFICATIONS_URL}${service.currentUser.key}`;
             const notificationsRef = ref.child(endPoint);
 
@@ -88,7 +88,7 @@
             }
 
             return notificationsRef;
-        }
+        };
 
         /**
          * It is responsible for check if the user already have a token.
@@ -97,26 +97,26 @@
          * @param {String} token 
          * @param notificationsRef 
          */
-        function setToken(token, notificationsRef) {
+        service._setToken = function setToken(token, notificationsRef) {
             service.firebaseArrayNotifications.$loaded().then(() => {
                 const tokenObject = $firebaseObject(notificationsRef);
                 tokenObject.token = token;
                 service.firebaseArrayNotifications.$add(tokenObject);
             });
-        }
+        };
 
         /**
          * Check if the user has already conceded the permission
          * using Notification object.
          */
-        function hasNotificationPermission() {
+        service._hasNotificationPermission = function hasNotificationPermission() {
             const { permission } = Notification;
             return permission === "granted";
-        }
+        };
 
         (function init() {
-            if (!hasNotificationPermission() && isMobile.any()) {
-                requestNotificationPermission();
+            if (!service._hasNotificationPermission() && isMobile.any()) {
+                service._requestNotificationPermission();
             }
         })();
     });

@@ -126,7 +126,6 @@
         };
 
         userInactiveCtrl.createInst = function createInst() {
-            window.removeEventListener('popstate', ()=>{});
             $state.go("create_institution_form");
             $mdDialog.hide();
         };

@@ -1,0 +1,96 @@
+.comment {
+    margin-bottom: -1.1em;
+}
+
+.reply-container {
+    margin-top: 1.2em;
+}
+
+.comment-header {
+    margin-bottom: 0.5em;
+}
+
+.user-name {
+    font-size: 0.9em;
+    color: #00796B;
+}
+
+.inst-name {
+    color: #7f7f7f;
+}
+
+.comment-btn-text {
+    font-size: 0.7em;
+}
+
+.btns-row {
+    margin: 0.5em 0 0.5em 0;
+}
+
+.comment-btn {
+    background: none;
+    border: 0;
+    padding-left: initial;
+}
+
+.comment-btn:hover {
+    background-color: #efefef;
+}
+
+.left-align {
+    margin-left: auto;
+}
+
+.comment-actions-counter {
+    font-size: inherit;
+}
+
+.reply {
+    margin-left: 0.3em; 
+    border-left: 0.1em solid #8BC34A;
+}
+
+.reply-input-container {
+    width: 100%;
+}
+
+.reply-input {
+    max-height: 10em;
+    overflow-y: auto;
+    resize: none;
+}
+
+.reply-btn-container {
+    margin-top: -2em;
+}
+
+.send-reply-btn {
+    margin-left: auto;
+    z-index: 3;
+}
+
+@media screen and (max-width: 350px) {
+    .comment-btn-text {
+        font-size: 0.6em;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .hide-xxs {
+        display: none;
+    }
+
+    .inst-name {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 451px) {
+    .comment-btn-text {
+        margin-left: -0.6em;        
+    }
+
+    .reply {
+        margin-left: 3.5em; 
+    }
+}

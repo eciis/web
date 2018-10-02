@@ -1,3 +1,10 @@
+.fill-screen {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+}
+
 .card {
     padding-top: 20px;
     margin: 10px 0 20px 0;

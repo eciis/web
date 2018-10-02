@@ -1,15 +1,14 @@
 <md-content layout-fill layout="column" md-colors="{background: 'teal-500'}" layout-align="center center">
-    <div layout="row" layout-align="center center">
-        <md-button class="md-fab md-primary" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
-            style="margin-right: -35px;" md-colors="{background: 'light-green-500'}" hide-xs>
+    <div layout="row" layout-align="center center" style="margin: 0 1em 0 1em">
+        <md-button class="md-fab md-primary" id="go-back-icon" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
+            md-colors="{background: 'light-green-500'}">
             <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;"
-            md-colors="{background: 'grey-50'}" layout="row" flex-xs="90"
-            flex-sm="65" flex-gt-sm="45" layout-align="center center">
-            <div layout="column" flex-xs="85" flex-gt-xs="70" layout-align="space-between" layout-margin>
+        <div class="padded" md-whiteframe="12" style="border-radius: 2px;"
+            md-colors="{background: 'grey-50'}" layout="row" id="card-responsive">
+            <div layout="column" id="content-card-responsive">
                 <div layout="row" layout-align="center center">
-                    <img src="/app/images/logowithname.png" flex="55"/>
+                    <img src="/app/images/logowithname.png" id="logo-cis-inactive"/>
                 </div>
                 <!-- Search institution -->
                 <div>
@@ -26,7 +25,7 @@
                             </md-button>
                         </form>
                     </div>
-                    <md-content style="max-height: 300px;" class="custom-scrollbar" layout="column"
+                    <md-content id="content-search-institution" class="custom-scrollbar" layout="column"
                         ng-if="!userInactiveCtrl.choicedInst">
                         <md-list flex layout-padding style="margin: 0px;">
                             <md-list-item ng-repeat="institution in userInactiveCtrl.institutions"
@@ -40,15 +39,14 @@
                                     <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.isInstSelect(institution)"
                                     md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
                                     <div layout="column" class="md-3-line">
-                                    <div>
-                                        <h4 style="margin:0px" hide-xs>{{ institution.name }}</h4>
-                                        <h5 style="margin:0px" hide-gt-xs>{{ institution.name }}</h5>
-                                    </div>
-                                    <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
-                                        <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
-                                        <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
-                                        <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
-                                    </div>
+                                        <div>
+                                            <p id="institution-name">{{ institution.name }}</p>
+                                        </div>
+                                        <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
+                                            <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
+                                            <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
+                                            <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </md-list-item>
@@ -67,12 +65,11 @@
                             </md-list-item>
                         </md-list>
                     </md-content>
-                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
+                    <div layout="row" layout-align="end"
                         ng-if="userInactiveCtrl.showButtonNext()">
-                        <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
+                        <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}"
                             ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
                     </div>
-
                     <!-- Form user -->
                     <form ng-submit="userInactiveCtrl.verifyAndSendRequest()" name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()" style="margin: 0px;">
                         <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
@@ -108,6 +105,10 @@
                             <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
                                 ng-click="userInactiveCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
                         </div>
+                    </div>
+                    <div id="go-back-button" ng-if="!userInactiveCtrl.isFinished">
+                        <md-button md-colors="{background: 'teal-500'}"
+                            ng-click="userInactiveCtrl.logout()">SAIR</md-button>
                     </div>
                 </div>
             </div>

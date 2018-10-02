@@ -213,7 +213,7 @@ case "$1" in
         set_support_url local $SUPPORT_LOCAL
         set_frontend_url local $FRONTEND_LOCAL
 
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML $2
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis $2
     ;;
 
     test)

@@ -669,6 +669,7 @@ a:active {
 .event-item .event-day {
     margin-bottom: -35px;
     font-size: 23px;
+    height: 23px;
     font-weight: bold;
     margin: 1px;
 }
@@ -807,17 +808,9 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .xs-icon-button md-icon {
     font-size: 11px;
-    margin: auto;
+    margin: -23px auto auto auto;
     height: 11px;
     min-height: 10px;
-}
-
-.xs-delete-icon-justify md-icon {
-    margin: 2 1 0 0;
-}
-
-.xs-edit-icon-justify md-icon {
-    margin: 2px;
 }
 
 .md-title {

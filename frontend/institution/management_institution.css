@@ -18,17 +18,25 @@
     width: 100%;
 }
 
-.edit-inst-number {
-    width: 49%;
-}
-
-.edit-inst-cep {
+.edit-inst-number, .edit-inst-cep {
     width: 49%;
 }
 
 .edit-inst-country, .edit-inst-federal-state, .edit-inst-city, .edit-inst-neighbourhood {
         width: 24%;
-    }
+}
+
+.edit-inst-cnpj, .edit-inst-phone {
+    width: 44%;
+}
+
+.edit-inst-phone {
+    width: 36%;
+}
+
+.edit-inst-branch {
+    width: 16%;
+}
 
 @media screen and (min-width: 601px) {
     .edit-inst-name {
@@ -40,15 +48,15 @@
     }
 
     .edit-inst-street {
-        width: 58%;
+        width: 59%;
     }
 
     .edit-inst-number {
-        width: 18%;
+        width: 19%;
     }
 
     .edit-inst-cep {
-        width: 18%;
+        width: 19%;
     }
 }
 
@@ -73,12 +81,22 @@
     }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (min-width: 400px) {
+    .edit-inst-actuation-area {
+        width: 58%;
+    }
+
+    .edit-inst-legal-nature {
+        width: 39%;
+    }
+}
+
+@media screen and (max-width: 401px) {
     #upload-csv-icon {
         margin-right: 25px;
         font-size: 30px;
     }
-    
+
     #upload-csv-text {
         font-size: 12px;
         margin-left: -16px;
@@ -94,5 +112,13 @@
 
     #manage-inst-titles {
         font-size: 14px;
+    }
+
+    .edit-inst-cnpj {
+        width: 100%;
+    }
+    
+    .edit-inst-phone, .edit-inst-branch {
+        width: 47%;
     }
 }

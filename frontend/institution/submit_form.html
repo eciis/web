@@ -124,8 +124,8 @@
                     </div>
                 </md-input-container>
             </div>
-            <div layout="row">
-                <md-input-container class="md-block" flex-gt-xs>
+            <div class="edit-container-resp">
+                <md-input-container class="edit-box edit-inst-cnpj">
                     <label>CNPJ</label>
                     <input type="text" name="cnpj"
                         ng-model="configInstCtrl.newInstitution.cnpj"
@@ -138,7 +138,7 @@
                         <div ng-message="pattern">O CNPJ deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-xs>
+                <md-input-container class="edit-box edit-inst-phone">
                     <label>Telefone</label>
                     <input type="text" name="phone"
                         ng-model="configInstCtrl.newInstitution.phone_number"
@@ -151,7 +151,7 @@
                         <div ng-message="pattern">O número de telefone deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-xs flex="20">
+                <md-input-container class="edit-box edit edit-inst-branch">
                     <label>Ramal</label>
                     <input type="text" name="branch_line" ng-pattern=configInstCtrl.numberRegex
                         ng-model="configInstCtrl.newInstitution.branch_line"
@@ -161,8 +161,8 @@
                     </div>
                 </md-input-container>
             </div>
-            <div layout="row">
-                <md-input-container class="md-block" flex-gt-sm>
+            <div class="edit-container-resp">
+                <md-input-container class="edit-box edit-inst-actuation-area">
                     <!-- The alphabetical order is being made manually 
                     in the json file actuation_area.json.
                         TODO: Do this automatically.
@@ -177,7 +177,7 @@
                         <div ng-message="required" >Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-sm>
+                <md-input-container class="edit-box edit-inst-legal-nature">
                     <!-- The alphabetical order is being made manually 
                     in the json file legal_nature.
                         TODO: Do this automatically.
@@ -194,12 +194,12 @@
                 </md-input-container>
             </div>
                 <div ng-if="configInstCtrl.newInstitution.actuation_area == 'other'">
-                <md-input-container class="md-block" flex-gt-xs>
+                <md-input-container class="edit-box edit-inst-actuation-area">
                     <label>Informe outra área de atuação</label>
                     <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">
                 </md-input-container>
             </div>
-            <md-input-container class="md-block">
+            <md-input-container class="md-block" flex-gt-xs>
                 <label>Uma breve descrição da sua instituição</label>
                 <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
                     md-select-on-focus required>

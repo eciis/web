@@ -4,7 +4,7 @@
     const app = angular.module('app');
 
     app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
-        AuthService, $firebaseObject) {
+        AuthService, $firebaseObject, MessageService) {
         /**
          * Service responsible for send request permission
          * to enable notifications to the user and for deal
@@ -54,11 +54,14 @@
          * and if the permission is conceded the user's new token
          * is retrieved and saveToken is called passing the token
          * as parameter.
+         * @private
          */
         service._requestNotificationPermission = function requestNotificationPermission() {
             messaging.requestPermission().then(() => {
                 messaging.getToken().then(token => {
                     service._saveToken(token);
+                }, () => {
+                    MessageService.showToast('Não foi possível ativar as notificações.');
                 });
             });
         };
@@ -66,7 +69,8 @@
         /**
          * It receives a token, starts a reference to
          * firebase's database and save the token.
-         * @param {String} token 
+         * @param {String} token
+         * @private 
          */
         service._saveToken = function saveToken(token) {
             const notificationsRef = service._initFirebaseArray();
@@ -78,6 +82,7 @@
          * based on the userKey, starts a firebaseArray
          * in case of it hasn't been started before, and
          * return the reference.
+         * @private
          */
         service._initFirebaseArray = function initFirebaseArray() {
             const endPoint = `${PUSH_NOTIFICATIONS_URL}${service.currentUser.key}`;
@@ -95,7 +100,8 @@
          * If it does, the token is replaced by the new one received as parameter.
          * Otherwise the token is saved.
          * @param {String} token 
-         * @param notificationsRef 
+         * @param notificationsRef
+         * @private 
          */
         service._setToken = function setToken(token, notificationsRef) {
             service.firebaseArrayNotifications.$loaded().then(() => {
@@ -108,6 +114,7 @@
         /**
          * Check if the user has already conceded the permission
          * using Notification object.
+         * @private
          */
         service._hasNotificationPermission = function hasNotificationPermission() {
             const { permission } = Notification;

@@ -19,8 +19,8 @@
         </div>
         <form name="instForm" prevent-state-change="configInstCtrl.newInstitution" 
             ng-submit="instForm.$valid && configInstCtrl.submit($event)">
-            <div layout="row">
-                <md-input-container class="md-block" flex-gt-xs flex="60">
+            <div class="edit-container-resp">
+                <md-input-container class="edit-box edit-inst-name">
                     <label>Nome</label>
                     <input type="text" name="name" required md-maxlength="90"
                         ng-model="configInstCtrl.newInstitution.name">
@@ -28,13 +28,14 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-xs flex="40">
+                <md-input-container class="edit-box edit-inst-acronym">
                     <label>Sigla</label>
-                    <input type="text" name="acronym" ng-model="configInstCtrl.newInstitution.acronym">
+                    <input type="text" name="acronym" md-maxlength="15"
+                    ng-model="configInstCtrl.newInstitution.acronym">
                 </md-input-container>
             </div>
-            <div layout="row">
-                <md-input-container class="md-block" flex-gt-xs>
+            <div class="edit-container-resp">
+                <md-input-container class="edit-box edit-inst-street">
                     <label>Rua</label>
                     <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
                         ng-model="configInstCtrl.address.street">
@@ -42,7 +43,7 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-xs  flex="20">
+                <md-input-container class="edit-box edit-inst-number">
                     <label>Número</label>
                     <input type="text" name="number"
                         ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
@@ -50,7 +51,7 @@
                         <div ng-message="pattern" >O número deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="md-block" flex-gt-xs  flex="20">
+                <md-input-container class="edit-box edit-inst-cep">
                     <label>CEP</label>
                     <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
                         ng-model="configInstCtrl.address.cep"

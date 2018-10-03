@@ -9,6 +9,45 @@
     font-size: 20px;
 }
 
+.edit-container-resp {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.edit-box {
+    width: 100%;
+}
+
+.edit-inst-number {
+    width: 49%;
+}
+
+.edit-inst-cep {
+    width: 49%;
+}
+
+@media screen and (min-width: 601px) {
+    .edit-inst-name {
+        width: 59%;
+    }
+
+    .edit-inst-acronym {
+        width: 39%;
+    }
+
+    .edit-inst-street {
+        width: 58%;
+    }
+
+    .edit-inst-number {
+        width: 18%;
+    }
+
+    .edit-inst-cep {
+        width: 18%;
+    }
+}
+
 @media screen and (max-width: 600px) {
     #upload-csv-icon {
         font-size: 35px;
@@ -20,6 +59,16 @@
 
     #manage-inst-titles {
         font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .edit-inst-number {
+        width: 47%;
+    }
+
+    .edit-inst-cep {
+        width: 47%;
     }
 }
 

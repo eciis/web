@@ -1,6 +1,4 @@
-#go-back-button{
-    justify-content: flex-end;
-    display: flex;
+.go-back-button{
     margin-top: 1em;
 }
 
@@ -47,7 +45,6 @@
 @media screen and (max-width: 550px){
     #go-back-icon{
         display: none
-
     }
 }
 

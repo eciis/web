@@ -65,11 +65,6 @@
                             </md-list-item>
                         </md-list>
                     </md-content>
-                    <div layout="row" layout-align="end"
-                        ng-if="userInactiveCtrl.showButtonNext()">
-                        <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}"
-                            ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
-                    </div>
                     <!-- Form user -->
                     <form ng-submit="userInactiveCtrl.verifyAndSendRequest()" name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()" style="margin: 0px;">
                         <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
@@ -88,8 +83,7 @@
                             <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
                         </md-input-container>
                         <div layout="row" layout-align="end">
-                            <md-button type="submit"
-                            class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                            <md-button type="submit" md-colors="{background: 'teal-500'}">
                                 FINALIZAR
                             </md-button>
                         </div>
@@ -101,14 +95,21 @@
                             de sua instituição na Plataforma CIS.</p>
                             <p>Você receberá a confirmação em seu email.</p>
                         </div>
-                        <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                    </div>
+                    <div>
+                       <div layout="row" layout-align="end" ng-if="userInactiveCtrl.showButtonNext()">
+                            <md-button md-colors="{background: 'teal-500'}"
+                                ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
+                       </div>
+                       <div layout="row" layout-align="end" ng-if="!userInactiveCtrl.isFinished">
+                           <md-button md-colors="{background: 'teal-500'}"
+                               ng-click="userInactiveCtrl.logout()">SAIR</md-button>
+                       </div>
+                       <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
+                            ng-if="userInactiveCtrl.isFinished">
                             <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
                                 ng-click="userInactiveCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
                         </div>
-                    </div>
-                    <div id="go-back-button" ng-if="!userInactiveCtrl.isFinished">
-                        <md-button md-colors="{background: 'teal-500'}"
-                            ng-click="userInactiveCtrl.logout()">SAIR</md-button>
                     </div>
                 </div>
             </div>

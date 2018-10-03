@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 """Push Notification Service."""
 
 __all__ = ['get_notification_props']
 
-def get_notification_props(_type, entity):
-    notification = NotificationProperties(_type, entity.key.urlsafe())
+def get_notification_props(_type, entity=None):
+    notification = NotificationProperties(_type, entity)
     return notification.get_props()
 
 class NotificationProperties(object):
@@ -12,8 +13,9 @@ class NotificationProperties(object):
         types = {
             'LIKE_POST': self.__get_like_props,
             'COMMENT': self.__get_comment_props,
-            'INVITE_MEMBER': self.get_invite_props,
-            'LINK': self.get_link_props
+            'USER': self.__get_invite_user_props,
+            'USER_ADM': self.__get_invite_user_adm_props,
+            'LINK': self.__get_link_props
         }
         self.entity = entity
         self.notification_method = types[_type] 
@@ -22,25 +24,40 @@ class NotificationProperties(object):
         return self.notification_method()
  
     def __get_like_props(self):
-        url = '/posts/%s' % self.entity
+        url = '/posts/%s' % self.entity.key.urlsafe()
 
         return {
-            'title': 'Postagem curtida',
-            'body': 'Uma postagem de seu interesse foi curtida',
+            'title': 'Publicação curtida',
+            'body': 'Uma publicação de seu interesse foi curtida',
             'click_action': url
         }
 
     def __get_comment_props(self):
-        url = "/posts/%s" % self.entity
+        url = "/posts/%s" % self.entity.key.urlsafe()
 
         return {
-            'title': 'Postagem comentada',
-            'body': 'Uma postagem do seu interesse foi comentada',
+            'title': 'Publicação comentada',
+            'body': 'Uma publicação do seu interesse foi comentada',
             'click_action': url
         }
 
-    def get_invite_props(self):
-        pass
+    def __get_invite_user_props(self):
+        url = "/notifications"
 
-    def get_link_props(self):
+        return {
+            'title': 'Novo convite',
+            'body': 'Você recebeu um novo convite para ser membro de uma instituição',
+            'click_action': url
+        }
+
+    def __get_invite_user_adm_props(self):
+        url = "/notifications"
+
+        return {
+            'title': 'Novo convite',
+            'body': 'Você recebeu um novo convite para ser administrador de uma instituição',
+            'click_action': url
+        }
+
+    def __get_link_props(self):
         pass

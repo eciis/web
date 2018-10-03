@@ -75,7 +75,8 @@ class InviteUserCollectionHandler(BaseHandler):
                     'invites_keys': json.dumps(invites_keys),
                     'host': host,
                     'current_institution': current_institution_key.urlsafe(),
-                    'notifications_ids': [notification_id]
+                    'notifications_ids': [notification_id],
+                    'type_of_invite': type_of_invite
                 }
             )
 
@@ -85,8 +86,12 @@ class InviteUserCollectionHandler(BaseHandler):
         else:
             invite = createInvite(invite)
             invites.append({'email': invite.invitee, 'key': invite.key.urlsafe()})
-            enqueue_task('send-invite', {'invites_keys': json.dumps([invite.key.urlsafe()]), 'host': host,
-                                         'current_institution': user.current_institution.urlsafe()})
+            enqueue_task('send-invite', {
+                'invites_keys': json.dumps([invite.key.urlsafe()]), 
+                'host': host,
+                'current_institution': user.current_institution.urlsafe(), 
+                'type_of_invite': type_of_invite
+            })
 
         self.response.write(json.dumps(
             {'msg': 'The invites are being processed.', 'invites' : invites}))

@@ -3,7 +3,7 @@
 import webapp2
 import json
 from firebase import send_notification
-from fcm import notify_single_user
+from fcm import notify_single_user, notify_multiple_users
 from push_notification import get_notification_props
 from google.appengine.api import mail
 import logging
@@ -21,6 +21,7 @@ from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
 from util import NotificationsQueueManager
+from models import User
 
 
 def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
@@ -269,9 +270,6 @@ class PostNotificationHandler(BaseHandler):
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
-        
-        is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE_POST'
-        is_first_comment = post.get_number_of_comment() == 1 and entity_type == 'COMMENT'
 
         notification_message = post.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -290,6 +288,9 @@ class PostNotificationHandler(BaseHandler):
                     entity_key=post_key,
                     message=notification_message
                 )
+
+                is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE_POST'
+                is_first_comment = post.get_number_of_comment() == 1 and entity_type == 'COMMENT'
 
                 if is_first_like or is_first_comment:
                     notification_data = get_notification_props(entity_type, post)
@@ -425,10 +426,18 @@ class SendInviteHandler(BaseHandler):
         host = self.request.get('host')
         current_institution = self.request.get('current_institution')
         current_institution = ndb.Key(urlsafe=current_institution)
+        type_of_invite = self.request.get('type_of_invite')
+        user_keys = []
 
         for key in keys:
             invite = ndb.Key(urlsafe=key).get()
             invite.send_invite(host, current_institution)
+            user = User.get_active_user(invite.invitee)
+            user = user.key.urlsafe() if user else None
+            user_keys.append(user)
+
+        notification_props = get_notification_props(type_of_invite)
+        notify_multiple_users(notification_props, user_keys)
 
         notifications_ids = self.request.get_all('notifications_ids', [])
         map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)

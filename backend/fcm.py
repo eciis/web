@@ -66,6 +66,7 @@ def send_push_notifications(data, tokens):
             message_body=body, message_icon=ICON_URL, 
             click_action=click_action
         )
+        print result
         return result
 
 

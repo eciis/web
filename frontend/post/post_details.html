@@ -216,7 +216,7 @@
             md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
           <md-icon>grade</md-icon>
         </md-button>
-        <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
+        <span style="margin-left: -16px;" class="counter-badge" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
         <b class="like-comment-text">CURTIR</b>
         <md-button class="sm-icon-button" aria-label="Comments"
             ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()"
@@ -224,7 +224,7 @@
             md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
           <md-icon>comments</md-icon>
         </md-button>
-        <span style="margin-left: -10px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
+        <span style="margin-left: -10px;" class="counter-badge" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
         <b class="like-comment-text">COMENTAR</b>
       </div>
     </div>

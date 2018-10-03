@@ -532,11 +532,12 @@ a:active {
    border: 2px solid #EFEBE9;
 }
 
-.counter-likes-comments {
+.counter-badge {
     position:relative;
+    margin-left: -16px;
 }
 
-.counter-likes-comments[data-badge]:after {
+.counter-badge[data-badge]:after {
     content:attr(data-badge);
     position:absolute;
     top:-10px;
@@ -808,7 +809,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .xs-icon-button md-icon {
     font-size: 11px;
-    margin: -2.2em auto auto auto;
+    margin: -2.1em auto auto auto;
     height: 11px;
     min-height: 10px;
 }

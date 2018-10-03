@@ -78,11 +78,11 @@
               </div>
             </div>
             <div class="md-list-item-text" layout="column" hide show-xs>
-                <a href class="md-title hyperlink" ng-if="inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)">
+                <a id="manage-inst-name" href class="md-title hyperlink" ng-if="inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)">
                   {{ inviteInstHierCtrl.institution.parent_institution.acronym ? 
                     inviteInstHierCtrl.institution.parent_institution.acronym : inviteInstHierCtrl.limitString(inviteInstHierCtrl.institution.parent_institution.name, 8) }}
                 </a>
-                <h3>{{inviteInstHierCtrl.linkParentStatus()}}</h3>
+                <h3 id="manage-inst-status">{{inviteInstHierCtrl.linkParentStatus()}}</h3>
                 <h4 ng-if="inviteInstHierCtrl.institution.parent_institution.invite">
                   Nome Sugerido: {{ inviteInstHierCtrl.limitString(inviteInstHierCtrl.getSuggestedName(inviteInstHierCtrl.institution.parent_institution), 8) }}
                 </h4>
@@ -131,10 +131,10 @@
                   <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstHierCtrl.getSuggestedName(institution) }}</h4>
                 </div>
                 <div ng-if="inviteInstHierCtrl.isActive(institution)" hide show-xs>
-                  <a href class="md-title hyperlink">
+                  <a id="manage-inst-name" href class="md-title hyperlink">
                     {{ institution.acronym ? institution.acronym : inviteInstHierCtrl.limitString(institution.name, 8) }}
                   </a>
-                  <h3>{{inviteInstHierCtrl.linkChildrenStatus(institution)}}</h3>
+                  <h3 id="manage-inst-status">{{inviteInstHierCtrl.linkChildrenStatus(institution)}}</h3>
                   <h4 ng-if="institution.invite">Nome Sugerido: {{ inviteInstHierCtrl.getSuggestedName(institution) }}</h4>
                 </div>
                 <div ng-if="!inviteInstHierCtrl.isActive(institution)">

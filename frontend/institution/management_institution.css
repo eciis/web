@@ -9,12 +9,12 @@
     font-size: 20px;
 }
 
-.edit-container-resp {
+.manage-inst-container-resp {
     display: flex;
     flex-wrap: wrap;
 }
 
-.edit-box {
+.manage-inst-box {
     width: 100%;
 }
 
@@ -36,6 +36,11 @@
 
 .edit-inst-branch {
     width: 16%;
+}
+
+.manage-member-content {
+    overflow: auto;
+    max-height: 220px;
 }
 
 @media screen and (min-width: 601px) {
@@ -72,6 +77,10 @@
     #manage-inst-titles {
         font-size: 16px;
     }
+
+    #manage-inst-name {
+        font-size: 16px;
+    }
 }
 
 @media screen and (max-width: 450px) {
@@ -102,11 +111,15 @@
         margin-left: -16px;
     }
 
-    #invite-text {
+    #manage-inst-name {
+        font-size: 14px;
+    }
+
+    #manage-user-email-text {
         font-size: 12px;
     }
 
-    #invitee-text {
+    #manage-username-text, #manage-inst-status {
         font-size: 11px;
     }
 

@@ -19,8 +19,8 @@
         </div>
         <form name="instForm" prevent-state-change="configInstCtrl.newInstitution" 
             ng-submit="instForm.$valid && configInstCtrl.submit($event)">
-            <div class="edit-container-resp">
-                <md-input-container class="edit-box edit-inst-name">
+            <div class="manage-inst-container-resp">
+                <md-input-container class="manage-inst-box edit-inst-name">
                     <label>Nome</label>
                     <input type="text" name="name" required md-maxlength="90"
                         ng-model="configInstCtrl.newInstitution.name">
@@ -28,14 +28,14 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-acronym">
+                <md-input-container class="manage-inst-box edit-inst-acronym">
                     <label>Sigla</label>
                     <input type="text" name="acronym" md-maxlength="15"
                     ng-model="configInstCtrl.newInstitution.acronym">
                 </md-input-container>
             </div>
-            <div class="edit-container-resp">
-                <md-input-container class="edit-box edit-inst-street">
+            <div class="manage-inst-container-resp">
+                <md-input-container class="manage-inst-box edit-inst-street">
                     <label>Rua</label>
                     <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
                         ng-model="configInstCtrl.address.street">
@@ -43,7 +43,7 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-number">
+                <md-input-container class="manage-inst-box edit-inst-number">
                     <label>Número</label>
                     <input type="text" name="number"
                         ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex">
@@ -51,7 +51,7 @@
                         <div ng-message="pattern" >O número deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-cep">
+                <md-input-container class="manage-inst-box edit-inst-cep">
                     <label>CEP</label>
                     <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
                         ng-model="configInstCtrl.address.cep"
@@ -64,8 +64,8 @@
                     </div>
                 </md-input-container>
             </div>
-            <div class="edit-container-resp">
-                <md-input-container class="edit-box edit-inst-country">
+            <div class="manage-inst-container-resp">
+                <md-input-container class="manage-inst-box edit-inst-country">
                     <label>País</label>
                     <md-select name="country" ng-model="configInstCtrl.address.country" required 
                         ng-change="configInstCtrl.setAnotherCountry()">
@@ -77,11 +77,11 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-federal-state" ng-if="configInstCtrl.isAnotherCountry">
+                <md-input-container class="manage-inst-box edit-inst-federal-state" ng-if="configInstCtrl.isAnotherCountry">
                     <label>Estado</label>
                     <input type="text" name="state" ng-model="configInstCtrl.address.federal_state">
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-federal-state" ng-if="!configInstCtrl.isAnotherCountry">
+                <md-input-container class="manage-inst-box edit-inst-federal-state" ng-if="!configInstCtrl.isAnotherCountry">
                     <label>Estado</label>
                     <md-select name="state" ng-model="configInstCtrl.selectedState" required
                         ng-change="configInstCtrl.getCitiesByState()">
@@ -93,11 +93,11 @@
                         <div ng-message="required">Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-city" ng-if="configInstCtrl.isAnotherCountry">
+                <md-input-container class="manage-inst-box edit-inst-city" ng-if="configInstCtrl.isAnotherCountry">
                     <label>Cidade</label>
                     <input type="text" name="city" ng-model="configInstCtrl.address.city">
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-city" ng-if="!configInstCtrl.isAnotherCountry">
+                <md-input-container class="manage-inst-box edit-inst-city" ng-if="!configInstCtrl.isAnotherCountry">
                     <label>Cidade</label>
                     <md-select name="city" ng-model="configInstCtrl.address.city" required
                         ng-disabled="!configInstCtrl.selectedState">
@@ -115,7 +115,7 @@
                         </div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-neighbourhood">
+                <md-input-container class="manage-inst-box edit-inst-neighbourhood">
                     <label>Bairro</label>
                     <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
                         ng-model="configInstCtrl.address.neighbourhood">
@@ -124,8 +124,8 @@
                     </div>
                 </md-input-container>
             </div>
-            <div class="edit-container-resp">
-                <md-input-container class="edit-box edit-inst-cnpj">
+            <div class="manage-inst-container-resp">
+                <md-input-container class="manage-inst-box edit-inst-cnpj">
                     <label>CNPJ</label>
                     <input type="text" name="cnpj"
                         ng-model="configInstCtrl.newInstitution.cnpj"
@@ -138,7 +138,7 @@
                         <div ng-message="pattern">O CNPJ deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-phone">
+                <md-input-container class="manage-inst-box edit-inst-phone">
                     <label>Telefone</label>
                     <input type="text" name="phone"
                         ng-model="configInstCtrl.newInstitution.phone_number"
@@ -151,7 +151,7 @@
                         <div ng-message="pattern">O número de telefone deve ser válido!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit edit-inst-branch">
+                <md-input-container class="manage-inst-box edit edit-inst-branch">
                     <label>Ramal</label>
                     <input type="text" name="branch_line" ng-pattern=configInstCtrl.numberRegex
                         ng-model="configInstCtrl.newInstitution.branch_line"
@@ -161,8 +161,8 @@
                     </div>
                 </md-input-container>
             </div>
-            <div class="edit-container-resp">
-                <md-input-container class="edit-box edit-inst-actuation-area">
+            <div class="manage-inst-container-resp">
+                <md-input-container class="manage-inst-box edit-inst-actuation-area">
                     <!-- The alphabetical order is being made manually 
                     in the json file actuation_area.json.
                         TODO: Do this automatically.
@@ -177,7 +177,7 @@
                         <div ng-message="required" >Este campo é obrigatório!</div>
                     </div>
                 </md-input-container>
-                <md-input-container class="edit-box edit-inst-legal-nature">
+                <md-input-container class="manage-inst-box edit-inst-legal-nature">
                     <!-- The alphabetical order is being made manually 
                     in the json file legal_nature.
                         TODO: Do this automatically.
@@ -194,7 +194,7 @@
                 </md-input-container>
             </div>
                 <div ng-if="configInstCtrl.newInstitution.actuation_area == 'other'">
-                <md-input-container class="edit-box edit-inst-actuation-area">
+                <md-input-container class="manage-inst-box edit-inst-actuation-area">
                     <label>Informe outra área de atuação</label>
                     <input type="text" name="other" ng-model="configInstCtrl.newInstitution.other_area">
                 </md-input-container>

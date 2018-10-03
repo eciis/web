@@ -15,6 +15,8 @@ from custom_exceptions import NotAuthorizedException
 from util import Notification, NotificationsQueueManager
 from service_entities import enqueue_task
 from service_messages import create_message
+from fcm import notify_single_user
+from push_notification import get_notification_props
 
 
 __all__ = ['InstitutionParentRequestCollectionHandler']
@@ -124,5 +126,10 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
             return request
 
         request = main_operations(request, requested_inst_key, child_institution, user, host)
+
+        requested_inst = requested_inst_key.get()
+        receiver = requested_inst.admin.urlsafe()
+        notification_props = get_notification_props('LINK', requested_inst)
+        notify_single_user(notification_props, receiver)
 
         self.response.write(json.dumps(request.make()))

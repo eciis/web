@@ -60,4 +60,10 @@ class NotificationProperties(object):
         }
 
     def __get_link_props(self):
-        pass
+        url = "/institution/%s/inviteInstitution" % self.entity.key.urlsafe()
+
+        return {
+            'title': 'Solicitação de vínculo',
+            'body': 'Uma instituição que você administra recebeu uma nova solicitação de vínculo',
+            'click_action': url
+        }

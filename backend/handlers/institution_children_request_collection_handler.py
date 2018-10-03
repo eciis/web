@@ -12,6 +12,8 @@ from . import BaseHandler
 from models import Institution
 from models import InviteFactory
 from models import RequestInstitutionChildren
+from fcm import notify_single_user
+from push_notification import get_notification_props
 
 __all__ = ['InstitutionChildrenRequestCollectionHandler']
 
@@ -71,5 +73,10 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
         institution_parent.add_child(requested_inst_key)
 
         request.send_invite(host, user.current_institution)
+
+        requested_inst = requested_inst_key.get()
+        receiver = requested_inst.admin.urlsafe()
+        notification_props = get_notification_props('LINK', requested_inst)
+        notify_single_user(notification_props, receiver)
 
         self.response.write(json.dumps(request.make()))

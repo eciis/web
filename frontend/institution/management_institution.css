@@ -26,6 +26,10 @@
     width: 49%;
 }
 
+.edit-inst-country, .edit-inst-federal-state, .edit-inst-city, .edit-inst-neighbourhood {
+        width: 24%;
+    }
+
 @media screen and (min-width: 601px) {
     .edit-inst-name {
         width: 59%;
@@ -63,11 +67,8 @@
 }
 
 @media screen and (max-width: 450px) {
-    .edit-inst-number {
-        width: 47%;
-    }
-
-    .edit-inst-cep {
+    .edit-inst-number, .edit-inst-cep, .edit-inst-country,
+    .edit-inst-federal-state, .edit-inst-city, .edit-inst-neighbourhood {
         width: 47%;
     }
 }

@@ -141,7 +141,7 @@ def filter_single_user_tokens(content):
         The user's tokens.
     """
     tokens = []
-    for key in content.keys():
+    for key in content:
         tokens.append(content[key]['token'])
     return tokens
 
@@ -163,7 +163,6 @@ def filter_multiple_user_tokens(content, users_keys):
     for user_key in users_keys:
         if user_key in content:
             current_firebase_objects = content[user_key]
-            for firebase_object_key in current_firebase_objects:
-                firebase_object = current_firebase_objects[firebase_object_key]
-                tokens.append(firebase_object['token'])
+            current_tokens = filter_single_user_tokens(current_firebase_objects)
+            map(lambda token: tokens.append(token), current_tokens)
     return tokens

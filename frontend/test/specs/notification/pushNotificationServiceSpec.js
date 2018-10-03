@@ -1,7 +1,7 @@
 'use strict';
 
-(fdescribe('Test PushNotificationService', function () {
-    var service, messaging, defaultToken, notificationsRef;
+(describe('Test PushNotificationService', function () {
+    var service, messaging, defaultToken, notificationsRef, messageService;
 
     const fakeCallback = function fakeCallback(data) {
         return {
@@ -13,9 +13,10 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function ($firebaseArray, PushNotificationService, AuthService) {
+    beforeEach(inject(function (PushNotificationService, AuthService, MessageService) {
         service = PushNotificationService;
         messaging = firebase.messaging();
+        messageService = MessageService;
         var ref = firebase.database().ref();
         AuthService.login(new User({key: 'opaksdapodkadpk'}));
         notificationsRef = ref.child("notifications/key");
@@ -51,7 +52,26 @@
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).not.toHaveBeenCalled();
             expect(service._saveToken).not.toHaveBeenCalled();
+        });
 
+        it('should call showToast', () => {
+            spyOn(messaging, 'requestPermission').and.callFake(fakeCallback);
+            spyOn(messaging, 'getToken').and.callFake(() => {
+                return {
+                    then: (success, error) => {
+                        return error();
+                    }
+                }
+            });
+            spyOn(service, '_saveToken');
+            spyOn(messageService, 'showToast');
+
+            service._requestNotificationPermission();
+
+            expect(messaging.requestPermission).toHaveBeenCalled();
+            expect(messaging.getToken).toHaveBeenCalled();
+            expect(service._saveToken).not.toHaveBeenCalled();
+            expect(messageService.showToast).toHaveBeenCalledWith('Não foi possível ativar as notificações.');
         });
     });
 
@@ -99,7 +119,7 @@
 
             const result = service._hasNotificationPermission();
 
-            expect(result).toBeTruthy();
+            expect(result).toEqual(true);
         });
 
         it('should return false', () => {
@@ -107,7 +127,7 @@
             
             const result = service._hasNotificationPermission();
 
-            expect(result).toBeFalsy();
+            expect(result).toEqual(false);
         });
     });
 }));

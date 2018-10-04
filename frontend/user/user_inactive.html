@@ -4,7 +4,7 @@
             md-colors="{background: 'light-green-500'}">
             <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="padded" md-whiteframe="12" style="border-radius: 2px;"
+        <div class="padded" md-whiteframe="12"
             md-colors="{background: 'grey-50'}" layout="row" id="card-responsive">
             <div layout="column" id="content-card-responsive">
                 <div layout="row" layout-align="center center">
@@ -44,7 +44,7 @@
                                         </div>
                                         <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
                                             <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
-                                            <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
+                                            <p id="actuation-area">{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
                                             <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
                                         </div>
                                     </div>
@@ -70,18 +70,20 @@
                         <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
                                 <p>Para finalizar o pedido de convite, preencha suas informações institucionais.</p>
                         </div>
-                        <md-input-container class="md-block">
-                            <label>Nome</label>
-                            <input name="nome" ng-model="userInactiveCtrl.request.name" name="name" required>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Cargo institucional</label>
-                            <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Email institucional</label>
-                            <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
-                        </md-input-container>
+                        <div>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Nome</label>
+                                <input name="nome" ng-model="userInactiveCtrl.request.name" name="name" required>
+                            </md-input-container>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Cargo institucional</label>
+                                <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
+                            </md-input-container>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Email institucional</label>
+                                <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
+                            </md-input-container>
+                        </div>
                         <div layout="row" layout-align="end">
                             <md-button type="submit" md-colors="{background: 'teal-500'}">
                                 FINALIZAR
@@ -101,7 +103,7 @@
                             <md-button md-colors="{background: 'teal-500'}"
                                 ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
                        </div>
-                       <div layout="row" layout-align="end" ng-if="!userInactiveCtrl.isFinished">
+                       <div layout="row" layout-align="end" id="go-back-button" ng-if="!userInactiveCtrl.isFinished">
                            <md-button md-colors="{background: 'teal-500'}"
                                ng-click="userInactiveCtrl.logout()">SAIR</md-button>
                        </div>

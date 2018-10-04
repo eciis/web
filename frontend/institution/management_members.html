@@ -167,12 +167,11 @@
             </md-input-container>
           </form>
         </div>
-        <md-card-content style="margin-top: -40px;"
-          style="overflow: auto; max-height: 220px;" class="custom-scrollbar">
+        <md-card-content id="manage-member-card" class="custom-scrollbar manage-member-content">
           <md-list>
             <md-list-item style="margin-top: 5px;" class="md-2-line" md-colors="{background: 'grey-300'}"
               ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="manageMemberCtrl.showUserProfile(member.key, $event)">
-              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar manage-members-img"/>
               <div id="manage-username-text" class="md-list-item-text manage-inst-box">
                  <h3 >{{ member.name }}</h3>
                  <p id="manage-user-email-text">{{ member.email[0]}}</p>

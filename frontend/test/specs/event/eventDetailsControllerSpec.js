@@ -166,6 +166,14 @@
             eventCtrl.event = event;
             var result = eventCtrl.endInTheSameDay();
             expect(result).toBeFalsy();
+
+            var startTime = new Date('2018-10-04');
+            var endTime = new Date('2018-10-11');
+            event.start_time = startTime;
+            event.end_time = endTime;
+            eventCtrl.event = event;
+            var result = eventCtrl.endInTheSameDay();
+            expect(result).toBeFalsy();
         });
     });
 

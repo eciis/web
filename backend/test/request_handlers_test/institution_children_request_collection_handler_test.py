@@ -29,8 +29,9 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
+    @patch('handlers.institution_children_request_collection_handler.notify_single_user', return_value={})
     @patch('util.login_service.verify_token', return_value=ADMIN)
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, notify):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
@@ -78,6 +79,8 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             request['type_of_invite'],
             'REQUEST_INSTITUTION_CHILDREN',
             'Expected sender type_of_invite is REQUEST_INSTITUTION_CHILDREN')
+        
+        notify.assert_called()
     
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):
@@ -121,6 +124,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             "Error! User is not allowed to send request",
             exception_message,
             "Expected error message is Error! User is not allowed to send request")
+        
 
     @patch('util.login_service.verify_token', return_value=USER)
     def test_post_user_not_admin(self, verify_token):

@@ -28,8 +28,9 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
+    @patch('handlers.institution_parent_request_collection_handler.notify_single_user', return_value={})
     @patch('util.login_service.verify_token', return_value=ADMIN)
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, notify):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
@@ -81,6 +82,8 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             institution.parent_institution, inst_requested.key,
             "The parent institution of inst test must be update to inst_requested")
+        
+        notify.assert_called()
     
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):
@@ -273,10 +276,11 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         
         self.assertTrue(exception_message == "Error! The institution's already have a parent")
 
+    @patch('handlers.institution_parent_request_collection_handler.notify_single_user', return_value={})
     @patch('util.login_service.verify_token', return_value=ADMIN)
     @patch('handlers.institution_parent_request_collection_handler.NotificationsQueueManager.create_notification_task', return_value='08-21879638')
     @patch('handlers.institution_parent_request_collection_handler.enqueue_task')
-    def test_post_which_parent_already_has_child(self, verify_token, enqueue_task, create_notification_task):
+    def test_post_which_parent_already_has_child(self, verify_token, enqueue_task, create_notification_task, notify):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
@@ -316,3 +320,4 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
             'Request should be accepted automatically when the parent institutions already has child')
 
         enqueue_task.assert_called()
+        notify.assert_called()

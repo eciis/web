@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Push Notification Service."""
+from custom_exceptions import EntityException
 
 __all__ = ['get_notification_props']
 
@@ -24,6 +25,10 @@ class NotificationProperties(object):
         return self.notification_method()
  
     def __get_like_props(self):
+        if not self.entity:
+            raise EntityException(
+                'A LIKE_POST notification requires the entity.')
+
         url = '/posts/%s' % self.entity.key.urlsafe()
 
         return {
@@ -33,6 +38,9 @@ class NotificationProperties(object):
         }
 
     def __get_comment_props(self):
+        if not self.entity:
+            raise EntityException(
+                'A COMMENT notification requires the entity.')
         url = "/posts/%s" % self.entity.key.urlsafe()
 
         return {

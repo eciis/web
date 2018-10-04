@@ -25,9 +25,13 @@ class FcmTest(TestBase):
     @patch('fcm.send_push_notifications')
     @patch('fcm.get_single_user_tokens')
     def test_notify_single_user(self, get_token, send_notification):
-        title = 'test'
-        body = 'test'
-        fcm.notify_single_user(title, body, self.f_user_key)
+        notification_props = {
+            'title':'test',
+            'body': 'test',
+            'click_action': '/'
+        }
+        
+        fcm.notify_single_user(notification_props, self.f_user_key)
         
         get_token.assert_called()
         send_notification.assert_called()
@@ -35,9 +39,13 @@ class FcmTest(TestBase):
     @patch('fcm.send_push_notifications')
     @patch('fcm.get_multiple_user_tokens')
     def test_notify_multiple_users(self, get_tokens, send_notification):
-        title = 'test'
-        body = 'test'
-        fcm.notify_multiple_users(title, body, [self.f_user_key, self.s_user_key])
+        notification_props = {
+            'title': 'test',
+            'body': 'test',
+            'click_action': '/'
+        }
+
+        fcm.notify_multiple_users(notification_props, [self.f_user_key, self.s_user_key])
 
         get_tokens.assert_called()
         send_notification.assert_called()

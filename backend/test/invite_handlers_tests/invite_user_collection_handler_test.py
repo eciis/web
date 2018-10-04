@@ -92,7 +92,8 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
                 'invites_keys': json.dumps([invite.key.urlsafe()]), 
                 'host': response.request.host,
                 'current_institution': institution.key.urlsafe(),
-                'notifications_ids': ['some_notification_id']
+                'notifications_ids': ['some_notification_id'],
+                'type_of_invite': 'USER'
             }
         )
 
@@ -149,7 +150,8 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             {
                 'invites_keys': json.dumps([invite.key.urlsafe()]), 
                 'host': response.request.host,
-                'current_institution': institution.key.urlsafe()
+                'current_institution': institution.key.urlsafe(),
+                'type_of_invite': 'USER_ADM'
             }
         )
 

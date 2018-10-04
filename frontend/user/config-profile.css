@@ -28,10 +28,6 @@
     margin: auto;
 }
 
-.column-responsive{
-    max-width: 100%;
-}
-
 .buttons-align{
     display: flex;
     -webkit-box-orient: horizontal;

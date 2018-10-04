@@ -532,27 +532,6 @@ a:active {
    border: 2px solid #EFEBE9;
 }
 
-.counter-badge {
-    position:relative;
-    margin-left: -16px;
-}
-
-.counter-badge[data-badge]:after {
-    content:attr(data-badge);
-    position:absolute;
-    top:-10px;
-    right:-10px;
-    font-size:.6em;
-    background:#004D40;
-    color:white;
-    width:18px;
-    height:18px;
-    text-align:center;
-    line-height:18px;
-    border-radius:50%;
-    box-shadow:0 0 1px #333;
-}
-
 .counter-of-notifications {
     position:relative;
 }
@@ -709,11 +688,6 @@ a:active {
     margin-top: -1px;
     margin-left: 40px;
     margin-right: 40px;
-}
-
-.like-comment-text {
-    font-size: 12px;
-    margin-left: 14px;
 }
 
 .sm-label {
@@ -1109,4 +1083,19 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .sm-multiple-choice {
     font-size: 11px;
     margin-left: 10px;
+}
+
+.flat-btn {
+    background: none;
+    border: 0;
+    padding-left: initial;
+}
+.flat-btn:hover {
+    background-color: #efefef;
+}
+
+.input-text-area {
+    max-height: 10em;
+    overflow-y: auto;
+    resize: none;
 }

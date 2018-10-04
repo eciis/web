@@ -6,6 +6,8 @@
     importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js');
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
+    // if the line number of the code below changes, modify the /ecis script.
+    const CACHE_SUFIX = 'master';
 
     let messaging;
 
@@ -16,7 +18,7 @@
 
     workbox.core.setCacheNameDetails({
         prefix: 'plataforma-cis',
-        suffix: 'v2'
+        suffix: CACHE_SUFIX
     });
 
     const precacheCacheName = workbox.core.cacheNames.precache;
@@ -26,6 +28,17 @@
         const myCache = await caches.open(precacheCacheName);
         await myCache.addAll(urls);
     }
+
+    /**
+     * Clear old version caches.
+     */
+    function clearOldCache() {
+        return caches.keys().then((keys) => {keys.filter((key) => !key.includes(CACHE_SUFIX)).map((key) => caches.delete(key))});
+    }
+
+    self.addEventListener('activate', (event) => {
+        event.waitUntil(clearOldCache());
+    });
 
     workbox.routing.registerRoute(
         ({ event }) => event.request.mode === 'navigate',

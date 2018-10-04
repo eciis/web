@@ -202,7 +202,7 @@
     app.directive("comment", function () {
         return {
             restrict: 'E',
-            templateUrl: "app/post/comment.html",
+            templateUrl: "app/comment/comment.html",
             controllerAs: "commentCtrl",
             controller: "CommentController",
             scope: {},

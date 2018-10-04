@@ -36,7 +36,7 @@
             expect(service._saveToken).toHaveBeenCalled();
         });
 
-        it('should not call saveToken', () => {
+        it('should not call saveToken when the user does not enable notification', () => {
             spyOn(messaging, 'requestPermission').and.callFake(function() {
                 return {
                     then: function () {
@@ -114,7 +114,7 @@
     });
 
     describe('hasNotificationPermission', () => {
-        it('should return true', () => {
+        it('should return true when the user has enabled notifications', () => {
             Notification = {permission: 'granted'};
 
             const result = service._hasNotificationPermission();
@@ -122,7 +122,7 @@
             expect(result).toEqual(true);
         });
 
-        it('should return false', () => {
+        it('should return false when the user has not enabled notifications', () => {
             Notification = {permission: 'ask'};
             
             const result = service._hasNotificationPermission();

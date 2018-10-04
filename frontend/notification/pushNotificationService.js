@@ -100,7 +100,7 @@
          * If it does, the token is replaced by the new one received as parameter.
          * Otherwise the token is saved.
          * @param {String} token 
-         * @param notificationsRef
+         * @param {object} notificationsRef
          * @private 
          */
         service._setToken = function setToken(token, notificationsRef) {

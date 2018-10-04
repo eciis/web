@@ -525,27 +525,6 @@ a:active {
    border: 2px solid #EFEBE9;
 }
 
-.counter-badge {
-    position:relative;
-    margin-left: -16px;
-}
-
-.counter-badge[data-badge]:after {
-    content:attr(data-badge);
-    position:absolute;
-    top:-10px;
-    right:-10px;
-    font-size:.6em;
-    background:#004D40;
-    color:white;
-    width:18px;
-    height:18px;
-    text-align:center;
-    line-height:18px;
-    border-radius:50%;
-    box-shadow:0 0 1px #333;
-}
-
 .counter-of-notifications {
     position:relative;
 }

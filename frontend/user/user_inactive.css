@@ -7,13 +7,17 @@
 }
 
 #card-responsive{
+    margin: 0 1em 0 1em
+}
+
+#content-card-responsive{
     border-radius: 2px;
     display: grid;
     max-height: 100%;
     max-width: 23em;
 }
 
-#content-card-responsive{
+#content-responsive{
     max-width: 25em;
     margin:1em 3em 1em 3em;
     display: grid;
@@ -39,10 +43,10 @@
     #actuation-area{
         display: none;
     }
-    #content-card-responsive{
+    #content-responsive{
         max-height: 34em;
     }
-    #card-responsive{
+    #content-card-responsive{
         margin-top: 1em;
     }
     #logo-cis-inactive{
@@ -51,7 +55,7 @@
 }
 
 @media screen and (min-width: 400px) and (max-width: 599px){
-    #card-responsive{
+    #content-card-responsive{
         max-width: 25em;
     }
 }
@@ -60,7 +64,7 @@
     #go-back-icon{
         display: none
     }
-    #content-card-responsive{
+    #content-responsive{
         margin:1em;
     }
 }
@@ -72,7 +76,7 @@
 }
 
 @media screen and (min-width: 600px) and (max-width: 800px){
-    #card-responsive{
+    #content-card-responsive{
         max-width: 30em;
     }
 
@@ -92,7 +96,7 @@
         display: none;
     }
     
-    #card-responsive{
+    #content-card-responsive{
         max-width: 45em;
     }
 
@@ -112,7 +116,7 @@
         max-height: 5em;
     }
 
-    #content-card-responsive{
+    #content-responsive{
         max-height: 21em;
         margin:0.5em 2em 0.5em 2em;
     }

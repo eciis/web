@@ -768,7 +768,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .sm-icon-button md-icon {
     font-size: 20px;
-    margin: 6px;
+    margin: 4px 6px 6px 6px;
     width: unset !important;
     min-width: unset !important;
     color: white;
@@ -783,7 +783,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .xs-icon-button md-icon {
     font-size: 11px;
-    margin: -2.1em auto auto auto;
+    margin: -2.2em auto auto auto;
     height: 11px;
     min-height: 10px;
 }

@@ -1,9 +1,6 @@
-<head>
-  <link rel="stylesheet" href="app/main/main.css">
-</head>
 <!-- TOOLBAR -->
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}">
-  <div class="md-toolbar-tools" >
+<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center" layout="row">
+  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70">
 
     <md-button class="md-icon-button hide-gt-sm" aria-label="Menu" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
@@ -16,25 +13,25 @@
       </md-button>
     </a>
 
-    <span flex md-truncate></span>
-
-    <a ui-sref="app.user.home">
-      <md-button class="md-icon-button" title="Home">
-        <md-icon>home</md-icon>
-      </md-button>
-    </a>
-
-    <notification></notification>
-
-    <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
-      <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
-        <md-input-container flex md-no-float>
-          <input aria-label="Pesquisar por instituições" ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}">
-        </md-input-container>
-      </form>
-      <md-button ng-click="mainCtrl.toogleSearch()" class="md-icon-button" title="Buscar">
-        <md-icon>search</md-icon>
-      </md-button>
+    <div class="toolbar-btns" layout="row">
+      <a ui-sref="app.user.home">
+        <md-button class="md-icon-button" title="Home">
+          <md-icon>home</md-icon>
+        </md-button>
+      </a>
+  
+      <notification></notification>
+  
+      <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
+        <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
+          <md-input-container flex md-no-float>
+            <input aria-label="Pesquisar por instituições" ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}">
+          </md-input-container>
+        </form>
+        <md-button ng-click="mainCtrl.toogleSearch()" class="md-icon-button" title="Buscar">
+          <md-icon>search</md-icon>
+        </md-button>
+      </div>
     </div>
   </div>
 </md-toolbar>

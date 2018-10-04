@@ -5,7 +5,7 @@
 
     app.controller("LoadController", function($scope){
         $scope.addLayoutFill ? 
-            document.getElementById("element").classList.add("layout-fill") : "";
+            document.getElementById("element").classList.add("fill-screen") : "";
     });
 
     app.directive("loadCircle", function() {

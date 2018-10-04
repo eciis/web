@@ -8,20 +8,60 @@
         var service = this;
 
         var authObj = firebase.auth();
-        var userAuthenticated;
         var userInfo;
-        var provider = new firebase.auth.GoogleAuthProvider();
-
-        authObj.onAuthStateChanged(function(user) {
-            if (user) {
-                userAuthenticated = user;
+        let tokenLoaded = false;
+        let resolveTokenPromise;
+        let loadTokenPromise;
+        let refreshInterval;
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        /**
+         * Function to get token of logged user.
+         * If the first token has not yet been loaded, it returns a promise 
+         * that will be resolved as soon as the token is loaded. 
+         * If the token has already been loaded, it returns the token.
+         */
+        service.getUserToken = async () => {
+            if (!tokenLoaded && !loadTokenPromise) {
+                loadTokenPromise = new Promise((resolve) => {
+                    resolveTokenPromise = resolve;
+                });
+            } else if (tokenLoaded) {
+                return userInfo.accessToken;
             }
-          });
+
+            return loadTokenPromise;
+        };
 
         /**
-         * Store the last promise to refresh user authentication token.
+         * Function to get token id of user and update object userInfo
+         * @param {firebaseUser} user 
          */
-        var refreshTokenPromise = null;
+        function getIdToken(user) {
+            user.getIdToken(true).then(function(userToken) {
+                if (userInfo) {
+                    userInfo.accessToken = userToken;
+                    service.save();
+                }
+
+                if (resolveTokenPromise) {
+                    resolveTokenPromise(userToken);
+                    resolveTokenPromise = null;
+                }
+
+                tokenLoaded = true;
+            })
+        }
+
+        authObj.onAuthStateChanged(function(user) {
+            const timeToRefresh = 3500000;
+            if (user) {
+                getIdToken(user);
+                refreshInterval = setInterval(() => {
+                    getIdToken(user);
+                }, timeToRefresh);
+            }
+          });
 
         /**
         * Store listeners to be executed when user logout is called.
@@ -123,6 +163,7 @@
             authObj.signOut();
             delete $window.localStorage.userInfo;
             userInfo = undefined;
+            clearInterval(refreshInterval);
 
             executeLogoutListeners();
 
@@ -131,11 +172,6 @@
 
         service.getCurrentUser = function getCurrentUser() {
             return userInfo;
-        };
-        
-        service.getUserToken = function getUserToken() {
-            refreshTokenAsync();
-            return userInfo.accessToken;
         };
 
         service.isLoggedIn = function isLoggedIn() {
@@ -214,26 +250,6 @@
             if ($window.localStorage.userInfo) {
                 var parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
-            }
-        }
-
-        /**
-         * Refreshes the user token asynchronously and store in the browser
-         * cache to maintain the section active, during the time that 
-         * the user is using the system. 
-         * 
-         * This function uses a global variable (refreshTokenPromise)
-         * to synchronize the token API call's, preventing multiples
-         * promises executing the same action.
-         */
-        function refreshTokenAsync() {
-            if (userAuthenticated && !refreshTokenPromise) {
-                refreshTokenPromise = userAuthenticated.getIdToken();
-                refreshTokenPromise.then(function(idToken) {
-                    userInfo.accessToken = idToken;
-                    service.save();
-                    refreshTokenPromise = null;
-                });
             }
         }
 

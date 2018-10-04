@@ -8,9 +8,10 @@
         controller: CommentController,
         controllerAs: 'commentCtrl',
         bindings: {
-            comment: '=',
-            post: '=',
             user: '=',
+            post: '=',
+            comment: '=',
+            commentParent: '=',
             isReply: '<'
         }
     });
@@ -25,48 +26,40 @@
         // Controll the disablement of actions
         commentCtrl.saving = false;
 
-        commentCtrl.$onInit = function () {
-         
-            
-        }
+        let commentId, replyId, postKey;
 
-        commentCtrl.likeOrDislike = function likeOrDislike(reply) {
-            var replyId = reply ? reply.id : undefined;
-            if (commentCtrl.isLikedByUser(reply)) {
-                commentCtrl.saving = true;
-                CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
-                    function sucess() {
-                        if (reply) {
-                            _.remove(reply.likes, function (key) {
-                                return commentCtrl.user.key === key;
-                            });
-                        } else {
-                            _.remove(commentCtrl.comment.likes, function (key) {
-                                return commentCtrl.user.key === key;
-                            });
-                        }
-                        commentCtrl.saving = false;
-                    }, function error() {
-                        $state.go("app.user.home");
-                        commentCtrl.saving = false;
-                    }
-                );
-            } else {
-                commentCtrl.saving = true;
-                CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, replyId).then(
-                    function sucess() {
-                        if (reply) {
-                            reply.likes.push(commentCtrl.user.key);
-                        } else {
-                            commentCtrl.comment.likes.push(commentCtrl.user.key);
-                        }
-                        commentCtrl.saving = false;
-                    }, function error() {
-                        $state.go("app.user.home");
-                        commentCtrl.saving = false;
-                    }
-                );
-            }
+        commentCtrl.$onInit = function () {
+            postKey = commentCtrl.post.key;
+            commentId = commentCtrl.isReply ? commentCtrl.commentParent.id : commentCtrl.comment.id;
+            replyId = commentCtrl.isReply ? commentCtrl.comment.id : '';
+        };
+    
+        commentCtrl.like = function () {
+            commentCtrl.saving = true;
+            CommentService.like(postKey, commentId, replyId)
+            .then(function sucess() {
+                    commentCtrl.comment.likes.push(commentCtrl.user.key);
+                    commentCtrl.saving = false;
+                }, function error() {
+                    $state.go("app.user.home");
+                    commentCtrl.saving = false;
+                }
+            );
+        };
+
+        commentCtrl.dislike = function () {
+            commentCtrl.saving = true;
+            CommentService.dislike(postKey, commentId, replyId)
+            .then(function sucess() {
+                    _.remove(commentCtrl.comment.likes, function (key) {
+                        return commentCtrl.user.key === key;
+                    });
+                    commentCtrl.saving = false;
+                }, function error() {
+                    $state.go("app.user.home");
+                    commentCtrl.saving = false;
+                }
+            );
         };
 
         commentCtrl.isDeletedPost = function isDeletedPost() {
@@ -74,9 +67,6 @@
         };
 
         commentCtrl.isLikedByUser = function isLikedByUser(reply) {
-            if (reply) {
-                return _.includes(reply.likes, commentCtrl.user.key);
-            }
             return _.includes(commentCtrl.comment.likes, commentCtrl.user.key);
         };
 
@@ -89,9 +79,6 @@
         };
 
         commentCtrl.numberOfLikes = function numberOfLikes(reply) {
-            if (reply) {
-                return _.size(reply.likes);
-            }
             return _.size(commentCtrl.comment.likes);
         };
 
@@ -104,10 +91,10 @@
                 commentCtrl.saving = true;
                 var institutionKey = commentCtrl.user.current_institution.key;
                 var promise = CommentService.replyComment(
-                    commentCtrl.post.key,
+                    postKey,
                     commentCtrl.newReply,
                     institutionKey,
-                    commentCtrl.comment.id
+                    commentId
                 );
 
                 promise.then(function success(response) {
@@ -123,34 +110,30 @@
             }
         };
 
-        commentCtrl.deleteReply = function deleteReply(reply) {
-            CommentService.deleteReply(commentCtrl.post.key, commentCtrl.comment.id, reply.id).then(
-                function success() {
-                    delete commentCtrl.comment.replies[reply.id];
+        commentCtrl.deleteReply = function deleteReply() {
+            CommentService.deleteReply(postKey, commentId, replyId)
+                .then(function success() {
+                    delete commentCtrl.commentParent.replies[replyId];
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
         };
 
         commentCtrl.deleteComment = function deleteComment() {
-            CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
+            CommentService.deleteComment(postKey, commentId).then(
                 function success() {
                     commentCtrl.post.data_comments = commentCtrl.post.data_comments
-                        .filter(comment => comment.id !== commentCtrl.comment.id);
+                        .filter(comment => comment.id !== commentId);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
         };
 
-        commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event, reply) {
+        commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event) {
             if (!commentCtrl.isDeletedPost()) {
                 MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                     'Este comentário será excluído e desaparecerá do referente post.'
                 ).then(function () {
-                    if (reply) {
-                        commentCtrl.deleteReply(reply);
-                    } else {
-                        commentCtrl.deleteComment();
-                    }
+                    commentCtrl.isReply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
                 }, function () {
                     MessageService.showToast('Cancelado');
                 });

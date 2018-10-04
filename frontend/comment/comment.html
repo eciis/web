@@ -1,5 +1,6 @@
 <md-list>
   <md-list-item class="md-3-line comment">
+    <!-- header -->
     <img class="md-avatar" ng-src="{{commentCtrl.comment.author_img}}" alt="{{commentCtrl.comment.author_name}}" />
     <div class="md-list-item-text" layout="column">
       <div class="comment-header">
@@ -13,19 +14,20 @@
       <!-- buttons -->
       <div layout="row" class="btns-row">
         <!-- delete -->
-        <button ng-if="commentCtrl.canDeleteComment()" class="comment-btn"
-          ng-click="commentCtrl.confirmCommentDeletion($event)">
+        <button aria-label="Delete" title="Excluir comentário" ng-if="commentCtrl.canDeleteComment()" 
+          class="comment-btn" ng-click="commentCtrl.confirmCommentDeletion($event)" >
           <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" 
-            aria-label="Delete" title="Excluir comentário" md-colors="{background: 'light-green'}">
+            md-colors="{background: 'light-green'}" aria-label="Delete icon">
             <md-icon>delete</md-icon>
           </md-button>
           <b class="comment-btn-text">EXCLUIR</b>
         </button>
         <!-- like -->
-        <button class="left-align comment-btn" ng-click="commentCtrl.likeOrDislike()"
-          ng-disabled="commentCtrl.disableButton()">
-          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite"
-            title="{{(commentCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
+        <button class="left-align comment-btn" 
+          ng-click="commentCtrl.isLikedByUser() ? commentCtrl.dislike() : commentCtrl.like()"
+          ng-disabled="commentCtrl.disableButton()" aria-label="Favorite"
+          title="{{commentCtrl.isLikedByUser() ? 'Descurtir' : 'Curtir'}}">
+          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite icon"
             md-colors="{background: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
             <md-icon>grade</md-icon>
           </md-button>
@@ -39,8 +41,8 @@
         </button>
         <!-- reply -->
         <button ng-if="!commentCtrl.isReply" ng-disabled="commentCtrl.hideReplies()"
-          class="comment-btn" ng-click="commentCtrl.toggleReplies()">
-          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply" title="Responder"
+          class="comment-btn" ng-click="commentCtrl.toggleReplies()" aria-label="reply">
+          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
             title="Comentar" md-colors="{background: 'light-green'}">
             <md-icon>reply</md-icon>
           </md-button>
@@ -55,25 +57,24 @@
       </div>
     </div>
   </md-list-item>
-
+  <!-- Replies -->
   <div class="reply-container reply" ng-show="commentCtrl.showReplies">
     <comment ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'"
-      id="{{reply.id}}" comment="reply" user="commentCtrl.user" post="commentCtrl.post"
-      is-reply="true">
+      id="{{reply.id}}" user="commentCtrl.user" post="commentCtrl.post" comment="reply"
+      comment-parent="commentCtrl.comment" is-reply="true">
     </comment>
-
-    <md-list-item ng-if="commentCtrl.canReply()">
+    <md-list-item class="md-2-line" ng-if="commentCtrl.canReply()">
       <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
       <div class="md-list-item-text">
         <md-input-container class="reply-input-container" flex>
           <label>Responder</label>
           <textarea class="reply-input" ng-model="commentCtrl.newReply"
-             md-select-on-focus ng-disabled="commentCtrl.saving"></textarea>
+              md-select-on-focus ng-disabled="commentCtrl.saving"></textarea>
         </md-input-container>
         <div layout="row" class="reply-btn-container">
           <button class="send-reply-btn comment-btn" ng-click="commentCtrl.replyComment();"
-            ng-disabled="!commentCtrl.newReply">
-            <md-button class="md-icon-button hide-xxs">
+            ng-disabled="!commentCtrl.newReply" aria-label="Send">
+            <md-button class="md-icon-button hide-xxs" aria-label="Send icon">
               <md-icon>send</md-icon>
             </md-button>
             <b class="comment-btn-text">ENVIAR</b>
@@ -84,7 +85,6 @@
   </div>
 </md-list>
 
-<!-- Replies -->
 
 <div class="reply-container" ng-if="false">
   <md-list-item class="md-3-line reply" ng-show="commentCtrl.showReplies" 
@@ -111,13 +111,17 @@
           </md-button>
           <b class="comment-btn-text">EXCLUIR</b>
         </button>
+
+
         <button class="left-align comment-btn" ng-click="commentCtrl.likeOrDislike(reply)" 
           ng-disabled="commentCtrl.disableButton()">
+          
           <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite"
             title="{{ commentCtrl.isLikedByUser(reply) ? 'Descurtir' : 'Curtir'}}"
             md-colors="{background: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}">
             <md-icon>grade</md-icon>
           </md-button>
+          
           <b class="comment-btn-text">
             <small md-colors="{color: commentCtrl.isLikedByUser(reply) ? 'light-green' : 'grey'}" 
               class="comment-actions-counter" title="{{ commentCtrl.numberOfLikesMessage(reply) }}">
@@ -126,6 +130,8 @@
             CURTIR
           </b>
         </button>
+
+
       </div>
     </div>
   </md-list-item>

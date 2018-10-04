@@ -22,9 +22,9 @@
     <div flex flex-lg="90" flex-gt-lg="70" layout="column" md-colors="{background: 'grey-50'}">
         <div layout="column" flex>
             <!-- COVER -->
-            <div layout="column" style="height: 15.5em; box-shadow: 0 -2px 5px 0px grey;" id="bigCover">
+            <div style="height: 15em; box-shadow: 0 -2px 5px 0px grey;" id="bigCover">
                 <div ng-if="institutionCtrl.isAdmin()" hide-xs layout="row" layout-align="end start" style="height: 0px; position: relative;">
-                    <div layout="column" layout-align "end start">
+                    <div layout="column" layout-align="end start">
                         <div layout="row" layout-align="center center" class="cover-photo">
                             <span class="cover-photo-text">Adicionar foto de capa</span>
                             <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
@@ -40,7 +40,7 @@
                     <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
                         layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>
                 </div>
-                <div id="instName" md-colors="{background: 'teal-500'}" style="height: 4em;" layout-xs="column" layout="row"
+                <div id="instName" md-colors="{background: 'teal-500'}" style="height: 4em;" layout-xs="column" layout-gt-xs="row"
                     layout-align-gt-xs="start center" layout-align-xs="center center">
                     <img hide-xs style="height: 10em; width: 10em; margin: -7.5em 2em 0 3em; border-radius: 50%; background: white;
                         box-shadow: 0px -2px 14px 2px grey;" 

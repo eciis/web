@@ -15,7 +15,7 @@
         <!-- delete -->
         <button ng-if="commentCtrl.canDeleteComment()" class="comment-btn"
           ng-click="commentCtrl.confirmCommentDeletion($event)">
-          <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" 
+          <md-button class="sm-icon-button xs-icon-button hide-xxs" 
             aria-label="Delete" title="Excluir comentário" md-colors="{background: 'light-green'}">
             <md-icon>delete</md-icon>
           </md-button>
@@ -76,7 +76,7 @@
           <!-- Delete -->
           <button ng-if="commentCtrl.canDeleteComment(reply)" class="comment-btn"
             ng-click="commentCtrl.confirmCommentDeletion($event, reply)">
-            <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" aria-label="Delete"
+            <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Delete"
               title="Excluir resposta" md-colors="{background: 'light-green'}">
               <md-icon>delete</md-icon>
             </md-button>

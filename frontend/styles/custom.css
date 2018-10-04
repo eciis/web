@@ -950,6 +950,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .notification-icon {
     font-size: 20px; 
     color:white;
+    vertical-align: super;
 }
 
 .notification-icon-bg {

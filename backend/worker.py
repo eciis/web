@@ -21,7 +21,7 @@ from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
 from util import NotificationsQueueManager
-from models import User
+from push_notification import SendPushNotificationHandler
 
 
 def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
@@ -289,12 +289,6 @@ class PostNotificationHandler(BaseHandler):
                     message=notification_message
                 )
 
-                is_first_like = post.get_number_of_likes() == 1 and entity_type == 'LIKE_POST'
-                is_first_comment = post.get_number_of_comment() == 1 and entity_type == 'COMMENT'
-
-                if is_first_like or is_first_comment:
-                    notification_data = get_notification_props(entity_type, post)
-                    notify_single_user(notification_data, subscriber)
 
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""
@@ -426,18 +420,10 @@ class SendInviteHandler(BaseHandler):
         host = self.request.get('host')
         current_institution = self.request.get('current_institution')
         current_institution = ndb.Key(urlsafe=current_institution)
-        type_of_invite = self.request.get('type_of_invite')
-        user_keys = []
 
         for key in keys:
             invite = ndb.Key(urlsafe=key).get()
             invite.send_invite(host, current_institution)
-            user = User.get_active_user(invite.invitee)
-            user = user.key.urlsafe() if user else None
-            user_keys.append(user)
-
-        notification_props = get_notification_props(type_of_invite)
-        notify_multiple_users(notification_props, user_keys)
 
         notifications_ids = self.request.get_all('notifications_ids', [])
         map(lambda notification_id: NotificationsQueueManager.resolve_notification_task(notification_id), notifications_ids)
@@ -527,5 +513,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/send-invite', SendInviteHandler),
-    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler),
+    ('/api/queue/send-push-notification', SendPushNotificationHandler)
 ], debug=True)

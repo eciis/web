@@ -1,22 +1,30 @@
 # -*- coding: utf-8 -*-
 """Push Notification Service."""
 from custom_exceptions import EntityException
+from enum import Enum
 
-__all__ = ['get_notification_props']
+__all__ = ['get_notification_props', 'NotificationType']
 
 def get_notification_props(_type, entity=None):
     notification = NotificationProperties(_type, entity)
     return notification.get_props()
 
+class NotificationType(Enum):
+    like = 'LIKE_POST'
+    comment = 'COMMENT'
+    invite_user = 'USER'
+    invite_user_adm = 'USER_ADM'
+    link = 'LINK'
+
 class NotificationProperties(object):
 
     def __init__(self, _type, entity):
         types = {
-            'LIKE_POST': self.__get_like_props,
-            'COMMENT': self.__get_comment_props,
-            'USER': self.__get_invite_user_props,
-            'USER_ADM': self.__get_invite_user_adm_props,
-            'LINK': self.__get_link_props
+            NotificationType.like: self.__get_like_props,
+            NotificationType.comment: self.__get_comment_props,
+            NotificationType.invite_user: self.__get_invite_user_props,
+            NotificationType.invite_user_adm: self.__get_invite_user_adm_props,
+            NotificationType.link: self.__get_link_props
         }
         self.entity = entity
         self.notification_method = types[_type] 

@@ -10,6 +10,7 @@ from utils import json_response, Utils
 from custom_exceptions import NotAuthorizedException
 from models import InviteFactory
 from service_entities import enqueue_task
+from push_notification import NotificationType
 
 __all__ = ['InviteUserCollectionHandler']
 
@@ -75,8 +76,7 @@ class InviteUserCollectionHandler(BaseHandler):
                     'invites_keys': json.dumps(invites_keys),
                     'host': host,
                     'current_institution': current_institution_key.urlsafe(),
-                    'notifications_ids': [notification_id],
-                    'type_of_invite': type_of_invite
+                    'notifications_ids': [notification_id]
                 }
             )
 
@@ -89,9 +89,13 @@ class InviteUserCollectionHandler(BaseHandler):
             enqueue_task('send-invite', {
                 'invites_keys': json.dumps([invite.key.urlsafe()]), 
                 'host': host,
-                'current_institution': user.current_institution.urlsafe(), 
-                'type_of_invite': type_of_invite
+                'current_institution': user.current_institution.urlsafe()
             })
+        
+        enqueue_task('send-push-notification', {
+            'type': NotificationType(type_of_invite),
+            'invites': json.dumps(map(lambda invite: invite['key'], invites))
+        })
 
         self.response.write(json.dumps(
             {'msg': 'The invites are being processed.', 'invites' : invites}))

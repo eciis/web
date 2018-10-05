@@ -11,6 +11,7 @@ from utils import Utils
 from service_entities import enqueue_task
 from custom_exceptions import NotAuthorizedException
 from custom_exceptions import EntityException
+from push_notification import NotificationType
 
 from . import BaseHandler
 from models import Comment
@@ -66,6 +67,14 @@ class PostCommentHandler(BaseHandler):
             'sender_institution_key': post.institution.urlsafe()
         }
         enqueue_task('post-notification', params)
+
+        is_first_comment = post.get_number_of_comment() == 1
+        if is_first_comment:
+            enqueue_task('send-push-notification', {
+                'type': NotificationType(entity_type),
+                'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],
+                'entity': post.key.urlsafe()
+            })
 
         self.response.write(json.dumps(Utils.toJson(comment)))
 

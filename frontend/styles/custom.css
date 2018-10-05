@@ -1101,6 +1101,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 
 .hr-status-bar {
-    min-width: 30px; 
+    min-width: 1em; 
     width: 20%;
 }

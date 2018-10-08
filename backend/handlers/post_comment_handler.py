@@ -11,7 +11,6 @@ from utils import Utils
 from service_entities import enqueue_task
 from custom_exceptions import NotAuthorizedException
 from custom_exceptions import EntityException
-from push_notification import NotificationType
 
 from . import BaseHandler
 from models import Comment
@@ -71,7 +70,7 @@ class PostCommentHandler(BaseHandler):
         is_first_comment = post.get_number_of_comment() == 1
         if is_first_comment:
             enqueue_task('send-push-notification', {
-                'type': NotificationType(entity_type),
+                'type': entity_type,
                 'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],
                 'entity': post.key.urlsafe()
             })

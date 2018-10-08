@@ -10,7 +10,6 @@ from utils import json_response, Utils
 from custom_exceptions import NotAuthorizedException
 from models import InviteFactory
 from service_entities import enqueue_task
-from push_notification import NotificationType
 
 __all__ = ['InviteUserCollectionHandler']
 
@@ -91,9 +90,9 @@ class InviteUserCollectionHandler(BaseHandler):
                 'host': host,
                 'current_institution': user.current_institution.urlsafe()
             })
-        
+
         enqueue_task('send-push-notification', {
-            'type': NotificationType(type_of_invite),
+            'type': type_of_invite,
             'invites': json.dumps(map(lambda invite: invite['key'], invites))
         })
 

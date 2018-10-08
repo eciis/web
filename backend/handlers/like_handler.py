@@ -12,7 +12,6 @@ from custom_exceptions import EntityException
 from service_entities import enqueue_task
 from service_messages import send_message_notification
 from utils import Utils
-from push_notification import NotificationType
 
 __all__ = ['LikeHandler']
 
@@ -89,7 +88,7 @@ class LikeHandler(BaseHandler):
             is_first_like = post.get_number_of_likes() == 1
             if is_first_like:
                 enqueue_task('send-push-notification', {
-                    'type': NotificationType(entity_type),
+                    'type': entity_type,
                     'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],
                     'entity': post.key.urlsafe()
                 })

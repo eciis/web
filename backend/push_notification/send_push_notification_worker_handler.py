@@ -26,8 +26,6 @@ class SendPushNotificationHandler(BaseHandler):
         notify_multiple_users(notification_props, receivers)
     
     def get_users_from_invite(self, invite_keys):
-        print invite_keys
-        print ">>>>>>>>>>>>>>>>>>>>>>"
         user_keys = []
         for invite_key in invite_keys:
             invite = ndb.Key(urlsafe=invite_key).get()

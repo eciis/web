@@ -78,7 +78,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
         receiver = requested_inst.admin.urlsafe()
     
         enqueue_task('send-push-notification', {
-            'type': NotificationType.link,
+            'type': NotificationType.link.value,
             'receivers': [receiver],
             'entity': requested_inst_key.urlsafe()
         })

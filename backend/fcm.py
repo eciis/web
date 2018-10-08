@@ -22,9 +22,11 @@ def notify_single_user(data, user_key):
     It sends a notification to each user's device.
 
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         user_key: user's urlsafe key.
     """
     tokens = get_single_user_tokens(user_key)
@@ -37,9 +39,11 @@ def notify_multiple_users(data, user_keys):
     and use it to retrieve the tokens.
 
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         user_keys: A list with all users' urlsafe keys that will
         receive the notification.
     """
@@ -51,9 +55,11 @@ def send_push_notifications(data, tokens):
     """It wraps the call to pyfcm notify function.
     
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         tokens: The devices' tokens that will receive
         the notification.
     """

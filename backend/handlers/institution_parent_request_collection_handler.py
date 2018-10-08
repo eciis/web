@@ -41,6 +41,20 @@ def remake_link(request, requested_inst_key, child_institution, user):
 
     request.change_status('accepted')
 
+
+def enqueue_push_notification(requested_inst_key):
+    """Get the necessary parameters and insert
+    a new push notification in the queue.
+    """
+    requested_inst = requested_inst_key.get()
+    receiver = requested_inst.admin.urlsafe()
+
+    enqueue_task('send-push-notification', {
+        'type': NotificationType.link.value,
+        'receivers': [receiver],
+        'entity': requested_inst_key.urlsafe()
+    })
+
 class InstitutionParentRequestCollectionHandler(BaseHandler):
     """Institution Parent Collectcion Request Handler."""
 
@@ -126,13 +140,6 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
 
         request = main_operations(request, requested_inst_key, child_institution, user, host)
 
-        requested_inst = requested_inst_key.get()
-        receiver = requested_inst.admin.urlsafe()
-
-        enqueue_task('send-push-notification', {
-            'type': NotificationType.link.value,
-            'receivers': [receiver],
-            'entity': requested_inst_key.urlsafe()
-        })
+        enqueue_push_notification(requested_inst_key)
 
         self.response.write(json.dumps(request.make()))

@@ -9,6 +9,8 @@ from firebase import _get_http
 
 import json
 
+from utils import validate_object
+
 FIREBASE_TOKENS_ENDPOINT = "%s/pushNotifications.json" % FIREBASE_URL
 
 ICON_URL = "https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/images%2FLOGO-E-CIS-1510941864112?alt=media&token=ca197614-ad60-408e-b21e-0ebe258c4a80"
@@ -63,9 +65,12 @@ def send_push_notifications(data, tokens):
         tokens: The devices' tokens that will receive
         the notification.
     """
+    validate_object(data, ['title', 'body', 'click_action'])
+
     title = data['title']
     body = data['body']
     click_action = data['click_action']
+    
     if tokens:
         result = push_service.notify_multiple_devices(
             registration_ids=tokens, message_title=title,

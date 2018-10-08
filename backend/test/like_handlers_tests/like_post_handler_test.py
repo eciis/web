@@ -8,7 +8,7 @@ from models import Institution
 from handlers.like_handler import LikeHandler
 
 from .. import mocks
-from mock import patch
+from mock import patch, call
 
 
 class LikePostHandlerTest(TestBaseHandler):
@@ -88,7 +88,7 @@ class LikePostHandlerTest(TestBaseHandler):
                          "The number of likes expected was 1, but was %d"
                          % self.post.get_number_of_likes())
         # assert the notification was sent
-        params = {
+        post_not_params = {
             'receiver_key': self.post.author.urlsafe(),
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.post.key.urlsafe(),
@@ -97,7 +97,18 @@ class LikePostHandlerTest(TestBaseHandler):
             'sender_institution_key': self.post.institution.urlsafe()
         }
 
-        enqueue_task.assert_called_with('post-notification', params)
+        push_not_params = {
+            'entity': self.post.key.urlsafe(),
+            'type': 'LIKE_POST',
+            'receivers': [subscriber.urlsafe() for subscriber in self.post.subscribers]
+        }
+
+        calls = [
+            call('post-notification', post_not_params),
+            call('send-push-notification', push_not_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
         # Call the post method again
         with self.assertRaises(Exception) as exc:

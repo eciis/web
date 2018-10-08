@@ -34,11 +34,9 @@ class SendInviteHandlerTest(TestBaseHandler):
             ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
     
-    @patch('worker.notify_multiple_users', return_value={})
-    @patch('worker.get_notification_props')
     @patch.object(NotificationsQueueManager, 'resolve_notification_task')
     @patch.object(Invite, 'send_invite')
-    def test_post(self, send_invite, resolve_notification_task, get_props, notify):
+    def test_post(self, send_invite, resolve_notification_task):
         """Test post method."""
         admin = mocks.create_user()
         institution = mocks.create_institution()
@@ -61,6 +59,3 @@ class SendInviteHandlerTest(TestBaseHandler):
             send_invite.assert_called_with(host, institution.key)
 
         resolve_notification_task.assert_called_with(notification_id)
-
-        notify.assert_called()
-        get_props.assert_called_with('USER')

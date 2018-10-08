@@ -3,7 +3,7 @@
 
 from ..test_base import TestBase
 from .. import mocks
-from push_notification import get_notification_props
+from push_notification import get_notification_props, NotificationType
 from custom_exceptions import EntityException
 
 
@@ -26,7 +26,7 @@ class PushNotificationServiceTest(TestBase):
     def test_like_post_notification(self):
         url = "/posts/%s" %self.post.key.urlsafe()
 
-        notification_props = get_notification_props('LIKE_POST', self.post)
+        notification_props = get_notification_props(NotificationType('LIKE_POST'), self.post)
 
         self.assertEqual(notification_props['title'], 'Publicação curtida')
         self.assertEqual(
@@ -35,7 +35,7 @@ class PushNotificationServiceTest(TestBase):
     
     def test_like_post_notification_without_entity(self):
         with self.assertRaises(EntityException) as ex:
-            notification_props = get_notification_props('LIKE_POST')
+            notification_props = get_notification_props(NotificationType('LIKE_POST'))
         
         error_message = ex.exception.message
 
@@ -45,7 +45,7 @@ class PushNotificationServiceTest(TestBase):
     def test_comment_notification(self):
         url = "/posts/%s" % self.post.key.urlsafe()
 
-        notification_props = get_notification_props('COMMENT', self.post)
+        notification_props = get_notification_props(NotificationType('COMMENT'), self.post)
 
         self.assertEqual(notification_props['title'], 'Publicação comentada')
         self.assertEqual(
@@ -54,7 +54,7 @@ class PushNotificationServiceTest(TestBase):
     
     def test_comment_notification_without_entity(self):
         with self.assertRaises(EntityException) as ex:
-            notification_props = get_notification_props('COMMENT')
+            notification_props = get_notification_props(NotificationType('COMMENT'))
 
         error_message = ex.exception.message
 
@@ -64,7 +64,7 @@ class PushNotificationServiceTest(TestBase):
     def test_invite_user_notification(self):
         url = "/notifications"
 
-        notification_props = get_notification_props('USER')
+        notification_props = get_notification_props(NotificationType('USER'))
 
         self.assertEqual(notification_props['title'], 'Novo convite')
         self.assertEqual(notification_props['body'], 
@@ -74,7 +74,7 @@ class PushNotificationServiceTest(TestBase):
     def test_invite_user_adm_notification(self):
         url = "/notifications"
 
-        notification_props = get_notification_props('USER_ADM')
+        notification_props = get_notification_props(NotificationType('USER_ADM'))
 
         self.assertEqual(notification_props['title'], 'Novo convite')
         self.assertEqual(notification_props['body'],

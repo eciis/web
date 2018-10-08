@@ -29,9 +29,9 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-    @patch('handlers.institution_children_request_collection_handler.notify_single_user', return_value={})
+    @patch('handlers.institution_children_request_collection_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value=ADMIN)
-    def test_post(self, verify_token, notify):
+    def test_post(self, verify_token, enqueue_task):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
@@ -80,7 +80,11 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             'REQUEST_INSTITUTION_CHILDREN',
             'Expected sender type_of_invite is REQUEST_INSTITUTION_CHILDREN')
         
-        notify.assert_called()
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'LINK',
+            'receivers': [inst_requested.admin.urlsafe()],
+            'entity': inst_requested.key.urlsafe()
+        })
     
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):

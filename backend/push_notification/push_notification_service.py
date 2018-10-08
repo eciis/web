@@ -11,7 +11,7 @@ def get_notification_props(_type, entity=None):
     to get the notification properties.
 
     Args:
-        _type -- the notification's type
+        _type -- the notification's type. type: NotificationType
         entity -- an optional parameter that can be
         used to determine the click_action property 
     """

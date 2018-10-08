@@ -11,7 +11,7 @@ MAIN_URI = '/api/queue/send-push-notification'
 
 
 class SendPushNotificationHandlerTest(TestBaseHandler):
-    """Test Remove admin permission in institution hierarchy."""
+    """Test Send Push Notification Handler."""
 
     @classmethod
     def setUp(cls):

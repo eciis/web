@@ -93,14 +93,14 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             'notifications_ids': ['some_notification_id']
         }
 
-        send_push_not_params = {
+        send_push_notification_params = {
             'type': 'USER',
             'invites': json.dumps([invite.key.urlsafe()])
         }
 
         calls = [
             call('send-invite', send_invite_params),
-            call('send-push-notification', send_push_not_params)
+            call('send-push-notification', send_push_notification_params)
         ]
 
         enqueue_task.assert_has_calls(calls)
@@ -159,14 +159,14 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
             'current_institution': institution.key.urlsafe()
         }
 
-        send_push_not_params = {
+        send_push_notification_params = {
             'type': 'USER_ADM',
             'invites': json.dumps([invite.key.urlsafe()])
         }
 
         calls = [
             call('send-invite', send_invite_params),
-            call('send-push-notification', send_push_not_params)
+            call('send-push-notification', send_push_notification_params)
         ]
 
         enqueue_task.assert_has_calls(calls)

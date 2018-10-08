@@ -16,8 +16,8 @@
                         Busque uma instituição que você faz parte.</p>
                     <div md-theme="input" class="search-field" style="margin: 0px; height: 48"
                         ng-if="!userInactiveCtrl.choicedInst">
-                        <form ng-submit="userInactiveCtrl.showMenu($event)" layout="row" style="margin-bottom: 0px; height: 48">
-                            <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48">
+                        <form ng-submit="userInactiveCtrl.showMenu($event)" layout="row" style="margin-bottom: 0px; height: 48;">
+                            <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48; width: 100%;">
                                 <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off" required>
                             </md-input-container>
                             <md-button type="submit" class="md-fab md-mini md-primary" md-colors="{'background': 'grey-50'}">

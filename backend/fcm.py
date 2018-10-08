@@ -136,7 +136,9 @@ def filter_single_user_tokens(content):
     Returns:
         The user's tokens.
     """
-    tokens = map(lambda key: key['token'], content)
+    tokens = []
+    for key in content:
+        tokens.append(content[key]['token'])
     return tokens
 
 

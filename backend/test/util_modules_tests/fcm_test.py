@@ -72,11 +72,12 @@ class FcmTest(TestBase):
         }
 
         tokens = fcm.filter_single_user_tokens(content)
-        self.assertTrue(len(tokens) == 3)
+        self.assertTrue(len(tokens) == 3, "The size of the list tokens is not the expected one")
         self.assertTrue(
             'token-1' in tokens and 
             'token-2' in tokens and 
-            'token-3' in tokens
+            'token-3' in tokens,
+            "The list tokens is not the expected one"
         )
     
     def test_filter_multiple_user_tokens(self):
@@ -96,10 +97,12 @@ class FcmTest(TestBase):
         users_keys = [self.f_user_key, self.s_user_key, 'aop-OPAKSD']
 
         tokens = fcm.filter_multiple_user_tokens(content, users_keys)
-        self.assertTrue(len(tokens) == 2)
+        self.assertTrue(len(tokens) == 2,
+                        "The size of the list tokens is not the expected one")
         self.assertTrue(
             'token-1' in tokens and
-            'token-2' in tokens
+            'token-2' in tokens,
+            "The list tokens is not the expected one"
         )
 
     def tearDown(self):

@@ -907,6 +907,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .dialog-transparent-without-shadow {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
+    max-width: 100% !important;
 }
 
 .share-post{

@@ -1,0 +1,8 @@
+.create-post-container-resp {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.create-post-box {
+    width: 85%;
+}

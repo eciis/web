@@ -1,4 +1,4 @@
-<md-card flex="90" flex-gt-xs="95">
+<md-card flex="90" class="create-post-container-resp create-post-box">
   <form name="saveForm" prevent-state-change="postCtrl.post" ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)" style="margin: 0;">
     <md-card-content layout="row" style="padding:0;" layout-padding>
       <div>
@@ -94,7 +94,7 @@
       </div>
     </md-card-content>
     <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
-      <div class="image-view" ng-if="postCtrl.showImage()">
+      <div  style="margin-left: auto; margin-right: auto;" ng-if="postCtrl.showImage()">
         <md-button class="md-icon-button" ng-click="postCtrl.hideImage()" style="margin-left: -0.5em;" title="Remover">
           <md-icon>clear</md-icon>
         </md-button>

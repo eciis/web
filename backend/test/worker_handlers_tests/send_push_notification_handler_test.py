@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Send push notification handler test."""
 
-from ..test_base_handler import TestBaseHandler, has_permissions
+from ..test_base_handler import TestBaseHandler
 from push_notification import SendPushNotificationHandler, get_notification_props, NotificationType
 import json
 from .. import mocks

@@ -3,8 +3,6 @@
 import webapp2
 import json
 from firebase import send_notification
-from fcm import notify_single_user, notify_multiple_users
-from push_notification import get_notification_props
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb

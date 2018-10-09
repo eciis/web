@@ -38,35 +38,33 @@
             commentCtrl.saving = true;
             CommentService.like(postKey, commentId, replyId)
             .then(function sucess() {
-                    commentCtrl.comment.likes.push(commentCtrl.user.key);
-                    commentCtrl.saving = false;
-                }, function error() {
-                    $state.go("app.user.home");
-                    commentCtrl.saving = false;
-                }
-            );
+                commentCtrl.comment.likes.push(commentCtrl.user.key);
+                commentCtrl.saving = false;
+            }, function error() {
+                $state.go("app.user.home");
+                commentCtrl.saving = false;
+            });
         };
 
         commentCtrl.dislike = function () {
             commentCtrl.saving = true;
             CommentService.dislike(postKey, commentId, replyId)
             .then(function sucess() {
-                    _.remove(commentCtrl.comment.likes, function (key) {
-                        return commentCtrl.user.key === key;
-                    });
-                    commentCtrl.saving = false;
-                }, function error() {
-                    $state.go("app.user.home");
-                    commentCtrl.saving = false;
-                }
-            );
+                _.remove(commentCtrl.comment.likes, function (key) {
+                    return commentCtrl.user.key === key;
+                });
+                commentCtrl.saving = false;
+            }, function error() {
+                $state.go("app.user.home");
+                commentCtrl.saving = false;
+            });
         };
 
         commentCtrl.isDeletedPost = function isDeletedPost() {
             return commentCtrl.post.state === 'deleted';
         };
 
-        commentCtrl.isLikedByUser = function isLikedByUser(reply) {
+        commentCtrl.isLikedByUser = function isLikedByUser() {
             return _.includes(commentCtrl.comment.likes, commentCtrl.user.key);
         };
 
@@ -78,7 +76,7 @@
             return _.values(commentCtrl.comment.replies);
         };
 
-        commentCtrl.numberOfLikes = function numberOfLikes(reply) {
+        commentCtrl.numberOfLikes = function numberOfLikes() {
             return _.size(commentCtrl.comment.likes);
         };
 
@@ -91,16 +89,11 @@
                 commentCtrl.saving = true;
                 var institutionKey = commentCtrl.user.current_institution.key;
                 var promise = CommentService.replyComment(
-                    postKey,
-                    commentCtrl.newReply,
-                    institutionKey,
-                    commentId
+                    postKey, commentCtrl.newReply, institutionKey, commentId
                 );
-
                 promise.then(function success(response) {
                     var data = response;
                     commentCtrl.comment.replies[data.id] = data;
-
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
                 }, function error() {
@@ -140,17 +133,11 @@
             }
         };
 
-        commentCtrl.canDeleteComment = function canDeleteComment(reply) {
-            var deletedPost = commentCtrl.post.state === 'deleted';
-            if (reply) {
-                var replyHasActivity = commentCtrl.numberOfLikes(reply) > 0;
-                return !replyHasActivity &&
-                    reply.author_key == commentCtrl.user.key && !deletedPost;
-            }
-            var commentHasActivity = commentCtrl.numberOfReplies() > 0 ||
-                commentCtrl.numberOfLikes() > 0;
-            return !commentHasActivity &&
-                commentCtrl.comment.author_key == commentCtrl.user.key && !deletedPost;
+        commentCtrl.canDeleteComment = function canDeleteComment() {
+            const isPostDeleted = commentCtrl.post.state === 'deleted';
+            const hasActivity = commentCtrl.numberOfReplies() > 0 || commentCtrl.numberOfLikes() > 0;
+            const userIsAuthor = commentCtrl.comment.author_key == commentCtrl.user.key
+            return !hasActivity && !isPostDeleted && userIsAuthor;
         };
 
         commentCtrl.canReply = function canReply() {
@@ -159,11 +146,8 @@
         };
 
         commentCtrl.hideReplies = function hideReplies() {
-            if (commentCtrl.isDeletedPost()) {
-                var noReplies = commentCtrl.numberOfReplies() === 0;
-                return commentCtrl.saving || noReplies;
-            }
-            return commentCtrl.saving;
+            const noReplies = commentCtrl.numberOfReplies() === 0;
+            return commentCtrl.isDeletedPost() && noReplies || commentCtrl.saving;
         };
 
         commentCtrl.disableButton = function disableButton() {
@@ -174,17 +158,18 @@
             return commentCtrl.post.institution_state === 'inactive';
         };
 
-        commentCtrl.numberOfLikesMessage = function numberOfLikesMessage(reply) {
-            return commentCtrl.numberOfLikes(reply) === 0 ? 'Nenhuma curtida' :
-                commentCtrl.numberOfLikes(reply) === 1 ? commentCtrl.isLikedByUser(reply) ?
-                    'Você curtiu isso' : '1 pessoa curtiu' :
-                    commentCtrl.numberOfLikes(reply) + ' pessoas curtiram';
+        commentCtrl.numberOfLikesMessage = function numberOfLikesMessage() {
+            const likesAmount = commentCtrl.numberOfLikes();
+            let message = likesAmount > 1 ? likesAmount + ' pessoas curtiram' : '1 pessoa curtiu';
+            message = likesAmount === 0 ? 'Nenhuma curtida' : message;
+            return message;
         };
 
         commentCtrl.numberOfRepliesMessage = function numberOfRepliesMessage() {
-            return commentCtrl.numberOfReplies() === 0 ? 'Nenhuma resposta' :
-                commentCtrl.numberOfReplies() === 1 ? '1 resposta' :
-                    commentCtrl.numberOfReplies() + ' respostas';
+            const repliesAmount = commentCtrl.numberOfReplies();
+            let message = repliesAmount > 1 ? repliesAmount + ' respostas' : '1 resposta';
+            message = repliesAmount === 0 ? 'Nenhuma resposta' : message;
+            return message;
         }
 
         commentCtrl.toggleReplies = function toggleReplies() {

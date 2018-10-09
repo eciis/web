@@ -1,7 +1,7 @@
 <md-dialog flex-gt-md="25" flex-md="40" flex-gt-sm="50" flex-sm="50" flex-xs="100">
     <md-dialog-content layout="column" class="custom-scrollbar" style="padding: 0">
         <div>
-            <div class="card hovercard" md-colors="{background: 'default-teal-600'}">
+            <div class="card hovercard" style="margin:0px;" md-colors="{background: 'default-teal-600'}">
                 <div layout="row" layout-align="end">
                     <md-button class="sm-icon-button" ng-click="editProfileCtrl.closeDialog()">
                         <md-icon>close</md-icon>
@@ -10,15 +10,10 @@
                 <div class="cardheader" layout="row"  layout-align="center start" id="cardheader-green-background">
                     <div class="avatar" id="cardheader-avatar">
                         <img alt="Foto do Perfil" ng-src="{{ editProfileCtrl.institution.photo_url }}"
-                        alt="{{editProfileCtrl.institution.name}}">
+                        alt="{{editProfileCtrl.institution.name}}" id="cardheader-image">
                     </div>
                 </div>
-                <div class="info"
-                    md-colors="{background: 'default-grey-50'}">
-                    <div class="desc">
-                    </div>
-                </div>
-                <div layout="column" style="background-color: white;">
+                <div layout="column" style="background-color: white; padding-top: 2.5em;">
                     <h2 id="inst-name-profile">{{editProfileCtrl.institution.name}}</h2>
                     <div id="input-edit-profile" md-theme="input">
                         <md-input-container style="width: 100%; margin: 0">
@@ -42,7 +37,7 @@
                             </md-input-container>
                         </div>
                     </div>
-                    <div layout="row" layout-align="end center">
+                    <div layout="row" layout-align="end center" style="padding-bottom:1em;">
                         <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
                         ng-click="editProfileCtrl.closeDialog()">
                             Cancelar

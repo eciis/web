@@ -1,0 +1,21 @@
+#cardheader-green-background{
+    height: 130px;
+}
+
+#cardheader-avatar{
+    top:30px;
+}
+
+#input-edit-profile{
+    padding-left: 2em;
+    padding-right: 2em;
+    text-align: start;
+}
+
+#inst-name-profile{
+    color: black;
+    padding: 0.3em;
+    padding-bottom: 0.5em;
+    font-size: 20px;
+    font-weight: 500;
+}

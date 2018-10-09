@@ -1,41 +1,48 @@
 'use strict';
 
-(describe('Test CommentController', function() {
+(fdescribe('Test CommentController', function() {
     beforeEach(module('app'));
-
-    var commentCtrl, scope, httpBackend, mdDialog, http, commentService, posts;
-    var user = {
+    
+    const POSTS_URI = "/api/posts";
+    let commentCtrl, scope, httpBackend, mdDialog, commentService;
+    
+    let user = {
         name: 'name',
-        key: 'asd234jk2l',
+        key: 'user-key',
         state: 'active'
     };
 
-    var reply = {"text": "reply", "id": 1};
+    let reply = {"text": "reply", "id": 1};
 
-    var comment = {
-        "text": "comment",
-        "id": 5,
-        "data_comments": [],
-        "replies": {
-            1: reply
-        }
+    let comment = {
+        text: "comment",
+        id: 5,
+        data_comments: [],
+        replies: {},
+        author_key: user.key
     };
 
-    var POSTS_URI = "/api/posts";
+    let post = {
+        title: 'post principal', author_key: user.key,
+        key: "123456", comments: "/api/posts/123456/comments",
+        likes: "/api/posts/123456/likes", 
+        number_of_likes: 0, number_of_comments: 0,
+        state: 'published'
+    };
+    
+    const fakeCallback = function(){
+        return {
+            then: function(callback) {
+                return callback();
+            }
+        };
+    };
 
-    posts = [{
-                title: 'post principal', author_key: user.key,
-                key: "123456", comments: "/api/posts/123456/comments",
-                likes: "/api/posts/123456/likes", number_of_likes: 0, number_of_comments: 0,
-                state: 'published'
-        }];
-
-    beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog,
+    beforeEach(inject(function ($controller, $httpBackend, $mdDialog,
             AuthService, $rootScope, CommentService) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
-        http = HttpService;
         commentService = CommentService;
 
         httpBackend.when('GET', 'main/main.html').respond(200);
@@ -52,6 +59,7 @@
 
         commentCtrl.user = AuthService.getCurrentUser();
         commentCtrl.comment = comment;
+        commentCtrl.post = post;
     }));
 
     afterEach(function() {
@@ -61,46 +69,46 @@
 
 
     describe('canDeleteComment()', function() {
-        it('Should return true', function() {
-            commentCtrl.post = posts[0];
-            var comment = {author_key: commentCtrl.user.key, text: "testando"};
-            var result = commentCtrl.canDeleteComment(comment);
-            expect(result).toBeTruthy();
+        it('Should be true when the user is the author', function() {
+            expect(commentCtrl.canDeleteComment()).toBeTruthy();
         });
 
-        it('Should return false', function() {
-            commentCtrl.post = posts[0];
-            var comment = {author_key: "1234", text: "testando"};
-            var result = commentCtrl.canDeleteComment(comment);
-            expect(result).toBeFalsy();
+        it('Should be false when the user is not the author', function() {
+            commentCtrl.comment = {author_key: "other-key", text: "testando"};
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
         });
 
-        it('Should not delete the comment in deleted post', function() {
-            commentCtrl.post = posts[0];
+        it('Should be false when the post is deleted', function() {
             commentCtrl.post.state = 'deleted';
-            var comment = {author_key: "1234", text: "testando"};
-            var result = commentCtrl.canDeleteComment(comment);
-            expect(result).toBeFalsy();
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+
+        it('Should be false when the comment has replies', function() {
+            commentCtrl.comment.replies = {1: reply};
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+
+        it('Should be false when the comment has replies', function() {
+            const nilComment = {};
+            commentCtrl.comment.likes = {1: nilComment};
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
         });
     });
 
     describe('canReply()', function() {
         it('Should return true', function() {
-            commentCtrl.post = posts[0];
             commentCtrl.post.state = "active";
             commentCtrl.showReplies = true;
             expect(commentCtrl.canReply()).toBeTruthy();
         });
 
         it('Should return false', function() {
-            commentCtrl.post = posts[0];
             commentCtrl.post.state = "deleted";
             commentCtrl.showReplies = true;
             expect(commentCtrl.canReply()).toBeFalsy();
         });
 
         it('Should return false', function() {
-            commentCtrl.post = posts[0];
             commentCtrl.post.state = "active";
             commentCtrl.post.institution_state = 'inactive';
             commentCtrl.showReplies = true;
@@ -109,23 +117,13 @@
     });
 
     describe('confirmCommentDeletion()', function(){
-        beforeEach(function() {
-            posts[0].state = 'published';
-        });
 
         it('Should delete the comment', function() {
-            commentCtrl.post = posts[0];
             spyOn(mdDialog, 'confirm').and.callThrough();
-            spyOn(mdDialog, 'show').and.callFake(function(){
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
+            spyOn(mdDialog, 'show').and.callFake(fakeCallback);
             spyOn(commentService, 'deleteComment').and.callThrough();
             commentCtrl.post.data_comments = [comment];
-            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/' + "5").respond(comment);
+            httpBackend.expect('DELETE', POSTS_URI + '/' + post.key + '/comments/' + "5").respond(comment);
             commentCtrl.confirmCommentDeletion("$event");
             httpBackend.flush();
             expect(commentService.deleteComment).toHaveBeenCalledWith(commentCtrl.post.key, 5);
@@ -135,17 +133,10 @@
         });
 
         it('Should call deleteReply', function() {
-            commentCtrl.post = posts[0];
             spyOn(mdDialog, 'confirm').and.callThrough();
-            spyOn(mdDialog, 'show').and.callFake(function(){
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
+            spyOn(mdDialog, 'show').and.callFake(fakeCallback);
             spyOn(commentService, 'deleteReply').and.callThrough();
-            httpBackend.expect('DELETE', POSTS_URI + '/' + posts[0].key + '/comments/5/replies/1').respond(reply);
+            httpBackend.expect('DELETE', POSTS_URI + '/' + post.key + '/comments/5/replies/1').respond(reply);
             commentCtrl.confirmCommentDeletion("$event", reply);
             httpBackend.flush();
             expect(commentService.deleteReply).toHaveBeenCalledWith(commentCtrl.post.key, 5, 1);

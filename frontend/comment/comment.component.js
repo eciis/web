@@ -1,11 +1,11 @@
 "use strict";
 
 (function () {
-    const app = angular.module('app');
-
-    app.component('comment', {
+    angular.module('app')
+    .controller("CommentController", CommentController)
+    .component('comment', {
         templateUrl: 'app/comment/comment.html',
-        controller: CommentController,
+        controller: "CommentController",
         controllerAs: 'commentCtrl',
         bindings: {
             user: '=',
@@ -122,15 +122,13 @@
         };
 
         commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event) {
-            if (!commentCtrl.isDeletedPost()) {
-                MessageService.showConfirmationDialog(event, 'Excluir Comentário',
-                    'Este comentário será excluído e desaparecerá do referente post.'
-                ).then(function () {
-                    commentCtrl.isReply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
-                }, function () {
-                    MessageService.showToast('Cancelado');
-                });
-            }
+            MessageService.showConfirmationDialog(event, 'Excluir Comentário',
+                'Este comentário será excluído e desaparecerá do referente post.'
+            ).then(function () {
+                commentCtrl.isReply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
+            }, function () {
+                MessageService.showToast('Cancelado');
+            });
         };
 
         commentCtrl.canDeleteComment = function canDeleteComment() {

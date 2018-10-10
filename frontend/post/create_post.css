@@ -31,7 +31,7 @@
 }
 
 .create-post-textarea {
-    max-height: 400px !important;
+    max-height: 100px !important;
     overflow-y:auto !important;
     resize:none !important;
 }

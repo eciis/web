@@ -77,22 +77,13 @@
       </md-toolbar>
       <md-card-content ng-show="manageMemberCtrl.showAdministrator">
         <md-list flex>
-          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+          <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
             ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
             <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
-              class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-            <div class="md-list-item-text" layout="column" style="margin-top: 12px;">
-              <b style="position: relative; font-size: 15px;">
-                <span style="line-height: 1.0;" hide show-gt-xs>
-                  {{ manageMemberCtrl.institution.admin.name }}
-                </span>
-                <span style="line-height: 1.0;" hide show-xs>
-                  {{ manageMemberCtrl.limitString(manageMemberCtrl.institution.admin.name, 45) }}
-                </span>
-              </b>
-              <span style="position: relative; font-size: 15px; margin-top: -10px;">
-                {{ manageMemberCtrl.institution.admin.email[0] }}
-              </span>
+              class="md-avatar manage-members-img"/>
+            <div id="manage-username-text" class="md-list-item-text manage-inst-box">
+              <h3 >{{ manageMemberCtrl.institution.admin.name }}</h3>
+              <p id="manage-user-email-text">{{ manageMemberCtrl.institution.admin.email[0] }}</p>
             </div>
             <div layout="row" layout-align="end center" flex hide show-gt-xs>
               <p class="status-invite-adm" style="line-height: 21px; padding: 5px;" md-colors="{color: 'teal-500'}">
@@ -107,16 +98,10 @@
               <div style="width: 5px; background-color: white;"></div>
               <div layout="row" layout-align="start center"  flex>
                 <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)}}" 
-                  class="md-avatar" style="margin: 0 15px 0 px; width: 60px; height: 60px;"/>
-                <div layout="column" style="margin-top: 12px;">
-                  <b style="position: relative; font-size: 15px;">
-                    <span style="line-height: 1.0;">
-                      {{ manageMemberCtrl.getMemberName(invite.invitee_key) }}
-                    </span>
-                  </b>
-                  <span style="position: relative; margin-top: -10px; font-size: 15px;">
-                    {{ invite.invitee }}
-                  </span>
+                  class="md-avatar manage-members-img"/>
+                <div id="manage-username-text" class="md-list-item-text manage-inst-box">
+                  <h3 >{{ manageMemberCtrl.getMemberName(invite.invitee_key) }}</h3>
+                  <p id="manage-user-email-text">{{ invite.invitee }}</p>
                 </div>
                 <div layout="row" layout-align="end center" flex hide show-gt-xs>
                   <p class="status-invite-adm" style="margin-right: -6px; line-height: 21px; padding: 5px;"
@@ -169,7 +154,7 @@
         </div>
         <md-card-content id="manage-member-card" class="custom-scrollbar manage-member-content">
           <md-list>
-            <md-list-item style="margin-top: 5px;" class="md-2-line" md-colors="{background: 'grey-300'}"
+            <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
               ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="manageMemberCtrl.showUserProfile(member.key, $event)">
               <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar manage-members-img"/>
               <div id="manage-username-text" class="md-list-item-text manage-inst-box">
@@ -209,10 +194,9 @@
       </md-toolbar>
       <md-card-content ng-show="manageMemberCtrl.showInvites" class="custom-scrollbar manage-member-content">
         <md-list>
-          <md-list-item class="md-2-line" md-colors="{background: 'grey-300'}"
+          <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
           ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
-            <md-icon class="md-avatar-icon" style="margin-top: 2px"
-            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
+            <img title="{{invite.invitee}}" ng-src="app/images/avatar.png" class="md-avatar manage-members-img"/>
             <div id="manage-username-text" class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>
               <p id="manage-user-email-text"> Convidado por: {{invite.sender_name}}</p>
@@ -241,12 +225,12 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showRequests" class="manage-member-content">
+      <md-card-content ng-show="manageMemberCtrl.showRequests" class="manage-member-content custom-scrollbar">
         <md-list flex>
-          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="manageMemberCtrl.openAcceptRequestDialog(request, $event)" class="md-3-line">
-            <md-icon class="md-avatar-icon"
-            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
-            <div class="md-list-item-text" layout="column">
+          <md-list-item class="md-2-line manage-members-margin" ng-repeat="request in manageMemberCtrl.requests"
+            ng-click="manageMemberCtrl.openAcceptRequestDialog(request, $event)">
+            <img title="{{request.sender_name}}" ng-src="app/images/avatar.png" class="md-avatar manage-members-img"/>
+            <div id="manage-username-text" class="md-list-item-text" layout="column">
               <h3>{{ request.sender_name}}</h3>
               <h4>Cargo atual: {{ request.office}}</h4>
               <p>Email institucional: {{ request.institutional_email}}</p>

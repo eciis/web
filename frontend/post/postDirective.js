@@ -367,8 +367,7 @@
         };
 
         postCtrl.showPlaceholderMsg = function() {
-            return postCtrl.isTyping() ? "Título" : !postCtrl.isTyping() && screen.width < 959 ?
-                "Nova publicação" : "Escreva aqui uma nova publicação";
+            return postCtrl.isTyping() ? "Título" : "Nova publicação";
         };
 
         (function main() {

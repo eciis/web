@@ -198,6 +198,13 @@
     white-space: pre-line;
   }
 
+.pdf-text {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .post-deleted {
     background-color:#F5F5F5;
 }
@@ -1079,11 +1086,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 .shared-post-header {
     height: 15vh;
-}
-
-.sm-multiple-choice {
-    font-size: 11px;
-    margin-left: 10px;
 }
 
 .flat-btn {

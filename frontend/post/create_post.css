@@ -1,10 +1,10 @@
 .create-post-container-resp {
     width: 100%;
     -webkit-box-flex: 1;
-    -webkit-flex: 1 1 88%;
-    flex: 1 1 88%;
+    -webkit-flex: 1 1 90%;
+    flex: 1 1 90%;
     box-sizing: border-box;
-    max-width: 80%;
+    max-width: 90%;
 }
 
 .create-post-title-placeholder {
@@ -30,19 +30,38 @@
     font-size: 14px !important;
 }
 
-.create-post-margin {
-    margin-left: 35px;
+.create-post-textarea {
+    max-height: 400px !important;
+    overflow-y:auto !important;
+    resize:none !important;
 }
 
-@media screen and (min-width: 500px) {
+.create-post-inst-img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.create-post-text-container {
+    margin: 0px !important;
+    padding-top: 10px !important;
+}
+
+.create-post-actions {
+    text-align: right;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 599px) {
     .create-post-margin {
-        margin-left: 40px;
+        margin-left: 35px;
     }
 }
 
-@media screen and (min-width: 650px) {
+@media screen and (min-width: 500px) and (max-width: 959px) {
     .create-post-margin {
-        margin-left: 60px;
+        margin-left: 40px;
     }
 }
 
@@ -53,6 +72,12 @@
 
     .create-post-text {
         font-size: 13.5px !important;
+    }
+
+    .create-post-container-resp {
+        -webkit-flex: 1 1 88%;
+        flex: 1 1 88%;
+        max-width: 80%;
     }
 }
 

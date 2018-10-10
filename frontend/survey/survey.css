@@ -1,0 +1,65 @@
+.survey-title-placeholder {
+    font-weight: bold !important;
+    color: #00695C !important;
+    margin: 0px !important;
+    border: 0 !important;
+    resize:none !important;
+}
+
+.survey-switch {
+    margin-top: -25px;
+    margin-left: -8px;
+}
+
+.survey-actions {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 959px) {
+    .survey-title-placeholder, .survey-options {
+        font-size: 13.5px !important;
+    }
+
+    .survey-multiple-choice {
+        font-size: 12px;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .survey-title-placeholder, .survey-options {
+        font-size: 12px !important;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .survey-multiple-choice {
+        font-size: 11px;
+        margin-left: 10px;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .survey-multiple-choice {
+        font-size: 9px;
+        margin-left: 22px;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .survey-multiple-choice {
+        font-size: 7.5px;
+        margin-right: -16px;
+    }
+
+    .survey-switch {
+        margin-left: -4px !important;
+    }
+
+    .survey-actions {
+        margin-left: 150px !important;
+    }
+}

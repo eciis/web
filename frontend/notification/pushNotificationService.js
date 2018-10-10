@@ -4,7 +4,7 @@
     const app = angular.module('app');
 
     app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
-        AuthService, $firebaseObject, MessageService) {
+        $firebaseObject, MessageService) {
         /**
          * Service responsible for send request permission
          * to enable notifications to the user and for deal
@@ -24,7 +24,10 @@
         
         const PUSH_NOTIFICATIONS_URL = "pushNotifications/";
         
-        const isMobile = {
+        /**
+         * @private
+         */
+        service._isMobile = {
             Android: () => {
                 return navigator.userAgent.match(/Android/i);
             },
@@ -47,23 +50,24 @@
 
         service.firebaseArrayNotifications;
 
-        service.currentUser = AuthService.getCurrentUser();
-
         /**
          * Ask permission to the user to send push notifications
          * and if the permission is conceded the user's new token
          * is retrieved and saveToken is called passing the token
          * as parameter.
-         * @private
          */
-        service._requestNotificationPermission = function requestNotificationPermission() {
-            messaging.requestPermission().then(() => {
-                messaging.getToken().then(token => {
-                    service._saveToken(token);
-                }, () => {
-                    MessageService.showToast('Não foi possível ativar as notificações.');
+        service.requestNotificationPermission = function requestNotificationPermission(user) {
+            service.currentUser = user;
+            const isOnMobile = service._isMobile.any();
+            if (!service._hasNotificationPermission() && isOnMobile) {
+                messaging.requestPermission().then(() => {
+                    messaging.getToken().then(token => {
+                        service._saveToken(token);
+                    }, () => {
+                        MessageService.showToast('Não foi possível ativar as notificações.');
+                    });
                 });
-            });
+            }
         };
 
         /**
@@ -120,11 +124,5 @@
             const { permission } = Notification;
             return permission === "granted";
         };
-
-        (function init() {
-            if (!service._hasNotificationPermission() && isMobile.any()) {
-                service._requestNotificationPermission();
-            }
-        })();
     });
 })();

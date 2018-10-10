@@ -13,23 +13,27 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function (PushNotificationService, AuthService, MessageService) {
+    beforeEach(inject(function (PushNotificationService, MessageService) {
         service = PushNotificationService;
         messaging = firebase.messaging();
         messageService = MessageService;
         var ref = firebase.database().ref();
-        AuthService.login(new User({key: 'opaksdapodkadpk'}));
         notificationsRef = ref.child("notifications/key");
         defaultToken = 'oaspkd-OPASKDAPO';
     }));
 
     describe('requestNotificationPermission', () => {
+        beforeEach(() => {
+            spyOn(service, '_hasNotificationPermission').and.returnValue(false);
+            spyOn(service._isMobile, 'any').and.returnValue(true);
+        });
+
         it('should call saveToken', () => {
             spyOn(messaging, 'requestPermission').and.callFake(fakeCallback);
             spyOn(messaging, 'getToken').and.callFake(fakeCallback);
             spyOn(service, '_saveToken').and.callFake(fakeCallback);
 
-            service._requestNotificationPermission();
+            service.requestNotificationPermission(new User({}));
 
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).toHaveBeenCalled();  
@@ -47,7 +51,7 @@
             spyOn(messaging, 'getToken');
             spyOn(service, '_saveToken');
 
-            service._requestNotificationPermission();
+            service.requestNotificationPermission();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).not.toHaveBeenCalled();
@@ -66,7 +70,7 @@
             spyOn(service, '_saveToken');
             spyOn(messageService, 'showToast');
 
-            service._requestNotificationPermission();
+            service.requestNotificationPermission();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).toHaveBeenCalled();
@@ -90,6 +94,9 @@
     describe('initFirebaseArray', () => {
         it('should starts a firebaseArray', () => {
             expect(service.firebaseArrayNotifications).toBe(undefined);
+            service.currentUser = new User({
+                key: 'aopskdpoaAPOSDKAPOKDPK'
+            });
 
             service._initFirebaseArray();
             
@@ -99,6 +106,9 @@
 
     describe('setToken', () => {
         beforeEach(() => {
+            service.currentUser = new User({
+                key: 'aopskdpoaAPOSDKAPOKDPK'
+            });
             service._initFirebaseArray();
         });
 

@@ -44,7 +44,13 @@
                 return navigator.userAgent.match(/IEMobile/i);
             },
             any: () => {
-                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                return (
+                    service._isMobile.Android() || 
+                    service._isMobile.BlackBerry() || 
+                    service._isMobile.iOS() || 
+                    service._isMobile.Opera() || 
+                    service._isMobile.Windows()
+                );
             }
         };
 

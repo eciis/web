@@ -27,12 +27,14 @@
   <meta name="apple-mobile-web-app-title" content="Plataforma CIS">
   <meta name="msapplication-TileImage" content="app/images/icons/cis-64x64.png">
   <meta name="msapplication-TileColor" content="#2F3BA2">
+  <meta name="theme-color" content="#009688"/>
   
   <!-- ngScrollbar style sheet -->
   <link rel="stylesheet" href="app/libs/jquery.mCustomScrollbar.css"/>
 
   <!-- Custom CSS -->
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
+  <link rel="stylesheet" type="text/css" href="app/user/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
@@ -67,8 +69,10 @@
   <!-- Firebase -->
   <script src="app/firebase-config.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-messaging.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
   <script>
     // Initialize the Firebase SDK
     var firebaseConfig = FIREBASE_CONFIG;
@@ -121,8 +125,6 @@
   <script src="app/auth/signupDirective.js"></script>
   <script src="app/auth/authService.js"></script>
   <script src="app/auth/loginController.js"></script>
-  <script src="app/auth/configProfileController.js"></script>
-  <script src="app/auth/editProfileController.js"></script>
   <script src="app/auth/resetPasswordController.js"></script>
 
   <!-- User -->
@@ -130,6 +132,8 @@
   <script src="app/user/userInactiveController.js"></script>
   <script src="app/user/profileService.js"></script>
   <script src="app/user/profileController.js"></script>
+  <script src="app/user/configProfileController.js"></script>
+  <script src="app/user/editProfileController.js"></script>
 
   <!-- Error Library -->
   <script src="app/error/errorController.js"></script>

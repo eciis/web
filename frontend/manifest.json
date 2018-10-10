@@ -2,27 +2,35 @@
   "name": "Plataforma Vitual CIS",
   "short_name": "CIS",
   "icons": [{
-    "src": "app/images/icons/cis-64x64.png",
+      "src": "app/images/icons/cis-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    }, {
+      "src": "app/images/icons/cis-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/cis-64x64.png",
+      "src": "app/images/icons/cis-144x144.png",
       "sizes": "144x144",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/cis-64x64.png",
+      "src": "app/images/icons/cis-152x152.png",
       "sizes": "152x152",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/cis-64x64.png",
+      "src": "app/images/icons/cis-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     }, {
-      "src": "app/images/icons/cis-64x64.png",
-      "sizes": "256x256",
+      "src": "app/images/icons/cis-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    }, {
+      "src": "app/images/icons/cis-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }],
-  "start_url": "/signin",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#009688",
   "theme_color": "#009688",

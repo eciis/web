@@ -101,7 +101,7 @@
                 url: "/config_profile",
                 views: {
                     user_content: {
-                        templateUrl: "app/auth/config_profile.html",
+                        templateUrl: "app/user/config_profile.html",
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
@@ -356,20 +356,23 @@
                 var AuthService = $injector.get('AuthService');
                 config.headers = config.headers || {};
                 if (AuthService.isLoggedIn()) {
-                    var token = AuthService.getUserToken();
-                    config.headers.Authorization = 'Bearer ' + token;
-                    
-                    var API_URL = "/api/";
-                    var FIRST_POSITION = 0;
-                    var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
-                    
-                    if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
-                        config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
-                    }
+                    return AuthService.getUserToken().then(token => {
+                        config.headers.Authorization = 'Bearer ' + token;                        
+                        
+                        var API_URL = "/api/";
+                        var FIRST_POSITION = 0;
+                        var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+                        
+                        if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
+                            config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                        }
+
+                        Utils.updateBackendUrl(config);
+                        return config || $q.when(config);
+                    });
                 }
 
                 Utils.updateBackendUrl(config);
-
                 return config || $q.when(config);
             },
             response: function(response) {

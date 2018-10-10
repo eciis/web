@@ -1,15 +1,14 @@
 <md-content class="fill-screen" layout="column" md-colors="{background: 'teal-500'}" layout-align="center center">
-    <div layout="row" layout-align="center center">
-        <md-button class="md-fab md-primary" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
-            style="margin-right: -35px;" md-colors="{background: 'light-green-500'}" hide-xs>
+    <div layout="row" layout-align="center center" id="card-responsive">
+        <md-button class="md-fab md-primary" id="go-back-icon" aria-label="Retornar" ng-click="userInactiveCtrl.logout()"
+            md-colors="{background: 'light-green-500'}">
             <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="padded" layout-margin md-whiteframe="12" style="border-radius: 2px;"
-            md-colors="{background: 'grey-50'}" layout="row" flex-xs="90"
-            flex-sm="65" flex-gt-sm="45" layout-align="center center">
-            <div layout="column" flex-xs="85" flex-gt-xs="70" layout-align="space-between" layout-margin>
+        <div class="padded" md-whiteframe="12"
+            md-colors="{background: 'grey-50'}" layout="row" id="content-card-responsive">
+            <div layout="column" id="content-responsive">
                 <div layout="row" layout-align="center center">
-                    <img src="/app/images/logowithname.png" flex="55"/>
+                    <img src="/app/images/logowithname.png" id="logo-cis-inactive"/>
                 </div>
                 <!-- Search institution -->
                 <div>
@@ -17,8 +16,8 @@
                         Busque uma instituição que você faz parte.</p>
                     <div md-theme="input" class="search-field" style="margin: 0px; height: 48"
                         ng-if="!userInactiveCtrl.choicedInst">
-                        <form ng-submit="userInactiveCtrl.showMenu($event)" layout="row" style="margin-bottom: 0px; height: 48">
-                            <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48">
+                        <form ng-submit="userInactiveCtrl.showMenu($event)" layout="row" style="margin-bottom: 0px; height: 48;">
+                            <md-input-container md-no-float class="md-block" flex-gt-sm style="margin: 0px; height: 48; width: 100%;">
                                 <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" flex-gt-sm autocomplete="off" required>
                             </md-input-container>
                             <md-button type="submit" class="md-fab md-mini md-primary" md-colors="{'background': 'grey-50'}">
@@ -26,7 +25,7 @@
                             </md-button>
                         </form>
                     </div>
-                    <md-content style="max-height: 300px;" class="custom-scrollbar" layout="column"
+                    <md-content id="content-search-institution" class="custom-scrollbar" layout="column"
                         ng-if="!userInactiveCtrl.choicedInst">
                         <md-list flex layout-padding style="margin: 0px;">
                             <md-list-item ng-repeat="institution in userInactiveCtrl.institutions"
@@ -40,15 +39,14 @@
                                     <md-icon class="md-avatar-icon" ng-if="userInactiveCtrl.isInstSelect(institution)"
                                     md-colors="{background: 'light-green-500', color: 'grey-50'}">done</md-icon>
                                     <div layout="column" class="md-3-line">
-                                    <div>
-                                        <h4 style="margin:0px" hide-xs>{{ institution.name }}</h4>
-                                        <h5 style="margin:0px" hide-gt-xs>{{ institution.name }}</h5>
-                                    </div>
-                                    <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
-                                        <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
-                                        <p>{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
-                                        <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
-                                    </div>
+                                        <div>
+                                            <p id="institution-name">{{ institution.name }}</p>
+                                        </div>
+                                        <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
+                                            <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
+                                            <p id="actuation-area">{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
+                                            <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </md-list-item>
@@ -67,32 +65,27 @@
                             </md-list-item>
                         </md-list>
                     </md-content>
-                    <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
-                        ng-if="userInactiveCtrl.showButtonNext()">
-                        <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
-                            ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
-                    </div>
-
                     <!-- Form user -->
                     <form ng-submit="userInactiveCtrl.verifyAndSendRequest()" name="requestuser"  ng-if="userInactiveCtrl.showRequestUser()" style="margin: 0px;">
                         <div layout="row" style="font-weight: 500" ng-if="userInactiveCtrl.showRequestUser()">
                                 <p>Para finalizar o pedido de convite, preencha suas informações institucionais.</p>
                         </div>
-                        <md-input-container class="md-block">
-                            <label>Nome</label>
-                            <input name="nome" ng-model="userInactiveCtrl.request.name" name="name" required>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Cargo institucional</label>
-                            <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
-                        </md-input-container>
-                        <md-input-container class="md-block">
-                            <label>Email institucional</label>
-                            <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
-                        </md-input-container>
+                        <div>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Nome</label>
+                                <input name="nome" ng-model="userInactiveCtrl.request.name" name="name" required>
+                            </md-input-container>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Cargo institucional</label>
+                                <input name="cargo" ng-model="userInactiveCtrl.request.office" name="office" required>
+                            </md-input-container>
+                            <md-input-container class="md-block input-responsive">
+                                <label>Email institucional</label>
+                                <input ng-model="userInactiveCtrl.request.email" type="email" name="email" required>
+                            </md-input-container>
+                        </div>
                         <div layout="row" layout-align="end">
-                            <md-button type="submit"
-                            class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                            <md-button type="submit" md-colors="{background: 'teal-500'}">
                                 FINALIZAR
                             </md-button>
                         </div>
@@ -104,7 +97,18 @@
                             de sua instituição na Plataforma CIS.</p>
                             <p>Você receberá a confirmação em seu email.</p>
                         </div>
-                        <div layout-gt-xs="row" layout-xs="column" layout-align="end center">
+                    </div>
+                    <div>
+                       <div layout="row" layout-align="end" ng-if="userInactiveCtrl.showButtonNext()">
+                            <md-button md-colors="{background: 'teal-500'}"
+                                ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
+                       </div>
+                       <div layout="row" layout-align="end" id="go-back-button" ng-if="!userInactiveCtrl.isFinished">
+                           <md-button md-colors="{background: 'teal-500'}"
+                               ng-click="userInactiveCtrl.logout()">SAIR</md-button>
+                       </div>
+                       <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
+                            ng-if="userInactiveCtrl.isFinished">
                             <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
                                 ng-click="userInactiveCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
                         </div>

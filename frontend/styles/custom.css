@@ -1099,3 +1099,8 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     overflow-y: auto;
     resize: none;
 }
+
+.hr-status-bar {
+    min-width: 1em; 
+    width: 20%;
+}

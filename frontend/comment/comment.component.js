@@ -26,17 +26,18 @@
         // Controll the disablement of actions
         commentCtrl.saving = false;
 
-        let commentId, replyId, postKey;
-
         commentCtrl.$onInit = function () {
-            postKey = commentCtrl.post.key;
-            commentId = commentCtrl.isReply ? commentCtrl.commentParent.id : commentCtrl.comment.id;
-            replyId = commentCtrl.isReply ? commentCtrl.comment.id : '';
+            commentCtrl.setupIds();
         };
+        
+        commentCtrl.setupIds = function () {
+            commentCtrl.commentId = commentCtrl.isReply ? commentCtrl.commentParent.id : commentCtrl.comment.id;
+            commentCtrl.replyId = commentCtrl.isReply ? commentCtrl.comment.id : '';
+        }
     
         commentCtrl.like = function () {
             commentCtrl.saving = true;
-            CommentService.like(postKey, commentId, replyId)
+            CommentService.like(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
             .then(function sucess() {
                 commentCtrl.comment.likes.push(commentCtrl.user.key);
                 commentCtrl.saving = false;
@@ -48,7 +49,7 @@
 
         commentCtrl.dislike = function () {
             commentCtrl.saving = true;
-            CommentService.dislike(postKey, commentId, replyId)
+            CommentService.dislike(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
             .then(function sucess() {
                 _.remove(commentCtrl.comment.likes, function (key) {
                     return commentCtrl.user.key === key;
@@ -89,7 +90,7 @@
                 commentCtrl.saving = true;
                 var institutionKey = commentCtrl.user.current_institution.key;
                 var promise = CommentService.replyComment(
-                    postKey, commentCtrl.newReply, institutionKey, commentId
+                    commentCtrl.post.key, commentCtrl.newReply, institutionKey, commentCtrl.commentId
                 );
                 promise.then(function success(response) {
                     var data = response;
@@ -104,18 +105,18 @@
         };
 
         commentCtrl.deleteReply = function deleteReply() {
-            CommentService.deleteReply(postKey, commentId, replyId)
+            CommentService.deleteReply(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
                 .then(function success() {
-                    delete commentCtrl.commentParent.replies[replyId];
+                    delete commentCtrl.commentParent.replies[commentCtrl.replyId];
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
         };
 
         commentCtrl.deleteComment = function deleteComment() {
-            CommentService.deleteComment(postKey, commentId).then(
+            CommentService.deleteComment(commentCtrl.post.key, commentCtrl.commentId).then(
                 function success() {
                     commentCtrl.post.data_comments = commentCtrl.post.data_comments
-                        .filter(comment => comment.id !== commentId);
+                        .filter(comment => comment.id !== commentCtrl.commentId);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 });

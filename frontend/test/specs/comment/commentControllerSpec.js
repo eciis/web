@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test CommentController', function() {
+(describe('Test CommentController', function() {
     beforeEach(module('app'));
     
     const POSTS_URI = "/api/posts";
@@ -12,7 +12,10 @@
         state: 'active'
     };
 
-    let reply = {"text": "reply", "id": 1};
+    let reply = {
+        text: "reply", 
+        id: 1
+    };
 
     let comment = {
         text: "comment",
@@ -40,7 +43,6 @@
 
     beforeEach(inject(function ($controller, $httpBackend, $mdDialog,
             AuthService, $rootScope, CommentService) {
-        scope = $rootScope.$new();
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
         commentService = CommentService;
@@ -53,6 +55,7 @@
 
         AuthService.login(user);
 
+        scope = $rootScope.$new();
         commentCtrl = $controller('CommentController', {
             scope: scope
         });
@@ -60,9 +63,11 @@
         commentCtrl.user = AuthService.getCurrentUser();
         commentCtrl.comment = comment;
         commentCtrl.post = post;
+        commentCtrl.setupIds();
     }));
 
     afterEach(function() {
+        scope.$destroy();
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
@@ -133,14 +138,24 @@
         });
 
         it('Should call deleteReply', function() {
+            comment.replies[reply.id] = reply;
+            commentCtrl.isReply = true;
+            commentCtrl.comment = reply;
+            commentCtrl.commentParent = comment;
+            commentCtrl.setupIds();
+
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(mdDialog, 'show').and.callFake(fakeCallback);
             spyOn(commentService, 'deleteReply').and.callThrough();
-            httpBackend.expect('DELETE', POSTS_URI + '/' + post.key + '/comments/5/replies/1').respond(reply);
+            
+            httpBackend.expect(
+                'DELETE', POSTS_URI + '/' + post.key + '/comments/'+ comment.id +'/replies/'+ reply.id
+            ).respond(reply);
             commentCtrl.confirmCommentDeletion("$event", reply);
             httpBackend.flush();
-            expect(commentService.deleteReply).toHaveBeenCalledWith(commentCtrl.post.key, 5, 1);
-            expect(commentCtrl.comment.replies).toEqual({});
+
+            expect(commentService.deleteReply).toHaveBeenCalledWith(commentCtrl.post.key, comment.id, reply.id);
+            expect(commentCtrl.commentParent.replies).toEqual({});
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });

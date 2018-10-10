@@ -1,9 +1,19 @@
+#cardhover-edit-profile{
+    overflow: visible;
+    margin: 0;
+}
+
 #cardheader-green-background{
     height: 130px;
 }
 
+#content-dialog-background{
+    background-color: white;
+    padding-top: 2.5em;
+}
+
 #cardheader-avatar{
-    top:30px;
+    top:25px;
 }
 
 #input-edit-profile{
@@ -18,4 +28,54 @@
     padding-bottom: 0.5em;
     font-size: 20px;
     font-weight: 500;
+}
+
+#cardheader-image{
+    height: 145px;
+    width: 145px;
+}
+
+.input-margin{
+    width: 100%;
+    margin: 0;
+}
+
+@media screen and (max-width: 350px){
+    #inst-name-profile{
+        font-size: 17px;
+    }
+    #content-dialog-background {
+        padding-top: 1em;
+    }
+    #cardheader-image{
+        height: 110px;
+        width: 110px;
+    }
+    #cardheader-green-background{
+        height: 110px;
+    }
+}
+
+@media screen and (min-width: 351px) and (max-width:600px){
+    #inst-name-profile{
+        font-size: 18px;
+        font-weight: 500;
+    }
+    #content-dialog-background {
+        padding-top: 1em;
+    }
+    #cardheader-green-background{
+        height: 10em;
+    }
+    #cardheader-avatar {
+        top: 2.5em;
+    }
+
+    #dialog-responsive{
+        height: 100%;
+    }
+
+    #dialog-response{
+        height: 100%;
+    }
 }

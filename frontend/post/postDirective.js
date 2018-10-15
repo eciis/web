@@ -27,6 +27,8 @@
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
+        const MOBILE_SCREEN = screen.width <= 960; // 960px is the max width of mobile devices
+
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
         };
@@ -361,9 +363,13 @@
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
         };
 
+        postCtrl.showTextField = function() {
+            return postCtrl.isTyping() || MOBILE_SCREEN;
+        }
+
         postCtrl.showButton = function() {
-            return postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
-                !postCtrl.loadingPost;
+            return (postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
+                !postCtrl.loadingPost) || MOBILE_SCREEN;
         };
 
         postCtrl.showPlaceholderMsg = function() {

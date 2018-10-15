@@ -10,7 +10,6 @@
 .create-post-title-placeholder {
     font-weight: bold !important;
     color: #00695C !important;
-    border: 0 !important;
     resize:none !important;
 }
 
@@ -68,6 +67,8 @@
 @media screen and (max-width: 959px) {
     .create-post-title-placeholder {
         font-size: 13.5px !important;
+        border: 5 !important;
+        border-color: #009688 !important;
     }
 
     .create-post-text {
@@ -78,6 +79,26 @@
         -webkit-flex: 1 1 88%;
         flex: 1 1 88%;
         max-width: 80%;
+    }
+
+    .create-post-button {
+        display: none;
+    }
+
+    .create-post-inst-name {
+        font-weight: 420;
+        margin-left: 10px;
+        margin-top: 2px;
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .create-post-title-placeholder {
+        border: 0 !important;
+    }
+
+    .create-post-inst-name {
+        display: none;
     }
 }
 

@@ -1,12 +1,17 @@
 <md-card class="create-post-container-resp create-post-margin">
     <form name="saveForm" prevent-state-change="postCtrl.post"
     ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)">
-    <div >
-      <md-card-content layout="row" layout-padding>
-        <div>
-          <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
-          title="{{postCtrl.user.current_institution.name}}"
-          class="create-post-inst-img"/>
+    <div>
+      <md-card-content layout-padding>
+        <div layout="row">
+          <div>
+            <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
+            title="{{postCtrl.user.current_institution.name}}"
+            class="create-post-inst-img"/>
+          </div>
+          <div class="create-post-inst-name">
+            <p>{{ postCtrl.getInstName() }}</p>
+          </div>
         </div>
         <div flex>
             <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
@@ -17,7 +22,7 @@
                       <div ng-message="required">O post deve conter um título!</div>
                   </div>
                 </md-input-container>
-                <md-input-container ng-show="postCtrl.isTyping()" class="md-block" md-no-float>
+                <md-input-container ng-show="postCtrl.showTextField()" class="md-block" md-no-float>
                   <textarea name="message" class="create-post-textarea create-post-text custom-scrollbar"
                   ng-model="postCtrl.post.text" placeholder="Texto" required>
                   </textarea>
@@ -117,6 +122,5 @@
         </md-button>
       </md-card-actions>
     </div>
-
     </form>
 </md-card>

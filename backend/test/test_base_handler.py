@@ -17,7 +17,7 @@ class TestBaseHandler(TestBase):
         cls.test.init_memcache_stub()
         cls.ndb.get_context().set_cache_policy(False)
         cls.test.init_search_stub()
-
+    
     def get_message_exception(self, exception):
         """Return only message of string exception for tests."""
         self.list_args = exception.split("\n")

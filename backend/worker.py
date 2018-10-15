@@ -3,7 +3,6 @@
 import webapp2
 import json
 from firebase import send_notification
-from fcm import notify_single_user
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
@@ -20,6 +19,7 @@ from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
 from util import NotificationsQueueManager
+from push_notification import SendPushNotificationHandler
 
 
 def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
@@ -268,7 +268,6 @@ class PostNotificationHandler(BaseHandler):
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         post = ndb.Key(urlsafe=post_key).get()
-        is_first_like = post.get_number_of_likes() == 1
 
         notification_message = post.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -287,11 +286,7 @@ class PostNotificationHandler(BaseHandler):
                     entity_key=post_key,
                     message=notification_message
                 )
-                
-                if is_first_like:
-                    title = "Primeira curtida"
-                    body = "O post pelo qual você deseja receber atualizações recebeu a primeira curtida."
-                    notify_single_user(title, body, subscriber)
+
 
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""
@@ -516,5 +511,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/send-invite', SendInviteHandler),
-    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler),
+    ('/api/queue/send-push-notification', SendPushNotificationHandler)
 ], debug=True)

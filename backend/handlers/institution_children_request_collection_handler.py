@@ -12,8 +12,24 @@ from . import BaseHandler
 from models import Institution
 from models import InviteFactory
 from models import RequestInstitutionChildren
+from service_entities import enqueue_task
+from push_notification import NotificationType
 
 __all__ = ['InstitutionChildrenRequestCollectionHandler']
+
+
+def enqueue_push_notification(requested_inst_key):
+    """Get the necessary parameters and insert
+    a new push notification in the queue.
+    """
+    requested_inst = requested_inst_key.get()
+    receiver = requested_inst.admin.urlsafe()
+
+    enqueue_task('send-push-notification', {
+        'type': NotificationType.link.value,
+        'receivers': [receiver],
+        'entity': requested_inst_key.urlsafe()
+    })
 
 class InstitutionChildrenRequestCollectionHandler(BaseHandler):
     """Institution Children Request Collection Handler."""
@@ -71,5 +87,7 @@ class InstitutionChildrenRequestCollectionHandler(BaseHandler):
         institution_parent.add_child(requested_inst_key)
 
         request.send_invite(host, user.current_institution)
+
+        enqueue_push_notification(requested_inst_key)
 
         self.response.write(json.dumps(request.make()))

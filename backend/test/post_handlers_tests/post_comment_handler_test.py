@@ -12,7 +12,7 @@ from models import User
 from models import Institution
 from models import Post
 
-from mock import patch
+from mock import patch, call
 
 USER_EMAIL = 'user@email.com'
 OTHER_USER_EMAIL = 'other_usero@email.com'
@@ -80,7 +80,7 @@ class PostCommentHandlerTest(TestBaseHandler):
                           "Expected size of comment's list should be one")
 
         # assert the notification was sent
-        params = {
+        post_not_params = {
             'receiver_key': self.user_post.author.urlsafe(),
             'sender_key': self.other_user.key.urlsafe(),
             'entity_key': self.user_post.key.urlsafe(),
@@ -88,7 +88,19 @@ class PostCommentHandlerTest(TestBaseHandler):
             'current_institution': self.institution.key.urlsafe(),
             'sender_institution_key': self.user_post.institution.urlsafe()
         }
-        enqueue_task.assert_called_with('post-notification', params)
+
+        push_not_params = {
+            'entity': self.user_post.key.urlsafe(),
+            'type': 'COMMENT',
+            'receivers': [subscriber.urlsafe() for subscriber in self.user_post.subscribers]
+        }
+
+        calls = [
+            call('post-notification', post_not_params),
+            call('send-push-notification', push_not_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
         # Verify that the post is published
         self.assertEquals(self.user_post.state, "published")

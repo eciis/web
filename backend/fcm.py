@@ -9,6 +9,8 @@ from firebase import _get_http
 
 import json
 
+from utils import validate_object
+
 FIREBASE_TOKENS_ENDPOINT = "%s/pushNotifications.json" % FIREBASE_URL
 
 ICON_URL = "https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/o/images%2FLOGO-E-CIS-1510941864112?alt=media&token=ca197614-ad60-408e-b21e-0ebe258c4a80"
@@ -17,50 +19,63 @@ ICON_URL = "https://firebasestorage.googleapis.com/v0/b/eciis-splab.appspot.com/
 push_service = FCMNotification(api_key=SERVER_KEY)
 
 
-def notify_single_user(title, body, user_key):
+def notify_single_user(data, user_key):
     """Notify a single user.
     It sends a notification to each user's device.
 
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         user_key: user's urlsafe key.
     """
     tokens = get_single_user_tokens(user_key)
-    send_push_notifications(title, body, tokens)
+    send_push_notifications(data, tokens)
 
 
-def notify_multiple_users(title, body, user_keys):
+def notify_multiple_users(data, user_keys):
     """Notify multiple users.
     This function receives a list of user_keys
     and use it to retrieve the tokens.
 
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         user_keys: A list with all users' urlsafe keys that will
         receive the notification.
     """
     tokens = get_multiple_user_tokens(user_keys)
-    send_push_notifications(title, body, tokens)
+    send_push_notifications(data, tokens)
 
 
-def send_push_notifications(title, body, tokens):
+def send_push_notifications(data, tokens):
     """It wraps the call to pyfcm notify function.
     
     Args:
-        title: A string that represents the notification's title.
-        body: The body message of the notification, the information
-        you want pass to the users.
+        data: An object that has the title, body and click_action
+        as properties. title is a string that represents the 
+        notification's title. body is the body message of the notification, 
+        the information you want pass to the users. click_action is the url
+        that the user is gonna be redirected when he click on the notification.
         tokens: The devices' tokens that will receive
         the notification.
     """
+    validate_object(data, ['title', 'body', 'click_action'])
+
+    title = data['title']
+    body = data['body']
+    click_action = data['click_action']
+    
     if tokens:
         result = push_service.notify_multiple_devices(
             registration_ids=tokens, message_title=title,
-            message_body=body, message_icon=ICON_URL
+            message_body=body, message_icon=ICON_URL, 
+            click_action=click_action
         )
         return result
 

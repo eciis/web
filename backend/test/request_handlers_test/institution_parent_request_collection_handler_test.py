@@ -9,7 +9,7 @@ from models import Address
 from handlers.institution_parent_request_collection_handler import InstitutionParentRequestCollectionHandler
 from .. import mocks
 
-from mock import patch
+from mock import patch, call
 
 ADMIN = {'email': 'user1@gmail.com'}
 USER = {'email': 'otheruser@ccc.ufcg.edu.br'}
@@ -28,8 +28,9 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
+    @patch('handlers.institution_parent_request_collection_handler.enqueue_task', return_value={})
     @patch('util.login_service.verify_token', return_value=ADMIN)
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, enqueue_task):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()		 
@@ -81,6 +82,14 @@ class InstitutionParentRequestCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(
             institution.parent_institution, inst_requested.key,
             "The parent institution of inst test must be update to inst_requested")
+        
+        enqueue_task.assert_called_with(
+            'send-push-notification', {
+                'type': 'LINK',
+                'receivers': [inst_requested.admin.urlsafe()],
+                'entity': inst_requested.key.urlsafe()
+            }
+        )
     
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):

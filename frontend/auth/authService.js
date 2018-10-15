@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService) {
+        MessageService, PushNotificationService) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -121,6 +121,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                            PushNotificationService.requestNotificationPermission(service.getCurrentUser());
                             return userInfo;
                         });
                     });

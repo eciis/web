@@ -3,7 +3,6 @@
 import webapp2
 import json
 from firebase import send_notification
-from fcm import notify_single_user
 from google.appengine.api import mail
 import logging
 from google.appengine.ext import ndb
@@ -20,6 +19,7 @@ from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
 from util import NotificationsQueueManager
+from push_notification import SendPushNotificationHandler
 
 
 def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
@@ -287,6 +287,7 @@ class PostNotificationHandler(BaseHandler):
                     message=notification_message
                 )
 
+
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""
 
@@ -345,7 +346,6 @@ class NotifyFollowersHandler(BaseHandler):
                     message=notification_message,
                     entity=entity
                 )
-            notify_single_user("bla", "blabla", follower.key.urlsafe())
 
 
 class AddAdminPermissionsInInstitutionHierarchy(BaseHandler):
@@ -511,5 +511,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/send-invite', SendInviteHandler),
-    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler),
+    ('/api/queue/send-push-notification', SendPushNotificationHandler)
 ], debug=True)

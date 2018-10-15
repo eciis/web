@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("NotificationService", function NotificationService($firebaseArray, AuthService, $rootScope,
-        NotificationMessageCreatorService, PushNotificationService) {
+        NotificationMessageCreatorService) {
         var service = this;
 
         var ref = firebase.database().ref();

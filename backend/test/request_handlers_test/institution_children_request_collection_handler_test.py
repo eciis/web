@@ -29,8 +29,9 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
+    @patch('handlers.institution_children_request_collection_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value=ADMIN)
-    def test_post(self, verify_token):
+    def test_post(self, verify_token, enqueue_task):
         """Test method post of InstitutionParentRequestCollectionHandler."""
         admin = mocks.create_user(ADMIN['email'])
         institution = mocks.create_institution()
@@ -78,6 +79,12 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             request['type_of_invite'],
             'REQUEST_INSTITUTION_CHILDREN',
             'Expected sender type_of_invite is REQUEST_INSTITUTION_CHILDREN')
+        
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'LINK',
+            'receivers': [inst_requested.admin.urlsafe()],
+            'entity': inst_requested.key.urlsafe()
+        })
     
     @patch('util.login_service.verify_token', return_value=ADMIN)
     def test_post_with_wrong_institution(self, verify_token):
@@ -121,6 +128,7 @@ class InstitutionChildrenRequestCollectionHandlerTest(TestBaseHandler):
             "Error! User is not allowed to send request",
             exception_message,
             "Expected error message is Error! User is not allowed to send request")
+        
 
     @patch('util.login_service.verify_token', return_value=USER)
     def test_post_user_not_admin(self, verify_token):

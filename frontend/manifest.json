@@ -2,10 +2,6 @@
   "name": "Plataforma Vitual CIS",
   "short_name": "CIS",
   "icons": [{
-      "src": "app/images/icons/cis-64x64.png",
-      "sizes": "64x64",
-      "type": "image/png"
-    }, {
       "src": "app/images/icons/cis-128x128.png",
       "sizes": "128x128",
       "type": "image/png"
@@ -32,7 +28,7 @@
     }],
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#009688",
+  "background_color": "#004D40",
   "theme_color": "#009688",
   "gcm_sender_id": "103953800507"
 }

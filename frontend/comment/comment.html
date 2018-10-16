@@ -1,16 +1,16 @@
 <md-list>
   <md-list-item class="md-3-line comment">
     <!-- header -->
-    <img class="md-avatar" ng-src="{{commentCtrl.comment.author_img}}" alt="{{commentCtrl.comment.author_name}}" />
+    <img class="md-avatar" ng-src="{{commentCtrl.currentComment.author_img}}" alt="{{commentCtrl.currentComment.author_name}}" />
     <div class="md-list-item-text" layout="column">
       <div class="comment-header">
-        <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.comment.author_key, $event)">
-          {{commentCtrl.comment.author_name}}</a>
-        <small class="md-caption inst-name"> | {{commentCtrl.comment.institution_name}}</small>
+        <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.currentComment.author_key, $event)">
+          {{commentCtrl.currentComment.author_name}}</a>
+        <small class="md-caption inst-name"> | {{commentCtrl.currentComment.institution_name}}</small>
         <b class="xs-bullet">&bull;</b>
-        <small>{{commentCtrl.comment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
+        <small>{{commentCtrl.currentComment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
       </div>
-      <p ng-bind-html="commentCtrl.comment.text"></p>
+      <p ng-bind-html="commentCtrl.currentComment.text"></p>
       <!-- buttons -->
       <div layout="row" class="btns-row">
         <!-- delete -->
@@ -40,7 +40,7 @@
           </b>
         </button>
         <!-- reply -->
-        <button ng-if="!commentCtrl.isReply" ng-disabled="commentCtrl.hideReplies()"
+        <button ng-if="!commentCtrl.reply" ng-disabled="commentCtrl.hideReplies()"
           class="comment-btn" ng-click="commentCtrl.toggleReplies()" aria-label="reply">
           <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
             title="Comentar" md-colors="{background: 'light-green'}">
@@ -58,10 +58,11 @@
     </div>
   </md-list-item>
   <!-- Replies -->
-  <div class="reply-container reply" ng-show="commentCtrl.showReplies">
-    <comment ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'"
-      id="{{reply.id}}" user="commentCtrl.user" post="commentCtrl.post" comment="reply"
-      comment-parent="commentCtrl.comment" is-reply="true">
+  <div class="reply-container reply" ng-show="commentCtrl.showReplies" >
+    <comment ng-if="!commentCtrl.reply"
+      ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'"
+      user="commentCtrl.user" post="commentCtrl.post"
+      comment="commentCtrl.comment" reply="reply">
     </comment>
     <md-list-item class="md-2-line" ng-if="commentCtrl.canReply()">
       <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />

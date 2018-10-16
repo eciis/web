@@ -2,22 +2,22 @@
 
 (function () {
     angular.module('app')
-    .controller("CommentController", CommentController)
-    .component('comment', {
-        templateUrl: 'app/comment/comment.html',
-        controller: "CommentController",
-        controllerAs: 'commentCtrl',
-        bindings: {
-            user: '=',
-            post: '=',
-            comment: '=',
-            commentParent: '=',
-            isReply: '<'
-        }
-    });
+        .controller("CommentController", CommentController)
+        .component('comment', {
+            templateUrl: 'app/comment/comment.html',
+            controller: "CommentController",
+            controllerAs: 'commentCtrl',
+            bindings: {
+                user: '=',
+                post: '=',
+                comment: '=',
+                reply: '='
+            }
+        });
 
     function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
-        var commentCtrl = this;
+        const commentCtrl = this;
+
         commentCtrl.user = AuthService.getCurrentUser();
 
         // Model to store data of a new reply on a comment
@@ -27,73 +27,45 @@
         commentCtrl.saving = false;
 
         commentCtrl.$onInit = function () {
-            commentCtrl.setupIds();
+            commentCtrl.replyId = commentCtrl.reply ? commentCtrl.reply.id : null;
+            commentCtrl.loadCommentBody();
         };
-        
-        commentCtrl.setupIds = function () {
-            commentCtrl.commentId = commentCtrl.isReply ? commentCtrl.commentParent.id : commentCtrl.comment.id;
-            commentCtrl.replyId = commentCtrl.isReply ? commentCtrl.comment.id : '';
-        }
-    
+
+        commentCtrl.loadCommentBody = function () {
+            commentCtrl.currentComment = commentCtrl.reply ? commentCtrl.reply : commentCtrl.comment;
+        };
+
         commentCtrl.like = function () {
             commentCtrl.saving = true;
-            CommentService.like(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
-            .then(function sucess() {
-                commentCtrl.comment.likes.push(commentCtrl.user.key);
-                commentCtrl.saving = false;
-            }, function error() {
-                $state.go("app.user.home");
-                commentCtrl.saving = false;
-            });
+            CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
+                .then(function sucess() {
+                    addLike();
+                    commentCtrl.saving = false;
+                }, function error() {
+                    $state.go("app.user.home");
+                    commentCtrl.saving = false;
+                });
         };
 
         commentCtrl.dislike = function () {
             commentCtrl.saving = true;
-            CommentService.dislike(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
-            .then(function sucess() {
-                _.remove(commentCtrl.comment.likes, function (key) {
-                    return commentCtrl.user.key === key;
+            CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
+                .then(function sucess() {
+                    removeLike();
+                    commentCtrl.saving = false;
+                }, function error() {
+                    $state.go("app.user.home");
+                    commentCtrl.saving = false;
                 });
-                commentCtrl.saving = false;
-            }, function error() {
-                $state.go("app.user.home");
-                commentCtrl.saving = false;
-            });
-        };
-
-        commentCtrl.isDeletedPost = function isDeletedPost() {
-            return commentCtrl.post.state === 'deleted';
-        };
-
-        commentCtrl.isLikedByUser = function isLikedByUser() {
-            return _.includes(commentCtrl.comment.likes, commentCtrl.user.key);
-        };
-
-        commentCtrl.showUserProfile = function showUserProfile(userKey, ev) {
-            ProfileService.showProfile(userKey, ev);
-        };
-
-        commentCtrl.getReplies = function getReplies() {
-            return _.values(commentCtrl.comment.replies);
-        };
-
-        commentCtrl.numberOfLikes = function numberOfLikes() {
-            return _.size(commentCtrl.comment.likes);
-        };
-
-        commentCtrl.numberOfReplies = function numberOfReplies() {
-            return _.size(commentCtrl.comment.replies);
         };
 
         commentCtrl.replyComment = function replyComment() {
             if (commentCtrl.newReply) {
                 commentCtrl.saving = true;
                 var institutionKey = commentCtrl.user.current_institution.key;
-                var promise = CommentService.replyComment(
-                    commentCtrl.post.key, commentCtrl.newReply, institutionKey, commentCtrl.commentId
-                );
-                promise.then(function success(response) {
-                    var data = response;
+                CommentService.replyComment(
+                    commentCtrl.post.key, commentCtrl.newReply, institutionKey, commentCtrl.comment.id
+                ).then(function success(data) {
                     commentCtrl.comment.replies[data.id] = data;
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
@@ -105,18 +77,18 @@
         };
 
         commentCtrl.deleteReply = function deleteReply() {
-            CommentService.deleteReply(commentCtrl.post.key, commentCtrl.commentId, commentCtrl.replyId)
+            CommentService.deleteReply(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
                 .then(function success() {
-                    delete commentCtrl.commentParent.replies[commentCtrl.replyId];
+                    delete commentCtrl.comment.replies[commentCtrl.replyId];
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
         };
 
         commentCtrl.deleteComment = function deleteComment() {
-            CommentService.deleteComment(commentCtrl.post.key, commentCtrl.commentId).then(
+            CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
                     commentCtrl.post.data_comments = commentCtrl.post.data_comments
-                        .filter(comment => comment.id !== commentCtrl.commentId);
+                        .filter(comment => comment.id !== commentCtrl.comment.id);
                     commentCtrl.post.number_of_comments--;
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
@@ -126,17 +98,49 @@
             MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                 'Este comentário será excluído e desaparecerá do referente post.'
             ).then(function () {
-                commentCtrl.isReply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
+                commentCtrl.reply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
             }, function () {
                 MessageService.showToast('Cancelado');
             });
         };
 
+        function addLike() {
+            commentCtrl.currentComment.likes.push(commentCtrl.user.key);
+        }
+
+        function removeLike() {
+            commentCtrl.currentComment.likes = commentCtrl.currentComment.likes
+                .filter(userKey => userKey !== commentCtrl.user.key);
+        }
+
+        commentCtrl.isDeletedPost = function isDeletedPost() {
+            return commentCtrl.post.state === 'deleted';
+        };
+
+        commentCtrl.isLikedByUser = function isLikedByUser() {
+            return _.includes(commentCtrl.currentComment.likes, commentCtrl.user.key);
+        };
+
+        commentCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
+        commentCtrl.getReplies = function getReplies() {
+            return commentCtrl.reply ? [] : _.values(commentCtrl.currentComment.replies);
+        };
+
+        commentCtrl.numberOfLikes = function numberOfLikes() {
+            return _.size(commentCtrl.currentComment.likes);
+        };
+
+        commentCtrl.numberOfReplies = function numberOfReplies() {
+            return _.size(commentCtrl.currentComment.replies);
+        };
+
         commentCtrl.canDeleteComment = function canDeleteComment() {
-            const isPostDeleted = commentCtrl.post.state === 'deleted';
             const hasActivity = commentCtrl.numberOfReplies() > 0 || commentCtrl.numberOfLikes() > 0;
-            const userIsAuthor = commentCtrl.comment.author_key == commentCtrl.user.key
-            return !hasActivity && !isPostDeleted && userIsAuthor;
+            const userIsAuthor = commentCtrl.currentComment.author_key == commentCtrl.user.key
+            return !hasActivity && !commentCtrl.isDeletedPost() && userIsAuthor;
         };
 
         commentCtrl.canReply = function canReply() {
@@ -175,10 +179,8 @@
             commentCtrl.showReplies = !commentCtrl.showReplies;
         };
 
-        function loadShowReplies() {
+        (function setReplies() {
             commentCtrl.showReplies = $state.current.name === 'app.post';
-        }
-
-        loadShowReplies();
+        })();
     };
 })();

@@ -27,9 +27,13 @@
         commentCtrl.saving = false;
 
         commentCtrl.$onInit = function () {
-            commentCtrl.replyId = commentCtrl.reply ? commentCtrl.reply.id : null;
+            commentCtrl.setReplyId();
             commentCtrl.loadCommentBody();
         };
+        
+        commentCtrl.setReplyId = function () {
+            commentCtrl.replyId = commentCtrl.reply ? commentCtrl.reply.id : null;
+        }
 
         commentCtrl.loadCommentBody = function () {
             commentCtrl.currentComment = commentCtrl.reply ? commentCtrl.reply : commentCtrl.comment;
@@ -39,7 +43,7 @@
             commentCtrl.saving = true;
             CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
                 .then(function sucess() {
-                    addLike();
+                    commentCtrl.addLike();
                     commentCtrl.saving = false;
                 }, function error() {
                     $state.go("app.user.home");
@@ -51,7 +55,7 @@
             commentCtrl.saving = true;
             CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
                 .then(function sucess() {
-                    removeLike();
+                    commentCtrl.removeLike();
                     commentCtrl.saving = false;
                 }, function error() {
                     $state.go("app.user.home");
@@ -104,11 +108,11 @@
             });
         };
 
-        function addLike() {
+        commentCtrl.addLike = function() {
             commentCtrl.currentComment.likes.push(commentCtrl.user.key);
         }
 
-        function removeLike() {
+        commentCtrl.removeLike = function() {
             commentCtrl.currentComment.likes = commentCtrl.currentComment.likes
                 .filter(userKey => userKey !== commentCtrl.user.key);
         }

@@ -1,10 +1,11 @@
 'use strict';
 
-(describe('Test CommentController', function() {
+(fdescribe('Test CommentController', function() {
     beforeEach(module('app'));
     
     const POSTS_URI = "/api/posts";
-    let commentCtrl, scope, httpBackend, mdDialog, commentService;
+    let commentCtrl, scope, httpBackend, mdDialog;
+    let commentService, profileService;
     
     let user = {
         name: 'name',
@@ -14,7 +15,8 @@
 
     let reply = {
         text: "reply", 
-        id: 1
+        id: 1,
+        likes: []
     };
 
     let comment = {
@@ -22,7 +24,8 @@
         id: 5,
         data_comments: [],
         replies: {},
-        author_key: user.key
+        author_key: user.key,
+        likes: []
     };
 
     let post = {
@@ -42,16 +45,11 @@
     };
 
     beforeEach(inject(function ($controller, $httpBackend, $mdDialog,
-            AuthService, $rootScope, CommentService) {
+            AuthService, $rootScope, CommentService, ProfileService) {
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
         commentService = CommentService;
-
-        httpBackend.when('GET', 'main/main.html').respond(200);
-        httpBackend.when('GET', 'home/home.html').respond(200);
-        httpBackend.when('GET', 'error/error.html').respond(200);
-        httpBackend.when('GET', 'auth/login.html').respond(200);
-        httpBackend.when('GET', 'error/error.html').respond(200);
+        profileService = ProfileService;
 
         AuthService.login(user);
 
@@ -61,9 +59,10 @@
         });
 
         commentCtrl.user = AuthService.getCurrentUser();
-        commentCtrl.comment = comment;
-        commentCtrl.post = post;
-        commentCtrl.setupIds();
+        commentCtrl.comment = {...comment};
+        commentCtrl.post = {...post};
+        commentCtrl.setReplyId();
+        commentCtrl.loadCommentBody();
     }));
 
     afterEach(function() {
@@ -72,6 +71,19 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
+    describe('setReplyId', function() {
+        it('shoult set replyId to null', function() {
+            commentCtrl.reply = null;
+            commentCtrl.setReplyId();
+            expect(commentCtrl.replyId).toEqual(null);
+        });
+
+        it('shoult set replyId to null', function() {
+            commentCtrl.reply = reply;
+            commentCtrl.setReplyId();
+            expect(commentCtrl.replyId).toEqual(reply.id);
+        });
+    });
 
     describe('canDeleteComment()', function() {
         it('Should be true when the user is the author', function() {
@@ -80,6 +92,7 @@
 
         it('Should be false when the user is not the author', function() {
             commentCtrl.comment = {author_key: "other-key", text: "testando"};
+            commentCtrl.loadCommentBody();
             expect(commentCtrl.canDeleteComment()).toBeFalsy();
         });
 
@@ -90,12 +103,6 @@
 
         it('Should be false when the comment has replies', function() {
             commentCtrl.comment.replies = {1: reply};
-            expect(commentCtrl.canDeleteComment()).toBeFalsy();
-        });
-
-        it('Should be false when the comment has replies', function() {
-            const nilComment = {};
-            commentCtrl.comment.likes = {1: nilComment};
             expect(commentCtrl.canDeleteComment()).toBeFalsy();
         });
     });
@@ -139,11 +146,10 @@
 
         it('Should call deleteReply', function() {
             comment.replies[reply.id] = reply;
-            commentCtrl.isReply = true;
-            commentCtrl.comment = reply;
-            commentCtrl.commentParent = comment;
-            commentCtrl.setupIds();
-
+            commentCtrl.reply = reply;
+            commentCtrl.setReplyId();
+            commentCtrl.loadCommentBody();
+            
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(mdDialog, 'show').and.callFake(fakeCallback);
             spyOn(commentService, 'deleteReply').and.callThrough();
@@ -155,9 +161,125 @@
             httpBackend.flush();
 
             expect(commentService.deleteReply).toHaveBeenCalledWith(commentCtrl.post.key, comment.id, reply.id);
-            expect(commentCtrl.commentParent.replies).toEqual({});
+            expect(commentCtrl.comment.replies).toEqual({});
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });
+
+    describe('isDeletedPost', function() {
+        it('should be true when the post is deleted', function() {
+            commentCtrl.post.state = 'deleted';
+            expect(commentCtrl.isDeletedPost()).toBeTruthy();
+        });
+
+        it('should be false when the post is published', function() {
+            commentCtrl.post.state = 'published';
+            expect(commentCtrl.isDeletedPost()).toBeFalsy();
+        });
+    });
+
+    describe('isLikedByUser', function() {
+        it('should be true when the post is liked by the user', function() {
+            commentCtrl.addLike();
+            expect(commentCtrl.isLikedByUser()).toBeTruthy();
+        });
+
+        it('should be false when the post is not liked by the user', function() {
+            commentCtrl.removeLike();
+            expect(commentCtrl.isLikedByUser()).toBeFalsy();
+        });
+    });
+
+    xdescribe('showUserProfile', function() {
+        spyOn(profileService, 'showProfile').and.callThrough();
+        let event = {};
+        commentCtrl.showUserProfile(user.key, event);
+        expect(profileService.showProfile).toHaveBeenCalledWith(user.key, event);
+    });
+
+    describe('getReplies', function() {
+        it('should get the comment replies', function () {
+            expect(commentCtrl.getReplies()).toEqual([]);
+            commentCtrl.comment.replies[reply.id] = {...reply};
+            // add reply to comment
+            const commentReplies = Object.values(commentCtrl.comment.replies);
+            expect(commentCtrl.getReplies()).toEqual(commentReplies);
+        });
+
+        it('should return an empty list when the comment is a reply', function () {
+            commentCtrl.comment.replies[reply.id] = {...reply};
+            commentCtrl.reply = {...reply};
+            expect(commentCtrl.getReplies()).toEqual([]);
+        });
+    });
+
+    describe('numberOfLikes', function () {
+        it('should return the number of likes of a comment', function () {
+            commentCtrl.comment.likes = [];
+            expect(commentCtrl.numberOfLikes()).toEqual(0);
+            commentCtrl.comment.likes = [{id: 'like01'}, {id: 'like02'}];
+            expect(commentCtrl.numberOfLikes()).toEqual(2);
+        });
+
+        it('should return the number of likes of a reply', function () {
+            commentCtrl.reply = {...reply, likes:[]};
+            commentCtrl.loadCommentBody();
+            expect(commentCtrl.numberOfLikes()).toEqual(0);
+            commentCtrl.reply = {
+                ...reply, 
+                likes: [{id: 'like01'}, {id: 'like02'}]
+            };
+            commentCtrl.loadCommentBody();
+            expect(commentCtrl.numberOfLikes()).toEqual(2);
+        });
+    }); 
+
+    describe('numberOfReplies', function () {
+        it('should return the number of replies of a comment', function() {
+            commentCtrl.comment.replies = {};
+            expect(commentCtrl.numberOfReplies()).toEqual(0);
+            commentCtrl.comment.replies = {1: {}, 2: {}};
+            expect(commentCtrl.numberOfReplies()).toEqual(2);
+        });
+    });
+
+    describe('canDeleteComment', function () {
+        beforeEach(function() {
+            commentCtrl.comment.likes = [];
+            commentCtrl.comment.replies = {};
+            commentCtrl.comment.author_key = user.key;
+            commentCtrl.post.state = 'published';
+        })
+
+        it('should be true when the post has no activity', function () {
+            expect(commentCtrl.canDeleteComment()).toBeTruthy();
+        });
+
+        it('should be false when the post is deleted', function () {
+            commentCtrl.post.state = 'deleted';
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+
+        it('should be false when the comment has likes', function () {
+            commentCtrl.addLike();
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+
+        it('should be false when the comment has replies', function () {
+            commentCtrl.comment.replies = {1:reply};
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+
+        it('should be false when the user is not the post author', function () {
+            commentCtrl.comment.author_key = 'other-user-key';
+            expect(commentCtrl.canDeleteComment()).toBeFalsy();
+        });
+    });
+
+
+
+    describe('', function () {});
+
+
 }));

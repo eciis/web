@@ -471,7 +471,7 @@ a:active {
 .youtube-player {
     position: relative;
     /* Use 75% for 4:3 videos */
-    height: 55%;
+    height: 100%;
     overflow: hidden;
     max-width: 100%;
     margin: 5px;

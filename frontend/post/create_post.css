@@ -1,8 +1,8 @@
 .create-post-container-resp {
     width: 100%;
     -webkit-box-flex: 1;
-    -webkit-flex: 1 1 95%;
-    flex: 1 1 95%;
+    -webkit-flex: 1 1 90%;
+    flex: 1 1 90%;
     box-sizing: border-box;
     max-width: 95%;
 }
@@ -69,10 +69,6 @@
         font-size: 13.5px !important;
     }
 
-    .create-post-button {
-        display: none;
-    }
-
     .create-post-inst-name {
         font-weight: 420;
         margin-left: 10px;
@@ -86,6 +82,9 @@
     .create-post-options-icons {
         background-color: #E9E9E9;
         padding: 4px !important;
+        position: fixed;
+        bottom: 0;
+        width: 92.5%;
     }
 
     .create-post-icons {
@@ -97,6 +96,18 @@
         background-color: rgb(173, 169, 169);
         color: white;
     }
+
+    .create-post-img {
+        overflow: hidden;
+        height: 150px; 
+        background-color: #E9E9E9
+    }
+
+    .create-post-actions {
+        position: absolute;
+        bottom: 50px;
+        width: 90%;
+    }
 }
 
 @media screen and (min-width: 960px) {
@@ -104,11 +115,7 @@
         border: 0 !important;
     }
 
-    .create-post-inst-name {
-        display: none;
-    }
-
-    .create-post-options-icons {
+    .create-post-inst-name, .create-post-options-icons {
         display: none;
     }
 }

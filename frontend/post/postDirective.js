@@ -398,4 +398,16 @@
             }
         };
     });
+
+    app.component('savePostMobile', {
+        templateUrl: "app/post/save_post_mobile.html",
+        controllerAs: "postCtrl",
+        controller: "PostController",
+        bindings: {
+            isDialog: '=',
+            posts: '=',
+            originalPost: '=',
+            isEditing: '='
+        }
+    });
 })();

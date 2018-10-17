@@ -106,7 +106,7 @@
         </div>
       </md-card-content>
       <md-card-actions class="create-post-actions"
-        layout="row" layout-align="end center" ng-show="postCtrl.showButton()">
+        layout="row" layout-align="end center" ng-show="postCtrl.showActionButtons()">
         <load-circle flex ng-if="postCtrl.loadingPost"></load-circle>
         <md-button style="color: #009688" ng-click="postCtrl.cancelDialog()">
           Cancelar

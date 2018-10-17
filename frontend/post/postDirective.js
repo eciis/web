@@ -363,11 +363,17 @@
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
         };
 
+        /**
+         * Return if should show or not the text field of post to be filled.
+         */
         postCtrl.showTextField = function() {
             return postCtrl.isTyping() || MOBILE_SCREEN;
         }
 
-        postCtrl.showButton = function() {
+        /**
+         * Return if should show or not the buttons to cancel and publish a post.
+         */
+        postCtrl.showActionButtons = function() {
             return (postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
                 !postCtrl.loadingPost) || MOBILE_SCREEN;
         };

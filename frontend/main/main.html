@@ -13,15 +13,8 @@
       </md-button>
     </a>
 
-    <div class="toolbar-btns" layout="row">
-      <a ui-sref="app.user.home">
-        <md-button class="md-icon-button" title="Home">
-          <md-icon>home</md-icon>
-        </md-button>
-      </a>
-  
-      <notification></notification>
-  
+    <div class="toolbar-btns" layout="row">  
+      <notification id="notification-navbar-top"></notification>
       <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
         <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
           <md-input-container flex md-no-float>
@@ -59,6 +52,27 @@
 <h4 class="md-caption app-version" hide show-gt-xs>
     {{mainCtrl.APP_VERSION}}
 </h4>
+
+<md-toolbar layout-align="space-around center" layout="row" id="navbar-bottom">
+  <div>
+    <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goHome()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('home')">home</md-icon>
+    </md-button>
+  </div>
+  <div>
+    <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goToEvents()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('events')">event</md-icon>
+    </md-button>
+  </div>
+  <div>
+    <md-button class="md-icon-button" aria-label="Instituições" ng-click="mainCtrl.goToInstitutions()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('institutions')">account_balance</md-icon>
+    </md-button>
+  </div>
+  <div>
+    <notification></notification>
+  </div>
+</md-toolbar>
 
 <md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">
   <div class="md-toolbar-tools" layout-align="end center">

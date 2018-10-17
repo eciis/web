@@ -14,6 +14,8 @@
         mainCtrl.pendingManagerMember = 0;
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
+
+        mainCtrl.stateView = "home";
         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
@@ -173,11 +175,34 @@
             $window.location.reload();
         };
 
+        mainCtrl.goHome = function goHome() {
+            mainCtrl.stateView = "home";
+            $state.go('app.user.home');
+        };
+
+        mainCtrl.goToEvents = function goToEvents() {
+            mainCtrl.stateView = "events";
+            $state.go('app.user.events', {posts: mainCtrl.posts});
+        };
+
+        mainCtrl.goToInstitutions = function goToInstitutions() {
+            mainCtrl.stateView = "institutions";
+            $state.go('app.user.institutions');
+        };
+
+        mainCtrl.getSelectedItemClass = function getSelectedItemClass(state){
+            loadStateView();
+            return (state === mainCtrl.stateView) ? "icon-selected-navbar":"icon-navbar";
+        };
+
+        function loadStateView(){
+            mainCtrl.stateView = $state.current.name.split(".")[2];
+        }
+
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
-
             mainCtrl.getPendingTasks();
         })();
     });

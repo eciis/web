@@ -61,7 +61,7 @@
         font-weight: 500 !important;
         font-size: 13.5px !important;
         border: 5 !important;
-        color: black !important;
+        color: #009688 !important;
         border-color: #009688 !important;
     }
 
@@ -89,7 +89,7 @@
 
     .create-post-icons {
         padding: 2px !important;
-        width: 33px !important;
+        width: 59px !important;
     }
 
     .create-post-cancel-button {
@@ -100,7 +100,7 @@
     .create-post-img {
         overflow: hidden;
         height: 150px; 
-        background-color: #E9E9E9
+        background-color: #009688
     }
 
     .create-post-actions {

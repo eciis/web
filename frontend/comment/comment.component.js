@@ -28,14 +28,14 @@
 
         commentCtrl.$onInit = function () {
             commentCtrl.setReplyId();
-            commentCtrl.loadCommentBody();
+            commentCtrl.setCurrentComment();
         };
         
         commentCtrl.setReplyId = function () {
             commentCtrl.replyId = commentCtrl.reply ? commentCtrl.reply.id : null;
         }
 
-        commentCtrl.loadCommentBody = function () {
+        commentCtrl.setCurrentComment = function () {
             commentCtrl.currentComment = commentCtrl.reply ? commentCtrl.reply : commentCtrl.comment;
         };
 

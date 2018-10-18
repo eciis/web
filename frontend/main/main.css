@@ -32,7 +32,7 @@
 
 #navbar-bottom{
     background-color: #ffffff;
-    box-shadow: 0px -2px 15px #BDBDBD;
+    box-shadow: 0px -0.5px 15px #BDBDBD;
     min-height: 2.3em;
 }
 
@@ -48,7 +48,7 @@
     #logo-full {
         display: none;
     }
-    #notification-navbar-top{
+    .navbar-top{
         display: none;
     }
 }

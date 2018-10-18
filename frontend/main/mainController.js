@@ -190,6 +190,11 @@
             $state.go('app.user.institutions');
         };
 
+        mainCtrl.goToNotifications = function goToNotifications() {
+            mainCtrl.stateView = "notifications";
+            $state.go('app.user.notifications');
+        };
+
         mainCtrl.getSelectedItemClass = function getSelectedItemClass(state){
             loadStateView();
             return (state === mainCtrl.stateView) ? "icon-selected-navbar":"icon-navbar";

@@ -4,7 +4,7 @@
       class="counter-of-notifications" data-badge="{{notificationCtrl.numberUnreadNotifications()}}">
     </span>
     <md-button aria-label="menu" class="md-icon-button" ng-click="notificationCtrl.showNotifications($mdMenu, ev)">
-      <md-icon style="color:#81C784;">{{ notificationCtrl.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
+      <md-icon style="color:#81C784;">{{ notificationCtrl.getIconNotification() }}</md-icon>
     </md-button>
   </div>
   <md-menu-content width="2" class="notifications-menu">

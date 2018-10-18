@@ -217,12 +217,24 @@
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
-            var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
-            hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
+            if(!notificationCtrl.action){
+                var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
+                hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
+            } else{
+                notificationCtrl.action();
+            }
         };
 
         notificationCtrl.format = function format(notification) {
             return NotificationService.formatMessage(notification);
+        };
+
+        notificationCtrl.getIconNotification = function getIconNotification() {
+            if(notificationCtrl.icon){
+                return notificationCtrl.icon;
+            } else {
+                return notificationCtrl.notifications.length === 0 ? 'notifications_none' : 'notifications';
+            }
         };
 
         notificationCtrl.clearAll = function clearAll() {
@@ -269,7 +281,11 @@
             restrict: 'E',
             templateUrl: "app/notification/notifications.html",
             controllerAs: "notificationCtrl",
-            controller: "NotificationController"
+            controller: "NotificationController",
+            bindToController: {
+                action: '=',
+                icon: '='
+            }
         };
     });
 })();

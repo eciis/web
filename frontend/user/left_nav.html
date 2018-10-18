@@ -49,13 +49,6 @@
               <div class="row section-menu">
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                   <md-menu-item>
-                    <md-button ng-click="homeCtrl.goHome()"
-                      ng-class="homeCtrl.getSelectedItemClass('home')">
-                      <md-icon>home</md-icon>
-                      <b>Início</b>
-                    </md-button>
-                  </md-menu-item>
-                  <md-menu-item>
                     <md-button ng-click="homeCtrl.goToProfile()"
                       ng-class="homeCtrl.getSelectedItemClass('config_profile')">
                       <md-icon>account_box</md-icon>
@@ -86,21 +79,8 @@
                 <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                   <md-menu-item>
                     <md-button ng-click="mainCtrl.goToEditInfo()">
-                      <md-icon>edit</md-icon>
-                      <b>Editar Informações</b>
-                    </md-button>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-button  ng-click="mainCtrl.goToManageMembers()">
-                      <md-icon ng-class="mainCtrl.pendingManagerMember? 'notification-badge': ''"
-                        data-badge>account_circle</md-icon>
-                      <b>Gerenciar Membros</b>
-                  </md-menu-item>
-                  <md-menu-item>
-                    <md-button ng-click="mainCtrl.goToManageInstitutions()">
-                      <md-icon ng-class="mainCtrl.pendingInstLinksInvitations? 'notification-badge': ''"
-                        data-badge>account_balance</md-icon>
-                      <b>Vínculos Institucionais</b>
+                      <md-icon>account_balance</md-icon>
+                      <b>Gerenciar instituição</b>
                     </md-button>
                   </md-menu-item>
                 </md-menu-content>

@@ -4,10 +4,10 @@
         <md-icon >keyboard_arrow_left</md-icon>
     </md-button>
 </div>
-<div layout-fill layout="column" flex-gt-sm="40" flex-xs="90" flex-sm="60">
+<div class="fill-screen" layout="column" flex-gt-md="45" flex-md="60" flex-xs="90" flex-sm="60">
   <div style="margin-top: 10%;">
     <div style="padding:0;">
-      <md-card style="max-width: 100%; margin:0 0 20 0;">
+      <md-card style="max-width: 100%; margin:0 0 20px 0;">
         <md-card-content style="padding: 8px;">
           <div layout="row" layout-align="space-between center" class="hide-scrollbar">
             <div layout="row" layout-align="center center">
@@ -19,7 +19,7 @@
               </span>
               <b class="inline" style="font-size: 14px;" hide show-gt-sm>Informação inicial</b>
             </div>
-            <hr style="min-width: 40px; width: 20%" layout-margin/>
+            <hr class="hr-status-bar" layout-margin/>
             <div layout="row" layout-align="center center">
               <span ng-class="controller.showGreenButton(2)? 'green-circle': 'grey-circle'" class="default-step">
                   <span layout="row" layout-algin="center">
@@ -29,7 +29,7 @@
               </span>
               <b class="inline" style="font-size: 14px;" hide show-gt-sm>Descrição e Progamação</b>
             </div>
-            <hr style="min-width: 40px; width: 20%" layout-margin/>
+            <hr class="hr-status-bar" layout-margin/>
             <div layout="row" layout-align="center center">
               <span ng-class="controller.showGreenButton(3)? 'green-circle': 'grey-circle'" class="default-step">
                   <span layout="row" layout-algin="center">
@@ -44,7 +44,7 @@
       </md-card>
     </div>
     <div layout="row" layout-align="start center" style="padding: 0; margin-top: -3%;">
-      <div layout="column" flex="100" layout-padding style="padding: 0;" layout-fill>
+      <div layout="column" flex="100" layout-padding style="padding: 0;" class="fill-screen">
         <md-dialog style="max-width: 100%; margin:0; overflow-y:auto;" class="hide-scrollbar">
           <form name="createEvent" ng-submit="controller.nextStepOrSave()">
             <md-dialog-content class="custom-scrollbar" layout-padding ng-if="controller.getStep(1)">

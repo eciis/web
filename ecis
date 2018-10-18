@@ -23,6 +23,7 @@ SUPPORT_LOCAL="localhost:8083"
 FRONTEND_CONFIG_FILE="frontend/config.js"
 SUPPORT_CONFIG_FILE="support/config.js"
 LANDINGPAGE_CONFIG_FILE="landing/config.js"
+SW_FILE="frontend/sw.js"
 
 git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE
 
@@ -113,6 +114,27 @@ function set_frontend_url {
     set_config_file $line $service $url $service_name;
 }
 
+function set_app_version_config {
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE
+    catch_error $? "APP VERSION on Frontend $1"
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE
+    catch_error $? "APP VERSION on Support $1"
+    sed -i "8s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE
+    catch_error $? "APP VERSION on LandingPage $1"
+}
+
+function set_cache_suffix_sw {
+   sed -i "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+   catch_error $? "CACHE_SUFIX on SW $1"
+}
+
+function git_commit {
+    set_cache_suffix_sw "master"
+    git add frontend/sw.js
+    read -p "${bold}$(echo -e 'Type commit message \n\b> ')${reset}" MSG
+    git commit -m "$MSG"
+}
+
 # Usage [ --error ] <message_to_log>
 function log_message {
     if [ "$1" == "--error" ]; then
@@ -138,14 +160,22 @@ function catch_error {
 }
 
 case "$1" in
+
+    commit)
+        git_commit
+    ;;
+
+    git-all)
+        git add -A
+        git_commit
+        current_branch=$(git branch | grep "*" | awk '{print $2}')
+        git push origin $current_branch
+    ;;
+
     run)
-        APP_VERSION=$(git branch | grep "*" | tr -d "()*" | cut -c2-)
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
-        catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
-        catch_error $? "APP VERSION on Support $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
-        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
+        APP_VERSION=$(git branch | grep "*" | awk '{print $2}')
+        set_cache_suffix_sw $APP_VERSION
+        set_app_version_config $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -183,7 +213,7 @@ case "$1" in
         set_support_url local $SUPPORT_LOCAL
         set_frontend_url local $FRONTEND_LOCAL
 
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML $2
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis $2
     ;;
 
     test)
@@ -226,6 +256,7 @@ case "$1" in
                 
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
+                echo 'SERVER_KEY = "SERVER_KEY"' >> firebase_config.py
 
                 TEST_NAME="*test.py"
                 if [ "$3" == "--name" ] && [ ! -z "$4" ]; then
@@ -244,12 +275,8 @@ case "$1" in
         git checkout tags/"$APP_VERSION"
         catch_error $? "Git checked out to tag $APP_VERSION"
 
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $FRONTEND_CONFIG_FILE
-        catch_error $? "APP VERSION on Frontend $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $SUPPORT_CONFIG_FILE
-        catch_error $? "APP VERSION on Support $APP_VERSION"
-        sed -i "8s|.*|    APP_VERSION: '$APP_VERSION'|" $LANDINGPAGE_CONFIG_FILE
-        catch_error $? "APP VERSION on LandingPage $APP_VERSION"
+        set_cache_suffix_sw $APP_VERSION
+        set_app_version_config $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")

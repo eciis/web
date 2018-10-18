@@ -112,10 +112,10 @@
     });
 
     describe('cancelDialog()', function() {
-        it('should call mdDialog.hide()', function() {
-            spyOn(mdDialog, 'hide');
+        it('should call mdDialog.cancel()', function() {
+            spyOn(mdDialog, 'cancel');
             postCtrl.cancelDialog();
-            expect(mdDialog.hide).toHaveBeenCalled();
+            expect(mdDialog.cancel).toHaveBeenCalled();
         });
     });
 

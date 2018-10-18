@@ -317,7 +317,7 @@
         postCtrl.cancelDialog = function() {
             postCtrl.clearPost();
             SubmitFormListenerService.unobserve("postCtrl.post");
-            $mdDialog.hide();
+            $mdDialog.cancel();
         };
 
         postCtrl.showButton = function() {
@@ -367,7 +367,7 @@
         };
 
         postCtrl.showPlaceholderMsg = function() {
-            return postCtrl.isTyping() ? "Título" : "Escreva aqui uma nova publicação";
+            return postCtrl.isTyping() ? "Título" : "Nova publicação";
         };
 
         (function main() {

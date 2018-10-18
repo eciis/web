@@ -30,7 +30,7 @@
                   </div>
                 </md-input-container>
                 <md-input-container ng-show="postCtrl.showTextField()" class="md-block create-post-textarea-container" md-no-float>
-                  <textarea name="message" class="create-post-textarea create-post-text custom-scrollbar"
+                  <textarea name="message" class="create-post-textarea create-post-text create-post-scrollbar"
                   ng-model="postCtrl.post.text" placeholder="Texto" required>
                   </textarea>
                   <div ng-messages='saveForm.message.$error'>
@@ -38,10 +38,9 @@
                   </div>
                 </md-input-container>
                 <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block" md-no-float>
-                  <label>Link do Video</label>
-                  <textarea class="create-post-textarea custom-scrollbar" ng-model="postCtrl.post.video_url"
+                  <label class="create-post-video-label">Link do Video</label>
+                  <input class="create-post-video-placeholder" ng-model="postCtrl.post.video_url"
                     md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
-                  </textarea>
                   <div ng-messages="saveForm.video.$error">
                     <div ng-message="pattern">Link do Youtube inválido.</div>
                   </div>

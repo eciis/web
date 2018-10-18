@@ -359,6 +359,9 @@
             return instName;
         };
 
+        /**
+         * Return a boolean to indicate if user is writing a post.
+         */
         postCtrl.isTyping = function() {
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
         };

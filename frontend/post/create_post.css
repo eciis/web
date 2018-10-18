@@ -52,7 +52,7 @@
     margin-bottom: 20px;
 }
 
-.create-post-cancel-button {
+.create-post-cancel-button, .create-post-video-label {
     color: #009688;
 }
 
@@ -63,6 +63,14 @@
         border: 5 !important;
         color: #009688 !important;
         border-color: #009688 !important;
+    }
+
+    .create-post-video-placeholder {
+        font-weight: normal !important;
+        font-size: 13.5px !important;
+        border: 5 !important;
+        border-color: #009688 !important;
+        max-height: 50px !important;
     }
 
     .create-post-text {
@@ -103,10 +111,32 @@
         background-color: #009688
     }
 
+    .create-post-img img {
+        height: 150px;
+        width: auto;
+    }
+
     .create-post-actions {
         position: absolute;
         bottom: 50px;
         width: 90%;
+    }
+
+    .create-post-scrollbar {
+        display: block;
+        width: 10em;
+        overflow: auto;
+        height: 2em;
+    }
+
+    .create-post-scrollbar::-webkit-scrollbar {
+        width: .2em;
+        height: .2em;
+        background-color: #ccc;
+    }
+
+    .create-post-scrollbar::-webkit-scrollbar-thumb {
+        background: #009688
     }
 }
 

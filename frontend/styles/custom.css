@@ -915,6 +915,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
     max-width: 100% !important;
+    max-height: 97% !important;
 }
 
 .share-post{

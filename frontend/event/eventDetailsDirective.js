@@ -124,9 +124,9 @@
 
         eventCtrl.endInTheSameDay = function endInTheSameDay() {
             if (eventCtrl.event) {
-                const startDay = new Date(eventCtrl.event.start_time).getDay();
-                const endDay = new Date(eventCtrl.event.end_time).getDay();
-                return startDay === endDay && !eventCtrl.endInOtherMonth();
+                const startDay = new Date(eventCtrl.event.start_time).toLocaleDateString();
+                const endDay = new Date(eventCtrl.event.end_time).toLocaleDateString();
+                return startDay === endDay;
             }
         };
 

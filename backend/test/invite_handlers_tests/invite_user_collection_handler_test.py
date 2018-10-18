@@ -8,7 +8,7 @@ from ..test_base_handler import TestBaseHandler
 from google.appengine.ext import ndb
 from handlers import InviteUserCollectionHandler
 from models import Invite, InviteUser
-from mock import patch
+from mock import patch, call
 
 
 
@@ -86,15 +86,24 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
         create_sent_invites_notification.assert_called_with(institution.key)
 
-        enqueue_task.assert_called_with(
-            'send-invite',
-            {
-                'invites_keys': json.dumps([invite.key.urlsafe()]), 
-                'host': response.request.host,
-                'current_institution': institution.key.urlsafe(),
-                'notifications_ids': ['some_notification_id']
-            }
-        )
+        send_invite_params = {
+            'invites_keys': json.dumps([invite.key.urlsafe()]),
+            'host': response.request.host,
+            'current_institution': institution.key.urlsafe(),
+            'notifications_ids': ['some_notification_id']
+        }
+
+        send_push_notification_params = {
+            'type': 'USER',
+            'invites': json.dumps([invite.key.urlsafe()])
+        }
+
+        calls = [
+            call('send-invite', send_invite_params),
+            call('send-push-notification', send_push_notification_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
 
     @patch('util.login_service.verify_token')
@@ -144,14 +153,23 @@ class InviteUserCollectionHandlerTest(TestBaseHandler):
 
         self.assertEqual(expected_make, invite.make())
 
-        enqueue_task.assert_called_with(
-            'send-invite',
-            {
-                'invites_keys': json.dumps([invite.key.urlsafe()]), 
-                'host': response.request.host,
-                'current_institution': institution.key.urlsafe()
-            }
-        )
+        send_invite_params = {
+            'invites_keys': json.dumps([invite.key.urlsafe()]),
+            'host': response.request.host,
+            'current_institution': institution.key.urlsafe()
+        }
+
+        send_push_notification_params = {
+            'type': 'USER_ADM',
+            'invites': json.dumps([invite.key.urlsafe()])
+        }
+
+        calls = [
+            call('send-invite', send_invite_params),
+            call('send-push-notification', send_push_notification_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
     @patch('util.login_service.verify_token')
     def test_post_invalid_invite_type(self, verify_token):

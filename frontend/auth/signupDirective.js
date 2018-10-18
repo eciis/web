@@ -3,7 +3,7 @@
     
     var app = angular.module('app');
     
-    app.controller('SignupController', function(AuthService, $scope) {
+    app.controller('SignupController', function(AuthService, $scope, MessageService) {
         var controller = this;
 
         controller.newUser = {};

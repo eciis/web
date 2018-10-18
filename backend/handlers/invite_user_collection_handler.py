@@ -85,8 +85,16 @@ class InviteUserCollectionHandler(BaseHandler):
         else:
             invite = createInvite(invite)
             invites.append({'email': invite.invitee, 'key': invite.key.urlsafe()})
-            enqueue_task('send-invite', {'invites_keys': json.dumps([invite.key.urlsafe()]), 'host': host,
-                                         'current_institution': user.current_institution.urlsafe()})
+            enqueue_task('send-invite', {
+                'invites_keys': json.dumps([invite.key.urlsafe()]), 
+                'host': host,
+                'current_institution': user.current_institution.urlsafe()
+            })
+
+        enqueue_task('send-push-notification', {
+            'type': type_of_invite,
+            'invites': json.dumps(map(lambda invite: invite['key'], invites))
+        })
 
         self.response.write(json.dumps(
             {'msg': 'The invites are being processed.', 'invites' : invites}))

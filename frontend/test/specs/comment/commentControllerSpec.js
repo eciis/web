@@ -1,26 +1,27 @@
 'use strict';
 
-(fdescribe('Test CommentController', function() {
+(describe('Test CommentController', function() {
     beforeEach(module('app'));
     
     const POSTS_URI = "/api/posts";
     let commentCtrl, scope, httpBackend, mdDialog;
-    let commentService, profileService;
+    let commentService, messageService;
     
     const user = {
         name: 'name',
         key: 'user-key',
-        state: 'active'
+        state: 'active',
+        current_institution: {name: 'inst', key:'inst-key'}
     };
 
-    const nilReply = {};
-    const reply = {
+    let nilReply = {};
+    let reply = {
         text: "reply", 
         id: 1,
         likes: []
     };
 
-    const comment = {
+    let comment = {
         text: "comment",
         id: 5,
         data_comments: [],
@@ -46,11 +47,11 @@
     };
 
     beforeEach(inject(function ($controller, $httpBackend, $mdDialog,
-            AuthService, $rootScope, CommentService, ProfileService) {
+            AuthService, $rootScope, CommentService, MessageService) {
         httpBackend = $httpBackend;
         mdDialog = $mdDialog;
         commentService = CommentService;
-        profileService = ProfileService;
+        messageService = MessageService;
 
         AuthService.login(user);
 
@@ -60,7 +61,7 @@
         });
 
         commentCtrl.user = AuthService.getCurrentUser();
-        commentCtrl.comment = {...comment};
+        commentCtrl.comment = {...comment, likes: [], replies: {}};
         commentCtrl.post = {...post};
         commentCtrl.setReplyId();
         commentCtrl.setCurrentComment();
@@ -68,6 +69,9 @@
 
     afterEach(function() {
         scope.$destroy();
+        comment = {...comment, likes: [], replies: {}};
+        reply = {...reply, likes: []};
+        nilReply = {};
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
@@ -177,7 +181,6 @@
     describe('dislike', function () {
         it('should dislike the comment', function() {
             commentCtrl.reply = null;
-            commentCtrl.comment = {...comment, likes: []};
             commentCtrl.setCurrentComment();
             commentCtrl.addLike();
             spyOn(commentService, 'dislike').and.callFake(fakeCallback);
@@ -191,7 +194,7 @@
         });
 
         it('should dislike the reply', function() {
-            commentCtrl.reply = {...reply, likes: []};
+            commentCtrl.reply = {...reply};
             commentCtrl.setCurrentComment();
             commentCtrl.addLike();
             spyOn(commentService, 'dislike').and.callFake(fakeCallback);
@@ -202,6 +205,68 @@
             expect(commentCtrl.removeLike).toHaveBeenCalled();
             expect(commentCtrl.numberOfLikes()).toEqual(0);
             expect(commentCtrl.saving).toBeFalsy();
+        });
+    });
+
+    describe('replyComment', function () {
+        it('should add a reply to the comment', function () {
+            commentCtrl.newReply = reply.text;
+            expect(commentCtrl.comment.replies).toEqual({});
+            const data = {...reply, id: 'new-reply-id'};
+            spyOn(commentService, 'replyComment').and.callFake(function(){
+                return {
+                    then: function(callback) {
+                        return callback(data);
+                    }
+                };
+            });
+            commentCtrl.replyComment();
+            expect(commentService.replyComment).toHaveBeenCalledWith(
+                post.key, reply.text, user.current_institution.key, comment.id
+            );
+            const replies = {};
+            replies[data.id] = data;
+            expect(commentCtrl.comment.replies).toEqual(replies);
+        });
+
+        it('should not create a new reply when newReply is null', function () {
+            commentCtrl.newReply = null;
+            expect(commentCtrl.comment.replies).toEqual({});
+            spyOn(commentService, 'replyComment').and.callFake(fakeCallback);
+            commentCtrl.replyComment();
+            expect(commentService.replyComment).not.toHaveBeenCalled();
+            expect(commentCtrl.comment.replies).toEqual({});
+        });
+    });
+
+    describe('deleteReply', function () {
+        it('should delete the reply', function () {
+            const replies = {};
+            commentCtrl.reply = {...reply};
+            replies[reply.id] = commentCtrl.reply;
+            replies['nil-key'] = nilReply;
+            commentCtrl.comment = {...comment , replies};
+            commentCtrl.setReplyId();
+            expect(commentCtrl.comment.replies).toEqual(replies);
+            spyOn(commentService, 'deleteReply').and.callFake(fakeCallback);
+            spyOn(messageService, 'showToast');
+            commentCtrl.deleteReply();
+            expect(commentService.deleteReply).toHaveBeenCalledWith(post.key, comment.id, reply.id);
+            expect(messageService.showToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
+            expect(commentCtrl.comment.replies).toEqual({'nil-key': nilReply});
+        });
+    });
+
+    describe('deleteComment', function () {
+        it('should delete the comment', function () {
+            commentCtrl.post.data_comments = [comment];
+            expect(commentCtrl.post.data_comments).toEqual([comment]);
+            spyOn(commentService, 'deleteComment').and.callFake(fakeCallback);
+            spyOn(messageService, 'showToast');
+            commentCtrl.deleteComment();
+            expect(commentService.deleteComment).toHaveBeenCalledWith(post.key, comment.id);
+            expect(messageService.showToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
+            expect(commentCtrl.post.data_comments).toEqual([]);
         });
     });
 
@@ -243,6 +308,40 @@
             expect(mdDialog.show).toHaveBeenCalled();
         });
     });
+
+    describe('addLike', function() {
+        it('should add a like to the comment', function () {
+            expect(commentCtrl.currentComment.likes).toEqual([]);
+            commentCtrl.addLike();
+            expect(commentCtrl.currentComment.likes).toEqual([user.key]);
+        });
+
+        it('should add a like to the reply', function () {
+            commentCtrl.reply = {...reply};
+            commentCtrl.setCurrentComment();
+            expect(commentCtrl.currentComment.likes).toEqual([]);
+            commentCtrl.addLike();
+            expect(commentCtrl.currentComment.likes).toEqual([user.key]);
+        });
+    });
+
+    describe('removeLike', function() {
+        it('should remove a like from the comment', function () {
+            commentCtrl.comment = {...comment, likes: [user.key]};
+            commentCtrl.setCurrentComment();
+            expect(commentCtrl.currentComment.likes).toEqual([user.key]);
+            commentCtrl.removeLike();
+            expect(commentCtrl.currentComment.likes).toEqual([]);
+        });
+
+        it('should remove a like from the reply', function () {
+            commentCtrl.reply = {...reply, likes: [user.key]};
+            commentCtrl.setCurrentComment();
+            expect(commentCtrl.currentComment.likes).toEqual([user.key]);
+            commentCtrl.removeLike();
+            expect(commentCtrl.currentComment.likes).toEqual([]);
+        });
+    })
 
     describe('isDeletedPost', function() {
         it('should be true when the post is deleted', function() {
@@ -288,7 +387,7 @@
         it('should return the number of likes of a comment', function () {
             commentCtrl.comment.likes = [];
             expect(commentCtrl.numberOfLikes()).toEqual(0);
-            commentCtrl.comment.likes = [{id: 'like01'}, {id: 'like02'}];
+            commentCtrl.comment.likes = ['user-key-01', 'user-key-02'];
             expect(commentCtrl.numberOfLikes()).toEqual(2);
         });
 
@@ -298,7 +397,7 @@
             expect(commentCtrl.numberOfLikes()).toEqual(0);
             commentCtrl.reply = {
                 ...reply, 
-                likes: [{id: 'like01'}, {id: 'like02'}]
+                likes: ['user-key-01', 'user-key-02']
             };
             commentCtrl.setCurrentComment();
             expect(commentCtrl.numberOfLikes()).toEqual(2);
@@ -447,12 +546,12 @@
         });
 
         it('should return a message when there is just one like ', function () {
-            commentCtrl.comment.likes = [{id: 'like01'}];
+            commentCtrl.comment.likes = ['user-key-01'];
             expect(commentCtrl.numberOfLikesMessage()).toEqual('1 pessoa curtiu');
         });
 
         it('should return a message when there is more than one like ', function () {
-            commentCtrl.comment.likes = [{id: 'like01'}, {id: 'like02'}];
+            commentCtrl.comment.likes = ['user-key-01', 'user-key-02'];
             expect(commentCtrl.numberOfLikesMessage()).toEqual('2 pessoas curtiram');
         });
     });

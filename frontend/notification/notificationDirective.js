@@ -217,11 +217,11 @@
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
-            if(!notificationCtrl.action){
+            if(!notificationCtrl.actionButtonNotification){
                 var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
                 hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
             } else{
-                notificationCtrl.action();
+                notificationCtrl.actionButtonNotification();
             }
         };
 
@@ -283,7 +283,7 @@
             controllerAs: "notificationCtrl",
             controller: "NotificationController",
             bindToController: {
-                action: '=',
+                actionButtonNotification: '=',
                 icon: '='
             }
         };

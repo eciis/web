@@ -71,7 +71,7 @@
   <md-button class="md-icon-button" aria-label="Instituições" ng-click="mainCtrl.goToInstitutions()">
     <md-icon ng-class="mainCtrl.getSelectedItemClass('institutions')">account_balance</md-icon>
   </md-button>
-  <notification action="mainCtrl.goToNotifications" icon="'notifications'"></notification>
+  <notification action-button-notification="mainCtrl.goToNotifications" icon="'notifications'"></notification>
 </md-toolbar>
 
 <md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">

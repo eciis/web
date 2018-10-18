@@ -112,7 +112,7 @@
     }
 
     .create-post-img img {
-        height: 150px;
+        height: auto;
         width: auto;
     }
 
@@ -130,13 +130,27 @@
     }
 
     .create-post-scrollbar::-webkit-scrollbar {
-        width: .2em;
+        width: .3em;
         height: .2em;
         background-color: #ccc;
     }
 
+    .create-post-scrollbar::-webkit-scrollbar-track {
+        background-color: #ccc  ;
+        border-left: .1em solid white;
+        border-right: .1em solid white;
+    }
+
     .create-post-scrollbar::-webkit-scrollbar-thumb {
-        background: #009688
+        border-radius: 50px;
+        background: #009688;
+        -webkit-box-shadow: inset 0 0 px #009688 ;
+    }
+
+    .create-post-loading {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
     }
 }
 

@@ -16,12 +16,16 @@
         <div flex>
             <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
                 <div ng-if="postCtrl.showImage()" layout="column" class="youtube-player image-view create-post-img">
-                    <button ng-click="postCtrl.hideImage()" type="button"
-                        ng-if="postCtrl.showImage()">&times;</button>
+                    <button ng-click="postCtrl.hideImage()" type="button">&times;</button>
                     <div>
                         <img ng-src="{{postCtrl.photoUrl}}"/>
                     </div>
                 </div>
+                <div ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
+                    <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
+                </div>
+                <load-circle class="create-post-loading md-hue-2" flex ng-if="postCtrl.loadingPost"></load-circle>
+                <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" class="md-hue-2 create-post-loading"></md-progress-linear>
                 <md-input-container md-no-float class="md-block create-post-text-container">
                   <input name="title" class="create-post-title-placeholder"
                   ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
@@ -51,15 +55,8 @@
                 options="postCtrl.options"></survey-directive>
         </div>
       </md-card-content>
-      <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
-        <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
-        <div style="margin-top: 5px; margin-left: 10px;">
-          <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
-        </div>
-      </md-card-content>
       <md-card-actions class="create-post-actions"
-        layout="row" layout-align="end center" ng-show="postCtrl.showActionButtons()">
-        <load-circle flex ng-if="postCtrl.loadingPost"></load-circle>
+        layout="row" layout-align="end center" ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
         <md-button class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
           Cancelar
         </md-button>

@@ -393,26 +393,23 @@
         })();
     });
 
-    let savePostDirective = {
-        restrict: 'E',
-        templateUrl: "app/post/save_post.html",
-        controllerAs: "postCtrl",
-        controller: "PostController",
-        scope: {
-            isDialog: '=',
-            posts: '=',
-            originalPost: '=',
-            isEditing: '='
-        }
+    function getTemplateUrl() {
+        const MOBILE_SCREEN = screen.width <= 960;
+        return MOBILE_SCREEN ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
     };
 
     app.directive("savePost", function() {
-        savePostDirective.templateUrl = "app/post/save_post.html";
-        return savePostDirective;
-    });
-
-    app.directive('savePostMobile', function() {
-        savePostDirective.templateUrl = "app/post/save_post_mobile.html";
-        return savePostDirective;
+        return {
+            restrict: 'E',
+            templateUrl: getTemplateUrl(),
+            controllerAs: "postCtrl",
+            controller: "PostController",
+            scope: {
+                isDialog: '=',
+                posts: '=',
+                originalPost: '=',
+                isEditing: '='
+            }
+        };
     });
 })();

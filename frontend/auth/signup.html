@@ -1,41 +1,37 @@
 <div layout="row" layout-align="center center">
-  <md-button class="md-fab md-primary" aria-label="Retornar" 
-    style="margin-right: -27px;" md-colors="{background: 'light-green-600'}"
-    ng-click="controller.returnAction()" hide-xs>
+  <md-button class="md-fab md-primary request-back-btn" aria-label="Retornar" 
+    md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()" hide-xs>
     <md-icon>keyboard_arrow_left</md-icon>
   </md-button>
-  <div class="padded" md-whiteframe="12" style="border-radius: 2px; background-color: white;" 
-    flex-sm="50" flex-xs="85" flex-md="50" flex-gt-md="30" layout="column">
-    <div layout="column">
-      <div style="color: black;" layout="row" layout-align="center center">
-        <div layout="column" flex-xs="85" flex="80">
-          <div layout="row" layout-align="center center">
-              <img src="/app/images/logowithname.png" style="margin-top: 20px; margin-bottom: 20px; width: 75%;"/>
-          </div>
-          <div layout="row" layout-align="center center" style="margin-bottom: 50px;">
-              <b>{{ cardTitle }}</b>
-          </div>
-          <div layout="column">
-            <form ng-submit="controller.signup()">
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Email</label>
-                <input type="email" name="email" ng-model="controller.newUser.email" required="true" aria-label="Email">
-              </md-input-container>
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Senha</label>
-                <input type="password" name="password" ng-model="controller.newUser.password" required="true"  minlength="6"
-                aria-label="Senha">
-              </md-input-container>
-              <md-input-container class="md-block" style="margin: 0;">
-                <label>Confirmar Senha</label>
-                <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
-                required="true" minlength="6" aria-label="Confirmar Senha">
-              </md-input-container>
-              <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
-                <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Avançar</md-button>
-              </div>
-            </form>
-          </div>
+  <div class="request-invite-card" md-whiteframe="12">
+    <div layout="row" layout-align="center center">
+      <div flex-xs="85" flex="80">
+        <div layout="row" layout-align="center center">
+          <img class="request-logo" src="/app/images/logowithname.png"/>
+        </div>
+        <div class="request-title-card" layout="row" layout-align="center center">
+          <p>{{ cardTitle }}</p>
+        </div>
+        <div layout="column">
+          <form ng-submit="controller.signup()">
+            <md-input-container class="md-block" style="margin: 0;">
+              <label>Email</label>
+              <input type="email" name="email" ng-model="controller.newUser.email" required="true" aria-label="Email">
+            </md-input-container>
+            <md-input-container class="md-block" style="margin: 0;">
+              <label>Senha</label>
+              <input type="password" name="password" ng-model="controller.newUser.password" required="true"  minlength="6"
+              aria-label="Senha">
+            </md-input-container>
+            <md-input-container class="md-block" style="margin: 0;">
+              <label>Confirmar Senha</label>
+              <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
+              required="true" minlength="6" aria-label="Confirmar Senha">
+            </md-input-container>
+            <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
+              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Avançar</md-button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

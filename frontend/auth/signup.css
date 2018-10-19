@@ -1,0 +1,43 @@
+.request-back-btn {
+   margin-right: -27px; 
+}
+
+.request-invite-card {
+    border-radius: 2px; 
+    background-color: white;
+    width: 30%;
+}
+
+.request-title-card {
+    color: black;
+}
+
+.request-logo {
+    margin-top: 20px;
+    margin-bottom: 20px; 
+    width: 75%;
+}
+
+
+
+
+/* Smartphones */
+@media screen and (max-width: 420px) {
+    .request-invite-card {
+        width: 90%;
+    }
+}
+
+/* Ipad, Ipad Pro- Portrait */
+@media screen and (min-width: 421px) and (max-width: 1024px) {
+    .request-invite-card {
+        width: 65%;
+    }
+}
+
+/*  - Portrait */
+/* @media screen and (min-width: 769px) {
+    .request-invite-card {
+        width: 63%;
+    }
+} */

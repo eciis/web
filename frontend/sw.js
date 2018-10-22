@@ -40,6 +40,48 @@
         event.waitUntil(clearOldCache());
     });
 
+    /**
+     * Intercepts the incoming PushEvents and
+     * personalizes the data setting up a vibration pattern,
+     * a badge image and an url to redirect the user when
+     * he clicks on the notification.
+     */
+    self.addEventListener('push', (event) => {
+        event.stopImmediatePropagation();
+
+        let options;
+
+        if(event.data) {
+            options = event.data.json().notification;
+            options.data = {
+                url: options.click_action
+            };
+        }
+
+        options.vibrate = [100, 50, 100];
+        options.badge = options.icon;
+
+        event.waitUntil(self.registration.showNotification(options.title, options));
+    });
+
+    /**
+     * Handles the notificationclick event.
+     * If the action is different of close
+     * a new tab is opened with the url contained
+     * in the notification.
+     */
+    self.addEventListener('notificationclick', (event) => {
+        const { notification } = event;
+
+        const { action } = event;
+        if(action !== 'close') {
+            const { url } = notification.data;
+            clients.openWindow(url);
+        }
+        
+        notification.close();
+    });
+
     workbox.routing.registerRoute(
         ({ event }) => event.request.mode === 'navigate',
         ({ url }) => fetch(url.href).catch(() => caches.match('/'))

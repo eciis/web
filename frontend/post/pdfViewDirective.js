@@ -67,18 +67,10 @@
         }
     });
 
-    /**
-     * Function to return a correct template url to show in desktop screen ou mobile screen.
-     * @returns {String} The string containing the url path to html file that be displayed in view.
-     */
-    function getTemplateUrl() {
-        return Utils.isMobileScreen() ? "app/post/pdf_view_mobile.html" : "app/post/pdf_view.html";
-    };
-
     app.directive("pdfView", function() {
         return {
             restrict: 'E',
-            templateUrl: getTemplateUrl(),
+            templateUrl: "app/post/pdf_view.html",
             controllerAs: "pdfCtrl",
             controller: "PdfController",
             scope: {},
@@ -86,6 +78,20 @@
                 pdfFiles: '=',
                 isEditing: '='
             }
-        };
+        }
+    });
+
+    app.directive("pdfPreview", function() {
+        return {
+            restrict: 'E',
+            templateUrl: "app/post/pdf_preview_mobile.html",
+            controllerAs: "pdfCtrl",
+            controller: "PdfController",
+            scope: {},
+            bindToController: {
+                pdfFiles: '=',
+                isEditing: '='
+            }
+        }
     });
 })();

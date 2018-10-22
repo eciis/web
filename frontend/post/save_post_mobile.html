@@ -1,4 +1,4 @@
-<md-card class="create-post-container-resp" style="height: 530px;">
+<md-card class="create-post-container-resp create-post-size">
     <form name="saveForm" prevent-state-change="postCtrl.post"
     ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)">
     <div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
-                    <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
+                    <pdf-preview pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-preview>
                 </div>
                 <load-circle class="create-post-loading md-hue-2" flex ng-if="postCtrl.loadingPost"></load-circle>
                 <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" class="md-hue-2 create-post-loading"></md-progress-linear>

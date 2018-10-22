@@ -97,7 +97,7 @@
 
     .create-post-icons {
         padding: 2px !important;
-        width: 59px !important;
+        width: 55px !important;
     }
 
     .create-post-cancel-button {
@@ -151,6 +151,11 @@
         margin-left: auto;
         margin-right: auto;
         width: 90%;
+    }
+
+    .create-post-size {
+        height: 530px !important;
+        max-width: 300px !important;
     }
 }
 

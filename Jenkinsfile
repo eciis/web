@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'andreldsa/nodejs-python'
+      image 'eciis/nodejs-python'
       args '--group-add staff --user root'
     }
     

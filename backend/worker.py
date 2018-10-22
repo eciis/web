@@ -19,6 +19,7 @@ from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from send_email_hierarchy import RemoveInstitutionEmailSender
 from util import NotificationsQueueManager
+from push_notification import SendPushNotificationHandler
 
 
 def should_remove(user, inst_key_urlsafe, transfer_inst_key_urlsafe):
@@ -286,6 +287,7 @@ class PostNotificationHandler(BaseHandler):
                     message=notification_message
                 )
 
+
 class EmailMembersHandler(BaseHandler):
     """Handle requests to send emails to institution members."""
 
@@ -509,5 +511,6 @@ app = webapp2.WSGIApplication([
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/remove-admin-permissions', RemoveAdminPermissionsInInstitutionHierarchy),
     ('/api/queue/send-invite', SendInviteHandler),
-    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler)
+    ('/api/queue/transfer-admin-permissions', TransferAdminPermissionsHandler),
+    ('/api/queue/send-push-notification', SendPushNotificationHandler)
 ], debug=True)

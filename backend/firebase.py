@@ -13,8 +13,8 @@ from firebase_config import FIREBASE_URL
 
 _FIREBASE_SCOPES = [
     'https://www.googleapis.com/auth/firebase.database',
-    'https://www.googleapis.com/auth/userinfo.email']
-
+    'https://www.googleapis.com/auth/userinfo.email'
+]
 
 @lru_cache()
 def _get_http():

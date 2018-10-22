@@ -1,0 +1,73 @@
+.pdf-background {
+    background-color: #E9E9E9;
+}
+
+.pdf-preview {
+    position:relative;
+    filter: alpha(opacity:1);
+    KHTMLOpacity: 1;
+    MozOpacity: 1;
+    -khtml-opacity:.1;
+    -ms-filter:"alpha(opacity=100)";
+    -moz-opacity:1;
+    filter:alpha(opacity=100);
+    opacity:1;
+}
+
+.pdf-preview:hover {
+    background-color: rgb(173, 169, 169);
+}
+
+.pdf-preview div {
+    max-height: 100%;
+    max-width: 100%
+}
+
+.pdf-preview:hover div {
+    filter: alpha(opacity:0.5);
+    KHTMLOpacity: 0.5;
+    MozOpacity: 0.5;
+    -khtml-opacity:.50;
+    -ms-filter:"alpha(opacity=50)";
+    -moz-opacity:.50;
+    filter:alpha(opacity=50);
+    opacity:.50;
+    color: black;
+}
+
+.pdf-preview button{
+    position:absolute;
+    background-color: rgba(0,0,0,0);
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    z-index:1;
+    top: 20%;
+    right: 8%;
+    width:19px;
+    height:25px;
+    padding:0;
+    border:0 none;
+    display: none;
+}
+
+.pdf-preview:hover button {
+    filter: alpha(opacity:1);
+    KHTMLOpacity: 1;
+    MozOpacity: 1;
+    -khtml-opacity:.1;
+    -ms-filter:"alpha(opacity=100)";
+    -moz-opacity:1;
+    filter:alpha(opacity=100);
+    opacity:1;
+    display: block;
+}
+
+.pdf-preview:hover md-icon {
+    color: white;
+}
+
+.pdf-size-padding {
+    padding-left: 10px;
+    padding-right: 10px; 
+}

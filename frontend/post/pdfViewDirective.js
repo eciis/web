@@ -33,6 +33,16 @@
             pdfCtrl.pdfFiles.splice(index, 1);
         };
 
+        /**
+         * Limit the specified string if its size is bigger than the specified limit
+         * @param {String} string string that will be limited if necessary
+         * @param {Number} limit max string size
+         * @returns {String} the sliced string, followed by ellipsis, or the original one
+         */
+        pdfCtrl.limitString = function(string, limit) {
+            return Utils.limitString(string, limit);
+        };
+
         function setPdfURL(url, pdf) {
             pdf.url = url;
         }
@@ -57,10 +67,18 @@
         }
     });
 
+    /**
+     * Function to return a correct template url to show in desktop screen ou mobile screen.
+     * @returns {String} The string containing the url path to html file that be displayed in view.
+     */
+    function getTemplateUrl() {
+        return Utils.isMobileScreen() ? "app/post/pdf_view_mobile.html" : "app/post/pdf_view.html";
+    };
+
     app.directive("pdfView", function() {
         return {
             restrict: 'E',
-            templateUrl: "app/post/pdf_view.html",
+            templateUrl: getTemplateUrl(),
             controllerAs: "pdfCtrl",
             controller: "PdfController",
             scope: {},

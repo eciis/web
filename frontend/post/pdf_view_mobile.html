@@ -1,0 +1,15 @@
+<div ng-if="pdfCtrl.showFiles()" ng-repeat="pdf in pdfCtrl.pdfFiles">
+  <div layout="row" ng-class="!pdfCtrl.isEditing ? 'clickable' : ''" ng-click="pdfCtrl.pdfDialog($event, pdf)">
+    <div layout="column" md-colors="{background: 'default-light-green'}" layout-align="center">
+      <md-icon class="lg-icon lg-width-height">
+        picture_as_pdf
+      </md-icon> 
+    </div>
+    <div layout="column" class="pdf-text pdf-background pdf-preview" layout-align="center">
+        <div class="pdf-size-padding">
+          {{ pdfCtrl.limitString(pdf.name, 20)}}
+        </div>
+        <button type="button" ng-click="pdfCtrl.hideFile($index)"><md-icon>delete</md-icon></button>
+    </div>  
+  </div>  
+</div>

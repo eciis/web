@@ -27,8 +27,6 @@
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
-        const MOBILE_SCREEN = screen.width <= 960; // 960px is the max width of mobile devices
-
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
         };
@@ -361,6 +359,7 @@
 
         /**
          * Return a boolean to indicate if user is writing a post.
+         * @returns {boolean}
          */
         postCtrl.isTyping = function() {
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
@@ -368,17 +367,19 @@
 
         /**
          * Return if should show or not the text field of post to be filled.
+         * @returns {boolean}
          */
         postCtrl.showTextField = function() {
-            return postCtrl.isTyping() || MOBILE_SCREEN;
+            return postCtrl.isTyping() || Utils.isMobileScreen();
         }
 
         /**
          * Return if should show or not the buttons to cancel and publish a post.
+         * @returns {boolean}
          */
         postCtrl.showActionButtons = function() {
             return (postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
-                !postCtrl.loadingPost) || MOBILE_SCREEN;
+                !postCtrl.loadingPost) || Utils.isMobileScreen();
         };
 
         postCtrl.showPlaceholderMsg = function() {
@@ -393,9 +394,12 @@
         })();
     });
 
+    /**
+     * Function to return a correct template url to show in desktop screen ou mobile screen.
+     * @returns {String} The string containing the url path to html file that be displayed in view.
+     */
     function getTemplateUrl() {
-        const MOBILE_SCREEN = screen.width <= 960;
-        return MOBILE_SCREEN ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
+        return Utils.isMobileScreen() ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
     };
 
     app.directive("savePost", function() {

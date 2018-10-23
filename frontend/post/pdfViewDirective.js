@@ -67,10 +67,15 @@
         }
     });
 
-    app.directive("pdfView", function() {
+    /**
+     * This function return the directive object with the templateUrl passed by parameter.
+     * @param {String} templateUrl The url path of the html to the directive.
+     * @returns {Object} An object with properties that define the directive.
+     */
+    function getDirectiveDefinitions(templateUrl) {
         return {
             restrict: 'E',
-            templateUrl: "app/post/pdf_view.html",
+            templateUrl: templateUrl,
             controllerAs: "pdfCtrl",
             controller: "PdfController",
             scope: {},
@@ -79,19 +84,12 @@
                 isEditing: '='
             }
         }
+    }
+    app.directive("pdfView", function() {
+        return getDirectiveDefinitions("app/post/pdf_view.html");
     });
 
     app.directive("pdfPreview", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "app/post/pdf_preview_mobile.html",
-            controllerAs: "pdfCtrl",
-            controller: "PdfController",
-            scope: {},
-            bindToController: {
-                pdfFiles: '=',
-                isEditing: '='
-            }
-        }
+        return getDirectiveDefinitions("app/post/pdf_preview_mobile.html");
     });
 })();

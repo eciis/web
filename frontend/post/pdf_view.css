@@ -2,6 +2,10 @@
     background-color: #E9E9E9;
 }
 
+.pdf-preview-container {
+    min-width: 218px;
+}
+
 .pdf-preview {
     position:relative;
     filter: alpha(opacity:1);

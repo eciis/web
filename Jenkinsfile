@@ -14,7 +14,7 @@ pipeline {
             sh './ecis test server --clean'
           },
           "Frontend": {
-            sh './ecis test server --clean'
+            sh './ecis test client --clean'
           }
         )
       }

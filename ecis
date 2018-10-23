@@ -221,6 +221,10 @@ case "$1" in
             client)
                 echo "=========== Starting Fronted Tests Setup ==========="
                 cd frontend/test
+
+                if [ "$3" == "--clean" ]; then
+                    rm -rf node_modules bower_components
+                fi
                 
                 if [ ! -e node_modules ]; then
                     npm install

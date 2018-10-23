@@ -149,7 +149,7 @@ function log_message {
 function catch_error {
     if [ $1 -ne 0 ]; then
         echo "${red}[eCIS ERROR]${reset} The last command exited with error $1. Fix it then try again!"
-        exit 0;
+        exit $1;
     fi
     if [ ! -z "$2" ]; then
         # Print the message passed as the second parameters
@@ -234,7 +234,7 @@ case "$1" in
                 fi
 
                 if [ ! -e bower_components ]; then
-                    bower install
+                    bower install --allow-root
                     catch_error $? "Bower modules installed with success"
                 else
                     log_message "Bower modules already installed"

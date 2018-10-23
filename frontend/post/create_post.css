@@ -15,7 +15,7 @@
 
 .create-post-text {
     border: 0 !important;
-    max-height: 100px !important;
+    /*max-height: 100px !important;*/
     resize:none !important;
     overflow: auto !important;
 }
@@ -30,7 +30,7 @@
 }
 
 .create-post-textarea {
-    max-height: 100px !important;
+    max-height: 30vh !important;
     overflow-y:auto !important;
     resize:none !important;
 }
@@ -154,8 +154,8 @@
     }
 
     .create-post-size {
-        height: 530px !important;
-        max-width: 300px !important;
+        height: 100vh !important;
+        max-width: 95%!important;
     }
 }
 

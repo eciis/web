@@ -2,6 +2,7 @@
 """Event model's test."""
 
 from ..test_base import TestBase
+from datetime import timedelta
 from models import Institution
 from models import User
 from models import Event
@@ -43,12 +44,14 @@ class RequestUserTest(TestBase):
 
     def test_create(self):
         """Test create method."""
+        todayDate = datetime.datetime.now()
+        tomorrowDate = todayDate + timedelta(days=1)
         data = {'title': 'test event',
                 'text': 'this event will be a test event',
                 'photo_url': 'photo_url',
                 'local': 'splab',
-                'start_time': str(datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S")),
-                'end_time': str(datetime.datetime(2018, 10, 20).strftime("%Y-%m-%dT%H:%M:%S")),
+                'start_time': str(todayDate.strftime("%Y-%m-%dT%H:%M:%S")),
+                'end_time': str(tomorrowDate.strftime("%Y-%m-%dT%H:%M:%S")),
                 'address': {}
                 }
         new_event = Event.create(data, self.user, self.institution)

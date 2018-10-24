@@ -1,6 +1,15 @@
 "use strict";
 
 (function () {
+    /**
+     * Comment Component
+     * The attributes are:
+     * user - the logged User
+     * post - the one in wich the comments are going to be loaded
+     * comment - the comment that is going to be loaded or
+     * the comment that is parent of the reply
+     * reply - when defined, the reply is loaded instead of its comment parent
+     */
     angular.module('app')
         .controller("CommentController", CommentController)
         .component('comment', {
@@ -27,8 +36,11 @@
         commentCtrl.saving = false;
 
         commentCtrl.$onInit = function () {
+            commentCtrl.post = new Post(commentCtrl.post);
+            commentCtrl.onDelete = commentCtrl.reply ? commentCtrl.deleteReply : commentCtrl.deleteComment;
             commentCtrl.setReplyId();
             commentCtrl.setCurrentComment();
+            commentCtrl.setShowReplies();
         };
         
         commentCtrl.setReplyId = function () {
@@ -39,14 +51,18 @@
             commentCtrl.currentComment = commentCtrl.reply ? commentCtrl.reply : commentCtrl.comment;
         };
 
+        commentCtrl.setShowReplies = function() {
+            commentCtrl.showReplies = $state.current.name === 'app.post';
+        }
+
         commentCtrl.like = function () {
             commentCtrl.saving = true;
             CommentService.like(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
-                .then(function sucess() {
+                .then(function () {                    
                     commentCtrl.addLike();
-                    commentCtrl.saving = false;
-                }, function error() {
-                    $state.go("app.user.home");
+                }).catch(function () {
+                    MessageService.showToast("Não foi possível curtir o comentário");
+                }).finally(function () {
                     commentCtrl.saving = false;
                 });
         };
@@ -56,9 +72,9 @@
             CommentService.dislike(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
                 .then(function sucess() {
                     commentCtrl.removeLike();
-                    commentCtrl.saving = false;
-                }, function error() {
-                    $state.go("app.user.home");
+                }).catch(function error() {
+                    MessageService.showToast("Não foi possível descurtir o comentário");
+                }).finally(function() {
                     commentCtrl.saving = false;
                 });
         };
@@ -71,9 +87,9 @@
                     commentCtrl.post.key, commentCtrl.newReply, institutionKey, commentCtrl.comment.id
                 ).then(function success(data) {
                     commentCtrl.comment.replies[data.id] = data;
-                    commentCtrl.newReply = null;
-                    commentCtrl.saving = false;
-                }, function error() {
+                }).catch(function error() {
+                    MessageService.showToast("Não foi possível responder ao comentário");
+                }).finally(function() {
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
                 });
@@ -91,19 +107,17 @@
         commentCtrl.deleteComment = function deleteComment() {
             CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
-                    commentCtrl.post.data_comments = commentCtrl.post.data_comments
-                        .filter(comment => comment.id !== commentCtrl.comment.id);
-                    commentCtrl.post.number_of_comments--;
+                    commentCtrl.post.deleteComment(commentCtrl.comment.id);
                     MessageService.showToast('Comentário excluído com sucesso');
                 });
         };
 
-        commentCtrl.confirmCommentDeletion = function confirmCommentDeletion(event) {
+        commentCtrl.commentDeletionDialog = function (event) {
             MessageService.showConfirmationDialog(event, 'Excluir Comentário',
                 'Este comentário será excluído e desaparecerá do referente post.'
             ).then(function () {
-                commentCtrl.reply ? commentCtrl.deleteReply() : commentCtrl.deleteComment();
-            }, function () {
+                commentCtrl.onDelete();
+            }).catch(function () {
                 MessageService.showToast('Cancelado');
             });
         };
@@ -182,9 +196,5 @@
         commentCtrl.toggleReplies = function toggleReplies() {
             commentCtrl.showReplies = !commentCtrl.showReplies;
         };
-
-        (function setReplies() {
-            commentCtrl.showReplies = $state.current.name === 'app.post';
-        })();
     };
 })();

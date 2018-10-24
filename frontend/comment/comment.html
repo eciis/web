@@ -15,7 +15,7 @@
       <div layout="row" class="btns-row">
         <!-- delete -->
         <button aria-label="Delete" title="Excluir comentário" ng-if="commentCtrl.canDeleteComment()" 
-          class="comment-btn" ng-click="commentCtrl.confirmCommentDeletion($event)" >
+          class="comment-btn" ng-click="commentCtrl.commentDeletionDialog($event)" >
           <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" 
             md-colors="{background: 'light-green'}" aria-label="Delete icon">
             <md-icon>delete</md-icon>

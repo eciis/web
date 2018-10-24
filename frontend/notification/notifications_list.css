@@ -1,0 +1,13 @@
+.notification-icon {
+    font-size: 20px; 
+    color:white;
+}
+
+.notification-icon-bg {
+    background: #009688; 
+    width: 21px; 
+    height: 21px; 
+    padding: 4px; 
+    margin-top: 4px; 
+    border-radius: 50%;
+}

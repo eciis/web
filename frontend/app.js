@@ -83,9 +83,6 @@
                         templateUrl: "app/event/event.html",
                         controller: "EventController as eventCtrl",
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.user.invite_inst", {
@@ -216,9 +213,6 @@
                         templateUrl: "app/event/event_page.html",
                         controller: "EventPageController as eventCtrl",
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.manage_institution.edit_info", {

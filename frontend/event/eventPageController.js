@@ -21,8 +21,6 @@
             var post = new Post({}, eventCtrl.user.current_institution.key);
             post.shared_event = event.key;
             PostService.createPost(post).then(function success(response) {
-                if(eventCtrl.posts)
-                    eventCtrl.posts.push(response);
                 MessageService.showToast('Evento compartilhado com sucesso!');
             });
         };
@@ -73,7 +71,6 @@
 
         (function main() {
             loadEvent($state.params.eventKey);
-            eventCtrl.posts = $state.params.posts;
         })();
     });
 })();

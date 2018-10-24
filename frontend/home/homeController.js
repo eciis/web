@@ -3,20 +3,18 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, NotificationService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
+    app.controller("HomeController", function HomeController(AuthService, $mdDialog, $state, 
+        ProfileService, EventService, $rootScope) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
-        var morePosts = true;
-        var actualPage = 0;
+        const NEW_POST_EVENT_TO_SEND = 'NEW-POST';
+        const NEW_POST_EVENT_TO_RECEIVE = 'NEW-POST-EVENT';
 
-        homeCtrl.posts = [];
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
-        homeCtrl.refreshTimeline = false;
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
         homeCtrl.showMessageOfEmptyEvents = true;
@@ -107,36 +105,8 @@
             return institution.state === ACTIVE;
         };
 
-        homeCtrl.loadMorePosts = function loadMorePosts(reload) {
-            var deferred = $q.defer();
-
-            if (reload) {
-                actualPage = 0;
-                morePosts = true;
-                homeCtrl.posts.splice(0, homeCtrl.posts.length);
-                homeCtrl.setRefreshTimelineButton();
-                homeCtrl.isLoadingPosts = true;
-            }
-
-            if (morePosts) {
-                loadPosts(deferred);
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred.promise;
-        };
-
         homeCtrl.isEventsEmpty = function isEventsEmpty() {
             return homeCtrl.events.length === 0 || homeCtrl.showMessageOfEmptyEvents;
-        };
-
-        homeCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
-            return homeCtrl.refreshTimeline;
-         };
-
-        homeCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
-            homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
         };
 
         homeCtrl.openColorPicker = function openColorPicker(){
@@ -152,22 +122,6 @@
                  bindToController: true
             });
         };
-
-        function loadPosts(deferred) {
-            PostService.getNextPosts(actualPage).then(function success(response) {
-                actualPage += 1;
-                morePosts = response.next;
-
-                _.forEach(response.posts, function(post) {
-                    homeCtrl.posts.push(post);
-                });
-
-                homeCtrl.isLoadingPosts = false;
-                deferred.resolve();
-            }, function error() {
-                deferred.reject();
-            });
-        }
 
         function getFollowingInstitutions(){
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
@@ -209,12 +163,21 @@
             });
         };
 
+        function registerNewPostEvent() {
+            $rootScope.$on(NEW_POST_EVENT_TO_RECEIVE, (event, data) => {
+                broadcastNewPostEvent(data);
+            });
+        }
+
+        function broadcastNewPostEvent(post) {
+            $rootScope.$broadcast(NEW_POST_EVENT_TO_SEND, post);
+        }
+
         (function main() {
-            NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
             loadEvents();
-            homeCtrl.loadMorePosts();
             getFollowingInstitutions();
             loadStateView();
+            registerNewPostEvent();
         })();
     });
 })();

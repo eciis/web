@@ -35,10 +35,8 @@
                 postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
-                    _.remove(postDetailsCtrl.posts, function (post) {
-                        return post.key === postDetailsCtrl.post.key;
-                    });
-                    postDetailsCtrl.posts.push(postDetailsCtrl.post);
+                    if(postDetailsCtrl.removePost)
+                        postDetailsCtrl.removePost(postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
                 });
             }, function() {
@@ -221,7 +219,6 @@
                 clickOutsideToClose:true,
                 locals: {
                     user : postDetailsCtrl.user,
-                    posts: postDetailsCtrl.posts,
                     post: post,
                     addPost: postDetailsCtrl.addPost
                 }
@@ -334,7 +331,7 @@
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key, posts: postDetailsCtrl.posts});
+            $state.go('app.user.event', {eventKey: event.key});
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
@@ -496,10 +493,9 @@
             controller: "PostDetailsController",
             scope: {},
             bindToController: {
-                posts: '=',
                 post: '=',
                 isPostPage: '=',
-                addPost: '='
+                removePost: '='
             }
         };
     });

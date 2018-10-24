@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService, UserService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
+           $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -26,6 +26,8 @@
                             };
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
+        
+        const NEW_POST_EVENT = 'NEW-POST-EVENT';
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
@@ -99,13 +101,13 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, originalPost, posts, saveForm) {
+        postCtrl.save = function save(isEditing, originalPost, saveForm) {
             saveForm.$setPristine();
             saveForm.$setUntouched();
             if(isEditing) {
                 postCtrl.editPost(originalPost);
             } else {
-                postCtrl.createPost(posts);
+                postCtrl.createPost();
             }
         };
 
@@ -225,7 +227,7 @@
             return deferred.promise;
         }
 
-        postCtrl.createPost = function createPost(posts) {
+        postCtrl.createPost = function createPost() {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
@@ -233,7 +235,7 @@
                     postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
-                        posts.push(new Post(response));
+                        $rootScope.$emit(NEW_POST_EVENT, new Post(response));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
@@ -386,7 +388,6 @@
             controller: "PostController",
             scope: {
                 isDialog: '=',
-                posts: '=',
                 originalPost: '=',
                 isEditing: '='
             }

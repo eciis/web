@@ -1,5 +1,5 @@
 <md-card flex="90" flex-gt-xs="95">
-  <form name="saveForm" prevent-state-change="postCtrl.post" ng-submit="postCtrl.save(isEditing, originalPost, posts, saveForm)" style="margin: 0;">
+  <form name="saveForm" prevent-state-change="postCtrl.post" ng-submit="postCtrl.save(isEditing, originalPost, saveForm)" style="margin: 0;">
     <md-card-content layout="row" style="padding:0;" layout-padding>
       <div>
         <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
@@ -34,7 +34,7 @@
               </md-input-container>
           </div>
             <!-- SURVEY -->
-          <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
+          <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" user="postCtrl.user" callback="postCtrl.choiceCommon"
               options="postCtrl.options"></survey-directive>
         </div>
       </div>

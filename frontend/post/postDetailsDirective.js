@@ -220,7 +220,7 @@
                 locals: {
                     user : postDetailsCtrl.user,
                     post: post,
-                    addPost: postDetailsCtrl.addPost
+                    addPost: true
                 }
             });
         };

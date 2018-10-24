@@ -4,12 +4,14 @@
     const app = angular.module("app");
 
     app.controller("SharePostController", function SharePostController(user, post, addPost, $mdDialog, PostService,
-        MessageService, $state) {
+        MessageService, $state, $rootScope) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 15;
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
+
+        const NEW_POST_EVENT = 'NEW-POST-EVENT';
 
         shareCtrl.user = user;
 
@@ -55,9 +57,8 @@
         };
 
         shareCtrl.addPostTimeline = function addPostTimeline(post) {
-            if (shareCtrl.addPost) {
-                shareCtrl.addPost(post);
-            }
+            if(shareCtrl.addPost)
+                $rootScope.$emit(NEW_POST_EVENT, new Post(post));
         };
 
         shareCtrl.isEvent = function isEvent() {
@@ -70,7 +71,7 @@
         shareCtrl.goTo = function goTo() {
             shareCtrl.cancelDialog();
             if (shareCtrl.isEvent()) {
-                $state.go('app.user.event', { eventKey: shareCtrl.post.key, addPost: shareCtrl.addPost });
+                $state.go('app.user.event', { eventKey: shareCtrl.post.key });
             }
             $state.go('app.post', { postKey: shareCtrl.post.key });
         };

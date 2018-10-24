@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test CommentController', function() {
+(describe('Test CommentController', function() {
     beforeEach(module('app'));
     
     const POSTS_URI = "/api/posts";

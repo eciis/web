@@ -233,13 +233,6 @@ case "$1" in
                     log_message "Node modules already installed"
                 fi
 
-                # if [ ! -e bower_components ]; then
-                #     bower install --allow-root
-                #     catch_error $? "Bower modules installed with success"
-                # else
-                #     log_message "Bower modules already installed"
-                # fi
-
                 echo "=========== Starting to run Fronted Tests ==========="
                 karma start --single-run
             ;;

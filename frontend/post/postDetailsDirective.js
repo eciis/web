@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
-        $mdDialog, MessageService, ngClipboard, ProfileService) {
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope) {
 
         var postDetailsCtrl = this;
 
@@ -12,6 +12,7 @@
         const REMOVE_POST_BY_INST_PERMISSION = 'remove_posts';
         const REMOVE_POST_BY_POST_PERMISSION = 'remove_post';
         const EDIT_POST_PERMISSION = 'edit_post';
+        const DELETED_POST_EVENT = 'DELETED_POST_EVENT';
 
         postDetailsCtrl.showComments = false;
         postDetailsCtrl.savingComment = false;
@@ -36,7 +37,7 @@
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
                     if(postDetailsCtrl.removePost)
-                        postDetailsCtrl.removePost(postDetailsCtrl.post);
+                        $rootScope.$emit(DELETED_POST_EVENT, postDetailsCtrl.post);
                     MessageService.showToast('Post excluído com sucesso');
                 });
             }, function() {

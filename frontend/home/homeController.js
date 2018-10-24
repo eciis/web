@@ -10,8 +10,10 @@
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
-        const NEW_POST_EVENT_TO_SEND = 'NEW-POST';
-        const NEW_POST_EVENT_TO_RECEIVE = 'NEW-POST-EVENT';
+        const NEW_POST_EVENT_TO_SEND = 'NEW_POST';
+        const NEW_POST_EVENT_TO_RECEIVE = 'NEW_POST_EVENT';
+        const DELETED_POST_EVENT_TO_RECEIVE = 'DELETED_POST_EVENT';
+        const DELETED_POST_EVENT_TO_SEND = 'DELETED_POST';
 
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
@@ -162,21 +164,25 @@
             });
         };
 
-        function registerNewPostEvent() {
+        function registerPostEvents() {
             $rootScope.$on(NEW_POST_EVENT_TO_RECEIVE, (event, data) => {
-                broadcastNewPostEvent(data);
+                broadcastPostEvent(NEW_POST_EVENT_TO_SEND, data);
+            });
+
+            $rootScope.$on(DELETED_POST_EVENT_TO_RECEIVE, (event, data) => {
+                broadcastPostEvent(DELETED_POST_EVENT_TO_SEND, data);
             });
         }
 
-        function broadcastNewPostEvent(post) {
-            $rootScope.$broadcast(NEW_POST_EVENT_TO_SEND, post);
+        function broadcastPostEvent(eventType, post) {
+            $rootScope.$broadcast(eventType, post);
         }
 
         (function main() {
             loadEvents();
             getFollowingInstitutions();
             loadStateView();
-            registerNewPostEvent();
+            registerPostEvents();
         })();
     });
 })();

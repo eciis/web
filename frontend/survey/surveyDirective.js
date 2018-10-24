@@ -9,7 +9,7 @@
 
         var surveyCtrl = this;
 
-        const NEW_POST_EVENT = 'NEW-POST-EVENT';
+        const NEW_POST_EVENT = 'NEW_POST_EVENT';
 
         surveyCtrl.options = $scope.options;
         surveyCtrl.now = new Date();

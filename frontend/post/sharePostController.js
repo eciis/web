@@ -11,7 +11,7 @@
         var URL_PATTERN = /(((www.)|(http(s)?:\/\/))[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/gi;
         var REPLACE_URL = "<a href=\'$1\' target='_blank'>$1</a>";
 
-        const NEW_POST_EVENT = 'NEW-POST-EVENT';
+        const NEW_POST_EVENT = 'NEW_POST_EVENT';
 
         shareCtrl.user = user;
 

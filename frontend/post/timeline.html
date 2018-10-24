@@ -12,7 +12,7 @@
     </md-button>
   </div>
   <div ng-repeat="post in timelineCtrl.posts | orderBy:'last_modified_date':true" ng-if="timelineCtrl.posts.length > 0">
-    <post-details post="post" is-post-page=false remove-post="timelineCtrl.deletePost">
+    <post-details post="post" is-post-page=false remove-post="true">
     </post-details>
   </div>
 </div>

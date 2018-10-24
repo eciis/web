@@ -27,7 +27,7 @@
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
         
-        const NEW_POST_EVENT = 'NEW-POST-EVENT';
+        const NEW_POST_EVENT = 'NEW_POST_EVENT';
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;

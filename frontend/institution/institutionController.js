@@ -20,6 +20,7 @@
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
         institutionCtrl.isLoadingCover = false
+        institutionCtrl.contentId = "instPage";
                 
         var currentInstitutionKey = $state.params.institutionKey;
         institutionCtrl.user = AuthService.getCurrentUser();

@@ -1,5 +1,5 @@
 <!-- TIMELINE -->
-<div flex>
+<div flex ng-if="true">
   <md-card ng-if="timelineCtrl.posts.length == 0">
     <md-content layout-align="center center" layout="column">
       <h4>Esta instituição ainda não possui publicações.</h4>
@@ -15,6 +15,9 @@
     <post-details post="post" is-post-page=false remove-post="timelineCtrl.deletePost">
     </post-details>
   </div>
-  <!-- LOADING CIRCLE -->
-  <load-circle ng-if="timelineCtrl.isLoadingPosts"></load-circle>
+</div>
+<div layout="column" layout-align="center center" ng-if="false">
+  <div layout="row" layout-align="center center">
+    <load-circle></load-circle>
+  </div>
 </div>

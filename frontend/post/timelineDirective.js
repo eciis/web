@@ -6,7 +6,9 @@
     app.controller('TimelineController', function(AuthService, $rootScope, PostService, 
         $q, NotificationService) {
         var timelineCtrl = this;
-        var content = document.getElementById("content");
+        var content = timelineCtrl.content || document.getElementById("content");
+        console.log(timelineCtrl.content);
+        console.log(content);
 
         var DELETED_POST_EVENT = 'DELETED_POST';
         const NEW_POST_EVENT = 'NEW-POST';
@@ -106,6 +108,7 @@
             NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setRefreshTimelineButton);
             timelineCtrl.loadMorePosts();
             startEventsListeners();
+            console.log(timelineCtrl.content);
         })();
     });
 
@@ -117,7 +120,11 @@
             controllerAs: "timelineCtrl",
             scope: {
                 institution: '='
-            }
+            },
+            bindToController: {
+                content: '='
+            },
+            transclude: true
         };
     });
 })();

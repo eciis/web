@@ -90,7 +90,6 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post')),
                 locals: {
-                    posts: homeCtrl.posts,
                     isEditing: false
                 },
                 bindToController: true

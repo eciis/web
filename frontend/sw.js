@@ -3,7 +3,7 @@
 
     importScripts('https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js');
     importScripts('https://www.gstatic.com/firebasejs/5.4.2/firebase-messaging.js');
-    importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js');
+    importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js');
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.
@@ -38,6 +38,48 @@
 
     self.addEventListener('activate', (event) => {
         event.waitUntil(clearOldCache());
+    });
+
+    /**
+     * Intercepts the incoming PushEvents and
+     * personalizes the data setting up a vibration pattern,
+     * a badge image and an url to redirect the user when
+     * he clicks on the notification.
+     */
+    self.addEventListener('push', (event) => {
+        event.stopImmediatePropagation();
+
+        let options;
+
+        if(event.data) {
+            options = event.data.json().notification;
+            options.data = {
+                url: options.click_action
+            };
+        }
+
+        options.vibrate = [100, 50, 100];
+        options.badge = options.icon;
+
+        event.waitUntil(self.registration.showNotification(options.title, options));
+    });
+
+    /**
+     * Handles the notificationclick event.
+     * If the action is different of close
+     * a new tab is opened with the url contained
+     * in the notification.
+     */
+    self.addEventListener('notificationclick', (event) => {
+        const { notification } = event;
+
+        const { action } = event;
+        if(action !== 'close') {
+            const { url } = notification.data;
+            clients.openWindow(url);
+        }
+        
+        notification.close();
     });
 
     workbox.routing.registerRoute(

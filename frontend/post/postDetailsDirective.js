@@ -3,8 +3,8 @@
 
     var app = angular.module('app');
 
-    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
+    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
+        $mdDialog, MessageService, ngClipboard, ProfileService) {
 
         var postDetailsCtrl = this;
 

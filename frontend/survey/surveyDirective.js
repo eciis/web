@@ -5,9 +5,12 @@
     var app = angular.module('app');
 
     app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
-                    $scope, $mdDialog, $state, SubmitFormListenerService) {
+        $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope) {
 
         var surveyCtrl = this;
+
+        const NEW_POST_EVENT = 'NEW-POST-EVENT';
+
         surveyCtrl.options = $scope.options;
         surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
@@ -71,7 +74,7 @@
                 var survey = createSurvey();
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
-                    surveyCtrl.posts.push(new Post(response));
+                    $rootScope.$emit(NEW_POST_EVENT, new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     const postAuthorPermissions = ["remove_post"];
@@ -119,7 +122,6 @@
             scope: {},
             bindToController: {
                 post: '=',
-                posts: '=',
                 user: '=',
                 options: '=',
                 callback: '='

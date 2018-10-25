@@ -131,7 +131,7 @@
                 }
             }).catch(function(error) {
                 MessageService.showToast(error);
-                return error;
+                throw error;
             });
         }
 

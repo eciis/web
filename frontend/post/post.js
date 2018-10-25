@@ -13,11 +13,6 @@ Post.prototype.deleteComment = function (commentId) {
     this.number_of_comments--;
 }
 
-Post.prototype.deleteReply = function(commentId, replyId) {
-    let replies = this.data_comments[commentId].replies;
-    replies = replies.filter(reply => reply.id !== replyId);
-}
-
 Post.prototype.isValid = function isValid() {
     if (_.isUndefined(this.title) || _.isEmpty(this.title)) {
         return false; 

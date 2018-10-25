@@ -3,7 +3,7 @@
 
     importScripts('https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js');
     importScripts('https://www.gstatic.com/firebasejs/5.4.2/firebase-messaging.js');
-    importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js');
+    importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js');
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.

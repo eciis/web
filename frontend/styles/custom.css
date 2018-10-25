@@ -471,7 +471,7 @@ a:active {
 .youtube-player {
     position: relative;
     /* Use 75% for 4:3 videos */
-    height: 55%;
+    height: 100%;
     overflow: hidden;
     max-width: 100%;
     margin: 5px;
@@ -915,6 +915,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
     max-width: 100% !important;
+    max-height: 97% !important;
 }
 
 .share-post{

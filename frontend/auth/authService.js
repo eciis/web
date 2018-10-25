@@ -129,9 +129,6 @@
                     service.sendEmailVerification(user);
                     throw "Error! Email not verified.";
                 }
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                throw error;
             });
         }
 

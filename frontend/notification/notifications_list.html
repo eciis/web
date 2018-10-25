@@ -7,20 +7,21 @@
                 <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>
                 <!-- notification.current_institution belongs to the new notification architecture. 
                     notification.from belongs to old architecture. DATE: 10/05/2018-->
-                <p><b style="font-size: 15px; color: #009688;">{{ notification.current_institution.name || notification.from.institution_name }}</b></p>
+                <p>
+                    <b id="institution-name-notification">
+                    {{ notification.current_institution.name || notification.from.institution_name }}</b>
+                </p>
                 <div layout="row">
-                    <div class="notification-icon-bg" style="margin-top: 1em;">
+                    <div class="notification-icon-bg">
                         <md-icon class="notification-icon">{{ctrl.getIcon(notification.entity_type)}}</md-icon>
                     </div>
-                    <div style="max-height: 7em; margin-left: 4px; margin-top: 4px">
-                        <p style="font-size: 11px;">
-                            <p style="font-size: 10px;">
-                                {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
-                                <br />
-                                <b style="font-size: 11px; margin-top: -10px;">
-                                    {{ ctrl.limitString(ctrl.format(notification), ctrl.lengthTextNotification) }}
-                                </b>
-                            </p>
+                    <div id="info-notification">
+                        <p style="font-size: 10px;">
+                            {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                            <br />
+                            <b style="font-size: 11px;">
+                                {{ ctrl.limitString(ctrl.format(notification), ctrl.lengthTextNotification) }}
+                            </b>
                         </p>
                     </div>
                 </div>

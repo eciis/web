@@ -8,6 +8,21 @@
     width: 21px; 
     height: 21px; 
     padding: 4px; 
-    margin-top: 4px; 
     border-radius: 50%;
+    align-self: center;
+}
+
+.unread-notification {
+    background: #E0E0E0;
+}
+
+#institution-name-notification{
+    font-size: 15px;
+    color: #009688;
+}
+
+#info-notification{
+    max-height: 7em;
+    margin-left: 4px;
+    margin-top: 4px;
 }

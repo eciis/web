@@ -101,9 +101,6 @@
           <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
         </div>
         <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
-        <div style="margin-top: 5px; margin-left: 10px;">
-          <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" style="width: 14%;"></md-progress-linear>
-        </div>
       </md-card-content>
       <md-card-actions class="create-post-actions"
         layout="row" layout-align="end center" ng-show="postCtrl.showActionButtons()">

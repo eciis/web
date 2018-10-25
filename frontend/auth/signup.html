@@ -1,39 +1,44 @@
-<div layout="row" layout-align="center center">
-  <md-button class="md-fab md-primary request-back-btn" aria-label="Retornar" 
-    md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()" hide-xs>
-    <md-icon>keyboard_arrow_left</md-icon>
-  </md-button>
-  <div class="request-invite-card" md-whiteframe="12">
-    <div layout="row" layout-align="center center">
-      <div flex-xs="85" flex="80">
+<div layout="column" layout-align="center center">
+
+  <md-card class="request-invite-card">
+
+    <md-card-content layout="row" layout-align="center center">
+      <div class="request-card-content">
         <div layout="row" layout-align="center center">
           <img class="request-logo" src="/app/images/logowithname.png"/>
         </div>
-        <div class="request-title-card" layout="row" layout-align="center center">
-          <p>{{ cardTitle }}</p>
-        </div>
-        <div layout="column">
-          <form ng-submit="controller.signup()">
-            <md-input-container class="md-block" style="margin: 0;">
-              <label>Email</label>
-              <input type="email" name="email" ng-model="controller.newUser.email" required="true" aria-label="Email">
-            </md-input-container>
-            <md-input-container class="md-block" style="margin: 0;">
-              <label>Senha</label>
-              <input type="password" name="password" ng-model="controller.newUser.password" required="true"  minlength="6"
-              aria-label="Senha">
-            </md-input-container>
-            <md-input-container class="md-block" style="margin: 0;">
-              <label>Confirmar Senha</label>
-              <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
-              required="true" minlength="6" aria-label="Confirmar Senha">
-            </md-input-container>
-            <div layout="row" layout-align="center center" style="margin-bottom: 20px;">
-              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Avançar</md-button>
-            </div>
-          </form>
-        </div>
+        <p class="request-title-card">{{ cardTitle }}</p>
+        <form ng-submit="controller.signup()">
+          <md-input-container class="md-block request-input-container">
+            <label>E-mail</label>
+            <input type="email" name="email" ng-model="controller.newUser.email" 
+              required="true" aria-label="Email" class="request-input">
+          </md-input-container>
+          <md-input-container class="md-block request-input-container">
+            <label>Senha</label>
+            <input type="password" name="password" ng-model="controller.newUser.password" 
+              required="true" minlength="6" aria-label="Senha" class="request-input">
+          </md-input-container>
+          <md-input-container class="md-block request-input-container">
+            <label>Confirmar Senha</label>
+            <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
+              required="true" minlength="6" aria-label="Confirmar Senha" class="request-input">
+          </md-input-container>
+          <div layout="row" layout-align="center center">
+            <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+              Enviar
+            </md-button>
+          </div>
+        </form>
       </div>
-    </div>
-  </div>
+    </md-card-content>
+
+    <div class="request-card-footer"></div>
+  </md-card>
+
+  <md-button class="request-back-btn md-fab md-primary " aria-label="Retornar" 
+    md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()">
+    <md-icon>keyboard_arrow_left</md-icon>
+  </md-button>
+  
 </div>

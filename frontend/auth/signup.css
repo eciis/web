@@ -1,30 +1,60 @@
 .request-back-btn {
-   margin-right: -27px; 
+    position: absolute;
+    margin: 0 0 0 -20.5em;
 }
 
 .request-invite-card {
-    border-radius: 2px; 
-    background-color: white;
     width: 30%;
+}
+
+.request-card-content {
+    width: 80%;
+}
+
+.request-logo {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 75%;
 }
 
 .request-title-card {
     color: black;
 }
 
-.request-logo {
-    margin-top: 20px;
-    margin-bottom: 20px; 
-    width: 75%;
+.request-input-container {
+    margin: 0;
 }
 
+.request-input {
+    border-bottom-color: #009688 !important;
+}
 
+.request-card-footer {
+    height: 3em;
+    background-color: #E6E6E6;
+    display: none;
+}
 
 
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .request-invite-card {
         width: 90%;
+    }
+
+    .request-card-content {
+        width: 85%;
+    }
+
+    .request-card-footer {
+        display: inherit;
+    }
+
+    .request-back-btn {
+        width: 5em !important;
+        height: 5em !important;
+        left: 0em;
+        top: 0em;
     }
 }
 
@@ -34,10 +64,3 @@
         width: 65%;
     }
 }
-
-/*  - Portrait */
-/* @media screen and (min-width: 769px) {
-    .request-invite-card {
-        width: 63%;
-    }
-} */

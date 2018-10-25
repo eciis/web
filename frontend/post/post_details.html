@@ -254,7 +254,8 @@
     <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.post.data_comments | orderBy:'publication_date'"
-      comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
+      comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post" >
+    </comment>
   </div>
   
   <md-list ng-if="postDetailsCtrl.showCommentInput()">

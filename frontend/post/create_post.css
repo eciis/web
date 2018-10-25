@@ -170,6 +170,10 @@
         max-height: 30vh !important;
     }
 
+    .create-post-video-input {
+        margin-top: -15px !important;
+    }
+
     @media screen and (max-height: 600px) {
         .create-post-textarea {
             max-height: 33vh !important;

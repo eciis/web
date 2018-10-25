@@ -43,7 +43,7 @@
                       <div ng-message="required">O post deve conter um texto!</div>
                   </div>
                 </md-input-container>
-                <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block" md-no-float>
+                <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block create-post-video-input" md-no-float>
                   <label class="create-post-video-label">Link do Video</label>
                   <input class="create-post-video-placeholder" ng-model="postCtrl.post.video_url"
                     md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">

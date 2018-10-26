@@ -65,7 +65,6 @@
         cropImageService = CropImageService;
         imageService = ImageService;
 
-        httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
@@ -75,8 +74,6 @@
         httpBackend.when('GET', "home/home.html").respond(200);
 
         AuthService.login(first_user);
-
-        spyOn(Utils, 'setScrollListener').and.callFake(function() {});
 
         createCtrl = function() {
             return $controller('InstitutionController',

@@ -3,57 +3,26 @@
 
     var app = angular.module('app');
 
-    app.controller('TimelineController', function(AuthService, $rootScope, PostService, 
-        $q, NotificationService, $scope) {
+    app.controller('TimelineController', function(AuthService, $rootScope, 
+        NotificationService, PostsFactory) {
         const timelineCtrl = this;
-        const content = document.getElementById($scope.contentId || "content");
+        const content = document.getElementById("content");
 
         const DELETED_POST_EVENT = 'DELETED_POST';
         const NEW_POST_EVENT = 'NEW_POST';
 
-        let morePosts = true;
-        let currentPage = 0;
-
-        timelineCtrl.posts = [];
+        timelineCtrl.hasPostFromCurrentInstitution = false;
         timelineCtrl.user = AuthService.getCurrentUser();
         timelineCtrl.isLoadingPosts = false;
         timelineCtrl.refreshTimeline = false;
 
-        timelineCtrl.loadMorePosts = function loadMorePosts(reload) {
-            var deferred = $q.defer();
-
-            if (reload) {
-                currentPage = 0;
-                morePosts = true;
-                timelineCtrl.posts.splice(0, timelineCtrl.posts.length);
-                timelineCtrl.setRefreshTimelineButton();
-                timelineCtrl.isLoadingPosts = true;
-            }
-
-            if (morePosts) {
-                loadNextPosts(deferred);
-            } else {
-                deferred.resolve();
-            }
- 
-            return deferred.promise;
-        };
-
         timelineCtrl.addPost = (post) => {
-            timelineCtrl.posts.push(post);
+            timelineCtrl.posts.addPost(post);
         };
 
         timelineCtrl.deletePost = (post) => {
-            var post = new Post(post);
-            if (!post.hasActivity()) {
-                _.remove(timelineCtrl.posts, function (currentPost) {
-                    return currentPost.key === post.key;
-                });
-            } else {
-                var postIndex = _.findIndex(timelineCtrl.posts, {'key': post.key});
-                timelineCtrl.posts[postIndex] = post;
-            }
-        }
+            timelineCtrl.posts.removePost(post);
+        };
 
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
             return timelineCtrl.refreshTimeline;
@@ -65,29 +34,13 @@
 
         function loadPosts() {
             timelineCtrl.isLoadingPosts = true;
-            var promise = timelineCtrl.loadMorePosts();
+            var promise = timelineCtrl.posts.loadMorePosts();
 
             promise.then(function success() {
                 timelineCtrl.isLoadingPosts = false;
             });
 
             return promise;
-        }
-
-        function loadNextPosts(deferred) {
-            PostService.getNextPosts(currentPage).then(function success(response) {
-                currentPage += 1;
-                morePosts = response.next;
-
-                _.forEach(response.posts, function (post) {
-                    timelineCtrl.posts.push(post);
-                });
-
-                timelineCtrl.isLoadingPosts = false;
-                deferred.resolve();
-            }, function error() {
-                deferred.reject();
-            });
         }
 
         function startEventsListeners() {
@@ -100,11 +53,16 @@
             });
         }
 
+        function getPosts() {
+            timelineCtrl.posts = new PostsFactory.timelinePosts();
+            loadPosts();
+        }
+
         Utils.setScrollListener(content, loadPosts);
 
         (() => {
             NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setRefreshTimelineButton);
-            timelineCtrl.loadMorePosts();
+            getPosts();
             startEventsListeners();
         })();
     });
@@ -116,8 +74,7 @@
             controller: "TimelineController",
             controllerAs: "timelineCtrl",
             scope: {
-                institution: '=',
-                contentId: '='
+                institution: '='
             }
         };
     });

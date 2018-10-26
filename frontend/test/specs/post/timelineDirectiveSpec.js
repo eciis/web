@@ -3,7 +3,7 @@
 (describe('Test TimelineController', function() {
     beforeEach(module('app'));
 
-    var timelineCtrl, createController, rootScope;
+    var timelineCtrl, createController, rootScope, scope, postService, notificationService;
     var user = {
         name: 'name',
         key : 'key',
@@ -53,20 +53,29 @@
 
     var posts = [survey, post];
 
-    beforeEach(inject(function($controller, AuthService, $rootScope) {
+    beforeEach(inject(function($controller, AuthService, $rootScope, 
+        PostService, NotificationService, $q) {
         rootScope = $rootScope;
+        scope = $rootScope.$new();
+        postService = PostService;
+        notificationService = NotificationService;
+        
         AuthService.login(user);
 
         spyOn(document, 'getElementById').and.callFake(function () {
             return content
-            
         });
 
         spyOn(Utils, 'setScrollListener').and.callThrough();
 
         createController = function(){
             return $controller('TimelineController', {
-                $rootScope: rootScope
+                scope: scope,
+                $rootScope: rootScope,
+                $scope: scope,
+                PostService: postService,
+                notificationService: NotificationService,
+                $q: $q
             });
         }
 

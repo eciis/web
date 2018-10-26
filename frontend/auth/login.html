@@ -1,73 +1,58 @@
 <md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
-    <div ng-if="!loginCtrl.isRequestInvite" flex-xs="90" flex-sm="65" flex-md="65" flex-lg="30" flex-xl="35">          
-          <md-card>
-            <md-card-content layout="row" layout-align="center">
-              <div layout="column" layout-align="center center" hide-xs>
-                <md-button class="md-fab md-primary" md-colors="{background: 'light-green-600'}"
-                    style="position: absolute; z-index: 3; margin-left: -18px;" ng-click="loginCtrl.goToLandingPage()">
-                  <md-icon >keyboard_arrow_left</md-icon>
+  <div ng-if="!loginCtrl.isRequestInvite" flex-xs="90" flex-sm="65" flex-md="65" flex-lg="30" flex-xl="35">          
+    <md-card>
+      <md-card-content layout="row" layout-align="center">
+        <div layout="column" layout-align="center center" hide-xs>
+          <md-button class="md-fab md-primary" md-colors="{background: 'light-green-600'}"
+              style="position: absolute; z-index: 3; margin-left: -18px;" ng-click="loginCtrl.goToLandingPage()">
+            <md-icon >keyboard_arrow_left</md-icon>
+          </md-button>
+        </div>
+        <div layout="column" flex style="padding: 10px" class="margin">
+            <img src="/app/images/logowithname.png" style="margin-bottom: 20px; width: 75%; padding-left: 10%"/>
+            <form ng-submit="loginCtrl.loginWithEmailPassword()">
+              <md-input-container class="md-block" style="margin: 0;">
+                <label>Email</label>
+                <input type="email" name="email" ng-model="loginCtrl.user.email" required="true" aria-label="Email">
+              </md-input-container>
+              <md-input-container class="md-block" style="margin: 0;">
+                <label>Senha</label>
+                <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6" aria-label="Senha">
+              </md-input-container>
+              <div layout="row" layout-align="end center" style="margin-bottom: 10px">
+                <md-button flex-xs="60" class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}"
+                  hide-gt-xs style="font-size: 11px; margin-left: 0;">
+                  Esqueci minha senha
                 </md-button>
+                <md-button flex-xs type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
               </div>
-              <div layout="column" flex style="padding: 10px" class="margin">
-                  <img src="/app/images/logowithname.png" style="margin-bottom: 20px; width: 75%; padding-left: 10%"/>
-                  <form ng-submit="loginCtrl.loginWithEmailPassword()">
-                    <md-input-container class="md-block" style="margin: 0;">
-                      <label>Email</label>
-                      <input type="email" name="email" ng-model="loginCtrl.user.email" required="true" aria-label="Email">
-                    </md-input-container>
-                    <md-input-container class="md-block" style="margin: 0;">
-                      <label>Senha</label>
-                      <input type="password" name="password" ng-model="loginCtrl.user.password" required="true"  minlength="6" aria-label="Senha">
-                    </md-input-container>
-                    <div layout="row" layout-align="end center" style="margin-bottom: 10px">
-                      <md-button flex-xs="60" class="md-primary" ng-click="loginCtrl.resetPassword()" md-colors="{background: 'grey-200', color: 'teal-900'}"
-                        hide-gt-xs style="font-size: 11px; margin-left: 0;">
-                        Esqueci minha senha
-                      </md-button>
-                      <md-button flex-xs type="submit" style="margin: 0" class="md-raised md-primary" md-colors="{background: 'teal-500'}">Acessar</md-button>
-                    </div>
-                  </form>
-                  <md-button class="login-button" ng-click="loginCtrl.loginWithGoogle()"
-                    style="background-color: #db4437; margin: 10px 0 10px 0;">
-                    <md-icon md-svg-src="/app/icons/google-icon.svg" style="padding-left: 1em;"></md-icon>
-                    <span>ACESSE COM GOOGLE</span>
-                  </md-button>
-                  <!-- TODO: Uncomment when it is possible to connect with other social networks
-                             @author: Mayza Nunes 11/01/2018
-
-                    <md-button disabled="true" class="md-raised md-primary login-button">
-                        <md-icon md-svg-src="/app/icons/facebook-icon.svg" style="padding-left: 1em;"></md-icon>
-                        <span>ACESSE COM FACEBOOK</span>
-                    </md-button>
-                    <md-button disabled="true" class="md-raised md-primary login-button">
-                      <md-icon md-svg-src="/app/icons/twitter-icon.svg" style="padding-left: 1em;"></md-icon>
-                        <span>ACESSE COM TWITTER</span>
-                    </md-button>
-                    <div layout="row" style="margin-top: 15px;">
-                      <hr style="height:0px;" flex/>
-                    </div>
-                  -->
-                <md-divider></md-divider>
-                <p style="color: black;">
-                  <b>Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.</b>
-                </p>
-                <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
-                  style="margin-bottom: 30px; margin: 10px 0 10px 0;">
-                    <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
-                    <span>SOLICITAR CONVITE</span>
-                </md-button>
-              </div>
-            </md-card-content>
-            <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>
-              <a href="" style="text-decoration: none;" ng-click="loginCtrl.resetPassword()">
-                <b md-colors="{color: 'teal-500'}">Esqueceu a senha?</b>
-              </a>
-            </div>
-          </md-card>
+            </form>
+            <md-button class="login-button" ng-click="loginCtrl.loginWithGoogle()"
+              style="background-color: #db4437; margin: 10px 0 10px 0;">
+              <md-icon md-svg-src="/app/icons/google-icon.svg" style="padding-left: 1em;"></md-icon>
+              <span>ACESSE COM GOOGLE</span>
+            </md-button>
+          <md-divider></md-divider>
+          <p style="color: black;">
+            <b>Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.</b>
+          </p>
+          <md-button md-colors="{background: 'teal-500'}" class="login-button" ng-click="loginCtrl.isRequestInvite = true"
+            style="margin-bottom: 30px; margin: 10px 0 10px 0;">
+              <md-icon style="color: white; padding-left: 1em;">add_circle</md-icon>
+              <span>SOLICITAR CONVITE</span>
+          </md-button>
+        </div>
+      </md-card-content>
+      <div style="padding: 15px; font-size: 14px;" md-colors="{background: 'grey-300'}" hide-xs>
+        <a href="" style="text-decoration: none;" ng-click="loginCtrl.resetPassword()">
+          <b md-colors="{color: 'teal-500'}">Esqueceu a senha?</b>
+        </a>
       </div>
-    </div>
+    </md-card>
+  </div>
     
-    <signup return-action="loginCtrl.requestInvite" callback="loginCtrl.redirect"
-      card-title="Preencha o formulário para solicitar um convite"
-      ng-if="loginCtrl.isRequestInvite"></signup>
-  </md-content>
+  <signup return-action="loginCtrl.requestInvite" callback="loginCtrl.redirect"
+    card-title="Preencha o formulário para solicitar um convite"
+    ng-if="loginCtrl.isRequestInvite">
+  </signup>
+</md-content>

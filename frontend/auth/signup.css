@@ -12,9 +12,8 @@
 }
 
 .request-logo {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 75%;
+    margin: 1em;
+    width: 90%;
 }
 
 .request-title-card {
@@ -51,16 +50,23 @@
 }
 
 /* Smartphones */
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 340px) {
     .request-back-btn {
-        margin: 17.3em 0 0 0;
+        margin: 17.5em 0 0 0;
+    }
+}
+
+/* Smartphones */
+@media screen and (min-width: 341px) and (max-width: 380px) {
+    .request-back-btn {
+        margin: 18em 0 0 0;
     }
 }
 
 /* Smartphones */
 @media screen and (min-width: 381px) and (max-width: 420px) {
     .request-back-btn {
-        margin: 18em 0 0 0;
+        margin: 18.5em 0 0 0;
     }
 }
 

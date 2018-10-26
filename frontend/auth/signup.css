@@ -35,8 +35,7 @@
     display: none;
 }
 
-
-/* Smartphones */
+/* Smartphones (Commum Properties)*/
 @media screen and (max-width: 420px) {
     .request-invite-card {
         width: 90%;
@@ -49,18 +48,51 @@
     .request-card-footer {
         display: inherit;
     }
+}
 
+/* Smartphones */
+@media screen and (max-width: 380px) {
     .request-back-btn {
-        width: 5em !important;
-        height: 5em !important;
-        left: 0em;
-        top: 0em;
+        margin: 17.3em 0 0 0;
     }
 }
 
-/* Ipad, Ipad Pro- Portrait */
+/* Smartphones */
+@media screen and (min-width: 381px) and (max-width: 420px) {
+    .request-back-btn {
+        margin: 18em 0 0 0;
+    }
+}
+
+/* Ipad, Ipad Pro (Commom Properties) */
 @media screen and (min-width: 421px) and (max-width: 1024px) {
     .request-invite-card {
         width: 65%;
+    }
+}
+
+/* L - Landscape, P - Portrait */
+/* Ipad (P) */
+@media screen and (min-width: 421px) and (max-width: 768px) {
+    .request-back-btn {
+        margin: 0 0 0 -18em;
+    }
+}
+
+/* Ipad (L), Ipad Pro (P) */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .request-back-btn {
+        margin: 0 0 0 -23.5em;
+    }
+}
+
+/* Ipad Pro (L) */
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    .request-invite-card {
+        width: 35%;
+    }
+
+    .request-back-btn {
+        margin: 0 0 0 -17em;
     }
 }

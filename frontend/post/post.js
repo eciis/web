@@ -7,6 +7,12 @@ function Post(data, institution) {
     this.institution = institution;
 }
 
+Post.prototype.deleteComment = function (commentId) {
+    this.data_comments = this.data_comments
+        .filter(comment => comment.id !== commentId);
+    this.number_of_comments--;
+}
+
 Post.prototype.isValid = function isValid() {
     if (_.isUndefined(this.title) || _.isEmpty(this.title)) {
         return false; 

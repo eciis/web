@@ -357,13 +357,29 @@
             return instName;
         };
 
+        /**
+         * Return a boolean to indicate if user is writing a post.
+         * @returns {boolean}
+         */
         postCtrl.isTyping = function() {
             return postCtrl.post.title || postCtrl.post.text || postCtrl.hasMedia();
         };
 
-        postCtrl.showButton = function() {
-            return postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
-                !postCtrl.loadingPost;
+        /**
+         * Return if should show or not the text field of post to be filled.
+         * @returns {boolean}
+         */
+        postCtrl.showTextField = function() {
+            return postCtrl.isTyping() || Utils.isMobileScreen();
+        }
+
+        /**
+         * Return if should show or not the buttons to cancel and publish a post.
+         * @returns {boolean}
+         */
+        postCtrl.showActionButtons = function() {
+            return (postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
+                !postCtrl.loadingPost) || Utils.isMobileScreen();
         };
 
         postCtrl.showPlaceholderMsg = function() {
@@ -378,10 +394,18 @@
         })();
     });
 
+    /**
+     * Function to return a correct template url to show in desktop screen ou mobile screen.
+     * @returns {String} The string containing the url path to html file that be displayed in view.
+     */
+    function getTemplateUrl() {
+        return Utils.isMobileScreen() ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
+    };
+
     app.directive("savePost", function() {
         return {
             restrict: 'E',
-            templateUrl: "app/post/save_post.html",
+            templateUrl: getTemplateUrl(),
             controllerAs: "postCtrl",
             controller: "PostController",
             scope: {

@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
 
     var app = angular.module('app');
 
-    app.controller('TimelineController', function(AuthService, $rootScope, 
+    app.controller('TimelineController', function (AuthService, $rootScope,
         NotificationService, PostsFactory) {
         const timelineCtrl = this;
         const content = document.getElementById("content");
@@ -33,7 +33,6 @@
         };
 
         function loadPosts() {
-            timelineCtrl.isLoadingPosts = true;
             var promise = timelineCtrl.posts.loadMorePosts();
 
             promise.then(function success() {
@@ -55,6 +54,7 @@
 
         function getPosts() {
             timelineCtrl.posts = new PostsFactory.timelinePosts();
+            timelineCtrl.isLoadingPosts = true;
             loadPosts();
         }
 
@@ -67,7 +67,7 @@
         })();
     });
 
-    app.directive("postTimeline", function() {
+    app.directive("postTimeline", function () {
         return {
             restrict: 'E',
             templateUrl: "app/post/timeline.html",

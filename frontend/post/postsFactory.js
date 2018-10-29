@@ -20,7 +20,7 @@
                     return currentPost.key === post.key;
                 });
             } else {
-                const postIndex = _.findIndex(timelineCtrl.posts, { 'key': post.key });
+                const postIndex = _.findIndex(this.data, { 'key': post.key });
                 this.data[postIndex] = post;
             }
         };

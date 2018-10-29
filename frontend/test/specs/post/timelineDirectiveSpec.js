@@ -1,9 +1,9 @@
 'use strict';
 
-(describe('Test TimelineController', function() {
+(fdescribe('Test TimelineController', function() {
     beforeEach(module('app'));
 
-    var timelineCtrl, createController, rootScope, scope, postService, notificationService, postsFactory;
+    var timelineCtrl, createController, rootScope, scope, notificationService, postsFactory;
     var user = {
         name: 'name',
         key : 'key',
@@ -54,11 +54,10 @@
     var posts = [survey, post];
 
     beforeEach(inject(function($controller, AuthService, $rootScope, 
-        PostService, NotificationService, $q, PostsFactory) {
+        NotificationService, $q, PostsFactory) {
         rootScope = $rootScope;
         postsFactory = PostsFactory;
         scope = $rootScope.$new();
-        postService = PostService;
         notificationService = NotificationService;
         
         AuthService.login(user);
@@ -74,28 +73,33 @@
                 scope: scope,
                 $rootScope: rootScope,
                 $scope: scope,
-                PostService: postService,
                 NotificationService: notificationService,
                 $q: $q,
                 PostsFactory: postsFactory
             });
         };
 
-        timelineCtrl = createController();
-        timelineCtrl.content = content;
-        timelineCtrl.user = new User(user);
-        spyOn(timelineCtrl.posts, 'addPost').and.callThrough();
-        spyOn(timelineCtrl.posts, 'loadMorePosts').and.callThrough();
-        spyOn(timelineCtrl.posts.prototype, 'getNextPosts').and.callFake(function () {
+        spyOn(postsFactory.posts.prototype, 'addPost').and.callThrough();
+        spyOn(postsFactory.posts.prototype, 'loadMorePosts').and.callThrough();
+        spyOn(postsFactory.posts.prototype, 'getNextPosts').and.callFake(function () {
             return {
-                then: function () {
-                    return {
+                then: function (callback) {
+                    const data = {
                         posts: posts,
                         next: true
                     };
+                    return callback(data);
                 }
             }
         });
+        spyOn(notificationService, 'watchPostNotification');
+
+        timelineCtrl = createController();
+        timelineCtrl.content = content;
+        timelineCtrl.user = new User(user);
+
+        expect(notificationService.watchPostNotification).toHaveBeenCalled();
+        expect(Utils.setScrollListener).toHaveBeenCalled();
     }));
 
     describe('Should create observer', function() {
@@ -147,18 +151,18 @@
             };
 
             rootScope.$emit("DELETED_POST", post_not_timeline);
-            expect(timelineCtrl.posts.length).toEqual(2);
-            expect(timelineCtrl.posts).toEqual(posts);
+            expect(timelineCtrl.posts.size()).toEqual(2);
+            expect(timelineCtrl.posts.data).toEqual(posts);
         });
 
         it('should not delete post because it has activity.', function() {
-            timelineCtrl.posts = [survey, post];
-            expect(timelineCtrl.posts[1].comments).toBeUndefined();
-            expect(timelineCtrl.posts[1].number_of_comments).toBeUndefined();
+            timelineCtrl.posts.data = [survey, post];
+            expect(timelineCtrl.posts.data[1].comments).toBeUndefined();
+            expect(timelineCtrl.posts.data[1].number_of_comments).toBeUndefined();
 
             rootScope.$emit("DELETED_POST", post_with_activity);
-            expect(timelineCtrl.posts.length).toEqual(2);
-            expect(timelineCtrl.posts[1]).toEqual(new Post(post_with_activity));
+            expect(timelineCtrl.posts.size()).toEqual(2);
+            expect(timelineCtrl.posts.data[1]).toEqual(new Post(post_with_activity));
         });
 
         it('should delete post.', function() {

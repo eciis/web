@@ -23,6 +23,7 @@
         homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
+        
         function loadStateView(){
             homeCtrl.stateView = $state.current.name.split(".")[2];
         }

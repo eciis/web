@@ -91,7 +91,7 @@
         display: none;
     }
 
-    .comment-btn send-comment-btn {
+    .send-comment-btn-text {
         display: none;
     }
 
@@ -113,7 +113,7 @@
         margin-left: -0.6em;        
     }
 
-    .send-comment-btn {
+    .send-comment-btn-text {
         margin-left: 4px;
     }
 

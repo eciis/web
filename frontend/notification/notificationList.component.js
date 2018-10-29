@@ -19,7 +19,7 @@
             if (actionNotification){
                 actionNotification(notification, event, properties);
             } else {
-                goTo(notification);
+                ctrl.goTo(notification);
             }
             ctrl.markAsRead(notification);
         };
@@ -36,7 +36,7 @@
             RequestDialogService.showRequestDialog(notification, event, properties);
         }
 
-        function goTo(notification) {
+        ctrl.goTo = function goTo(notification) {
             var state = typeNotification[notification.entity_type].state;
             state && $state.go(state, {key: notification.entity.key});
             !state && $state.go('app.user.notifications');

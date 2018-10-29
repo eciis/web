@@ -6,7 +6,7 @@
     </md-content>
   </md-card>
   <div layout="row" layout-align="center center" class="ng-if" ng-if="timelineCtrl.showRefreshTimelineButton()">
-    <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.loadMorePosts(true)">
+    <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.refreshTimeline()">
       VOCÊ TEM NOVOS POSTS
       <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
     </md-button>

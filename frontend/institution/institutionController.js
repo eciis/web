@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
+        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService, PostsFactory) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -19,8 +19,7 @@
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
-        institutionCtrl.isLoadingCover = false
-        institutionCtrl.contentId = "instPage";
+        institutionCtrl.isLoadingCover = false;
                 
         var currentInstitutionKey = $state.params.institutionKey;
         institutionCtrl.user = AuthService.getCurrentUser();
@@ -41,6 +40,10 @@
                 institutionCtrl.isLoadingData = true; 
             });
         }
+
+        institutionCtrl.getInstKey = () => {
+            return currentInstitutionKey;
+        };
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;

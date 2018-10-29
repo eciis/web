@@ -21,6 +21,7 @@
 
 .comment-btn-text {
     font-size: 0.7em;
+    margin-left: 8px;
 }
 
 .btns-row {
@@ -52,6 +53,7 @@
 
 .reply-input-container {
     width: 100%;
+    margin-bottom: 0;
 }
 
 .reply-input {
@@ -69,6 +71,12 @@
     z-index: 3;
 }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: auto 100px;
+    align-items: center;
+}
+
 @media screen and (max-width: 350px) {
     .comment-btn-text {
         font-size: 0.6em;
@@ -83,11 +91,27 @@
     .inst-name {
         display: none;
     }
+
+    .comment-btn send-comment-btn {
+        display: none;
+    }
+
+    .comment-btn md-icon {
+        margin-left: 8px;
+    }
+
+    .grid-container {
+        grid-template-columns: auto 30px;
+    }
 }
 
 @media screen and (min-width: 451px) {
     .comment-btn-text {
         margin-left: -0.6em;        
+    }
+
+    .send-comment-btn {
+        margin-left: 4px;
     }
 
     .reply {

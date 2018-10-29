@@ -162,6 +162,10 @@
         };
 
         commentCtrl.canReply = function canReply() {
+            const t1 = commentCtrl.showReplies;
+            const t2 = !commentCtrl.isDeletedPost();
+            const t3 = !commentCtrl.isInstInactive();
+            
             return commentCtrl.showReplies && !commentCtrl.isDeletedPost() &&
                 !commentCtrl.isInstInactive();
         };

@@ -66,21 +66,17 @@
     </comment>
     <md-list-item class="md-2-line" ng-if="commentCtrl.canReply()">
       <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
-      <div class="md-list-item-text">
+      <div class="md-list-item-text grid-container">
         <md-input-container class="reply-input-container" flex>
           <label>Responder</label>
           <textarea class="reply-input" ng-model="commentCtrl.newReply"
               md-select-on-focus ng-disabled="commentCtrl.saving"></textarea>
         </md-input-container>
-        <div layout="row" class="reply-btn-container">
-          <button class="send-reply-btn comment-btn" ng-click="commentCtrl.replyComment();"
-            ng-disabled="!commentCtrl.newReply" aria-label="Send">
-            <md-button class="md-icon-button hide-xxs" aria-label="Send icon">
-              <md-icon>send</md-icon>
-            </md-button>
-            <b class="comment-btn-text">ENVIAR</b>
-          </button>
-        </div>
+        <button class="comment-btn" style="height: 30px;" ng-click="commentCtrl.replyComment();"
+          ng-disabled="!commentCtrl.newReply" aria-label="Send">
+          <md-icon>send</md-icon>
+          <b class="comment-btn-text send-comment-btn" hide-xs>ENVIAR</b>
+        </button>
       </div>
     </md-list-item>
   </div>

@@ -3,7 +3,7 @@
 (describe('Test TimelineController', function() {
     beforeEach(module('app'));
 
-    var timelineCtrl, createController, rootScope, scope, postService, notificationService;
+    var timelineCtrl, createController, rootScope, scope, postService, notificationService, postsFactory;
     var user = {
         name: 'name',
         key : 'key',
@@ -54,8 +54,9 @@
     var posts = [survey, post];
 
     beforeEach(inject(function($controller, AuthService, $rootScope, 
-        PostService, NotificationService, $q) {
+        PostService, NotificationService, $q, PostsFactory) {
         rootScope = $rootScope;
+        postsFactory = PostsFactory;
         scope = $rootScope.$new();
         postService = PostService;
         notificationService = NotificationService;
@@ -74,15 +75,27 @@
                 $rootScope: rootScope,
                 $scope: scope,
                 PostService: postService,
-                notificationService: NotificationService,
-                $q: $q
+                NotificationService: notificationService,
+                $q: $q,
+                PostsFactory: postsFactory
             });
-        }
+        };
 
         timelineCtrl = createController();
         timelineCtrl.content = content;
         timelineCtrl.user = new User(user);
-        timelineCtrl.posts = posts;
+        spyOn(timelineCtrl.posts, 'addPost').and.callThrough();
+        spyOn(timelineCtrl.posts, 'loadMorePosts').and.callThrough();
+        spyOn(timelineCtrl.posts.prototype, 'getNextPosts').and.callFake(function () {
+            return {
+                then: function () {
+                    return {
+                        posts: posts,
+                        next: true
+                    };
+                }
+            }
+        });
     }));
 
     describe('Should create observer', function() {
@@ -107,7 +120,7 @@
                 }
             };
             expect(timelineCtrl.testLoadMorePosts).toEqual(undefined);
-            timelineCtrl.loadMorePosts = callbackLoadMorePost;
+            timelineCtrl.posts.loadMorePosts = callbackLoadMorePost;
             timelineCtrl.content = content;
 
             timelineCtrl.content.onscroll();
@@ -117,9 +130,10 @@
 
     describe('Should not call delete post function', function() {
         it("should do nothing.", function() {
+            console.log(timelineCtrl.posts);
             rootScope.$emit("DELETED_INSTITUTION", {});
-            expect(timelineCtrl.posts.length).toEqual(2);
-            expect(timelineCtrl.posts).toEqual(posts);
+            expect(timelineCtrl.posts.size()).toEqual(2);
+            expect(timelineCtrl.posts.data).toEqual(posts);
         });
     });
 
@@ -148,18 +162,18 @@
         });
 
         it('should delete post.', function() {
-            expect(timelineCtrl.posts).toEqual(posts);
+            expect(timelineCtrl.posts.data).toEqual(posts);
             rootScope.$emit("DELETED_POST", post);
-            expect(timelineCtrl.posts.length).toEqual(1);
-            expect(timelineCtrl.posts).toEqual([survey]);
+            expect(timelineCtrl.posts.size()).toEqual(1);
+            expect(timelineCtrl.posts.data).toEqual([survey]);
 
             rootScope.$emit("DELETED_POST", post);
-            expect(timelineCtrl.posts.length).toEqual(1);
-            expect(timelineCtrl.posts).toEqual([survey]);
+            expect(timelineCtrl.posts.size()).toEqual(1);
+            expect(timelineCtrl.posts.data).toEqual([survey]);
 
             rootScope.$emit("DELETED_POST", survey);
-            expect(timelineCtrl.posts.length).toEqual(0);
-            expect(timelineCtrl.posts).toEqual([]);
+            expect(timelineCtrl.posts.size()).toEqual(0);
+            expect(timelineCtrl.posts.data).toEqual([]);
         });
     });
 }));

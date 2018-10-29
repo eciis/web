@@ -4,8 +4,8 @@
 
     app.factory('PostsFactory', ($q, HttpService) => {
         
-        function Posts(uri) {
-            this.data = [];
+        function Posts(uri, data) {
+            this.data = data || [];
             this.uri = uri;
             this.currentPage = 0;
             this.limit = 10;
@@ -59,18 +59,18 @@
             } else {
                 deferred.resolve();
             }
-
+            
             return deferred.promise;
         };
 
-        function TimelinePosts() {
-            Posts.call(this, '/api/user');
+        function TimelinePosts(data) {
+            Posts.call(this, '/api/user', data);
         }
 
         TimelinePosts.prototype = Object.create(Posts.prototype);
 
-        function InstitutionTimelinePosts(institutionKey) {
-            Posts.call(this, `/api/institutions/${institutionKey}`);
+        function InstitutionTimelinePosts(institutionKey, data) {
+            Posts.call(this, `/api/institutions/${institutionKey}`, data);
         }
 
         InstitutionTimelinePosts.prototype = Object.create(Posts.prototype);

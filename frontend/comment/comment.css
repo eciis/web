@@ -48,7 +48,7 @@
 
 .reply {
     margin-left: 0.3em; 
-    border-left: 0.1em solid #8BC34A;
+    border-left: 0.289em solid #8BC34A;
 }
 
 .reply-input-container {
@@ -73,7 +73,6 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: auto 100px;
     align-items: center;
 }
 
@@ -101,11 +100,15 @@
     }
 
     .grid-container {
-        grid-template-columns: auto 30px;
+        grid-template-columns: auto 2em;
     }
 }
 
 @media screen and (min-width: 451px) {
+    .grid-container {
+        grid-template-columns: auto 6em;
+    }
+
     .comment-btn-text {
         margin-left: -0.6em;        
     }

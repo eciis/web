@@ -1,10 +1,10 @@
-<md-list style="padding: 10px;" flex>
+<md-list id="list-padding" flex>
     <md-list-item title="{{ctrl.format(notification)}}" class="md-3-line" style="margin-bottom: 5px; padding: 3 0 3 0;"
         ng-repeat="notification in ctrl.notifications | orderBy:'-timestamp' | filter: ctrl.keyword" 
         ng-click="ctrl.action(notification, $event)" flex-xs ng-class="notification.status === 'READ'? '': 'unread-notification'">    
-        <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
+        <img ng-src="{{notification.from.photo_url}}" class="md-avatar" id="image-notification"/>
             <div class="md-list-item-text" layout="column">
-                <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>
+                <p><b style="font-size:18px;">{{ notification.from.name }}</b></p>
                 <!-- notification.current_institution belongs to the new notification architecture. 
                     notification.from belongs to old architecture. DATE: 10/05/2018-->
                 <p>

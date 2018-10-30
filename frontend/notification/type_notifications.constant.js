@@ -2,7 +2,7 @@
 
 (function(){
     var app = angular.module("app");
-    app.constant('typeNotification', {
+    app.constant('NOTIFICATION_TYPE', {
         COMMENT: {
             "icon": "comment",
             "state": "app.post"
@@ -52,9 +52,7 @@
         },
         REQUEST_USER: {
             "icon": "person_add",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            },
+            "action": true,
             "properties": {
                 "templateUrl": "app/requests/request_user_dialog.html",
                 "controller": "RequestProcessingController",
@@ -64,21 +62,15 @@
         },
         REQUEST_INSTITUTION_CHILDREN: {
             "icon": "account_balance",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            }
+            "action": true
         },
         REQUEST_INSTITUTION_PARENT: {
             "icon": "account_balance",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            }
+            "action": true
         },
         REQUEST_INSTITUTION: {
             "icon": "account_balance",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            },
+            "action": true,
             "properties": {
                 "templateUrl": "app/requests/request_institution_processing.html",
                 "controller": "RequestProcessingController",
@@ -119,9 +111,7 @@
         },
         USER_ADM: {
             "icon": "account_balance",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            },
+            "action": true,
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",
                 "controller": "ProcessInviteUserAdmController",
@@ -133,9 +123,7 @@
         },
         ACCEPT_INVITE_USER_ADM: {
             "icon": "account_balance",
-            "action": function (notification, event, properties, callback) {
-                return callback.showRequestDialog(notification, event, properties);
-            },
+            "action": true,
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",
                 "controller": "ProcessInviteUserAdmController",

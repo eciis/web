@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     var notificationCtrlComponent = function(NotificationService, $state,
-        RequestDialogService, typeNotification){
+        RequestDialogService, NOTIFICATION_TYPE){
 
         var ctrl = this;
 
@@ -14,14 +14,14 @@
         }
 
         ctrl.getIcon = function(type) {
-            return typeNotification[type].icon;
+            return NOTIFICATION_TYPE[type].icon;
         };
 
         ctrl.action = function action(notification, event) {
-            var properties = typeNotification[notification.entity_type].properties;
-            var actionNotification = typeNotification[notification.entity_type].action;
+            var properties = NOTIFICATION_TYPE[notification.entity_type].properties;
+            var actionNotification = NOTIFICATION_TYPE[notification.entity_type].action;
             if (actionNotification){
-                actionNotification(notification, event, properties, callback);
+                showRequestDialog(notification, event, properties, callback);
             } else {
                 ctrl.goTo(notification);
             }
@@ -41,7 +41,7 @@
         }
 
         ctrl.goTo = function goTo(notification) {
-            var state = typeNotification[notification.entity_type].state;
+            var state = NOTIFICATION_TYPE[notification.entity_type].state;
             state && $state.go(state, {key: notification.entity.key});
             !state && $state.go('app.user.notifications');
         };
@@ -56,7 +56,7 @@
             keyword: '='
         },
         controller: ["NotificationService", "$state", "RequestDialogService",
-                        "typeNotification", notificationCtrlComponent],
+                        "NOTIFICATION_TYPE", notificationCtrlComponent],
         controllerAs: 'ctrl'
     });
 })();

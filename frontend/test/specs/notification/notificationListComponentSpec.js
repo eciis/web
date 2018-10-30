@@ -1,13 +1,12 @@
 'use strict';
 
 (describe('notificationListComponent', function() {
-    var state, notCtrl, requestDialogService;
+    let state, notCtrl, requestDialogService;
 
-    var bindings = {'markAsRead': function(){}}
+    const bindings = {'markAsRead': function(){}}
 
     beforeEach(module('app'));
-    beforeEach(inject(function(_$componentController_, NotificationService, $state,
-      RequestDialogService, typeNotification) {
+    beforeEach(inject(function(_$componentController_, $state, RequestDialogService) {
       state = $state;
       requestDialogService = RequestDialogService;
       notCtrl = _$componentController_('notificationList', null, bindings);

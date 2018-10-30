@@ -290,6 +290,14 @@
                     }
                 }
             })
+            .state("email_verification", {
+                url: "/emailverification",
+                views: {
+                    main: {
+                      templateUrl: "app/auth/email_verification.html"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/userinactive",
                 views: {

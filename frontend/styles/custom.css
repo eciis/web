@@ -1108,3 +1108,68 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     min-width: 1em; 
     width: 20%;
 }
+
+.custom-card {
+    width: 30%;
+    color: black;
+}
+
+.custom-card-logo {
+    margin: 1em;
+    width: 90%;
+}
+
+.custom-card-content {
+    width: 80%;
+}
+
+.custom-card-footer {
+    height: 3em;
+    background-color: #E6E6E6;
+    display: none;
+}
+
+.custom-card-back-btn {
+    margin: 0 -2.5em 0 0;
+}
+
+.custom-card-input-container {
+    margin: 0;
+}
+
+.custom-card-input {
+    border-bottom-color: #009688 !important;
+}
+
+/* Smartphones */
+@media screen and (max-width: 420px) {
+    .custom-card {
+        width: 90%;
+    }
+
+    .custom-card-content {
+        width: 85%;
+    }
+
+    .custom-card-footer {
+        display: inherit;
+    }
+    
+    .custom-card-back-btn {
+        margin: 1.2em 0 0 0;
+    }
+}
+
+/* Ipad, Ipad Pro */
+@media screen and (min-width: 421px) and (max-width: 1024px) {
+    .custom-card {
+        width: 65%;
+    }
+}
+
+/* Ipad Pro (L) */
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    .custom-card {
+        width: 35%;
+    }
+}

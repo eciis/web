@@ -9,6 +9,10 @@
 
         var ctrl = this;
 
+        var callback = {
+            "showRequestDialog": showRequestDialog
+        }
+
         ctrl.getIcon = function(type) {
             return typeNotification[type].icon;
         };
@@ -17,7 +21,7 @@
             var properties = typeNotification[notification.entity_type].properties;
             var actionNotification = typeNotification[notification.entity_type].action;
             if (actionNotification){
-                actionNotification(notification, event, properties);
+                actionNotification(notification, event, properties, callback);
             } else {
                 ctrl.goTo(notification);
             }

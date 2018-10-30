@@ -52,8 +52,8 @@
         },
         REQUEST_USER: {
             "icon": "person_add",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             },
             "properties": {
                 "templateUrl": "app/requests/request_user_dialog.html",
@@ -64,20 +64,20 @@
         },
         REQUEST_INSTITUTION_CHILDREN: {
             "icon": "account_balance",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             }
         },
         REQUEST_INSTITUTION_PARENT: {
             "icon": "account_balance",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             }
         },
         REQUEST_INSTITUTION: {
             "icon": "account_balance",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             },
             "properties": {
                 "templateUrl": "app/requests/request_institution_processing.html",
@@ -119,8 +119,8 @@
         },
         USER_ADM: {
             "icon": "account_balance",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             },
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",
@@ -133,8 +133,8 @@
         },
         ACCEPT_INVITE_USER_ADM: {
             "icon": "account_balance",
-            "action": function (notification, event, properties) {
-                return showRequestDialog(notification, event, properties);
+            "action": function (notification, event, properties, callback) {
+                return callback.showRequestDialog(notification, event, properties);
             },
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",

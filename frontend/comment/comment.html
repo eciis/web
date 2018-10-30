@@ -72,7 +72,7 @@
           <textarea class="reply-input" ng-model="commentCtrl.newReply"
               md-select-on-focus ng-disabled="commentCtrl.saving"></textarea>
         </md-input-container>
-        <button class="comment-btn" style="height: 30px;" ng-click="commentCtrl.replyComment();"
+        <button class="comment-btn send-reply-btn" ng-click="commentCtrl.replyComment();"
           ng-disabled="!commentCtrl.newReply" aria-label="Send">
           <md-icon>send</md-icon>
           <b class="comment-btn-text send-comment-btn-text">ENVIAR</b>

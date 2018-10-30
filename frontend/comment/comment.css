@@ -67,8 +67,8 @@
 }
 
 .send-reply-btn {
-    margin-left: auto;
-    z-index: 3;
+    height: 30px;
+    border-radius: 5px;
 }
 
 .grid-container {
@@ -95,7 +95,7 @@
         display: none;
     }
 
-    .comment-btn md-icon {
+    .send-reply-btn {
         margin-left: 8px;
     }
 

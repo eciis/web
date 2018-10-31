@@ -47,6 +47,10 @@
         background-color: #7CB342 !important;
     }
 
+    .save-survey-date {
+        pointer-events: none;
+    }
+
     .save-survey-scrollbar {
         display: block;
         width: 47.5vh;

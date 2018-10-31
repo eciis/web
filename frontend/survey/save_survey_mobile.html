@@ -15,7 +15,7 @@
         <label>Data limite</label>
         <input name="date" mdc-datetime-picker="" short-time="false" date="true" time="true" type="text"
           format="DD/MM/YYYY HH:mm" lang="pt-BR" placeholder="Receber respostas até..."
-          ng-model="surveyCtrl.post.deadline" class="survey-options md-input survey-title-placeholder" today-text="Hoje" min-date="surveyCtrl.now"
+          ng-model="surveyCtrl.post.deadline" class="survey-options md-input survey-title-placeholder save-survey-date" today-text="Hoje" min-date="surveyCtrl.now"
           readonly="readonly" cancel-text="Cancelar" required>
           <div ng-messages="saveSurvey.date.$error">
             <div ng-message="required">Insira a data limite da enquete.</div>

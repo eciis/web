@@ -19,13 +19,26 @@
 }
 
 @media screen and (max-width: 959px) {
-    .survey-title-placeholder, .survey-options {
+    .survey-title-placeholder, {
         font-size: 13.5px !important;
+    }
+
+    .survey-options {
+        font-size: 13.5px !important;
+        background-color: white;
     }
 
     .survey-multiple-choice {
         font-size: 12px;
         margin-left: 10px;
+    }
+
+    .save-survey-input-placeholder {
+        font-weight: 500 !important;
+        font-size: 13.5px !important;
+        border: 5 !important;
+        color: #009688 !important;
+        border-color: #009688 !important;
     }
 }
 

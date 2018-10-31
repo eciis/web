@@ -1,27 +1,29 @@
 <form name="saveSurvey" layout="column" ng-submit="surveyCtrl.save()">
-  <div>
+  <md-card-content style="display: flex; flex-wrap: wrap">
     <md-input-container md-no-float class="md-block" style="margin: 0px;">
-      <input ng-model="surveyCtrl.post.title" class="survey-title-placeholder" placeholder="Pergunte algo"/>
+      <input ng-model="surveyCtrl.post.title" class="save-survey-input-placeholder" placeholder="Título da enquete"/>
     </md-input-container>
-    <div ng-if="surveyCtrl.isTyping()">
+    <div>
       <p class="md-subheader survey-options"> Alternativas</p>
-      <md-content flex style="max-height: 150px;" class="survey-options custom-scrollbar">
-        <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float class="md-block" style="height: 25px;">
-          <input class="md-input" ng-model="option.text" ng-change="surveyCtrl.changeOption(option)" placeholder="+ Adicionar uma opção..." maxlength="150" />
+      <md-card-content flex style="max-height: 150px;" class="survey-options custom-scrollbar">
+        <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float
+        class="md-block save-survey-input-placeholder" style="height: 25px;">
+          <input class="survey-title-placeholder" ng-model="option.text" ng-change="surveyCtrl.changeOption(option)"
+          placeholder="+ Adicionar uma opção..." maxlength="150" />
         </md-input-container>
-      </md-content>
+      </md-card-content>
       <md-input-container class="md-block">
         <label>Data limite</label>
         <input name="date" mdc-datetime-picker="" short-time="false" date="true" time="true" type="text"
           format="DD/MM/YYYY HH:mm" lang="pt-BR" placeholder="Receber respostas até..." 
-          ng-model="surveyCtrl.post.deadline" class="survey-options md-input" today-text="Hoje" min-date="surveyCtrl.now"
+          ng-model="surveyCtrl.post.deadline" class="survey-options md-input survey-title-placeholder" today-text="Hoje" min-date="surveyCtrl.now"
           readonly="readonly" cancel-text="Cancelar" required>
           <div ng-messages="saveSurvey.date.$error">
             <div ng-message="required">Insira a data limite da enquete.</div>
           </div>
       </md-input-container>
     </div>
-    <md-card-actions layout="column" ng-if="surveyCtrl.isTyping()">
+    <md-card-actions layout="column">
       <md-switch ng-model="surveyCtrl.multipleChoice" class="survey-switch" required>
         <p class="survey-multiple-choice">MULTIPLA ESCOLHA</p>
       </md-switch>
@@ -32,6 +34,6 @@
         </md-button>
       </div>
     </md-card-actions>
-  </div>
+  </md-card-content>
 </form>
 

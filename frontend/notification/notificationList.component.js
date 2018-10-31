@@ -23,7 +23,7 @@
          * If notification has action, should call showRequestDialog,
          * otherwise should go to notification state.
          * @param {object} notification - The notification that has or not action and will be mark as read.
-         * @param {object} event
+         * @param {Event} event - MouseEvent
          */
         ctrl.action = function action(notification, event) {
             ctrl.markAsRead(notification);
@@ -59,7 +59,7 @@
         /**
          * Show dialogs to accept or reject requests or invites.
          * @param {object} notification - The notification with informations about invite or request.
-         * @param {object} event
+         * @param {Event} event - MouseEvent
          * @param {object} properties - The properties necessaries to open dialog, e.g. path of controller and html.
          */
         function showRequestDialog(notification, event, properties) {

@@ -38,7 +38,10 @@
             timelineCtrl.setRefreshTimelineButton();
         };
 
-        function loadPosts() {
+        /**
+         * private
+         */
+        timelineCtrl._loadPosts = function loadPosts() {
             var promise = timelineCtrl.posts.loadMorePosts();
 
             promise.then(function success() {
@@ -46,7 +49,7 @@
             });
 
             return promise;
-        }
+        };
 
         function setUpTimelineProperties() {
             if (institutionKey) {
@@ -61,7 +64,7 @@
         function getPosts() {
             timelineCtrl.posts = new timelineCtrl.postsType(institutionKey);
             timelineCtrl.isLoadingPosts = true;
-            loadPosts();
+            timelineCtrl._loadPosts();
         }
 
         function startEventsListeners() {
@@ -76,7 +79,7 @@
             });
 
             const content = document.getElementById(timelineCtrl.contentId);
-            Utils.setScrollListener(content, loadPosts);
+            Utils.setScrollListener(content, timelineCtrl._loadPosts);
         }
 
         (() => {

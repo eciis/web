@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test TimelineController', function() {
+(describe('Test TimelineController', function() {
     beforeEach(module('app'));
 
     var timelineCtrl, createController, rootScope, scope, notificationService, postsFactory;
@@ -102,6 +102,22 @@
         expect(Utils.setScrollListener).toHaveBeenCalled();
     }));
 
+    describe('setUpTimelineProperties()', () => {
+        it('should set the timeline as institutionTimeline', () => {
+            scope.institution = 'aopskdaop-OPAKDOPA';
+            timelineCtrl = createController();
+            expect(timelineCtrl.postsType).toEqual(postsFactory.institutionTimelinePosts);
+            expect(timelineCtrl.contentId).toEqual("instPage");
+        });
+
+        it('should set the timeline as timelinePosts', () => {
+            delete scope.institution;
+            timelineCtrl = createController();
+            expect(timelineCtrl.postsType).toEqual(postsFactory.timelinePosts);
+            expect(timelineCtrl.contentId).toEqual("content");
+        });
+    });
+
     describe('Should create observer', function() {
         it('should call root scope to create observer', function() {
             spyOn(rootScope, '$on').and.callThrough();
@@ -178,6 +194,20 @@
             rootScope.$emit("DELETED_POST", survey);
             expect(timelineCtrl.posts.size()).toEqual(0);
             expect(timelineCtrl.posts.data).toEqual([]);
+        });
+    });
+
+    describe('refreshTimeline()', () => {
+        it('should call some functions', () => {
+            spyOn(timelineCtrl, 'postsType').and.callThrough();
+            spyOn(timelineCtrl, 'setRefreshTimelineButton').and.callThrough();
+            spyOn(timelineCtrl, '_loadPosts').and.returnValue({});
+
+            timelineCtrl.refreshTimeline();
+
+            expect(timelineCtrl.postsType).toHaveBeenCalled();
+            expect(postsFactory.posts.prototype.loadMorePosts).toHaveBeenCalled();
+            expect(timelineCtrl.setRefreshTimelineButton).toHaveBeenCalled();
         });
     });
 }));

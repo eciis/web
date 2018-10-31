@@ -1,15 +1,16 @@
 'use strict';
 
 (describe('notificationComponentController', function() {
-    let state, notCtrl, requestDialogService;
+    let state, notCtrl, requestDialogService, NOTIFICATIONS_TYPE;
     const event = "$event";
 
     const bindings = {'markAsRead': function(){}}
 
     beforeEach(module('app'));
-    beforeEach(inject(function(_$componentController_, $state, RequestDialogService) {
+    beforeEach(inject(function(_$componentController_, $state, RequestDialogService, NOTIFICATION_TYPE) {
       state = $state;
       requestDialogService = RequestDialogService;
+      NOTIFICATIONS_TYPE = NOTIFICATION_TYPE;
       notCtrl = _$componentController_('notificationList', null, bindings);
     }));
 
@@ -53,12 +54,7 @@
 
         it('should call action of notification if is defined', function() {
             var notification = {"entity_type" : "REQUEST_USER"};
-            var properties = {
-                "templateUrl": "app/requests/request_user_dialog.html",
-                "controller": "RequestProcessingController",
-                "controllerAs": "requestCtrl",
-                "locals": {}
-            };
+            var properties = NOTIFICATIONS_TYPE.REQUEST_USER.properties;
 
             notCtrl.action(notification, event);
             expect(requestDialogService.showRequestDialog).toHaveBeenCalledWith(notification, event, properties);

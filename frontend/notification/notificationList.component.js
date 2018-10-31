@@ -9,30 +9,32 @@
 
         const ctrl = this;
 
-        const callback = {
-            "showRequestDialog": showRequestDialog
-        }
-
+        /**
+         * Return the icon according the notification type
+         * @param {string} type - The notification type.
+         * @return {string} name of icon
+         */
         ctrl.getIcon = function(type) {
             return NOTIFICATION_TYPE[type].icon;
         };
 
         /**
-         * In case that notification had action, e.g. INVITE_USER, call showRequestDialog,
-         *  otherwise if the notification didn't has action will go to notification page.
-         * This function mark notification like read.
+         * Executes some action according to the notification type and mark notification as read.
+         * If notification has action, should call showRequestDialog,
+         * otherwise should go to notification state.
          * @param {object} notification - The notification that has or not action and will be mark as read.
          * @param {object} event
          */
         ctrl.action = function action(notification, event) {
+            ctrl.markAsRead(notification);
+            
             const properties = NOTIFICATION_TYPE[notification.entity_type].properties;
             const actionNotification = NOTIFICATION_TYPE[notification.entity_type].action;
             if (actionNotification){
-                showRequestDialog(notification, event, properties, callback);
+                actionNotification.showDialog && showRequestDialog(notification, event, properties);
             } else {
                 ctrl.goTo(notification);
             }
-            ctrl.markAsRead(notification);
         };
 
         /**
@@ -41,16 +43,16 @@
          * @param {integer} value - Max length of formatted string.
          * @return {string} The formatted string.
          */
-        ctrl.limitString = function limitString(string, value) {
+        ctrl.getLimitedString = function getLimitedString(string, value) {
             return Utils.limitString(string, value);
         };
 
         /**
-         * Format the notification message according type and the institution(s) involved.
+         * The notification that will have the message formated
          * @param {object} notification - The notification will be formatted the message
-         * @return {Point} The notification message.
+         * @return {string} The notification message.
          */
-        ctrl.format = function format(notification) {
+        ctrl.getFormattedMessage = function getFormattedMessage(notification) {
             return NotificationService.formatMessage(notification);
         };
 
@@ -69,7 +71,7 @@
          * @param {string} notification - The notification that contains state to redirect or not.
          */
         ctrl.goTo = function goTo(notification) {
-            var state = NOTIFICATION_TYPE[notification.entity_type].state;
+            const state = NOTIFICATION_TYPE[notification.entity_type].state;
             state && $state.go(state, {key: notification.entity.key});
             !state && $state.go('app.user.notifications');
         };

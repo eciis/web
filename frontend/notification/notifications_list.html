@@ -1,5 +1,5 @@
 <md-list id="list-padding" flex>
-    <md-list-item title="{{notificationListCtrl.format(notification)}}" class="md-3-line" style="margin-bottom: 5px; padding: 3 0 3 0;"
+    <md-list-item title="{{notificationListCtrl.format(notification)}}" class="md-3-line" id="notification-list-item"
         ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp' | filter: notificationListCtrl.keyword" 
         ng-click="notificationListCtrl.action(notification, $event)" flex-xs ng-class="notification.status === 'READ'? '': 'unread-notification'">    
         <img ng-src="{{notification.from.photo_url}}" class="md-avatar" id="image-notification"/>
@@ -20,7 +20,7 @@
                             {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
                             <br />
                             <b style="font-size: 11px;">
-                                {{ notificationListCtrl.limitString(notificationListCtrl.format(notification), notificationListCtrl.lengthTextNotification) }}
+                                {{ notificationListCtrl.getLimitedString(notificationListCtrl.getFormattedMessage(notification), notificationListCtrl.lengthTextNotification) }}
                             </b>
                         </p>
                     </div>

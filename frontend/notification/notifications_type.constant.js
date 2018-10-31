@@ -52,7 +52,7 @@
         },
         REQUEST_USER: {
             "icon": "person_add",
-            "action": true,
+            "action": {"showDialog": true},
             "properties": {
                 "templateUrl": "app/requests/request_user_dialog.html",
                 "controller": "RequestProcessingController",
@@ -62,15 +62,15 @@
         },
         REQUEST_INSTITUTION_CHILDREN: {
             "icon": "account_balance",
-            "action": true
+            "action": {"showDialog": true},
         },
         REQUEST_INSTITUTION_PARENT: {
             "icon": "account_balance",
-            "action": true
+            "action": {"showDialog": true},
         },
         REQUEST_INSTITUTION: {
             "icon": "account_balance",
-            "action": true,
+            "action": {"showDialog": true},
             "properties": {
                 "templateUrl": "app/requests/request_institution_processing.html",
                 "controller": "RequestProcessingController",
@@ -111,7 +111,7 @@
         },
         USER_ADM: {
             "icon": "account_balance",
-            "action": true,
+            "action": {"showDialog": true},
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",
                 "controller": "ProcessInviteUserAdmController",
@@ -123,7 +123,7 @@
         },
         ACCEPT_INVITE_USER_ADM: {
             "icon": "account_balance",
-            "action": true,
+            "action": {"showDialog": true},
             "properties": {
                 "templateUrl": "app/invites/process_invite_user_adm.html",
                 "controller": "ProcessInviteUserAdmController",

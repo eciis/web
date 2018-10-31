@@ -40,6 +40,37 @@
         color: #009688 !important;
         border-color: #009688 !important;
     }
+
+    .save-survey-date-button {
+        margin-top: -6vh !important;
+        margin-left: auto !important;
+        background-color: #7CB342 !important;
+    }
+
+    .save-survey-scrollbar {
+        display: block;
+        width: 47.5vh;
+        overflow: auto;
+        height: 20vh;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar {
+        width: .3em;
+        height: .2em;
+        background-color: #ccc;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar-track {
+        background-color: #ccc  ;
+        border-left: .1em solid white;
+        border-right: .1em solid white;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 50px;
+        background: #009688;
+        -webkit-box-shadow: inset 0 0 px #009688 ;
+    }
 }
 
 @media screen and (max-width: 600px) {

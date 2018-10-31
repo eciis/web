@@ -48,8 +48,8 @@
         };
 
         /**
-         * The notification that will have the message formated
-         * @param {object} notification - The notification will be formatted the message
+         * Format the notification message according to the type and the institution(s) involved.
+         * @param { object} notification - The notification that will have the message formatted
          * @return {string} The notification message.
          */
         ctrl.getFormattedMessage = function getFormattedMessage(notification) {

@@ -294,7 +294,8 @@
                 url: "/emailverification",
                 views: {
                     main: {
-                      templateUrl: "app/auth/email_verification.html"
+                      templateUrl: "app/auth/email_verification.html",
+                      controller: "EmailVerificationController as emailVerifCtrl"
                     }
                 }
             })

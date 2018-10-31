@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="center" class="custom-scrollbar">
+<md-content layout="row" layout-align="center" class="custom-scrollbar" hide show-gt-xs>
     <div flex="95" layout-align="center" class="fill-screen">
         <div layout-align="center" class="fill-screen">
             <md-card>
@@ -79,4 +79,22 @@
             </md-card>
         </div>
     </div>
+</md-content>
+<md-content hide show="xs">
+  <div class="search-top-bar-xs" layout="row" layout-align="start center">
+    <md-button class="md-icon-button">
+      <md-icon>clear</md-icon>
+    </md-button>
+    <b>PESQUISAR</b>
+  </div>
+  <div class="search-content-xs">
+    <div>
+      <form ng-submit="searchCtrl.search()">
+        <md-input-container class="md-block">
+          <input placeholder="Digite aqui sua pesquisa..."
+            ng-model="searchCtrl.search_keyword">
+        </md-input-container>
+      </form>
+    </div>
+  </div>
 </md-content>

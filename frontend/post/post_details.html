@@ -224,7 +224,7 @@
         <b class="post-btn-text">CURTIR</b>
       </button>
       <!-- comments -->
-      <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.goToPost(postDetailsCtrl.post)">
+      <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()">
         <md-button class="sm-icon-button" aria-label="Comments" title="Mostrar comentários"
           md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
           <md-icon>comments</md-icon>

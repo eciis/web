@@ -6,8 +6,9 @@
   <div class="comment-header">
     <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.currentComment.author_key, $event)">
       {{commentCtrl.currentComment.author_name}}</a>
-    <small class="md-caption inst-name"> | {{commentCtrl.currentComment.institution_name}}</small>
-    <b class="xs-bullet">&bull;</b>
+    <small class="md-caption inst-name separator"> | </small>
+    <small class="md-caption inst-name">{{commentCtrl.currentComment.institution_name}}</small>
+    <b class="xs-bullet comment-bullet">&bull;</b>
     <small>{{commentCtrl.currentComment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
   </div>
   <div class="comment-text">
@@ -18,7 +19,7 @@
       <button aria-label="Delete" title="Excluir comentário" ng-if="commentCtrl.canDeleteComment()" 
         class="comment-btn" ng-click="commentCtrl.commentDeletionDialog($event)" >
         <md-icon class="delete-btn">delete</md-icon>
-        <b class="comment-btn-text">EXCLUIR</b>
+        <b class="comment-btn-text comment-delete-btn-txt">EXCLUIR</b>
       </button>
       <!-- like -->
       <button class="left-align comment-btn" 
@@ -41,11 +42,8 @@
         <!-- <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
           title="Comentar" md-colors="{background: 'light-green'}">
         </md-button> -->
+        <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfReplies()}}"></span>
         <b class="comment-btn-text">
-          <small class="comment-actions-counter" md-colors="{color: 'light-green'}" 
-            title="{{ commentCtrl.numberOfRepliesMessage() }}">
-            {{commentCtrl.numberOfReplies()}} 
-          </small>
           RESPONDER
         </b>
       </button>

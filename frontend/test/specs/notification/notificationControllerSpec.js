@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test NotificationController', function() {
+(describe('Test NotificationButtonController', function() {
 
     var notCtrl, httpBackend, scope, createCtrl, state, notificationService
     var authService, notificationListenerService, http;
@@ -62,7 +62,7 @@
         authService.login(user);
 
         createCtrl = function() {
-            return $controller('NotificationController', {
+            return $controller('NotificationButtonController', {
                 scope: scope
             });
         };

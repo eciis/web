@@ -395,8 +395,8 @@
     });
 
     /**
-     * Function to return a correct template url to show in desktop screen ou mobile screen.
-     * @returns {String} The string containing the url path to html file that be displayed in view.
+     * Function to return a correct template url to show in desktop screen or mobile screen.
+     * @returns {String} The string containing the url path to html file that will be displayed in view.
      */
     function getTemplateUrl() {
         return Utils.isMobileScreen() ? "app/post/save_post_mobile.html" : "app/post/save_post.html";

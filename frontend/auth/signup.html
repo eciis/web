@@ -1,39 +1,46 @@
 <div layout="column" layout-align="center center">
-  <md-card class="request-invite-card">
-    <md-card-content layout="row" layout-align="center center">
-      <div class="request-card-content">
-        <div layout="row" layout-align="center center">
-          <img class="request-logo" src="/app/images/logowithname.png"/>
-        </div>
-        <p class="request-title-card">{{ cardTitle }}</p>
-        <form ng-submit="controller.signup()">
-          <md-input-container class="md-block request-input-container">
-            <label>E-mail</label>
-            <input type="email" name="email" ng-model="controller.newUser.email" 
-            required="true" aria-label="Email" class="request-input">
-          </md-input-container>
-          <md-input-container class="md-block request-input-container">
-            <label>Senha</label>
-            <input type="password" name="password" ng-model="controller.newUser.password" 
-            required="true" minlength="6" aria-label="Senha" class="request-input">
-          </md-input-container>
-          <md-input-container class="md-block request-input-container">
-            <label>Confirmar Senha</label>
-            <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
-            required="true" minlength="6" aria-label="Confirmar Senha" class="request-input">
-          </md-input-container>
+  <div layout="row" layout-align="center center">
+    <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Retornar" hide-xs 
+        md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()">
+        <md-icon>keyboard_arrow_left</md-icon>
+    </md-button>
+    <md-card class="custom-card">
+      <md-card-content layout="row" layout-align="center center">
+        <div class="custom-card-content">
           <div layout="row" layout-align="center center">
-            <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
-              Enviar
-            </md-button>
+            <img class="custom-card-logo" src="/app/images/logowithname.png"/>
           </div>
-        </form>
+          <p>{{ cardTitle }}</p>
+          <form ng-submit="controller.signup()">
+            <md-input-container class="md-block custom-card-input-container">
+              <label>E-mail</label>
+              <input type="email" name="email" ng-model="controller.newUser.email" 
+              required="true" aria-label="Email" class="custom-card-input">
+            </md-input-container>
+            <md-input-container class="md-block custom-card-input-container">
+              <label>Senha</label>
+              <input type="password" name="password" ng-model="controller.newUser.password" 
+              required="true" minlength="6" aria-label="Senha" class="custom-card-input">
+            </md-input-container>
+            <md-input-container class="md-block custom-card-input-container">
+              <label>Confirmar Senha</label>
+              <input type="password" name="verifypassword" ng-model="controller.newUser.verifypassword"
+              required="true" minlength="6" aria-label="Confirmar Senha" class="custom-card-input">
+            </md-input-container>
+            <div layout="row" layout-align="center center">
+              <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                Enviar
+              </md-button>
+            </div>
+          </form>
+        </div>
+      </md-card-content>
+      <div class="custom-card-footer" layout-align="center">
+          <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Retornar" 
+            md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()">
+            <md-icon>keyboard_arrow_left</md-icon>
+          </md-button>
       </div>
-    </md-card-content>
-    <div class="request-card-footer"></div>
-  </md-card> 
-  <md-button class="request-back-btn md-fab md-primary " aria-label="Retornar" 
-    md-colors="{background: 'light-green-600'}" ng-click="controller.returnAction()">
-    <md-icon>keyboard_arrow_left</md-icon>
-  </md-button>
+    </md-card>
+  </div>
 </div>

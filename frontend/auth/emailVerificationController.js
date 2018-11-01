@@ -2,11 +2,11 @@
 
 (function() {
     angular.module("app")
-    .controller("EmailVerificationController", function ($state) {
+    .controller("EmailVerificationController", function ($state, AuthService) {
         const emailVerifCtrl = this;
 
-        emailVerifCtrl.return = function () {
-            $state.go("signin");
+        emailVerifCtrl.logout = function () {
+            AuthService.logout();
         };
 
         emailVerifCtrl.next = function () {

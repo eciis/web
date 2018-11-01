@@ -291,7 +291,7 @@
                 }
             })
             .state("email_verification", {
-                url: "/emailverification",
+                url: "/email_verification",
                 views: {
                     main: {
                       templateUrl: "app/auth/email_verification.html",
@@ -440,6 +440,7 @@
             'create_institution_form',
             'error',
             'signin',
+            'email_verification',
             'user_inactive',
             'new_invite'
         ];

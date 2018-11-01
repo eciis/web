@@ -1119,6 +1119,10 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     width: 90%;
 }
 
+.custom-container {
+    padding: 0 0.3em;
+}
+
 .custom-card-content {
     width: 80%;
 }
@@ -1133,6 +1137,13 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     margin: 0 -2.5em 0 0;
 }
 
+.custom-next-btn {
+    position: absolute;
+    right: 0.7em;
+    bottom: 1em;
+    display: none;
+}
+
 .custom-card-input-container {
     margin: 0;
 }
@@ -1144,14 +1155,14 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .custom-card {
-        width: 90%;
+        width: 100%;
     }
 
     .custom-card-content {
         width: 85%;
     }
 
-    .custom-card-footer {
+    .custom-card-footer, .custom-next-btn {
         display: inherit;
     }
     

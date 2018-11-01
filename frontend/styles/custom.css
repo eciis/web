@@ -1137,13 +1137,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     margin: 0 -2.5em 0 0;
 }
 
-.custom-next-btn {
-    position: absolute;
-    right: 0.7em;
-    bottom: 1em;
-    display: none;
-}
-
 .custom-card-input-container {
     margin: 0;
 }

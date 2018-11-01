@@ -300,7 +300,7 @@
                 }
             })
             .state("user_inactive", {
-                url: "/userinactive",
+                url: "/user_inactive",
                 views: {
                     main: {
                       templateUrl: "app/user/user_inactive.html",

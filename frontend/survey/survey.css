@@ -7,35 +7,35 @@
 }
 
 .survey-switch {
-    margin-top: -25px;
-    margin-left: -8px;
+    margin-top: -1.5625em;
+    margin-left: -0.5em;
 }
 
 .survey-actions {
     text-align: right;
     margin-left: auto;
-    margin-right: 20px;
-    margin-bottom: 20px;
+    margin-right: 1.25em;
+    margin-bottom: 1.25em;
 }
 
 @media screen and (max-width: 959px) {
     .survey-title-placeholder, {
-        font-size: 13.5px !important;
+        font-size: 0.84375em !important;
     }
 
     .survey-options {
-        font-size: 13.5px !important;
+        font-size: 0.84375em !important;
         background-color: white;
     }
 
     .survey-multiple-choice {
-        font-size: 12px;
-        margin-left: 10px;
+        font-size: 0.75em;
+        margin-left: 0.625em;
     }
 
     .save-survey-input-placeholder {
         font-weight: 500 !important;
-        font-size: 13.5px !important;
+        font-size: 0.84375em !important;
         border: 5 !important;
         color: #009688 !important;
         border-color: #009688 !important;
@@ -81,7 +81,7 @@
     }
 
     .save-survey-scrollbar::-webkit-scrollbar-thumb {
-        border-radius: 50px;
+        border-radius: 3.125em;
         background: #009688;
         -webkit-box-shadow: inset 0 0 px #009688 ;
     }
@@ -127,35 +127,35 @@
 
 @media screen and (max-width: 600px) {
     .survey-title-placeholder, .survey-options {
-        font-size: 12px !important;
+        font-size: 0.75em !important;
     }
 }
 
 @media screen and (max-width: 450px) {
     .survey-multiple-choice {
-        font-size: 11px;
-        margin-left: 10px;
+        font-size: 0.6875em;
+        margin-left: 0.625em;
     }
 }
 
 @media screen and (max-width: 380px) {
     .survey-multiple-choice {
-        font-size: 9px;
-        margin-left: 22px;
+        font-size: 0.5625em;
+        margin-left: 1.375em;
     }
 }
 
 @media screen and (max-width: 360px) {
     .survey-multiple-choice {
-        font-size: 7.5px;
-        margin-right: -16px;
+        font-size: 0.46875em;
+        margin-right: -1em;
     }
 
     .survey-switch {
-        margin-left: -4px !important;
+        margin-left: -0.25em !important;
     }
 
     .survey-actions {
-        margin-left: 150px !important;
+        margin-left: 9.375em !important;
     }
 }

@@ -59,6 +59,11 @@
     .create-post-container-resp {
         margin:auto;
     }
+
+    .create-post-full-width {
+        width: 100%;
+    }
+
     .create-post-title-placeholder {
         font-weight: 500 !important;
         font-size: 13.5px !important;
@@ -157,6 +162,14 @@
     .create-post-size {
         height: 75vh !important;
         max-height: 79vh !important;
+        width: 96vh;
+        max-width: 95%!important;
+        margin: auto;
+    }
+
+    .create-post-size-expand {
+        height: 84vh !important;
+        max-height: 84vh !important;
         width: 96vh;
         max-width: 95%!important;
         margin: auto;

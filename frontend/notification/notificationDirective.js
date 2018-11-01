@@ -4,14 +4,17 @@
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        UserService, NotificationListenerService) {
+    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
 
         notificationCtrl.notifications = [];
         notificationCtrl.allNotifications = [];
+
+        notificationCtrl.addUnreadNotification = function addUnreadNotification(notification){
+            notificationCtrl.push(notification);
+        };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
@@ -24,8 +27,12 @@
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
-            var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
-            hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
+            if(notificationCtrl.actionButton){
+                notificationCtrl.actionButton();
+            } else{
+                const hasUnreadNotifications = notificationCtrl.notifications.length > 0;
+                hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
+            }
         };
 
         notificationCtrl.clearAll = function clearAll() {
@@ -47,15 +54,9 @@
             AuthService.reload();
         };
 
-        function notificationListener() {
-            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
-                notificationCtrl.refreshUser);
-        }
-
         (function main() {
-            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
+            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
-            notificationListener();
         })();
     });
 
@@ -64,7 +65,10 @@
             restrict: 'E',
             templateUrl: "app/notification/notifications.html",
             controllerAs: "notificationCtrl",
-            controller: "NotificationController"
+            controller: "NotificationController",
+            bindToController:{
+                'actionButton': '=?'
+            }
         };
     });
 })();

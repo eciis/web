@@ -27,18 +27,18 @@
             return message;
         };
 
-        service.watchNotifications = function watchNotifications(userKey, notificationsList) {
+        service.watchNotifications = function watchNotifications(userKey, addUnreadNotification) {
             setupNotifications(userKey, function() {
                 _.forEach(service.firebaseArrayNotifications, function each(notification) {
                     if (isNew(notification)) {
-                        notificationsList.push(notification);
+                        addUnreadNotification(notification);
                     }
                 });
 
                 service.firebaseArrayNotifications.$watch(function(ev) {
                     if (ev.event === CHILD_ADDED) {
                         var notification = service.firebaseArrayNotifications.$getRecord(ev.key);
-                        notificationsList.push(notification);
+                        addUnreadNotification(notification);
                         if (isNew(notification)) {
                             $rootScope.$emit(notification.entity_type, notification.entity);
                         }

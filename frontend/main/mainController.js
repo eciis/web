@@ -173,11 +173,17 @@
             $window.location.reload();
         };
 
+        function notificationListener() {
+            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
+                notificationCtrl.refreshUser);
+        }
+
+
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
-
+            notificationListener();
             mainCtrl.getPendingTasks();
         })();
     });

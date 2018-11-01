@@ -13,7 +13,7 @@
         notificationCtrl.allNotifications = [];
 
         notificationCtrl.addUnreadNotification = function addUnreadNotification(notification){
-            notificationCtrl.push(notification);
+            notificationCtrl.notifications.push(notification);
         };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {
@@ -50,24 +50,20 @@
             $state.go('app.user.notifications');
         };
 
-        notificationCtrl.refreshUser = function refreshUser() {
-            AuthService.reload();
-        };
-
         (function main() {
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
         })();
     });
 
-    app.directive("notification", function() {
+    app.directive("notificationButton", function() {
         return {
-            restrict: 'E',
             templateUrl: "app/notification/notifications.html",
             controllerAs: "notificationCtrl",
             controller: "NotificationController",
-            bindToController:{
-                'actionButton': '=?'
+            bindings:{
+                actionButton: '=',
+                classButton: '='
             }
         };
     });

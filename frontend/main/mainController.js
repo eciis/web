@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-            RequestInvitationService, $mdMenu, $window) {
+        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -175,7 +175,7 @@
 
         function notificationListener() {
             NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
-                notificationCtrl.refreshUser);
+                mainCtrl.refreshUser);
         }
 
 

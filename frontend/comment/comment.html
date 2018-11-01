@@ -16,10 +16,7 @@
         <!-- delete -->
         <button aria-label="Delete" title="Excluir comentário" ng-if="commentCtrl.canDeleteComment()" 
           class="comment-btn" ng-click="commentCtrl.commentDeletionDialog($event)" >
-          <md-button class="sm-icon-button xs-icon-button xs-delete-icon-justify hide-xxs" 
-            md-colors="{background: 'light-green'}" aria-label="Delete icon">
-            <md-icon>delete</md-icon>
-          </md-button>
+          <md-icon class="delete-btn">delete</md-icon>
           <b class="comment-btn-text">EXCLUIR</b>
         </button>
         <!-- like -->
@@ -27,25 +24,22 @@
           ng-click="commentCtrl.isLikedByUser() ? commentCtrl.dislike() : commentCtrl.like()"
           ng-disabled="commentCtrl.disableButton()" aria-label="Favorite"
           title="{{commentCtrl.isLikedByUser() ? 'Descurtir' : 'Curtir'}}">
-          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite icon"
+          <md-icon class="delete-btn">grade</md-icon>
+          <!-- <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite icon"
             md-colors="{background: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
-            <md-icon>grade</md-icon>
-          </md-button>
+          </md-button> -->
+          <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfLikes()}}"></span>
           <b class="comment-btn-text">
-            <small md-colors="{color: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}"
-              title="{{ commentCtrl.numberOfLikesMessage() }}" class="comment-actions-counter">
-              {{commentCtrl.numberOfLikes()}} 
-            </small>
             CURTIR
           </b>
         </button>
         <!-- reply -->
         <button ng-if="!commentCtrl.reply" ng-disabled="commentCtrl.hideReplies()"
           class="comment-btn" ng-click="commentCtrl.toggleReplies()" aria-label="reply">
-          <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
+          <md-icon class="delete-btn">reply</md-icon>
+          <!-- <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
             title="Comentar" md-colors="{background: 'light-green'}">
-            <md-icon>reply</md-icon>
-          </md-button>
+          </md-button> -->
           <b class="comment-btn-text">
             <small class="comment-actions-counter" md-colors="{color: 'light-green'}" 
               title="{{ commentCtrl.numberOfRepliesMessage() }}">

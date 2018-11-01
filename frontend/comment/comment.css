@@ -48,7 +48,7 @@
 
 .reply {
     margin-left: 0.3em; 
-    border-left: 0.289em solid #8BC34A;
+    border-left: 0.289em solid #004d41;
 }
 
 .reply-input-container {
@@ -69,6 +69,14 @@
 .send-reply-btn {
     height: 30px;
     border-radius: 5px;
+}
+
+.delete-btn {
+    background-color: #84c45e;
+    color: white;
+    border-radius: 50%;
+    font-size: 17px;
+    line-height: 1.40;
 }
 
 .grid-container {
@@ -107,6 +115,10 @@
 @media screen and (min-width: 451px) {
     .grid-container {
         grid-template-columns: auto 6em;
+    }
+
+    .delete-btn {
+        margin-right: 8px;
     }
 
     .comment-btn-text {

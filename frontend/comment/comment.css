@@ -64,10 +64,6 @@ comment {
     margin-left: auto;
 }
 
-.comment-actions-counter {
-    font-size: inherit;
-}
-
 .reply {
     margin-left: 0.3em; 
     border-left: 0.289em solid #004d41;
@@ -82,10 +78,6 @@ comment {
     max-height: 10em;
     overflow-y: auto;
     resize: none;
-}
-
-.reply-btn-container {
-    margin-top: -2em;
 }
 
 .send-reply-btn {

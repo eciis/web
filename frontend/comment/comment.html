@@ -27,9 +27,6 @@
         ng-disabled="commentCtrl.disableButton()" aria-label="Favorite"
         title="{{commentCtrl.isLikedByUser() ? 'Descurtir' : 'Curtir'}}">
         <md-icon class="delete-btn">grade</md-icon>
-        <!-- <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Favorite icon"
-          md-colors="{background: commentCtrl.isLikedByUser() ? 'light-green' : 'grey'}">
-        </md-button> -->
         <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfLikes()}}"></span>
         <b class="comment-btn-text">
           CURTIR
@@ -39,9 +36,6 @@
       <button style="margin-left: 8px;" ng-if="!commentCtrl.reply" ng-disabled="commentCtrl.hideReplies()"
         class="comment-btn" ng-click="commentCtrl.toggleReplies()" aria-label="reply">
         <md-icon class="delete-btn">reply</md-icon>
-        <!-- <md-button class="sm-icon-button xs-icon-button hide-xxs" aria-label="Reply icon" title="Responder"
-          title="Comentar" md-colors="{background: 'light-green'}">
-        </md-button> -->
         <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfReplies()}}"></span>
         <b class="comment-btn-text">
           RESPONDER

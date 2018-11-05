@@ -1,27 +1,25 @@
 comment {
     width: 100%;
     display: block;
-    padding: 8px 0 8px 0;
-}
-
-.comment {
-    margin-bottom: -1.1em;
+    padding: 0.5em 0 0.5em 0;
 }
 
 .comment-avatar img {
-    height: 40px;
-    width: 40px;
+    height: 2.5em;
+    width: 2.5em;
     border-radius: 50%;
 }
 
 .comment-container {
     display: grid;
+    grid-template-columns: 2.5em auto;
+    grid-template-rows: auto auto;
     align-items: initial;
     margin: auto;
 }
 
 .comment-text p {
-    margin: 0 0 12px 0;
+    margin: 0 0 0.75em 0;
 }
 
 .reply-container {
@@ -29,7 +27,7 @@ comment {
 }
 
 .comment-header {
-    margin-left: 8px;
+    margin-left: 0.5em;
 }
 
 .user-name {
@@ -43,7 +41,7 @@ comment {
 
 .comment-btn-text {
     font-size: 0.7em;
-    margin-left: 8px;
+    margin-left: 0.8em;
 }
 
 .btns-row {
@@ -81,21 +79,25 @@ comment {
 }
 
 .send-reply-btn {
-    height: 30px;
-    border-radius: 5px;
+    height: 2em;
+    border-radius: 0.25em;
 }
 
 .delete-btn {
     background-color: #84c45e;
     color: white;
     border-radius: 50%;
-    font-size: 17px;
+    font-size: 1em;
     line-height: 1.40;
 }
 
 .grid-container {
     display: grid;
     align-items: center;
+}
+
+.comment-delete-btn-txt {
+    margin-left: 0.25em;
 }
 
 @media screen and (max-width: 350px) {
@@ -122,7 +124,7 @@ comment {
     }
 
     .send-reply-btn {
-        margin-left: 8px;
+        margin-left: 0.5em;
     }
 
     .grid-container {
@@ -130,8 +132,6 @@ comment {
     }
 
     .comment-container {
-        grid-template-columns: 40px auto;
-        grid-template-rows: auto auto;
         align-items: center;
         width: 90%;
     }
@@ -139,7 +139,7 @@ comment {
     .comment-text {
         grid-column-start: 1;
         grid-column-end: 3;
-        margin-top: 10px;
+        margin-top: 0.626em;
     }
 
     .comment-header {
@@ -154,8 +154,6 @@ comment {
 
 @media screen and (min-width: 451px) {
     .comment-container {
-        grid-template-columns: 40px auto;
-        grid-template-rows: auto auto;
         width: 96%;
     }
 
@@ -165,12 +163,12 @@ comment {
     }
 
     .comment-header {
-        margin-bottom: 4px;
+        margin-bottom: 0.25em;
     }
 
     .comment-text {
         grid-column-start: 2;
-        margin-left: 8px;
+        margin-left: 0.5em;
     }
 
     .grid-container {
@@ -178,11 +176,11 @@ comment {
     }
 
     .delete-btn {
-        margin-right: 4px;
+        margin-right: 0.25em;
     }
 
     .send-comment-btn-text {
-        margin-left: 4px;
+        margin-left: 0.25em;
     }
 
     .reply {

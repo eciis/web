@@ -86,7 +86,8 @@
           </div>
           <div class="create-post-icon">
             <md-button ng-if="!isEditing" class="md-icon-button"
-                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post">
+                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post"
+                       ng-disabled="postCtrl.hasMedia()">
                 <div ng-if="postCtrl.typePost === 'Common'">
                     <md-icon>poll</md-icon>
                 </div>

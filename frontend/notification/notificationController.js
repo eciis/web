@@ -1,4 +1,4 @@
-   "use strict";
+"use strict";
 
 (function() {
 
@@ -55,14 +55,5 @@
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
         })();
-    });
-
-    app.component("notificationButton", {
-            templateUrl: "app/notification/notifications_button.html",
-            controllerAs: "notificationCtrl",
-            controller:  "NotificationController",
-            bindings:{
-                classButton: '@'
-            }
     });
 })();

@@ -111,7 +111,7 @@
                 views: {
                     user_content: {
                         templateUrl: "app/notification/notifications_page.html",
-                        constroller: "NotificationController as notificationCtrl"
+                        controller: "NotificationController as notificationCtrl"
                     }
                 }
             })

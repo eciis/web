@@ -13,14 +13,6 @@
         notificationCtrl.notifications = [];
         notificationCtrl.allNotifications = [];
 
-        /** Add new notifications in array with unread notifications.
-         *  This function is used by NotificationService, always that service receive new notification.
-         * @param {Notification} notification The unread notification that should be added. 
-         */ 
-        notificationCtrl.addUnreadNotification = function addUnreadNotification(notification){
-            notificationCtrl.notifications.push(notification);
-        };
-
         notificationCtrl.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
             return promise;

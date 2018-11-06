@@ -9,7 +9,8 @@
             controllerAs: "notificationCtrl",
             controller:  "NotificationController",
             bindings:{
-                classButton: '@'
+                classButton: '@',
+                shouldGoToState: '='
             }
     });
 })();

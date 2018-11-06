@@ -173,6 +173,8 @@
             $window.location.reload();
         };
 
+        /** Add new observers to listen events that user should be refresh. 
+         */ 
         function notificationListener() {
             NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
                 mainCtrl.refreshUser);

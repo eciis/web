@@ -299,6 +299,15 @@
                     }
                 }
             })
+            .state("reset_password", {
+                url: "/reset_password",
+                views: {
+                    main: {
+                        templateUrl: "/app/auth/reset_password.html",
+                        controller: "ResetPasswordController as resetCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/user_inactive",
                 views: {
@@ -497,6 +506,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        // initServiceWorker();
     })();
 })();

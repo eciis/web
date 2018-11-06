@@ -424,6 +424,7 @@
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin',
+            'reset_password',
             'accept_invite'
         ];
 
@@ -450,6 +451,7 @@
             'error',
             'signin',
             'email_verification',
+            'reset_password',
             'user_inactive',
             'new_invite'
         ];
@@ -506,6 +508,6 @@
     }
 
     (function main() {
-        // initServiceWorker();
+        initServiceWorker();
     })();
 })();

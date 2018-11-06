@@ -96,7 +96,7 @@
         describe('Test watchPostNotification', function(){
             it('Should call function of array notification.', function() {
                 spyOn(service.firebaseArrayNotifications, '$watch');
-                service.watchNotifications(user_key, []);
+                service.watchNotifications(user_key, fakeCallback);
                 expect(service.firebaseArrayNotifications.$loaded).toHaveBeenCalled();
                 expect(service.firebaseArrayNotifications.$watch).toHaveBeenCalled();
             });

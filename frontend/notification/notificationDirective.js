@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    const notificationButtonCtrl = function (NotificationService, 
+    app.controller("NotificationController", function NotificationController(NotificationService, 
             AuthService, $state) {
         var notificationCtrl = this;
 
@@ -51,17 +51,16 @@
             $state.go('app.user.notifications');
         };
 
-        notificationCtrl.$onInit = function(){
+        (function main(){
             NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
-        };
-    };
+        })();
+    });
 
     app.component("notificationButton", {
             templateUrl: "app/notification/notifications_button.html",
             controllerAs: "notificationCtrl",
-            controller:  ["NotificationService", "AuthService", 
-                            "$state", notificationButtonCtrl],
+            controller:  "NotificationController",
             bindings:{
                 classButton: '@'
             }

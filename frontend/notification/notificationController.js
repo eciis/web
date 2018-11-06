@@ -23,11 +23,6 @@
 
         notificationCtrl.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
-            promise.then(function success() {
-                _.remove(notificationCtrl.notifications, function find(found) {
-                    return found.$id === notification.$id;
-                });
-            });
             return promise;
         };
 
@@ -53,8 +48,8 @@
         };
 
         (function main(){
-            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
+            notificationCtrl.notifications =  NotificationService.getUnreadNotifications();
         })();
     });
 })();

@@ -9,7 +9,9 @@
 
         var ref = firebase.database().ref();
 
+        service.user = AuthService.getCurrentUser();
         service.firebaseArrayNotifications;
+        service.unreadNotifications = [];
 
         var POST_NOTIFICATION = 'POST';
         var CHILD_ADDED = "child_added";
@@ -27,18 +29,18 @@
             return message;
         };
 
-        service.watchNotifications = function watchNotifications(userKey, addUnreadNotification) {
+        service.watchNotifications = function watchNotifications(userKey) {
             setupNotifications(userKey, function() {
                 _.forEach(service.firebaseArrayNotifications, function each(notification) {
                     if (isNew(notification)) {
-                        addUnreadNotification(notification);
+                        service.unreadNotifications.push(notification);
                     }
                 });
 
                 service.firebaseArrayNotifications.$watch(function(ev) {
                     if (ev.event === CHILD_ADDED) {
                         var notification = service.firebaseArrayNotifications.$getRecord(ev.key);
-                        addUnreadNotification(notification);
+                        service.unreadNotifications.push(notification);
                         if (isNew(notification)) {
                             $rootScope.$emit(notification.entity_type, notification.entity);
                         }
@@ -62,12 +64,19 @@
 
         service.markAsRead = function markAsRead(notification) {
             notification.status = "READ";
+            _.remove(service.unreadNotifications, function find(found) {
+                return found.$id === notification.$id;
+            })
             return service.firebaseArrayNotifications.$save(notification);
         };
 
         service.getAllNotifications = function getAllNotifications() {
             return service.firebaseArrayNotifications;
         };
+
+        service.getUnreadNotifications = function getUnreadNotifications(){
+            return service.unreadNotifications;
+        }
 
         function setupNotifications(userKey, callback) {
             if (!service.firebaseArrayNotifications) {
@@ -94,5 +103,9 @@
                 service.firebaseArrayNotifications = undefined;
             }
         });
+
+        (function main(){
+            service.watchNotifications(service.user.key);
+        })();
     });
 })();

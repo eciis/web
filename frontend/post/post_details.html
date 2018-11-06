@@ -224,7 +224,7 @@
         <b class="post-btn-text">CURTIR</b>
       </button>
       <!-- comments -->
-      <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()">
+      <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.showCommentsOrRedirectToPostPage()">
         <md-button class="sm-icon-button" aria-label="Comments" title="Mostrar comentários"
           md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
           <md-icon>comments</md-icon>
@@ -250,6 +250,22 @@
   <md-divider ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"></md-divider>
   
   <!-- COMMENTS -->
+  <md-list-item class="md-2-line" ng-if="postDetailsCtrl.showCommentInput()">
+    <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
+    <div class="md-list-item-text grid-container">
+      <md-input-container class="reply-input-container" flex>
+        <label>Comentar</label>
+        <textarea class="reply-input" ng-model="postDetailsCtrl.newComment"
+            md-select-on-focus ng-disabled="postDetailsCtrl.savingComment"></textarea>
+      </md-input-container>
+      <button class="comment-btn send-reply-btn" ng-click="postDetailsCtrl.createComment()"
+        ng-disabled="!postDetailsCtrl.newComment" aria-label="Send">
+        <md-icon>send</md-icon>
+        <b class="comment-btn-text send-comment-btn-text">ENVIAR</b>
+      </button>
+    </div>
+  </md-list-item>
+
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
     <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
@@ -257,27 +273,4 @@
       comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post" >
     </comment>
   </div>
-  
-  <md-list ng-if="postDetailsCtrl.showCommentInput()">
-    <md-list-item class="md-3-line">
-      <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}"/>
-      <div class="md-list-item-text">
-        <md-input-container class="md-block">
-          <div layout="column">
-            <label>Comentar</label>
-            <textarea class="input-text-area" ng-model="postDetailsCtrl.newComment"
-              rows="1" md-select-on-focus ng-disabled="postDetailsCtrl.savingComment">
-            </textarea>
-            <div layout="row" layout-align="end center">
-              <md-button ng-show="postDetailsCtrl.newComment" class="md-raised md-primary"
-                ng-click="postDetailsCtrl.createComment()" aria-label="postar"
-                type="submit" md-colors="{background: 'teal-500'}">
-                Enviar
-              </md-button>
-            </div>
-          </div>
-        </md-input-container>
-      </div>
-    </md-list-item>
-  </md-list>
 </md-card>

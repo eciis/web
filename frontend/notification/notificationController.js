@@ -1,17 +1,25 @@
-   "use strict";
+"use strict";
 
 (function() {
 
     var app = angular.module("app");
 
-    app.controller("NotificationController", function NotificationController(NotificationService, AuthService, $state,
-        UserService, NotificationListenerService) {
+    app.controller("NotificationController", function NotificationController(NotificationService, 
+            AuthService, $state) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
 
         notificationCtrl.notifications = [];
         notificationCtrl.allNotifications = [];
+
+        /** Add new notifications in array with unread notifications.
+         *  This function is used by NotificationService, always that service receive new notification.
+         * @param {Notification} notification The unread notification that should be added. 
+         */ 
+        notificationCtrl.addUnreadNotification = function addUnreadNotification(notification){
+            notificationCtrl.notifications.push(notification);
+        };
 
         notificationCtrl.markAsRead = function markAsRead(notification) {
             var promise = NotificationService.markAsRead(notification);
@@ -24,8 +32,9 @@
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
-            var hasUnreadNotifications = notificationCtrl.notifications.length > 0;
-            hasUnreadNotifications ? $mdMenu.open($event) : notificationCtrl.seeAll();
+            const shouldGoToState = notificationCtrl.shouldGoToState || 
+                                    notificationCtrl.notifications.length === 0;
+            shouldGoToState ? notificationCtrl.seeAll(): $mdMenu.open($event);
         };
 
         notificationCtrl.clearAll = function clearAll() {
@@ -43,28 +52,9 @@
             $state.go('app.user.notifications');
         };
 
-        notificationCtrl.refreshUser = function refreshUser() {
-            AuthService.reload();
-        };
-
-        function notificationListener() {
-            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
-                notificationCtrl.refreshUser);
-        }
-
-        (function main() {
-            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.notifications);
+        (function main(){
+            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
-            notificationListener();
         })();
-    });
-
-    app.directive("notification", function() {
-        return {
-            restrict: 'E',
-            templateUrl: "app/notification/notifications.html",
-            controllerAs: "notificationCtrl",
-            controller: "NotificationController"
-        };
     });
 })();

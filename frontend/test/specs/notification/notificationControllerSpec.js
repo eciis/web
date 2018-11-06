@@ -3,12 +3,7 @@
 (describe('Test NotificationController', function() {
 
     var notCtrl, httpBackend, scope, createCtrl, state, notificationService
-    var authService, notificationListenerService, http;
-
-    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
-                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
-                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_INSTITUTION", "ACCEPT_INVITE_USER_ADM",
-                                "REMOVE_INSTITUTION_LINK", "RE_ADD_ADM_PERMISSIONS"];
+    var authService, http;
     
     var institution = {
         name: 'institution',
@@ -17,6 +12,7 @@
 
     var user = {
         name: 'user',
+        key: 'keeey',
         institutions: [institution],
         current_institution: institution,
         follows: institution.key
@@ -50,13 +46,12 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, NotificationService,
-            $state, AuthService, NotificationListenerService) {
+            $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         authService = AuthService;
         notificationService = NotificationService;
-        notificationListenerService = NotificationListenerService;
         httpBackend.when('GET', 'app/user/user_inactive.html').respond(200);
         
         authService.login(user);
@@ -85,16 +80,9 @@
             notCtrl = createCtrl();
 
             expect(notificationService.getAllNotifications).toHaveBeenCalled();
-            expect(notificationService.watchNotifications).toHaveBeenCalledWith(user.key, notCtrl.notifications);
+            expect(notificationService.watchNotifications).toHaveBeenCalledWith(user.key, notCtrl.addUnreadNotification);
             //The user don't have any notifications
             expect(_.isEmpty(notCtrl.notifications)).toBe(true);
-        });
-
-        it("should create observer", function() {
-            spyOn(notificationListenerService, 'multipleEventsListener');
-
-            notCtrl = createCtrl();
-            expect(notificationListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, notCtrl.refreshUser);
         });
     });
 
@@ -133,44 +121,6 @@
             notCtrl.showNotifications(mdMenu, event);
             expect(mdMenu.open).toHaveBeenCalled();
             expect(notCtrl.seeAll).not.toHaveBeenCalled();
-        });
-    });
-
-    describe('Main Controller listenners', function(){
-        it("Should call userService load when event 'DELETED_INSTITUTION' was create.", function(){
-            spyOn(authService, 'reload').and.callThrough();
-            spyOn(notCtrl, 'refreshUser').and.callThrough();
-
-            scope.$emit("DELETED_INSTITUTION", {});
-            expect(authService.reload).toHaveBeenCalled();
-            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
-        });
-
-        it("Should call userService load when event 'DELETE_MEMBER' was create.", function(){
-            spyOn(authService, 'reload').and.callThrough();
-            spyOn(notCtrl, 'refreshUser').and.callThrough();
-
-            scope.$emit("DELETE_MEMBER", {});
-            expect(authService.reload).toHaveBeenCalled();
-            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
-        });
-
-        it("Should call userService load when event 'ACCEPT_INSTITUTION_LINK' was create.", function(){
-            spyOn(authService, 'reload').and.callThrough();
-            spyOn(notCtrl, 'refreshUser').and.callThrough();
-
-            scope.$emit("ACCEPT_INSTITUTION_LINK", {});
-            expect(authService.reload).toHaveBeenCalled();
-            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
-        });
-
-        it("Should NOT call userService load when event 'EVENT' was create.", function(){
-            spyOn(authService, 'reload').and.callThrough();
-            spyOn(notCtrl, 'refreshUser').and.callThrough();
-
-            scope.$emit("EVENT", {});
-            expect(authService.reload).not.toHaveBeenCalled();
-            expect(notCtrl.refreshUser).not.toHaveBeenCalled();
         });
     });
 }));

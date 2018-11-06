@@ -1,6 +1,5 @@
 <md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
-  <div layout="row" layout-align="center center">
-      
+  <div layout="row" layout-align="center center" ng-if="!loginCtrl.isRequestInvite">
       <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Voltar" hide-xs 
         md-colors="{background: 'light-green-600'}" ng-click="emailVerifCtrl.goToLandingPage()">
         <md-icon>keyboard_arrow_left</md-icon>
@@ -40,7 +39,8 @@
               Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.
             </p>
 
-            <md-button class="login-btn" ng-click="null" md-colors="{background: 'teal-500'}">
+            <md-button class="login-btn" md-colors="{background: 'teal-500'}"
+              ng-click="loginCtrl.requestInvite()">
               <md-icon>add_circle</md-icon>
               <span>SOLICITAR CONVITE</span>
             </md-button>
@@ -55,10 +55,8 @@
           </md-card-actions>
         </div>
       </md-card>
-  </div>          
+  </div>
+  <signup ng-if="loginCtrl.isRequestInvite" return-action="loginCtrl.requestInvite"
+    card-title="Preencha o formulário para solicitar um convite">
+  </signup>
 </md-content>
-
-<!-- <signup return-action="loginCtrl.requestInvite"
-  card-title="Preencha o formulário para solicitar um convite"
-  ng-if="loginCtrl.isRequestInvite">
-</signup> -->

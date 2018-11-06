@@ -1,8 +1,9 @@
 <md-card>
-  <div class="create-post-container-resp create-post-size">
+  <div class="create-post-container-resp"
+    ng-class="postCtrl.typePost == 'Common' ? 'create-post-size' : 'create-post-size-expand'">
     <form name="saveForm" prevent-state-change="postCtrl.post">
     <div layout="row">
-      <md-card-content layout-padding>
+      <md-card-content layout-padding class="create-post-full-width">
         <div layout="row">
           <div>
             <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
@@ -52,12 +53,12 @@
                   </div>
                 </md-input-container>
             </div>
-              <!-- SURVEY -->
-            <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
-                options="postCtrl.options"></survey-directive>
         </div>
       </md-card-content>
     </div>
+      <!-- SURVEY -->
+      <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
+          options="postCtrl.options"></survey-directive>
     </form>
   </div>
   <div valign="bottom">
@@ -85,7 +86,8 @@
           </div>
           <div class="create-post-icon">
             <md-button ng-if="!isEditing" class="md-icon-button"
-                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post">
+                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post"
+                       ng-disabled="postCtrl.hasMedia()">
                 <div ng-if="postCtrl.typePost === 'Common'">
                     <md-icon>poll</md-icon>
                 </div>

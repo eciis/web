@@ -377,6 +377,18 @@
             return promise;
         };
 
+        /**
+         * Function to show post comments or redirect to post page.
+         * If the screen width less than 600 pixels (mobile devices), redirect to post page
+         * otherwise show all post comments.
+         */
+        postDetailsCtrl.showCommentsOrRedirectToPostPage = function showCommentsOrRedirect() {
+            if (window.screen.width > 600)
+                return postDetailsCtrl.getComments();
+            else
+                postDetailsCtrl.goToPost(postDetailsCtrl.post); 
+        };
+
         postDetailsCtrl.getComments = function getComments() {
             postDetailsCtrl.showComments = !postDetailsCtrl.showComments;
             if (postDetailsCtrl.showComments){

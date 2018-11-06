@@ -4,6 +4,7 @@
 
 .pdf-preview-container {
     min-width: 218px;
+    width: 100%;
 }
 
 .pdf-preview {

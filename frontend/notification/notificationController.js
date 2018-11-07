@@ -14,8 +14,7 @@
         notificationCtrl.allNotifications = [];
 
         notificationCtrl.markAsRead = function markAsRead(notification) {
-            var promise = NotificationService.markAsRead(notification);
-            return promise;
+            return NotificationService.markAsRead(notification);
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {

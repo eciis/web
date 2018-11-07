@@ -62,12 +62,17 @@
             });
         };
 
+        /** Modify status of notification to 'READ' and save in array of notification
+         * @param {Notification} notification The notification that was READ
+         */
         function markAsRead(notification) {
             notification.status = "READ";
             return service.firebaseArrayNotifications.$save(notification);
         };
 
-
+        /** Change status of notification to READ and remove of unreadNotifications array.
+         * @param {Notification} notification Tha notification that was READ.
+         */
         service.markAsRead = function(notification) {
             markAsRead(notification);
             _.remove(service.unreadNotifications, function find(found) {
@@ -75,13 +80,16 @@
             })
         };
 
+        /** Mark all unreadNotification to READ.
+         */
         service.markAllAsRead = function markAllAsRead() {
-            var promises = service.unreadNotifications.map(function(obj){
-                return markAsRead(obj);
+            const promises = service.unreadNotifications.map(function(notification){
+                return markAsRead(notification);
             });
             Promise.all(promises).then(function() {
                 Utils.clearArray(service.unreadNotifications);
             });
+            return promises;
         };
 
         service.getAllNotifications = function getAllNotifications() {

@@ -76,8 +76,12 @@
         };
 
         service.markAllAsRead = function markAllAsRead() {
-            service.unreadNotifications.map(markAsRead)
-            Utils.clearArray(service.unreadNotifications);
+            var promises = service.unreadNotifications.map(function(obj){
+                return markAsRead(obj);
+            });
+            Promise.all(promises).then(function() {
+                Utils.clearArray(service.unreadNotifications);
+            });
         };
 
         service.getAllNotifications = function getAllNotifications() {

@@ -195,9 +195,10 @@ var Utils = {
     /**
      * Clear array
      * @param {array} the array that will be clean.
-     * @returns {string} Empty array.
      */
     clearArray: function clearArray(array) {
-        return  array.splice(0, array.lenght);
+        while(array.length > 0){
+            array.pop();
+        }
     }
 };

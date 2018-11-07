@@ -1,5 +1,5 @@
 #search-container {
-    width: 100%;
+    width: 90%;
 }
 
 #search-inst-icon {
@@ -13,7 +13,17 @@
     border-radius: 50%;
 }
 
+.search-inst-avatar {
+    background: #8BC34A !important;
+}
 
+
+
+
+
+
+
+/* 
 .go-back-button{
     margin-top: 1em;
 }
@@ -145,4 +155,4 @@
         margin: 0em;
         height: 3em;
     }
-}
+} */

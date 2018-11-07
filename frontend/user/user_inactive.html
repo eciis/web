@@ -1,5 +1,5 @@
 <md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
-    <div class="custom-container">
+    <div layout-align="center center">
         <div layout="row" layout-align="center center">
             <div layout="row" layout-align="center center">
                 <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
@@ -11,13 +11,23 @@
                         <div class="custom-card-content">
                             <img class="custom-card-logo" src="/app/images/logowithname.png"/>
                             <p>{{ userInactiveCtrl.getMessage() }}</p>
-                            <form layout="row" layout-align="space-between center">
+                            <form>
                                 <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
                                     <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" 
                                         class="custom-card-input" autocomplete="off" required>
                                     <md-icon id="search-inst-icon" ng-click="userInactiveCtrl.showMenu()"> search </md-icon>
                                 </md-input-container>
                             </form>
+                            <md-content>
+                                <md-list flex>
+                                    <md-list-item class="md-3-line" >
+                                        <md-icon class="md-avatar-icon search-inst-avatar">account_balance</md-icon>
+                                        <div class="md-list-item-text" layout="column">
+                                            <p>Laboratorio de pratica de software - SPlab da Universidade Federal de Campina Grande UFCG</p>
+                                        </div>
+                                    </md-list-item>
+                                </md-list>
+                            </md-content>
                         </div>
                     </md-card-content>
                     <div class="custom-card-footer" layout-align="center">
@@ -48,6 +58,7 @@
             </md-button>
         </form>
     </div>
+
     <md-content id="content-search-institution" class="custom-scrollbar" layout="column"
         ng-if="!userInactiveCtrl.choicedInst">
         <md-list flex layout-padding style="margin: 0px;">
@@ -56,6 +67,7 @@
                 ng-disabled="userInactiveCtrl.showFullInformation(institution)"
                 md-colors="userInactiveCtrl.isInstSelect(institution) ? {background: 'grey-300'}:''"
                 class="md-3-line md-long-text" style="margin: 0px;">
+
                 <div layout-align="center center" layout="row">
                     <md-icon class="md-avatar-icon"  ng-if="!userInactiveCtrl.isInstSelect(institution)"
                     md-colors="{background: 'light-green-500', color: 'grey-50'}">account_balance</md-icon>

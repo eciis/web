@@ -5,7 +5,8 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService, UserService,
-        $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
+        $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, 
+        SubmitFormListenerService, POST_EVENTS) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -26,8 +27,6 @@
                             };
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
-        
-        const NEW_POST_EVENT = 'NEW_POST_EVENT';
 
         postCtrl.hasMedia = function hasMedia() {
             return postCtrl.photoBase64Data || postCtrl.pdfFiles.length > 0 || postCtrl.hasVideo || postCtrl.photoUrl;
@@ -235,7 +234,7 @@
                     postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
-                        $rootScope.$emit(NEW_POST_EVENT, new Post(response));
+                        $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();

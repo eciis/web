@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test TimelineController', function () {
+(describe('Test PostsFactory', function () {
     beforeEach(module('app'));
 
     let postsFactory, httpService;
@@ -54,7 +54,7 @@
             expect(posts.data).toEqual([post_with_activity]);
         });
 
-        it('should not remove the post', () => {
+        it('should not remove the post because it has activity', () => {
             const posts = new postsFactory.posts();
             posts.data = [post_with_activity, post];
             posts.removePost(post_with_activity);
@@ -67,7 +67,7 @@
             const posts = new postsFactory.posts();
             expect(posts.data).toEqual([]);
             posts.addPost(post);
-            expect(posts.data).toEqual([post]);
+            expect(posts.data).toEqual([new Post(post)]);
         });
     });
 
@@ -81,10 +81,10 @@
                 };
             });
 
-            const posts = new postsFactory.posts();
+            const posts = new postsFactory.posts('/api/mock');
             posts.getNextPosts();
 
-            expect(httpService.get).toHaveBeenCalled();
+            expect(httpService.get).toHaveBeenCalledWith('/api/mock/timeline?page=0&limit=10');
         });
     });
 
@@ -118,7 +118,23 @@
             expect(posts.getNextPosts).toHaveBeenCalled();
             expect(posts.currentPage).toEqual(1);
             expect(posts.morePosts).toEqual(true);
-            expect(posts.data).toEqual([post, post_with_activity])
+            expect(posts.data).toEqual([new Post(post), new Post(post_with_activity)])
+        });
+
+        it('should not call getNextPosts when morePosts is false', () => {
+            const posts = new postsFactory.posts();
+            posts.morePosts = false;
+
+            spyOn(posts, 'getNextPosts');
+
+            expect(posts.data).toEqual([]);
+
+            posts.loadMorePosts();
+
+            expect(posts.getNextPosts).not.toHaveBeenCalled();
+            expect(posts.currentPage).toEqual(0);
+            expect(posts.morePosts).toEqual(false);
+            expect(posts.data).toEqual([])
         });
     });
 }));

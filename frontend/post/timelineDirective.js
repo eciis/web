@@ -4,11 +4,8 @@
     var app = angular.module('app');
 
     app.controller('TimelineController', function (AuthService, $rootScope,
-        NotificationService, PostsFactory, $scope) {
+        NotificationService, PostsFactory, $scope, POST_EVENTS) {
         const timelineCtrl = this;
-
-        const DELETED_POST_EVENT = 'DELETED_POST';
-        const NEW_POST_EVENT = 'NEW_POST';
 
         const institutionKey = $scope.institution;
 
@@ -16,7 +13,7 @@
         timelineCtrl.user = AuthService.getCurrentUser();
         timelineCtrl.isLoadingPosts = false;
         timelineCtrl.refreshTimelineFlag = false;
-
+        
         timelineCtrl.addPost = (post) => {
             timelineCtrl.posts.addPost(post);
         };
@@ -25,56 +22,83 @@
             timelineCtrl.posts.removePost(post);
         };
 
+        /**
+         * Just returns the flag that checks if the button responsible for 
+         * refresh the timeline has to be shown.
+         */
         timelineCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
             return timelineCtrl.refreshTimelineFlag;
         };
 
-        timelineCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
+        /**
+         * Changes the value of the refresh timeline flag.
+         */
+        timelineCtrl.toggleRefreshTimelineButton = function toggleRefreshTimelineButton() {
             timelineCtrl.refreshTimelineFlag = !timelineCtrl.refreshTimelineFlag;
         };
 
+        /**
+         * Get the posts and then change the value 
+         * of the refresh timeline flag to hide the refresh button
+         */
         timelineCtrl.refreshTimeline = () => {
             getPosts();
-            timelineCtrl.setRefreshTimelineButton();
+            timelineCtrl.toggleRefreshTimelineButton();
         };
 
         /**
-         * private
+         * Retrieve the posts by calling loadMorePosts
+         * from posts object and set isLoadingPosts to
+         * false to hide the loading icon.
+         * @private
          */
         timelineCtrl._loadPosts = function loadPosts() {
-            var promise = timelineCtrl.posts.loadMorePosts();
-
-            promise.then(function success() {
-                timelineCtrl.isLoadingPosts = false;
-            });
-
-            return promise;
+            return timelineCtrl.posts.loadMorePosts();
         };
 
-        function setUpTimelineProperties() {
-            if (institutionKey) {
-                timelineCtrl.postsType = PostsFactory.institutionTimelinePosts;
-                timelineCtrl.contentId = "instPage";
-            } else {
-                timelineCtrl.postsType = PostsFactory.timelinePosts;
-                timelineCtrl.contentId = "content";
-            }
+        /**
+         * Set the properties necessary to make the default Timeline work
+         * with the expected values to this context.
+         */
+        function setUpDefaultTimeline() {
+            timelineCtrl.postsType = PostsFactory.timelinePosts;
+            timelineCtrl.contentId = "content";
         }
 
+        /**
+         * Set the properties necessary to make the InstitutionTimeline work
+         * with the expected values to this context.
+         */
+        function setUpInstitutionTimeline() {
+            timelineCtrl.postsType = PostsFactory.institutionTimelinePosts;
+            timelineCtrl.contentId = "instPage";
+        }
+
+        /**
+         * Instantiate a new posts object, get the next posts
+         * by calling _loadPosts and handle with the isLoadingPosts
+         * flag.
+         */
         function getPosts() {
             timelineCtrl.posts = new timelineCtrl.postsType(institutionKey);
             timelineCtrl.isLoadingPosts = true;
-            timelineCtrl._loadPosts();
+            timelineCtrl._loadPosts().then(() => {
+                timelineCtrl.isLoadingPosts = false;
+            });
         }
 
+        /**
+         * Wraps the initialization of the eventListeners.
+         * Each listener do specific operations in the callback function.
+         */
         function startEventsListeners() {
-            NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.setRefreshTimelineButton);
+            NotificationService.watchPostNotification(timelineCtrl.user.key, timelineCtrl.toggleRefreshTimelineButton);
 
-            $rootScope.$on(DELETED_POST_EVENT, function (event, post) {
+            $rootScope.$on(POST_EVENTS.DELETED_POST_EVENT_TO_DOWN, function (event, post) {
                 timelineCtrl.deletePost(post);
             });
 
-            $rootScope.$on(NEW_POST_EVENT, (event, post) => {
+            $rootScope.$on(POST_EVENTS.NEW_POST_EVENT_TO_DOWN, (event, post) => {
                 timelineCtrl.addPost(post);
             });
 
@@ -82,8 +106,13 @@
             Utils.setScrollListener(content, timelineCtrl._loadPosts);
         }
 
+        /**
+         * Wrap the calls that are necessary as soon as the controller
+         * starts.
+         */
         (() => {
-            setUpTimelineProperties();
+            institutionKey && setUpInstitutionTimeline();
+            !institutionKey && setUpDefaultTimeline();
             getPosts();
             startEventsListeners();
         })();

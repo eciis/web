@@ -250,7 +250,7 @@
             spyOn(rootScope, '$emit');
             shareCtrl.addPostTimeline(newPost);
 
-            expect(rootScope.$emit).toHaveBeenCalledWith("NEW_POST_EVENT", new Post(newPost));
+            expect(rootScope.$emit).toHaveBeenCalledWith("NEW_POST_EVENT_TO_UP", new Post(newPost));
         });
         
         it("shouldn't throw an event", function() {

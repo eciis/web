@@ -4,16 +4,11 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(AuthService, $mdDialog, $state, 
-        ProfileService, EventService, $rootScope) {
+        ProfileService, EventService, $rootScope, POST_EVENTS) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
-
-        const NEW_POST_EVENT_TO_SEND = 'NEW_POST';
-        const NEW_POST_EVENT_TO_RECEIVE = 'NEW_POST_EVENT';
-        const DELETED_POST_EVENT_TO_RECEIVE = 'DELETED_POST_EVENT';
-        const DELETED_POST_EVENT_TO_SEND = 'DELETED_POST';
 
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
@@ -165,16 +160,21 @@
             });
         };
 
+        /**
+         * Start the listeners to new post and delete post events.
+         * broadCasts the event to the hierachy by calling broadcastPostEvent() 
+         * when there is a new event.
+         */
         function registerPostEvents() {
-            $rootScope.$on(NEW_POST_EVENT_TO_RECEIVE, (event, data) => {
-                broadcastPostEvent(NEW_POST_EVENT_TO_SEND, data);
+            $rootScope.$on(POST_EVENTS.NEW_POST_EVENT_TO_UP, (event, data) => {
+                broadcastPostEvent(POST_EVENTS.NEW_POST_EVENT_TO_DOWN, data);
             });
 
-            $rootScope.$on(DELETED_POST_EVENT_TO_RECEIVE, (event, data) => {
-                broadcastPostEvent(DELETED_POST_EVENT_TO_SEND, data);
+            $rootScope.$on(POST_EVENTS.DELETED_POST_EVENT_TO_UP, (event, data) => {
+                broadcastPostEvent(POST_EVENTS.DELETED_POST_EVENT_TO_DOWN, data);
             });
         }
-
+        
         function broadcastPostEvent(eventType, post) {
             $rootScope.$broadcast(eventType, post);
         }

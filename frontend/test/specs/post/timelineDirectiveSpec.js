@@ -3,8 +3,9 @@
 (describe('Test TimelineController', function() {
     beforeEach(module('app'));
 
-    var timelineCtrl, createController, rootScope, scope, notificationService, postsFactory;
-    var user = {
+    let timelineCtrl, createController, rootScope, scope, notificationService, postsFactory, q;
+
+    let user = {
         name: 'name',
         key : 'key',
         current_institution: {key: "institutuion_key"},
@@ -12,7 +13,7 @@
         permissions: {}
     };
 
-    var post = {
+    let post = {
         title: 'post principal',
         author_key: user.key,
         institution_key: "institution_key",
@@ -20,7 +21,7 @@
         state: 'published'
     };
 
-    var post_with_activity = {
+    let post_toAdd = {
         title: 'post principal',
         author_key: user.key,
         institution_key: "institution_key",
@@ -30,7 +31,7 @@
         number_of_comments: 1
     };
 
-    var options = [{'id' : 0,
+    let options = [{'id' : 0,
                     'text': 'Option number 1',
                     'number_votes': 0,
                     'voters': [] },
@@ -39,19 +40,19 @@
                     'number_votes': 0,
                     'voters': [] }];
 
-    var survey = { 'title' : 'The Survey',
+    let survey = { 'title' : 'The Survey',
                     'type_survey' : 'multiple_choice',
                     'options' : options,
                     'key': '654321'
                     };
 
-    var content = {
+    let content = {
         'scrollTop': 1,
         'offsetHeight': 3,
         'scrollHeight': 5
     }
 
-    var posts = [survey, post];
+    let posts = [survey, post];
 
     beforeEach(inject(function($controller, AuthService, $rootScope, 
         NotificationService, $q, PostsFactory) {
@@ -59,6 +60,7 @@
         postsFactory = PostsFactory;
         scope = $rootScope.$new();
         notificationService = NotificationService;
+        q = $q;
         
         AuthService.login(user);
 
@@ -95,6 +97,7 @@
         spyOn(notificationService, 'watchPostNotification');
 
         timelineCtrl = createController();
+
         timelineCtrl.content = content;
         timelineCtrl.user = new User(user);
 
@@ -148,15 +151,6 @@
         });
     });
 
-    describe('Should not call delete post function', function() {
-        it("should do nothing.", function() {
-            console.log(timelineCtrl.posts);
-            rootScope.$emit("DELETED_INSTITUTION", {});
-            expect(timelineCtrl.posts.size()).toEqual(2);
-            expect(timelineCtrl.posts.data).toEqual(posts);
-        });
-    });
-
     describe('Should call delete post function', function() {
         
         it("should not delete post because it isn't in timeline.", function() {
@@ -166,32 +160,18 @@
                 state: 'published'
             };
 
-            rootScope.$emit("DELETED_POST", post_not_timeline);
+            rootScope.$emit("DELETED_POST_TO_DOWN", post_not_timeline);
             expect(timelineCtrl.posts.size()).toEqual(2);
-            expect(timelineCtrl.posts.data).toEqual(posts);
-        });
-
-        it('should not delete post because it has activity.', function() {
-            timelineCtrl.posts.data = [survey, post];
-            expect(timelineCtrl.posts.data[1].comments).toBeUndefined();
-            expect(timelineCtrl.posts.data[1].number_of_comments).toBeUndefined();
-
-            rootScope.$emit("DELETED_POST", post_with_activity);
-            expect(timelineCtrl.posts.size()).toEqual(2);
-            expect(timelineCtrl.posts.data[1]).toEqual(new Post(post_with_activity));
+            expect(timelineCtrl.posts.data).toEqual([new Post(survey), new Post(post)]);
         });
 
         it('should delete post.', function() {
-            expect(timelineCtrl.posts.data).toEqual(posts);
-            rootScope.$emit("DELETED_POST", post);
+            expect(timelineCtrl.posts.data).toEqual([new Post(survey), new Post(post)]);
+            rootScope.$emit("DELETED_POST_TO_DOWN", post);
             expect(timelineCtrl.posts.size()).toEqual(1);
-            expect(timelineCtrl.posts.data).toEqual([survey]);
+            expect(timelineCtrl.posts.data).toEqual([new Post(survey)]);
 
-            rootScope.$emit("DELETED_POST", post);
-            expect(timelineCtrl.posts.size()).toEqual(1);
-            expect(timelineCtrl.posts.data).toEqual([survey]);
-
-            rootScope.$emit("DELETED_POST", survey);
+            rootScope.$emit("DELETED_POST_TO_DOWN", survey);
             expect(timelineCtrl.posts.size()).toEqual(0);
             expect(timelineCtrl.posts.data).toEqual([]);
         });
@@ -200,14 +180,50 @@
     describe('refreshTimeline()', () => {
         it('should call some functions', () => {
             spyOn(timelineCtrl, 'postsType').and.callThrough();
-            spyOn(timelineCtrl, 'setRefreshTimelineButton').and.callThrough();
-            spyOn(timelineCtrl, '_loadPosts').and.returnValue({});
+            spyOn(timelineCtrl, 'toggleRefreshTimelineButton').and.callThrough();
+            spyOn(timelineCtrl, '_loadPosts').and.returnValue(q.when());
 
             timelineCtrl.refreshTimeline();
 
             expect(timelineCtrl.postsType).toHaveBeenCalled();
             expect(postsFactory.posts.prototype.loadMorePosts).toHaveBeenCalled();
-            expect(timelineCtrl.setRefreshTimelineButton).toHaveBeenCalled();
+            expect(timelineCtrl.toggleRefreshTimelineButton).toHaveBeenCalled();
+        });
+    });
+
+    describe('addPost()', () => {
+        it('should call addPost and add the post', () => {
+            spyOn(timelineCtrl, 'addPost').and.callThrough();
+            expect(timelineCtrl.posts.data).toEqual([new Post(survey), new Post(post)]);
+
+            timelineCtrl.addPost(post_toAdd);
+
+            expect(timelineCtrl.addPost).toHaveBeenCalled();
+            expect(timelineCtrl.posts.data.length).toEqual(3);
+        });
+    });
+
+    describe('deletePost()', () => {
+        it('should call deletePost and delete the post', () => {
+            spyOn(timelineCtrl, 'deletePost').and.callThrough();
+            expect(timelineCtrl.posts.data.length).toEqual(2);
+
+            timelineCtrl.deletePost(post);
+
+            expect(timelineCtrl.deletePost).toHaveBeenCalled();
+            expect(timelineCtrl.posts.data.length).toEqual(1);
+        });
+    });
+
+    describe('showRefreshTimelineButton() and toggleRefreshTimelineButton()', () => {
+        it('should toggle the value of the flag', () => {
+            spyOn(timelineCtrl, 'showRefreshTimelineButton').and.callThrough();
+            spyOn(timelineCtrl, 'toggleRefreshTimelineButton').and.callThrough();
+            expect(timelineCtrl.showRefreshTimelineButton()).toEqual(false);
+            timelineCtrl.toggleRefreshTimelineButton();
+            expect(timelineCtrl.showRefreshTimelineButton()).toEqual(true);
+            timelineCtrl.toggleRefreshTimelineButton();
+            expect(timelineCtrl.showRefreshTimelineButton()).toEqual(false);
         });
     });
 }));

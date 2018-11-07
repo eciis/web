@@ -4,13 +4,12 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService, PostsFactory) {
+        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
 
         institutionCtrl.institution = null;
-        institutionCtrl.posts = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
@@ -41,6 +40,10 @@
             });
         }
 
+        /**
+         * Returns the key of the current institution
+         * that the controller is responsible for.
+         */
         institutionCtrl.getInstKey = () => {
             return currentInstitutionKey;
         };

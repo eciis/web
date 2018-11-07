@@ -141,10 +141,14 @@
         }
     });
     
+    const event_details_html = 'app/event/event_details.html';
+    const event_details_small_page = 'app/event/event_details_small_page.html'
+    const screen_width = window.screen.width;
+
     app.directive("eventDetails", function () {
         return {
             restrict: 'E',
-            templateUrl: "app/event/event_details.html",
+            templateUrl: (screen_width > 600) ? event_details_html : event_details_small_page,
             controllerAs: "eventDetailsCtrl",
             controller: "EventDetailsController",
             scope: {},

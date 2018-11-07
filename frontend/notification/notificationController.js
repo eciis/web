@@ -25,9 +25,7 @@
         };
 
         notificationCtrl.clearAll = function clearAll() {
-            _.forEach(notificationCtrl.notifications, function(notification) {
-                notificationCtrl.markAsRead(notification);
-            });
+            NotificationService.markAllAsRead();
         };
 
         notificationCtrl.numberUnreadNotifications = function numberUnreadNotifications() {

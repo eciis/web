@@ -70,6 +70,14 @@
             return service.firebaseArrayNotifications.$save(notification);
         };
 
+        service.markAllAsRead = function markAllAsRead() {
+            service.unreadNotifications.map(function(notification) {
+                notification.status = "READ";
+            }).then(function(){
+                _.remove(service.unreadNotifications, (not)=>not);
+            });
+        };
+
         service.getAllNotifications = function getAllNotifications() {
             return service.firebaseArrayNotifications;
         };

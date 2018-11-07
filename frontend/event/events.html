@@ -1,13 +1,14 @@
+<div class="container-resp">
   <div flex flex-md="95" layout="row" layout-align="space-around"
       md-colors="{background: 'grey-50'}">
     <div flex flex-gt-md="100" layout-align="center top" layout="row">
       <div flex layout="column">
         <div>
-          <md-card ng-click="eventsTlCtrl.newEvent()" flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
+          <md-card ng-click="eventCtrl.newEvent()" flex="90" flex-gt-xs="95" style="margin-left: 40px; margin-right: 35px;">
             <md-card-content layout="row" style="padding:5px;">
               <md-card-content layout="row">
-                <img ng-src="{{ eventsTlCtrl.user.current_institution.photo_url }}"
-                title="{{eventsTlCtrl.user.current_institution.name}}"
+                <img ng-src="{{ eventCtrl.user.current_institution.photo_url }}"
+                title="{{eventCtrl.user.current_institution.name}}"
                 style="border-radius: 50%; margin-top: 7px" width="50px" height="50px"/>
                 <h4 class="font-resp create-event">CRIAR EVENTO</h4>
               </md-card-content>
@@ -24,26 +25,26 @@
             </md-card-content>
           </md-card>
         </div>
-        <load-circle flex add-layout-fill="true" ng-if="eventsTlCtrl.isLoadingEvents"></load-circle>
-        <md-card ng-if="eventsTlCtrl.events.lentgh === 0" style="margin-left: 40px;">
+        <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
+        <md-card ng-if="eventCtrl.events.length === 0" style="margin-left: 40px;">
             <md-content layout-align="center center" layout="column">
               <h4>Nenhum evento a ser exibido.</h4>
             </md-content>
         </md-card>
-        <md-content class="body custom-scrollbar box">
-          <div ng-repeat="event in eventsTlCtrl.events | orderBy:'start_time'" ng-if="eventsTlCtrl.events.length > 0"
+        <md-content id="content" class="body custom-scrollbar box">
+          <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">
             <div layout="row">
               <div style="display: flex; align-items: center;">
                 <md-button class="md-fab md-primary" title="Compartilhar"
                   style="margin-left: -30px; background-color: #8BC34A; vertical-align: middle;"
-                  ng-click="eventsTlCtrl.share($event, event)">
+                  ng-click="eventCtrl.share($event, event)">
                   <md-icon>share</md-icon>
                 </md-button>
               </div>
               <div class="box" style="margin-left: -22px;">
                 <md-card >
-                    <event-details event="event" posts="eventsTlCtrl.posts" is-event-page=false></event-details>
+                    <event-details event="event" posts="eventCtrl.posts" is-event-page=false></event-details>
                 </md-card>
               </div>
             </div>
@@ -53,3 +54,4 @@
     </div>
     <md-content class="custom-scrollbar" flex-gt-md="20" hide show-gt-md></md-content>
   </div>
+</div>

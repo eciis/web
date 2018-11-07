@@ -49,6 +49,37 @@
             });
         }
 
+        eventCtrl.newEvent = function newEvent(event) {
+            $mdDialog.show({
+                controller: 'EventDialogController',
+                controllerAs: "controller",
+                templateUrl: 'app/event/event_dialog.html',
+                targetEvent: event,
+                clickOutsideToClose: true,
+                locals: {
+                    events: eventCtrl.events
+                },
+                bindToController: true
+            });
+        };
+
+        eventCtrl.share = function share(ev, event) {
+            $mdDialog.show({
+                controller: "SharePostController",
+                controllerAs: "sharePostCtrl",
+                templateUrl: 'app/post/share_post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    user: eventCtrl.user,
+                    posts: eventCtrl.posts,
+                    post: event,
+                    addPost: true
+                }
+            });
+        };
+
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
             eventCtrl.loadMoreEvents();

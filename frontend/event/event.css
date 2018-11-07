@@ -52,3 +52,35 @@
         width: 100%;
     }
 }
+
+/* MOBILE DEVICES */
+@media screen and (max-width: 960px) {
+    .create-event-button {
+        background-color: #7CB342 !important;
+    }
+
+    .highlight {
+        background:rgba(0,0,0,0.65);
+        position: absolute;
+        height: 85px;
+        width: 100%;
+        background-color: rgba(0,0,0,0.40);
+        font-family: Verdana, Geneva, sans-serif;
+        color: #FFF;
+        bottom: 0px;
+        z-index: 1;
+    }
+
+    .hilight h4 {
+        font-family: Helvetica, Verdana;
+        color: #FFF;
+        z-index: 200;
+    }
+    
+    .event-preview {
+        position: relative;
+    }
+    .event-preview img {
+        z-index: 1;
+    }
+}

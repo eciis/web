@@ -62,20 +62,22 @@
             });
         };
 
-        service.markAsRead = function markAsRead(notification) {
+        function markAsRead(notification) {
             notification.status = "READ";
-            _.remove(service.unreadNotifications, function find(found) {
-                return found.$id === notification.$id;
-            })
             return service.firebaseArrayNotifications.$save(notification);
         };
 
+
+        service.markAsRead = function(notification) {
+            markAsRead(notification);
+            _.remove(service.unreadNotifications, function find(found) {
+                return found.$id === notification.$id;
+            })
+        };
+
         service.markAllAsRead = function markAllAsRead() {
-            service.unreadNotifications.map(function(notification) {
-                notification.status = "READ";
-            }).then(function(){
-                _.remove(service.unreadNotifications, (not)=>not);
-            });
+            service.unreadNotifications.map(markAsRead)
+            Utils.clearArray(service.unreadNotifications);
         };
 
         service.getAllNotifications = function getAllNotifications() {

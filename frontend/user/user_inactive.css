@@ -1,3 +1,19 @@
+#search-container {
+    width: 100%;
+}
+
+#search-inst-icon {
+    display:inline-block;
+    cursor: pointer;
+    color: #009688;
+}
+
+#search-inst-icon:active { 
+    background-color: #EEEEEE;
+    border-radius: 50%;
+}
+
+
 .go-back-button{
     margin-top: 1em;
 }

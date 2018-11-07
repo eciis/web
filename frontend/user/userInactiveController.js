@@ -20,6 +20,11 @@
         userInactiveCtrl.institutionSelect = {};
         var ACTIVE = 'active';
 
+        userInactiveCtrl.getMessage = function () {
+            const fistMsg = "Busque uma instituição que você faz parte.";
+            return fistMsg;
+        };
+
         userInactiveCtrl.logout = function logout() {
             AuthService.logout();
         };
@@ -103,6 +108,8 @@
         };
 
         userInactiveCtrl.showMenu = function showMenu() {
+            console.log('showmenu');
+            
             var deferred = $q.defer();
             if(userInactiveCtrl.search) {
                 userInactiveCtrl.finalSearch = userInactiveCtrl.search;

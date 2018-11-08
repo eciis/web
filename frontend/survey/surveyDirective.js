@@ -111,10 +111,18 @@
         }
     });
 
+    /**
+     * Function to return a correct template url to show in desktop screen or mobile screen.
+     * @returns {String} The string containing the url path to html file that will be displayed in view.
+     */
+    function getTemplateUrl() {
+        return Utils.isMobileScreen() ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
+    };
+
     app.directive("surveyDirective", function() {
         return {
             restrict: 'E',
-            templateUrl: "app/survey/save_survey.html",
+            templateUrl: getTemplateUrl(),
             controllerAs: "surveyCtrl",
             controller: "SurveyDirectiveController",
             scope: {},

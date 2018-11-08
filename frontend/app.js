@@ -281,8 +281,26 @@
                     }
                 }
             })
+            .state("email_verification", {
+                url: "/email_verification",
+                views: {
+                    main: {
+                      templateUrl: "app/auth/email_verification.html",
+                      controller: "EmailVerificationController as emailVerifCtrl"
+                    }
+                }
+            })
+            .state("reset_password", {
+                url: "/reset_password",
+                views: {
+                    main: {
+                        templateUrl: "/app/auth/reset_password.html",
+                        controller: "ResetPasswordController as resetCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
-                url: "/userinactive",
+                url: "/user_inactive",
                 views: {
                     main: {
                       templateUrl: "app/user/user_inactive.html",
@@ -397,6 +415,7 @@
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin',
+            'reset_password',
             'accept_invite'
         ];
 
@@ -422,6 +441,8 @@
             'create_institution_form',
             'error',
             'signin',
+            'email_verification',
+            'reset_password',
             'user_inactive',
             'new_invite'
         ];

@@ -1,0 +1,180 @@
+.survey-title-placeholder {
+    font-weight: bold !important;
+    color: #00695C !important;
+    margin: 0px !important;
+    border: 0 !important;
+    resize:none !important;
+}
+
+.survey-switch {
+    margin-top: -1.5625em;
+    margin-left: -0.5em;
+}
+
+.survey-actions {
+    text-align: right;
+    margin-left: auto;
+    margin-right: 1.25em;
+    margin-bottom: 1.25em;
+}
+
+@media screen and (max-width: 959px) {
+    .survey-title-placeholder, {
+        font-size: 0.84375em !important;
+    }
+
+    .survey-options {
+        font-size: 0.84375em !important;
+        background-color: white;
+    }
+
+    .survey-multiple-choice {
+        font-weight: bold;
+        font-size: 0.9em;
+        margin-left: 0.625em;
+    }
+
+    .save-survey-input-placeholder {
+        font-weight: 500 !important;
+        font-size: 0.84375em !important;
+        border: 5 !important;
+        color: #009688 !important;
+        border-color: #009688 !important;
+    }
+
+    .save-survey-date-button {
+        margin-top: -2.5vh !important;
+        margin-left: auto !important;
+        background-color: #7CB342 !important;
+    }
+
+    .survey-switch {
+        margin-top: -0.8vh;
+        margin-left: -2vh;
+    }
+
+    .save-survey-date {
+        pointer-events: none;
+    }
+
+    .save-survey-margin {
+        margin: 0px !important;
+        padding: 0px 8px 0px 8px !important;
+    }
+
+    .save-survey-scrollbar {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 22vh;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar {
+        width: .3em;
+        height: .2em;
+        background-color: #ccc;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar-track {
+        background-color: #ccc  ;
+        border-left: .1em solid white;
+        border-right: .1em solid white;
+    }
+
+    .save-survey-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 3.125em;
+        background: #009688;
+        -webkit-box-shadow: inset 0 0 px #009688 ;
+    }
+
+    .save-survey-cancel-button {
+        background-color: rgb(173, 169, 169);
+        color: white;
+    }
+
+    @media screen and (max-height: 570px) {
+        .save-survey-form {
+            height: 52vh;
+        }
+
+        .save-survey-scrollbar {
+            height: 23vh;
+        }
+    }
+
+    @media screen and (min-height: 571px) and (max-height: 670px) {
+        .save-survey-form {
+            height: 56vh;
+        }
+
+        .save-survey-scrollbar {
+            height: 30vh;
+        }
+    }
+
+    @media screen and (min-height: 671px) and (max-height: 770px) {
+        .save-survey-form {
+            height: 59vh;
+        }
+
+        .save-survey-scrollbar {
+            height: 35vh;
+        }
+    }
+
+    @media screen and (min-height: 771px) and (max-height: 870px) {
+        .save-survey-form {
+            height: 62vh;
+        }
+
+        .save-survey-scrollbar {
+            height: 40vh;
+        }
+    }
+
+    @media screen and (min-height: 871px) {
+        .save-survey-form {
+            height: 67vh;
+            width: 100%;
+        }
+
+        .save-survey-scrollbar {
+            height: 45vh;
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .survey-title-placeholder, .survey-options {
+        font-size: 0.75em !important;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .survey-multiple-choice {
+        font-size: 0.8875em;
+        margin-left: 0.625em;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .survey-multiple-choice {
+        font-size: 0.7625em;
+        margin-left: 1.375em;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .survey-multiple-choice {
+        font-size: 0.66875em;
+        margin-right: -1em;
+    }
+
+    .survey-switch {
+        margin-left: -0.25em !important;
+    }
+
+    .survey-actions {
+        margin-left: 9.375em !important;
+    }
+}

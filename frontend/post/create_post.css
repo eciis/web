@@ -1,0 +1,229 @@
+.create-post-container-resp {
+    width: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 90%;
+    flex: 1 1 90%;
+    box-sizing: border-box;
+    max-width: 95%;
+}
+
+.create-post-title-placeholder {
+    font-weight: bold !important;
+    color: #00695C !important;
+    resize:none !important;
+}
+
+.create-post-text {
+    border: 0 !important;
+    resize:none !important;
+    overflow: auto !important;
+}
+
+.create-post-button {
+    margin-right: -42px !important;
+    background-color: #7CB342 !important;
+}
+
+.create-post-finish-button {
+    font-size: 14px !important;
+}
+
+.create-post-textarea {
+    max-height: 100px !important;
+    overflow-y:auto !important;
+    resize:none !important;
+}
+
+.create-post-inst-img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.create-post-text-container {
+    margin: 0px !important;
+    padding-top: 10px !important;
+}
+
+.create-post-actions {
+    text-align: right;
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+
+.create-post-cancel-button, .create-post-video-label {
+    color: #009688;
+}
+
+@media screen and (max-width: 959px) {
+    .create-post-container-resp {
+        margin:auto;
+    }
+
+    .create-post-full-width {
+        width: 100%;
+    }
+
+    .create-post-title-placeholder {
+        font-weight: 500 !important;
+        font-size: 13.5px !important;
+        border: 5 !important;
+        color: #009688 !important;
+        border-color: #009688 !important;
+    }
+
+    .create-post-video-placeholder {
+        font-weight: normal !important;
+        font-size: 13.5px !important;
+        border: 5 !important;
+        border-color: #009688 !important;
+        max-height: 50px !important;
+    }
+
+    .create-post-text {
+        font-size: 13.5px !important;
+    }
+
+    .create-post-inst-name {
+        font-weight: 420;
+        margin-left: 10px;
+        margin-top: 2px;
+    }
+
+    .create-post-textarea-container {
+        margin-top: -15px;
+    }
+
+    .create-post-options-icons {
+        background-color: #E9E9E9;
+        padding: 4px !important;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .create-post-icon {
+        text-align: center;
+        width: 24%;
+    }
+
+    .create-post-cancel-button {
+        background-color: rgb(173, 169, 169);
+        color: white;
+    }
+
+    .create-post-img {
+        overflow: hidden;
+        height: 150px; 
+        background-color: #009688
+    }
+
+    .create-post-img img {
+        height: auto;
+        width: auto;
+    }
+
+    .create-post-actions {
+        position: absolute;
+        bottom: 50px;
+        width: 85%;
+    }
+
+    .create-post-scrollbar {
+        display: block;
+        width: 10em;
+        overflow: auto;
+        height: 2em;
+    }
+
+    .create-post-scrollbar::-webkit-scrollbar {
+        width: .3em;
+        height: .2em;
+        background-color: #ccc;
+    }
+
+    .create-post-scrollbar::-webkit-scrollbar-track {
+        background-color: #ccc  ;
+        border-left: .1em solid white;
+        border-right: .1em solid white;
+    }
+
+    .create-post-scrollbar::-webkit-scrollbar-thumb {
+        border-radius: 50px;
+        background: #009688;
+        -webkit-box-shadow: inset 0 0 px #009688 ;
+    }
+
+    .create-post-loading {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+    }
+
+    .create-post-size {
+        height: 75vh !important;
+        max-height: 79vh !important;
+        width: 96vh;
+        max-width: 95%!important;
+        margin: auto;
+    }
+
+    .create-post-size-expand {
+        height: 84vh !important;
+        max-height: 84vh !important;
+        width: 96vh;
+        max-width: 95%!important;
+        margin: auto;
+    }
+
+    .create-post-textarea {
+        max-height: 45vh !important;
+    }
+
+    .create-post-textarea-reduced {
+        max-height: 30vh !important;
+    }
+
+    .create-post-video-input {
+        margin-top: -15px !important;
+    }
+
+    @media screen and (max-height: 600px) {
+        .create-post-textarea {
+            max-height: 33vh !important;
+        }
+
+        .create-post-textarea-reduced {
+            max-height: 18vh !important;
+        }
+    }
+
+    @media screen and (min-height: 601px) and (max-height: 700px) {
+        .create-post-textarea {
+            max-height: 38vh !important;
+        }
+
+        .create-post-textarea-reduced {
+            max-height: 24vh !important;
+        }
+    }
+}
+
+@media screen and (min-width: 960px) {
+    .create-post-title-placeholder {
+        border: 0 !important;
+    }
+
+    .create-post-inst-name, .create-post-options-icons {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .create-post-title-placeholder {
+        font-size: 12px !important;
+    }
+
+    .create-post-text {
+        font-size: 12px !important;
+    }
+}

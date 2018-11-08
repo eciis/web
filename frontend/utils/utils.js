@@ -193,6 +193,14 @@ var Utils = {
     },
 
     /**
+     * This function indicate if the screen are in mobile device size.
+     * @returns {boolean} True if the screen is smaller or equal to 960 pixels and false in otherwise.
+     */
+    isMobileScreen: function isMobileScreen() {
+        return screen.width <= 960;
+    },
+
+    /**
      * Clear array
      * @param {array} the array that will be clean.
      */

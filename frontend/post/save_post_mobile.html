@@ -1,0 +1,118 @@
+<md-card>
+  <div class="create-post-container-resp"
+    ng-class="postCtrl.typePost == 'Common' ? 'create-post-size' : 'create-post-size-expand'">
+    <form name="saveForm" prevent-state-change="postCtrl.post">
+    <div layout="row">
+      <md-card-content layout-padding class="create-post-full-width">
+        <div layout="row">
+          <div>
+            <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
+            title="{{postCtrl.user.current_institution.name}}"
+            class="create-post-inst-img"/>
+          </div>
+          <div>
+            <p class="create-post-inst-name">{{ postCtrl.getInstName() }}</p>
+          </div>
+        </div>
+        <div flex>
+            <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
+                <div ng-if="postCtrl.showImage()" layout="column" class="youtube-player image-view create-post-img">
+                    <button ng-click="postCtrl.hideImage()" type="button">&times;</button>
+                    <div>
+                        <img ng-src="{{postCtrl.photoUrl}}"/>
+                    </div>
+                </div>
+                <div ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
+                    <pdf-preview pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-preview>
+                </div>
+                <load-circle class="create-post-loading md-hue-2" flex ng-if="postCtrl.loadingPost"></load-circle>
+                <md-progress-linear ng-show="postCtrl.loading" md-mode="indeterminate" class="md-hue-2 create-post-loading"></md-progress-linear>
+                <md-input-container md-no-float class="md-block create-post-text-container">
+                  <input name="title" class="create-post-title-placeholder"
+                  ng-model="postCtrl.post.title" maxlength="100" placeholder="{{postCtrl.showPlaceholderMsg()}}" required>
+                  <div ng-show="postCtrl.isTyping()" ng-messages='saveForm.title.$error'>
+                      <div ng-message="required">O post deve conter um título!</div>
+                  </div>
+                </md-input-container>
+                <md-input-container ng-show="postCtrl.showTextField()"
+                 class="md-block create-post-textarea-container" md-no-float>
+                  <textarea name="message" ng-class="postCtrl.showImage() ? 'create-post-textarea-reduced' : 'create-post-textarea'"
+                  class="create-post-text create-post-scrollbar"
+                  ng-model="postCtrl.post.text" placeholder="Texto" required>
+                  </textarea>
+                  <div ng-messages='saveForm.message.$error'>
+                      <div ng-message="required">O post deve conter um texto!</div>
+                  </div>
+                </md-input-container>
+                <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block create-post-video-input" md-no-float>
+                  <label class="create-post-video-label">Link do Video</label>
+                  <input class="create-post-video-placeholder" ng-model="postCtrl.post.video_url"
+                    md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
+                  <div ng-messages="saveForm.video.$error">
+                    <div ng-message="pattern">Link do Youtube inválido.</div>
+                  </div>
+                </md-input-container>
+            </div>
+        </div>
+      </md-card-content>
+    </div>
+      <!-- SURVEY -->
+      <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
+          options="postCtrl.options"></survey-directive>
+    </form>
+  </div>
+  <div valign="bottom">
+      <md-card-actions layout="row" layout-align="end center"
+      ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
+        <md-button class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
+            Cancelar
+        </md-button>
+        <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
+          ng-click="postCtrl.save(isEditing, originalPost, posts, saveForm)">
+            Postar
+        </md-button>
+      </md-card-actions>
+    </div>
+    <div valign="bottom">
+        <md-card-content class="create-post-options-icons">
+          <div class="create-post-icon">
+            <md-button class="md-icon-button" ng-click="null" ng-model="postCtrl.file"
+                       ngf-pattern="'image/*'" title="Adicionar imagem"
+                       ngf-accept="'image/*'" ngf-max-size="5MB"
+                       ngf-select="postCtrl.addImage(postCtrl.file)"
+                       ng-disabled="postCtrl.hasMedia() && !postCtrl.showImage() || postCtrl.typePost === 'Survey'">
+                <md-icon>add_a_photo</md-icon>
+            </md-button>
+          </div>
+          <div class="create-post-icon">
+            <md-button ng-if="!isEditing" class="md-icon-button"
+                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post"
+                       ng-disabled="postCtrl.hasMedia()">
+                <div ng-if="postCtrl.typePost === 'Common'">
+                    <md-icon>poll</md-icon>
+                </div>
+                <div ng-if="postCtrl.typePost === 'Survey'">
+                    <md-icon>edit</md-icon>
+                </div>
+            </md-button>
+          </div>
+          <div class="create-post-icon">
+            <md-button class="md-icon-button" ng-click="null" ng-file-model="postCtrl.files"
+                       ngf-pattern="'application/pdf'" title="Adicionar pdf"
+                       ngf-accept="'application/pdf'"
+                       ngf-max-files="1"
+                       ngf-select="postCtrl.addPdf($files)"
+                       ng-disabled="postCtrl.hasMedia() && !postCtrl.showFiles() || postCtrl.typePost === 'Survey'">
+                <md-icon>picture_as_pdf</md-icon>
+            </md-button>
+          </div>
+          <div class="create-post-icon">
+            <md-button class="md-icon-button" ng-click="postCtrl.setHasVideo()"
+                       title="{{postCtrl.hasVideo || postCtrl.post.video_url? 'Remover link':'Adicionar link'}}"
+                       ng-disabled="postCtrl.hasMedia() && !postCtrl.hasVideo || postCtrl.typePost === 'Survey'">
+                <md-icon>video_library</md-icon>
+            </md-button>
+          </div>
+        </md-card-content>
+    </div>
+</md-card>

@@ -5,6 +5,7 @@
   position: fixed;
   width: 100%;
   font-size: 20px;
+  z-index: 2;
 }
 
 .search-by-xs span {
@@ -16,9 +17,27 @@
 }
 
 .tst label {
-  margin-left: 280px;
+  margin-left: 92%;
   position: absolute;
   top: 4px;
   display: block;
   box-sizing: border-box;
+}
+
+@media screen and (min-width: 550px) {
+  .tst label {
+    margin-left: 95%;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-width: 550px) {
+  .tst label {
+    margin-left: 94%;
+  }
+}
+
+@media screen and (min-width: 425px) and (max-width: 450px) {
+  .tst label {
+    margin-left: 93.5%;
+  }
 }

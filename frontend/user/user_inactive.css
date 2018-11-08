@@ -2,6 +2,10 @@
     width: 90%;
 }
 
+#inst-container {
+    max-height: 10em;
+}
+
 #search-inst-icon {
     display:inline-block;
     cursor: pointer;
@@ -17,6 +21,19 @@
     background: #8BC34A !important;
 }
 
+.inst-name {
+    display: block;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 5em;
+}
+
+.limited-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
 
 
 

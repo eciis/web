@@ -59,10 +59,16 @@ Institution.prototype.addChildInst = function addChildInst(institution){
     childIsNew ? this.children_institutions.push(institution) : null;
 };
 
+Institution.prototype.getSimpleAddress = function () {
+    if(this.address) {
+        return this.address.city + ", " + this.address.federal_state + ", " + this.address.country;
+    }
+};
+
 Institution.prototype.getFullAddress = function getFullAddress() {
     if(this.address) {
         var fullAddress = this.address.street + ", " + this.address.number + ", " + this.address.neighbourhood +
-                         ", " + this.address.city + ", " + this.address.federal_state + ", " + this.address.country;
+                         ", " + this.getSimpleAddress();
         return fullAddress;
     }
 };

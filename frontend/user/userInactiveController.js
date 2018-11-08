@@ -17,13 +17,17 @@
         userInactiveCtrl.institutions = [];
         userInactiveCtrl.requestsOfSelectedInst = [];
         userInactiveCtrl.request = null;
-        userInactiveCtrl.institutionSelect = {};
+        userInactiveCtrl.selectedInst = {};
         var ACTIVE = 'active';
 
         userInactiveCtrl.getMessage = function () {
             const fistMsg = "Busque uma instituição que você faz parte.";
             return fistMsg;
         };
+
+        userInactiveCtrl.getInstIcon = function (inst) {
+            return userInactiveCtrl.isInstSelect(inst) ? 'done' : 'account_balance';
+        }
 
         userInactiveCtrl.logout = function logout() {
             AuthService.logout();
@@ -48,9 +52,9 @@
 
         userInactiveCtrl.sendRequest = function sendRequest() {
             var dataInvite = {
-                institution_key : userInactiveCtrl.institutionSelect.key,
+                institution_key : userInactiveCtrl.selectedInst.key,
                 sender_key : userInactiveCtrl.user.key,
-                admin_key : userInactiveCtrl.institutionSelect.admin.key,
+                admin_key : userInactiveCtrl.selectedInst.admin.key,
                 is_request : true,
                 type_of_invite : 'REQUEST_USER',
                 sender_name : userInactiveCtrl.request.name || userInactiveCtrl.user.name,
@@ -59,7 +63,7 @@
             };
 
             var request = new Invite(dataInvite);
-            var promise = RequestInvitationService.sendRequest(request, userInactiveCtrl.institutionSelect.key);
+            var promise = RequestInvitationService.sendRequest(request, userInactiveCtrl.selectedInst.key);
             promise.then(function success() {
                 $mdDialog.hide();
                 MessageService.showToast("Pedido enviado com sucesso!");
@@ -82,15 +86,14 @@
 
         userInactiveCtrl.selectInstitution = function selectInstitution(institution){
             var deferred = $q.defer();
-
             InstitutionService.getInstitution(institution.id).then(function success(response) {
-                userInactiveCtrl.institutionSelect = response;
+                userInactiveCtrl.selectedInst = response;
                 userInactiveCtrl.hasInstSelect = true;
                 userInactiveCtrl.showFullInformation(institution);
                 userInactiveCtrl.request = {
                     institution_name: institution.name
                 };
-                getRequests(userInactiveCtrl.institutionSelect.key);
+                getRequests(userInactiveCtrl.selectedInst.key);
                 deferred.resolve(response);
             });
             return deferred.promise;
@@ -104,12 +107,10 @@
         };
 
         userInactiveCtrl.isInstSelect = function isInstSelect(institution){
-            return userInactiveCtrl.institutionSelect.key === institution.id;
+            return userInactiveCtrl.selectedInst.key === institution.id;
         };
 
         userInactiveCtrl.showMenu = function showMenu() {
-            console.log('showmenu');
-            
             var deferred = $q.defer();
             if(userInactiveCtrl.search) {
                 userInactiveCtrl.finalSearch = userInactiveCtrl.search;
@@ -122,14 +123,14 @@
 
         userInactiveCtrl.showFullInformation = function showFullInformation(institution){
            if(!_.isEmpty(userInactiveCtrl.institutions)){
-                return userInactiveCtrl.institutionSelect.key === institution.id;
+                return userInactiveCtrl.selectedInst.key === institution.id;
             }
             return false;
         };
 
-        userInactiveCtrl.getFullAddress = function getFullAddress(institution) {
-                var instObject = new Institution(institution);
-                return instObject.getFullAddress();
+        userInactiveCtrl.address = function () {
+            const instObject = new Institution(userInactiveCtrl.selectedInst);
+            return instObject.getSimpleAddress();
         };
 
         userInactiveCtrl.createInst = function createInst() {
@@ -146,9 +147,10 @@
         userInactiveCtrl.makeSearch = function () {
             var deferred = $q.defer();
             clearProperties();
-            InstitutionService.searchInstitutions(userInactiveCtrl.finalSearch, ACTIVE, 'institution').then(function success(response) {
-                userInactiveCtrl.institutions = response;
-                deferred.resolve(response);
+            InstitutionService.searchInstitutions(userInactiveCtrl.finalSearch, ACTIVE, 'institution')
+            .then(function success(institutions) {
+                userInactiveCtrl.institutions = institutions;
+                deferred.resolve(institutions);
             });
             return deferred.promise;
         };
@@ -160,7 +162,7 @@
 
         function clearProperties(){
             userInactiveCtrl.request = null;
-            userInactiveCtrl.institutionSelect = {};
+            userInactiveCtrl.selectedInst = {};
             userInactiveCtrl.hasInstSelect = false;
             userInactiveCtrl.wasSearched = true;
         }

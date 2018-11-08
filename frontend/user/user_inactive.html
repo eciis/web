@@ -1,43 +1,49 @@
 <md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
     <div layout-align="center center">
         <div layout="row" layout-align="center center">
-            <div layout="row" layout-align="center center">
-                <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
-                    md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
-                    <md-icon>keyboard_arrow_left</md-icon>
-                </md-button>
-                <md-card class="custom-card">
-                    <md-card-content layout="row" layout-align="center center">
-                        <div class="custom-card-content">
-                            <img class="custom-card-logo" src="/app/images/logowithname.png"/>
-                            <p>{{ userInactiveCtrl.getMessage() }}</p>
-                            <form>
-                                <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
-                                    <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" 
-                                        class="custom-card-input" autocomplete="off" required>
-                                    <md-icon id="search-inst-icon" ng-click="userInactiveCtrl.showMenu()"> search </md-icon>
-                                </md-input-container>
-                            </form>
-                            <md-content>
-                                <md-list flex>
-                                    <md-list-item class="md-3-line" >
-                                        <md-icon class="md-avatar-icon search-inst-avatar">account_balance</md-icon>
-                                        <div class="md-list-item-text" layout="column">
-                                            <p>Laboratorio de pratica de software - SPlab da Universidade Federal de Campina Grande UFCG</p>
+            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
+                md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
+                <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+            <md-card class="custom-card">
+                <md-card-content layout="row" layout-align="center center">
+                    <div class="custom-card-content">
+                        <img class="custom-card-logo" src="/app/images/logowithname.png"/>
+                        <p>{{ userInactiveCtrl.getMessage() }}</p>
+                        <form>
+                            <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
+                                <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" 
+                                    class="custom-card-input" autocomplete="off" required>
+                                <md-icon id="search-inst-icon" ng-click="userInactiveCtrl.showMenu()"> search </md-icon>
+                            </md-input-container>
+                        </form>
+                        <md-content id="inst-container" class="custom-scrollbar">
+                            <md-list class="md-dense" flex>
+                                <md-list-item class="md-3-line" 
+                                    ng-repeat="institution in userInactiveCtrl.institutions"
+                                    ng-click="userInactiveCtrl.selectInstitution(institution)">
+                                    <md-icon class="md-avatar-icon search-inst-avatar">
+                                        {{userInactiveCtrl.getInstIcon(institution)}}
+                                    </md-icon>
+                                    <div class="md-list-item-text">
+                                        <p class="inst-name">{{ institution.name }}</p>
+                                        <div ng-if="userInactiveCtrl.isInstSelect(institution)" >
+                                            <p class="limited-text">{{ institution.email }} </p>
+                                            <p class="limited-text">{{ userInactiveCtrl.address() }}</p>
                                         </div>
-                                    </md-list-item>
-                                </md-list>
-                            </md-content>
-                        </div>
-                    </md-card-content>
-                    <div class="custom-card-footer" layout-align="center">
-                        <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" 
-                            md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
-                            <md-icon>keyboard_arrow_left</md-icon>
-                        </md-button>
+                                    </div>
+                                </md-list-item>
+                            </md-list>
+                        </md-content>
                     </div>
-                </md-card> 
-            </div>
+                </md-card-content>
+                <div class="custom-card-footer" layout-align="center">
+                    <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" 
+                        md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </md-button>
+                </div>
+            </md-card> 
         </div>
     </div>
 </md-content>
@@ -78,9 +84,9 @@
                             <p id="institution-name">{{ institution.name }}</p>
                         </div>
                         <div ng-if="userInactiveCtrl.showFullInformation(institution)" class="md-list-item-text md-3-line">
-                            <p>{{ userInactiveCtrl.institutionSelect.email }}</p>
-                            <p id="actuation-area">{{ userInactiveCtrl.institutionSelect.actuation_area }}</p>
-                            <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.institutionSelect) }}</p>
+                            <p>{{ userInactiveCtrl.selectedInst.email }}</p>
+                            <p id="actuation-area">{{ userInactiveCtrl.selectedInst.actuation_area }}</p>
+                            <p>{{ userInactiveCtrl.getFullAddress(userInactiveCtrl.selectedInst) }}</p>
                         </div>
                     </div>
                 </div>

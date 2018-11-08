@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test NotificationService', function () {
-    var service, authService;
+    var service, authService, scope;
 
     var notification_to = {
         'entity_type' : 'REQUEST_INSTITUTION',
@@ -68,8 +68,9 @@
         spyOn(AuthService, '$onLogout');
     }));
 
-    beforeEach(inject(function(NotificationService, $firebaseArray) {
+    beforeEach(inject(function(NotificationService, $firebaseArray, $rootScope) {
         service = NotificationService;
+        scope= $rootScope.$new();
         var ref = firebase.database().ref();
         var notificationsRef = ref.child("notifications/key");
         service.firebaseArrayNotifications = $firebaseArray(notificationsRef)
@@ -103,12 +104,11 @@
             expect(notification_from.status).toEqual('READ');
 
             
-            const promise = service.markAllAsRead();
-            promise.then(function(){
+            service.markAllAsRead().then(function(){
                 expect(service.firebaseArrayNotifications.$save).toHaveBeenCalled();
                 expect(notification_from_to.status).toEqual('READ');
                 expect(notification_from.status).toEqual('READ');
-                expect(Utils.clearArray).toHaveBeenCalledWith(service.unreadNotifications);
+                expect(Utils.clearArray).toHaveBeenCalled();
                 done();
             });
         });

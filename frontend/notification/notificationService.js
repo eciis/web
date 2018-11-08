@@ -86,10 +86,9 @@
             const promises = service.unreadNotifications.map(function(notification){
                 return markAsRead(notification);
             });
-            Promise.all(promises).then(function() {
+            return Promise.all(promises).then(function() {
                 Utils.clearArray(service.unreadNotifications);
             });
-            return Promise.all(promises);
         };
 
         service.getAllNotifications = function getAllNotifications() {

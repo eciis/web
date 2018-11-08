@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, postService, http;
+    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, http, postService;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -34,15 +34,14 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, InstitutionService,
-            PostService, $mdDialog, $state, AuthService, $http, NotificationService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope,
+            PostService, $mdDialog, $state, AuthService, $http) {
         httpBackend = $httpBackend;
         http = $http;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
         postService = PostService;
-        httpBackend.expect('GET', '/api/user/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.when('GET', "/api/events?page=0&limit=5").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -59,16 +58,12 @@
             });
         };
 
-        spyOn(NotificationService, 'watchPostNotification').and.callFake(function() {
-            return {
-                then: function(callback) {
-                    callback();
-                }
-            };
-        });
+        spyOn($rootScope, '$on').and.callThrough();
 
         homeCtrl = createCtrl();
         httpBackend.flush();
+
+        expect($rootScope.$on).toHaveBeenCalled();
     }));
 
     afterEach(function() {
@@ -80,19 +75,6 @@
 
         it('should exist a user and his name is Tiago', function() {
             expect(homeCtrl.user.name).toEqual('Tiago');
-        });
-
-        it('should exist an post in posts array', function() {
-            expect(homeCtrl.posts.length).toBe(1);
-        });
-
-        it('should exist a post', function() {
-            expect(homeCtrl.posts).toContain({
-                author: 'Mayza Nunes',
-                author_key: '111111',
-                title: 'Post de Mayza',
-                text: 'Lorem ipsum'
-            });
         });
 
         it('should exist an institution in institutions array', function() {
@@ -134,29 +116,6 @@
             it('should be true the instMenuExpanded propertie', function() {
                 homeCtrl.expandInstMenu();
                 expect(homeCtrl.instMenuExpanded).toBe(true);
-            });
-        });
-
-        describe('loadMorePosts()', function() {
-            beforeEach(function() {
-                spyOn(postService, 'getNextPosts').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            callback({data: {posts: posts, next: false}});
-                        }
-                    };
-                });
-            });
-
-            it('Should call postService.getNextPosts()', function(done) {
-                var promise = homeCtrl.loadMorePosts();
-                var actualPage = 1;
-
-                promise.then(function success() {
-                    expect(postService.getNextPosts).toHaveBeenCalledWith(actualPage);
-                    done();
-                });
-                scope.$apply();
             });
         });
 

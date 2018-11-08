@@ -6,19 +6,12 @@
     <div flex flex-gt-md="70" layout-align="center top" layout="row">
       <div flex layout="column">
         <div>
-          <save-post is-dialog="false" posts="homeCtrl.posts" hide show-gt-sm></save-post>
-        </div>
-        <div layout="row" layout-align="center center" class="ng-if" ng-if="homeCtrl.showRefreshTimelineButton()">
-          <md-button flex md-colors="{background: 'teal-700'}" ng-click="homeCtrl.loadMorePosts(true)">
-            VOCÊ TEM NOVOS POSTS
-            <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
-          </md-button>
+          <save-post is-dialog="false" hide show-gt-sm></save-post>
         </div>
         <md-content flex id="content" class="body custom-scrollbar">
             <div flex layout="row">
-                <load-circle add-layout-fill="true" flex ng-show="homeCtrl.isLoadingPosts"></load-circle>
-                <post-timeline flex ng-if="!homeCtrl.isLoadingPosts" layout="column" posts="homeCtrl.posts" institution="false"
-                user="homeCtrl.user" add-post="true" load-more-posts='homeCtrl.loadMorePosts'></post-timeline>
+                <post-timeline flex layout="column" institution="false"
+                  user="homeCtrl.user"></post-timeline>
               <!-- LOADING CIRCLE -->
             </div>
         </md-content>

@@ -13,22 +13,8 @@
         notificationCtrl.notifications = [];
         notificationCtrl.allNotifications = [];
 
-        /** Add new notifications in array with unread notifications.
-         *  This function is used by NotificationService, always that service receive new notification.
-         * @param {Notification} notification The unread notification that should be added. 
-         */ 
-        notificationCtrl.addUnreadNotification = function addUnreadNotification(notification){
-            notificationCtrl.notifications.push(notification);
-        };
-
         notificationCtrl.markAsRead = function markAsRead(notification) {
-            var promise = NotificationService.markAsRead(notification);
-            promise.then(function success() {
-                _.remove(notificationCtrl.notifications, function find(found) {
-                    return found.$id === notification.$id;
-                });
-            });
-            return promise;
+            return NotificationService.markAsRead(notification);
         };
 
         notificationCtrl.showNotifications = function showNotifications($mdMenu, $event) {
@@ -38,9 +24,7 @@
         };
 
         notificationCtrl.clearAll = function clearAll() {
-            _.forEach(notificationCtrl.notifications, function(notification) {
-                notificationCtrl.markAsRead(notification);
-            });
+            NotificationService.markAllAsRead();
         };
 
         notificationCtrl.numberUnreadNotifications = function numberUnreadNotifications() {
@@ -53,8 +37,8 @@
         };
 
         (function main(){
-            NotificationService.watchNotifications(notificationCtrl.user.key, notificationCtrl.addUnreadNotification);
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
+            notificationCtrl.notifications =  NotificationService.getUnreadNotifications();
         })();
     });
 })();

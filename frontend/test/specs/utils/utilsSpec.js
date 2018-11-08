@@ -174,6 +174,19 @@
 			});
 		});
 	});
+
+	describe('clearArray()', function () {
+
+		it('should clear array', function () {
+			const emptyArray = [];
+			const elementsArray = ["element1", "element2"];
+
+			Utils.clearArray(emptyArray);
+			Utils.clearArray(elementsArray);
+			expect(emptyArray.length === 0).toBeTruthy();
+			expect(elementsArray.length === 0).toBeTruthy();			
+		});
+	});
 }));
 
 

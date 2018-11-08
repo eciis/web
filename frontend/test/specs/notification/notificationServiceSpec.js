@@ -75,16 +75,41 @@
         service.firebaseArrayNotifications = $firebaseArray(notificationsRef)
         service.firebaseArrayNotifications.push(notification_from_to);
         service.firebaseArrayNotifications.push(notification_from);
+        service.unreadNotifications.push(notification_from_to);
+        service.unreadNotifications.push(notification_from);
 
         expect(authService.$onLogout).toHaveBeenCalled();
     }));
 
     describe('Test markAsRead', function(){
         it('Mark message as read.', function() {
-            spyOn(service.firebaseArrayNotifications, '$save');
+            spyOn(service.firebaseArrayNotifications, '$save').and.callThrough();
+            expect(notification_from_to.status).toEqual('NEW');
+            expect(notification_from.status).toEqual('NEW');
+
             service.markAsRead(notification_from);
+
             expect(service.firebaseArrayNotifications.$save).toHaveBeenCalledWith(notification_from);
+            expect(notification_from_to.status).toEqual('NEW');
             expect(notification_from.status).toEqual('READ');
+        });
+    });
+
+    describe('Test markAllAsRead', function(){
+        it('Mark all message as read.', function(done) {
+            spyOn(service.firebaseArrayNotifications, '$save');
+            spyOn(Utils,'clearArray');
+            expect(notification_from_to.status).toEqual('NEW');
+            expect(notification_from.status).toEqual('READ');
+
+            
+            service.markAllAsRead().then(function(){
+                expect(service.firebaseArrayNotifications.$save).toHaveBeenCalled();
+                expect(notification_from_to.status).toEqual('READ');
+                expect(notification_from.status).toEqual('READ');
+                expect(Utils.clearArray).toHaveBeenCalledWith(service.unreadNotifications);
+                done();
+            });
         });
     });
 

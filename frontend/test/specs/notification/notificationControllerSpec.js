@@ -75,28 +75,14 @@
 
         it("should call getAllNotifications.", function() {
             spyOn(notificationService, 'getAllNotifications').and.callThrough();
-            spyOn(notificationService, 'watchNotifications').and.callThrough();
+            spyOn(notificationService, 'getUnreadNotifications').and.callThrough();
 
             notCtrl = createCtrl();
 
             expect(notificationService.getAllNotifications).toHaveBeenCalled();
-            expect(notificationService.watchNotifications).toHaveBeenCalledWith(user.key, notCtrl.addUnreadNotification);
+            expect(notificationService.getUnreadNotifications).toHaveBeenCalled();
             //The user don't have any notifications
             expect(_.isEmpty(notCtrl.notifications)).toBe(true);
-        });
-    });
-
-    describe('numberUnreadNotifications()', function() {
-
-        it("should be zero.", function() {
-            expect(notCtrl.numberUnreadNotifications()).toEqual(0);
-        });
-
-        it("should be one.", function() {
-            notificationService.firebaseArrayNotifications.push(postNotification);
-            notCtrl.notifications.push(postNotification);
-
-            expect(notCtrl.numberUnreadNotifications()).toEqual(1);
         });
     });
 

@@ -1,0 +1,24 @@
+<md-dialog>
+    <md-list>
+        <h4 md-colors="{color:'grey-700'}">Resultados da pesquisa</h4>
+        <md-list-item class="list-item-dense" ng-repeat="institution in institutions = (searchCtrl.institutions 
+            | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)"
+            style="margin-bottom: 1%;" md-colors="{background: 'grey-300'}">
+            <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)">
+                <md-icon class="md-avatar-icon" md-colors="{background: 'light-green-500', color: 'grey-50'}">
+                    account_balance
+                </md-icon>
+                <div layout="column" layout-align="center">
+                    <b hide-xs hide-sm>
+                        {{ institution.name | limitTo: 90}}{{institution.name.length > 90 ? '...' : ''}}</b>
+                    <b hide-gt-sm>
+                        {{ institution.name | limitTo: 50}}{{institution.name.length > 50 ? '...' : ''}}</b>
+                    <bolder md-colors="{color:'grey-700'}">{{ institution.email}}</bolder>
+                </div>
+            </div>
+        </md-list-item>
+        <md-list-item class="md-3-line" ng-if="institutions.length === 0">
+            <b>&bull; Nenhuma instituição encontrada</b>
+        </md-list-item>
+    </md-list>
+</md-dialog>

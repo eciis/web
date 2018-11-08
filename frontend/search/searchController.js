@@ -3,8 +3,8 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService,
-        brCidadesEstados, HttpService) {
+    app.controller("SearchController", function SearchController($state, InstitutionService,
+        brCidadesEstados, HttpService, $mdDialog) {
 
         var searchCtrl = this;
 
@@ -14,8 +14,6 @@
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
         searchCtrl.legalNature = [];
-        var actuationAreas;
-        var legalNatures;
         searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
@@ -57,6 +55,23 @@
                 refreshPreviousKeyword();
             }
         };
+
+        searchCtrl.searchFromMobile = (ev) => {
+            $mdDialog.show({
+                controller: SearchDialogController,
+                controllerAs: "searchCtrl",
+                templateUrl: '/app/search/search_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+            });
+        };
+
+        function SearchDialogController() {
+            const searchDialogCtrl = this;
+
+            searchDialogCtrl.institutions = searchCtrl.institutions;
+        }
 
         /**
          * This function verifies if there is any changes in the search_keyword.

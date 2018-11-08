@@ -497,6 +497,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        //initServiceWorker();
     })();
 })();

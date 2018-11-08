@@ -4,27 +4,21 @@
     var app = angular.module('app');
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-            InviteService, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, ProfileService, $q, CropImageService, ImageService) {
+        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
         var institutionCtrl = this;
-        var content = document.getElementById("instPage") || {};
-        var morePosts = true;
-        var actualPage = 0;
-        
+
+        institutionCtrl.content = document.getElementById("instPage");
+
         institutionCtrl.institution = null;
-        institutionCtrl.posts = [];
         institutionCtrl.isUserFollower = false;
         institutionCtrl.isMember = false;
         institutionCtrl.portfolioUrl = null;
         institutionCtrl.showFullDescription = false;
         institutionCtrl.showFullData = false;
-        institutionCtrl.isLoadingPosts = true;
         institutionCtrl.instLegalNature = "";
         institutionCtrl.instActuationArea = "";
         institutionCtrl.isLoadingData = true;
         institutionCtrl.isLoadingCover = false;
-        
-        var patch;
-        var observer;
                 
         var currentInstitutionKey = $state.params.institutionKey;
         institutionCtrl.user = AuthService.getCurrentUser();
@@ -46,6 +40,14 @@
             });
         }
 
+        /**
+         * Returns the key of the current institution
+         * that the controller is responsible for.
+         */
+        institutionCtrl.getInstKey = () => {
+            return currentInstitutionKey;
+        };
+
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
             if(institutionCtrl.portfolioUrl) {
@@ -62,33 +64,6 @@
             institutionCtrl.portfolioUrl = url;
         }
 
-        institutionCtrl.loadMorePosts = function loadMorePosts() {
-            var deferred = $q.defer();
-
-            if (morePosts) {
-                InstitutionService.getNextPosts(currentInstitutionKey, actualPage).then(function success(response) {
-                    actualPage += 1;
-                    morePosts = response.next;
-
-                    _.forEach(response.posts, function(post) {
-                        institutionCtrl.posts.push(post);
-                    });
-
-                    institutionCtrl.isLoadingPosts = false;
-                    deferred.resolve();
-                }, function error(response) {
-                    MessageService.showToast(response.msg);
-                    deferred.reject();
-                });
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred.promise;
-        };
-
-        institutionCtrl.loadMorePosts();
-        Utils.setScrollListener(content, institutionCtrl.loadMorePosts);
         loadInstitution();
 
         institutionCtrl.isAdmin = function isAdmin() {
@@ -180,7 +155,7 @@
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
             institutionCtrl.stateView = "events";
-            $state.go('app.institution.events', {institutionKey: institutionKey, posts: institutionCtrl.posts});
+            $state.go('app.institution.events', {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {

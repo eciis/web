@@ -198,5 +198,15 @@ var Utils = {
      */
     isMobileScreen: function isMobileScreen() {
         return screen.width <= 960;
+    },
+
+    /**
+     * Clear array
+     * @param {array} the array that will be clean.
+     */
+    clearArray: function clearArray(array) {
+        while(array.length > 0){
+            array.pop();
+        }
     }
 };

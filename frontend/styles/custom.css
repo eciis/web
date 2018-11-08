@@ -909,21 +909,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     max-width: 25rem; 
 }
 
-.notification-icon {
-    font-size: 20px; 
-    color:white;
-    vertical-align: super;
-}
-
-.notification-icon-bg {
-    background: #009688; 
-    width: 21px; 
-    height: 21px; 
-    padding: 4px; 
-    margin-top: 4px; 
-    border-radius: 50%;
-}
-
 .grey-background {
    background: #EEEEEE;
 }
@@ -1045,10 +1030,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     margin-top: 3px;
 }
 
-.unread-notification {
-    background: #E0E0E0;
-}
-
 .hollow-button {
     border: solid; 
     height: 35px; 
@@ -1084,7 +1065,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 
 .hr-status-bar {
-    min-width: 1em; 
+    min-width: 1em;
     width: 20%;
 }
 
@@ -1137,7 +1118,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     .custom-card-footer, .custom-next-btn {
         display: inherit;
     }
-    
+
     .custom-card-back-btn {
         margin: 1.2em 0 0 0;
     }

@@ -1,0 +1,30 @@
+<md-list id="list-padding" flex>
+    <md-list-item title="{{notificationListCtrl.format(notification)}}" class="md-3-line" id="notification-list-item"
+        ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp' | filter: notificationListCtrl.keyword" 
+        ng-click="notificationListCtrl.action(notification, $event)" flex-xs ng-class="notification.status === 'READ'? '': 'unread-notification'">    
+        <img ng-src="{{notification.from.photo_url}}" class="md-avatar" id="image-notification"/>
+            <div class="md-list-item-text" layout="column">
+                <p><b style="font-size:18px;">{{ notification.from.name }}</b></p>
+                <!-- notification.current_institution belongs to the new notification architecture. 
+                    notification.from belongs to old architecture. DATE: 10/05/2018-->
+                <p>
+                    <b id="institution-name-notification">
+                    {{ notification.current_institution.name || notification.from.institution_name }}</b>
+                </p>
+                <div layout="row">
+                    <div class="notification-icon-bg">
+                        <md-icon class="notification-icon">{{notificationListCtrl.getIcon(notification.entity_type)}}</md-icon>
+                    </div>
+                    <div id="info-notification">
+                        <p style="font-size: 10px;">
+                            {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
+                            <br />
+                            <b style="font-size: 11px;">
+                                {{ notificationListCtrl.getLimitedString(notificationListCtrl.getFormattedMessage(notification), notificationListCtrl.lengthTextNotification) }}
+                            </b>
+                        </p>
+                    </div>
+                </div>
+            </div>    
+    </md-list-item>
+</md-list>

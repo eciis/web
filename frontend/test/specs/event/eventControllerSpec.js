@@ -88,7 +88,6 @@
             });
         }
 
-        state.params.posts = [];
         eventCtrl = createCtrl();
         eventCtrl.showImage = true;
         eventCtrl.events = [];
@@ -113,7 +112,6 @@
             expect(eventService.getEvents).toHaveBeenCalledWith(0, undefined);
 
             expect(eventCtrl.events).toEqual([event, other_event]);
-            expect(eventCtrl.posts).toEqual([]);
         });
     });
 
@@ -138,8 +136,6 @@
             // should only have one event because of the institution's events.
             expect(eventCtrl.events.length).toBe(1);
             expect(eventCtrl.events).toEqual([event]);
-            expect(eventCtrl.posts).toEqual([]);
-            
         });
     });
 

@@ -10,18 +10,6 @@
         service.posts = [];
         service.user = AuthService.getCurrentUser();
 
-        service.get = function getPosts() {
-            return HttpService.get("/api/user/timeline");
-        };
-
-        service.getNextPosts = function getNextPosts(page) {
-            var promise = HttpService.get("/api/user/timeline?page=" + page + "&limit=" + LIMIT);
-            promise.then(function success(response) {
-                service.posts = response;
-            });
-            return promise;
-        };
-
         service.createPost = function createPost(post) {
             var institutionName = service.user.current_institution ? service.user.current_institution.name : "";
             var body = {

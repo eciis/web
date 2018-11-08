@@ -107,7 +107,7 @@
                 expect(service.firebaseArrayNotifications.$save).toHaveBeenCalled();
                 expect(notification_from_to.status).toEqual('READ');
                 expect(notification_from.status).toEqual('READ');
-                expect(Utils.clearArray).toHaveBeenCalled();
+                expect(Utils.clearArray).toHaveBeenCalledWith(service.unreadNotifications);
                 done();
             });
         });

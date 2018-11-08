@@ -190,5 +190,15 @@ var Utils = {
         var supportGtExtraLargeScreen = screenWidth > extraLargeScreen && greatestWordLength >= maxLengthWordToGtExtraLargeScreen
 
         return supportSmallScreen || supportMediumScreen || supportLargeScreen || supportExtraLargeScreen || supportExtraLargeScreen || supportGtExtraLargeScreen;
+    },
+
+    /**
+     * Clear array
+     * @param {array} the array that will be clean.
+     */
+    clearArray: function clearArray(array) {
+        while(array.length > 0){
+            array.pop();
+        }
     }
 };

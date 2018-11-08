@@ -12,6 +12,7 @@
 
     var user = {
         name: 'Tiago',
+        key: 'key',
         follows: institutions
     };
 

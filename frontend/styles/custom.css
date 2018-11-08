@@ -946,20 +946,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     max-width: 25rem; 
 }
 
-.notification-icon {
-    font-size: 20px; 
-    color:white;
-}
-
-.notification-icon-bg {
-    background: #009688; 
-    width: 21px; 
-    height: 21px; 
-    padding: 4px; 
-    margin-top: 4px; 
-    border-radius: 50%;
-}
-
 .grey-background {
    background: #EEEEEE;
 }
@@ -1079,10 +1065,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     color: #757575;
     font-size: 14px;
     margin-top: 3px;
-}
-
-.unread-notification {
-    background: #E0E0E0;
 }
 
 .hollow-button {

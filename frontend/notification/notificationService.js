@@ -89,7 +89,7 @@
             Promise.all(promises).then(function() {
                 Utils.clearArray(service.unreadNotifications);
             });
-            return promises;
+            return Promise.all(promises);
         };
 
         service.getAllNotifications = function getAllNotifications() {

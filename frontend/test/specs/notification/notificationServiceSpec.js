@@ -104,7 +104,7 @@
 
             
             const promise = service.markAllAsRead();
-            Promise.all(promise).then(function(){
+            promise.then(function(){
                 expect(service.firebaseArrayNotifications.$save).toHaveBeenCalled();
                 expect(notification_from_to.status).toEqual('READ');
                 expect(notification_from.status).toEqual('READ');

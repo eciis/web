@@ -31,8 +31,7 @@
             return HttpService.delete(POST_URI + postKey + '/comments/' + commentId);
         };
 
-        service.replyComment = function createComment(postKey, text, institutionKey, commentId) {
-            var deferred = $q.defer();
+        service.replyComment = function replyComment(postKey, text, institutionKey, commentId) {
             var body = {
                 replyData: {
                     text: text, 

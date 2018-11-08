@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-br" >
 <head>
   <meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
@@ -37,7 +38,16 @@
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
   <link rel="stylesheet" type="text/css" href="app/user/config-profile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/management_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/post/post_details.css">
+  <link rel="stylesheet" type="text/css" href="app/post/create_post.css">
+  <link rel="stylesheet" type="text/css" href="app/post/pdf_view.css">
+  <link rel="stylesheet" type="text/css" href="app/survey/survey.css">
+  <link rel="stylesheet" type="text/css" href="app/main/main.css">
+  <link rel="stylesheet" type="text/css" href="app/comment/comment.css">
+  <link rel="stylesheet" type="text/css" href="app/auth/login.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
@@ -128,6 +138,7 @@
   <script src="app/auth/authService.js"></script>
   <script src="app/auth/loginController.js"></script>
   <script src="app/auth/resetPasswordController.js"></script>
+  <script src="app/auth/emailVerificationController.js"></script>
 
   <!-- User -->
   <script src="app/user/userService.js"></script>
@@ -151,7 +162,6 @@
   <script src="app/post/postPageController.js"></script>
   <script src="app/post/timelineDirective.js"></script>
   <script src="app/post/pdfViewDirective.js"></script>
-  <script src="app/post/commentDirective.js"></script>
   <script src="app/post/sharePostController.js"></script>
   <script src="app/post/postsFactory.js"></script>
   <script src="app/post/postEventsConstants.js"></script>
@@ -201,6 +211,7 @@
 
   <!-- Comment Library -->
   <script src="app/comment/commentService.js"></script>
+  <script src="app/comment/comment.component.js"></script>
 
   <!-- Upload Library -->
   <script src="app/imageUpload/imageService.js"></script>

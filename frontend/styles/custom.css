@@ -1,3 +1,10 @@
+.fill-screen {
+    margin: 0;
+    width: 100%;
+    min-height: 100vh;
+    height: 100vh;
+}
+
 .card {
     padding-top: 20px;
     margin: 10px 0 20px 0;
@@ -190,6 +197,13 @@
     text-align: left;
     white-space: pre-line;
   }
+
+.pdf-text {
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .post-deleted {
     background-color:#F5F5F5;
@@ -457,7 +471,7 @@ a:active {
 .youtube-player {
     position: relative;
     /* Use 75% for 4:3 videos */
-    height: 55%;
+    height: 100%;
     overflow: hidden;
     max-width: 100%;
     margin: 5px;
@@ -523,26 +537,6 @@ a:active {
    line-height:18px;
    border-radius:50%;
    border: 2px solid #EFEBE9;
-}
-
-.counter-likes-comments {
-    position:relative;
-}
-
-.counter-likes-comments[data-badge]:after {
-    content:attr(data-badge);
-    position:absolute;
-    top:-10px;
-    right:-10px;
-    font-size:.6em;
-    background:#004D40;
-    color:white;
-    width:18px;
-    height:18px;
-    text-align:center;
-    line-height:18px;
-    border-radius:50%;
-    box-shadow:0 0 1px #333;
 }
 
 .counter-of-notifications {
@@ -662,6 +656,7 @@ a:active {
 .event-item .event-day {
     margin-bottom: -35px;
     font-size: 23px;
+    height: 23px;
     font-weight: bold;
     margin: 1px;
 }
@@ -700,11 +695,6 @@ a:active {
     margin-top: -1px;
     margin-left: 40px;
     margin-right: 40px;
-}
-
-.like-comment-text {
-    font-size: 12px;
-    margin-left: 14px;
 }
 
 .sm-label {
@@ -785,7 +775,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .sm-icon-button md-icon {
     font-size: 20px;
-    margin: 6px;
+    margin: 4px 6px 6px 6px;
     width: unset !important;
     min-width: unset !important;
     color: white;
@@ -800,17 +790,9 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
 .xs-icon-button md-icon {
     font-size: 11px;
-    margin: auto;
+    margin: -2.2em auto auto auto;
     height: 11px;
     min-height: 10px;
-}
-
-.xs-delete-icon-justify md-icon {
-    margin: 2 1 0 0;
-}
-
-.xs-edit-icon-justify md-icon {
-    margin: 2px;
 }
 
 .md-title {
@@ -832,29 +814,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     margin: 0px;
 }
 
-.login-button {
-    padding-left: 5px;
-    margin: 3px 0 3px 0;
-    text-align: left;
-}
-
 .address-another-country{
     height: 34px;
-}
-
-.login-button md-icon {
-    min-height: 10px;
-    min-width: 10px;
-    width: 12px;
-    height: 12px;
-    font-size: 12px;
-}
-
-.login-button span {
-    font-size: 10px;
-    color: white;
-    margin-left: 10px;
-    font-weight: bold;
 }
 
 .margin {
@@ -932,6 +893,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .dialog-transparent-without-shadow {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
+    max-width: 100% !important;
+    max-height: 97% !important;
 }
 
 .share-post{
@@ -1086,7 +1049,91 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     height: 15vh;
 }
 
-.sm-multiple-choice {
-    font-size: 11px;
-    margin-left: 10px;
+.flat-btn {
+    background: none;
+    border: 0;
+    padding-left: initial;
+}
+.flat-btn:hover {
+    background-color: #efefef;
+}
+
+.input-text-area {
+    max-height: 10em;
+    overflow-y: auto;
+    resize: none;
+}
+
+.hr-status-bar {
+    min-width: 1em;
+    width: 20%;
+}
+
+.custom-card {
+    width: 30%;
+    color: black;
+}
+
+.custom-card-logo {
+    margin: 1em;
+    width: 90%;
+}
+
+.custom-container {
+    padding: 0 0.3em;
+}
+
+.custom-card-content {
+    width: 80%;
+}
+
+.custom-card-footer {
+    height: 3em;
+    background-color: #E6E6E6;
+    display: none;
+}
+
+.custom-card-back-btn {
+    margin: 0 -2.5em 0 0;
+}
+
+.custom-card-input-container {
+    margin: 0;
+}
+
+.custom-card-input {
+    border-bottom-color: #009688 !important;
+}
+
+/* Smartphones */
+@media screen and (max-width: 420px) {
+    .custom-card {
+        width: 100%;
+    }
+
+    .custom-card-content {
+        width: 85%;
+    }
+
+    .custom-card-footer, .custom-next-btn {
+        display: inherit;
+    }
+
+    .custom-card-back-btn {
+        margin: 1.2em 0 0 0;
+    }
+}
+
+/* Ipad, Ipad Pro */
+@media screen and (min-width: 421px) and (max-width: 1024px) {
+    .custom-card {
+        width: 65%;
+    }
+}
+
+/* Ipad Pro (L) */
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    .custom-card {
+        width: 35%;
+    }
 }

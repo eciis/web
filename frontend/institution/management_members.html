@@ -6,7 +6,7 @@
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
        ng-click="manageMemberCtrl.toggleElement('showSendInvite')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>
+          <h1 id="manage-inst-titles">
             <md-icon>send</md-icon>
             Enviar convite
           </h1>
@@ -46,8 +46,8 @@
                     ngf-max-files="1"
                     ngf-select="manageMemberCtrl.addCSV($files, $ev)">
                     <div layout="row">
-                      <md-icon style="color: #7CB342; font-size: 45px; margin-right: 30px; margin-top: 15px;">file_upload</md-icon>
-                      <p style="font-size: 20px;">ENVIAR ENDEREÇOS EM CSV</p>
+                      <md-icon id="upload-csv-icon">file_upload</md-icon>
+                      <p id="upload-csv-text">ENVIAR ENDEREÇOS EM CSV</p>
                     </div>
                   </md-button>
                 </md-list-item>
@@ -65,7 +65,7 @@
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row"
         class="clickable-no-hover" ng-click="manageMemberCtrl.toggleElement('showAdministrator')">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>
+          <h1 id="manage-inst-titles">
             <md-icon>account_circle </md-icon>
             Administrador
           </h1>
@@ -77,22 +77,13 @@
       </md-toolbar>
       <md-card-content ng-show="manageMemberCtrl.showAdministrator">
         <md-list flex>
-          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+          <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
             ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)" flex-xs>
             <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.institution.admin.photo_url || '/app/images/avatar.png'}}" 
-              class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-            <div class="md-list-item-text" layout="column" style="margin-top: 12px;">
-              <b style="position: relative; font-size: 15px;">
-                <span style="line-height: 1.0;" hide show-gt-xs>
-                  {{ manageMemberCtrl.institution.admin.name }}
-                </span>
-                <span style="line-height: 1.0;" hide show-xs>
-                  {{ manageMemberCtrl.limitString(manageMemberCtrl.institution.admin.name, 45) }}
-                </span>
-              </b>
-              <span style="position: relative; font-size: 15px; margin-top: -10px;">
-                {{ manageMemberCtrl.institution.admin.email[0] }}
-              </span>
+              class="md-avatar manage-members-img"/>
+            <div id="manage-username-text" class="md-list-item-text manage-inst-box">
+              <h3 >{{ manageMemberCtrl.institution.admin.name }}</h3>
+              <p id="manage-user-email-text">{{ manageMemberCtrl.institution.admin.email[0] }}</p>
             </div>
             <div layout="row" layout-align="end center" flex hide show-gt-xs>
               <p class="status-invite-adm" style="line-height: 21px; padding: 5px;" md-colors="{color: 'teal-500'}">
@@ -107,16 +98,10 @@
               <div style="width: 5px; background-color: white;"></div>
               <div layout="row" layout-align="start center"  flex>
                 <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)}}" 
-                  class="md-avatar" style="margin: 0 15px 0 px; width: 60px; height: 60px;"/>
-                <div layout="column" style="margin-top: 12px;">
-                  <b style="position: relative; font-size: 15px;">
-                    <span style="line-height: 1.0;">
-                      {{ manageMemberCtrl.getMemberName(invite.invitee_key) }}
-                    </span>
-                  </b>
-                  <span style="position: relative; margin-top: -10px; font-size: 15px;">
-                    {{ invite.invitee }}
-                  </span>
+                  class="md-avatar manage-members-img"/>
+                <div id="manage-username-text" class="md-list-item-text manage-inst-box">
+                  <h3 >{{ manageMemberCtrl.getMemberName(invite.invitee_key) }}</h3>
+                  <p id="manage-user-email-text">{{ invite.invitee }}</p>
                 </div>
                 <div layout="row" layout-align="end center" flex hide show-gt-xs>
                   <p class="status-invite-adm" style="margin-right: -6px; line-height: 21px; padding: 5px;"
@@ -148,7 +133,7 @@
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
         ng-click="manageMemberCtrl.toggleElement('showMembers')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>
+          <h1 id="manage-inst-titles">
             <md-icon>account_circle </md-icon>
             Gerenciar Membros
           </h1>
@@ -167,25 +152,27 @@
             </md-input-container>
           </form>
         </div>
-        <md-card-content style="margin-top: -40px;" layout-margin>
-          <md-list flex>
-            <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
-              ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" flex-xs>
-              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-              <div layout="column">
-                 <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
-                 <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+        <md-card-content id="manage-member-card" class="custom-scrollbar manage-member-content">
+          <md-list>
+            <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
+              ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" ng-click="manageMemberCtrl.showUserProfile(member.key, $event)">
+              <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar manage-members-img"/>
+              <div id="manage-username-text" class="md-list-item-text manage-inst-box">
+                 <h3 >{{ member.name }}</h3>
+                 <p id="manage-user-email-text">{{ member.email[0]}}</p>
               </div>
-              <md-button class="md-icon-button md-secondary" title="Remover usuário"
-                  ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
-                  layout-align="center center"
-                  ng-if="!manageMemberCtrl.isAdmin(member)">
-                <md-icon>delete</md-icon>
-              </md-button>
-              <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)" class="md-icon-button md-secondary"
-              title="Ver perfil" layout-align="center center">
-                <md-icon>more_horizontal</md-icon>
-              </md-button>
+              <div layout-align="end end" style="width:15%;">
+                <md-button class="md-icon-button" title="Remover usuário"
+                    ng-click="manageMemberCtrl.openRemoveMemberDialog($event, member)"
+                    ng-if="!manageMemberCtrl.isAdmin(member)">
+                  <md-icon>delete</md-icon>
+                </md-button>
+                <md-button ng-click="manageMemberCtrl.showUserProfile(member.key, $event)"
+                class="md-icon-button"
+                title="Ver perfil" layout-align="center center">
+                  <md-icon>more_horizontal</md-icon>
+                </md-button>
+              </div>
             </md-list-item>
           </md-list>
         </md-card-content>
@@ -196,7 +183,7 @@
       <md-toolbar md-colors="{background: 'teal-500'}" layout="row" 
         ng-click="manageMemberCtrl.toggleElement('showInvites')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>
+          <h1 id="manage-inst-titles">
             <md-icon>email</md-icon>
             Convites enviados</h1>
           <span flex md-truncate></span>
@@ -205,15 +192,14 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showInvites" 
-           style="overflow: auto; max-height: 220px;" class="custom-scrollbar">
+      <md-card-content ng-show="manageMemberCtrl.showInvites" class="custom-scrollbar manage-member-content">
         <md-list>
-          <md-list-item class="md-2-line" ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
-            <md-icon class="md-avatar-icon" style="margin-top: 2px"
-            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
-            <div class="md-list-item-text">
+          <md-list-item class="md-2-line manage-members-margin" md-colors="{background: 'grey-300'}"
+          ng-repeat="invite in manageMemberCtrl.sent_invitations" ng-click="null">
+            <img title="{{invite.invitee}}" ng-src="app/images/avatar.png" class="md-avatar manage-members-img"/>
+            <div id="manage-username-text" class="md-list-item-text">
               <h3> {{ invite.invitee }} </h3>
-              <p> Convidado por: {{invite.sender_name}}</p>
+              <p id="manage-user-email-text"> Convidado por: {{invite.sender_name}}</p>
             </div>
             <div layout-align="end center">
               <md-button class="md-raised" ng-click="manageMemberCtrl.resendInvite(invite.key, $event)">
@@ -229,7 +215,7 @@
       <md-toolbar md-colors="(manageMemberCtrl.hasRequested()) ? {background: 'light-green-500'} : {background: 'teal-500'}" layout="row"
         ng-click="manageMemberCtrl.toggleElement('showRequests')" class="clickable-no-hover">
         <div class="md-toolbar-tools" flex layout="row" layout-align="center center">
-          <h1>
+          <h1 id="manage-inst-titles">
             <md-icon ng-class="(manageMemberCtrl.hasRequested()) ? 'notification-badge' : ''" data-badge>feedback</md-icon>
             <span md-colors="{color: 'grey-50'}">Convites requisitados</span>
           </h1>
@@ -239,13 +225,12 @@
           </md-button>
         </div>
       </md-toolbar>
-      <md-card-content ng-show="manageMemberCtrl.showRequests"
-          style="overflow: auto; max-height: 270px;" class="custom-scrollbar">
+      <md-card-content ng-show="manageMemberCtrl.showRequests" class="manage-member-content custom-scrollbar">
         <md-list flex>
-          <md-list-item ng-repeat="request in manageMemberCtrl.requests" ng-click="manageMemberCtrl.openAcceptRequestDialog(request, $event)" class="md-3-line">
-            <md-icon class="md-avatar-icon"
-            md-colors="{background: 'light-green-500', color: 'grey-50'}">account_box</md-icon>
-            <div class="md-list-item-text" layout="column">
+          <md-list-item class="md-2-line manage-members-margin" ng-repeat="request in manageMemberCtrl.requests"
+            ng-click="manageMemberCtrl.openAcceptRequestDialog(request, $event)">
+            <img title="{{request.sender_name}}" ng-src="app/images/avatar.png" class="md-avatar manage-members-img"/>
+            <div id="manage-username-text" class="md-list-item-text" layout="column">
               <h3>{{ request.sender_name}}</h3>
               <h4>Cargo atual: {{ request.office}}</h4>
               <p>Email institucional: {{ request.institutional_email}}</p>

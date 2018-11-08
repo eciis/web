@@ -36,7 +36,7 @@
               </div>
               <div layout="row" ng-repeat="event in homeCtrl.events | filter: homeCtrl.eventInProgress" class="event-item">
                 <div layout="column">
-                  <div layout-align="center center" style="padding: 3px;" class="rounded-circle event-date">
+                  <div layout="column" layout-align="center center" style="padding: 3px;" class="rounded-circle event-date">
                     <span class="event-day">
                       {{ event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
                     </span>

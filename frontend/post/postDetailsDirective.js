@@ -132,8 +132,17 @@
             return postDetailsCtrl.post.type_survey;
         };
 
+        /**
+         * Show the comment input field if the post comments or the 
+         * post page are being showed, besides that the post must not
+         * be deleted, be of the type SURVEY or have its institution
+         * on the inactive state
+         */
         postDetailsCtrl.showCommentInput = function showCommentInput() {
-            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
+            return (postDetailsCtrl.showComments || postDetailsCtrl.isPostPage) && 
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
+                !postDetailsCtrl.isInstInactive() && 
+                !postDetailsCtrl.showSurvey();
         };
 
         postDetailsCtrl.showPost = function showPost() {
@@ -145,11 +154,15 @@
                      postDetailsCtrl.showPost();
         };
 
+        /**
+         * Show the delete button if the user has the necessary permissions
+         * and if the post is not deleted or its institution on state inactive.
+         */
         postDetailsCtrl.showButtonDelete = function showButtonDelete() {
             const hasInstitutionPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_INST_PERMISSION, postDetailsCtrl.post.institution_key);
             const hasPostPermission = postDetailsCtrl.user.hasPermission(REMOVE_POST_BY_POST_PERMISSION, postDetailsCtrl.post.key);
             const hasPermission = hasInstitutionPermission || hasPostPermission;
-            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
+            return hasPermission && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && !postDetailsCtrl.isInstInactive();
         };
 
         postDetailsCtrl.showActivityButtons = function showActivityButtons() {
@@ -362,6 +375,18 @@
                 postDetailsCtrl.isLoadingComments = true;
             });
             return promise;
+        };
+
+        /**
+         * Function to show post comments or redirect to post page.
+         * If the screen width less than 600 pixels (mobile devices), redirect to post page
+         * otherwise show all post comments.
+         */
+        postDetailsCtrl.showCommentsOrRedirectToPostPage = function showCommentsOrRedirect() {
+            if (window.screen.width > 600)
+                return postDetailsCtrl.getComments();
+            else
+                postDetailsCtrl.goToPost(postDetailsCtrl.post); 
         };
 
         postDetailsCtrl.getComments = function getComments() {

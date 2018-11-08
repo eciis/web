@@ -132,7 +132,7 @@
             var auth_user = user || authObj.$getAuth();
             auth_user.sendEmailVerification().then(
             function success() {
-                MessageService.showToast('Email de verificação enviado para o seu email.');
+                $state.go("email_verification");
             }, function error(error) {
                 console.error(error);
             });

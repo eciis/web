@@ -1,40 +1,24 @@
-<md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
+<md-content id="search-inst-content" class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
     <div layout-align="center center">
         <div layout="row" layout-align="center center">
             <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
                 md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
                 <md-icon>keyboard_arrow_left</md-icon>
             </md-button>
-            <md-card class="custom-card">
+            <md-card id="search-inst-card" class="custom-card">
                 <md-card-content layout="row" layout-align="center center">
                     <div class="custom-card-content">
-                        <img class="custom-card-logo" src="/app/images/logowithname.png"/>
+                        <img id="search-inst-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
                         <p>{{ userInactiveCtrl.getMessage() }}</p>
-                        <form>
-                            <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
-                                <input placeholder="Busque uma instituição" ng-model="userInactiveCtrl.search" 
-                                    class="custom-card-input" autocomplete="off" required>
-                                <md-icon id="search-inst-icon" ng-click="userInactiveCtrl.showMenu()"> search </md-icon>
-                            </md-input-container>
-                        </form>
-                        <md-content id="inst-container" class="custom-scrollbar">
-                            <md-list class="md-dense" flex>
-                                <md-list-item class="md-3-line" 
-                                    ng-repeat="institution in userInactiveCtrl.institutions"
-                                    ng-click="userInactiveCtrl.selectInstitution(institution)">
-                                    <md-icon class="md-avatar-icon search-inst-avatar">
-                                        {{userInactiveCtrl.getInstIcon(institution)}}
-                                    </md-icon>
-                                    <div class="md-list-item-text">
-                                        <p class="inst-name">{{ institution.name }}</p>
-                                        <div ng-if="userInactiveCtrl.isInstSelect(institution)" >
-                                            <p class="limited-text">{{ institution.email }} </p>
-                                            <p class="limited-text">{{ userInactiveCtrl.address() }}</p>
-                                        </div>
-                                    </div>
-                                </md-list-item>
-                            </md-list>
-                        </md-content>
+
+                        <search-institution on-select="userInactiveCtrl.onSelect"></search-institution>
+
+                        <div layout="row" layout-align="center center" ng-if="userInactiveCtrl.isInstSelected()">
+                            <md-button class="md-raised search-inst-btn" md-colors="{background: 'teal-500'}"
+                                ng-click="null">
+                                AVANÇAR
+                            </md-button>
+                        </div>
                     </div>
                 </md-card-content>
                 <div class="custom-card-footer" layout-align="center">

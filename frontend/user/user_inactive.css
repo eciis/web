@@ -1,41 +1,23 @@
-#search-container {
-    width: 90%;
-}
-
-#inst-container {
-    max-height: 10em;
-}
-
-#search-inst-icon {
-    display:inline-block;
-    cursor: pointer;
-    color: #009688;
-}
-
-#search-inst-icon:active { 
-    background-color: #EEEEEE;
-    border-radius: 50%;
-}
-
-.search-inst-avatar {
-    background: #8BC34A !important;
-}
-
-.inst-name {
-    display: block;
-    text-overflow: ellipsis;
-    word-wrap: break-word;
-    overflow: hidden;
-    max-height: 5em;
-}
-
-.limited-text {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+#search-inst-content {
+    overflow-y: hidden;
 }
 
 
+@media screen and (max-width: 320px) {
+    .search-inst-btn {
+        margin-bottom: -0.5em;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    #search-inst-card {
+        width: 95%;
+    }
+
+    #search-inst-logo {
+        width: 80%;
+    }
+}
 
 
 

@@ -11,43 +11,23 @@
         
         userInactiveCtrl.isFinished = false;
         userInactiveCtrl.choicedInst = false;
-        userInactiveCtrl.search = "";
-        userInactiveCtrl.hasInstSelect = false;
         userInactiveCtrl.wasSearched = false;
         userInactiveCtrl.institutions = [];
         userInactiveCtrl.requestsOfSelectedInst = [];
         userInactiveCtrl.request = null;
         userInactiveCtrl.selectedInst = {};
-        var ACTIVE = 'active';
 
         userInactiveCtrl.getMessage = function () {
             const fistMsg = "Busque uma instituição que você faz parte.";
             return fistMsg;
         };
 
-        userInactiveCtrl.getInstIcon = function (inst) {
-            return userInactiveCtrl.isInstSelect(inst) ? 'done' : 'account_balance';
-        }
-
         userInactiveCtrl.logout = function logout() {
             AuthService.logout();
         };
 
-        userInactiveCtrl.confirmInst =  function confirmInst(){
-            if(userInactiveCtrl.hasInstSelect){
-                userInactiveCtrl.choicedInst = true;
-            } else {
-                MessageService.showToast("Escolha uma instituição.");
-            }
-        };
-
         userInactiveCtrl.showRequestUser =  function showRequestUser(){
             return userInactiveCtrl.choicedInst && !userInactiveCtrl.isFinished;
-        };
-
-        userInactiveCtrl.showButtonNext =  function showButtonNext(){
-            var hasInstFound = userInactiveCtrl.institutions.length > 0;
-            return !userInactiveCtrl.choicedInst && hasInstFound;
         };
 
         userInactiveCtrl.sendRequest = function sendRequest() {
@@ -84,53 +64,31 @@
             }
         };
 
-        userInactiveCtrl.selectInstitution = function selectInstitution(institution){
-            var deferred = $q.defer();
-            InstitutionService.getInstitution(institution.id).then(function success(response) {
-                userInactiveCtrl.selectedInst = response;
-                userInactiveCtrl.hasInstSelect = true;
-                userInactiveCtrl.showFullInformation(institution);
-                userInactiveCtrl.request = {
-                    institution_name: institution.name
-                };
-                getRequests(userInactiveCtrl.selectedInst.key);
-                deferred.resolve(response);
-            });
-            return deferred.promise;
-        };
+
+        // userInactiveCtrl.selectInstitution = function (institution){
+        //     InstitutionService.getInstitution(institution.id)
+        //     .then(function success(response) {
+        //         userInactiveCtrl.selectedInst = response;
+        //         userInactiveCtrl.request = {
+        //             institution_name: institution.name
+        //         };
+        //         getRequests(userInactiveCtrl.selectedInst.key);
+        //     });
+        // };
+
+        userInactiveCtrl.isInstSelected = function () {
+            return !angular.equals(userInactiveCtrl.selectedInst, {});
+        }
+
+        userInactiveCtrl.onSelect = function (selectedInst) {
+            userInactiveCtrl.selectedInst = selectedInst;
+        }
 
         userInactiveCtrl.showMessage = function showMessage(){
             if(_.isEmpty(userInactiveCtrl.institutions)){
                 return userInactiveCtrl.wasSearched;
             }
             return false;
-        };
-
-        userInactiveCtrl.isInstSelect = function isInstSelect(institution){
-            return userInactiveCtrl.selectedInst.key === institution.id;
-        };
-
-        userInactiveCtrl.showMenu = function showMenu() {
-            var deferred = $q.defer();
-            if(userInactiveCtrl.search) {
-                userInactiveCtrl.finalSearch = userInactiveCtrl.search;
-                userInactiveCtrl.makeSearch().then(function success() {
-                    deferred.resolve(userInactiveCtrl.institutions);
-                });
-            }
-            return deferred.promise;
-        };
-
-        userInactiveCtrl.showFullInformation = function showFullInformation(institution){
-           if(!_.isEmpty(userInactiveCtrl.institutions)){
-                return userInactiveCtrl.selectedInst.key === institution.id;
-            }
-            return false;
-        };
-
-        userInactiveCtrl.address = function () {
-            const instObject = new Institution(userInactiveCtrl.selectedInst);
-            return instObject.getSimpleAddress();
         };
 
         userInactiveCtrl.createInst = function createInst() {
@@ -144,17 +102,6 @@
             });
         }
 
-        userInactiveCtrl.makeSearch = function () {
-            var deferred = $q.defer();
-            clearProperties();
-            InstitutionService.searchInstitutions(userInactiveCtrl.finalSearch, ACTIVE, 'institution')
-            .then(function success(institutions) {
-                userInactiveCtrl.institutions = institutions;
-                deferred.resolve(institutions);
-            });
-            return deferred.promise;
-        };
-
         userInactiveCtrl.goToLandingPage = function goToLandingPage() {
             userInactiveCtrl.logout();
             $window.open(Config.LANDINGPAGE_URL, '_self');
@@ -163,7 +110,6 @@
         function clearProperties(){
             userInactiveCtrl.request = null;
             userInactiveCtrl.selectedInst = {};
-            userInactiveCtrl.hasInstSelect = false;
             userInactiveCtrl.wasSearched = true;
         }
     });

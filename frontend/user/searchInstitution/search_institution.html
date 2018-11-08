@@ -1,0 +1,25 @@
+<div>
+    <form>
+        <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
+            <input placeholder="Busque uma instituição" ng-model="searchInstCtrl.keyword" 
+                class="custom-card-input" autocomplete="off" required>
+            <md-icon id="search-inst-icon" ng-click="searchInstCtrl.search()"> search </md-icon>
+        </md-input-container>
+    </form>
+    <md-content id="inst-container" class="custom-scrollbar">
+        <md-list flex>
+            <md-list-item class="md-3-line" ng-repeat="institution in searchInstCtrl.institutions"
+                ng-click="searchInstCtrl.select(institution)">
+                <md-icon class="md-avatar-icon search-inst-avatar">
+                    {{searchInstCtrl.getInstIcon(institution)}}
+                </md-icon>
+                <div class="md-list-item-text">
+                    <p class="inst-name">{{ institution.name }}</p>
+                    <p class="limited-text" ng-if="searchInstCtrl.isInstSelect(institution)">
+                        {{ searchInstCtrl.address() }}
+                    </p>
+                </div>
+            </md-list-item>
+        </md-list>
+    </md-content>
+</div>

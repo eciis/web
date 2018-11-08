@@ -299,6 +299,15 @@
                     }
                 }
             })
+            .state("reset_password", {
+                url: "/reset_password",
+                views: {
+                    main: {
+                        templateUrl: "/app/auth/reset_password.html",
+                        controller: "ResetPasswordController as resetCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
                 url: "/user_inactive",
                 views: {
@@ -415,6 +424,7 @@
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin',
+            'reset_password',
             'accept_invite'
         ];
 
@@ -441,6 +451,7 @@
             'error',
             'signin',
             'email_verification',
+            'reset_password',
             'user_inactive',
             'new_invite'
         ];

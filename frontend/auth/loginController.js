@@ -42,14 +42,7 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            $mdDialog.show({
-                controller: "ResetPasswordController",
-                controllerAs: "resetCtrl",
-                templateUrl: '/app/auth/reset_password_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true
-            });
+            $state.go("reset_password");
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {

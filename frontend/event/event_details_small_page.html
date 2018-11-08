@@ -6,31 +6,23 @@
 </div>
 <div class="adress-container">
     <p class="adress-text">Endereço</p>
-    <md-icon class="adress-icon">room</md-icon>
+    <md-icon class="event-icon">room</md-icon>
     <div>
-        <p style="margin: 0; font-weight: bold; font-size: 15px;">Centro de convenção ataufo alves</p>
-        <p style="margin: 0; color: rgba(0,0,0,0.54); font-size: 13px;">R. Braão do Rio Branco, 370 - Centro, Curitiba, Paraná</p>
+        <p class="location">Centro de convenção ataufo alves</p>
+        <p class="adress">R. Braão do Rio Branco, 370 - Centro, Curitiba, Paraná</p>
     </div>
-    <hr style="grid-column-start: 1; grid-column-end: 3; width: 100%"/>
+    <hr class="adress-hr"/>
 </div>
 
 <div class="time-container">
-    <md-icon style="
-    height: 40px;
-    font-size: 40px;
-    width: 40px;">date_range</md-icon>
+    <md-icon class="event-icon">date_range</md-icon>
     <div>
-        <p style="font-size: 11px; color: #009688;
-        font-weight: bold; margin: 0;">Data</p>
+        <p class="time-head">Data</p>
         <p style="margin: 0;">18 a 23 de Janeiro</p>
     </div>
-    <md-icon style="
-    height: 40px;
-    font-size: 40px;
-    width: 40px;">schedule</md-icon>
+    <md-icon class="event-icon">schedule</md-icon>
     <div>
-        <p style="font-size: 11px; color: #009688;
-        font-weight: bold; margin: 0;">Data</p>
+        <p class="time-head">Horário</p>
         <p style="margin: 0;">8h30 às 18h</p>
     </div>
     <hr style="grid-column-start: 1; grid-column-end: 5; width: 100%; border-width: 2px; border-color: #009688;
@@ -49,8 +41,7 @@
         and more recently with desktop publishing software like Aldus PageMaker including 
         versions of Lorem Ipsum.
     </p>
-    <hr style="grid-column-start: 1; grid-column-end: 5; width: 100%; border-width: 2px; border-color: #009688;
-    border-style: solid;"/>
+    <hr class="event-hr"/>
 </div>
 
 <div style="margin: 0 16px 0 16px;">
@@ -95,6 +86,12 @@
             16h20 - Abertura da Exposição "Talentos do Nosso Regional" - mostra de artes de autoria de
             magistrados, servidores e estagiários do TRT/MS
     </p>
-    <hr style="grid-column-start: 1; grid-column-end: 5; width: 100%; border-width: 2px; border-color: #009688;
-    border-style: solid;"/>
+    <hr class="event-hr"/>
+</div>
+
+<div style="margin: 0 16px 0 16px;">
+    <p>Vídeos</p>
+    <div class="youtube-player">
+        <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl('https://www.youtube.com/watch?v=MrOBNFSun7Y') }}"></iframe>
+    </div>
 </div>

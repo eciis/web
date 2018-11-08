@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test NotificationService', function () {
-    var service, authService, scope;
+    var service, authService;
 
     var notification_to = {
         'entity_type' : 'REQUEST_INSTITUTION',
@@ -68,9 +68,8 @@
         spyOn(AuthService, '$onLogout');
     }));
 
-    beforeEach(inject(function(NotificationService, $firebaseArray, $rootScope) {
+    beforeEach(inject(function(NotificationService, $firebaseArray) {
         service = NotificationService;
-        scope= $rootScope.$new();
         var ref = firebase.database().ref();
         var notificationsRef = ref.child("notifications/key");
         service.firebaseArrayNotifications = $firebaseArray(notificationsRef)

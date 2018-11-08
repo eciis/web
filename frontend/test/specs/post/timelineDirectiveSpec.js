@@ -5,7 +5,7 @@
 
     let timelineCtrl, createController, rootScope, scope, notificationService, postsFactory, q;
 
-    let user = {
+    const user = {
         name: 'name',
         key : 'key',
         current_institution: {key: "institutuion_key"},
@@ -13,7 +13,7 @@
         permissions: {}
     };
 
-    let post = {
+    const post = {
         title: 'post principal',
         author_key: user.key,
         institution_key: "institution_key",
@@ -21,7 +21,7 @@
         state: 'published'
     };
 
-    let post_toAdd = {
+    const post_toAdd = {
         title: 'post principal',
         author_key: user.key,
         institution_key: "institution_key",
@@ -31,7 +31,7 @@
         number_of_comments: 1
     };
 
-    let options = [{'id' : 0,
+    const options = [{'id' : 0,
                     'text': 'Option number 1',
                     'number_votes': 0,
                     'voters': [] },
@@ -40,19 +40,19 @@
                     'number_votes': 0,
                     'voters': [] }];
 
-    let survey = { 'title' : 'The Survey',
+    const survey = { 'title' : 'The Survey',
                     'type_survey' : 'multiple_choice',
                     'options' : options,
                     'key': '654321'
                     };
 
-    let content = {
+    const content = {
         'scrollTop': 1,
         'offsetHeight': 3,
         'scrollHeight': 5
     }
 
-    let posts = [survey, post];
+    const posts = [survey, post];
 
     beforeEach(inject(function($controller, AuthService, $rootScope, 
         NotificationService, $q, PostsFactory) {

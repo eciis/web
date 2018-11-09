@@ -1,5 +1,5 @@
 <div class="title">
-    CONGRESSO DE TECNOLOGIA APLICADA A SAÚDE E PRODUÇÃO DE FARMACOS IMONOBIOLÓGICOS
+    {{ eventDetailsCtrl.event.title | uppercase}}
 </div>
 <div>
     <img style="background-color: white; width: 100%" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
@@ -8,8 +8,14 @@
     <p class="adress-text">Endereço</p>
     <md-icon class="event-icon">room</md-icon>
     <div>
-        <p class="location">Centro de convenção ataufo alves</p>
-        <p class="adress">R. Braão do Rio Branco, 370 - Centro, Curitiba, Paraná</p>
+        <p class="location">{{eventDetailsCtrl.event.local | uppercase}}</p>
+        <p class="adress">
+            {{eventDetailsCtrl.event.address.street ? eventDetailsCtrl.event.address.street + ', ' : ''}}
+            {{ eventDetailsCtrl.event.address.street && eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number + ',' : eventDetailsCtrl.event.address.street ? 'S/N,' : ''}}
+            {{eventDetailsCtrl.event.address.city ? eventDetailsCtrl.event.address.city : ''}}
+            {{eventDetailsCtrl.event.address.federal_state ? ', ' + eventDetailsCtrl.event.address.federal_state + ' - ': ''}}
+            {{eventDetailsCtrl.event.address.country ? eventDetailsCtrl.event.address.country : ''}}
+        </p>
     </div>
     <hr class="adress-hr"/>
 </div>
@@ -31,99 +37,44 @@
 
 <div class="content-block">
     <h2>Descrição</h2>
-    <p>
-        Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-        when an unknown printer took a galley of type and scrambled it to make a type 
-        specimen book. It has survived not only five centuries, but also the leap into 
-        electronic typesetting, remaining essentially unchanged. It was popularised in 
-        the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-        and more recently with desktop publishing software like Aldus PageMaker including 
-        versions of Lorem Ipsum.
-    </p>
+    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)" style="white-space: pre-line;"></p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Progamação</h2>
-    <p>
-            14h - Abertura oficial Interpretação do Hino Nacional - alunos do Centro Estadual de
-            Atendimento ao Deficiente da audiocomunicação - CEADA.
-            Execução do Hino do Estado de Mato Grosso do Sul - Miguel Romero Cristaldi <br/><br/>
-            15h - Palestra de abertura: "A Construção de uma História em Cultura e Arte de Mato Grosso do
-            Sul"
-            Palestrante: Profa. Pós-Dr. Maria Adélia Menegazzo <br/><br/>
-            16h - Abertura da Exposição "70 anos da Consolidação das Leis do TrabalhoCLT" - Tribunal
-            Superior do Trabalho <br/><br/>
-            16h30 - Momento Cultural I 
-            Apresentação Musical: Sexteto de Cordas - Grupo formado por acadêmicos da Universidade
-            Católica Dom Bosco - UCDB<br/><br/>
-            Dia 12/11 (terça-feira)
-            14h - Momento Cultural II
-            Apresentação Musical: Coral de alunos da Escola Estadual Sulivan Silvestre de Oliveira<br/><br/>
-            14h30 - Mesa Temática: "Populações Indígenas e Afrodescendentes: História, Trabalho e Cultura"
-            Prof. Me. Antonio Carlos Seizer
-            Prof. Dr. Gonçalo Santa Cruz de Souza
-            Prof. Pós-Dr. Levi Marques Pereira
-            Coordenador e Debatedor: Des. Francisco das C. Lima Filho<br/><br/>
-            16h10 - Momento Cultural III
-            Apresentação de Dança: Grupo Arara Azul
-            Grupo formado por acadêmicos da Universidade Católica Dom Bosco - UCDB
-            16h30 - Palestra:"A Constituição Federal de 1988 e sua Importância na Concretização dos Direitos
-            Fundamentais Laborais"
-            Palestrante: Me. Christiana D'Arc Damasceno Oliveira - Juíza do Trabalho da 14ª Região<br/><br/>
-            Dia 13/11 (quarta-feira)
-            14h - Momento Cultural IV
-            Apresentação de Teatro: "Ventos Nordestinos"
-            Grupo formado por acadêmicos da Universidade Estadual de Mato Grosso do Sul e alunos da rede
-            de Estadual de Educação<br/><br/>
-            14h30 - Mesa Temática: "Ferrovia Noroeste: História, Trabalhadores e sua contribuição para Mato
-            Grosso do Sul"
-            Prof. Me. Thiago Moratelli
-            Profa. Maria Madalena Dib Mereb Greco
-            Profa. Dra. Alisolete Antônia dos Santos Weingartner
-            Coordenadora e debatedora: Dra. Maria Augusta de Castilho<br/><br/>
-            16h20 - Abertura da Exposição "Talentos do Nosso Regional" - mostra de artes de autoria de
-            magistrados, servidores e estagiários do TRT/MS
-    </p>
+    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)" style="white-space: pre-line;"></p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Vídeos</h2>
-    <div class="youtube-player">
-        <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl('https://www.youtube.com/watch?v=cyU7eXopEFM') }}"></iframe>
+    <div ng-repeat="video in eventDetailsCtrl.event.video_url">
+        <div class="youtube-player">
+            <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
+        </div>
+        <p>{{video.description}}</p>
     </div>
-    <p>Dia 13/11 (quarta-feira)
-            14h - Momento Cultural IV
-            Apresentação de Teatro: "Ventos Nordestinos"
-            Dia 13/11 (quarta-feira)
-            14h - Momento Cultural IV
-            Apresentação de Teatro: "Ventos Nordestinos"</p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Links úteis</h2>
-    <div style="display: grid; grid-template-columns: 50px auto; margin-bottom: 5px;">
-        <md-icon class="useful-links-icon">link</md-icon>
-        
-        <p class="useful-links-text">dkjlshadkhasdhlkjhds herjkhew dsfdsfs df d d d d</p>
-    </div>
-
-    <div style="display: grid; grid-template-columns: 50px auto; margin-bottom: 5px;">
-        <md-icon class="useful-links-icon">link</md-icon>
-        
-        <p class="useful-links-text">dkjlshadkhasdhlkjhds herjkhew dsfdsfs df d d d d</p>
+    <div ng-repeat="link in eventDetailsCtrl.event.useful_links">
+        <div class="useful-links-container">
+            <md-icon class="useful-links-icon">link</md-icon>
+            
+            <p class="useful-links-text">{{ link.description }}</p>
+        </div>
     </div>
 </div>
 
-<md-fab-speed-dial id="fab-new-post" class="md-fab-bottom-right" style="position: fixed;" hide-gt-sm>
+<md-fab-speed-dial ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)" id="fab-new-post" class="md-fab-bottom-right" style="position: fixed;" hide-gt-sm>
     <md-fab-trigger>
-        <md-button aria-label="menu" class="md-fab md-primary" ng-click="null"
+        <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)"
             style="background-color: #8cbf4d; color: white;">
         <md-icon>edit</md-icon>
         </md-button>

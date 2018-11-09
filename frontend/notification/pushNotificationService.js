@@ -4,7 +4,7 @@
     const app = angular.module('app');
 
     app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
-        $firebaseObject, MessageService) {
+        $firebaseObject, $q) {
         /**
          * Service responsible for send request permission
          * to enable notifications to the user and for deal
@@ -66,12 +66,12 @@
             service.currentUser = user;
             const isOnMobile = service._isMobile.any();
             if (!service._hasNotificationPermission() && isOnMobile) {
-                messaging.requestPermission().then(() => {
-                    messaging.getToken().then(token => {
+                return messaging.requestPermission().then(() => {
+                    return messaging.getToken().then(token => {
                         service._saveToken(token);
-                    }, () => {
-                        MessageService.showToast('Não foi possível ativar as notificações.');
                     });
+                }).catch(() => {
+                    return $q.when();
                 });
             }
         };

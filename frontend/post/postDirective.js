@@ -5,7 +5,8 @@
     var app = angular.module("app");
 
     app.controller("PostController", function PostController($mdDialog, PostService, AuthService, UserService,
-            $mdToast, $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, SubmitFormListenerService) {
+        $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, 
+        SubmitFormListenerService, POST_EVENTS) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -99,13 +100,13 @@
             }
         };
 
-        postCtrl.save = function save(isEditing, originalPost, posts, saveForm) {
+        postCtrl.save = function save(isEditing, originalPost, saveForm) {
             saveForm.$setPristine();
             saveForm.$setUntouched();
             if(isEditing) {
                 postCtrl.editPost(originalPost);
             } else {
-                postCtrl.createPost(posts);
+                postCtrl.createPost();
             }
         };
 
@@ -225,7 +226,7 @@
             return deferred.promise;
         }
 
-        postCtrl.createPost = function createPost(posts) {
+        postCtrl.createPost = function createPost() {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
@@ -233,7 +234,7 @@
                     postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
-                        posts.push(new Post(response));
+                        $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
                         MessageService.showToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
@@ -395,8 +396,8 @@
     });
 
     /**
-     * Function to return a correct template url to show in desktop screen ou mobile screen.
-     * @returns {String} The string containing the url path to html file that be displayed in view.
+     * Function to return a correct template url to show in desktop screen or mobile screen.
+     * @returns {String} The string containing the url path to html file that will be displayed in view.
      */
     function getTemplateUrl() {
         return Utils.isMobileScreen() ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
@@ -410,7 +411,6 @@
             controller: "PostController",
             scope: {
                 isDialog: '=',
-                posts: '=',
                 originalPost: '=',
                 isEditing: '='
             }

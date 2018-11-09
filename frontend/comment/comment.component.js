@@ -162,8 +162,10 @@
         };
 
         commentCtrl.canReply = function canReply() {
+            const isCommentReply = commentCtrl.reply;
+            
             return commentCtrl.showReplies && !commentCtrl.isDeletedPost() &&
-                !commentCtrl.isInstInactive();
+                !commentCtrl.isInstInactive() && !isCommentReply;
         };
 
         commentCtrl.hideReplies = function hideReplies() {

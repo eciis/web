@@ -3,8 +3,8 @@
 
     var app = angular.module('app');
 
-    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $mdToast, $state,
-        $mdDialog, NotificationService, MessageService, ngClipboard, ProfileService) {
+    app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS) {
 
         var postDetailsCtrl = this;
 
@@ -35,10 +35,11 @@
                 postDetailsCtrl.post = new Post(postDetailsCtrl.post);
                 PostService.deletePost(postDetailsCtrl.post).then(function success() {
                     postDetailsCtrl.post.remove(postDetailsCtrl.user.name);
-                    _.remove(postDetailsCtrl.posts, function (post) {
-                        return post.key === postDetailsCtrl.post.key;
-                    });
-                    postDetailsCtrl.posts.push(postDetailsCtrl.post);
+                    if(postDetailsCtrl.removePost)
+                        $rootScope.$emit(
+                            POST_EVENTS.DELETED_POST_EVENT_TO_UP, 
+                            postDetailsCtrl.post
+                        );
                     MessageService.showToast('Post excluído com sucesso');
                 });
             }, function() {
@@ -234,9 +235,8 @@
                 clickOutsideToClose:true,
                 locals: {
                     user : postDetailsCtrl.user,
-                    posts: postDetailsCtrl.posts,
                     post: post,
-                    addPost: postDetailsCtrl.addPost
+                    addPost: true
                 }
             });
         };
@@ -347,7 +347,7 @@
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key, posts: postDetailsCtrl.posts});
+            $state.go('app.user.event', {eventKey: event.key});
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {
@@ -375,6 +375,18 @@
                 postDetailsCtrl.isLoadingComments = true;
             });
             return promise;
+        };
+
+        /**
+         * Function to show post comments or redirect to post page.
+         * If the screen width less than 600 pixels (mobile devices), redirect to post page
+         * otherwise show all post comments.
+         */
+        postDetailsCtrl.showCommentsOrRedirectToPostPage = function showCommentsOrRedirect() {
+            if (window.screen.width > 600)
+                return postDetailsCtrl.getComments();
+            else
+                postDetailsCtrl.goToPost(postDetailsCtrl.post); 
         };
 
         postDetailsCtrl.getComments = function getComments() {
@@ -509,10 +521,9 @@
             controller: "PostDetailsController",
             scope: {},
             bindToController: {
-                posts: '=',
                 post: '=',
                 isPostPage: '=',
-                addPost: '='
+                removePost: '='
             }
         };
     });

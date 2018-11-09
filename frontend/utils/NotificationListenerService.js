@@ -12,7 +12,7 @@
             });
         };
 
-        service.multipleEventsListener = function eventListener(events, callback){
+        service.multipleEventsListener = function multipleEventsListener(events, callback){
             events.forEach(event => {
                 service.eventListener(event, callback);
             });

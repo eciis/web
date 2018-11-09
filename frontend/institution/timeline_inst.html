@@ -25,14 +25,9 @@
                 </div>
                 <div flex id="content" class="body">
                     <div flex layout="row">
-                        <post-timeline ng-if="!institutionCtrl.isLoadingPosts" layout="column" 
-                        md-colors="{background: 'grey-50'}" posts="institutionCtrl.posts"
-                        institution="true" user="institutionCtrl.user" add-post="institutionCtrl.addPost"
-                        load-more-posts="institutionCtrl.loadMorePosts" flex>
+                        <post-timeline layout="column" md-colors="{background: 'grey-50'}" 
+                            institution="institutionCtrl.getInstKey()" flex>
                         </post-timeline>
-                        <!-- LOADING CIRCLE --> 
-                        <load-circle flex add-layout-fill="true"
-                            ng-if="institutionCtrl.isLoadingPosts"></load-circle>
                     </div>
                 </div>
             </div>

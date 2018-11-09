@@ -35,6 +35,8 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
+  <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
+  <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
   <link rel="stylesheet" type="text/css" href="app/user/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
@@ -45,7 +47,7 @@
   <link rel="stylesheet" type="text/css" href="app/survey/survey.css">
   <link rel="stylesheet" type="text/css" href="app/main/main.css">
   <link rel="stylesheet" type="text/css" href="app/comment/comment.css">
-  <link rel="stylesheet" type="text/css" href="app/auth/signup.css">
+  <link rel="stylesheet" type="text/css" href="app/auth/login.css">
   <link rel="stylesheet" type="text/css" href="app/search/search.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
@@ -137,6 +139,7 @@
   <script src="app/auth/authService.js"></script>
   <script src="app/auth/loginController.js"></script>
   <script src="app/auth/resetPasswordController.js"></script>
+  <script src="app/auth/emailVerificationController.js"></script>
 
   <!-- User -->
   <script src="app/user/userService.js"></script>
@@ -161,6 +164,8 @@
   <script src="app/post/timelineDirective.js"></script>
   <script src="app/post/pdfViewDirective.js"></script>
   <script src="app/post/sharePostController.js"></script>
+  <script src="app/post/postsFactory.js"></script>
+  <script src="app/post/postEventsConstants.js"></script>
 
   <!-- Survey Library -->
   <script src="app/survey/surveyDirective.js"></script>
@@ -221,7 +226,10 @@
   <script src="app/notification/notificationMessageCreatorService.js"></script>
   <script src="app/notification/notificationService.js"></script>
   <script src="app/notification/pushNotificationService.js"></script>
-  <script src="app/notification/notificationDirective.js"></script>
+  <script src="app/notification/notificationController.js"></script>
+  <script src="app/notification/notifications_type.constant.js"></script>
+  <script src="app/notification/notificationList.component.js"></script>
+  <script src="app/notification/notificationButton.component.js"></script>
 
   <!-- Search Library -->
   <script src="app/search/searchController.js"></script>

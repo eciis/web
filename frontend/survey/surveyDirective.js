@@ -5,9 +5,10 @@
     var app = angular.module('app');
 
     app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
-                    $scope, $mdDialog, $state, SubmitFormListenerService) {
+        $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope, POST_EVENTS) {
 
         var surveyCtrl = this;
+
         surveyCtrl.options = $scope.options;
         surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
@@ -71,7 +72,7 @@
                 var survey = createSurvey();
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
-                    surveyCtrl.posts.push(new Post(response));
+                    $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
                     MessageService.showToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     const postAuthorPermissions = ["remove_post"];
@@ -110,16 +111,23 @@
         }
     });
 
+    /**
+     * Function to return a correct template url to show in desktop screen or mobile screen.
+     * @returns {String} The string containing the url path to html file that will be displayed in view.
+     */
+    function getTemplateUrl() {
+        return Utils.isMobileScreen() ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
+    };
+
     app.directive("surveyDirective", function() {
         return {
             restrict: 'E',
-            templateUrl: "app/survey/save_survey.html",
+            templateUrl: getTemplateUrl(),
             controllerAs: "surveyCtrl",
             controller: "SurveyDirectiveController",
             scope: {},
             bindToController: {
                 post: '=',
-                posts: '=',
                 user: '=',
                 options: '=',
                 callback: '='

@@ -18,38 +18,9 @@
                 </form>
             </div>
             <md-content class="custom-scrollbar" flex>
-                <md-list style="padding: 10px;" flex>
-                    <md-list-item title="{{notificationCtrl.format(notification)}}" class="md-3-line" style="margin-bottom: 5px; padding: 3 0 3 0;"
-                        ng-repeat="notification in notificationCtrl.allNotifications | orderBy:'-timestamp' | filter: notificationCtrl.keyword" 
-                        ng-click="notificationCtrl.action(notification, $event)" flex-xs ng-class="notification.status === 'READ'? '': 'unread-notification'">
-                            <img ng-src="{{notification.from.photo_url}}" class="md-avatar" style="width: 60px; height: 60px;"/>
-                            <div class="md-list-item-text" layout="column">
-                                <p><b style="font-size: 18px;">{{ notification.from.name }}</b></p>
-                                <!-- notification.current_institution belongs to the new notification architecture. 
-                                    notification.from belongs to old architecture. DATE: 10/05/2018-->
-                                <p><b style="font-size: 15px; color: #009688;">{{ notification.current_institution.name || notification.from.institution_name }}</b></p>
-                                <div layout="row">
-                                    <div class="notification-icon-bg" hide show-gt-xs>
-                                        <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
-                                    </div>
-                                    <div class="notification-icon-bg" hide show-xs style="margin-top: 1em;">
-                                        <md-icon class="notification-icon">{{notificationCtrl.getIcon(notification.entity_type)}}</md-icon>
-                                    </div>
-                                    <div style="max-height: 7em; margin-left: 4px; margin-top: 4px">
-                                        <p style="font-size: 11px;">
-                                            <p style="font-size: 10px;">
-                                                {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}
-                                                </br>
-                                                <b style="font-size: 11px; margin-top: -10px;">
-                                                        {{ notificationCtrl.format(notification) }}
-                                                </b>
-                                            </p>
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>    
-                    </md-list-item>
-                </md-list>
+                <notification-list notifications="notificationCtrl.allNotifications"
+                    mark-as-read="notificationCtrl.markAsRead" keyword="notificationCtrl.keyword">
+                </notification-list>
             </md-content>
         </md-card-content>
     </md-card>

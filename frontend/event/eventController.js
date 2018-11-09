@@ -10,6 +10,7 @@
         var actualPage = 0;
 
         eventCtrl.events = [];
+        eventCtrl.eventsByDay = [];
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
@@ -42,6 +43,7 @@
                 });
 
                 eventCtrl.isLoadingEvents = false;
+                eventCtrl.getEventsByDay();
                 deferred.resolve();
             }, function error() {
                 deferred.reject();
@@ -78,6 +80,39 @@
                     addPost: true
                 }
             });
+        };
+
+        eventCtrl.goToEvent = function(event) {
+            $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
+        };
+
+        eventCtrl.getSubTitle = function(event) {
+            const date = new Date(event.start_time);
+            const startHour = date.getDate() + ":" + date.getMinutes();
+            return event.address.city ? startHour + " | " + event.address.city :
+                startHour;
+        };
+
+        eventCtrl.getEventsByDay = function() {
+            if(eventCtrl.events.length > 0) {
+                eventCtrl.eventsByDay = [];
+                let eventsByDay = {};
+                _.forEach(eventCtrl.events, function(event) {
+                    const day = new Date(event.start_time).getDate();
+                    if(!eventsByDay[day]) 
+                        eventsByDay[day] = [];
+                    eventsByDay[day].push(event);
+                });
+
+                let days = Object.keys(eventsByDay);
+                _.forEach(days, function(day) {
+                    let currentValue = {
+                        day: day,
+                        events: eventsByDay[day]
+                    };
+                    eventCtrl.eventsByDay.push(currentValue);
+                });
+            }
         };
 
         (function main() {

@@ -55,16 +55,28 @@
 
 /* MOBILE DEVICES */
 @media screen and (max-width: 960px) {
+
     .create-event-button {
         background-color: #7CB342 !important;
     }
 
     .events-grid {
         display: grid;
-        grid-template-columns: 95% auto;
+        grid-template-columns: 20% 75% auto;
         grid-template-rows: 5em  3em;
         align-items: initial;
         margin: 0;
+    }
+
+    .event-position {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+
+    .events-column {
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
     }
 
     .event-preview-image {
@@ -72,6 +84,8 @@
         height: 120px;
         max-width: 100%;
         width: 100%;
+        padding: 0;
+        background-color: #009688;
     }
 
     .event-preview-border {
@@ -89,7 +103,7 @@
         bottom: 0px;
         z-index: 1;
         grid-row-start: 2;
-        grid-row-end: 3
+        grid-row-end: 3;
     }
 
     .hilight p {
@@ -97,11 +111,25 @@
         color: #FFF;
         z-index: 200;
     }
-    
+
     .event-preview {
         position: relative;
     }
+
     .event-preview img {
         z-index: 1;
+    }
+
+    .event-title, .event-subtitle {
+        font-size: 0.9em;
+        margin-left: 0.85em;
+        margin-top: 0.8em; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .event-subtitle {
+        margin-top: 0.3em;
     }
 }

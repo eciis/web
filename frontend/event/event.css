@@ -25,9 +25,9 @@
 .time-container {
     display: grid;
     grid-template-columns: 40px auto 40px auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: auto;
     align-items: center;
-    margin: 16px 16px 0 16px;
+    margin: 16px;
 }
 
 .title {
@@ -65,7 +65,8 @@
 
 .adress-hr {
     grid-column-start: 1; 
-    grid-column-end: 3; 
+    grid-column-end: 3;
+    margin-top: 16px;
     width: 100%;
 }
 
@@ -77,10 +78,35 @@
 }
 
 .event-hr {
-    width: 100%; 
     border-width: 2px; 
     border-color: #009688;
     border-style: solid;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.content-block {
+    margin: 30px 16px;
+}
+
+.useful-links-icon {
+    background-color: #8cc04e; 
+    color: white; 
+    height: 50px; 
+    width: 50px; 
+    text-align: center; 
+    line-height: 50px; 
+    font-size: 30px;
+}
+
+.useful-links-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    background-color: #e6e6e6; 
+    margin: 0; 
+    padding-left: 8px; 
+    line-height: 50px;
 }
 
 @media screen and (max-width: 450px) {

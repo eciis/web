@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog) {
+        brCidadesEstados, HttpService, $mdDialog, $window) {
 
         var searchCtrl = this;
 
@@ -14,6 +14,8 @@
         searchCtrl.institutions = [];
         searchCtrl.actuationAreas = [];
         searchCtrl.legalNature = [];
+        var actuationAreas;
+        var legalNatures;
         searchCtrl.loading = false;
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
@@ -34,18 +36,22 @@
             searchCtrl.institutions = [];
         };
 
-        searchCtrl.search = function search() {
+        searchCtrl.search = function search(ev) {
             if (searchCtrl.search_keyword) {
-                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution').then(() => {
+                    if (Utils.isMobileScreen()) {
+                        searchCtrl.showSearchFromMobile(ev);
+                    }
+                });
                 refreshPreviousKeyword();
             }
         };
 
-        searchCtrl.goToInstitution = function goToInstitution(institutionId) {
+        searchCtrl.goToInstitution = function goToInstitution(institutionId, cameFromDialog) {
             if (institutionId) {
-                InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution.timeline', { institutionKey: response.key });
-                });
+                if(cameFromDialog)
+                    $mdDialog.cancel();
+                $state.go('app.institution.timeline', { institutionKey: institutionId });
             }
         };
 
@@ -56,7 +62,11 @@
             }
         };
 
-        searchCtrl.searchFromMobile = (ev) => {
+        /**
+         * Open up a mdDialog to show the search result in a mobile fone
+         * @param {Object} ev 
+         */
+        searchCtrl.showSearchFromMobile = (ev) => {
             $mdDialog.show({
                 controller: SearchDialogController,
                 controllerAs: "searchCtrl",
@@ -66,11 +76,35 @@
                 clickOutsideToClose: true,
             });
         };
+        
+        /**
+         * Go back to the previous state.
+         */
+        searchCtrl.leaveMobileSearchPage = () => {
+            $window.history.back();
+        };
 
+        /**
+         * Check if the user is in a mobile or not.
+         */
+        searchCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen();
+        };
+        
+        /**
+         * A simple function that works like a controller to the
+         * search_dialog.html.
+         */
         function SearchDialogController() {
             const searchDialogCtrl = this;
 
             searchDialogCtrl.institutions = searchCtrl.institutions;
+            searchDialogCtrl.goToInstitution = searchCtrl.goToInstitution;
+            searchDialogCtrl.searchNature = searchCtrl.searchNature;
+            searchDialogCtrl.searchActuation = searchCtrl.searchActuation;
+            searchDialogCtrl.searchState = searchCtrl.searchState;
+            searchDialogCtrl.isLoading = searchCtrl.isLoading;
+            
         }
 
         /**

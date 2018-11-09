@@ -1,4 +1,4 @@
-.search-top-bar-xs {
+.search-mobile-top-bar {
   background-color: white;
   box-shadow: 0px 3px 6px grey;
   height: 60px;
@@ -8,15 +8,19 @@
   z-index: 2;
 }
 
-.search-by-xs span {
-    color: #009688;
-}
-
-.search-content-xs {
+.search-mobile-content {
   margin-top: 85px;
 }
 
-.tst label {
+.search-mobile-content form {
+  width: 100%;
+}
+
+.search-mobile-input {
+  width: 85%;
+}
+
+.search-mobile-input label {
   margin-left: 92%;
   position: absolute;
   top: 4px;
@@ -25,19 +29,50 @@
 }
 
 @media screen and (min-width: 550px) {
-  .tst label {
+  .search-mobile-input label {
     margin-left: 95%;
   }
 }
 
 @media screen and (min-width: 450px) and (max-width: 550px) {
-  .tst label {
+  .search-mobile-input label {
     margin-left: 94%;
   }
 }
 
 @media screen and (min-width: 425px) and (max-width: 450px) {
-  .tst label {
+  .search-mobile-input label {
     margin-left: 93.5%;
   }
+}
+
+@media screen and (min-width: 730px) {
+  .search-mobile-input label {
+    margin-left: 96%;
+  }
+}
+
+.search-mobile-options-title {
+  margin-top: 5px; 
+  font-size: 20px; 
+  margin-left: 7.5%;
+}
+
+.search-mobile-options {
+  margin-left: -1px; 
+  margin-top: 15px;
+}
+
+.search-mobile-options md-input-container {
+  width: 85%; 
+  font-size: 10px;
+}
+
+.search-by-mobile span {
+    color: #009688;
+}
+
+.search-mobile-action-buttons {
+  margin-right: 6%; 
+  margin-top: 10%;
 }

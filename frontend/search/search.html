@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="center" class="custom-scrollbar" hide show-gt-sm>
+<md-content layout="row" layout-align="center" class="custom-scrollbar" ng-if="!searchCtrl.isMobileScreen()">
     <div flex="95" layout-align="center" class="fill-screen">
         <div layout-align="center" class="fill-screen">
             <md-card>
@@ -81,16 +81,16 @@
     </div>
 </md-content>
 
-<md-content hide show-xs show-sm>
-    <div class="search-top-bar-xs" layout="row" layout-align="start center">
-        <md-button class="md-icon-button">
+<md-content ng-if="searchCtrl.isMobileScreen()">
+    <div class="search-mobile-top-bar" layout="row" layout-align="start center">
+        <md-button class="md-icon-button" ng-click="searchCtrl.leaveMobileSearchPage()">
             <md-icon>clear</md-icon>
         </md-button>
         <b>PESQUISAR</b>
     </div>
-    <div layout="row" layout-align="center" class="search-content-xs">
-        <form ng-submit="searchCtrl.search()" style="width: 100%;" layout="row" layout-align="center center">
-            <md-input-container style="width: 85%;" class="tst" md-no-float>
+    <div layout="row" layout-align="center" class="search-mobile-content">
+        <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
+            <md-input-container class="search-mobile-input" md-no-float>
                 <input placeholder="Pesquisar"
                     ng-model="searchCtrl.search_keyword">
                 <label class="md-no-float">
@@ -99,28 +99,28 @@
             </md-input-container>
         </form>
     </div>
-    <div style="margin-top: 5px; font-size: 20px; margin-left: 7.5%;">
+    <div class="search-mobile-options-title">
         <b>Pesquisa avançada</b>
     </div>
-    <div layout="column" layout-align="center center" style="margin-left: -1px; margin-top: 15px;">
-        <md-input-container style="width: 85%; font-size: 10px;">
-            <md-select ng-model="searchCtrl.searchActuation" placeholder="AREA DE ATUAÇÃO" class="search-by-xs">
+    <div layout="column" layout-align="center center" class="search-mobile-options">
+        <md-input-container>
+            <md-select ng-model="searchCtrl.searchActuation" placeholder="AREA DE ATUAÇÃO" class="search-by-mobile">
                 <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
                     ng-value="actuation_area.value" ng-click="searchCtrl.searchBy(actuaction_area.value)">
                     {{actuation_area.name}}
                 </md-option>
             </md-select>
         </md-input-container>
-        <md-input-container style="width: 85%; font-size: 10px;">
-            <md-select ng-model="searchCtrl.searchNature" placeholder="NATUREZA LEGAL" class="search-by-xs">
+        <md-input-container>
+            <md-select ng-model="searchCtrl.searchNature" placeholder="NATUREZA LEGAL" class="search-by-mobile">
                 <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
                     ng-value="nature.value" ng-click="searchCtrl.searchBy(nature.value)">
                     {{nature.name}}
                 </md-option>
             </md-select>
         </md-input-container>
-        <md-input-container style="width: 85%; font-size: 10px;">
-            <md-select ng-model="searchCtrl.searchState" placeholder="LOCALIZAÇÃO" class="search-by-xs">
+        <md-input-container>
+            <md-select ng-model="searchCtrl.searchState" placeholder="LOCALIZAÇÃO" class="search-by-mobile">
                 <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 
                     ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome)">
                     {{state.nome}}
@@ -128,11 +128,11 @@
             </md-select>
         </md-input-container>
     </div>
-    <div layout="row" layout-align="end center" style="margin-right: 6%; margin-top: 10%;">
-        <md-button md-colors="{background:'grey-500'}">
+    <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
+        <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
             CANCELAR
         </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.searchFromMobile($event)">
+        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event)">
             PESQUISAR
         </md-button>
     </div>

@@ -13,9 +13,10 @@
 
                         <search-institution on-select="userInactiveCtrl.onSelect"></search-institution>
 
-                        <div layout="row" layout-align="center center" ng-if="userInactiveCtrl.isInstSelected()">
+                        <div id="search-btn-container" layout="row" layout-align="center center" 
+                            ng-if="userInactiveCtrl.isInstSelected()">
                             <md-button class="md-raised search-inst-btn" md-colors="{background: 'teal-500'}"
-                                ng-click="null">
+                                ng-click="null"> 
                                 AVANÇAR
                             </md-button>
                         </div>

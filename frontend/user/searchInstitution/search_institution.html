@@ -6,7 +6,7 @@
             <md-icon id="search-inst-icon" ng-click="searchInstCtrl.search()"> search </md-icon>
         </md-input-container>
     </form>
-    <md-content id="inst-container" class="custom-scrollbar">
+    <md-content id="inst-container" class="custom-scrollbar" ng-if="!searchInstCtrl.instNotFound">
         <md-list flex>
             <md-list-item class="md-3-line" ng-repeat="institution in searchInstCtrl.institutions"
                 ng-click="searchInstCtrl.select(institution)">
@@ -22,4 +22,16 @@
             </md-list-item>
         </md-list>
     </md-content>
+    <div id="manifest-container" ng-if="searchInstCtrl.instNotFound">
+        <p>A instituição pesquisada não está cadastrada. Para prosseguir pressione o botão abaixo:</p>
+        <md-checkbox ng-model="searchInstCtrl.canCreate" class="md-primary" aria-label="Checkbox">
+            Manifesto que tenho autonomia para cadastrar a instituição
+        </md-checkbox>
+        <center>
+            <md-button md-colors="{background: searchInstCtrl.canCreate ? 'teal-500' : 'grey-200'}"
+                ng-disabled="!searchInstCtrl.canCreate" ng-click="searchInstCtrl.createInst()">
+                Criar instituição
+            </md-button>
+        </center>
+    </div>
 </div>

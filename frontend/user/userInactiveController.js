@@ -11,7 +11,6 @@
         
         userInactiveCtrl.isFinished = false;
         userInactiveCtrl.choicedInst = false;
-        userInactiveCtrl.wasSearched = false;
         userInactiveCtrl.institutions = [];
         userInactiveCtrl.requestsOfSelectedInst = [];
         userInactiveCtrl.request = null;
@@ -84,18 +83,6 @@
             userInactiveCtrl.selectedInst = selectedInst;
         }
 
-        userInactiveCtrl.showMessage = function showMessage(){
-            if(_.isEmpty(userInactiveCtrl.institutions)){
-                return userInactiveCtrl.wasSearched;
-            }
-            return false;
-        };
-
-        userInactiveCtrl.createInst = function createInst() {
-            $state.go("create_institution_form");
-            $mdDialog.hide();
-        };
-
         function getRequests(instKey) {
             RequestInvitationService.getRequests(instKey).then(function success(response) {
                 userInactiveCtrl.requestsOfSelectedInst = response;
@@ -110,7 +97,6 @@
         function clearProperties(){
             userInactiveCtrl.request = null;
             userInactiveCtrl.selectedInst = {};
-            userInactiveCtrl.wasSearched = true;
         }
     });
 })();

@@ -11,7 +11,7 @@
             }
         });
 
-    function SearchInstitutionCtrl(InstitutionService) {
+    function SearchInstitutionCtrl(InstitutionService, $state) {
         const searchInstCtrl = this;
 
         searchInstCtrl.keyword = "";
@@ -37,6 +37,7 @@
             InstitutionService.searchInstitutions(searchInstCtrl.keyword, INST_STATE, 'institution')
                 .then(institutions => {
                     searchInstCtrl.institutions = institutions;
+                    searchInstCtrl.instNotFound = institutions.length === 0;
                 });
         };
 
@@ -46,6 +47,10 @@
                     searchInstCtrl.selectedInst = institution;
                     searchInstCtrl.onSelect(institution);
             });
+        };
+
+        searchInstCtrl.createInst = function createInst() {
+            $state.go("create_institution_form");
         };
     }
 })();

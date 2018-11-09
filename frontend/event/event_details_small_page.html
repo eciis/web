@@ -65,7 +65,9 @@
     <h2>Links úteis</h2>
     <div ng-repeat="link in eventDetailsCtrl.event.useful_links">
         <div class="useful-links-container">
-            <md-icon class="useful-links-icon">link</md-icon>
+            <a title="Link" ng-href="{{link.url}}" target="_blank">
+                <md-icon class="useful-links-icon">link</md-icon>
+            </a>
             
             <p class="useful-links-text">{{ link.description }}</p>
         </div>

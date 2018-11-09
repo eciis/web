@@ -487,6 +487,6 @@
     }
 
     (function main() {
-        /* initServiceWorker(); */
+        initServiceWorker();
     })();
 })();

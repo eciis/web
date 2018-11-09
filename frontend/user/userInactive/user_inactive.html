@@ -11,12 +11,15 @@
                         <img id="search-inst-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
                         <p>{{ userInactiveCtrl.getMessage() }}</p>
 
-                        <search-institution on-select="userInactiveCtrl.onSelect"></search-institution>
+                        <search-institution 
+                            on-select="userInactiveCtrl.onSelect"
+                            on-search="userInactiveCtrl.onSearch">
+                        </search-institution>
 
                         <div id="search-btn-container" layout="row" layout-align="center center" 
                             ng-if="userInactiveCtrl.isInstSelected()">
                             <md-button class="md-raised search-inst-btn" md-colors="{background: 'teal-500'}"
-                                ng-click="null"> 
+                                ng-click="userInactiveCtrl.advance()"> 
                                 AVANÇAR
                             </md-button>
                         </div>
@@ -127,19 +130,9 @@
             <p>Você receberá a confirmação em seu email.</p>
         </div>
     </div>
-    <div>
-        <div layout="row" layout-align="end" ng-if="userInactiveCtrl.showButtonNext()">
-            <md-button md-colors="{background: 'teal-500'}"
-                ng-click="userInactiveCtrl.confirmInst()">AVANÇAR</md-button>
-        </div>
-        <div layout="row" layout-align="end" id="go-back-button" ng-if="!userInactiveCtrl.isFinished">
-            <md-button md-colors="{background: 'teal-500'}"
-                ng-click="userInactiveCtrl.logout()">SAIR</md-button>
-        </div>
-        <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
-            ng-if="userInactiveCtrl.isFinished">
-            <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
-                ng-click="userInactiveCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
-        </div>
+    <div layout-gt-xs="row" layout-xs="column" layout-align="end center"
+        ng-if="userInactiveCtrl.isFinished">
+        <md-button flex-order-xs="1" class="md-raised md-primary" md-colors="{background: 'teal-500'}"
+            ng-click="userInactiveCtrl.goToLandingPage()">PÁGINA INICIAL</md-button>
     </div>
 </div>

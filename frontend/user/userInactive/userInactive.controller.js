@@ -83,6 +83,14 @@
             userInactiveCtrl.selectedInst = selectedInst;
         }
 
+        userInactiveCtrl.onSearch = function (institutions) {
+            userInactiveCtrl.selectedInst = {};
+        }
+
+        userInactiveCtrl.advance = function () {
+            $state.go("user_request");
+        }
+
         function getRequests(instKey) {
             RequestInvitationService.getRequests(instKey).then(function success(response) {
                 userInactiveCtrl.requestsOfSelectedInst = response;

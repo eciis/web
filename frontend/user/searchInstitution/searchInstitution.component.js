@@ -7,7 +7,8 @@
             controller: SearchInstitutionCtrl,
             controllerAs: 'searchInstCtrl',
             bindings: {
-                onSelect: '<'
+                onSelect: '<',
+                onSearch: '<'
             }
         });
 
@@ -38,6 +39,7 @@
                 .then(institutions => {
                     searchInstCtrl.institutions = institutions;
                     searchInstCtrl.instNotFound = institutions.length === 0;
+                    searchInstCtrl.onSearch(institutions);
                 });
         };
 

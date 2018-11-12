@@ -74,6 +74,8 @@
                     return $q.when();
                 });
             }
+
+            return $q.when();
         };
 
         /**

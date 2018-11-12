@@ -85,6 +85,16 @@
             $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
         };
 
+        eventCtrl.getProfileColor = function(event) {
+            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
+                return prof.institution_key === event.institution_key;
+            });
+            if(profile.length > 0) {
+                return profile[0].color;
+            }
+            return 'teal';
+        };
+
         eventCtrl.getEventsByDay = function() {
             if(eventCtrl.events.length > 0) {
                 eventCtrl.eventsByDay = [];

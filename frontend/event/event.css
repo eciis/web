@@ -120,7 +120,7 @@
     }
 
     .event-preview-border {
-        border-left: 0.55em solid #009688;
+        border-left: 0.55em solid;
     }
 
     .highlight {

@@ -36,21 +36,33 @@
             searchCtrl.institutions = [];
         };
 
+        /**
+         * First of all it checks if there is a search
+         * keyword before make the search to avoid unecessary requests.
+         * Then, make search is called and the result is stored in
+         * searchCtrl.institutions. If the user is using a mobile
+         * showSearchFromMobile is called to open a mdDialog with the
+         * search's result.
+         * @param {Event} ev : The event that is useful to deal with the mdDialog.
+         * When the user isn't in a mobile its value is undefined. 
+         */
         searchCtrl.search = function search(ev) {
             if (searchCtrl.search_keyword) {
-                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution').then(() => {
+                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+
+                promise.then(() => {
                     if (Utils.isMobileScreen()) {
                         searchCtrl.showSearchFromMobile(ev);
                     }
                 });
                 refreshPreviousKeyword();
+
+                return promise;
             }
         };
 
-        searchCtrl.goToInstitution = function goToInstitution(institutionId, cameFromDialog) {
+        searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
-                if(cameFromDialog)
-                    $mdDialog.cancel();
                 $state.go('app.institution.timeline', { institutionKey: institutionId });
             }
         };
@@ -64,7 +76,7 @@
 
         /**
          * Open up a mdDialog to show the search result in a mobile fone
-         * @param {Object} ev 
+         * @param {Event} ev 
          */
         searchCtrl.showSearchFromMobile = (ev) => {
             $mdDialog.show({
@@ -99,11 +111,20 @@
             const searchDialogCtrl = this;
 
             searchDialogCtrl.institutions = searchCtrl.institutions;
-            searchDialogCtrl.goToInstitution = searchCtrl.goToInstitution;
             searchDialogCtrl.searchNature = searchCtrl.searchNature;
             searchDialogCtrl.searchActuation = searchCtrl.searchActuation;
             searchDialogCtrl.searchState = searchCtrl.searchState;
             searchDialogCtrl.isLoading = searchCtrl.isLoading;
+
+            /**
+             * Close the dialog and then call the regular goToInstitution
+             * function.
+             * @param {String} institutionId 
+             */
+            searchDialogCtrl.goToInstitution = (institutionId) => {
+                $mdDialog.cancel();
+                searchCtrl.goToInstitution(institutionId);
+            };
             
         }
 

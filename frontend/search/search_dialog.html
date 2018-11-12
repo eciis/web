@@ -5,7 +5,7 @@
             <md-list-item class="list-item-dense" ng-repeat="institution in institutions = (searchCtrl.institutions 
                 | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)"
                 style="margin-bottom: 1%;" md-colors="::{background: 'default-grey-300'}">
-                <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id, true)">
+                <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)">
                     <md-icon class="md-avatar-icon" md-colors="{background: 'default-light-green-500', color: 'default-grey-50'}">
                         account_balance
                     </md-icon>

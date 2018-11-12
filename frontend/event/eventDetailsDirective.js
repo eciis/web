@@ -3,13 +3,9 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService, $q) {
+        $state, $mdDialog, AuthService) {
 
         var eventCtrl = this;
-        var content = document.getElementById("content");
-
-        var moreEvents = true;
-        var actualPage = 0;
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
@@ -25,9 +21,8 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    posts: eventCtrl.posts || [],
                     post: event,
-                    addPost: true
+                    addPost: false
                 }
             });
         };
@@ -133,12 +128,6 @@
         eventCtrl.isDeleted = () => {
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
         }
-
-        function isInstitutionAdmin(event) {
-            if(event.institution_key)
-                return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                    Utils.getKeyFromUrl(event.institution_key));
-        }
     });
     
     app.directive("eventDetails", function () {
@@ -150,8 +139,7 @@
             scope: {},
             bindToController: {
                 event: '=',
-                isEventPage: '=',
-                posts: '='
+                isEventPage: '='
             }
         };
     });

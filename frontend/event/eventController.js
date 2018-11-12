@@ -75,22 +75,14 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    posts: eventCtrl.posts,
                     post: event,
-                    addPost: true
+                    addPost: false
                 }
             });
         };
 
         eventCtrl.goToEvent = function(event) {
             $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
-        };
-
-        eventCtrl.getSubTitle = function(event) {
-            const date = new Date(event.start_time);
-            const startHour = date.getDate() + ":" + date.getMinutes();
-            return event.address.city ? startHour + " | " + event.address.city :
-                startHour;
         };
 
         eventCtrl.getEventsByDay = function() {
@@ -118,7 +110,6 @@
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
             eventCtrl.loadMoreEvents();
-            eventCtrl.posts = $state.params.posts;
         })();
     });
 })();

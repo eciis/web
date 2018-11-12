@@ -83,9 +83,6 @@
                         templateUrl: Utils.isMobileScreen() ? "app/event/events_mobile.html" : "app/event/events.html",
                         controller: "EventController as eventCtrl",
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.user.invite_inst", {
@@ -111,7 +108,7 @@
                 views: {
                     user_content: {
                         templateUrl: "app/notification/notifications_page.html",
-                        constroller: "NotificationController as notificationCtrl"
+                        controller: "NotificationController as notificationCtrl"
                     }
                 }
             })
@@ -149,9 +146,6 @@
                         templateUrl: "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.institution.members", {
@@ -216,9 +210,6 @@
                         templateUrl: "app/event/event_page.html",
                         controller: "EventPageController as eventCtrl",
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.manage_institution.edit_info", {
@@ -296,6 +287,15 @@
                     main: {
                       templateUrl: "app/auth/email_verification.html",
                       controller: "EmailVerificationController as emailVerifCtrl"
+                    }
+                }
+            })
+            .state("reset_password", {
+                url: "/reset_password",
+                views: {
+                    main: {
+                        templateUrl: "/app/auth/reset_password.html",
+                        controller: "ResetPasswordController as resetCtrl"
                     }
                 }
             })
@@ -415,6 +415,7 @@
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin',
+            'reset_password',
             'accept_invite'
         ];
 
@@ -441,6 +442,7 @@
             'error',
             'signin',
             'email_verification',
+            'reset_password',
             'user_inactive',
             'new_invite'
         ];

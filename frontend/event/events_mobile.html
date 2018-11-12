@@ -1,33 +1,37 @@
 <div class="container-resp">
   <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-  <md-card ng-if="eventCtrl.events.length === 0">
-      <md-content layout-align="center center" layout="column">
-        <h4>Nenhum evento a ser exibido.</h4>
-      </md-content>
-  </md-card>
+    <md-content style="margin-left: auto; margin-right: auto;" ng-if="eventCtrl.events.length === 0">
+      <h4>Nenhum evento a ser exibido.</h4>
+    </md-content>
   <md-content id="content" class="custom-scrollbar">
     <div ng-repeat="events in eventCtrl.eventsByDay"
-    ng-if="eventCtrl.events.length > 0" layut="row">
-      <div layout="column">
-        <div>{{events.day}}</div>
-        <div ng-repeat="event in events.events | orderBy:'start_time'">
-          <div class="events-grid" ng-click="eventCtrl.goToEvent(event)">
-              <md-card class="event-preview-position">
+    ng-if="eventCtrl.events.length > 0" class="events-grid events-grid-position">
+        <div class="events-day-position event-day-properties">
+          <span>{{events.day}}</span>
+        </br>
+          <p class="event-weekday">
+            {{events.events[$index].start_time | amUtc | amLocal | amDateFormat:'ddd' }}
+          </p>
+        </div>
+        <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position">
+          <div ng-click="eventCtrl.goToEvent(event)">
+              <md-card>
                 <div class="event-preview event-preview-border">
                   <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
-                  <div class="highlight" style="grid-row-start: 2; grid-row-end: 3">
+                  <div class="highlight">
                       <div class="event-title">
                         <b>{{ event.title | uppercase}}</b>
                       </div>
                       <div class="event-subtitle">
-                          {{ eventCtrl.getSubTitle(event) }}
+                          {{ event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
+                          {{ event.address.city ? ' | ' + event.address.city : ''}}
                       </div>
                   </div>
                 </div>
               </md-card>
           </div>
         </div>
-      </div>
+        <md-divider class="event-divider"></md-divider>
     </div>
   </md-content>
   <md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>

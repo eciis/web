@@ -1,0 +1,42 @@
+.notification-icon {
+    font-size: 20px; 
+    color:white;
+}
+
+.notification-icon-bg {
+    background: #009688; 
+    width: 1.3em; 
+    height: 1.3em; 
+    padding: 0.25em; 
+    border-radius: 50%;
+    align-self: center;
+}
+
+.unread-notification {
+    background: #E0E0E0;
+}
+
+#institution-name-notification{
+    font-size: 15px;
+    color: #009688;
+}
+
+#info-notification{
+    max-height: 7em;
+    margin-left: 0.25em;
+    margin-top: 0.25em;
+}
+
+#list-padding{
+    padding: 0.5em;
+}
+
+#notification-list-item{
+    margin-bottom: 0.32em;
+    padding: 3 0 3 0;
+}
+
+#image-notification{
+    width: 3.75em;
+    height: 3.75em;
+}

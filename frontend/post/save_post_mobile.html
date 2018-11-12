@@ -68,7 +68,7 @@
             Cancelar
         </md-button>
         <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
-          ng-click="postCtrl.save(isEditing, originalPost, posts, saveForm)">
+          ng-click="postCtrl.save(isEditing, originalPost, saveForm)">
             Postar
         </md-button>
       </md-card-actions>
@@ -86,7 +86,8 @@
           </div>
           <div class="create-post-icon">
             <md-button ng-if="!isEditing" class="md-icon-button"
-                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post">
+                       ng-click="postCtrl.setTypeOfPost()" aria-label="Tipo do Post"
+                       ng-disabled="postCtrl.hasMedia()">
                 <div ng-if="postCtrl.typePost === 'Common'">
                     <md-icon>poll</md-icon>
                 </div>

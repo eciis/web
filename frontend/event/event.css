@@ -114,6 +114,7 @@
         max-height: 120px;
         height: 120px;
         max-width: 100%;
+        min-width: 100%;
         width: 100%;
         padding: 0;
         background-color: #009688;

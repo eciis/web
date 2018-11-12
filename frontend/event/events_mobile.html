@@ -3,14 +3,15 @@
     <md-content style="margin-left: auto; margin-right: auto;" ng-if="eventCtrl.events.length === 0">
       <h4>Nenhum evento a ser exibido.</h4>
     </md-content>
-  <md-content id="content" class="custom-scrollbar">
+  <md-content id="content" class="custom-scrollbar box">
     <div ng-repeat="events in eventCtrl.eventsByDay"
     ng-if="eventCtrl.events.length > 0" class="events-grid events-grid-position">
         <div class="events-day-position event-day-properties">
           <span>{{events.day}}</span>
         </br>
           <p class="event-weekday">
-            {{events.events[$index].start_time | amUtc | amLocal | amDateFormat:'ddd' }}
+            {{eventCtrl.test(events.events[0])}}
+            {{events.events[0].start_time | amUtc | amDateFormat:'ddd' }}
           </p>
         </div>
         <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position">

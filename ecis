@@ -213,7 +213,11 @@ case "$1" in
         set_support_url local $SUPPORT_LOCAL
         set_frontend_url local $FRONTEND_LOCAL
 
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis $2
+        gcloud beta emulators datastore start --host-port=0.0.0.0:8586 &
+        $(gcloud beta emulators datastore env-init)
+
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=True $2
+        $(gcloud beta emulators datastore env-unset)
     ;;
 
     test)

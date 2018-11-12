@@ -1,4 +1,4 @@
-<md-content layout="row" layout-align="center" class="custom-scrollbar" ng-if="!searchCtrl.isMobileScreen()">
+<md-content layout="row" layout-align="center" class="custom-scrollbar">
     <div flex="95" layout-align="center" class="fill-screen">
         <div layout-align="center" class="fill-screen">
             <md-card>
@@ -78,62 +78,5 @@
                 </md-card-content>
             </md-card>
         </div>
-    </div>
-</md-content>
-
-<md-content ng-if="searchCtrl.isMobileScreen()">
-    <div class="search-mobile-top-bar" layout="row" layout-align="start center">
-        <md-button class="md-icon-button" ng-click="searchCtrl.leaveMobileSearchPage()">
-            <md-icon>clear</md-icon>
-        </md-button>
-        <b>PESQUISAR</b>
-    </div>
-    <div layout="row" layout-align="center" class="search-mobile-content">
-        <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
-            <md-input-container class="search-mobile-input" md-no-float>
-                <input placeholder="Pesquisar"
-                    ng-model="searchCtrl.search_keyword">
-                <label class="md-no-float">
-                    <md-icon>search</md-icon>
-                </label>
-            </md-input-container>
-        </form>
-    </div>
-    <div class="search-mobile-options-title">
-        <b>Pesquisa avançada</b>
-    </div>
-    <div layout="column" layout-align="center center" class="search-mobile-options">
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchActuation" placeholder="AREA DE ATUAÇÃO" class="search-by-mobile">
-                <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" 
-                    ng-value="actuation_area.value" ng-click="searchCtrl.searchBy(actuaction_area.value)">
-                    {{actuation_area.name}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchNature" placeholder="NATUREZA LEGAL" class="search-by-mobile">
-                <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" 
-                    ng-value="nature.value" ng-click="searchCtrl.searchBy(nature.value)">
-                    {{nature.name}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchState" placeholder="LOCALIZAÇÃO" class="search-by-mobile">
-                <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" 
-                    ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome)">
-                    {{state.nome}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-    </div>
-    <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
-        <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
-            CANCELAR
-        </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event)">
-            PESQUISAR
-        </md-button>
     </div>
 </md-content>

@@ -78,18 +78,10 @@
 
         describe('goToInstitution()', function() {
 
-            it('Should call state.go and should not call mdDialog.cancel', function() {
+            it('Should call state.go', function() {
                 spyOn(state, 'go').and.callThrough();
                 searchCtrl.goToInstitution(splab.key);
                 expect(state.go).toHaveBeenCalled();
-            });
-
-            it('should call state.go and mdDialog.cancel', function () {
-                spyOn(state, 'go').and.callThrough();
-                spyOn(mdDialog, 'cancel');
-                searchCtrl.goToInstitution(splab.key, 'true');
-                expect(state.go).toHaveBeenCalled();
-                expect(mdDialog.cancel).toHaveBeenCalled();
             });
         });
 

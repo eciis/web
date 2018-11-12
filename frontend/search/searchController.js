@@ -125,7 +125,6 @@
                 $mdDialog.cancel();
                 searchCtrl.goToInstitution(institutionId);
             };
-            
         }
 
         /**

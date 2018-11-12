@@ -361,10 +361,14 @@
             autoHideScrollbar: false
         };
 
+        /**
+         * It selects the correct html based on the screen size.
+         * @param {String} notMobileHtml : The template applied to
+         * screens greater than 960px;
+         * @param {String} mobileHtml : The template applied to mobile screens.
+         */
         function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml) {
-            let selectedHtml;
-            Utils.isMobileScreen() ? selectedHtml = mobileHtml : selectedHtml = notMobileHtml;
-            return selectedHtml;
+            return Utils.isMobileScreen() ? mobileHtml : notMobileHtml;
         }
     });
 

@@ -4,14 +4,14 @@
             <h4 md-colors="{color:'default-grey-700'}">Resultado da pesquisa</h4>
             <md-list-item class="list-item-dense" ng-repeat="institution in institutions = (searchCtrl.institutions 
                 | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)"
-                style="margin-bottom: 1%;" md-colors="::{background: 'default-grey-300'}">
-                <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)">
+                style="margin-bottom: 1%;" md-colors="::{background: 'default-grey-300'}" id="search-list-item">
+                <div layout="row" ng-click="searchCtrl.goToInstitution(institution.id)" layout-align="center center">
                     <md-icon class="md-avatar-icon" md-colors="{background: 'default-light-green-500', color: 'default-grey-50'}">
                         account_balance
                     </md-icon>
-                    <div layout="column" layout-align="center">
-                        <b>
-                            {{ institution.name | limitTo: 40}}{{institution.name.length > 40 ? '...' : ''}}</b>
+                    <div layout="column" layout-align="center center">
+                        <b layout="column" layout-align="center center">
+                            {{ institution.name | limitTo: 45}}{{institution.name.length > 45 ? '...' : ''}}</b>
                     </div>
                 </div>
             </md-list-item>

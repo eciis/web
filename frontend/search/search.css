@@ -76,3 +76,16 @@
   margin-right: 6%; 
   margin-top: 10%;
 }
+
+#search-list-item {
+  height: 50px;
+}
+
+#search-list-item div div {
+  height: 47px;
+}
+
+#search-list-item div b {
+  height: 47px;
+  font-size: 12px;
+}

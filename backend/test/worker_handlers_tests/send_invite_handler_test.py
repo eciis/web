@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Send Invite Handler Tests."""
 
 from ..test_base_handler import TestBaseHandler
@@ -49,8 +50,8 @@ class SendInviteHandlerTest(TestBaseHandler):
             second_invite.key.urlsafe()
         ]
 
-        request_url = '/api/queue/send-invite?invites_keys=%s&host=%s&current_institution=%s&notifications_ids=%s' % (
-            json.dumps(invites_keys), host, institution.key.urlsafe(), notification_id)
+        request_url = '/api/queue/send-invite?invites_keys=%s&host=%s&current_institution=%s&notifications_ids=%s&type_of_invite=%s' % (
+            json.dumps(invites_keys), host, institution.key.urlsafe(), notification_id, 'USER')
 
         self.testapp.post(request_url)
 
@@ -58,4 +59,3 @@ class SendInviteHandlerTest(TestBaseHandler):
             send_invite.assert_called_with(host, institution.key)
 
         resolve_notification_task.assert_called_with(notification_id)
-        

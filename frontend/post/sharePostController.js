@@ -3,8 +3,8 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("SharePostController", function SharePostController(user, posts, post, addPost, $mdDialog, PostService,
-        MessageService, $state) {
+    app.controller("SharePostController", function SharePostController(user, post, addPost, $mdDialog, PostService,
+        MessageService, $state, $rootScope, POST_EVENTS) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 15;
@@ -15,7 +15,6 @@
 
         shareCtrl.post = new Post(post, post.institution_key);
 
-        shareCtrl.posts = posts;
         shareCtrl.addPost = addPost;
         shareCtrl.newPost = new Post({}, shareCtrl.user.current_institution.key);
 
@@ -56,9 +55,8 @@
         };
 
         shareCtrl.addPostTimeline = function addPostTimeline(post) {
-            if (shareCtrl.addPost) {
-                shareCtrl.posts.push(post);
-            }
+            if(shareCtrl.addPost)
+                $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(post));
         };
 
         shareCtrl.isEvent = function isEvent() {
@@ -71,7 +69,7 @@
         shareCtrl.goTo = function goTo() {
             shareCtrl.cancelDialog();
             if (shareCtrl.isEvent()) {
-                $state.go('app.user.event', { eventKey: shareCtrl.post.key, posts: shareCtrl.posts });
+                $state.go('app.user.event', { eventKey: shareCtrl.post.key });
             }
             $state.go('app.post', { postKey: shareCtrl.post.key });
         };

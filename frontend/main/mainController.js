@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-            RequestInvitationService, $mdMenu, $window) {
+        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -204,10 +204,19 @@
             mainCtrl.stateView = $state.current.name.split(".")[2];
         }
 
+        /** Add new observers to listen events that user should be refresh. 
+         */ 
+        function notificationListener() {
+            NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
+                mainCtrl.refreshUser);
+        }
+
+
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
+            notificationListener();
             mainCtrl.getPendingTasks();
         })();
     });

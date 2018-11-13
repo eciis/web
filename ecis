@@ -149,7 +149,7 @@ function log_message {
 function catch_error {
     if [ $1 -ne 0 ]; then
         echo "${red}[eCIS ERROR]${reset} The last command exited with error $1. Fix it then try again!"
-        exit 0;
+        exit $1;
     fi
     if [ ! -z "$2" ]; then
         # Print the message passed as the second parameters
@@ -221,19 +221,16 @@ case "$1" in
             client)
                 echo "=========== Starting Fronted Tests Setup ==========="
                 cd frontend/test
+
+                if [ "$3" == "--clean" ]; then
+                    rm -rf node_modules bower_components
+                fi
                 
                 if [ ! -e node_modules ]; then
-                    npm install
+                    yarn add package.json
                     catch_error $? "Node modules installed with success"
                 else
                     log_message "Node modules already installed"
-                fi
-
-                if [ ! -e bower_components ]; then
-                    bower install
-                    catch_error $? "Bower modules installed with success"
-                else
-                    log_message "Bower modules already installed"
                 fi
 
                 echo "=========== Starting to run Fronted Tests ==========="
@@ -256,6 +253,7 @@ case "$1" in
                 
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
+                echo 'SERVER_KEY = "SERVER_KEY"' >> firebase_config.py
 
                 TEST_NAME="*test.py"
                 if [ "$3" == "--name" ] && [ ! -z "$4" ]; then

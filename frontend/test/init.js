@@ -9,7 +9,8 @@
         apiKey: "MOCK-API_KEY",
         authDomain: "eciis-splab.firebaseapp.com",           // Your Firebase Auth domain ("*.firebaseapp.com")
         databaseURL: "https://eciis-splab.firebaseio.com",   // Your Firebase Database URL ("https://*.firebaseio.com")
-        storageBucket: "eciis-splab.appspot.com"
+        storageBucket: "eciis-splab.appspot.com",
+        messagingSenderId: "jdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk"
     });
 
     var user = {

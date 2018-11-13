@@ -65,7 +65,6 @@
                 dialog.then(function() {
                     surveyCtrl.voteService().then(function () {                        
                         surveyCtrl.reloadPost();
-                        syncSharedPosts();
                     });
                 }, function() {
                     MessageService.showToast('Cancelado');
@@ -75,23 +74,6 @@
                 MessageService.showToast('Você precisa escolher alguma alternativa');
             }         
         };
-
-        function updateSharedPost(post, updatedPost) {
-            if(post.shared_post && post.shared_post.key === updatedPost.key) post.shared_post = updatedPost;
-            if(post.key === updatedPost.key) post = updatedPost;
-            return post;
-        }
-
-        /**
-        * Function to synchronize survey posts with shared posts
-        * when the user vote in survey post that is shared or vote in shared post that is survey.
-        * @param {} empty - No require param.
-        * @return {undefined} - Void function returns undefined.
-        */
-        function syncSharedPosts() {
-            if(surveyCtrl.posts)
-                surveyCtrl.posts = surveyCtrl.posts.map(post => updateSharedPost(post, surveyCtrl.post));
-        }
 
         surveyCtrl.voteService = function(){
             var promise = SurveyService.vote(surveyCtrl.post, surveyCtrl.optionsSelected);
@@ -200,7 +182,6 @@
             scope: {},
             bindToController: {
                 post: '=',
-                posts: '=',
                 user: '=',
                 isdialog: '=',
                 isPostPage: '=',

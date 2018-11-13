@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("LoginController", function LoginController(AuthService, $state, $mdDialog, 
-            $stateParams, $window) {
+            $stateParams, $window, MessageService) {
         var loginCtrl = this;
 
         loginCtrl.user = {};
@@ -17,6 +17,8 @@
             var promise = AuthService.loginWithGoogle();
             promise.then(function success() {
                 redirectTo(redirectPath);
+            }).catch(function(error) {
+                MessageService.showToast(error);
             });
             return promise;
         };
@@ -30,7 +32,9 @@
                 function success() {
                     redirectTo(redirectPath);
                 }
-            );
+            ).catch(function(error) {
+                MessageService.showToast(error);
+            });
         };
 
         loginCtrl.redirect = function success() {
@@ -38,14 +42,7 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            $mdDialog.show({
-                controller: "ResetPasswordController",
-                controllerAs: "resetCtrl",
-                templateUrl: '/app/auth/reset_password_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose:true
-            });
+            $state.go("reset_password");
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {

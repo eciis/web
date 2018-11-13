@@ -190,5 +190,23 @@ var Utils = {
         var supportGtExtraLargeScreen = screenWidth > extraLargeScreen && greatestWordLength >= maxLengthWordToGtExtraLargeScreen
 
         return supportSmallScreen || supportMediumScreen || supportLargeScreen || supportExtraLargeScreen || supportExtraLargeScreen || supportGtExtraLargeScreen;
+    },
+
+    /**
+     * This function indicate if the screen are in mobile device size.
+     * @returns {boolean} True if the screen is smaller or equal to 960 pixels and false in otherwise.
+     */
+    isMobileScreen: function isMobileScreen() {
+        return screen.width <= 960;
+    },
+
+    /**
+     * Clear array
+     * @param {array} the array that will be clean.
+     */
+    clearArray: function clearArray(array) {
+        while(array.length > 0){
+            array.pop();
+        }
     }
 };

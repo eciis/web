@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService) {
+        MessageService, PushNotificationService) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -121,6 +121,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                            PushNotificationService.requestNotificationPermission(service.getCurrentUser());
                             return userInfo;
                         });
                     });
@@ -128,9 +129,6 @@
                     service.sendEmailVerification(user);
                     throw "Error! Email not verified.";
                 }
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                return error;
             });
         }
 
@@ -145,7 +143,6 @@
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
             var deferred = $q.defer();
             authObj.createUserWithEmailAndPassword(email, password).then(function(response) {
-                service.sendEmailVerification();
                 let user = response.user;
                 var idToken = user.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
@@ -206,19 +203,15 @@
             var auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
-                MessageService.showToast('Email de verificação enviado para o seu email.');
+                $state.go("email_verification");
             }, function error(error) {
                 console.error(error);
             });
         };
 
         service.resetPassword = function resetPassword(email) {
-            authObj.sendPasswordResetEmail(email).then(
-            function success() {
-                MessageService.showToast('Você receberá um email para resetar sua senha.');
-            }, function error(error) {
-                console.error(error);
-            });
+            return authObj.sendPasswordResetEmail(email);
+                    
         };
 
         service.$onLogout = function $onLogout(callback) {

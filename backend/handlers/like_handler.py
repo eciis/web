@@ -85,6 +85,14 @@ class LikeHandler(BaseHandler):
 
             enqueue_task('post-notification', params)
 
+            is_first_like = post.get_number_of_likes() == 1
+            if is_first_like:
+                enqueue_task('send-push-notification', {
+                    'type': entity_type,
+                    'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],
+                    'entity': post.key.urlsafe()
+                })
+
     @json_response
     @login_required
     def delete(self, user, post_key, comment_id=None, reply_id=None):

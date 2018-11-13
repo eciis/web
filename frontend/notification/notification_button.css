@@ -1,0 +1,14 @@
+.green-icon-notification{
+    color:#81C784 !important;
+}
+
+#span-integer{
+    position:relative;
+    bottom: -1px;
+    right:-33px;
+}
+
+#buttons-menu{
+    color: #009688;
+    padding: 1rem 0 1rem 0;
+}

@@ -58,18 +58,6 @@
             httpBackend.verifyNoOutstandingRequest();
         });
 
-        it('Test get in success case', function() {
-            spyOn($http, 'get').and.callThrough();
-            httpBackend.expect('GET', "/api/user/timeline").respond(posts);
-            var result;
-            service.get().then(function(data){
-                result = data;
-            });
-            httpBackend.flush();
-            expect($http.get).toHaveBeenCalled();
-            expect(result).toEqual(posts);
-        });
-
         it('Test createPost in success case', function() {
             spyOn($http, 'post').and.callThrough();
             httpBackend.expect('POST', POSTS_URI).respond(posts[0]);

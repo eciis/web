@@ -15,7 +15,8 @@ from custom_exceptions import NotAuthorizedException
 from util import Notification, NotificationsQueueManager
 from service_entities import enqueue_task
 from service_messages import create_message
-
+from service_entities import enqueue_task
+from push_notification import NotificationType
 
 __all__ = ['InstitutionParentRequestCollectionHandler']
 
@@ -39,6 +40,20 @@ def remake_link(request, requested_inst_key, child_institution, user):
     })
 
     request.change_status('accepted')
+
+
+def enqueue_push_notification(requested_inst_key):
+    """Get the necessary parameters and insert
+    a new push notification in the queue.
+    """
+    requested_inst = requested_inst_key.get()
+    receiver = requested_inst.admin.urlsafe()
+
+    enqueue_task('send-push-notification', {
+        'type': NotificationType.link.value,
+        'receivers': [receiver],
+        'entity': requested_inst_key.urlsafe()
+    })
 
 class InstitutionParentRequestCollectionHandler(BaseHandler):
     """Institution Parent Collectcion Request Handler."""
@@ -124,5 +139,7 @@ class InstitutionParentRequestCollectionHandler(BaseHandler):
             return request
 
         request = main_operations(request, requested_inst_key, child_institution, user, host)
+
+        enqueue_push_notification(requested_inst_key)
 
         self.response.write(json.dumps(request.make()))

@@ -67,6 +67,14 @@ class PostCommentHandler(BaseHandler):
         }
         enqueue_task('post-notification', params)
 
+        is_first_comment = post.get_number_of_comment() == 1
+        if is_first_comment:
+            enqueue_task('send-push-notification', {
+                'type': entity_type,
+                'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],
+                'entity': post.key.urlsafe()
+            })
+
         self.response.write(json.dumps(Utils.toJson(comment)))
 
     @json_response

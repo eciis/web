@@ -1,5 +1,5 @@
 <div>
-    <form>
+    <form ng-submit="searchInstCtrl.search()">
         <md-input-container md-no-float id="search-container" class="md-block custom-card-input-container">
             <input placeholder="Busque uma instituição" ng-model="searchInstCtrl.keyword" 
                 class="custom-card-input" autocomplete="off" required>

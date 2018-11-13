@@ -310,6 +310,9 @@
             })
             .state("user_request", {
                 url: '/user_request',
+                params: {
+                    institution: null
+                },
                 views: {
                     main: {
                         templateUrl: 'app/user/userRequestForm/user_request_form.html',

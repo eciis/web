@@ -10,19 +10,28 @@
                     <div class="custom-card-content">
                         <img id="search-inst-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
                         <p>{{ userReqFormCtrl.getMessage() }}</p>
-
-                        
-                        <div id="search-btn-container" layout="row" layout-align="center center">
-                            <md-button class="md-raised search-inst-btn" md-colors="{background: 'teal-500'}"
-                                ng-click="null"> 
-                                Finalizar
+                        <form ng-if="!userReqFormCtrl.isRequestSent">
+                            <md-input-container md-no-float class="md-block custom-card-input-container">
+                                <input placeholder="Cargo institucional" ng-model="userReqFormCtrl.request.office" 
+                                    class="custom-card-input" autocomplete="off" required>
+                            </md-input-container>
+                            <md-input-container md-no-float class="md-block custom-card-input-container">
+                                <input placeholder="E-mail institucional*" ng-model="userReqFormCtrl.request.email" 
+                                    class="custom-card-input" autocomplete="off" required>
+                            </md-input-container>
+                        </form>
+                        <div layout="row" layout-align="center center">
+                            <md-button class="md-raised" md-colors="{background: 'teal-500'}" 
+                                ng-click="userReqFormCtrl.onClick()"> 
+                                {{ userReqFormCtrl.getBtnTitle() }}
                             </md-button>
                         </div>
                     </div>
                 </md-card-content>
                 <div class="custom-card-footer" layout-align="center">
                     <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" 
-                        md-colors="{background: 'light-green-600'}" ng-click="userReqFormCtrl.logout()">
+                        ng-if="!userReqFormCtrl.isRequestSent" md-colors="{background: 'light-green-600'}" 
+                        ng-click="userReqFormCtrl.back()">
                         <md-icon>keyboard_arrow_left</md-icon>
                     </md-button>
                 </div>

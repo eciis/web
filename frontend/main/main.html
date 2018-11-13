@@ -62,16 +62,28 @@
 </h4>
 
 <md-toolbar layout-align="space-around center" layout="row" id="navbar-bottom">
-  <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goHome()">
-    <md-icon ng-class="mainCtrl.getSelectedItemClass('home')">home</md-icon>
-  </md-button>
-  <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goToEvents()">
-    <md-icon ng-class="mainCtrl.getSelectedItemClass('events')">event</md-icon>
-  </md-button>
-  <md-button class="md-icon-button" aria-label="Instituições" ng-click="mainCtrl.goToInstitutions()">
-    <md-icon ng-class="mainCtrl.getSelectedItemClass('institutions')">account_balance</md-icon>
-  </md-button>
-  <notification action-button-notification="mainCtrl.goToNotifications" icon="'notifications'"></notification>
+  <div class="icon-navbar-bottom">
+    <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goHome()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('home')">home</md-icon>
+    </md-button>
+    <p ng-class="mainCtrl.getSelectedItemClass('home')" id="label-icon-navbottom">Início</p>
+  </div> 
+  <div class="icon-navbar-bottom">
+    <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goToEvents()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('events')">event</md-icon>
+    </md-button>
+    <p ng-class="mainCtrl.getSelectedItemClass('events')" id="label-icon-navbottom">Eventos</p>
+  </div>
+  <div class="icon-navbar-bottom">
+   <md-button class="md-icon-button big-label-icon" aria-label="Instituições" ng-click="mainCtrl.goToInstitutions()">
+      <md-icon ng-class="mainCtrl.getSelectedItemClass('institutions')">account_balance</md-icon>
+    </md-button>
+    <p ng-class="mainCtrl.getSelectedItemClass('institutions')" id="label-icon-navbottom">Instituições</p>
+  </div>
+  <div class="icon-navbar-bottom">
+    <notification class="big-label-icon"></notification>
+    <p id="label-icon-navbottom" ng-class="mainCtrl.getSelectedItemClass('notifications')">Notificações</p>  
+  </div> 
 </md-toolbar>
 
 <md-toolbar class="md-warn" ng-if="!mainCtrl.userEmailVerified()" ng-hide="hideEmailVerification">

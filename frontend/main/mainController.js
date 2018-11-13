@@ -197,7 +197,7 @@
 
         mainCtrl.getSelectedItemClass = function getSelectedItemClass(state){
             loadStateView();
-            return (state === mainCtrl.stateView) ? "icon-selected-navbar":"icon-navbar";
+            return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
         };
 
         function loadStateView(){

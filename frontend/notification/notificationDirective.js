@@ -281,11 +281,7 @@
             restrict: 'E',
             templateUrl: "app/notification/notifications.html",
             controllerAs: "notificationCtrl",
-            controller: "NotificationController",
-            bindToController: {
-                actionButtonNotification: '=',
-                icon: '='
-            }
+            controller: "NotificationController"
         };
     });
 })();

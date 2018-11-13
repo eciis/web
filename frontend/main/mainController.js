@@ -211,11 +211,30 @@
                 mainCtrl.refreshUser);
         }
 
+        function changeCoverOnScroll() {
+            var instName = document.getElementById("main-toolbar");
+            var instPage = $("lala");
+
+            const FULL = 1, NONE = 0;
+
+            console.log(instPage, instName)
+
+ 
+            instPage && instPage.addEventListener('scroll', function() {
+                console.log(instPage.scrollTop, instName.offsetTop)
+                var isOverInstName = instPage.scrollTop > instName.offsetTop;
+                var opacity = isOverInstName ? FULL : NONE;
+                ///setElementsOpacity(opacity);
+                //changeLeftMenuStyle(isOverInstName);
+            });
+        }
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
                 $state.go("app.user.config_profile");
             }
+
+            changeCoverOnScroll();
             notificationListener();
             mainCtrl.getPendingTasks();
         })();

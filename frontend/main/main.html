@@ -20,9 +20,7 @@
           <md-icon>home</md-icon>
         </md-button>
       </a>
-
-        <notification-button class-button="green-icon-notification"></notification-button>
-
+      <notification-button class-button="green-icon-notification" class="navbar-top"></notification-button>
       <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
         <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
           <md-input-container flex md-no-float>
@@ -48,7 +46,7 @@
   </div>
 </md-toolbar>
 
-<md-content ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}"></md-content>
+<md-content id="lala" ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}"></md-content>
 
 <div hide-xs hide-sm>
   <md-button class="feedback-btn" ng-click="mainCtrl.goToReport()"
@@ -81,7 +79,9 @@
     <p ng-class="mainCtrl.getSelectedItemClass('institutions')" id="label-icon-navbottom">Instituições</p>
   </div>
   <div class="icon-navbar-bottom">
-    <notification class="big-label-icon"></notification>
+    <notification-button should-go-to-state="true"  style="justify-self:center"
+      class-button="{{mainCtrl.getSelectedItemClass('notifications')}}">
+    </notification-button>
     <p id="label-icon-navbottom" ng-class="mainCtrl.getSelectedItemClass('notifications')">Notificações</p>  
   </div> 
 </md-toolbar>

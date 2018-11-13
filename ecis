@@ -215,12 +215,16 @@ case "$1" in
 
         if [[ -n $2 ]] && [ $2 = "--enable_datastore_emulator" ] ; then
             gcloud beta emulators datastore start --host-port=0.0.0.0:8586 &
-            $(gcloud beta emulators datastore env-init)
-            dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=True $3
-            $(gcloud beta emulators datastore env-unset)
+            emulator=True
+            other_parameter=$3
         else
-            dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis $2
+            other_parameter=$2
+            emulator=False
         fi
+
+        $(gcloud beta emulators datastore env-init)
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=$emulator $other_parameter
+        $(gcloud beta emulators datastore env-unset)
     ;;
 
     test)

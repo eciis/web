@@ -1,8 +1,9 @@
 <md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
     <div layout-align="center center">
         <div layout="row" layout-align="center center">
-            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
-                md-colors="{background: 'light-green-600'}" ng-click="userReqFormCtrl.logout()">
+            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs
+                ng-if="!userReqFormCtrl.isRequestSent" md-colors="{background: 'light-green-600'}"
+                ng-click="userReqFormCtrl.back()">
                 <md-icon>keyboard_arrow_left</md-icon>
             </md-button>
             <md-card id="search-inst-card" class="custom-card">

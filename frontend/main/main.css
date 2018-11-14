@@ -33,11 +33,10 @@
 #navbar-bottom{
     background-color: #ffffff;
     box-shadow: 0px -8px 20px #EEEEEE;
-    display: grid;
-    position: fixed;
+    overflow-x: hidden;
+    overflow-y: hidden;
     top: 90%;
-    height: 3.5em;
-    grid-template-columns: 20% 20% 30% 30%;
+    position: fixed;
 }
 
 #label-icon-navbottom{
@@ -70,6 +69,9 @@
     }
     .navbar-top{
         display: none;
+    }
+    .content-mobile{
+        padding-bottom:15%;
     }
 }
 

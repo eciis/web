@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(AuthService, $mdDialog, $state, 
+    app.controller("HomeController", function HomeController(AuthService, $mdDialog, $state, $scope,
         ProfileService, EventService, $rootScope, POST_EVENTS) {
         var homeCtrl = this;
 

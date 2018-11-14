@@ -175,25 +175,16 @@
             $window.location.reload();
         };
 
-        mainCtrl.goHome = function goHome() {
-            mainCtrl.stateView = "home";
-            $state.go('app.user.home');
+        mainCtrl.goToNavBottom = function goToNavBottom(state) {
+            mainCtrl.stateView = state;
+            document.getElementById('main-toolbar').style.display = 'block';
+            $state.go('app.user.' + state);
         };
 
-        mainCtrl.goToEvents = function goToEvents() {
-            mainCtrl.stateView = "events";
-            $state.go('app.user.events', {posts: mainCtrl.posts});
-        };
-
-        mainCtrl.goToInstitutions = function goToInstitutions() {
-            mainCtrl.stateView = "institutions";
-            $state.go('app.user.institutions');
-        };
-
-        mainCtrl.goToNotifications = function goToNotifications() {
+        mainCtrl.goToNotifications = function goToNotifications(){
             mainCtrl.stateView = "notifications";
-            $state.go('app.user.notifications');
-        };
+            document.getElementById('main-toolbar').style.display = 'block';
+        }
 
         mainCtrl.getSelectedItemClass = function getSelectedItemClass(state){
             loadStateView();

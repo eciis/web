@@ -201,6 +201,14 @@ var Utils = {
     },
 
     /**
+     * This function indicate if the screen are in phone device size.
+     * @returns {boolean} True if the screen is smaller or equal to 450 pixels and false in otherwise.
+     */
+    isPhoneScreen: function isPhoneScreen() {
+        return screen.width <= 450;
+    },
+
+    /**
      * Clear array
      * @param {array} the array that will be clean.
      */

@@ -53,14 +53,14 @@
 }
 
 .search-mobile-options-title {
-  margin-top: 5px; 
-  font-size: 20px; 
+  margin-top: 0.3em; 
+  font-size: 1.5em; 
   margin-left: 7.5%;
 }
 
 .search-mobile-options {
-  margin-left: -1px; 
-  margin-top: 15px;
+  margin-left: -0.1em; 
+  margin-top: 1.2em;
 }
 
 .search-mobile-options md-input-container {
@@ -78,14 +78,14 @@
 }
 
 #search-list-item {
-  height: 50px;
+  height: 3em;
 }
 
 #search-list-item div div {
-  height: 47px;
+  height: 2.8em;
 }
 
 #search-list-item div b {
-  height: 47px;
-  font-size: 12px;
+  height: 2.8em;
+  font-size: 0.75em;
 }

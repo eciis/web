@@ -54,7 +54,10 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: "app/search/search.html",
+                        templateUrl: selectHtmlBasedOnScreenSize(
+                                "app/search/search.html",
+                                "app/search/search_mobile.html"
+                            ),
                         controller: "SearchController as searchCtrl"
                     }
                 }
@@ -357,6 +360,16 @@
             theme: 'minimal-dark',
             autoHideScrollbar: false
         };
+
+        /**
+         * It selects the correct html based on the screen size.
+         * @param {String} notMobileHtml : The template applied to
+         * screens greater than 960px;
+         * @param {String} mobileHtml : The template applied to mobile screens.
+         */
+        function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml) {
+            return Utils.isMobileScreen() ? mobileHtml : notMobileHtml;
+        }
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {

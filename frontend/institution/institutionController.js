@@ -326,7 +326,6 @@
             const FULL = 1, NONE = 0;
  
             instPage && instPage.addEventListener('scroll', function() {
-                console.log(instPage.scrollTop, instName.offsetTop)
                 var isOverInstName = instPage.scrollTop > instName.offsetTop;
                 var opacity = isOverInstName ? FULL : NONE;
                 setElementsOpacity(opacity);

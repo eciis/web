@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
         var eventCtrl = this;
         var content = document.getElementById("content");
 
@@ -11,7 +11,7 @@
 
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
-
+        eventCtrl.months = [];
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
@@ -117,8 +117,15 @@
             }
         };
 
+        function getMonths() {
+            $http.get('app/utils/months.json').then(function success(response) {
+                eventCtrl.months = response.data;
+            });
+        };
+
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
+            getMonths();
             eventCtrl.loadMoreEvents();
         })();
     });

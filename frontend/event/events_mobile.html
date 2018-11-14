@@ -1,7 +1,14 @@
 <div class="container-resp">
   <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <md-content style="margin-left: auto; margin-right: auto;" ng-if="eventCtrl.events.length === 0">
+    <md-content class="none-events-msg" ng-if="eventCtrl.events.length === 0">
       <h4>Nenhum evento a ser exibido.</h4>
+    </md-content>
+    <md-content class="none-events-msg" ng-if="eventCtrl.events.length > 0">
+      <md-select name="month" ng-model="eventCtrl.currentMonth">
+        <md-option ng-repeat="month in eventCtrl.months" ng-value="month.nome_mes">
+            {{month.nome_mes}}
+        </md-option>
+    </md-select>
     </md-content>
   <md-content id="content" class="custom-scrollbar box">
     <div ng-repeat="events in eventCtrl.eventsByDay"

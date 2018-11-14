@@ -162,4 +162,9 @@
     .event-subtitle {
         margin-top: 0.3em;
     }
+
+    .none-events-msg {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

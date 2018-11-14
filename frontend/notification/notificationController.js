@@ -36,6 +36,10 @@
             $state.go('app.user.notifications');
         };
 
+        notificationCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen();
+        };
+
         (function main(){
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
             notificationCtrl.notifications =  NotificationService.getUnreadNotifications();

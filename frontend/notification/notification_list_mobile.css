@@ -1,0 +1,43 @@
+.mobile-notification-list-item {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 100%;
+    height: 5em;
+    width: 100%;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.mobile-notification-list-item div {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 50% 50%;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    justify-self: start;
+    align-self: start;
+    margin-left: 0.5em;
+    margin-top: 1em;
+}
+
+#notification-user-name {
+    justify-self: start;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#notification-from-inst-name {
+    justify-self: start;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.mobile-notification-list-item img {
+    width: 75%;
+    height: 4em;
+    border-radius: 50%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    justify-self: end;
+}

@@ -78,7 +78,10 @@
     }
 
     app.component("notificationList", {
-        templateUrl: "app/notification/notifications_list.html",
+        templateUrl: Utils.selectHtmlBasedOnScreenSize(
+            "app/notification/notifications_list.html", 
+            "app/notification/notifications_list_mobile.html"
+        ),
         bindings: {
             lengthTextNotification: '=?',
             notifications: '=',

@@ -56,7 +56,6 @@
             scope: scope,
             user: user,
             post: post,
-            posts:[post],
             addPost: true
         });
     }));
@@ -99,7 +98,7 @@
             shareCtrl.post = event;
             spyOn(state, 'go').and.callThrough();
             shareCtrl.goTo();
-            expect(state.go).toHaveBeenCalledWith('app.user.event', Object({ eventKey: shareCtrl.post.key, posts: shareCtrl.posts}));
+            expect(state.go).toHaveBeenCalledWith('app.user.event', Object({ eventKey: shareCtrl.post.key}));
         });
     });
 
@@ -247,19 +246,19 @@
 
     describe('addPostTimeline()', function() {
 
-        it('should add post in posts', function() {
-            expect(shareCtrl.posts).not.toContain(newPost);
+        it('should throw an event', function() {
+            spyOn(rootScope, '$emit');
             shareCtrl.addPostTimeline(newPost);
 
-            expect(shareCtrl.posts).toContain(newPost);
+            expect(rootScope.$emit).toHaveBeenCalledWith("NEW_POST_EVENT_TO_UP", new Post(newPost));
         });
         
-        it("shouldn't add post in posts", function() {
+        it("shouldn't throw an event", function() {
             shareCtrl.addPost = false;
-            expect(shareCtrl.posts).not.toContain(newPost);
+            spyOn(rootScope, '$emit');
             shareCtrl.addPostTimeline(newPost);
             
-            expect(shareCtrl.posts).not.toContain(newPost);
+            expect(rootScope.$emit).not.toHaveBeenCalled();
         });
     });
 }));

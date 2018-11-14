@@ -1,0 +1,27 @@
+<md-menu md-position-mode="target-right target">
+  <div>
+    <span ng-if="notificationCtrl.notifications.length > 0" style="position:relative; bottom: -1px; right:-33px;"
+      class="counter-of-notifications" data-badge="{{notificationCtrl.numberUnreadNotifications()}}">
+    </span>
+    <md-button aria-label="menu" class="md-icon-button" ng-click="notificationCtrl.showNotifications($mdMenu, ev)">
+      <md-icon ng-class="notificationCtrl.classButton">{{ notificationCtrl.notifications.length === 0 ? 'notifications_none' : 'notifications'}}</md-icon>
+    </md-button>
+  </div>
+  <md-menu-content width="2" class="notifications-menu">
+    
+    <div layout="column">
+      <md-content class="custom-scrollbar" style="max-height: 25rem;">
+        <notification-list notifications="notificationCtrl.notifications"
+          mark-as-read="notificationCtrl.markAsRead" length-text-notification="50"></notification-list>
+      </md-content>
+      <div layout="row" layout-align="space-between center" style="color: #009688; padding: 1rem 0 1rem 0">
+        <md-button aria-label="done all" ng-click="notificationCtrl.clearAll()">
+          MARCAR TODAS COMO LIDAS
+        </md-button>
+        <md-button ng-click="notificationCtrl.seeAll()">
+          VER TUDO
+        </md-button>
+      </div>
+    </div>
+  </md-menu-content>
+</md-menu>

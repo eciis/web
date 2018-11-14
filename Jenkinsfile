@@ -35,6 +35,5 @@ pipeline {
       slackSend(color: '#d32f2f', message: "FAILED: Build <${env.BUILD_URL}display/redirect|#${env.BUILD_NUMBER}> of *${env.JOB_NAME}*")
       
     }
-    
   }
 }

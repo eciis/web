@@ -1,15 +1,18 @@
 .notification-icon {
-    font-size: 20px; 
+    font-size: 20px;
     color:white;
+    line-height: 24px;
+    text-align: center;
 }
 
 .notification-icon-bg {
     background: #009688; 
-    width: 1.3em; 
-    height: 1.3em; 
-    padding: 0.25em; 
+    width: 2em; 
+    height: 2em; 
     border-radius: 50%;
     align-self: center;
+    text-align: center;
+    line-height: 2em;
 }
 
 .unread-notification {

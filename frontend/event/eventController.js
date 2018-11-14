@@ -12,6 +12,7 @@
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
         eventCtrl.months = [];
+        eventCtrl.currentMonth = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
@@ -120,6 +121,8 @@
         function getMonths() {
             $http.get('app/utils/months.json').then(function success(response) {
                 eventCtrl.months = response.data;
+                const currentMonth = new Date().getMonth();
+                eventCtrl.currentMonth = eventCtrl.months[currentMonth];
             });
         };
 

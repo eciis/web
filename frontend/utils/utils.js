@@ -193,11 +193,12 @@ var Utils = {
     },
 
     /**
-     * This function indicate if the screen are in mobile device size.
-     * @returns {boolean} True if the screen is smaller or equal to 960 pixels and false in otherwise.
+     * This function indicate if the current screen size are smaller than the screen passed by parameter.
+     * @param {number} the screen size that will be compared.
+     * @returns {boolean} True if the screen is smaller or equal to the parameter and false in otherwise.
      */
-    isMobileScreen: function isMobileScreen() {
-        return screen.width <= 960;
+    isSmallerToScreen: function isSmallerToScreen(screenSize) {
+        return screen.width <= screenSize;
     },
 
     /**

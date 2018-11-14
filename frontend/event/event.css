@@ -54,7 +54,7 @@
 }
 
 /* MOBILE DEVICES */
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 475px) {
 
     .create-event-button {
         background-color: #7CB342 !important;

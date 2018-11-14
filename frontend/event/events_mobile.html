@@ -3,9 +3,9 @@
     <md-content class="none-events-msg" ng-if="eventCtrl.events.length === 0">
       <h4>Nenhum evento a ser exibido.</h4>
     </md-content>
-    <md-content class="none-events-msg" ng-if="eventCtrl.events.length > 0">
+    <md-content class="none-events-msg" ng-if="eventCtrl.months.length > 0">
       <md-select name="month" ng-model="eventCtrl.currentMonth">
-        <md-option ng-repeat="month in eventCtrl.months" ng-value="month.nome_mes">
+        <md-option ng-repeat="month in eventCtrl.months" ng-value="month">
             {{month.nome_mes}}
         </md-option>
     </md-select>

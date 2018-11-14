@@ -80,7 +80,7 @@
                 url: "/events",
                 views: {
                     user_content: {
-                        templateUrl: Utils.isMobileScreen() ? "app/event/events_mobile.html" : "app/event/events.html",
+                        templateUrl: Utils.isSmallerToScreen(475) ? "app/event/events_mobile.html" : "app/event/events.html",
                         controller: "EventController as eventCtrl",
                     }
                 }

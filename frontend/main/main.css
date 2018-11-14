@@ -35,8 +35,6 @@
     box-shadow: 0px -8px 25px #EEEEEE;
     overflow-x: hidden;
     overflow-y: hidden;
-    top: 90%;
-    position: fixed;
 }
 
 #label-icon-navbottom{
@@ -69,9 +67,6 @@
     }
     .navbar-top{
         display: none;
-    }
-    .content-mobile{
-        padding-bottom:16%;
     }
 }
 

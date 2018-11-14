@@ -1122,10 +1122,6 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     .custom-card-back-btn {
         margin: 1.2em 0 0 0;
     }
-
-    #fab-new-post{
-        padding-bottom:15%;
-    }
 }
 
 /* Ipad, Ipad Pro */

@@ -57,7 +57,6 @@
         authService = AuthService;
         notificationService = NotificationService;
         notificationListenerService = NotificationListenerService;
-        httpBackend.when('GET', 'app/user/user_inactive.html').respond(200);
         
         authService.login(user);
 
@@ -68,7 +67,6 @@
         };
         notCtrl = createCtrl();
         notCtrl.notifications = [];
-        httpBackend.flush();
     }));
 
     afterEach(function() {

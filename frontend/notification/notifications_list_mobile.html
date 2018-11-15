@@ -1,19 +1,22 @@
 <md-content>
     <div ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp'"
-        class="mobile-notification-list-item" id="bla">
+        class="mobile-notification-list-item" ng-class="notification.status === 'READ'? '': 'unread-notification'">
         <img ng-src="{{notification.from.photo_url}}" />
-        <div>
+        <div id="mobile-notification-content">
             <b style="font-size: 15px;" id="notification-user-name">
-                {{ notification.from.name | limitTo: 30}}{{notification.from.name > 30 ? '...' : ''}}</b>
+                {{ notificationListCtrl.getLimitedString(notification.from.name, 30)}}</b>
             <b style="font-size: 10px" id="notification-from-inst-name" md-colors="{color: 'teal-700'}">
-                {{ notification.from.institution_name | limitTo: 45}}{{notification.from.institution_name > 45 ? '...' : ''}}</b>
+                {{ notificationListCtrl.getLimitedString(notification.from.institution_name, 45)}}</b>
             <div id="notification-mobile-info">
-                <div class="notification-icon-bg">
-                    <md-icon class="notification-icon">{{notificationListCtrl.getIcon(notification.entity_type)}}</md-icon>
+                <div id="mobile-notification-icon-container">
+                    <md-icon id="mobile-notification-icon">{{notificationListCtrl.getIcon(notification.entity_type)}}</md-icon>
                 </div>
-                <span>
-                    {{ notificationListCtrl.getLimitedString(notificationListCtrl.getFormattedMessage(notification), notificationListCtrl.lengthTextNotification) }}
-                </span>
+                <div id="mobile-notification-text">
+                    <span id="mobile-notification-action">
+                        {{ notificationListCtrl.getLimitedString(notificationListCtrl.getFormattedMessage(notification), 40) }}</span>
+                    <span id="mobile-notification-time">
+                        {{ notification.timestamp | amUtc | amLocal | amCalendar:referenceTime:formats }}</span>
+                </div>
             </div>
         </div>
     </div>

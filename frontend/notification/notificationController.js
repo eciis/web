@@ -36,8 +36,8 @@
             $state.go('app.user.notifications');
         };
 
-        notificationCtrl.isMobileScreen = () => {
-            return Utils.isMobileScreen();
+        notificationCtrl.isMobileScreen = (mobileScreenSize) => {
+            return Utils.isMobileScreen(mobileScreenSize);
         };
 
         (function main(){

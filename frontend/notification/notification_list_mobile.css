@@ -2,19 +2,20 @@
     display: grid;
     grid-template-columns: 25% 75%;
     grid-template-rows: 100%;
-    height: 5em;
+    height: 5.5em;
     width: 100%;
     text-align: center;
     align-items: center;
     justify-items: center;
+    margin-top: 2%;
 }
 
-.mobile-notification-list-item div {
+#mobile-notification-content {
     display: grid;
-    height: 3em;
+    height: 4em;
     width: 100%;
     grid-template-columns: 100%;
-    grid-template-rows: 40% 20% 40%;
+    grid-template-rows: 29% 19% 52%;
     grid-column-start: 2;
     grid-column-end: 3;
     justify-self: start;
@@ -37,25 +38,61 @@
 
 #notification-mobile-info {
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 2em 15em;
+  height: 100%;
 }
 
-#notification-mobile-info div {
+#mobile-notification-icon-container {
   grid-column-start: 1;
   grid-column-end: 2;
 }
 
-#notification-mobile-info span {
+#mobile-notification-icon-container {
+  background: #009688; 
+  width: 1.5em; 
+  height: 1.5em; 
+  border-radius: 50%;
+  align-self: center;
+  text-align: center;
+  line-height: 1.5em;
+}
+
+#mobile-notification-text {
   grid-column-start: 2;
   grid-column-end: 3;
   font-size: 10px;
+  justify-self: start;
+  text-align: left;
+  height: 3em;
+  margin-top: -1%;
+  display: grid;
+  grid-template-rows: 66% 33%;
 }
 
 .mobile-notification-list-item img {
-    width: 72%;
+    width: 4em;
     height: 4em;
     border-radius: 50%;
     grid-column-start: 1;
     grid-column-end: 2;
     justify-self: end;
+}
+
+#mobile-notification-icon {
+  font-size: 15px;
+  color:white;
+  line-height: 24px;
+  text-align: center;
+}
+
+#mobile-notification-action {
+  grid-row-start: 1; 
+  grid-row-end: 2; 
+  align-self: end;
+}
+
+#mobile-notification-time {
+  grid-row-start: 2; 
+  grid-row-end: 3; 
+  align-self: start;
 }

@@ -1,4 +1,4 @@
-<div layout="row" layout-align="center" ng-if="!notificationCtrl.isMobileScreen()">
+<div layout="row" layout-align="center" ng-if="!notificationCtrl.isMobileScreen(600)">
     <md-card flex="95">
         <md-toolbar md-colors="{background: 'teal-500'}" layout="row">
             <div class="md-toolbar-tools">
@@ -26,7 +26,7 @@
     </md-card>
 </div>
 
-<div ng-if="notificationCtrl.isMobileScreen()">
+<div ng-if="notificationCtrl.isMobileScreen(600)">
     <notification-list notifications="notificationCtrl.allNotifications" 
         mark-as-read="notificationCtrl.markAsRead" keyword="notificationCtrl.keyword">
 </div>

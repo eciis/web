@@ -1,7 +1,7 @@
-<md-card class="create-post-container-resp create-post-margin">
+<md-card class="create-post-container-resp">
     <form name="saveForm" prevent-state-change="postCtrl.post"
           ng-submit="postCtrl.save(isEditing, originalPost, saveForm)">
-    <div >
+    <div>
       <md-card-content layout="row" layout-padding>
         <div>
           <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"

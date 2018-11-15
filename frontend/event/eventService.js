@@ -14,8 +14,10 @@
             return HttpService.post(EVENT_URI, event);
         };
 
-        service.getEvents = function getEvents(page) {
-            return HttpService.get(EVENT_URI + '?page=' + page + "&limit=" + LIMIT);
+        service.getEvents = function getEvents(page, month, year) {
+            let url = EVENT_URI + '?page=' + page + "&limit=" + LIMIT;
+            if(month && year) url += "&month=" + month + "&year=" + year
+            return HttpService.get(url);
         };
 
         service.getInstEvents = function getInstEvents(page, institution_key) {

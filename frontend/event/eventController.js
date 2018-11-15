@@ -35,7 +35,10 @@
 
 
         function loadEvents(deferred, getEvents) {
-            getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1;
+            const currentYear = currentDate.getFullYear();
+            getEvents(actualPage, eventCtrl.institutionKey || currentMonth, currentYear).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.next;
 

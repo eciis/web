@@ -13,9 +13,23 @@ from utils import json_response
 from utils import NotAuthorizedException
 from utils import query_paginated
 from utils import to_int
+from datetime import datetime
 from custom_exceptions import QueryException
 
 __all__ = ['EventCollectionHandler']
+
+def get_query_events(filters, user):
+    if len(filters) > 2:
+        month = int(filters[2][1])
+        year = int(filters[3][1])
+        current_month = datetime(year, month, 1)
+        next_month = datetime(year if month < 12 else year+1, month+1 if month < 12 else 1, 1)
+        return Event.query(Event.institution_key.IN(
+            user.follows), Event.state == 'published',
+            Event.start_time >= current_month, Event.start_time < next_month).order(Event.start_time, Event.key)
+    else:
+        return Event.query(Event.institution_key.IN(
+            user.follows), Event.state == 'published').order(Event.start_time, Event.key)
 
 class EventCollectionHandler(BaseHandler):
     """Event  Collection Handler."""
@@ -28,10 +42,10 @@ class EventCollectionHandler(BaseHandler):
         more = False
 
         if len(user.follows) > 0:
-            queryEvents = Event.query(Event.institution_key.IN(
-                user.follows), Event.state == 'published').order(Event.start_time, Event.key)
+            queryEvents = get_query_events(self.request.GET.items(), user)
+            page_params = self.request.GET.items()[0:2]
             queryEvents, more = query_paginated(
-                self.request.GET.items(), queryEvents)
+                page_params, queryEvents)
 
             array = [Utils.toJson(Event.make(event), host=self.request.host) for event in queryEvents]
 

@@ -132,16 +132,25 @@
         eventCtrl.getTimeHours = function getTimeHours(isoTime) {
             return new Date(isoTime).getHours();
         };
+
+        function loadEvent(eventKey) {
+            EventService.getEvent(eventKey).then(function success(response) {
+                eventCtrl.event = response;
+            }, function error() {
+                $state.go("app.user.home");
+            });
+        }
+
+        (function main() {
+            if ($state.params.eventKey)
+                loadEvent($state.params.eventKey);
+        })();
     });
-    
-    const event_details_html = 'app/event/event_details.html';
-    const event_details_small_page = 'app/event/event_details_small_page.html'
-    const screen_width = window.screen.width;
 
     app.directive("eventDetails", function () {
         return {
             restrict: 'E',
-            templateUrl: (screen_width > 600) ? event_details_html : event_details_small_page,
+            templateUrl: "app/event/event_details.html",
             controllerAs: "eventDetailsCtrl",
             controller: "EventDetailsController",
             scope: {},

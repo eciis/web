@@ -210,8 +210,8 @@
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
-                        templateUrl: "app/event/event_page.html",
-                        controller: "EventPageController as eventCtrl",
+                        templateUrl: (Utils.isMobileScreen()) ? "app/event/event_details_small_page.html" : "app/event/event_page.html",
+                        controller: (Utils.isMobileScreen()) ?  "EventDetailsController as eventDetailsCtrl" : "EventPageController as eventCtrl",
                     }
                 }
             })

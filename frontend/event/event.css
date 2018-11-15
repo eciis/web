@@ -113,7 +113,7 @@
     overflow: hidden; 
     background-color: #e6e6e6; 
     margin: 0; 
-    padding-left: 8px; 
+    padding: 0 8px; 
     line-height: 50px;
 }
 

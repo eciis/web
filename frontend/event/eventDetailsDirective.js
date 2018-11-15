@@ -128,6 +128,10 @@
         eventCtrl.isDeleted = () => {
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
         }
+
+        eventCtrl.getTimeHours = function getTimeHours(isoTime) {
+            return new Date(isoTime).getHours();
+        };
     });
     
     const event_details_html = 'app/event/event_details.html';

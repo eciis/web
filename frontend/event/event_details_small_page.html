@@ -1,7 +1,7 @@
 <div class="title">
     {{ eventDetailsCtrl.event.title | uppercase}}
 </div>
-<div>
+<div ng-if="eventDetailsCtrl.event.photo_url">
     <img style="background-color: white; width: 100%" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
 </div>
 <div class="adress-container">
@@ -24,12 +24,34 @@
     <md-icon class="event-icon">date_range</md-icon>
     <div>
         <p class="time-head">Data</p>
-        <p style="margin: 0;">18 a 23 de Janeiro</p>
+
+        <p style="margin: 0;" ng-if="eventDetailsCtrl.endInTheSameDay() && !eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+        </p>
+        
+        <p style="margin: 0;" ng-if="!eventDetailsCtrl.endInTheSameDay() && !eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            a {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD'}}
+            de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+        </p>
+
+        <p style="margin: 0;" ng-if="eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+        </p>
+
+        <p style="margin: 0;" ng-if="eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD'}}
+            de {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+        </p>
     </div>
     <md-icon class="event-icon">schedule</md-icon>
-    <div>
+    <div><!-- <p style="margin: 0;">18 a 23 de Janeiro</p> -->
         <p class="time-head">Horário</p>
-        <p style="margin: 0;">8h30 às 18h</p>
+        <p style="margin: 0;">
+            {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.start_time)}} 
+            às {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.end_time)}}h</p>
     </div>
 </div>
 
@@ -37,33 +59,36 @@
 
 <div class="content-block">
     <h2>Descrição</h2>
-    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)" style="white-space: pre-line;"></p>
+    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)" ng-if="eventDetailsCtrl.event.text" style="white-space: pre-line;"></p>
+    <p ng-if="!eventDetailsCtrl.event.text">Não há descrição</p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Progamação</h2>
-    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)" style="white-space: pre-line;"></p>
+    <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)" ng-if="eventDetailsCtrl.event.programation" style="white-space: pre-line;"></p>
+    <p ng-if="eventDetailsCtrl.event.programation">Não há programação</p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Vídeos</h2>
-    <div ng-repeat="video in eventDetailsCtrl.event.video_url">
+    <div ng-repeat="video in eventDetailsCtrl.event.video_url" ng-if="eventDetailsCtrl.event.video_url.length !== 0">
         <div class="youtube-player">
             <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
         </div>
         <p>{{video.description}}</p>
     </div>
+    <p ng-if="eventDetailsCtrl.event.video_url.length === 0">Não há vídeos</p>
 </div>
 
 <hr class="event-hr"/>
 
 <div class="content-block">
     <h2>Links úteis</h2>
-    <div ng-repeat="link in eventDetailsCtrl.event.useful_links">
+    <div ng-repeat="link in eventDetailsCtrl.event.useful_links" ng-if="eventDetailsCtrl.event.useful_links.length !== 0">
         <div class="useful-links-container">
             <a title="Link" ng-href="{{link.url}}" target="_blank">
                 <md-icon class="useful-links-icon">link</md-icon>
@@ -72,6 +97,8 @@
             <p class="useful-links-text">{{ link.description }}</p>
         </div>
     </div>
+
+    <p ng-if="eventDetailsCtrl.event.useful_links.length === 0">Não Há links</p>
 </div>
 
 <md-fab-speed-dial ng-if="eventDetailsCtrl.event && eventDetailsCtrl.canEdit(eventDetailsCtrl.event)" id="fab-new-post" class="md-fab-bottom-right" style="position: fixed;" hide-gt-sm>

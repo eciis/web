@@ -47,7 +47,7 @@
         </p>
     </div>
     <md-icon class="event-icon">schedule</md-icon>
-    <div><!-- <p style="margin: 0;">18 a 23 de Janeiro</p> -->
+    <div>
         <p class="time-head">Horário</p>
         <p style="margin: 0;">
             {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.start_time)}} 
@@ -68,7 +68,7 @@
 <div class="content-block">
     <h2>Progamação</h2>
     <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)" ng-if="eventDetailsCtrl.event.programation" style="white-space: pre-line;"></p>
-    <p ng-if="eventDetailsCtrl.event.programation">Não há programação</p>
+    <p ng-if="!eventDetailsCtrl.event.programation">Não há programação</p>
 </div>
 
 <hr class="event-hr"/>

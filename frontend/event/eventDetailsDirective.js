@@ -129,22 +129,37 @@
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
         }
 
+        /**
+         * This function receives a date in iso format, 
+         * for example, 2018-11-15T19: 41: 11.545Z, and 
+         * returns the corresponding time for that date.
+         * 
+         * @param {String} isoTime String date in iso format
+         */
         eventCtrl.getTimeHours = function getTimeHours(isoTime) {
             return new Date(isoTime).getHours();
         };
 
+        /**
+         * This function receives the event key, makes a 
+         * request to the backend, and returns the event 
+         * returned as a backend response.
+         * 
+         * @param {String} eventKey Key of event 
+         */
         function loadEvent(eventKey) {
-            EventService.getEvent(eventKey).then(function success(response) {
+            return EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = response;
-            }, function error() {
+            }, function error(response) {
+                MessageService.showToast(response);
                 $state.go("app.user.home");
             });
         }
 
-        (function main() {
+        eventCtrl.$onInit = function() {
             if ($state.params.eventKey)
-                loadEvent($state.params.eventKey);
-        })();
+                return loadEvent($state.params.eventKey);
+        };
     });
 
     app.directive("eventDetails", function () {

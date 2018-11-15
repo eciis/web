@@ -25,16 +25,19 @@
 
 .time-container {
     display: grid;
-    grid-template-columns: 40px auto 40px auto;
+    grid-template-columns: 40px auto auto 40px 75px;
     grid-template-rows: auto;
     align-items: center;
     margin: 16px;
 }
 
-.title {
+.title-container {
     font-size: 20px; 
     font-weight: bold; 
     margin: 16px;
+    display: grid; 
+    grid-template-columns: auto 16px; 
+    align-items: end;
 }
 
 .adress-text {
@@ -117,6 +120,14 @@
     line-height: 50px;
 }
 
+.event-menu-button {
+    margin: 0; 
+    padding: 0; 
+    width: 16px; 
+    background-color: white; 
+    border: 0;
+}
+
 @media screen and (max-width: 450px) {
     .font-resp {
         font-size: 12px;
@@ -130,6 +141,11 @@
 @media screen and (min-width: 600px) {
     #hide-share {
         display: none !important;
+    }
+
+    .time-container {
+        width: 70%;
+        margin: 16px auto;
     }
 }
 

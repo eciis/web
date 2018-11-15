@@ -210,8 +210,8 @@
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
-                        templateUrl: (Utils.isMobileScreen()) ? "app/event/event_details_small_page.html" : "app/event/event_page.html",
-                        controller: (Utils.isMobileScreen()) ?  "EventDetailsController as eventDetailsCtrl" : "EventPageController as eventCtrl",
+                        templateUrl: selectHtmlBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
+                        controller: selectHtmlBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
                     }
                 }
             })
@@ -512,6 +512,6 @@
     }
 
     (function main() {
-        //initServiceWorker();
+        initServiceWorker();
     })();
 })();

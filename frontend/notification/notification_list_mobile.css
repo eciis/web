@@ -11,8 +11,10 @@
 
 .mobile-notification-list-item div {
     display: grid;
+    height: 3em;
+    width: 100%;
     grid-template-columns: 100%;
-    grid-template-rows: 50% 50%;
+    grid-template-rows: 40% 20% 40%;
     grid-column-start: 2;
     grid-column-end: 3;
     justify-self: start;
@@ -33,8 +35,24 @@
     grid-row-end: 3;
 }
 
+#notification-mobile-info {
+  display: grid;
+  grid-template-columns: 25% 75%;
+}
+
+#notification-mobile-info div {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+#notification-mobile-info span {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  font-size: 10px;
+}
+
 .mobile-notification-list-item img {
-    width: 75%;
+    width: 72%;
     height: 4em;
     border-radius: 50%;
     grid-column-start: 1;

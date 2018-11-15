@@ -1,12 +1,20 @@
 <md-content>
     <div ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp'"
-        class="mobile-notification-list-item">
+        class="mobile-notification-list-item" id="bla">
         <img ng-src="{{notification.from.photo_url}}" />
         <div>
             <b style="font-size: 15px;" id="notification-user-name">
-                {{ notification.from.name | limitTo: 40}}{{notification.from.name > 40 ? '...' : ''}}</b>
-            <b style="font-size: 10px" id="notification-from-inst-name">
-                {{ notification.from.institution_name | limitTo: 40}}{{notification.from.institution_name > 40 ? '...' : ''}}</b>
+                {{ notification.from.name | limitTo: 30}}{{notification.from.name > 30 ? '...' : ''}}</b>
+            <b style="font-size: 10px" id="notification-from-inst-name" md-colors="{color: 'teal-700'}">
+                {{ notification.from.institution_name | limitTo: 45}}{{notification.from.institution_name > 45 ? '...' : ''}}</b>
+            <div id="notification-mobile-info">
+                <div class="notification-icon-bg">
+                    <md-icon class="notification-icon">{{notificationListCtrl.getIcon(notification.entity_type)}}</md-icon>
+                </div>
+                <span>
+                    {{ notificationListCtrl.getLimitedString(notificationListCtrl.getFormattedMessage(notification), notificationListCtrl.lengthTextNotification) }}
+                </span>
+            </div>
         </div>
     </div>
 </md-content>

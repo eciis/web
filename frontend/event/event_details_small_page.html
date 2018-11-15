@@ -1,7 +1,7 @@
 <div style="background-color: white;">
     <div class="title-container">
         {{ eventDetailsCtrl.event.title | uppercase}}
-        <md-menu style="margin-left: auto; width: 16px;" md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
+        <md-menu style="margin-left: auto; width: 16px;" md-offset="-165 45">
                 <button class="event-menu-button" title="Opções"
                 ng-click="$mdMenu.open(ev)">
                     <md-icon style="color: black;">more_vert</md-icon>
@@ -43,7 +43,7 @@
 
     <div class="time-container">
         <md-icon class="event-icon">date_range</md-icon>
-        <div style="grid-column-start: 2; grid-column-end: 3;">
+        <div>
             <p class="time-head">Data</p>
 
             <p style="margin: 0;" ng-if="eventDetailsCtrl.endInTheSameDay() && !eventDetailsCtrl.endInOtherMonth()">
@@ -67,8 +67,8 @@
                 de {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMMM'}}
             </p>
         </div>
-        <md-icon class="event-icon" style="grid-column-start: 4; grid-column-end: 5;">schedule</md-icon>
-        <div style="grid-column-start: 5; grid-column-end: 6;">
+        <md-icon class="event-icon">schedule</md-icon>
+        <div>
             <p class="time-head">Horário</p>
             <p style="margin: 0;">
                 {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.start_time)}} 

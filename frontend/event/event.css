@@ -25,7 +25,7 @@
 
 .time-container {
     display: grid;
-    grid-template-columns: 40px auto auto 40px 75px;
+    grid-template-columns: 40px auto 40px 75px;
     grid-template-rows: auto;
     align-items: center;
     margin: 16px;

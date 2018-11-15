@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<md-fab-speed-dial ng-if="eventDetailsCtrl.canEdit(eventDetailsCtrl.event)" id="fab-new-post" class="md-fab-bottom-right" style="position: fixed;" hide-gt-sm>
+<md-fab-speed-dial ng-if="eventDetailsCtrl.event && eventDetailsCtrl.canEdit(eventDetailsCtrl.event)" id="fab-new-post" class="md-fab-bottom-right" style="position: fixed;" hide-gt-sm>
     <md-fab-trigger>
         <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)"
             style="background-color: #8cbf4d; color: white;">

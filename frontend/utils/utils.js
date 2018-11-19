@@ -215,11 +215,11 @@ var Utils = {
     },
 
     /**
-         * It selects the correct html based on the screen size.
-         * @param {String} notMobileHtml : The template applied to
-         * screens greater than 960px;
-         * @param {String} mobileHtml : The template applied to mobile screens.
-         */
+     * It selects the correct html based on the screen size.
+     * @param {String} notMobileHtml : The template applied to
+     * screens greater than 960px;
+     * @param {String} mobileHtml : The template applied to mobile screens.
+     */
     selectHtmlBasedOnScreenSize: function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml, mobileScreenSize) {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileHtml : notMobileHtml;
     }

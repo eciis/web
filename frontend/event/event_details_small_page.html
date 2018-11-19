@@ -1,14 +1,14 @@
 <div style="background-color: white;">
     <div class="title-container">
-        {{ eventDetailsCtrl.event.title | uppercase}}
-        <md-menu style="margin-left: auto; width: 16px;" md-offset="-165 45">
+        <span>{{ eventDetailsCtrl.event.title | uppercase}}</span>
+        <md-menu id="menu-button" md-offset="-165 45">
                 <button class="event-menu-button" title="Opções"
                 ng-click="$mdMenu.open(ev)">
                     <md-icon style="color: black;">more_vert</md-icon>
                 </button>
                 <md-menu-content>
                 <md-menu-item id="hide-share">
-                    <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)"">
+                    <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
                     <md-icon>share</md-icon>
                     Compartilhar evento
                     </md-button>
@@ -25,12 +25,12 @@
     <div ng-if="eventDetailsCtrl.event.photo_url">
         <img style="background-color: white; width: 100%" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
     </div>
-    <div class="adress-container">
-        <p class="adress-text">Endereço</p>
+    <div class="address-container">
+        <p class="address-text">Endereço</p>
         <md-icon class="event-icon">room</md-icon>
         <div>
             <p class="location">{{eventDetailsCtrl.event.local | uppercase}}</p>
-            <p class="adress">
+            <p class="address">
                 {{eventDetailsCtrl.event.address.street ? eventDetailsCtrl.event.address.street + ', ' : ''}}
                 {{ eventDetailsCtrl.event.address.street && eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number + ',' : eventDetailsCtrl.event.address.street ? 'S/N,' : ''}}
                 {{eventDetailsCtrl.event.address.city ? eventDetailsCtrl.event.address.city : ''}}
@@ -38,7 +38,7 @@
                 {{eventDetailsCtrl.event.address.country ? eventDetailsCtrl.event.address.country : ''}}
             </p>
         </div>
-        <hr class="adress-hr"/>
+        <hr class="address-hr"/>
     </div>
 
     <div class="time-container">

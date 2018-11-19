@@ -54,7 +54,7 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: selectHtmlBasedOnScreenSize(
+                        templateUrl: selectFieldBasedOnScreenSize(
                                 "app/search/search.html",
                                 "app/search/search_mobile.html"
                             ),
@@ -210,8 +210,8 @@
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
-                        templateUrl: selectHtmlBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
-                        controller: selectHtmlBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
+                        templateUrl: selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
+                        controller: selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
                     }
                 }
             })
@@ -362,13 +362,13 @@
         };
 
         /**
-         * It selects the correct html based on the screen size.
-         * @param {String} notMobileHtml : The template applied to
+         * It selects the correct Field based on the screen size.
+         * @param {String} notMobileField : The template applied to
          * screens greater than 960px;
-         * @param {String} mobileHtml : The template applied to mobile screens.
+         * @param {String} mobileField : The template applied to mobile screens.
          */
-        function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml) {
-            return Utils.isMobileScreen() ? mobileHtml : notMobileHtml;
+        function selectFieldBasedOnScreenSize(notMobileField, mobileField) {
+            return Utils.isMobileScreen() ? mobileField : notMobileField;
         }
     });
 

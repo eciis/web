@@ -15,68 +15,68 @@
     color: #03b3a1;
 }
 
-.adress-container {
+.address-container {
     display: grid;
-    grid-template-columns: 40px auto;
+    grid-template-columns: 2.5em auto;
     grid-template-rows: auto auto auto;
-    margin: 16px 16px 0 16px;
+    margin: 1em 1em 0 1em;
     align-items: center;
 }
 
 .time-container {
     display: grid;
-    grid-template-columns: 40px auto 40px 75px;
+    grid-template-columns: 2.5em auto 2.5em 4.688em;
     grid-template-rows: auto;
     align-items: center;
-    margin: 16px;
+    margin: 1em;
 }
 
 .title-container {
-    font-size: 20px; 
+    font-size: 1.25em; 
     font-weight: bold; 
-    margin: 16px;
+    margin: 0.8em;
     display: grid; 
-    grid-template-columns: auto 16px; 
+    grid-template-columns: auto 0.8em; 
     align-items: end;
 }
 
-.adress-text {
+.address-text {
     grid-column-start: 1; 
     grid-column-end: 3; 
-    font-size: 11px; 
+    font-size: 0.69em; 
     color: #009688;
     font-weight: bold; 
-    margin-bottom: 5px;
+    margin-bottom: 0.45em;
 }
 
 .event-icon {
-    height: 40px;
-    width: 40px;
-    font-size: 40px;
+    height: 1em;
+    width: 1em;
+    font-size: 2.5em;
     margin: 0;
 }
 
 .location {
     margin: 0; 
     font-weight: bold; 
-    font-size: 15px;
+    font-size: 0.94em;
 }
 
-.adress {
+.address {
     margin: 0; 
     color: rgba(0,0,0,0.54); 
-    font-size: 13px;
+    font-size: 0.82em;
 }
 
-.adress-hr {
+.address-hr {
     grid-column-start: 1; 
     grid-column-end: 3;
-    margin-top: 16px;
+    margin-top: 1em;
     width: 100%;
 }
 
 .time-head {
-    font-size: 11px; 
+    font-size: 0.69em; 
     color: #009688;
     font-weight: bold; 
     margin: 0;
@@ -91,23 +91,23 @@
 }
 
 .content-block {
-    margin: 30px 16px;
+    margin: 1.875em 1em;
 }
 
 .useful-links-container {
     display: grid; 
-    grid-template-columns: 50px auto; 
-    margin-bottom: 5px;
+    grid-template-columns: 3.125em auto; 
+    margin-bottom: 0.3125em;
 }
 
 .useful-links-icon {
     background-color: #8cc04e; 
     color: white; 
-    height: 50px; 
-    width: 50px; 
+    height: 1.667em; 
+    width: 1.667em; 
     text-align: center; 
-    line-height: 50px; 
-    font-size: 30px;
+    line-height: 1.667em; 
+    font-size: 1.89em;
 }
 
 .useful-links-text {
@@ -116,16 +116,21 @@
     overflow: hidden; 
     background-color: #e6e6e6; 
     margin: 0; 
-    padding: 0 8px; 
-    line-height: 50px;
+    padding: 0 0.5em; 
+    line-height: 3.1em;
 }
 
 .event-menu-button {
     margin: 0; 
     padding: 0; 
-    width: 16px; 
+    width: 0.8em; 
     background-color: white; 
     border: 0;
+}
+
+#menu-button {
+    margin-left: auto; 
+    width: 0.8em;
 }
 
 @media screen and (max-width: 450px) {
@@ -145,7 +150,7 @@
 
     .time-container {
         width: 70%;
-        margin: 16px auto;
+        margin: 1em auto;
     }
 }
 

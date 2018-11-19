@@ -354,11 +354,11 @@ a:active {
         opacity: 1;
     }
 
-    60% {
+    70% {
         opacity: 0.5;
     }
 
-    60% {
+    80% {
         opacity: 0;
     }
 }

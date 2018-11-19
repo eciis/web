@@ -54,7 +54,7 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: selectFieldBasedOnScreenSize(
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
                                 "app/search/search.html",
                                 "app/search/search_mobile.html"
                             ),
@@ -210,8 +210,8 @@
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
-                        templateUrl: selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
-                        controller: selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
+                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
                     }
                 }
             })
@@ -360,16 +360,6 @@
             theme: 'minimal-dark',
             autoHideScrollbar: false
         };
-
-        /**
-         * It selects the correct Field based on the screen size.
-         * @param {String} notMobileField : The template applied to
-         * screens greater than 960px;
-         * @param {String} mobileField : The template applied to mobile screens.
-         */
-        function selectFieldBasedOnScreenSize(notMobileField, mobileField) {
-            return Utils.isMobileScreen() ? mobileField : notMobileField;
-        }
     });
 
     app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {

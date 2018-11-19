@@ -339,6 +339,31 @@ a:active {
   }
 }
 
+@keyframes fade {
+    0% {
+      opacity: 0;
+    }
+  
+    60% {
+      opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.5;
+    }
+
+    60% {
+        opacity: 0;
+    }
+}
+
+
 .image-view{
     position:relative;
     max-width: 37%;

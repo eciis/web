@@ -15,7 +15,7 @@
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
 
-        mainCtrl.stateView = "home";
+        mainCtrl.stateView =  $state.current.name;
         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
@@ -114,7 +114,7 @@
             });
         };
 
-        mainCtrl.goToEditInfo = function goToEditInfo(instKey){
+        mainCtrl.goToEditInstInfo = function goToEditInstInfo(instKey){
             $state.go('app.manage_institution.edit_info', {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
@@ -175,24 +175,37 @@
             $window.location.reload();
         };
 
-        mainCtrl.goToNavBottom = function goToNavBottom(state) {
-            mainCtrl.stateView = state;
-            document.getElementById('main-toolbar').style.display = 'block';
-            $state.go('app.user.' + state);
+        /** Function used in bottom navbar to redirect to new state and
+         * reset properties of CSS that can be modified while using in mode mobile
+         * @param {string} state - state that should be redirect. 
+         */
+        mainCtrl.goToOfBottomNav = function goToOfBottomNav(state) {
+            mainCtrl.stateView = "app.user." + state;
+            resetNavBarDisplayStyle();
+            $state.go(mainCtrl.stateView);
         };
 
-        mainCtrl.goToNotifications = function goToNotifications(){
-            mainCtrl.stateView = "notifications";
-            document.getElementById('main-toolbar').style.display = 'block';
+        /** Update the state view to notifications
+         *  and reset properties of CSS.
+         */
+        mainCtrl.selectNotificationState = function selectNotificationState(){
+            mainCtrl.stateView = "app.user.notifications";
+            resetNavBarDisplayStyle();
         }
 
-        mainCtrl.getSelectedItemClass = function getSelectedItemClass(state){
-            loadStateView();
+        /** Return correct class according currently state view.
+         */
+        mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
+            state = "app.user." + state;
+            console.log(state, state === mainCtrl.stateView);
             return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
         };
 
-        function loadStateView(){
-            mainCtrl.stateView = $state.current.name.split(".")[2];
+        /** Reset properties CSS. 
+         * In mode mobile maybe changes some properties.
+         */
+        function resetNavBarDisplayStyle(){
+            document.getElementById('main-toolbar').style.display = 'block';
         }
 
         /** Add new observers to listen events that user should be refresh. 

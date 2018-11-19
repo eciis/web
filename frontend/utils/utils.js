@@ -196,7 +196,11 @@ var Utils = {
      * This function indicate if the screen are in mobile device size.
      * @returns {boolean} True if the screen is smaller or equal to 960 pixels and false in otherwise.
      */
-    isMobileScreen: function isMobileScreen() {
+    isMobileScreen: function isMobileScreen(mobileScreenSize) {
+        if (mobileScreenSize) {
+          return screen.width <= mobileScreenSize;
+        }
+        
         return screen.width <= 960;
     },
 
@@ -208,5 +212,15 @@ var Utils = {
         while(array.length > 0){
             array.pop();
         }
+    },
+
+    /**
+     * It selects the correct html based on the screen size.
+     * @param {String} notMobileHtml : The template applied to
+     * screens greater than 960px;
+     * @param {String} mobileHtml : The template applied to mobile screens.
+     */
+    selectHtmlBasedOnScreenSize: function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml, mobileScreenSize) {
+        return Utils.isMobileScreen(mobileScreenSize) ? mobileHtml : notMobileHtml;
     }
 };

@@ -75,7 +75,7 @@
             state && $state.go(state, {key: notification.entity.key});
             !state && $state.go('app.user.notifications');
         };
-    }
+    };
 
     app.component("notificationList", {
         templateUrl: Utils.selectHtmlBasedOnScreenSize(

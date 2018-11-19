@@ -13,6 +13,7 @@
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
         eventCtrl.months = [];
+        eventCtrl.years = [];
         eventCtrl.currentMonth = null;
         eventCtrl.currentYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
@@ -37,7 +38,7 @@
 
 
         function loadEvents(deferred, getEvents, month, year) {
-            getEvents(actualPage, eventCtrl.institutionKey || month, year).then(function success(response) {
+            getEvents(actualPage, month, year, eventCtrl.institutionKey).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.next;
 
@@ -51,7 +52,7 @@
                 }
 
                 eventCtrl.isLoadingEvents = false;
-                eventCtrl.getEventsByDay();
+                eventCtrl._getEventsByDay();
                 deferred.resolve();
             }, function error() {
                 deferred.reject();
@@ -89,11 +90,19 @@
             });
         };
 
-        eventCtrl.goToEvent = function(event) {
+        /**
+         * Go to the page of a specific event
+         * @param {object} event - The current event
+         */
+        eventCtrl.goToEvent = (event) => {
             $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
         };
 
-        eventCtrl.getProfileColor = function(event) {
+        /**
+         * Get the color of institutional profile of the user
+         * @param {object} event - The current event
+         */
+        eventCtrl.getProfileColor = (event) => {
             const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
                 return prof.institution_key === event.institution_key;
             });
@@ -103,7 +112,21 @@
             return 'teal';
         };
 
-        eventCtrl.getEventsByDay = function() {
+        /**
+         * Loads the events when the filters of month and/or year is changed
+         */
+        eventCtrl.loadFilteredEvents = () => {
+            moreEvents = true;
+            actualPage = 0;
+            isAnotherMonth = true;
+            eventCtrl.loadMoreEvents();
+        };
+
+        /**
+         * Group the events into an array of days of the selected month of year
+         * @private
+         */
+        eventCtrl._getEventsByDay = () => {
             if(eventCtrl.events.length > 0) {
                 eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
@@ -125,27 +148,35 @@
             }
         };
 
-        eventCtrl.loadFilteredEvents = function() {
-            moreEvents = true;
-            actualPage = 0;
-            isAnotherMonth = true;
-            eventCtrl.loadMoreEvents();
+        /**
+         * Loads the years 2017 to 2050 to show in filter by year
+         * @private
+         */
+        eventCtrl._loadYears = () => {
+            for (let year = 2017; year <= 2050; year++) {
+                eventCtrl.years.push(year);
+            }
         };
 
-        function getMonths() {
+        /**
+         * Loads all the months of years into objects with number and name of the month
+         * @private
+         */
+        eventCtrl._getMonths = () => {
             $http.get('app/utils/months.json').then(function success(response) {
                 eventCtrl.months = response.data;
                 const currentDate = new Date();
                 const currentMonth = currentDate.getMonth();
                 eventCtrl.currentMonth = eventCtrl.months[currentMonth];
                 eventCtrl.currentYear = currentDate.getFullYear();
+                eventCtrl._loadYears();
                 eventCtrl.loadMoreEvents();
             });
         };
 
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
-            getMonths();
+            eventCtrl._getMonths();
         })();
     });
 })();

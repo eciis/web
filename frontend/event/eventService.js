@@ -16,11 +16,11 @@
 
         service.getEvents = function getEvents(page, month, year) {
             let url = EVENT_URI + '?page=' + page + "&limit=" + LIMIT;
-            if(month && year) url += "&month=" + month + "&year=" + year
+            if(month && year) url += "&month=" + month + "&year=" + year;
             return HttpService.get(url);
         };
 
-        service.getInstEvents = function getInstEvents(page, institution_key) {
+        service.getInstEvents = function getInstEvents(page, month, year, institution_key) {
             return HttpService.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT);
         };
 

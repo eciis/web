@@ -1,11 +1,16 @@
-<div class="container-resp">
+<div class="container-resp box">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div class="none-events-msg">
-      <md-content ng-if="eventCtrl.months.length > 0">
+      <md-content ng-if="eventCtrl.months.length > 0" layout="row">
         <md-select name="month" ng-model="eventCtrl.currentMonth" ng-change="eventCtrl.loadFilteredEvents()">
           <md-option ng-repeat="month in eventCtrl.months" ng-value="month">
               {{month.month_name}}
+          </md-option>
+        </md-select>
+        <md-select name="year" ng-model="eventCtrl.currentYear" ng-change="eventCtrl.loadFilteredEvents()">
+          <md-option ng-repeat="year in eventCtrl.years" ng-value="year">
+              {{year}}
           </md-option>
         </md-select>
       </md-content>
@@ -46,7 +51,8 @@
     </md-content>
   </div>
 </div>
-<md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
+<md-fab-speed-dial ng-if="!eventCtrl.institutionKey"
+  id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
     <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
     class="md-fab md-primary create-event-button">

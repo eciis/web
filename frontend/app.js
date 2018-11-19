@@ -146,7 +146,7 @@
                 url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/institution_events.html",
+                        templateUrl: Utils.isMobileScreen(475) ? "app/event/events_mobile.html" : "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
                 }

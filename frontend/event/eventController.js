@@ -8,11 +8,13 @@
 
         var moreEvents = true;
         var actualPage = 0;
+        var isAnotherMonth = false;
 
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
         eventCtrl.months = [];
         eventCtrl.currentMonth = null;
+        eventCtrl.currentYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
@@ -21,9 +23,9 @@
             var deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents);
+                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.currentMonth.month, eventCtrl.currentYear);
                 } else {
-                    loadEvents(deferred, EventService.getEvents);
+                    loadEvents(deferred, EventService.getEvents, eventCtrl.currentMonth.month, eventCtrl.currentYear);
                 }
             } else {
                 deferred.resolve();
@@ -34,17 +36,19 @@
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
 
-        function loadEvents(deferred, getEvents) {
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth() + 1;
-            const currentYear = currentDate.getFullYear();
-            getEvents(actualPage, eventCtrl.institutionKey || currentMonth, currentYear).then(function success(response) {
+        function loadEvents(deferred, getEvents, month, year) {
+            getEvents(actualPage, eventCtrl.institutionKey || month, year).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.next;
 
-                _.forEach(response.events, function(event) {
-                    eventCtrl.events.push(event);
-                });
+                if(isAnotherMonth) {
+                    eventCtrl.events = response.events;
+                    isAnotherMonth = false;
+                } else {
+                    _.forEach(response.events, function(event) {
+                        eventCtrl.events.push(event);
+                    });
+                }
 
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl.getEventsByDay();
@@ -121,18 +125,27 @@
             }
         };
 
+        eventCtrl.loadFilteredEvents = function() {
+            moreEvents = true;
+            actualPage = 0;
+            isAnotherMonth = true;
+            eventCtrl.loadMoreEvents();
+        };
+
         function getMonths() {
             $http.get('app/utils/months.json').then(function success(response) {
                 eventCtrl.months = response.data;
-                const currentMonth = new Date().getMonth();
+                const currentDate = new Date();
+                const currentMonth = currentDate.getMonth();
                 eventCtrl.currentMonth = eventCtrl.months[currentMonth];
+                eventCtrl.currentYear = currentDate.getFullYear();
+                eventCtrl.loadMoreEvents();
             });
         };
 
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
             getMonths();
-            eventCtrl.loadMoreEvents();
         })();
     });
 })();

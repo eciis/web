@@ -1,54 +1,56 @@
 <div class="container-resp">
-  <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <md-content class="none-events-msg" ng-if="eventCtrl.events.length === 0">
-      <h4>Nenhum evento a ser exibido.</h4>
-    </md-content>
-    <md-content class="none-events-msg"
-    ng-if="eventCtrl.events.length > 0 && eventCtrl.months.length > 0">
-      <md-select name="month" ng-model="eventCtrl.currentMonth">
-        <md-option ng-repeat="month in eventCtrl.months" ng-value="month">
-            {{month.nome_mes}}
-        </md-option>
-    </md-select>
-    </md-content>
-  <md-content id="content" class="custom-scrollbar box">
-    <div ng-repeat="events in eventCtrl.eventsByDay"
-    ng-if="eventCtrl.events.length > 0" class="events-grid events-grid-position">
-        <div class="events-day-position event-day-properties">
-          <span>{{events.day}}</span>
-        </br>
-          <p class="event-weekday">
-            {{eventCtrl.test(events.events[0])}}
-            {{events.events[0].start_time | amUtc | amDateFormat:'ddd' }}
-          </p>
-        </div>
-        <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position">
-          <div ng-click="eventCtrl.goToEvent(event)">
-              <md-card>
-                <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
-                  <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
-                  <div class="highlight">
-                      <div class="event-title">
-                        <b>{{ event.title | uppercase}}</b>
-                      </div>
-                      <div class="event-subtitle">
-                          {{ event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
-                          {{ event.address.city ? ' | ' + event.address.city : ''}}
-                      </div>
-                  </div>
-                </div>
-              </md-card>
-          </div>
-        </div>
-        <md-divider class="event-divider"></md-divider>
+  <div flex layout="column">
+    <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
+    <div class="none-events-msg">
+      <md-content ng-if="eventCtrl.months.length > 0">
+        <md-select name="month" ng-model="eventCtrl.currentMonth" ng-change="eventCtrl.loadFilteredEvents()">
+          <md-option ng-repeat="month in eventCtrl.months" ng-value="month">
+              {{month.month_name}}
+          </md-option>
+        </md-select>
+      </md-content>
+      <md-content ng-if="eventCtrl.events.length === 0">
+        <h4>Nenhum evento a ser exibido.</h4>
+      </md-content>
     </div>
-  </md-content>
-  <md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
-    <md-fab-trigger>
-      <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
-      class="md-fab md-primary create-event-button">
-        <md-icon>add</md-icon>
-      </md-button>
-    </md-fab-trigger>
-  </md-fab-speed-dial>
+    <md-content id="content" class="custom-scrollbar box">
+      <div ng-repeat="events in eventCtrl.eventsByDay"
+        ng-if="eventCtrl.events.length > 0" class="events-grid events-grid-position">
+          <div class="events-day-position event-day-properties">
+            <span>{{events.day}}</span>
+            <p class="event-weekday">
+              {{eventCtrl.test(events.events[0])}}
+              {{events.events[0].start_time | amUtc | amDateFormat:'ddd' }}
+            </p>
+          </div>
+          <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position">
+            <div ng-click="eventCtrl.goToEvent(event)">
+                <md-card>
+                  <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
+                    <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
+                    <div class="highlight">
+                        <div class="event-title">
+                          <b>{{ event.title | uppercase}}</b>
+                        </div>
+                        <div class="event-subtitle">
+                            {{ event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
+                            {{ event.address.city ? ' | ' + event.address.city : ''}}
+                        </div>
+                    </div>
+                  </div>
+                </md-card>
+            </div>
+          </div>
+          <md-divider class="event-divider"></md-divider>
+      </div>
+    </md-content>
+  </div>
 </div>
+<md-fab-speed-dial id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
+  <md-fab-trigger>
+    <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
+    class="md-fab md-primary create-event-button">
+      <md-icon>add</md-icon>
+    </md-button>
+  </md-fab-trigger>
+</md-fab-speed-dial>

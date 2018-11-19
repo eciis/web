@@ -1,12 +1,12 @@
 <md-content>
     <div ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp'"
-        ng-class="notification.status === 'READ'? '': 'unread-notification'" style="padding: 10px 16px; margin-top: 3%;">
+        ng-class="notification.status === 'READ'? '': 'unread-notification'" class="mobile-notification-list">
         <div class="mobile-notification-list-item">
             <img ng-src="{{notification.from.photo_url}}" />
             <div id="mobile-notification-content">
-                <b style="font-size: 15px;" id="notification-user-name">
+                <b id="notification-user-name">
                     {{ notification.from.name }}</b>
-                <b style="font-size: 10px" id="notification-from-inst-name" md-colors="{color: 'teal-700'}">
+                <b id="notification-from-inst-name" md-colors="{color: 'teal-700'}">
                     {{ notification.from.institution_name }}</b>
                 <div id="notification-mobile-info">
                     <div id="mobile-notification-icon-container">

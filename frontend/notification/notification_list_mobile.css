@@ -8,6 +8,11 @@
     grid-column-gap: 0.5em;
 }
 
+.mobile-notification-list {
+  padding: 10px 16px; 
+  margin-top: 3%;
+}
+
 #mobile-notification-content {
     display: grid;
     grid-template-columns: auto;
@@ -19,6 +24,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     text-align: start;
+    font-size: 15px;
 }
 
 #notification-from-inst-name {
@@ -26,6 +32,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    font-size: 10px;
 }
 
 #notification-mobile-info {

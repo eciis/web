@@ -116,7 +116,7 @@
      * @returns {String} The string containing the url path to html file that will be displayed in view.
      */
     function getTemplateUrl() {
-        return Utils.isSmallerToScreen(960) ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
+        return Utils.isMobileScreen() ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
     };
 
     app.directive("surveyDirective", function() {

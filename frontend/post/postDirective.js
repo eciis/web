@@ -371,7 +371,7 @@
          * @returns {boolean}
          */
         postCtrl.showTextField = function() {
-            return postCtrl.isTyping() || Utils.isSmallerToScreen(960);
+            return postCtrl.isTyping() || Utils.isMobileScreen();
         }
 
         /**
@@ -380,7 +380,7 @@
          */
         postCtrl.showActionButtons = function() {
             return (postCtrl.typePost === 'Common' && postCtrl.isTyping() && 
-                !postCtrl.loadingPost) || Utils.isSmallerToScreen(960);
+                !postCtrl.loadingPost) || Utils.isMobileScreen();
         };
 
         postCtrl.showPlaceholderMsg = function() {
@@ -400,7 +400,7 @@
      * @returns {String} The string containing the url path to html file that will be displayed in view.
      */
     function getTemplateUrl() {
-        return Utils.isSmallerToScreen(960) ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
+        return Utils.isMobileScreen() ? "app/post/save_post_mobile.html" : "app/post/save_post.html";
     };
 
     app.directive("savePost", function() {

@@ -13,6 +13,7 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
+        '../utils/utils.js',
         'node_modules/angular/angular.js',
         'node_modules/angular-animate/angular-animate.js',
         'node_modules/angular-aria/angular-aria.js',

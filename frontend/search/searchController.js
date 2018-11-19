@@ -3,8 +3,8 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService, MessageService,
-        brCidadesEstados, HttpService) {
+    app.controller("SearchController", function SearchController($state, InstitutionService,
+        brCidadesEstados, HttpService, $mdDialog, $window) {
 
         var searchCtrl = this;
 
@@ -36,18 +36,34 @@
             searchCtrl.institutions = [];
         };
 
-        searchCtrl.search = function search() {
+        /**
+         * First of all it checks if there is a search
+         * keyword before make the search to avoid unecessary requests.
+         * Then, make search is called and the result is stored in
+         * searchCtrl.institutions. If the user is using a mobile
+         * showSearchFromMobile is called to open a mdDialog with the
+         * search's result.
+         * @param {Event} ev : The event that is useful to deal with the mdDialog.
+         * When the user isn't in a mobile its value is undefined. 
+         */
+        searchCtrl.search = function search(ev) {
             if (searchCtrl.search_keyword) {
-                searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+
+                promise.then(() => {
+                    if (Utils.isMobileScreen()) {
+                        searchCtrl.showSearchFromMobile(ev);
+                    }
+                });
                 refreshPreviousKeyword();
+
+                return promise;
             }
         };
 
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
-                InstitutionService.getInstitution(institutionId).then(function success(response) {
-                    $state.go('app.institution.timeline', { institutionKey: response.key });
-                });
+                $state.go('app.institution.timeline', { institutionKey: institutionId });
             }
         };
 
@@ -57,6 +73,59 @@
                 refreshPreviousKeyword();
             }
         };
+
+        /**
+         * Open up a mdDialog to show the search result in a mobile fone
+         * @param {Event} ev 
+         */
+        searchCtrl.showSearchFromMobile = (ev) => {
+            $mdDialog.show({
+                controller: SearchDialogController,
+                controllerAs: "searchCtrl",
+                templateUrl: '/app/search/search_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: ev,
+                clickOutsideToClose: true,
+            });
+        };
+        
+        /**
+         * Go back to the previous state.
+         */
+        searchCtrl.leaveMobileSearchPage = () => {
+            $window.history.back();
+        };
+
+        /**
+         * Check if the user is in a mobile or not.
+         */
+        searchCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen();
+        };
+        
+        /**
+         * A simple function that works like a controller to the
+         * search_dialog.html.
+         */
+        function SearchDialogController() {
+            const searchDialogCtrl = this;
+
+            searchDialogCtrl.institutions = searchCtrl.institutions;
+            searchDialogCtrl.searchNature = searchCtrl.searchNature;
+            searchDialogCtrl.searchActuation = searchCtrl.searchActuation;
+            searchDialogCtrl.searchState = searchCtrl.searchState;
+            searchDialogCtrl.isLoading = searchCtrl.isLoading;
+
+            /**
+             * Close the dialog and then call the regular goToInstitution
+             * function.
+             * @param {String} institutionId 
+             */
+            searchDialogCtrl.goToInstitution = (institutionId) => {
+                $mdDialog.cancel();
+                searchCtrl.goToInstitution(institutionId);
+            };
+        }
 
         /**
          * This function verifies if there is any changes in the search_keyword.

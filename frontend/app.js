@@ -54,7 +54,10 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: "app/search/search.html",
+                        templateUrl: Utils.selectHtmlBasedOnScreenSize(
+                                "app/search/search.html",
+                                "app/search/search_mobile.html"
+                            ),
                         controller: "SearchController as searchCtrl"
                     }
                 }
@@ -80,7 +83,7 @@
                 url: "/events",
                 views: {
                     user_content: {
-                        templateUrl: Utils.isSmallerToScreen(475) ? "app/event/events_mobile.html" : "app/event/events.html",
+                        templateUrl: Utils.isMobileScreen(475) ? "app/event/events_mobile.html" : "app/event/events.html",
                         controller: "EventController as eventCtrl",
                     }
                 }

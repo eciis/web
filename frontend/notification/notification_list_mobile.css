@@ -1,50 +1,37 @@
 .mobile-notification-list-item {
     display: grid;
-    grid-template-columns: 25% 75%;
-    grid-template-rows: 100%;
-    height: 5.5em;
-    width: 100%;
+    grid-template-columns: 4em auto;
+    grid-template-rows: auto;
     text-align: center;
     align-items: center;
-    justify-items: center;
-    margin-top: 2%;
+    justify-items: start;
+    grid-column-gap: 0.5em;
 }
 
 #mobile-notification-content {
     display: grid;
-    height: 4em;
-    width: 100%;
-    grid-template-columns: 100%;
-    grid-template-rows: 29% 19% 52%;
-    grid-column-start: 2;
-    grid-column-end: 3;
-    justify-self: start;
-    align-self: start;
-    margin-left: 0.5em;
-    margin-top: 1em;
+    grid-template-columns: auto;
+    grid-column-gap: 0;
 }
 
 #notification-user-name {
-    justify-self: start;
-    grid-row-start: 1;
-    grid-row-end: 2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
 }
 
 #notification-from-inst-name {
-    justify-self: start;
-    grid-row-start: 2;
-    grid-row-end: 3;
+    text-align: start;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 #notification-mobile-info {
   display: grid;
-  grid-template-columns: 2em 15em;
-  height: 100%;
-}
-
-#mobile-notification-icon-container {
-  grid-column-start: 1;
-  grid-column-end: 2;
+  grid-template-columns: 1.7em auto;
+  margin-top: 0.3em;
 }
 
 #mobile-notification-icon-container {
@@ -58,23 +45,17 @@
 }
 
 #mobile-notification-text {
-  grid-column-start: 2;
-  grid-column-end: 3;
+  align-items: center;
   font-size: 10px;
   justify-self: start;
   text-align: left;
-  height: 3em;
-  margin-top: -1%;
   display: grid;
-  grid-template-rows: 66% 33%;
 }
 
 .mobile-notification-list-item img {
     width: 4em;
     height: 4em;
     border-radius: 50%;
-    grid-column-start: 1;
-    grid-column-end: 2;
     justify-self: end;
 }
 
@@ -86,13 +67,12 @@
 }
 
 #mobile-notification-action {
-  grid-row-start: 1; 
-  grid-row-end: 2; 
   align-self: end;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #mobile-notification-time {
-  grid-row-start: 2; 
-  grid-row-end: 3; 
   align-self: start;
 }

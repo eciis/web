@@ -1,7 +1,8 @@
 "use strict";
 
 (function() {
-    angular.module('app')
+		angular
+		.module('app')
     .controller('UserRequestFormController', function (AuthService, RequestInvitationService, MessageService, $state) {
         const userReqFormCtrl = this;
 
@@ -23,7 +24,7 @@
         };
 
         userReqFormCtrl.sendRequest = function () {
-            var dataInvite = {
+            const dataInvite = {
                 institution_key : userReqFormCtrl.selectedInst.key,
                 sender_key : userReqFormCtrl.user.key,
                 admin_key : userReqFormCtrl.selectedInst.admin.key,
@@ -34,7 +35,7 @@
                 institutional_email : userReqFormCtrl.request.email
             };
 
-            var request = new Invite(dataInvite);
+            const request = new Invite(dataInvite);
             RequestInvitationService.sendRequest(request, userReqFormCtrl.selectedInst.key)
                 .then(_ => {
                     userReqFormCtrl.isRequestSent = true;
@@ -52,7 +53,7 @@
             return userReqFormCtrl.isRequestSent ? "Início" : "Finalizar";
         };
 
-        userReqFormCtrl.back = function () {
+        userReqFormCtrl.goBack = function () {
             $state.go('user_inactive');
         }
 

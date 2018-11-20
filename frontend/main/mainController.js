@@ -197,7 +197,6 @@
          */
         mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
             state = "app.user." + state;
-            console.log(state, state === mainCtrl.stateView);
             return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
         };
 

@@ -1,16 +1,17 @@
 "use strict";
 
 (function() {
-    angular.module("app")
-        .component("searchInstitution", {
-            templateUrl: 'app/user/searchInstitution/search_institution.html',
-            controller: SearchInstitutionCtrl,
-            controllerAs: 'searchInstCtrl',
-            bindings: {
-                onSelect: '<',
-                onSearch: '<'
-            }
-        });
+    angular
+    .module("app")
+    .component("searchInstitution", {
+        templateUrl: 'app/user/searchInstitution/search_institution.html',
+        controller: SearchInstitutionCtrl,
+        controllerAs: 'searchInstCtrl',
+        bindings: {
+            onSelect: '<',
+            onSearch: '<'
+        }
+    });
 
     function SearchInstitutionCtrl(InstitutionService, $state) {
         const searchInstCtrl = this;

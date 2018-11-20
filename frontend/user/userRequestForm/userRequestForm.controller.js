@@ -1,8 +1,8 @@
 "use strict";
 
 (function() {
-		angular
-		.module('app')
+    angular
+    .module('app')
     .controller('UserRequestFormController', function (AuthService, RequestInvitationService, MessageService, $state) {
         const userReqFormCtrl = this;
 

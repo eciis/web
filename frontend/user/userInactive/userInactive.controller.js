@@ -1,9 +1,9 @@
 'use strict';
 
 (function() {
-		angular
-		.module("app")
-		.controller("UserInactiveController", function UserInactiveController(AuthService, $state) {
+    angular
+    .module("app")
+    .controller("UserInactiveController", function UserInactiveController(AuthService, $state) {
         const userInactiveCtrl = this;
 
         userInactiveCtrl.selectedInst = {};

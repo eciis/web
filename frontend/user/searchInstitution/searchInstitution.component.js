@@ -21,23 +21,19 @@
 
 
         searchInstCtrl.getInstIcon = function (inst) {
-            return searchInstCtrl.isInstSelect(inst) ? 'done' : 'account_balance';
+            return searchInstCtrl.isInstSelected(inst) ? 'done' : 'account_balance';
         }
 
-        searchInstCtrl.isInstSelect = function isInstSelect(institution){
-            return searchInstCtrl.selectedInst.key === institution.id;
-        };
-
-        searchInstCtrl.address = function () {
-            const instObject = new Institution(searchInstCtrl.selectedInst);
-            return instObject.getSimpleAddress();
+        searchInstCtrl.isInstSelected = function (institution){
+						return searchInstCtrl.selectedInst.key === institution.id && 
+							searchInstCtrl.isInstLoaded;
         };
 
         searchInstCtrl.search = function () {
             const INST_STATE = 'active';
             InstitutionService.searchInstitutions(searchInstCtrl.keyword, INST_STATE, 'institution')
                 .then(institutions => {
-                    searchInstCtrl.institutions = institutions;
+										searchInstCtrl.institutions = institutions;
                     searchInstCtrl.instNotFound = institutions.length === 0;
                     searchInstCtrl.onSearch(institutions);
                 });
@@ -46,7 +42,8 @@
         searchInstCtrl.select = function (institution){
             InstitutionService.getInstitution(institution.id)
                 .then(institution => {
-                    searchInstCtrl.selectedInst = institution;
+										searchInstCtrl.selectedInst = new Institution(institution);
+										searchInstCtrl.isInstLoaded = true;
                     searchInstCtrl.onSelect(institution);
             });
         };

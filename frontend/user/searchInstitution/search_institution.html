@@ -15,8 +15,8 @@
                 </md-icon>
                 <div class="md-list-item-text">
                     <p class="inst-name">{{ institution.name }}</p>
-                    <p class="limited-text" ng-if="searchInstCtrl.isInstSelect(institution)">
-                        {{ searchInstCtrl.address() }}
+                    <p class="limited-text" ng-if="searchInstCtrl.isInstSelected(institution)">
+                        {{ searchInstCtrl.selectedInst.getSimpleAddress() }}
                     </p>
                 </div>
             </md-list-item>

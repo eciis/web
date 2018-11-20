@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test PushNotificationService', function () {
-    var service, messaging, defaultToken, notificationsRef, messageService;
+    let service, messaging, defaultToken, notificationsRef, messageService, scope, $qMock;
 
     const fakeCallback = function fakeCallback(data) {
         return {
@@ -13,27 +13,33 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function (PushNotificationService, MessageService) {
+    beforeEach(inject(function (PushNotificationService, MessageService, $q, $rootScope) {
         service = PushNotificationService;
         messaging = firebase.messaging();
         messageService = MessageService;
         var ref = firebase.database().ref();
         notificationsRef = ref.child("notifications/key");
         defaultToken = 'oaspkd-OPASKDAPO';
+        scope = $rootScope.$new();
+        $qMock = $q;
     }));
 
     describe('requestNotificationPermission', () => {
         beforeEach(() => {
             spyOn(service, '_hasNotificationPermission').and.returnValue(false);
             spyOn(service._isMobile, 'any').and.returnValue(true);
+            spyOn(messaging, 'requestPermission');
+            spyOn(messaging, 'getToken');
+            spyOn(service, '_saveToken');
         });
 
         it('should call saveToken', () => {
-            spyOn(messaging, 'requestPermission').and.callFake(fakeCallback);
-            spyOn(messaging, 'getToken').and.callFake(fakeCallback);
-            spyOn(service, '_saveToken').and.callFake(fakeCallback);
+            messaging.requestPermission.and.callFake(() => $qMock.when());
+            messaging.getToken.and.callFake(fakeCallback);
+            service._saveToken.and.callFake(fakeCallback);
 
             service.requestNotificationPermission(new User({}));
+            scope.$digest();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).toHaveBeenCalled();  
@@ -41,41 +47,14 @@
         });
 
         it('should not call saveToken when the user does not enable notification', () => {
-            spyOn(messaging, 'requestPermission').and.callFake(function() {
-                return {
-                    then: function () {
-                        return;
-                    }
-                }
-            });
-            spyOn(messaging, 'getToken');
-            spyOn(service, '_saveToken');
+            messaging.requestPermission.and.callFake(() => $qMock.reject());
 
             service.requestNotificationPermission();
+            scope.$digest();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
             expect(messaging.getToken).not.toHaveBeenCalled();
             expect(service._saveToken).not.toHaveBeenCalled();
-        });
-
-        it('should call showToast', () => {
-            spyOn(messaging, 'requestPermission').and.callFake(fakeCallback);
-            spyOn(messaging, 'getToken').and.callFake(() => {
-                return {
-                    then: (success, error) => {
-                        return error();
-                    }
-                }
-            });
-            spyOn(service, '_saveToken');
-            spyOn(messageService, 'showToast');
-
-            service.requestNotificationPermission();
-
-            expect(messaging.requestPermission).toHaveBeenCalled();
-            expect(messaging.getToken).toHaveBeenCalled();
-            expect(service._saveToken).not.toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalledWith('Não foi possível ativar as notificações.');
         });
     });
 

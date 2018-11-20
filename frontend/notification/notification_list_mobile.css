@@ -1,0 +1,85 @@
+.mobile-notification-list-item {
+    display: grid;
+    grid-template-columns: 4em auto;
+    grid-template-rows: auto;
+    text-align: center;
+    align-items: center;
+    justify-items: start;
+    grid-column-gap: 0.5em;
+}
+
+.mobile-notification-list {
+  padding: 10px 16px; 
+  margin-top: 3%;
+}
+
+#mobile-notification-content {
+    display: grid;
+    grid-template-columns: auto;
+    grid-column-gap: 0;
+}
+
+#notification-user-name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
+    font-size: 15px;
+}
+
+#notification-from-inst-name {
+    text-align: start;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 10px;
+}
+
+#notification-mobile-info {
+  display: grid;
+  grid-template-columns: 1.7em auto;
+  margin-top: 0.3em;
+}
+
+#mobile-notification-icon-container {
+  background: #009688; 
+  width: 1.5em; 
+  height: 1.5em; 
+  border-radius: 50%;
+  align-self: center;
+  text-align: center;
+  line-height: 1.5em;
+}
+
+#mobile-notification-text {
+  align-items: center;
+  font-size: 10px;
+  justify-self: start;
+  text-align: left;
+  display: grid;
+}
+
+.mobile-notification-list-item img {
+    width: 4em;
+    height: 4em;
+    border-radius: 50%;
+    justify-self: end;
+}
+
+#mobile-notification-icon {
+  font-size: 15px;
+  color:white;
+  line-height: 24px;
+  text-align: center;
+}
+
+#mobile-notification-action {
+  align-self: end;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#mobile-notification-time {
+  align-self: start;
+}

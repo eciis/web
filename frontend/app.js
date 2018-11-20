@@ -54,7 +54,10 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: "app/search/search.html",
+                        templateUrl: Utils.selectHtmlBasedOnScreenSize(
+                                "app/search/search.html",
+                                "app/search/search_mobile.html"
+                            ),
                         controller: "SearchController as searchCtrl"
                     }
                 }

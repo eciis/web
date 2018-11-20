@@ -918,8 +918,13 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 .dialog-transparent-without-shadow {
     background-color: rgba(0, 0, 0, 0);
     box-shadow: 0 0 0;
-    max-width: 100% !important;
-    max-height: 97% !important;
+}
+
+@media screen and (max-width: 960px) {
+    .dialog-transparent-without-shadow {
+        max-width: 100%;
+        max-height: 97%;
+    }
 }
 
 .share-post{

@@ -15,6 +15,124 @@
     color: #03b3a1;
 }
 
+.address-container {
+    display: grid;
+    grid-template-columns: 2.5em auto;
+    grid-template-rows: auto auto auto;
+    margin: 1em 1em 0 1em;
+    align-items: center;
+}
+
+.time-container {
+    display: grid;
+    grid-template-columns: 2.5em auto 2.5em 4.688em;
+    grid-template-rows: auto;
+    align-items: center;
+    margin: 1em;
+}
+
+.title-container {
+    font-size: 1.25em; 
+    font-weight: bold; 
+    margin: 0.8em;
+    display: grid; 
+    grid-template-columns: auto 0.8em; 
+    align-items: end;
+}
+
+.address-text {
+    grid-column-start: 1; 
+    grid-column-end: 3; 
+    font-size: 0.69em; 
+    color: #009688;
+    font-weight: bold; 
+    margin-bottom: 0.45em;
+}
+
+.event-icon {
+    height: 1em;
+    width: 1em;
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.location {
+    margin: 0; 
+    font-weight: bold; 
+    font-size: 0.94em;
+}
+
+.address {
+    margin: 0; 
+    color: rgba(0,0,0,0.54); 
+    font-size: 0.82em;
+}
+
+.address-hr {
+    grid-column-start: 1; 
+    grid-column-end: 3;
+    margin-top: 1em;
+    width: 100%;
+}
+
+.time-head {
+    font-size: 0.69em; 
+    color: #009688;
+    font-weight: bold; 
+    margin: 0;
+}
+
+.event-hr {
+    border-width: 2px; 
+    border-color: #009688;
+    border-style: solid;
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.content-block {
+    margin: 1.875em 1em;
+}
+
+.useful-links-container {
+    display: grid; 
+    grid-template-columns: 3.125em auto; 
+    margin-bottom: 0.3125em;
+}
+
+.useful-links-icon {
+    background-color: #8cc04e; 
+    color: white; 
+    height: 1.667em; 
+    width: 1.667em; 
+    text-align: center; 
+    line-height: 1.667em; 
+    font-size: 1.89em;
+}
+
+.useful-links-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden; 
+    background-color: #e6e6e6; 
+    margin: 0; 
+    padding: 0 0.5em; 
+    line-height: 3.1em;
+}
+
+.event-menu-button {
+    margin: 0; 
+    padding: 0; 
+    width: 0.8em; 
+    background-color: white; 
+    border: 0;
+}
+
+#menu-button {
+    margin-left: auto; 
+    width: 0.8em;
+}
+
 @media screen and (max-width: 450px) {
     .font-resp {
         font-size: 12px;
@@ -28,6 +146,11 @@
 @media screen and (min-width: 600px) {
     #hide-share {
         display: none !important;
+    }
+
+    .time-container {
+        width: 70%;
+        margin: 1em auto;
     }
 }
 

@@ -75,10 +75,14 @@
             state && $state.go(state, {key: notification.entity.key});
             !state && $state.go('app.user.notifications');
         };
-    }
+    };
 
     app.component("notificationList", {
-        templateUrl: "app/notification/notifications_list.html",
+        templateUrl: Utils.selectFieldBasedOnScreenSize(
+            "app/notification/notifications_list.html", 
+            "app/notification/notifications_list_mobile.html",
+            600
+        ),
         bindings: {
             lengthTextNotification: '=?',
             notifications: '=',

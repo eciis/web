@@ -2,7 +2,7 @@
 
 (describe('Test SearchController', function() {
 
-    var httpBackend, scope, createCtrl, state, instService, searchCtrl;
+    let httpBackend, scope, createCtrl, state, instService, searchCtrl, mdDialog, window;
 
     var user = {
         name: 'username',
@@ -34,11 +34,14 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, InstitutionService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService, 
+        InstitutionService, $mdDialog, $window) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         instService = InstitutionService;
+        mdDialog = $mdDialog;
+        window = $window;
 
         AuthService.login(user);
         httpBackend.expectGET('app/institution/actuation_area.json').respond({
@@ -54,6 +57,7 @@
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+        httpBackend.when('GET', "/app/search/search_dialog.html").respond(200);
         createCtrl = function() {
             return $controller('SearchController', {
                 scope: scope,
@@ -74,31 +78,53 @@
 
         describe('goToInstitution()', function() {
 
-            beforeEach(function() {
-                spyOn(instService, 'getInstitution').and.callThrough();
-                spyOn(state, 'go').and.callThrough();
-                httpBackend.expect('GET', "/api/institutions/" + splab.key).respond(splab);
-                searchCtrl.goToInstitution(splab.key);
-                httpBackend.flush();
-            });
-
-            it('Should call InstitutionService.getInstitution', function() {
-                expect(instService.getInstitution).toHaveBeenCalledWith(splab.key);
-            });
-
             it('Should call state.go', function() {
+                spyOn(state, 'go').and.callThrough();
+                searchCtrl.goToInstitution(splab.key);
                 expect(state.go).toHaveBeenCalled();
             });
         });
 
         describe('search()', function() {
 
-            it('Should call makeSearch()', function() {
-                spyOn(searchCtrl, 'makeSearch');
+            it('Should call makeSearch(); mobile screen', function() {
+                spyOn(searchCtrl, 'makeSearch').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
+                spyOn(mdDialog, 'show');
+
                 searchCtrl.search_keyword = 'splab';
                 searchCtrl.search();
+
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
+                expect(searchCtrl.showSearchFromMobile).toHaveBeenCalled();
+                expect(mdDialog.show).toHaveBeenCalled();
             });
+
+            it('should call makeSearch(); not mobile screen', () => {
+                spyOn(searchCtrl, 'makeSearch').and.callFake(function () {
+                    return {
+                        then: function (callback) {
+                            return callback();
+                        }
+                    };
+                });
+                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
+                spyOn(mdDialog, 'show');
+                spyOn(Utils, 'isMobileScreen').and.returnValue(false);
+
+                searchCtrl.search_keyword = 'splab';
+                searchCtrl.search();
+
+                expect(searchCtrl.makeSearch).toHaveBeenCalled();
+                expect(searchCtrl.showSearchFromMobile).not.toHaveBeenCalled();
+                expect(mdDialog.show).not.toHaveBeenCalled();
+            })
         });
 
         describe('makeSearch()', function() {
@@ -152,6 +178,30 @@
             it('Should be true if search_keyword is not empty', function() {
                 searchCtrl.search_keyword = "splab";
                 expect(searchCtrl.isLoading()).toBeTruthy();
+            });
+        });
+
+        describe('showSearchFromMobile', () => {
+            it('should call mdDialog.show', () => {
+                spyOn(mdDialog, 'show');
+                searchCtrl.showSearchFromMobile();
+                expect(mdDialog.show).toHaveBeenCalled();
+            });
+        });
+
+        describe('leaveMobileSearchPage()', () => {
+            it('should call window.history.back', () => {
+                spyOn(window.history, 'back');
+                searchCtrl.leaveMobileSearchPage();
+                expect(window.history.back).toHaveBeenCalled();
+            });
+        });
+
+        describe('isMobileScreen', () => {
+            it('should call Utils.isMobileScreen', () => {
+                spyOn(Utils, 'isMobileScreen');
+                searchCtrl.isMobileScreen();
+                expect(Utils.isMobileScreen).toHaveBeenCalled();
             });
         });
     });

@@ -339,6 +339,16 @@ a:active {
   }
 }
 
+@keyframes fadeNav {
+    0% {
+      opacity: 0;
+    }
+  
+    60% {
+      opacity: 1;
+    }
+}
+
 .image-view{
     position:relative;
     max-width: 37%;

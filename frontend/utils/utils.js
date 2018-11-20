@@ -215,12 +215,12 @@ var Utils = {
     },
 
     /**
-     * It selects the correct html based on the screen size.
-     * @param {String} notMobileHtml : The template applied to
+     * It selects the correct Field based on the screen size.
+     * @param {String} notMobileField : The template applied to
      * screens greater than 960px;
-     * @param {String} mobileHtml : The template applied to mobile screens.
+     * @param {String} mobileField : The template applied to mobile screens.
      */
-    selectHtmlBasedOnScreenSize: function selectHtmlBasedOnScreenSize(notMobileHtml, mobileHtml, mobileScreenSize) {
-        return Utils.isMobileScreen(mobileScreenSize) ? mobileHtml : notMobileHtml;
+    selectFieldBasedOnScreenSize: function selectFieldBasedOnScreenSize(notMobileField, mobileField, mobileScreenSize) {
+        return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
     }
 };

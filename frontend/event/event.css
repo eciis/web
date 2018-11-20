@@ -15,6 +15,11 @@
     color: #03b3a1;
 }
 
+.event-content {
+    display: flex; 
+    overflow: scroll;
+}
+
 .address-container {
     display: grid;
     grid-template-columns: 2.5em auto;

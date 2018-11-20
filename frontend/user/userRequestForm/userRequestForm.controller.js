@@ -6,16 +6,22 @@
     .controller('UserRequestFormController', function (AuthService, RequestInvitationService, MessageService, $state) {
         const userReqFormCtrl = this;
 
-        userReqFormCtrl.infos = {};
         userReqFormCtrl.user = AuthService.getCurrentUser();
         userReqFormCtrl.selectedInst = $state.params.institution;
         userReqFormCtrl.requests = [];
 
-
+				/**
+				 * Called after the controller is constructed
+				 * and had its bindings initialized
+				 */
         userReqFormCtrl.$onInit = function () {
             loadRequests();
         };
 
+				/**
+				 * Get the apropriated message to be showed depending on 
+				 * whether the request was already sent or not.
+				 */
         userReqFormCtrl.getMessage = function () {
             const formMsg = "Para finalizar o pedido de convite, preencha suas informações institucionais";
             const requestSentMsg = `Sua solicitação de convite foi enviada e esta em analise pelo administrador
@@ -23,6 +29,9 @@
             return userReqFormCtrl.isRequestSent ? requestSentMsg : formMsg;
         };
 
+				/**
+				 * Send the user request
+				 */
         userReqFormCtrl.sendRequest = function () {
             const dataInvite = {
                 institution_key : userReqFormCtrl.selectedInst.key,
@@ -45,18 +54,34 @@
                 });
         };
 
+				/**
+				 * Perform the apropriated action depending on 
+				 * whether the request was already sent or not.
+				 */
         userReqFormCtrl.onClick = function () {
             userReqFormCtrl.isRequestSent ? AuthService.logout() : verifyAndSendRequest();
         };
 
+				/**
+				 * Get the apropriated button title depending on 
+				 * whether the request was already sent or not.
+				 */
         userReqFormCtrl.getBtnTitle = function () {
             return userReqFormCtrl.isRequestSent ? "Início" : "Finalizar";
         };
 
+				/**
+				 * Return to the user inactive state
+				 */
         userReqFormCtrl.goBack = function () {
             $state.go('user_inactive');
         }
 
+				/**
+				 * Show an error message to the user in case the request 
+				 * to this institution has already been sent, otherwise
+				 * it sends the request
+				 */
         function verifyAndSendRequest () {
             if (wasInstRequested()) {
                 MessageService.showToast("Você já solicitou para fazer parte dessa instituição.");
@@ -65,6 +90,9 @@
             }
         };
 
+				/**
+				 * Check if the institution was already requested
+				 */
         function wasInstRequested () {
             return userReqFormCtrl.requests
                 .filter(request => request.status === "sent")
@@ -72,6 +100,9 @@
                 .includes(userReqFormCtrl.user.key);
         }
 
+				/**
+				 * Load the selected institution requests
+				 */
         function loadRequests () {
             if(userReqFormCtrl.selectedInst) {
                 RequestInvitationService.getRequests(userReqFormCtrl.selectedInst.key)

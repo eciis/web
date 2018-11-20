@@ -162,6 +162,15 @@
         font-size: 0.8875em;
         margin-left: 0.625em;
     }
+
+    #survey-option{
+        grid-template-columns: 3em 10em 5em;
+    }
+
+    #text-option{
+        word-break:break-all;
+        margin-right: 0.5em;
+    }
 }
 
 @media screen and (max-width: 380px) {

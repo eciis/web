@@ -21,7 +21,7 @@
           <md-checkbox ng-disabled="!surveyCtrl.canVote()" ng-checked="surveyCtrl.votedOption(option)"
             ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected" style="margin:0"></md-checkbox>
         </div>
-        <div>
+        <div id="text-option">
           <p ng-if="!surveyCtrl.isPostPage">{{surveyCtrl.getOption(option.text)}}</p>
           <p ng-if="surveyCtrl.isPostPage">{{option.text}}</p>
         </div>

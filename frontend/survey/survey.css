@@ -1,3 +1,10 @@
+#survey-option{
+    display: grid; 
+    grid-template-columns: 3em auto 5em;
+    grid-template-rows: auto;
+    align-items: center;
+}
+
 .survey-title-placeholder {
     font-weight: bold !important;
     color: #00695C !important;

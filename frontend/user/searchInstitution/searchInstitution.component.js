@@ -42,7 +42,7 @@
             const INST_STATE = 'active';
             InstitutionService.searchInstitutions(searchInstCtrl.keyword, INST_STATE, 'institution')
                 .then(institutions => {
-										searchInstCtrl.institutions = institutions;
+					searchInstCtrl.institutions = institutions;
                     searchInstCtrl.instNotFound = institutions.length === 0;
                     searchInstCtrl.onSearch(institutions);
                 });
@@ -54,8 +54,8 @@
         searchInstCtrl.select = function (institution){
             InstitutionService.getInstitution(institution.id)
                 .then(institution => {
-										searchInstCtrl.selectedInst = new Institution(institution);
-										searchInstCtrl.isInstLoaded = true;
+                    searchInstCtrl.selectedInst = new Institution(institution);
+                    searchInstCtrl.isInstLoaded = true;
                     searchInstCtrl.onSelect(institution);
             });
         };

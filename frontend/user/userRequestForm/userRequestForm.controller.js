@@ -19,7 +19,7 @@
         };
 
 				/**
-				 * Get the apropriated message to be showed depending on 
+				 * Get the appropriated message to be showed depending on 
 				 * whether the request was already sent or not.
 				 */
         userReqFormCtrl.getMessage = function () {
@@ -55,7 +55,7 @@
         };
 
 				/**
-				 * Perform the apropriated action depending on 
+				 * Perform the appropriated action depending on 
 				 * whether the request was already sent or not.
 				 */
         userReqFormCtrl.onClick = function () {
@@ -63,7 +63,7 @@
         };
 
 				/**
-				 * Get the apropriated button title depending on 
+				 * Get the appropriated button title depending on 
 				 * whether the request was already sent or not.
 				 */
         userReqFormCtrl.getBtnTitle = function () {

@@ -59,18 +59,20 @@ Institution.prototype.addChildInst = function addChildInst(institution){
     childIsNew ? this.children_institutions.push(institution) : null;
 };
 
+/**
+ * Get the address with just the city, federal state and country.
+ */
 Institution.prototype.getSimpleAddress = function () {
-    if(this.address) {
-        return this.address.city + ", " + this.address.federal_state + ", " + this.address.country;
-    }
+		return `${this.address.city}, ${this.address.federal_state}, ${this.address.country}`;
 };
 
+/**
+ * Get the full address with street, number, neighbourhood,
+ * city, federal state and country.
+ */
 Institution.prototype.getFullAddress = function getFullAddress() {
-    if(this.address) {
-        var fullAddress = this.address.street + ", " + this.address.number + ", " + this.address.neighbourhood +
-                         ", " + this.getSimpleAddress();
-        return fullAddress;
-    }
+		return `${this.address.street}, ${this.address.number}, 
+			${this.address.neighbourhood}, ${this.getSimpleAddress()}`;
 };
 
 Institution.prototype.isStateOn = function (state) {

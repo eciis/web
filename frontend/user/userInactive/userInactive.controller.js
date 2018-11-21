@@ -8,44 +8,44 @@
 
         userInactiveCtrl.selectedInst = {};
 
-		/**
-		 * Get the message to be showed 
-		 */
+	/**
+	 * Get the message to be showed 
+	 */
         userInactiveCtrl.getMessage = function () {
             return "Busque uma instituição que você faz parte.";
         };
 
-		/**
-		 * Logout the user
-		 */
+	/**
+	 * Logout the user
+	 */
         userInactiveCtrl.logout = function () {
             AuthService.logout();
         };
 
-		/**
-		 * Check if one institution has been selected
-		 */
+	/**
+	 * Check if one institution has been selected
+	 */
         userInactiveCtrl.hasInstSelected = function () {
             return !angular.equals(userInactiveCtrl.selectedInst, {});
         };
 				
-		/**
-		 * Set the selected institution 
-		 */
+	/**
+	 * Set the selected institution 
+	 */
         userInactiveCtrl.onSelect = function (selectedInst) {
             userInactiveCtrl.selectedInst = selectedInst;
         };
 				
-		/**
-		 * Clear the selected institution
-		 */
+	/**
+	 * Clear the selected institution
+	 */
         userInactiveCtrl.onSearch = function () {
             userInactiveCtrl.selectedInst = {};
         };
 				
-		/**
-		 * Go to the user request form
-		 */
+	/**
+	 * Go to the user request form
+	 */
         userInactiveCtrl.advance = function () {
             $state.go("user_request", { institution: userInactiveCtrl.selectedInst });
         };

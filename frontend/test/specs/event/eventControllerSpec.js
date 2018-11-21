@@ -154,6 +154,7 @@
             eventCtrl._getEventsByDay();
             expect(eventCtrl.eventsByDay.length).toEqual(1);
         });
+
     });
 
     describe('getMonths()', () => {
@@ -162,7 +163,7 @@
             spyOn(eventService, 'getMonths').and.callFake(function () {
                 return {
                     then: function (callback) {
-                        return callback({data: months});
+                        return callback(months);
                     }
                 };
             });

@@ -123,6 +123,21 @@
         };
 
         /**
+         * distributes events on days that happens 
+         * @param {object} event the event that be distributed
+         * @param {object} eventsByDay the object with days in keys
+         */
+        eventCtrl._distributeEvents = (event, eventsByDay) => {
+            const day = new Date(event.start_time).getDate();
+            const endDay = new Date(event.end_time).getDate();
+            for (let i = day; i <= endDay; i++) {
+                if(!eventsByDay[i]) 
+                    eventsByDay[i] = [];
+                eventsByDay[i].push(event);
+            }
+        };
+
+        /**
          * Group the events into an array of days of the selected month of year
          * @private
          */
@@ -131,10 +146,7 @@
                 eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
                 _.forEach(eventCtrl.events, function(event) {
-                    const day = new Date(event.start_time).getDate();
-                    if(!eventsByDay[day]) 
-                        eventsByDay[day] = [];
-                    eventsByDay[day].push(event);
+                    eventCtrl._distributeEvents(event, eventsByDay);
                 });
 
                 let days = Object.keys(eventsByDay);
@@ -164,7 +176,7 @@
          */
         eventCtrl._getMonths = () => {
             EventService.getMonths().then(function success(response) {
-                eventCtrl.months = response.data;
+                eventCtrl.months = response;
                 const currentDate = new Date();
                 const currentMonth = currentDate.getMonth();
                 eventCtrl.currentMonth = eventCtrl.months[currentMonth];

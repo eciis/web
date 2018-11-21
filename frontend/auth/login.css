@@ -1,13 +1,12 @@
 .login-btn {
     margin: 0 0 1em auto;
-    text-align: left;
-    color: white;
     width: 100%;
 }
 
 .login-btn md-icon {
-    margin: 0 0.5em;
     color: white;
+    margin-left: 1em;
+    margin-right: 0.5em;
 }
 
 .login-text {

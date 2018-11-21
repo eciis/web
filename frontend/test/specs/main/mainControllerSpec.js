@@ -172,6 +172,18 @@
         it('User should not be admin of your current institution', function(){
             expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
         });
+
+        it("The class css of state selected should be 'color-icon-selected-navbar'", function(){
+            mainCtrl.stateView = "app.user.home";
+            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
+
+            mainCtrl.stateView = "app.user.events";
+            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
+        });
     });
     
     describe('Main Controller listenners', function(){

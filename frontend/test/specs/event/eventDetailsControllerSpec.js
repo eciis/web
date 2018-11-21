@@ -228,4 +228,20 @@
             expect(returnedValue).toBeFalsy();
         });
     });
+
+    describe('getTimeHours()', function() {
+        it('should return current hours', function() {
+            let date = new Date();
+            let hours = date.getHours();
+
+            let returnedHours = eventCtrl.getTimeHours(date.toISOString());
+            expect(returnedHours).toEqual(hours);
+
+            date.setHours(22);
+            hours = date.getHours();
+
+            returnedHours = eventCtrl.getTimeHours(date.toISOString());
+            expect(returnedHours).toEqual(hours);
+        });
+    });
 }));

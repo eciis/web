@@ -1,0 +1,135 @@
+<div class="event-content">
+    <div style="background-color: white;">
+        <div class="title-container">
+            <span>{{ eventDetailsCtrl.event.title | uppercase}}</span>
+            <md-menu id="menu-button" md-offset="-165 45">
+                    <button class="event-menu-button" title="Opções"
+                    ng-click="$mdMenu.open(ev)">
+                        <md-icon style="color: black;">more_vert</md-icon>
+                    </button>
+                    <md-menu-content>
+                    <md-menu-item id="hide-share">
+                        <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
+                        <md-icon>share</md-icon>
+                        Compartilhar evento
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
+                        <md-icon>cancel</md-icon>
+                        Cancelar evento
+                        </md-button>
+                    </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+        </div>
+        <div ng-if="eventDetailsCtrl.event.photo_url">
+            <img style="background-color: white; width: 100%" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
+        </div>
+        <div class="address-container">
+            <p class="address-text">Endereço</p>
+            <md-icon class="event-icon">room</md-icon>
+            <div>
+                <p class="location">{{eventDetailsCtrl.event.local | uppercase}}</p>
+                <p class="address">
+                    {{eventDetailsCtrl.event.address.street ? eventDetailsCtrl.event.address.street + ', ' : ''}}
+                    {{ eventDetailsCtrl.event.address.street && eventDetailsCtrl.event.address.number ? eventDetailsCtrl.event.address.number + ',' : eventDetailsCtrl.event.address.street ? 'S/N,' : ''}}
+                    {{eventDetailsCtrl.event.address.city ? eventDetailsCtrl.event.address.city : ''}}
+                    {{eventDetailsCtrl.event.address.federal_state ? ', ' + eventDetailsCtrl.event.address.federal_state + ' - ': ''}}
+                    {{eventDetailsCtrl.event.address.country ? eventDetailsCtrl.event.address.country : ''}}
+                </p>
+            </div>
+            <hr class="address-hr"/>
+        </div>
+
+        <div class="time-container">
+            <md-icon class="event-icon">date_range</md-icon>
+            <div>
+                <p class="time-head">Data</p>
+
+                <p style="margin: 0;" ng-if="eventDetailsCtrl.endInTheSameDay() && !eventDetailsCtrl.endInOtherMonth()">
+                    {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+                    de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+                </p>
+                
+                <p style="margin: 0;" ng-if="!eventDetailsCtrl.endInTheSameDay() && !eventDetailsCtrl.endInOtherMonth()">
+                    {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+                    a {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD'}}
+                    de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+                </p>
+
+                <p style="margin: 0;" ng-if="eventDetailsCtrl.endInOtherMonth()">
+                    {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+                    de {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+                </p>
+
+                <p style="margin: 0;" ng-if="eventDetailsCtrl.endInOtherMonth()">
+                    {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD'}}
+                    de {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMMM'}}
+                </p>
+            </div>
+            <md-icon class="event-icon">schedule</md-icon>
+            <div>
+                <p class="time-head">Horário</p>
+                <p style="margin: 0;">
+                    {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.start_time)}} 
+                    às {{eventDetailsCtrl.getTimeHours(eventDetailsCtrl.event.end_time)}}h</p>
+            </div>
+        </div>
+
+        <hr class="event-hr"/>
+
+        <div class="content-block">
+            <h2>Descrição</h2>
+            <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.text)" ng-if="eventDetailsCtrl.event.text" style="white-space: pre-line;"></p>
+            <p ng-if="!eventDetailsCtrl.event.text">Não há descrição</p>
+        </div>
+
+        <hr class="event-hr"/>
+
+        <div class="content-block">
+            <h2>Progamação</h2>
+            <p ng-bind-html="eventDetailsCtrl.recognizeUrl(eventDetailsCtrl.event.programation)" ng-if="eventDetailsCtrl.event.programation" style="white-space: pre-line;"></p>
+            <p ng-if="!eventDetailsCtrl.event.programation">Não há programação</p>
+        </div>
+
+        <hr class="event-hr"/>
+
+        <div class="content-block">
+            <h2>Vídeos</h2>
+            <div ng-repeat="video in eventDetailsCtrl.event.video_url" ng-if="eventDetailsCtrl.event.video_url.length !== 0">
+                <div class="youtube-player">
+                    <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>
+                </div>
+                <p>{{video.description}}</p>
+            </div>
+            <p ng-if="eventDetailsCtrl.event.video_url.length === 0">Não há vídeos</p>
+        </div>
+
+        <hr class="event-hr"/>
+
+        <div class="content-block">
+            <h2>Links úteis</h2>
+            <div ng-repeat="link in eventDetailsCtrl.event.useful_links" ng-if="eventDetailsCtrl.event.useful_links.length !== 0">
+                <div class="useful-links-container">
+                    <a title="Link" ng-href="{{link.url}}" target="_blank">
+                        <md-icon class="useful-links-icon">link</md-icon>
+                    </a>
+                    
+                    <p class="useful-links-text">{{ link.description }}</p>
+                </div>
+            </div>
+
+            <p ng-if="eventDetailsCtrl.event.useful_links.length === 0">Não Há links</p>
+        </div>
+    </div>
+</div>
+
+<md-fab-speed-dial ng-if="eventDetailsCtrl.event && eventDetailsCtrl.canEdit(eventDetailsCtrl.event)" id="fab-new-post" class="md-fab-bottom-right" hide-gt-sm>
+    <md-fab-trigger>
+        <md-button aria-label="menu" class="md-fab md-primary" ng-click="eventDetailsCtrl.editEvent($event, eventDetailsCtrl.event)"
+            style="background-color: #8cbf4d; color: white;">
+        <md-icon>edit</md-icon>
+        </md-button>
+    </md-fab-trigger>
+</md-fab-speed-dial>

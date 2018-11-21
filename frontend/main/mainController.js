@@ -14,6 +14,8 @@
         mainCtrl.pendingManagerMember = 0;
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
+
+        mainCtrl.stateView =  $state.current.name;
         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
@@ -112,7 +114,7 @@
             });
         };
 
-        mainCtrl.goToEditInfo = function goToEditInfo(instKey){
+        mainCtrl.goToEditInstInfo = function goToEditInstInfo(instKey){
             $state.go('app.manage_institution.edit_info', {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
@@ -173,13 +175,44 @@
             $window.location.reload();
         };
 
+        /** Function used in bottom navbar to redirect to new state and
+         * reset properties of CSS that can be modified while using in mode mobile
+         * @param {string} state - state that should be redirect. 
+         */
+        mainCtrl.goToOfBottomNav = function goToOfBottomNav(state) {
+            mainCtrl.stateView = "app.user." + state;
+            resetNavBarDisplayStyle();
+            $state.go(mainCtrl.stateView);
+        };
+
+        /** Update the state view to notifications
+         *  and reset properties of CSS.
+         */
+        mainCtrl.selectNotificationState = function selectNotificationState(){
+            mainCtrl.stateView = "app.user.notifications";
+            resetNavBarDisplayStyle();
+        }
+
+        /** Return correct class according currently state view.
+         */
+        mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
+            state = "app.user." + state;
+            return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
+        };
+
+        /** Reset properties CSS. 
+         * In mode mobile maybe changes some properties.
+         */
+        function resetNavBarDisplayStyle(){
+            document.getElementById('main-toolbar').style.display = 'block';
+        }
+
         /** Add new observers to listen events that user should be refresh. 
          */ 
         function notificationListener() {
             NotificationListenerService.multipleEventsListener(UserService.NOTIFICATIONS_TO_UPDATE_USER,
                 mainCtrl.refreshUser);
         }
-
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {

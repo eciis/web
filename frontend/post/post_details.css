@@ -36,3 +36,60 @@
     border-radius:50%;
     box-shadow:0 0 1px #333;
 }
+
+.deleted-post-container {
+    margin: 0px 9px;
+    height: 130px;
+    background: rgb(0, 150, 136);
+    color: rgb(255, 255, 255);
+    display: grid;
+    grid-template-columns: 70px auto;
+    grid-template-rows: auto;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleted-post-icon {
+    font-size:  70px; 
+    color: white; 
+    width: 70px; 
+    height: 70px;
+}
+
+#removed-by {
+    font-size: 19px;
+    margin: 0;
+}
+
+#removed-details {
+    margin: 0;
+}
+
+@media screen and (max-width: 599px) {
+    .deleted-post-container {
+        grid-template-columns: auto;
+        grid-template-rows: 60px auto;
+        justify-items: center;
+    }
+
+    .deleted-post-icon {
+        font-size: 60px; 
+        color: white; 
+        width: 60px; 
+        height: 60px;
+        margin: 0;
+    }
+
+    .delete-post-text {
+        text-align: center;
+    }
+
+    #removed-by {
+        font-size: 16px;
+    }
+
+    #removed-details {
+        font-size: 12px;
+    }
+}

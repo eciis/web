@@ -175,17 +175,15 @@
     </md-card-title-text>
   </md-card-title>
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
-    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
-    <div style="height: 70px; width: 70px;">
-      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
-    </div>
-    <div layout="column" layout-align-xs="center center">
-      <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
-      <span>
+    class="deleted-post-container">
+    <md-icon class="deleted-post-icon">delete_forever</md-icon>
+    <div class="delete-post-text">
+      <p id="removed-by">ESTA PUBLICAÇÃO FOI REMOVIDA</p>
+      <p id="removed-details">
         {{postDetailsCtrl.post.last_modified_by == postDetailsCtrl.post.author ? 'por' : 'pelo administrador'}} 
-        {{postDetailsCtrl.post.last_modified_by}} 
+        {{postDetailsCtrl.post.last_modified_by}} <br hide-gt-xs/>
         {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
-      </span>
+      </p>
     </div>
   </div>  
   <md-card-content ng-if="postDetailsCtrl.showTextPost()">

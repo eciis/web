@@ -7,6 +7,20 @@
 	margin: auto;
 }
 
+.percentage-selected{
+    margin-right: -16px;
+    background-color: #8BC34A;
+    text-align: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    width: 78px;
+    height: 20px;
+    color: #FFFFFF;
+}
+
+.option-selected{
+    background-color: #E0E0E0;
+}
 
 .survey-card{
     margin-top: -1px;

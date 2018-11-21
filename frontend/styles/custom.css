@@ -701,11 +701,6 @@ a:active {
     margin: 0px;
 }
 
-.option-selected{
-    background-color: #E0E0E0;
-    height: 48px;
-}
-
 .option-percentage{
     background-color: #E0E0E0;
     margin-right: -16px;
@@ -715,17 +710,6 @@ a:active {
     color: #616161;
     padding-top: 16px;
     padding-bottom: 16px;
-}
-
-.percentage-selected{
-    margin-right: -16px;
-    background-color: #8BC34A;
-    text-align: center;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    width: 78px;
-    height: 20px;
-    color: #FFFFFF;
 }
 
 md-switch.md-checked .md-thumb {

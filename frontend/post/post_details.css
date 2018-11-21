@@ -38,12 +38,12 @@
 }
 
 .deleted-post-container {
-    margin: 0px 9px;
-    height: 130px;
+    margin: 0 0.57em;
+    height: 8.125em;
     background: rgb(0, 150, 136);
     color: rgb(255, 255, 255);
     display: grid;
-    grid-template-columns: 70px auto;
+    grid-template-columns: 4.38em auto;
     grid-template-rows: auto;
     align-content: center;
     justify-content: center;
@@ -51,14 +51,14 @@
 }
 
 .deleted-post-icon {
-    font-size:  70px; 
+    font-size:  4.27em; 
     color: white; 
-    width: 70px; 
-    height: 70px;
+    width: 1em; 
+    height: 1em;
 }
 
 #removed-by {
-    font-size: 19px;
+    font-size: 1.19em;
     margin: 0;
 }
 
@@ -69,15 +69,13 @@
 @media screen and (max-width: 599px) {
     .deleted-post-container {
         grid-template-columns: auto;
-        grid-template-rows: 60px auto;
+        grid-template-rows: 3.75em auto;
         justify-items: center;
     }
 
     .deleted-post-icon {
-        font-size: 60px; 
+        font-size: 3.75em; 
         color: white; 
-        width: 60px; 
-        height: 60px;
         margin: 0;
     }
 
@@ -86,10 +84,10 @@
     }
 
     #removed-by {
-        font-size: 16px;
+        font-size: 1em;
     }
 
     #removed-details {
-        font-size: 12px;
+        font-size: 0.75em;
     }
 }

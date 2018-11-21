@@ -146,7 +146,7 @@
                 url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
-                        templateUrl: Utils.isMobileScreen(475) ? "app/event/events_mobile.html" : "app/institution/institution_events.html",
+                        templateUrl: "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
                 }
@@ -211,7 +211,7 @@
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
-                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
+                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl")
                     }
                 }
             })

@@ -19,6 +19,13 @@ from custom_exceptions import QueryException
 __all__ = ['EventCollectionHandler']
 
 def get_query_events(filters, user):
+    """Get query of events based on filters by date or not.
+
+    Args:
+        filters: A list of tuples with the name and value of filters to the query
+        Filters by month and year are in end of list
+        user: The current logged user.
+    """
     if len(filters) > 2:
         month = int(filters[2][1])
         year = int(filters[3][1])

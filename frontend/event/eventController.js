@@ -163,7 +163,7 @@
          * @private
          */
         eventCtrl._getMonths = () => {
-            $http.get('app/utils/months.json').then(function success(response) {
+            EventService.getMonths().then(function success(response) {
                 eventCtrl.months = response.data;
                 const currentDate = new Date();
                 const currentMonth = currentDate.getMonth();

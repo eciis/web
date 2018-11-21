@@ -1,8 +1,15 @@
 #survey-option{
     display: grid; 
-    grid-template-columns: 3em auto 5em;
+    grid-template-columns: 2em auto 5em;
     grid-template-rows: auto;
     align-items: center;
+	width: 90%;
+	margin: auto;
+}
+
+
+.survey-card{
+    margin-top: -1px;
 }
 
 .survey-title-placeholder {
@@ -161,10 +168,6 @@
     .survey-multiple-choice {
         font-size: 0.8875em;
         margin-left: 0.625em;
-    }
-
-    #survey-option{
-        grid-template-columns: 3em 10em 5em;
     }
 
     #text-option{

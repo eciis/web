@@ -691,12 +691,6 @@ a:active {
    border-radius: 50%;
 }
 
-.survey-card{
-    margin-top: -1px;
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;

@@ -32,7 +32,6 @@ def get_filtered_events(filters, user):
         year = int(filters[3][1])
         current_month = datetime(year, month, 1)
         next_month = datetime(year if month < 11 else year+1, month+2 if month < 11 else 2, 1)
-        print current_month, next_month
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published',
             Event.end_time >= current_month,

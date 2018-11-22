@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(PostService, AuthService, NotificationService,
-            InstitutionService, $interval, $mdToast, $mdDialog, $state, MessageService, ProfileService, EventService, $q) {
+            $mdSidenav, $mdDialog, $state, ProfileService, EventService, $q) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -24,7 +24,11 @@
 
         homeCtrl.user = AuthService.getCurrentUser();
         function loadStateView(){
-            homeCtrl.stateView = $state.current.name.split(".")[2];
+            homeCtrl.stateView = getStateView($state.current.name);
+        }
+
+        function getStateView (state) {
+            return state.split(".")[2];
         }
  
         homeCtrl.getSelectedItemClass = function getSelectedItemClass(state){
@@ -52,29 +56,30 @@
             ProfileService.showProfile(userKey, ev);
         };
 
+        function go(state, params={}) {
+            homeCtrl.stateView = getStateView(state);
+            $state.go(state, params);
+            $mdSidenav('leftNav').toggle();
+        }
+
         homeCtrl.goHome = function goHome() {
-            homeCtrl.stateView = "home";
-            $state.go('app.user.home');
+            go('app.user.home');
         };
 
         homeCtrl.goToProfile = function goToProfile() {
-            homeCtrl.stateView = "config_profile";
-            $state.go('app.user.config_profile');
+            go('app.user.config_profile');
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            homeCtrl.stateView = "events";
-            $state.go('app.user.events', {posts: homeCtrl.posts});
+            go('app.user.events', {posts: homeCtrl.posts});
         };
 
         homeCtrl.goToInstitutions = function goToInstitutions() {
-            homeCtrl.stateView = "institutions";
-            $state.go('app.user.institutions');
+            go('app.user.institutions');
         };
 
         homeCtrl.goInvite = function goInvite() {
-            homeCtrl.stateView = "invite_inst";
-            $state.go('app.user.invite_inst');
+            go('app.user.invite_inst');
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {

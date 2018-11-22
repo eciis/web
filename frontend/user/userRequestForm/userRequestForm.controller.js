@@ -15,7 +15,7 @@
          * and had its bindings initialized
          */
         userReqFormCtrl.$onInit = function () {
-            loadRequests();
+            userReqFormCtrl._loadRequests();
         };
 
         /**
@@ -50,7 +50,7 @@
                     userReqFormCtrl.isRequestSent = true;
                 })
                 .catch(_ => {
-                    MessageService.showToast("Um erro ocorreu. Verifique as informações e tente novamente")
+                    MessageService.showToast("Um erro ocorreu. Verifique as informações e tente novamente");
                 });
         };
 
@@ -59,7 +59,7 @@
          * whether the request was already sent or not.
          */
         userReqFormCtrl.onClick = function () {
-            userReqFormCtrl.isRequestSent ? AuthService.logout() : verifyAndSendRequest();
+            userReqFormCtrl.isRequestSent ? AuthService.logout() : userReqFormCtrl._verifyAndSendRequest();
         };
 
         /**
@@ -82,8 +82,8 @@
          * to this institution has already been sent, otherwise
          * it sends the request
          */
-        function verifyAndSendRequest () {
-            if (wasInstRequested()) {
+        userReqFormCtrl._verifyAndSendRequest = function () {
+            if (userReqFormCtrl._wasInstRequested()) {
                 MessageService.showToast("Você já solicitou para fazer parte dessa instituição.");
             } else {
                 userReqFormCtrl.sendRequest();
@@ -93,24 +93,24 @@
         /**
          * Check if the institution was already requested
          */
-        function wasInstRequested () {
+        userReqFormCtrl._wasInstRequested = function () {
             return userReqFormCtrl.requests
                 .filter(request => request.status === "sent")
                 .map(request => request.sender_key)
                 .includes(userReqFormCtrl.user.key);
-        }
+        };
 
         /**
          * Load the selected institution requests
          */
-        function loadRequests () {
+        userReqFormCtrl._loadRequests = function () {
             if(userReqFormCtrl.selectedInst) {
                 RequestInvitationService.getRequests(userReqFormCtrl.selectedInst.key)
                 .then(requests => {
                     userReqFormCtrl.requests = requests;
                 });
             }
-        }
+        };
 
     });
 })();

@@ -1,7 +1,12 @@
+#content-new-invite{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 400px) {
     .new-invite-page-card {
         max-width: 20em;
-        margin: 0px;
     }
 }
 

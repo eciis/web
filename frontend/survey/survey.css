@@ -7,6 +7,11 @@
 	margin: auto;
 }
 
+.radio-checkbox-button{
+    margin:auto;
+    width: 20px;
+}
+
 .percentage-selected{
     margin-right: -16px;
     background-color: #8BC34A;

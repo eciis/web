@@ -75,7 +75,7 @@
          */
         userReqFormCtrl.goBack = function () {
             $state.go('user_inactive');
-        }
+        };
 
         /**
          * Show an error message to the user in case the request 

@@ -25,7 +25,7 @@
          */
         searchInstCtrl.getInstIcon = function (inst) {
             return searchInstCtrl.isInstSelected(inst) ? 'done' : 'account_balance';
-        }
+        };
 
         /**
          * Check if the institution is selected and loaded
@@ -39,6 +39,10 @@
          * Search for an institution based on the user input
          */
         searchInstCtrl.search = function () {
+            /**
+             * TODO: Modify the inst search document to store the inst's address. 
+             * Thus, the get request done at the select function will be unnecessary.
+            */
             const INST_STATE = 'active';
             InstitutionService.searchInstitutions(searchInstCtrl.keyword, INST_STATE, 'institution')
                 .then(institutions => {

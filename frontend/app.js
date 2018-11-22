@@ -306,8 +306,20 @@
                 url: "/user_inactive",
                 views: {
                     main: {
-                      templateUrl: "app/user/user_inactive.html",
+                      templateUrl: "app/user/userInactive/user_inactive.html",
                       controller: "UserInactiveController as userInactiveCtrl"
+                    }
+                }
+            })
+            .state("user_request", {
+                url: '/user_request',
+                params: {
+                    institution: null
+                },
+                views: {
+                    main: {
+                        templateUrl: 'app/user/userRequestForm/user_request_form.html',
+                        controller: 'UserRequestFormController as userReqFormCtrl'
                     }
                 }
             })
@@ -447,6 +459,7 @@
             'email_verification',
             'reset_password',
             'user_inactive',
+            'user_request',
             'new_invite'
         ];
 

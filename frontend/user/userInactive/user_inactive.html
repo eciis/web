@@ -1,0 +1,37 @@
+<md-content id="search-inst-content" class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
+    <div layout-align="center center">
+        <div layout="row" layout-align="center center">
+            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs 
+                md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
+                <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+            <md-card id="search-inst-card" class="custom-card">
+                <md-card-content layout="row" layout-align="center center">
+                    <div class="custom-card-content">
+                        <img id="search-inst-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
+                        <p>"Busque uma instituição que você faz parte."</p>
+
+                        <search-institution 
+                            on-select="userInactiveCtrl.onSelect"
+                            on-search="userInactiveCtrl.onSearch">
+                        </search-institution>
+
+                        <div id="search-btn-container" layout="row" layout-align="center center" 
+                            ng-if="userInactiveCtrl.hasInstSelected()">
+                            <md-button class="md-raised search-inst-btn" md-colors="{background: 'teal-500'}"
+                                ng-click="userInactiveCtrl.advance()"> 
+                                AVANÇAR
+                            </md-button>
+                        </div>
+                    </div>
+                </md-card-content>
+                <div class="custom-card-footer" layout-align="center">
+                    <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" 
+                        md-colors="{background: 'light-green-600'}" ng-click="userInactiveCtrl.logout()">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </md-button>
+                </div>
+            </md-card> 
+        </div>
+    </div>
+</md-content>

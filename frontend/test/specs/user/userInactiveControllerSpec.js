@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test UserInactiveController', function() {
+(xdescribe('Test UserInactiveController', function() {
 
     var userInactiveCtrl, httpBackend, scope, institutionService, createCtrl, state, requestService, authService;
 

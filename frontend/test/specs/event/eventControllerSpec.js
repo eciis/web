@@ -149,7 +149,7 @@
     describe('_getEventsByDay()', () => {
         it('Should populate the eventsByDay array', () => {
             eventCtrl.events = requestEvent.events;
-            eventCtrl.currentMonth = months[11];
+            eventCtrl.selectedMonth = months[11];
             expect(eventCtrl.eventsByDay.length).toEqual(0);
             eventCtrl._getEventsByDay();
             expect(eventCtrl.eventsByDay.length).toEqual(4);
@@ -190,7 +190,13 @@
     describe('newEvent()', () => {
 
         it('should call functions', () => {
-            spyOn(mdDialog, 'show');
+            spyOn(mdDialog, 'show').and.callFake(() => {
+                return {
+                    then: function (callback) {
+                        return callback({});
+                    }
+                };
+            });
             eventCtrl.newEvent();
             expect(mdDialog.show).toHaveBeenCalled();
         });

@@ -198,7 +198,7 @@
 
     .event-day-properties {
         margin-top: 1em;
-        margin-left: auto;
+        margin-left: 0.5em;
         margin-right: auto;
         font-weight: 1000;
         font-size: 1.5em;
@@ -232,15 +232,9 @@
         grid-column-end: 3;
     }
 
-    .events-column {
-        display: grid;
-        grid-template-columns: auto;
-        grid-template-rows: auto;
-    }
-
     .event-preview-image {
-        max-height: 120px;
-        height: 120px;
+        max-height: 8em;
+        height: 8em;
         max-width: 100%;
         min-width: 100%;
         width: 100%;
@@ -255,12 +249,12 @@
     .highlight {
         background:rgba(0,0,0,0.65);
         position: absolute;
-        height: 55px;
+        height: 3.5em;
         width: 100%;
         background-color: rgba(0,0,0,0.40);
         font-family: Verdana, Geneva, sans-serif;
         color: #FFF;
-        bottom: 0px;
+        bottom: 0em;
         z-index: 1;
     }
 
@@ -294,5 +288,13 @@
     .none-events-msg {
         margin-left: auto;
         margin-right: auto;
+    }
+
+    .select-months {
+        width: 8em;
+    }
+
+    .select-years {
+        width: 6em;
     }
 }

@@ -3,30 +3,31 @@
     var app = angular.module('app');
 
     app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
-        var eventCtrl = this;
-        var content = document.getElementById("content");
+        const eventCtrl = this;
+        let content = document.getElementById("content");
 
-        var moreEvents = true;
-        var actualPage = 0;
-        var isAnotherMonth = false;
+        let moreEvents = true;
+        let actualPage = 0;
+        let isAnotherMonth = false;
+        let currentDate, currentMonth, currentYear;
 
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
         eventCtrl.months = [];
         eventCtrl.years = [];
-        eventCtrl.currentMonth = null;
-        eventCtrl.currentYear = null;
+        eventCtrl.selectedMonth = null;
+        eventCtrl.selectedYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
 
-            var deferred = $q.defer();
+            let deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.currentMonth.month, eventCtrl.currentYear);
+                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.selectedMonth.month, eventCtrl.selectedYear);
                 } else {
-                    loadEvents(deferred, EventService.getEvents, eventCtrl.currentMonth.month, eventCtrl.currentYear);
+                    loadEvents(deferred, EventService.getEvents, eventCtrl.selectedMonth.month, eventCtrl.selectedYear);
                 }
             } else {
                 deferred.resolve();
@@ -71,6 +72,8 @@
                     events: eventCtrl.events
                 },
                 bindToController: true
+            }).then(() => {
+                eventCtrl._getEventsByDay();
             });
         };
 
@@ -128,20 +131,19 @@
          * @param {object} eventsByDay the object with days in keys
          */
         eventCtrl._distributeEvents = (event, eventsByDay) => {
-            const daysOfCurrentMonth = new Date(eventCtrl.currentYear, eventCtrl.currentMonth.month, 0).getDate();
+            const daysOfCurrentMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0).getDate();
             const startMonth = new Date(event.start_time).getMonth()+1;
             const endMonth = new Date(event.end_time).getMonth()+1;
             let day = new Date(event.start_time).getDate();
             let endDay = new Date(event.end_time).getDate();
-            if(endDay <= day && eventCtrl.currentMonth.month < endMonth) {
+            if(endDay <= day && eventCtrl.selectedMonth.month !== endMonth) {
                 endDay = daysOfCurrentMonth;
-            } else if(endDay <= day && startMonth < endMonth
-                && eventCtrl.currentMonth.month === endMonth) {
+            } else if(endDay <= day && eventCtrl.selectedMonth.month !== startMonth) {
                 day = 1;
-            }
+            } 
             for (let i = day; i <= endDay; i++) {
-                if(startMonth === eventCtrl.currentMonth.month
-                    || endMonth === eventCtrl.currentMonth.month) {
+                if(startMonth === eventCtrl.selectedMonth.month
+                    || endMonth === eventCtrl.selectedMonth.month) {
                     if(!eventsByDay[i]) 
                         eventsByDay[i] = [];
                     eventsByDay[i].push(event);
@@ -173,11 +175,11 @@
         };
 
         /**
-         * Loads the years 2017 to 2050 to show in filter by year
+         * Loads the current year and add 50 years to show in filter by year
          * @private
          */
         eventCtrl._loadYears = () => {
-            for (let year = 2017; year <= 2050; year++) {
+            for (let year = currentYear; year <= currentYear + 50; year++) {
                 eventCtrl.years.push(year);
             }
         };
@@ -189,10 +191,8 @@
         eventCtrl._getMonths = () => {
             EventService.getMonths().then(function success(response) {
                 eventCtrl.months = response;
-                const currentDate = new Date();
-                const currentMonth = currentDate.getMonth();
-                eventCtrl.currentMonth = eventCtrl.months[currentMonth];
-                eventCtrl.currentYear = currentDate.getFullYear();
+                eventCtrl.selectedMonth = eventCtrl.months[currentMonth];
+                eventCtrl.selectedYear = currentDate.getFullYear();
                 eventCtrl._loadYears();
                 eventCtrl.loadMoreEvents();
             });
@@ -200,6 +200,9 @@
 
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
+            currentDate = new Date();
+            currentMonth = currentDate.getMonth();
+            currentYear = currentDate.getFullYear();
             eventCtrl._getMonths();
         })();
     });

@@ -1,20 +1,22 @@
 <div class="container-resp box">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <div class="none-events-msg">
+    <div ng-if="!eventCtrl.isLoadingEvents" class="none-events-msg">
       <md-content ng-if="eventCtrl.months.length > 0" layout="row">
-        <md-select name="month" ng-model="eventCtrl.currentMonth" ng-change="eventCtrl.loadFilteredEvents()">
+        <md-select name="month" ng-model="eventCtrl.selectedMonth"
+          ng-change="eventCtrl.loadFilteredEvents()" class="select-months">
           <md-option ng-repeat="month in eventCtrl.months" ng-value="month">
               {{month.month_name}}
           </md-option>
         </md-select>
-        <md-select name="year" ng-model="eventCtrl.currentYear" ng-change="eventCtrl.loadFilteredEvents()">
+        <md-select name="year" ng-model="eventCtrl.selectedYear"
+          ng-change="eventCtrl.loadFilteredEvents()" class="select-years">
           <md-option ng-repeat="year in eventCtrl.years" ng-value="year">
               {{year}}
           </md-option>
         </md-select>
       </md-content>
-      <md-content ng-if="eventCtrl.events.length === 0">
+      <md-content ng-if="eventCtrl.eventsByDay.length === 0">
         <h4>Nenhum evento a ser exibido.</h4>
       </md-content>
     </div>

@@ -18,7 +18,7 @@ from custom_exceptions import QueryException
 
 __all__ = ['EventCollectionHandler']
 
-def get_query_events(filters, user):
+def get_filtered_events(filters, user):
     """Get query of events based on filters by date or not.
 
     Args:
@@ -26,11 +26,13 @@ def get_query_events(filters, user):
         Filters by month and year are in end of list
         user: The current logged user.
     """
-    if len(filters) > 2:
+    has_date_filters = len(filters) > 2
+    if has_date_filters:
         month = int(filters[2][1])
         year = int(filters[3][1])
         current_month = datetime(year, month, 1)
-        next_month = datetime(year if month < 11 else year+1, month+2 if month < 11 else 1, 1)
+        next_month = datetime(year if month < 11 else year+1, month+2 if month < 11 else 2, 1)
+        print current_month, next_month
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published',
             Event.end_time >= current_month,
@@ -50,7 +52,7 @@ class EventCollectionHandler(BaseHandler):
         more = False
 
         if len(user.follows) > 0:
-            queryEvents = get_query_events(self.request.GET.items(), user)
+            queryEvents = get_filtered_events(self.request.GET.items(), user)
             page_params = self.request.GET.items()[0:2]
             queryEvents, more = query_paginated(
                 page_params, queryEvents)

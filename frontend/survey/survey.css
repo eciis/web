@@ -3,8 +3,8 @@
     grid-template-columns: 2em auto 5em;
     grid-template-rows: auto;
     align-items: center;
-	width: 90%;
-	margin: auto;
+    width: 90%;
+    margin: auto;
 }
 
 .radio-checkbox-button{

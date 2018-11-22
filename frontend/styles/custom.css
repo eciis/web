@@ -701,12 +701,6 @@ a:active {
    border-radius: 50%;
 }
 
-.survey-card{
-    margin-top: -1px;
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
@@ -715,11 +709,6 @@ a:active {
 .option{
     height: 25px;
     margin: 0px;
-}
-
-.option-selected{
-    background-color: #E0E0E0;
-    height: 48px;
 }
 
 .option-percentage{
@@ -731,17 +720,6 @@ a:active {
     color: #616161;
     padding-top: 16px;
     padding-bottom: 16px;
-}
-
-.percentage-selected{
-    margin-right: -16px;
-    background-color: #8BC34A;
-    text-align: center;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    width: 78px;
-    height: 20px;
-    color: #FFFFFF;
 }
 
 md-switch.md-checked .md-thumb {

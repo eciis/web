@@ -45,7 +45,7 @@
         userReqFormCtrl.selectedInst = {...institution};
     }));
 
-    fdescribe('UserRequestFormController functions', function() {
+    describe('UserRequestFormController functions', function() {
 
         describe('getMesage()', function () {
             const formMsg = "Para finalizar o pedido de convite, preencha suas informações institucionais";

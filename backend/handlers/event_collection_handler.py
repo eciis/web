@@ -30,10 +30,11 @@ def get_query_events(filters, user):
         month = int(filters[2][1])
         year = int(filters[3][1])
         current_month = datetime(year, month, 1)
-        next_month = datetime(year if month < 12 else year+1, month+1 if month < 12 else 1, 1)
+        next_month = datetime(year if month < 11 else year+1, month+2 if month < 11 else 1, 1)
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published',
-            Event.start_time >= current_month, Event.start_time < next_month).order(Event.start_time, Event.key)
+            Event.end_time >= current_month,
+            Event.end_time < next_month).order(Event.end_time, Event.key)
     else:
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published').order(Event.start_time, Event.key)

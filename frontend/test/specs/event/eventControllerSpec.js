@@ -8,8 +8,8 @@
     var institution = { name: 'Institution', key: '098745' };
     var other_institution = { name: 'Ohter Institution', key: '75368' };
 
-    var date = new Date();
-    var date_next_month = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    var date = new Date(2018, 11, 22);
+    var next_date = new Date(2018, 11, 25);
 
     var months = [ {"month": 1}, {"month": 2},
         {"month": 3}, {"month": 4},
@@ -33,7 +33,7 @@
         'local': 'Local',
         'photo_url': null,
         'start_time': date,
-        'end_time': date_next_month,
+        'end_time': next_date,
         'institution_key': institution.key,
         'key': '12345'
     };
@@ -44,7 +44,7 @@
         'local': 'Local',
         'photo_url': null,
         'start_time': date,
-        'end_time': date_next_month,
+        'end_time': next_date,
         'institution_key': other_institution.key,
         'key': '54321'
     };
@@ -147,14 +147,13 @@
     });
 
     describe('_getEventsByDay()', () => {
-
         it('Should populate the eventsByDay array', () => {
             eventCtrl.events = requestEvent.events;
+            eventCtrl.currentMonth = months[11];
             expect(eventCtrl.eventsByDay.length).toEqual(0);
             eventCtrl._getEventsByDay();
-            expect(eventCtrl.eventsByDay.length).toEqual(1);
+            expect(eventCtrl.eventsByDay.length).toEqual(4);
         });
-
     });
 
     describe('getMonths()', () => {

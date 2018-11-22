@@ -123,17 +123,29 @@
         };
 
         /**
-         * distributes events on days that happens 
+         * Distributes events on days that happens 
          * @param {object} event the event that be distributed
          * @param {object} eventsByDay the object with days in keys
          */
         eventCtrl._distributeEvents = (event, eventsByDay) => {
-            const day = new Date(event.start_time).getDate();
-            const endDay = new Date(event.end_time).getDate();
+            const daysOfCurrentMonth = new Date(eventCtrl.currentYear, eventCtrl.currentMonth.month, 0).getDate();
+            const startMonth = new Date(event.start_time).getMonth()+1;
+            const endMonth = new Date(event.end_time).getMonth()+1;
+            let day = new Date(event.start_time).getDate();
+            let endDay = new Date(event.end_time).getDate();
+            if(endDay <= day && eventCtrl.currentMonth.month < endMonth) {
+                endDay = daysOfCurrentMonth;
+            } else if(endDay <= day && startMonth < endMonth
+                && eventCtrl.currentMonth.month === endMonth) {
+                day = 1;
+            }
             for (let i = day; i <= endDay; i++) {
-                if(!eventsByDay[i]) 
-                    eventsByDay[i] = [];
-                eventsByDay[i].push(event);
+                if(startMonth === eventCtrl.currentMonth.month
+                    || endMonth === eventCtrl.currentMonth.month) {
+                    if(!eventsByDay[i]) 
+                        eventsByDay[i] = [];
+                    eventsByDay[i].push(event);
+                }
             }
         };
 

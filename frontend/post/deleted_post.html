@@ -1,0 +1,12 @@
+<div md-colors="{background: 'teal-500'}"
+    class="deleted-post-container">
+    <md-icon class="deleted-post-icon">delete_forever</md-icon>
+    <div class="delete-post-text">
+        <p id="removed-by">{{$ctrl.message}}</p>
+        <p id="removed-details">
+            {{$ctrl.post.last_modified_by == $ctrl.post.author ? 'por' : 'pelo administrador'}} 
+            {{$ctrl.post.last_modified_by}} <br hide-gt-xs/>
+            {{$ctrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
+        </p>
+    </div>
+</div>

@@ -99,6 +99,8 @@
             <md-icon>clear</md-icon>
           </md-button>
           <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
+          <md-progress-linear md-mode="indeterminate" 
+            style="margin-top: 0.1em;" ng-if="postCtrl.loadingImage"></md-progress-linear>
         </div>
         <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
       </md-card-content>

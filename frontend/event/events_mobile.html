@@ -1,7 +1,7 @@
 <div class="container-resp box">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <div ng-if="!eventCtrl.isLoadingEvents" class="none-events-msg">
+    <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
       <md-content ng-if="eventCtrl.months.length > 0" layout="row">
         <md-select name="month" ng-model="eventCtrl.selectedMonth"
           ng-change="eventCtrl.loadFilteredEvents()" class="select-months">

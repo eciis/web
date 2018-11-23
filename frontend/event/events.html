@@ -26,7 +26,7 @@
           </md-card>
         </div>
         <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-        <md-card ng-if="eventCtrl.events.length === 0" style="margin-left: 40px;">
+        <md-card ng-if="eventCtrl.events.length === 0" class="centralized-event-content">
             <md-content layout-align="center center" layout="column">
               <h4>Nenhum evento a ser exibido.</h4>
             </md-content>

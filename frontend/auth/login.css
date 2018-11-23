@@ -5,8 +5,25 @@
 
 .login-btn md-icon {
     color: white;
-    margin-left: 1em;
     margin-right: 0.5em;
+    text-align: center;
+}
+
+#login-invite-icon {
+    font-size: 1.3em;
+    line-height: 24px;
+    margin-left: 0.3em;
+}
+
+#login-google-icon {
+    margin-left: 0.5em;
+}
+
+#login-google-icon svg {
+    height: auto;
+    width: 1.3em;
+    line-height: auto;
+    margin: 0.155em 0.2em;
 }
 
 .login-text {

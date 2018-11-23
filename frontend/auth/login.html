@@ -28,9 +28,9 @@
               </div>
             </form>
 
-            <md-button layout="row" layout-align="start center" class="login-btn" 
+            <md-button layout="row" layout-align="start center" class="login-btn"
               ng-click="loginCtrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
-              <md-icon md-svg-src="/app/icons/google-icon.svg" class="material-icons"></md-icon>
+              <md-icon md-svg-src="/app/icons/google-icon.svg" id="login-google-icon"></md-icon>
               <span>ACESSE COM GOOGLE</span>
             </md-button>
 
@@ -42,7 +42,7 @@
 
             <md-button layout="row" layout-align="start center" class="login-btn" 
               md-colors="{background: 'teal-500'}" ng-click="loginCtrl.requestInvite()">
-              <md-icon>add_circle</md-icon>
+              <md-icon id="login-invite-icon">add_circle</md-icon>
               <span>SOLICITAR CONVITE</span>
             </md-button>
           </div>

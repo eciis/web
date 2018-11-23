@@ -272,17 +272,25 @@
         z-index: 1;
     }
 
-    .event-title, .event-subtitle {
-        font-size: 0.9em;
-        margin-left: 0.85em;
-        margin-top: 0.8em; 
+    .event-title, .event-subtitle, .event-inst-name { 
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
 
+    .event-title, .event-subtitle {
+        font-size: 0.9em;
+        margin-left: 0.85em;
+        margin-top: 0.8em;
+    }
+
     .event-subtitle {
-        margin-top: 0.3em;
+        margin-top: 0.1em;
+    }
+
+    .event-inst-name {
+        font-size: 0.65em;
+        margin-top: -0.08em;
     }
 
     .none-events-msg {

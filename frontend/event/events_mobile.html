@@ -42,6 +42,10 @@
                         <div class="event-subtitle">
                             {{ event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
                             {{ event.address.city ? ' | ' + event.address.city : ''}}
+                            <p class="event-inst-name"
+                              ng-if="!eventCtrl.user.isMember(event.institution_key)">
+                                {{event.institution_name || uppercase}}
+                          </p>
                         </div>
                     </div>
                   </div>

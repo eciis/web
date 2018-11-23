@@ -83,3 +83,11 @@
 #mobile-notification-time {
   align-self: start;
 }
+
+.read-mobile-notification {
+    background: #EEEEEE;
+}
+
+.unread-mobile-notification {
+    background: #BDBDBD;
+}

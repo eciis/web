@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 """Calendar handler test."""
 
+from .. import mocks
 from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Event
-from handlers.event_collection_handler import EventCollectionHandler
+from handlers.event_collection_handler import EventCollectionHandler, get_filtered_events
 from google.appengine.ext import ndb
 import json
 import datetime
@@ -122,41 +123,68 @@ class EventCollectionHandlerTest(TestBaseHandler):
                          'Event location',
                          "The event's local is not the expected one")
 
+    def test_get_filtered_events_with_date_filters(self):
+        """Test the get query of events filtered by date"""
+
+        filters = [('page', '0'), ('limit', '1'), ('month', str(self.date.month)), ('year', str(self.date.year))]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 2,
+                    "Should return only the events that happens the current month")
+
+    def test_get_filtered_events_without_date_filters(self):
+        """Test the get query events not filtered"""
+
+        filters = [('page', '0'), ('limit', '1')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 4,
+                    "Should return all created events in the initModels")
+
+def setup_title_and_local(event):
+    event.title = "New Event"
+    event.local = "Event location"
+    event.put()
+
+def setup_photo_url(entity):
+    entity.photo_url = 'urlphoto'
+    entity.put()
+
+def setup_date(event, date):
+    two_months_later = datetime.datetime(date.year if date.month < 11 else date.year+1, date.month+2 if date.month < 11 else 2, 15)
+    event.start_time = two_months_later
+    event.end_time = two_months_later
+    event.put()
 
 def initModels(cls):
     """Init the models."""
     # new User user
-    cls.user = User()
-    cls.user.name = 'user name'
-    cls.user.photo_url = 'urlphoto'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['user@gmail.com']
-    cls.user.put()
+    cls.user = mocks.create_user("user@gmail.com")
+    setup_photo_url(cls.user)
+
     # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.photo_url = 'urlphoto'
-    cls.certbio.members = [cls.user.key]
-    cls.certbio.followers = [cls.user.key]
-    cls.certbio.admin = cls.user.key
-    cls.certbio.state = "active"
-    cls.certbio.put()
+    cls.certbio = mocks.create_institution("CERTBIO")
+    setup_photo_url(cls.certbio)
 
     """ Update User."""
     cls.user.add_institution(cls.certbio.key)
     cls.user.follows = [cls.certbio.key]
     cls.user.put()
 
+    # Util date
+    cls.date = datetime.datetime.now()
+
     # Events
-    cls.event = Event()
-    cls.event.title = "New Event"
-    cls.event.author_key = cls.user.key
-    cls.event.author_name = cls.user.name
-    cls.event.author_photo = cls.user.photo_url
-    cls.event.institution_key = cls.certbio.key
-    cls.event.institution_name = cls.certbio.name
-    cls.event.institution_image = cls.certbio.photo_url
-    cls.event.start_time = datetime.datetime.now()
-    cls.event.end_time = datetime.datetime.now()
-    cls.event.local = "Event location"
-    cls.event.put()
+    cls.event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.event)
+
+    cls.other_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.other_event)
+
+    cls.distant_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.distant_event)
+    setup_date(cls.distant_event, cls.date)
+
+    cls.other_distant_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.other_distant_event)
+    setup_date(cls.other_distant_event, cls.date)

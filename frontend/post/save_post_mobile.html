@@ -1,22 +1,25 @@
-<md-card>
+<div style="    background-color: white;
+display: grid;
+grid-template-rows: 82px auto 104px;
+width: 96vw;
+border-radius: 4px;">
+  <div style="
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-column-gap: 8px;">
+    <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
+    title="{{postCtrl.user.current_institution.name}}"
+    class="create-post-inst-img"/>
+    <p class="create-post-inst-name" style="margin: 0;">{{ postCtrl.getInstName() }}</p>
+  </div>
+  <div style="padding: 0 16px;">
   <div class="create-post-container-resp"
     ng-class="postCtrl.typePost == 'Common' ? 'create-post-size' : 'create-post-size-expand'">
     <form name="saveForm" prevent-state-change="postCtrl.post">
-    <div layout="row">
-      <md-card-content layout-padding class="create-post-full-width">
-        <div layout="row">
-          <div>
-            <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
-            title="{{postCtrl.user.current_institution.name}}"
-            class="create-post-inst-img"/>
-          </div>
-          <div>
-            <p class="create-post-inst-name">{{ postCtrl.getInstName() }}</p>
-          </div>
-        </div>
-        <div flex>
-            <div ng-if="postCtrl.typePost === 'Common'"  layout="column">
-                <div ng-if="postCtrl.showImage()" layout="column" class="youtube-player image-view create-post-img">
+      <div class="create-post-full-width">
+            <div ng-if="postCtrl.typePost === 'Common'">
+                <div ng-if="postCtrl.showImage()" class="image-view create-post-img" style="max-width: 100%;">
                     <button ng-click="postCtrl.hideImage()" type="button">&times;</button>
                     <div>
                         <img ng-src="{{postCtrl.photoUrl}}"/>
@@ -34,9 +37,9 @@
                       <div ng-message="required">O post deve conter um título!</div>
                   </div>
                 </md-input-container>
-                <md-input-container ng-show="postCtrl.showTextField()"
+                <md-input-container ng-show="postCtrl.showTextField()" style="margin: 0;"
                  class="md-block create-post-textarea-container" md-no-float>
-                  <textarea name="message" ng-class="postCtrl.showImage() ? 'create-post-textarea-reduced' : 'create-post-textarea'"
+                  <textarea name="message" style="max-height: 66px !important;" ng-class="postCtrl.showImage() ? 'create-post-textarea-reduced' : 'create-post-textarea'"
                   class="create-post-text create-post-scrollbar"
                   ng-model="postCtrl.post.text" placeholder="Texto" required>
                   </textarea>
@@ -54,27 +57,24 @@
                 </md-input-container>
             </div>
         </div>
-      </md-card-content>
-    </div>
+      </div>
       <!-- SURVEY -->
       <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
           options="postCtrl.options"></survey-directive>
     </form>
   </div>
-  <div valign="bottom">
-      <md-card-actions layout="row" layout-align="end center"
-      ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
-        <md-button class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
-            Cancelar
-        </md-button>
-        <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
-          ng-click="postCtrl.save(isEditing, originalPost, saveForm)">
-            Postar
-        </md-button>
-      </md-card-actions>
-    </div>
     <div valign="bottom">
-        <md-card-content class="create-post-options-icons">
+        <div style="display: grid; justify-content: end; grid-template-columns: auto auto; padding: 0 8px 8px;"
+        ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
+          <md-button class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
+              Cancelar
+          </md-button>
+          <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar"
+            ng-click="postCtrl.save(isEditing, originalPost, saveForm)">
+              Postar
+          </md-button>
+        </div>
+        <div class="create-post-options-icons">
           <div class="create-post-icon">
             <md-button class="md-icon-button" ng-click="null" ng-model="postCtrl.file"
                        ngf-pattern="'image/*'" title="Adicionar imagem"
@@ -113,6 +113,6 @@
                 <md-icon>video_library</md-icon>
             </md-button>
           </div>
-        </md-card-content>
+        </div>
     </div>
-</md-card>
+  </div>

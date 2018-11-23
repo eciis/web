@@ -160,9 +160,9 @@
     }
 
     .create-post-size {
-        height: 75vh !important;
-        max-height: 79vh !important;
-        width: 96vh;
+        /* height: 400px; */
+        /* max-height: 79vh !important; */
+        /* width: 96vh; */
         max-width: 95%!important;
         margin: auto;
     }

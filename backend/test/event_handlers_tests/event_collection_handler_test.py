@@ -132,6 +132,12 @@ class EventCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(len(query_events), 2,
                     "Should return only the events that happens the current month")
 
+        filters = [('page', '0'), ('limit', '1'), ('month', str(self.date.month)), ('year', '2017')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 0,
+                    "Should return nothing because no has past events")
+
     def test_get_filtered_events_without_date_filters(self):
         """Test the get query events not filtered"""
 

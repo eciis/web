@@ -103,20 +103,21 @@
         eventCtrl.events = [];
     }));
 
-    describe('main() without definy institution_key', () => {
+    describe('main() without define institution_key', () => {
 
-        it("Should not has an institution_key", () => {
+        it("Should not have an institution_key", () => {
+            eventCtrl = createCtrl();
             expect(eventCtrl.institutionKey).toEqual(undefined);
         });
     });
 
-    describe('main() definy institution_key', () => {
+    describe('main() define institution_key', () => {
 
         beforeEach( () => {
             state.params.institutionKey = institution.key;
         });
 
-        it("Should not has an institution_key", () => {
+        it("Should have an institution_key", () => {
             eventCtrl = createCtrl();
             expect(eventCtrl.institutionKey).toEqual(institution.key);
         });
@@ -189,7 +190,7 @@
 
     describe('newEvent()', () => {
 
-        it('should call functions', () => {
+        it('should call mdDialog.show', () => {
             spyOn(mdDialog, 'show').and.callFake(() => {
                 return {
                     then: function (callback) {
@@ -204,7 +205,7 @@
 
     describe('share()', () => {
 
-        it('should call functions', () => {
+        it('should call mdDialog.show', () => {
             spyOn(mdDialog, 'show');
             eventCtrl.share("$event", event);
             expect(mdDialog.show).toHaveBeenCalled();

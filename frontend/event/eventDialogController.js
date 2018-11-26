@@ -51,6 +51,9 @@
 
         dialogCtrl.createInitDate = function createInitDate() {
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
+            if(dialogCtrl.isEditing) {
+                dialogCtrl.changeDate('startTime');
+            }
         };
 
         function saveImage(callback) {
@@ -280,10 +283,14 @@
 
         function generatePatch(patch, data) {
             if (dialogCtrl.dateToChange.startTime) {
-                patch.push({ op: 'replace', path: "/start_time", value: data.start_time });
+                patch.push({ op: 'replace', path: "/start_time", value: data.start_time },
+                    { op: 'replace', path: '/start_month', value: new Date(data.start_time).getMonth() + 1},
+                    { op: 'replace', path: '/start_year', value: new Date(data.start_time).getFullYear()});
             }
             if (dialogCtrl.dateToChange.endTime) {
-                patch.push({ op: 'replace', path: "/end_time", value: data.end_time });
+                patch.push({ op: 'replace', path: "/end_time", value: data.end_time },
+                    { op: 'replace', path: '/end_month', value: new Date(data.end_time).getMonth() + 1},
+                    { op: 'replace', path: '/end_year', value: new Date(data.end_time).getFullYear()});
             }
             return patch;
         }

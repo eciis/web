@@ -98,7 +98,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
+            $state.go('app.user.event', { eventKey: event.key });
         };
 
         /**

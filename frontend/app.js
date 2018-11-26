@@ -74,7 +74,8 @@
                 url: "/all_institutions",
                 views: {
                     user_content: {
-                        templateUrl: "app/institution/institutions.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/institutions.html", 
+                            "app/institution/registered_institutions_mobile.html", 600),
                         controller: "AllInstitutionsController as allInstitutionsCtrl"
                     }
                 }

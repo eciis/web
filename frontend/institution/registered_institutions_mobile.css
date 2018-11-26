@@ -1,0 +1,23 @@
+.registered-institutions-mobile-top-bar {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
+    height: 3em;
+    width: 100%;
+    background: #009688;
+    align-items: center;
+    position: absolute;
+}
+
+.registered-institutions-mobile-top-bar div {
+    font-size: 12px;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+}
+
+.registered-institutions-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-gap: 0.4em;
+}

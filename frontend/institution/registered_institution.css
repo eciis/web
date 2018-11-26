@@ -1,0 +1,53 @@
+.registered-institution-container {
+    height: 14em;
+    display: grid;
+    grid-template-rows: 50% 40% auto;
+    grid-template-columns: auto;
+    width: 100%;
+}
+
+.registered-institution-cover {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+#tst {
+    height: 5.5em;
+    width: 100%; 
+}
+
+.registered-institution-cover div img {
+    height: 5.5em;
+    width: 100%;
+}
+
+#registered-institution-img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 3em;
+    height: 3em;
+    z-index: 2;
+    margin-top: -1.5em;
+}
+
+#registered-institution-img img {
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+}
+
+.registered-institution-content {
+    justify-self: center;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    width: 100%;
+}
+
+.registered-institution-content span {
+    justify-self: center;
+    font-size: 12px;
+}
+
+.registered-institution-action {
+
+}

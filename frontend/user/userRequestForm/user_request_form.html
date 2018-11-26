@@ -1,0 +1,42 @@
+<md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
+    <div layout-align="center center">
+        <div layout="row" layout-align="center center">
+            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" hide-xs
+                ng-if="!userReqFormCtrl.isRequestSent" md-colors="{background: 'light-green-600'}"
+                ng-click="userReqFormCtrl.goBack()">
+                <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+            <md-card id="search-inst-card" class="custom-card">
+                <md-card-content layout="row" layout-align="center center">
+                    <div class="custom-card-content">
+                        <img id="search-inst-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
+                        <p>{{ userReqFormCtrl.getMessage() }}</p>
+                        <form ng-if="!userReqFormCtrl.isRequestSent">
+                            <md-input-container md-no-float class="md-block custom-card-input-container">
+                                <input placeholder="Cargo institucional" ng-model="userReqFormCtrl.request.office" 
+                                    class="custom-card-input" autocomplete="off" required>
+                            </md-input-container>
+                            <md-input-container md-no-float class="md-block custom-card-input-container">
+                                <input placeholder="E-mail institucional*" ng-model="userReqFormCtrl.request.email" 
+                                    class="custom-card-input" autocomplete="off" required>
+                            </md-input-container>
+                        </form>
+                        <div layout="row" layout-align="center center">
+                            <md-button class="md-raised" md-colors="{background: 'teal-500'}" 
+                                ng-click="userReqFormCtrl.onClick()"> 
+                                {{ userReqFormCtrl.getBtnTitle() }}
+                            </md-button>
+                        </div>
+                    </div>
+                </md-card-content>
+                <div class="custom-card-footer" layout-align="center">
+                    <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Sair" 
+                        ng-if="!userReqFormCtrl.isRequestSent" md-colors="{background: 'light-green-600'}" 
+                        ng-click="userReqFormCtrl.goBack()">
+                        <md-icon>keyboard_arrow_left</md-icon>
+                    </md-button>
+                </div>
+            </md-card> 
+        </div>
+    </div>
+</md-content>

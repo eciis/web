@@ -12,22 +12,26 @@
   </md-card-title>
   <md-list>
     <md-radio-group ng-model="surveyCtrl.binaryOptionSelected">
-      <md-list-item ng-repeat="option in surveyCtrl.post.options" 
-        ng-class="surveyCtrl.votedOption(option)?'option-selected':''">
-        <md-radio-button  ng-if="surveyCtrl.showRadioButton()" aria-label="option"
-          ng-value="option" ng-disabled="!surveyCtrl.canVote()" style="top:7px">
-        </md-radio-button>
-        <md-checkbox ng-disabled="!surveyCtrl.canVote()" ng-checked="surveyCtrl.votedOption(option)"
-          ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected"></md-checkbox>
-        <p ng-if="!surveyCtrl.isPostPage">{{surveyCtrl.getOption(option.text)}}</p>
-        <p ng-if="surveyCtrl.isPostPage">{{option.text}}</p>
+      <div ng-repeat="option in surveyCtrl.post.options" 
+        ng-class="surveyCtrl.votedOption(option)?'option-selected':''" id="survey-option">
+        <center>
+          <md-radio-button  ng-if="surveyCtrl.showRadioButton()" aria-label="option"
+            ng-value="option" ng-disabled="!surveyCtrl.canVote()" class="radio-checkbox-button">
+          </md-radio-button>
+          <md-checkbox ng-disabled="!surveyCtrl.canVote()" ng-checked="surveyCtrl.votedOption(option)"
+            ng-if="surveyCtrl.showCheckboxButton()" ng-model="option.selected" class="radio-checkbox-button"></md-checkbox>
+        </center>
+        <div id="text-option">
+          <p ng-if="!surveyCtrl.isPostPage">{{surveyCtrl.getOption(option.text)}}</p>
+          <p ng-if="surveyCtrl.isPostPage">{{option.text}}</p>
+        </div>
         <div ng-if="surveyCtrl.userVoted() || surveyCtrl.isSurveyAuthor() || surveyCtrl.timeHasBeenExpired()" 
           ng-click="surveyCtrl.showMenu($event, option)" title="Clique para ver quem votou nessa opção">
           <div ng-class="surveyCtrl.votedOption(option)?'percentage-selected':'option-percentage'">
             {{surveyCtrl.getPercentage(option)}}
           </div>
         </div>
-      </md-list-item>
+      </div>
     </md-radio-group>
   </md-list>
   <div ng-if="surveyCtrl.canVote()" layout="column" layout-align="center end">

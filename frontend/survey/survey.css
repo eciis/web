@@ -1,3 +1,36 @@
+#survey-option{
+    display: grid; 
+    grid-template-columns: 2em auto 5em;
+    grid-template-rows: auto;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
+
+.radio-checkbox-button{
+    margin:auto;
+    width: 20px;
+}
+
+.percentage-selected{
+    margin-right: -16px;
+    background-color: #8BC34A;
+    text-align: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    width: 78px;
+    height: 20px;
+    color: #FFFFFF;
+}
+
+.option-selected{
+    background-color: #E0E0E0;
+}
+
+.survey-card{
+    margin-top: -1px;
+}
+
 .survey-title-placeholder {
     font-weight: bold !important;
     color: #00695C !important;
@@ -154,6 +187,11 @@
     .survey-multiple-choice {
         font-size: 0.8875em;
         margin-left: 0.625em;
+    }
+
+    #text-option{
+        word-break:break-all;
+        margin-right: 0.5em;
     }
 }
 

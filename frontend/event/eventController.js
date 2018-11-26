@@ -4,12 +4,12 @@
 
     app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
         const eventCtrl = this;
-        let content = document.getElementById("content");
-
-        let moreEvents = true;
-        let actualPage = 0;
-        let isAnotherMonth = false;
-        let currentDate, currentMonth, currentYear;
+        let
+            content = document.getElementById("content"),
+            moreEvents = true,
+            actualPage = 0,
+            isAnotherMonth = false,
+            currentDate, currentMonth, currentYear;
 
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
@@ -25,9 +25,11 @@
             let deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.selectedMonth.month, eventCtrl.selectedYear);
+                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.selectedMonth && eventCtrl.selectedMonth.month,
+                        eventCtrl.selectedYear);
                 } else {
-                    loadEvents(deferred, EventService.getEvents, eventCtrl.selectedMonth.month, eventCtrl.selectedYear);
+                    loadEvents(deferred, EventService.getEvents, eventCtrl.selectedMonth && eventCtrl.selectedMonth.month,
+                        eventCtrl.selectedYear);
                 }
             } else {
                 deferred.resolve();
@@ -110,7 +112,7 @@
                 return prof.institution_key === event.institution_key;
             });
             if(profile.length > 0) {
-                return profile[0].color;
+                return _.first(profile).color;
             }
             return 'teal';
         };
@@ -134,14 +136,14 @@
             const daysOfCurrentMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0).getDate();
             const startMonth = new Date(event.start_time).getMonth()+1;
             const endMonth = new Date(event.end_time).getMonth()+1;
-            let day = new Date(event.start_time).getDate();
+            let startDay = new Date(event.start_time).getDate();
             let endDay = new Date(event.end_time).getDate();
-            if(endDay <= day && eventCtrl.selectedMonth.month !== endMonth) {
+            if(endDay <= startDay && eventCtrl.selectedMonth.month !== endMonth) {
                 endDay = daysOfCurrentMonth;
-            } else if(endDay <= day && eventCtrl.selectedMonth.month !== startMonth) {
-                day = 1;
+            } else if(endDay <= startDay && eventCtrl.selectedMonth.month !== startMonth) {
+                startDay = 1;
             } 
-            for (let i = day; i <= endDay; i++) {
+            for (let i = startDay; i <= endDay; i++) {
                 if(startMonth === eventCtrl.selectedMonth.month
                     || endMonth === eventCtrl.selectedMonth.month) {
                     if(!eventsByDay[i]) 
@@ -156,7 +158,7 @@
          * @private
          */
         eventCtrl._getEventsByDay = () => {
-            if(eventCtrl.events.length > 0) {
+            if(eventCtrl.events.length > 0 && eventCtrl.selectedMonth) {
                 eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
                 _.forEach(eventCtrl.events, function(event) {
@@ -175,11 +177,12 @@
         };
 
         /**
-         * Loads the current year and add 50 years to show in filter by year
+         * Loads the year 2017 to current_year + 30 to show in filter by year
+         * The year 2017 was chosen because it's the year that the project started to work
          * @private
          */
         eventCtrl._loadYears = () => {
-            for (let year = currentYear; year <= currentYear + 50; year++) {
+            for (let year = 2017; year <= currentYear + 30; year++) {
                 eventCtrl.years.push(year);
             }
         };
@@ -200,10 +203,14 @@
 
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
-            currentDate = new Date();
-            currentMonth = currentDate.getMonth();
-            currentYear = currentDate.getFullYear();
-            eventCtrl._getMonths();
+            if(Utils.isMobileScreen(475)) {
+                currentDate = new Date();
+                currentMonth = currentDate.getMonth();
+                currentYear = currentDate.getFullYear();
+                eventCtrl._getMonths();
+            } else {
+                eventCtrl.loadMoreEvents();
+            }
         })();
     });
 })();

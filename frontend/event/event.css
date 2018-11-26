@@ -125,10 +125,13 @@
     line-height: 3.1em;
 }
 
+.space-between-filters, .event-menu-button {
+    width: 0.8em;
+}
+
 .event-menu-button {
     margin: 0; 
-    padding: 0; 
-    width: 0.8em; 
+    padding: 0;
     background-color: white; 
     border: 0;
 }

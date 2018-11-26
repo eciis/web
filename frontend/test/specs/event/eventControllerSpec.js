@@ -2,66 +2,60 @@
 
 (describe('Test EventController', function () {
 
-    var eventCtrl, scope, httpBackend, rootScope;
-    var createCtrl, eventService, messageService, mdDialog, state;
+    let // variables to be associated to the injected parameters
+        eventCtrl, scope, httpBackend, rootScope,
+        createCtrl, eventService, messageService, mdDialog, state;
 
-    var institution = { name: 'Institution', key: '098745' };
-    var other_institution = { name: 'Ohter Institution', key: '75368' };
-
-    var date = new Date(2018, 11, 22);
-    var next_date = new Date(2018, 11, 25);
-
-    var months = [ {"month": 1}, {"month": 2},
+    let // variables to create the test scenario
+        institution = { name: 'Institution', key: '098745' },
+        other_institution = { name: 'Ohter Institution', key: '75368' },
+        date = new Date(2018, 11, 22),
+        next_date = new Date(2018, 11, 25),
+        months = [ {"month": 1}, {"month": 2},
         {"month": 3}, {"month": 4},
         {"month": 5}, {"month": 6},
         {"month": 7}, {"month": 8},
         {"month": 9}, {"month": 10},
-        {"month": 11}, {"month": 12}];
-
-    var user = {
-        name: 'User',
-        institutions: [institution],
-        follows: [institution],
-        institutions_admin: institution,
-        current_institution: institution,
-        key: '123'
-    };
-
-    var event = {
-        'title': 'Title',
-        'text': 'Text',
-        'local': 'Local',
-        'photo_url': null,
-        'start_time': date,
-        'end_time': next_date,
-        'institution_key': institution.key,
-        'key': '12345'
-    };
-
-    var other_event = {
-        'title': 'Other event',
-        'text': 'Text',
-        'local': 'Local',
-        'photo_url': null,
-        'start_time': date,
-        'end_time': next_date,
-        'institution_key': other_institution.key,
-        'key': '54321'
-    };
-
-    var requestEvent = {
-        events: [ event, other_event ],
-        next: true
-    };
-
-    var requestEventInst = {
-        events: [ event ],
-        next: true
-    };
-
-    var GET_EVENTS_URI = '/api/events?page=0&limit=5&month=' + date.getMonth() + '&year=' + date.getFullYear();
-    var GET_EVENTS_INST_URI = '/api/institutions/'+institution.key+'/events?page=0&limit=5';
-    
+        {"month": 11}, {"month": 12}],
+        user = {
+            name: 'User',
+            institutions: [institution],
+            follows: [institution],
+            institutions_admin: institution,
+            current_institution: institution,
+            key: '123'
+        },
+        event = {
+            'title': 'Title',
+            'text': 'Text',
+            'local': 'Local',
+            'photo_url': null,
+            'start_time': date,
+            'end_time': next_date,
+            'institution_key': institution.key,
+            'key': '12345'
+        },
+        other_event = {
+            'title': 'Other event',
+            'text': 'Text',
+            'local': 'Local',
+            'photo_url': null,
+            'start_time': date,
+            'end_time': next_date,
+            'institution_key': other_institution.key,
+            'key': '54321'
+        },
+        requestEvent = {
+            events: [ event, other_event ],
+            next: true
+        },
+        requestEventInst = {
+            events: [ event ],
+            next: true
+        },
+        GET_EVENTS_URI = '/api/events?page=0&limit=5',
+        GET_EVENTS_INST_URI = '/api/institutions/'+institution.key+'/events?page=0&limit=5',
+        GET_EVENTS_URI_WITH_FILTERS = GET_EVENTS_URI + '&month=' + date.getMonth() + '&year=' + date.getFullYear();
 
     beforeEach(module('app'));
 
@@ -76,7 +70,7 @@
         state = $state;
         AuthService.login(user);
 
-        httpBackend.when('GET', GET_EVENTS_URI).respond(requestEvent);
+        httpBackend.when('GET', GET_EVENTS_URI || GET_EVENTS_URI_WITH_FILTERS).respond(requestEvent);
         httpBackend.when('GET', GET_EVENTS_INST_URI).respond(requestEventInst);
         httpBackend.when('GET', 'app/utils/months.json').respond(months);
 
@@ -87,6 +81,8 @@
                 }
             };
         });
+
+        spyOn(Utils, 'isMobileScreen').and.returnValue(true);
 
         createCtrl = function(){
             return $controller('EventController', {
@@ -131,7 +127,7 @@
 
         it('Should call state.go', () => {
             eventCtrl.goToEvent(event);
-            expect(state.go).toHaveBeenCalledWith('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
+            expect(state.go).toHaveBeenCalledWith('app.user.event', { eventKey: event.key });
         });
     });
 

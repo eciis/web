@@ -18,18 +18,30 @@ from custom_exceptions import QueryException
 
 __all__ = ['EventCollectionHandler']
 
+def get_date_filters(filters):
+    """Get a dict with the filters month and year.
+
+    Args:
+        filters: A list of tuples with name and value.
+    """
+    date_filters = {}
+    for item in filters:
+        if item[0] == 'month' or item[0] == 'year':
+            date_filters[item[0]] = int(item[1])
+    return date_filters
+
 def get_filtered_events(filters, user):
     """Get query of events based on filters by date or not.
 
     Args:
-        filters: A list of tuples with the name and value of filters to the query
-        Filters by month and year are in end of list
+        filters: A list of tuples with the name and value of filters to the query.
+        Filters by month and year are used to get events by date.
         user: The current logged user.
     """
-    has_date_filters = len(filters) > 2
-    if has_date_filters:
-        month = int(filters[2][1])
-        year = int(filters[3][1])
+    date_filters = get_date_filters(filters)
+    if date_filters:
+        month = date_filters['month']
+        year = date_filters['year']
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published',
             ndb.AND(ndb.OR(Event.start_year == year, Event.end_year == year),

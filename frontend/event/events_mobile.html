@@ -9,6 +9,7 @@
               {{month.month_name}}
           </md-option>
         </md-select>
+        <span class="space-between-filters"></span>
         <md-select name="year" ng-model="eventCtrl.selectedYear"
           ng-change="eventCtrl.loadFilteredEvents()" class="select-years">
           <md-option ng-repeat="year in eventCtrl.years" ng-value="year">

@@ -3,8 +3,8 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(AuthService, $mdSidenav, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES) {
+    app.controller("HomeController", function HomeController(AuthService, $mdDialog, 
+        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, UtilsService) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -20,16 +20,12 @@
         homeCtrl.user = AuthService.getCurrentUser();
         
         function loadStateView(){
-            homeCtrl.stateView = getStateView($state.current.name);
-        }
-
-        function getStateView (state) {
-            return state.split(".")[2];
+            setStateView($state.current.name);
         }
  
-        homeCtrl.getSelectedItemClass = function getSelectedItemClass(state){
+        homeCtrl.getSelectedItemClass = function getSelectedItemClass(selectedStateView){
             loadStateView();
-             return (state === homeCtrl.stateView) ? "option-selected-left-bar":"";
+            return (selectedStateView === homeCtrl.stateView) ? "option-selected-left-bar":"";
          };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
@@ -52,35 +48,33 @@
             ProfileService.showProfile(userKey, ev);
         };
 
-        function go(state, params={}) {
-            homeCtrl.stateView = getStateView(state);
-            $state.go(state, params);
-            $mdSidenav('leftNav').toggle();
-        }
-
         homeCtrl.goHome = function goHome() {
-            go(STATES.HOME);
+            UtilsService.selectNavOption(STATES.HOME, {}, setStateView);
         };
 
         homeCtrl.goToProfile = function goToProfile() {
-            go('STATES.CONFIG_PROFILE');
+            UtilsService.selectNavOption(STATES.CONFIG_PROFILE, {}, setStateView);
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            go(STATES.EVENTS, {posts: homeCtrl.posts});
+            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts}, setStateView);
         };
 
         homeCtrl.goToInstitutions = function goToInstitutions() {
-            go(STATES.USER_INSTITUTIONS);
+            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS, {}, setStateView);
         };
 
         homeCtrl.goInvite = function goInvite() {
-            go(STATES.INVITE_INSTITUTION);
+            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION, {}, setStateView);
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
             $state.go('app.user.event', {eventKey: event.key, posts: homeCtrl.posts});
         };
+        
+        function setStateView(state) {
+            homeCtrl.stateView = state.split(".")[2];
+        }
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({

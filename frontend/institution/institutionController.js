@@ -3,8 +3,9 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES,
-        $mdSidenav, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
+        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
+        CropImageService, ImageService, UtilsService) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -119,47 +120,43 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey}, setStateView);
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            go('app.manage_institution.invite_inst', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey}, setStateView);
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
-            go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey}, setStateView);
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            go('app.institution.timeline', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey}, setStateView);
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
-            go('app.institution.members', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey}, setStateView);
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
-            go('app.institution.followers', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, {institutionKey: institutionKey}, setStateView);
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            go('app.institution.registration_data', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey}, setStateView);
         };
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
-            go('app.institution.events', {institutionKey: institutionKey, posts: institutionCtrl.posts});
+            UtilsService.selectNavOption(
+                STATES.INST_EVENTS, {institutionKey: institutionKey, posts: institutionCtrl.posts}, setStateView
+            );
         };
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {
-            go('app.institution.institutional_links', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_LINKS, {institutionKey: institutionKey}, setStateView);
         };
-
-        function go(state, params={}) {
-            institutionCtrl.stateView = getStateView(state);
-            $state.go(state, params);
-            $mdSidenav('leftNav').toggle();
-        }
-
+        
         institutionCtrl.goToHome = function goToHome() {
             $state.go(STATES.HOME);
         };
@@ -310,11 +307,11 @@
         };
 
         function loadStateView(){
-            institutionCtrl.stateView = getStateView($state.current.name);
+            setStateView($state.current.name);
         }
 
-        function getStateView(state) {
-            return state.split(".")[2];
+        function setStateView(state) {
+            institutionCtrl.stateView = state.split(".")[2];
         }
 
         institutionCtrl.getSelectedItemClass = function getSelectedItemClass(state){

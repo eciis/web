@@ -515,6 +515,6 @@
     }
 
     (function main() {
-        //initServiceWorker();
+        initServiceWorker();
     })();
 })();

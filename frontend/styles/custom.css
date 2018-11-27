@@ -911,13 +911,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     box-shadow: 0 0 0;
 }
 
-.save-post-dialog {
-    display: grid;
-    height: 100%;
-    padding: 8px;
-    overflow: scroll;
-}
-
 @media screen and (max-width: 960px) {
     .dialog-transparent-without-shadow {
         max-width: 100%;

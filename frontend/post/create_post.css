@@ -1,3 +1,10 @@
+.save-post-dialog {
+    display: grid;
+    height: 100%;
+    padding: 8px;
+    overflow: scroll;
+}
+
 .create-post-container-common {
     background-color: white;
     display: grid;

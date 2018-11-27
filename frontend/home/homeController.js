@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(AuthService, $mdSidenav, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS) {
+        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -59,23 +59,23 @@
         }
 
         homeCtrl.goHome = function goHome() {
-            go('app.user.home');
+            go(STATES.HOME);
         };
 
         homeCtrl.goToProfile = function goToProfile() {
-            go('app.user.config_profile');
+            go('STATES.CONFIG_PROFILE');
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            go('app.user.events', {posts: homeCtrl.posts});
+            go(STATES.EVENTS, {posts: homeCtrl.posts});
         };
 
         homeCtrl.goToInstitutions = function goToInstitutions() {
-            go('app.user.institutions');
+            go(STATES.USER_INSTITUTIONS);
         };
 
         homeCtrl.goInvite = function goInvite() {
-            go('app.user.invite_inst');
+            go(STATES.INVITE_INSTITUTION);
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
@@ -135,7 +135,7 @@
                 homeCtrl.events = activeEvents(response.events);
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
 

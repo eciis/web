@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService, $mdToast, $state, AuthService, InstitutionService, RequestInvitationService, $mdDialog, MessageService) {
+        InviteService, STATES, $state, AuthService, InstitutionService, RequestInvitationService, $mdDialog, MessageService) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -158,7 +158,7 @@
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
                 inviteInstCtrl.sent_requests = requests.filter(isSentRequest);
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
         
@@ -168,7 +168,7 @@
                 getSentInvitations(requests);
                 getAcceptedInvitations(requests);
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
         

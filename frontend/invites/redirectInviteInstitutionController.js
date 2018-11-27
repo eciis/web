@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("RedirectInviteInstitutionController", function RedirectInviteInstitutionController(
-            InviteService, $stateParams, $state, AuthService) {
+            InviteService, $stateParams, $state, AuthService, STATES) {
         var controller = this;
 
         var inviteId = $stateParams.id;
@@ -18,7 +18,7 @@
         };
 
         controller.goToHome = function goToHome() {
-            $state.go("app.user.home");
+            $state.go(STATES.HOME);
         };
 
         controller.signin = function signin() {

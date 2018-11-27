@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
-            $mdToast, $mdDialog, $http, InviteService, ImageService, $rootScope, MessageService, PdfService, $q, $window,
+            $mdDialog, $http, STATES, ImageService, $rootScope, MessageService, PdfService, $q, $window,
             RequestInvitationService, brCidadesEstados, ObserverRecorderService) {
 
         var configInstCtrl = this;
@@ -266,7 +266,7 @@
             configInstCtrl.loadingSaveInstitution = false;
             MessageService.showToast('Dados da instituição salvos com sucesso.');
             showHierarchyDialog(institution);
-            $state.go('app.user.home');
+            $state.go(STATES.HOME);
         }
 
         configInstCtrl.showImage = function showImage() {

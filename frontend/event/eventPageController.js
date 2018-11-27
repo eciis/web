@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventPageController", function EventPageController(MessageService, EventService, 
-            $state, AuthService, PostService) {
+            $state, AuthService, PostService, STATES) {
         var eventCtrl = this;
 
         eventCtrl.event = null;
@@ -13,7 +13,7 @@
             EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = response;
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
 

@@ -4,7 +4,7 @@
    var app = angular.module('app');
 
    app.controller('NewInviteController', function NewInviteController(AuthService, InviteService,
-    $mdDialog, MessageService, ObserverRecorderService, $state) {
+    $mdDialog, MessageService, ObserverRecorderService, $state, STATES) {
         var newInviteCtrl = this;
 
         newInviteCtrl.institution = null;
@@ -62,7 +62,7 @@
                     newInviteCtrl.user.state = 'active';
                     newInviteCtrl.user.changeInstitution(newInviteCtrl.institution);
                     AuthService.save();
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                     _.isEmpty(newInviteCtrl.user.invites) && showAlert(event);
                 }, function error() {
                     redirectFromError();
@@ -79,7 +79,7 @@
         };
 
         newInviteCtrl.goToHome = function goToHome() {
-            $state.go("app.user.home");
+            $state.go(STATES.HOME);
         };
 
         newInviteCtrl.isInviteUser = function isInviteUser(){
@@ -130,7 +130,7 @@
                     AuthService.save();
                 }
             });
-            $state.go("app.user.home");
+            $state.go(STATES.HOME);
         };
 
         newInviteCtrl.canAnswerLater = function canAnswerLater() {
@@ -148,7 +148,7 @@
                 if(newInviteCtrl.user.isInactive()) {
                     $state.go("user_inactive");
                 } else {
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                 }
             });
             return promise;
@@ -214,7 +214,7 @@
         }
 
        function redirectFromError() {
-           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go("app.user.home");
+           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go(STATES.HOME);
        }
 
         loadInvite();

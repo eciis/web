@@ -20,7 +20,7 @@
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -32,7 +32,7 @@
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
         $stateProvider
-            .state("app", {
+            .state(STATES.APP, {
                 abstract: true,
                 views: {
                     main: {
@@ -41,7 +41,7 @@
                     }
                 }
             })
-            .state("app.user", {
+            .state(STATES.USER, {
                 abstract: true,
                 views: {
                     content: {
@@ -50,7 +50,7 @@
                     }
                 }
             })
-            .state("app.user.search", {
+            .state(STATES.SEARCH, {
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
@@ -62,7 +62,7 @@
                     }
                 }
             })
-            .state("app.user.home", {
+            .state(STATES.HOME, {
                 url: "/",
                 views: {
                     user_content: {
@@ -70,7 +70,7 @@
                     }
                 }
             })
-            .state("app.user.institutions", {
+            .state(STATES.USER_INSTITUTIONS, {
                 url: "/all_institutions",
                 views: {
                     user_content: {
@@ -79,7 +79,7 @@
                     }
                 }
             })
-            .state("app.user.events", {
+            .state(STATES.EVENTS, {
                 url: "/events",
                 views: {
                     user_content: {
@@ -88,7 +88,7 @@
                     }
                 }
             })
-            .state("app.user.invite_inst", {
+            .state(STATES.INVITE_INSTITUTION, {
                 url: "/inviteInstitution",
                 views: {
                     user_content: {
@@ -97,7 +97,7 @@
                     }
                 }
             })
-            .state("app.user.config_profile", {
+            .state(STATES.CONFIG_PROFILE, {
                 url: "/config_profile",
                 views: {
                     user_content: {
@@ -106,7 +106,7 @@
                     }
                 }
             })
-            .state("app.user.notifications", {
+            .state(STATES.NOTIFICATION, {
                 url: "/notifications",
                 views: {
                     user_content: {
@@ -115,7 +115,7 @@
                     }
                 }
             })
-            .state("app.institution", {
+            .state(STATES.INSTITUTION, {
                 abstract: true,
                 views: {
                     content: {
@@ -502,6 +502,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        // initServiceWorker();
     })();
 })();

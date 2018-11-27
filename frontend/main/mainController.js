@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService) {
+        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService, STATES) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -23,7 +23,7 @@
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
                 mainCtrl.search_keyword = '';
-                $state.go('app.user.search', {search_keyword: search});
+                $state.go(STATES.SEARCH, {search_keyword: search});
             }
         };
         
@@ -34,7 +34,7 @@
          */
         mainCtrl.toogleSearch = function () {
             if(screen.width <= 450)  {
-                $state.go('app.user.search', {search_keyword: ''});
+                $state.go(STATES.SEARCH, {search_keyword: ''});
             } else {
                 mainCtrl.showSearch = !mainCtrl.showSearch;
             }
@@ -86,7 +86,7 @@
         };
 
         mainCtrl.goInvite = function goInvite() {
-            $state.go('app.user.invite_inst');
+            $state.go(STATES.INVITE_INSTITUTION);
         };
 
         mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
@@ -95,7 +95,7 @@
         };
 
         mainCtrl.goEvents = function goEvents(){
-            $state.go('app.user.events');
+            $state.go(STATES.EVENTS);
         };
 
         mainCtrl.logout = function logout() {
@@ -189,7 +189,7 @@
          *  and reset properties of CSS.
          */
         mainCtrl.selectNotificationState = function selectNotificationState(){
-            mainCtrl.stateView = "app.user.notifications";
+            mainCtrl.stateView = STATES.NOTIFICATION;
             resetNavBarDisplayStyle();
         }
 
@@ -216,7 +216,7 @@
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
-                $state.go("app.user.config_profile");
+                $state.go(STATES.CONFIG_PROFILE);
             }
             notificationListener();
             mainCtrl.getPendingTasks();

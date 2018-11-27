@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state;
+    var mainCtrl, httpBackend, scope, createCtrl, state, states;
     var authService, requestInvitationService, notificationListenerService;
     var user = {
         name: 'user',
@@ -43,10 +43,11 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                RequestInvitationService, NotificationListenerService) {
+                RequestInvitationService, NotificationListenerService, STATES) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        states = STATES;
         authService = AuthService;
         requestInvitationService = RequestInvitationService;
         notificationListenerService = NotificationListenerService;
@@ -114,7 +115,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
+            expect(state.go).toHaveBeenCalledWith('states.CONFIG_PROFILE');
         });
 
         it("should create observer", function() {
@@ -160,8 +161,8 @@
         });
         it('Should call state.go() in function goTo()', function(){
             spyOn(state, 'go');
-            mainCtrl.goTo('app.user.home');
-            expect(state.go).toHaveBeenCalledWith('app.user.home');
+            mainCtrl.goTo(states.HOME);
+            expect(state.go).toHaveBeenCalledWith(states.HOME);
         });
         it('Should call state.go() in function goToInstitution()', function(){
             spyOn(state, 'go');
@@ -174,12 +175,12 @@
         });
 
         it("The class css of state selected should be 'color-icon-selected-navbar'", function(){
-            mainCtrl.stateView = "app.user.home";
+            mainCtrl.stateView = states.HOME;
             expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-selected-navbar");
             expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-navbar");
             expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
 
-            mainCtrl.stateView = "app.user.events";
+            mainCtrl.stateView = states.EVENTS;
             expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-navbar");
             expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-selected-navbar");
             expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");

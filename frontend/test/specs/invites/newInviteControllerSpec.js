@@ -2,7 +2,7 @@
 
 (describe('Test NewInviteController', function() {
 
-    var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, userService,
+    var newInviteCtrl, httpBackend, scope, institutionService, createCtrl, state, inviteService, states,
         mdDialog, authService;
     var INVITES_URI = "/api/invites/";
 
@@ -42,12 +42,13 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, $mdDialog, InstitutionService, UserService, InviteService, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, STATES, $state, $mdDialog, InstitutionService, UserService, InviteService, AuthService) {
         userService = UserService;
         inviteService = InviteService;
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        states = STATES;
         mdDialog = $mdDialog;
         institutionService = InstitutionService;
         authService = AuthService;
@@ -105,7 +106,7 @@
 
                 expect(newInviteCtrl.user.invites).toEqual([invite]);
                 expect(newInviteCtrl.user.invites[0].answerLater).toEqual(true);
-                expect(state.go).toHaveBeenCalledWith("app.user.home");
+                expect(state.go).toHaveBeenCalledWith(states.HOME);
             });
         });
 
@@ -183,7 +184,7 @@
 
             it('should be call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.user.home');
+                    expect(state.go).toHaveBeenCalledWith(states.HOME);
                     done();
                 });
             });
@@ -217,7 +218,7 @@
 
             it('should go to app.home', function () {
                 newInviteCtrl.addInstitution('$event');
-                expect(state.go).toHaveBeenCalledWith("app.user.home");
+                expect(state.go).toHaveBeenCalledWith(states.HOME);
             });
 
             it('should go to user_inactive', function () {
@@ -288,7 +289,7 @@
 
             it('should call $state.go()', function(done) {
                 promise.then(function() {
-                    expect(state.go).toHaveBeenCalledWith('app.user.home');
+                    expect(state.go).toHaveBeenCalledWith(states.HOME);
                     done();
                 });
             });

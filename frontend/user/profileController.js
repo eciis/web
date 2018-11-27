@@ -25,7 +25,7 @@
         };
 
         profileCtrl.goToConfigProfile = function goToConfigProfile() {
-            $state.go("app.user.config_profile");
+            $state.go(STATES.CONFIG_PROFILE);
             $mdDialog.cancel();
         };
 

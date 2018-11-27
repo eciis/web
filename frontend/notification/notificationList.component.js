@@ -4,7 +4,7 @@
 
     var app = angular.module("app");
 
-    var notificationComponentController = function(NotificationService, $state,
+    var notificationComponentController = function(NotificationService, $state, STATES,
         RequestDialogService, NOTIFICATION_TYPE){
 
         const ctrl = this;
@@ -73,7 +73,7 @@
         ctrl.goTo = function goTo(notification) {
             const state = NOTIFICATION_TYPE[notification.entity_type].state;
             state && $state.go(state, {key: notification.entity.key});
-            !state && $state.go('app.user.notifications');
+            !state && $state.go(STATES.NOTIFICATION);
         };
     };
 

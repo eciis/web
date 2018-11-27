@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES,
         $mdSidenav, AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
         var institutionCtrl = this;
 
@@ -35,7 +35,7 @@
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
@@ -161,7 +161,7 @@
         }
 
         institutionCtrl.goToHome = function goToHome() {
-            $state.go('app.user.home');
+            $state.go(STATES.HOME);
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
@@ -371,7 +371,7 @@
         };
 
         institutionCtrl.canManageInst = function canManageInst() {
-            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go('app.user.home');
+            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go(STATES.HOME);
         };
 
         institutionCtrl.limitString = function limitString(string, size) {

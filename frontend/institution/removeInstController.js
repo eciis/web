@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller("RemoveInstController", function RemoveInstController($mdDialog, institution,
-        InstitutionService, $state, AuthService, loadStateView, MessageService) {
+        InstitutionService, $state, AuthService, loadStateView, MessageService, STATES) {
         var removeInstCtrl = this;
 
         removeInstCtrl.institution = institution;
@@ -25,7 +25,7 @@
                 if (_.isEmpty(removeInstCtrl.user.institutions)) {
                     AuthService.logout();
                 } else {
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                 }
                 MessageService.showToast("Instituição removida com sucesso.");
             });

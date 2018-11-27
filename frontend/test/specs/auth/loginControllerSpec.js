@@ -2,7 +2,7 @@
 
 (describe('Test LoginController', function() {
 
-    var logginCtrl, httpBackend, scope, createCtrl, state, authService;
+    var logginCtrl, httpBackend, scope, createCtrl, state, authService, states;
 
     var user = {
         name: 'Tiago',
@@ -23,10 +23,11 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, AuthService) {
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, STATES, $state, AuthService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
+        states = STATES;
         authService = AuthService;
 
         httpBackend.when('GET', "main/main.html").respond(200);
@@ -56,7 +57,7 @@
 
         it('should change state to app.user.home if user is loggedIn', function() {
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith('app.user.home');
+            expect(state.go).toHaveBeenCalledWith(states.HOME);
         });
     });
 }));

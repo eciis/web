@@ -1,3 +1,33 @@
+.create-post-container-common {
+    background-color: white;
+    display: grid;
+    grid-template-rows: 82px auto 104px;
+    width: 96vw;
+    border-radius: 4px;
+}
+
+.create-post-container-survey {
+    background-color: white;
+    display: grid;
+    grid-template-rows: 82px auto 48px;
+    width: 96vw;
+    border-radius: 4px;
+}
+
+.post-head-container {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-column-gap: 8px;
+}
+
+.action-post-container {
+    display: grid; 
+    justify-content: end; 
+    grid-template-columns: auto auto; 
+    padding: 0 8px 8px;
+}
+
 .create-post-container-resp {
     width: 100%;
     -webkit-box-flex: 1;
@@ -193,7 +223,7 @@
         }
 
         .create-post-textarea-reduced {
-            max-height: 18vh !important;
+            max-height: 12vh !important;
         }
     }
 

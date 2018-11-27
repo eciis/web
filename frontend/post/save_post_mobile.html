@@ -1,13 +1,5 @@
-<div style="    background-color: white;
-display: grid;
-grid-template-rows: 82px auto 104px;
-width: 96vw;
-border-radius: 4px;">
-  <div style="
-    padding: 16px;
-    display: grid;
-    grid-template-columns: 50px auto;
-    grid-column-gap: 8px;">
+<div ng-class="(postCtrl.typePost === 'Survey') ? 'create-post-container-survey' : 'create-post-container-common'">
+  <div class="post-head-container">
     <img ng-src="{{ postCtrl.getInstPhotoUrl()}}"
     title="{{postCtrl.user.current_institution.name}}"
     class="create-post-inst-img"/>
@@ -15,7 +7,7 @@ border-radius: 4px;">
   </div>
   <div style="padding: 0 16px;">
   <div class="create-post-container-resp"
-    ng-class="postCtrl.typePost == 'Common' ? 'create-post-size' : 'create-post-size-expand'">
+    ng-class="postCtrl.typePost == 'Common' ? 'create-post-size' : 'create-post-size-expand'" ng-if="postCtrl.typePost !== 'Survey'">
     <form name="saveForm" prevent-state-change="postCtrl.post">
       <div class="create-post-full-width">
             <div ng-if="postCtrl.typePost === 'Common'">
@@ -39,7 +31,7 @@ border-radius: 4px;">
                 </md-input-container>
                 <md-input-container ng-show="postCtrl.showTextField()" style="margin: 0;"
                  class="md-block create-post-textarea-container" md-no-float>
-                  <textarea name="message" style="max-height: 66px !important;" ng-class="postCtrl.showImage() ? 'create-post-textarea-reduced' : 'create-post-textarea'"
+                  <textarea name="message" ng-class="postCtrl.showImage() ? 'create-post-textarea-reduced' : 'create-post-textarea'"
                   class="create-post-text create-post-scrollbar"
                   ng-model="postCtrl.post.text" placeholder="Texto" required>
                   </textarea>
@@ -60,11 +52,11 @@ border-radius: 4px;">
       </div>
       <!-- SURVEY -->
       <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
-          options="postCtrl.options"></survey-directive>
+          options="postCtrl.options" style="display: block;"></survey-directive>
     </form>
   </div>
     <div valign="bottom">
-        <div style="display: grid; justify-content: end; grid-template-columns: auto auto; padding: 0 8px 8px;"
+        <div class="action-post-container"
         ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
           <md-button class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
               Cancelar

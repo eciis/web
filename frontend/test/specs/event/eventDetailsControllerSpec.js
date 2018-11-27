@@ -166,6 +166,14 @@
             eventCtrl.event = event;
             var result = eventCtrl.endInTheSameDay();
             expect(result).toBeFalsy();
+
+            var startTime = new Date('2018-10-04');
+            var endTime = new Date('2018-10-11');
+            event.start_time = startTime;
+            event.end_time = endTime;
+            eventCtrl.event = event;
+            var result = eventCtrl.endInTheSameDay();
+            expect(result).toBeFalsy();
         });
     });
 
@@ -218,6 +226,22 @@
 
             let returnedValue = eventCtrl.canEdit(event);
             expect(returnedValue).toBeFalsy();
+        });
+    });
+
+    describe('getTimeHours()', function() {
+        it('should return current hours', function() {
+            let date = new Date();
+            let hours = date.getHours();
+
+            let returnedHours = eventCtrl.getTimeHours(date.toISOString());
+            expect(returnedHours).toEqual(hours);
+
+            date.setHours(22);
+            hours = date.getHours();
+
+            returnedHours = eventCtrl.getTimeHours(date.toISOString());
+            expect(returnedHours).toEqual(hours);
         });
     });
 }));

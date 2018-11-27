@@ -30,6 +30,11 @@
 
     var institutionKey = institution.key;
 
+    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
+                                "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
+                                "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_INSTITUTION", "ACCEPT_INVITE_USER_ADM",
+                                "REMOVE_INSTITUTION_LINK", "RE_ADD_ADM_PERMISSIONS"];
+
     user.institutions = [institution, otherInstitution];
     user.institutions_admin = [institutionKey];
     user.current_institution = institution;
@@ -54,9 +59,19 @@
             };
         };
 
+        var eventsListenerFake = function eventsListenerFake(events, callback){
+            events.forEach(event => {
+                $rootScope.$on(event, function () {
+                    authService.reload();
+                });
+            });
+        };
+
         spyOn(requestInvitationService, 'getRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
+        spyOn(NotificationListenerService, 'multipleEventsListener').and.callFake(eventsListenerFake);
+
 
         authService.login(user);
 
@@ -100,6 +115,11 @@
             mainCtrl = createCtrl();
 
             expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
+        });
+
+        it("should create observer", function() {
+            mainCtrl = createCtrl();
+            expect(notificationListenerService.multipleEventsListener).toHaveBeenCalledWith(EVENTS_TO_UPDATE_USER, mainCtrl.refreshUser);
         });
     });
 
@@ -151,6 +171,44 @@
 
         it('User should not be admin of your current institution', function(){
             expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
+        });
+
+        it("The class css of state selected should be 'color-icon-selected-navbar'", function(){
+            mainCtrl.stateView = "app.user.home";
+            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
+
+            mainCtrl.stateView = "app.user.events";
+            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
+        });
+    });
+    
+    describe('Main Controller listenners', function(){
+        it("Should call userService load when event 'DELETED_INSTITUTION' was create.", function(){
+            spyOn(authService, 'reload').and.callThrough();
+            scope.$emit("DELETED_INSTITUTION", {});
+            expect(authService.reload).toHaveBeenCalled();
+        });
+
+        it("Should call userService load when event 'DELETE_MEMBER' was create.", function(){
+            spyOn(authService, 'reload').and.callThrough();
+            scope.$emit("DELETE_MEMBER", {});
+            expect(authService.reload).toHaveBeenCalled();
+        });
+
+        it("Should call userService load when event 'ACCEPT_INSTITUTION_LINK' was create.", function(){
+            spyOn(authService, 'reload').and.callThrough();
+            scope.$emit("ACCEPT_INSTITUTION_LINK", {});
+            expect(authService.reload).toHaveBeenCalled();
+        });
+
+        it("Should NOT call userService load when event 'EVENT' was create.", function(){
+            spyOn(authService, 'reload').and.callThrough();
+            scope.$emit("EVENT", {});
+            expect(authService.reload).not.toHaveBeenCalled();
         });
     });
 }));

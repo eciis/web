@@ -1,9 +1,6 @@
-<head>
-  <link rel="stylesheet" href="app/main/main.css">
-</head>
 <!-- TOOLBAR -->
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}">
-  <div class="md-toolbar-tools" >
+<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center" layout="row">
+  <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70">
 
     <md-button class="md-icon-button hide-gt-sm" aria-label="Menu" ng-click="mainCtrl.toggle()">
       <md-icon>menu</md-icon>
@@ -16,25 +13,24 @@
       </md-button>
     </a>
 
-    <span flex md-truncate></span>
-
-    <a ui-sref="app.user.home">
-      <md-button class="md-icon-button" title="Home">
-        <md-icon>home</md-icon>
-      </md-button>
-    </a>
-
-    <notification></notification>
-
-    <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
-      <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
-        <md-input-container flex md-no-float>
-          <input aria-label="Pesquisar por instituições" ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}">
-        </md-input-container>
-      </form>
-      <md-button ng-click="mainCtrl.toogleSearch()" class="md-icon-button" title="Buscar">
-        <md-icon>search</md-icon>
-      </md-button>
+    <div class="toolbar-btns" layout="row">
+      
+      <a ui-sref="app.user.home" class="navbar-top">
+        <md-button class="md-icon-button" title="Home">
+          <md-icon>home</md-icon>
+        </md-button>
+      </a>
+      <notification-button class-button="green-icon-notification" class="navbar-top"></notification-button>
+      <div layout="row" md-theme="input" class="toolbar-search" md-colors="{background: mainCtrl.showSearch ? 'teal-800': 'teal-900'}">
+        <form ng-submit="mainCtrl.search()" ng-show="mainCtrl.showSearch">
+          <md-input-container flex md-no-float>
+            <input aria-label="Pesquisar por instituições" ng-model="mainCtrl.search_keyword" md-colors="{background: 'teal-800'}">
+          </md-input-container>
+        </form>
+        <md-button ng-click="mainCtrl.toogleSearch()" class="md-icon-button" title="Buscar">
+          <md-icon>search</md-icon>
+        </md-button>
+      </div>
     </div>
   </div>
 </md-toolbar>
@@ -50,7 +46,8 @@
   </div>
 </md-toolbar>
 
-<md-content ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}"></md-content>
+<md-content ui-view="content" flex layout="column" md-colors="{background: 'grey-200'}" class="content-mobile">
+</md-content>
 
 <div hide-xs hide-sm>
   <md-button class="feedback-btn" ng-click="mainCtrl.goToReport()"
@@ -59,7 +56,7 @@
   </md-button>
 </div>
 
-<h4 class="md-caption app-version">
+<h4 class="md-caption app-version" hide show-gt-xs>
     {{mainCtrl.APP_VERSION}}
 </h4>
 
@@ -71,3 +68,32 @@
     <md-button class="md-icon-button" ng-click="hideEmailVerification = true"><md-icon>close</md-icon></md-button>
   </div>
 </md-toolbar>
+
+<footer>
+  <md-toolbar layout-align="space-around center" layout="row" id="navbar-bottom">
+    <div class="icon-navbar-bottom">
+      <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goToOfBottomNav('home')">
+        <md-icon ng-class="mainCtrl.getSelectedStateClass('home')">home</md-icon>
+      </md-button>
+      <p ng-class="mainCtrl.getSelectedStateClass('home')" id="label-icon-navbottom">Início</p>
+    </div> 
+    <div class="icon-navbar-bottom">
+      <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goToOfBottomNav('events')">
+        <md-icon ng-class="mainCtrl.getSelectedStateClass('events')">event</md-icon>
+      </md-button>
+      <p ng-class="mainCtrl.getSelectedStateClass('events')" id="label-icon-navbottom">Eventos</p>
+    </div>
+    <div class="icon-navbar-bottom">
+      <md-button class="md-icon-button big-label-icon" aria-label="Instituições" ng-click="mainCtrl.goToOfBottomNav('institutions')">
+        <md-icon ng-class="mainCtrl.getSelectedStateClass('institutions')">account_balance</md-icon>
+      </md-button>
+      <p ng-class="mainCtrl.getSelectedStateClass('institutions')" id="label-icon-navbottom">Instituições</p>
+    </div>
+    <div class="icon-navbar-bottom" ng-click="mainCtrl.selectNotificationState()">
+      <notification-button should-go-to-state="true"  style="justify-self:center"
+        class-button="{{mainCtrl.getSelectedStateClass('notifications')}}">
+      </notification-button>
+      <p id="label-icon-navbottom" ng-class="mainCtrl.getSelectedStateClass('notifications')">Notificações</p>  
+    </div> 
+  </md-toolbar>
+</footer>

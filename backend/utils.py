@@ -14,8 +14,7 @@ from oauth2client import client
 from oauth2client.crypt import AppIdentityError
 
 from custom_exceptions import NotAuthorizedException
-from custom_exceptions import QueryException
-
+from custom_exceptions import QueryException, FieldException
 
 class Utils():
 
@@ -173,3 +172,13 @@ def text_normalize(text):
     normal_form_text = normalize('NFKD', unicode(text)).encode('ascii', 'ignore')
     text_ignoring_escape_chars = normal_form_text.encode('unicode-escape')
     return text_ignoring_escape_chars
+
+def validate_object(obj, props):
+    """It iterates in props list and
+    check if each one is in the obj's keys."""
+    for prop in props:
+        Utils._assert(
+            prop not in obj, 
+            "The %s property is not in the object" %prop, 
+            FieldException
+        )

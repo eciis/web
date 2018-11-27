@@ -1,0 +1,189 @@
+comment {
+    width: 100%;
+    display: block;
+    padding: 0.5em 0 0.5em 0;
+}
+
+.comment-avatar img {
+    height: 2.5em;
+    width: 2.5em;
+    border-radius: 50%;
+}
+
+.comment-container {
+    display: grid;
+    grid-template-columns: 2.5em auto;
+    grid-template-rows: auto auto;
+    align-items: initial;
+    margin: auto;
+}
+
+.comment-text p {
+    margin: 0 0 0.75em 0;
+}
+
+.reply-container {
+    grid-column-start: 2;
+}
+
+.comment-header {
+    margin-left: 0.5em;
+}
+
+.user-name {
+    font-size: 0.9em;
+    color: #00796B;
+}
+
+.inst-name {
+    color: #7f7f7f;
+}
+
+.comment-btn-text {
+    font-size: 0.7em;
+    margin-left: 0.8em;
+}
+
+.btns-row {
+    margin: 0.5em 0 0.5em 0;
+}
+
+.comment-btn {
+    background: none;
+    border: 0;
+    padding-left: initial;
+}
+
+.comment-btn:hover {
+    background-color: #efefef;
+}
+
+.left-align {
+    margin-left: auto;
+}
+
+.reply {
+    margin-left: 0.3em; 
+    border-left: 0.289em solid #004d41;
+}
+
+.reply-input-container {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.reply-input {
+    max-height: 10em;
+    overflow-y: auto;
+    resize: none;
+}
+
+.send-reply-btn {
+    height: 2em;
+    border-radius: 0.25em;
+}
+
+.delete-btn {
+    background-color: #84c45e;
+    color: white;
+    border-radius: 50%;
+    font-size: 1em;
+    line-height: 1.40;
+}
+
+.grid-container {
+    display: grid;
+    align-items: center;
+}
+
+.comment-delete-btn-txt {
+    margin-left: 0.25em;
+}
+
+@media screen and (max-width: 350px) {
+    .comment-btn-text {
+        font-size: 0.6em;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .separator {
+        display: none;
+    }
+
+    .comment-bullet {
+        display: none;
+    }
+
+    .hide-xxs {
+        display: none;
+    }
+
+    .send-comment-btn-text {
+        display: none;
+    }
+
+    .send-reply-btn {
+        margin-left: 0.5em;
+    }
+
+    .grid-container {
+        grid-template-columns: auto 2em;
+    }
+
+    .comment-container {
+        align-items: center;
+        width: 90%;
+    }
+    
+    .comment-text {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        margin-top: 0.626em;
+    }
+
+    .comment-header {
+        display: grid;
+        grid-template-rows: auto auto auto;
+    }
+
+    .comment-delete-btn-txt {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 451px) {
+    .comment-container {
+        width: 96%;
+    }
+
+    .comment-avatar {
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+
+    .comment-header {
+        margin-bottom: 0.25em;
+    }
+
+    .comment-text {
+        grid-column-start: 2;
+        margin-left: 0.5em;
+    }
+
+    .grid-container {
+        grid-template-columns: auto 6em;
+    }
+
+    .delete-btn {
+        margin-right: 0.25em;
+    }
+
+    .send-comment-btn-text {
+        margin-left: 0.25em;
+    }
+
+    .reply {
+        margin-left: 3.5em; 
+    }
+}

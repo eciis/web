@@ -1,11 +1,11 @@
 <md-content layout="row" id="content" class="body custom-scrollbar" ng-if="!eventCtrl.isDeleted()">
   <div layout="row" flex flex-gt-xs="95" layout-align="end start">
     <div flex flex-gt-xs="95">
-      <event-details event="eventCtrl.event" posts="eventCtrl.posts" is-event-page=true></event-details>
+      <event-details event="eventCtrl.event" is-event-page=true></event-details>
     </div>
   </div>
 </md-content>
-<div layout="row" layout-align="center center" ng-if="eventCtrl.isDeleted()" layout-fill>
+<div layout="row" layout-align="center center" ng-if="eventCtrl.isDeleted()" class="fill-screen">
   <div layout="column" layout-align="center center">
       <h2>Esse evento foi removido</h2>
   </div>

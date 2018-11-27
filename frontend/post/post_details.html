@@ -1,4 +1,4 @@
-<div layout="column" layout-align="center center" layout-fill ng-show="postDetailsCtrl.isPostEmpty()">
+<div layout="column" layout-align="center center" class="fill-screen" ng-show="postDetailsCtrl.isPostEmpty()">
   <div layout="row" layout-align="center center">
     <div layout-align="center center">
       <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -87,7 +87,9 @@
 
   <!-- SURVEY -->
   <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" 
-    posts="postDetailsCtrl.posts" user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage" reload-post="postDetailsCtrl.reloadPost"></survey-details>
+    user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage" 
+    reload-post="postDetailsCtrl.reloadPost">
+  </survey-details>
 
   <!-- BODY SHARED EVENT -->
   <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
@@ -100,7 +102,7 @@
       <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
     </div>
   </div>
-  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false posts="postDetailsCtrl.posts"></event-details>
+  <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
 
   <!-- BODY SHARED POST -->
   <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
@@ -150,7 +152,7 @@
       <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" 
         pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
       <survey-details ng-if="postDetailsCtrl.isSharedSurvey()" 
-        post="postDetailsCtrl.post.shared_post" posts="postDetailsCtrl.posts" 
+        post="postDetailsCtrl.post.shared_post"
         user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
     </md-card-content>
   </md-card>
@@ -201,32 +203,37 @@
   <md-divider ng-if="!postDetailsCtrl.showSurvey() || postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()"></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions style="margin-top: 20px; margin-bottom: 20px;">
-    <div layout="row" layout-align="start center">
-      <div ng-if="postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()">
-        <md-button md-colors="{background: 'light-green'}" class="sm-icon-button" arial-label="Delete"
-            ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)" title="Apagar o post">
-          <md-icon>delete</md-icon>
-        </md-button>
-        <b hide-xs style="font-size: 12px;">EXCLUIR POST</b>
-      </div>
-      <div style="margin-left: auto; margin-right: 10px;" ng-if="postDetailsCtrl.showActivityButtons()">
-        <md-button class="sm-icon-button" aria-label="Favorite" ng-click="postDetailsCtrl.likeOrDislikePost()"
-            ng-disabled="postDetailsCtrl.disableButton()" title="{{(postDetailsCtrl.isLikedByUser()) ? 'Descurtir' : 'Curtir'}}"
-            md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
+  <md-card-actions layout="row" class="post-btns-row">
+    <!-- delete -->
+    <button class="flat-btn" ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)"
+      ng-if="postDetailsCtrl.showButtonDelete()">
+      <md-button md-colors="{background: 'light-green'}" class="sm-icon-button" arial-label="Delete"
+        title="Apagar o post">
+        <md-icon>delete</md-icon>
+      </md-button>
+      <b id="delete-btn-text" class="post-btn-text">EXCLUIR</b>
+    </button>
+    <div class="post-right-btns" ng-if="postDetailsCtrl.showActivityButtons()">
+      <!-- like -->
+      <button class="flat-btn" ng-click="postDetailsCtrl.likeOrDislikePost()"
+        ng-disabled="postDetailsCtrl.disableButton()">
+        <md-button class="sm-icon-button" aria-label="Favorite"
+          title="{{postDetailsCtrl.isLikedByUser() ? 'Descurtir' : 'Curtir'}}"
+          md-colors="{{ postDetailsCtrl.getButtonColor(postDetailsCtrl.isLikedByUser(), false) }}">
           <md-icon>grade</md-icon>
         </md-button>
-        <span style="margin-left: -16px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
-        <b class="like-comment-text">CURTIR</b>
-        <md-button class="sm-icon-button" aria-label="Comments"
-            ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.getComments()"
-            title="Mostrar comentários"
-            md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
+        <span class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_likes()}}"></span>
+        <b class="post-btn-text">CURTIR</b>
+      </button>
+      <!-- comments -->
+      <button class="flat-btn" ng-click="postDetailsCtrl.isPostPage ? 'null' : postDetailsCtrl.showCommentsOrRedirectToPostPage()">
+        <md-button class="sm-icon-button" aria-label="Comments" title="Mostrar comentários"
+          md-colors="{{ postDetailsCtrl.getButtonColor(true, true) }}">
           <md-icon>comments</md-icon>
         </md-button>
-        <span style="margin-left: -10px;" class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
-        <b class="like-comment-text">COMENTAR</b>
-      </div>
+        <span class="counter-likes-comments" data-badge="{{postDetailsCtrl.number_of_comments()}}"></span>
+        <b class="post-btn-text">COMENTAR</b>
+      </button>
     </div>
   </md-card-actions>
 
@@ -245,30 +252,27 @@
   <md-divider ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"></md-divider>
   
   <!-- COMMENTS -->
+  <md-list-item class="md-2-line" ng-if="postDetailsCtrl.showCommentInput()">
+    <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
+    <div class="md-list-item-text grid-container">
+      <md-input-container class="reply-input-container" flex>
+        <label>Comentar</label>
+        <textarea class="reply-input" ng-model="postDetailsCtrl.newComment"
+            md-select-on-focus ng-disabled="postDetailsCtrl.savingComment"></textarea>
+      </md-input-container>
+      <button class="comment-btn send-reply-btn" ng-click="postDetailsCtrl.createComment()"
+        ng-disabled="!postDetailsCtrl.newComment" aria-label="Send">
+        <md-icon>send</md-icon>
+        <b class="comment-btn-text send-comment-btn-text">ENVIAR</b>
+      </button>
+    </div>
+  </md-list-item>
+
   <div ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage">
     <load-circle flex ng-if="postDetailsCtrl.isLoadingComments && !postDetailsCtrl.isPostPage"></load-circle>
     <comment ng-if="!postDetailsCtrl.isLoadingComments || postDetailsCtrl.isPostPage"
       ng-repeat="comment in postDetailsCtrl.post.data_comments | orderBy:'publication_date'"
-      comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post"></comment>
+      comment="comment" user="postDetailsCtrl.user" post="postDetailsCtrl.post" >
+    </comment>
   </div>
-  
-
-  <md-list ng-if="!postDetailsCtrl.showSurvey() && postDetailsCtrl.showCommentInput()">
-    <md-list-item class="md-3-line">
-      <img ng-src="{{postDetailsCtrl.user.photo_url}}" class="md-avatar" alt="{{postDetailsCtrl.user.name}}" />
-      <div class="md-list-item-text">
-        <md-input-container class="md-block">
-          <form ng-submit="postDetailsCtrl.createComment()" layout="column">
-            <label>Comentar</label>
-            <textarea style="max-height: 400px;overflow-y:auto;resize:none;" ng-model="postDetailsCtrl.newComment" rows="1" md-select-on-focus
-            ng-disabled="postDetailsCtrl.savingComment"></textarea>
-            <div layout="row" layout-align="end center">
-              <md-button ng-show="postDetailsCtrl.newComment"
-              class="md-raised md-primary" aria-label="postar" type="submit" md-colors="{background: 'teal-500'}">Enviar</md-button>
-            </div>
-          </form>
-        </md-input-container>
-      </div>
-    </md-list-item>
-  </md-list>
 </md-card>

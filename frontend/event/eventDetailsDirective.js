@@ -3,13 +3,9 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService, $q) {
+        $state, $mdDialog, AuthService) {
 
         var eventCtrl = this;
-        var content = document.getElementById("content");
-
-        var moreEvents = true;
-        var actualPage = 0;
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
@@ -25,9 +21,8 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    posts: eventCtrl.posts || [],
                     post: event,
-                    addPost: true
+                    addPost: false
                 }
             });
         };
@@ -124,9 +119,9 @@
 
         eventCtrl.endInTheSameDay = function endInTheSameDay() {
             if (eventCtrl.event) {
-                const startDay = new Date(eventCtrl.event.start_time).getDay();
-                const endDay = new Date(eventCtrl.event.end_time).getDay();
-                return startDay === endDay && !eventCtrl.endInOtherMonth();
+                const startDay = new Date(eventCtrl.event.start_time).toLocaleDateString();
+                const endDay = new Date(eventCtrl.event.end_time).toLocaleDateString();
+                return startDay === endDay;
             }
         };
 
@@ -134,13 +129,39 @@
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
         }
 
-        function isInstitutionAdmin(event) {
-            if(event.institution_key)
-                return _.includes(_.map(eventCtrl.user.institutions_admin, Utils.getKeyFromUrl),
-                    Utils.getKeyFromUrl(event.institution_key));
+        /**
+         * This function receives a date in iso format, 
+         * for example, 2018-11-15T19: 41: 11.545Z, and 
+         * returns the corresponding time for that date.
+         * 
+         * @param {String} isoTime String date in iso format
+         */
+        eventCtrl.getTimeHours = function getTimeHours(isoTime) {
+            return new Date(isoTime).getHours();
+        };
+
+        /**
+         * This function receives the event key, makes a 
+         * request to the backend, and returns the event 
+         * returned as a backend response.
+         * 
+         * @param {String} eventKey Key of event 
+         */
+        function loadEvent(eventKey) {
+            return EventService.getEvent(eventKey).then(function success(response) {
+                eventCtrl.event = response;
+            }, function error(response) {
+                MessageService.showToast(response);
+                $state.go("app.user.home");
+            });
         }
+
+        eventCtrl.$onInit = function() {
+            if ($state.params.eventKey)
+                return loadEvent($state.params.eventKey);
+        };
     });
-    
+
     app.directive("eventDetails", function () {
         return {
             restrict: 'E',
@@ -150,8 +171,7 @@
             scope: {},
             bindToController: {
                 event: '=',
-                isEventPage: '=',
-                posts: '='
+                isEventPage: '='
             }
         };
     });

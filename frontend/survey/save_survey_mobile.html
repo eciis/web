@@ -1,0 +1,47 @@
+<form class="save-survey-form" name="saveSurvey" layout="column" ng-submit="surveyCtrl.save()">
+  <div>
+    <md-input-container md-no-float class="md-block save-survey-margin">
+      <input ng-model="surveyCtrl.post.title" class="save-survey-input-placeholder" placeholder="Título da enquete"/>
+    </md-input-container>
+    <div>
+      <md-content flex class="survey-options save-survey-scrollbar">
+        <md-input-container ng-repeat="option in surveyCtrl.options" md-no-float
+        class="md-block save-survey-margin">
+          <input class="save-survey-input-placeholder" ng-model="option.text" ng-change="surveyCtrl.changeOption(option)"
+          placeholder="+ Adicionar uma opção..." maxlength="150" />
+        </md-input-container>
+      </md-content>
+      <md-input-container class="md-block save-survey-margin">
+        <input name="date" mdc-datetime-picker="" short-time="false" date="true" time="true" type="text"
+          format="DD/MM/YYYY HH:mm" lang="pt-BR"
+          ng-model="surveyCtrl.post.deadline" class="survey-options md-input survey-title-placeholder save-survey-date"
+          today-text="Hoje" min-date="surveyCtrl.now"
+          readonly="readonly" cancel-text="Cancelar" required>
+      </md-input-container>
+    </div>
+    <md-card-actions layout="column">
+      <div layout="row">
+        <md-switch ng-model="surveyCtrl.multipleChoice" class="survey-switch" required>
+          <p class="survey-multiple-choice">MULTIPLA ESCOLHA</p>
+        </md-switch>
+        <md-button mdc-datetime-picker="" lang="pt-BR"
+        ng-model="surveyCtrl.post.deadline" class="md-fab md-primary save-survey-date-button"
+        today-text="Hoje" min-date="surveyCtrl.now"
+        readonly="readonly" cancel-text="Cancelar">
+          <md-icon>date_range</md-icon>
+        </md-button>
+      </div>
+    </md-card-actions>
+  </div>
+</form>
+<div valign="bottom">
+  <md-card-actions layout="row" layout-align="end end" class="save-survey-margin-buttons">
+    <md-button title="Cancelar" ng-click="surveyCtrl.resetSurvey()" class="save-survey-cancel-button">
+      CANCELAR
+    </md-button>
+    <md-button title="Enviar" ng-click="surveyCtrl.save()"
+      class="md-raised" md-colors="{background: 'default-teal-500'}">
+      POSTAR
+    </md-button>
+  </md-card-actions>
+</div>

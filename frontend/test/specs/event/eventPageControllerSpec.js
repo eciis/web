@@ -69,7 +69,6 @@
       mdDialog = $mdDialog;
       AuthService.login(user);
       state = $state;
-      state.params.posts = [];
       state.params.eventKey = event_convert_date.key;
       eventCtrl = $controller('EventPageController', {
             scope: scope,
@@ -105,7 +104,6 @@
       });
       eventCtrl.share(event);
       expect(postService.createPost).toHaveBeenCalledWith(post);
-      expect(eventCtrl.posts).toEqual([{}]);
     });
   });
 

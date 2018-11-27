@@ -54,7 +54,10 @@
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
-                        templateUrl: "app/search/search.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                                "app/search/search.html",
+                                "app/search/search_mobile.html"
+                            ),
                         controller: "SearchController as searchCtrl"
                     }
                 }
@@ -83,9 +86,6 @@
                         templateUrl: "app/event/event.html",
                         controller: "EventController as eventCtrl",
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.user.invite_inst", {
@@ -111,7 +111,7 @@
                 views: {
                     user_content: {
                         templateUrl: "app/notification/notifications_page.html",
-                        constroller: "NotificationController as notificationCtrl"
+                        controller: "NotificationController as notificationCtrl"
                     }
                 }
             })
@@ -149,9 +149,6 @@
                         templateUrl: "app/institution/institution_events.html",
                         controller: "EventController as eventCtrl"
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.institution.members", {
@@ -213,12 +210,9 @@
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
-                        templateUrl: "app/event/event_page.html",
-                        controller: "EventPageController as eventCtrl",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
+                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
                     }
-                },
-                params: {
-                    posts: undefined
                 }
             })
             .state("app.manage_institution.edit_info", {
@@ -290,8 +284,26 @@
                     }
                 }
             })
+            .state("email_verification", {
+                url: "/email_verification",
+                views: {
+                    main: {
+                      templateUrl: "app/auth/email_verification.html",
+                      controller: "EmailVerificationController as emailVerifCtrl"
+                    }
+                }
+            })
+            .state("reset_password", {
+                url: "/reset_password",
+                views: {
+                    main: {
+                        templateUrl: "/app/auth/reset_password.html",
+                        controller: "ResetPasswordController as resetCtrl"
+                    }
+                }
+            })
             .state("user_inactive", {
-                url: "/userinactive",
+                url: "/user_inactive",
                 views: {
                     main: {
                       templateUrl: "app/user/user_inactive.html",
@@ -356,20 +368,23 @@
                 var AuthService = $injector.get('AuthService');
                 config.headers = config.headers || {};
                 if (AuthService.isLoggedIn()) {
-                    var token = AuthService.getUserToken();
-                    config.headers.Authorization = 'Bearer ' + token;
-                    
-                    var API_URL = "/api/";
-                    var FIRST_POSITION = 0;
-                    var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
-                    
-                    if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
-                        config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
-                    }
+                    return AuthService.getUserToken().then(token => {
+                        config.headers.Authorization = 'Bearer ' + token;                        
+                        
+                        var API_URL = "/api/";
+                        var FIRST_POSITION = 0;
+                        var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+                        
+                        if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
+                            config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                        }
+
+                        Utils.updateBackendUrl(config);
+                        return config || $q.when(config);
+                    });
                 }
 
                 Utils.updateBackendUrl(config);
-
                 return config || $q.when(config);
             },
             response: function(response) {
@@ -403,6 +418,7 @@
     app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
         var ignored_routes = [
             'signin',
+            'reset_password',
             'accept_invite'
         ];
 
@@ -428,6 +444,8 @@
             'create_institution_form',
             'error',
             'signin',
+            'email_verification',
+            'reset_password',
             'user_inactive',
             'new_invite'
         ];

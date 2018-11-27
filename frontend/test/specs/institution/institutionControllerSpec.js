@@ -65,7 +65,6 @@
         cropImageService = CropImageService;
         imageService = ImageService;
 
-        httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key + '/timeline?page=0&limit=10').respond({posts: posts, next: true});
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
@@ -75,8 +74,6 @@
         httpBackend.when('GET', "home/home.html").respond(200);
 
         AuthService.login(first_user);
-
-        spyOn(Utils, 'setScrollListener').and.callFake(function() {});
 
         createCtrl = function() {
             return $controller('InstitutionController',
@@ -101,11 +98,6 @@
         it('should exist a user and his name is first_user', function() {
             expect(institutionCtrl.user.name).toEqual(first_user.name);
         });
-
-        it('should exist posts', function() {
-            expect(institutionCtrl.posts).toEqual(posts);
-        });
-
     });
 
     describe('InstitutionController functions', function() {
@@ -225,30 +217,6 @@
             });
         });
 
-        describe('loadMorePosts()', function() {
-            beforeEach(function() {
-                spyOn(institutionService, 'getNextPosts').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            callback({posts: posts, next: false});
-                        }
-                    };
-                });
-            });
-
-            it('Should call institutionService.getNextPosts()', function(done) {
-                var promise = institutionCtrl.loadMorePosts();
-                var actualPage = 1;
-
-                promise.then(function success() {
-                    expect(institutionService.getNextPosts).toHaveBeenCalledWith(first_institution.key, actualPage);
-                    done();
-                });
-
-                scope.$apply();
-            });
-        });
-
         describe('requestInvitation()', function() {
 
             it('should call $mdDialog.show()', function() {
@@ -318,7 +286,7 @@
                 spyOn(state, 'go');
                 institutionCtrl.posts = posts;
                 institutionCtrl.goToEvents(first_institution.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution.events', {institutionKey: first_institution.key, posts: institutionCtrl.posts});
+                expect(state.go).toHaveBeenCalledWith('app.institution.events', {institutionKey: first_institution.key});
             });
         });
         describe('goToLinks()', function() {
@@ -328,5 +296,12 @@
                 expect(state.go).toHaveBeenCalledWith('app.institution.institutional_links', {institutionKey: first_institution.key});
             });
         });
+
+        describe('getInstKey()', () => {
+            it('should return $state.params.institutionKey', () => {
+                const key = institutionCtrl.getInstKey();
+                expect(key).toEqual(state.params.institutionKey);
+            })
+        })
     });
 }));

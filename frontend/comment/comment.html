@@ -1,0 +1,69 @@
+<div class="comment-container">
+  <!-- header -->
+  <div class="comment-avatar">
+    <img ng-src="{{commentCtrl.currentComment.author_img}}" alt="{{commentCtrl.currentComment.author_name}}" />
+  </div>
+  <div class="comment-header">
+    <a href class="md-title user-name hyperlink" ng-click="commentCtrl.showUserProfile(commentCtrl.currentComment.author_key, $event)">
+      {{commentCtrl.currentComment.author_name}}</a>
+    <small class="md-caption inst-name separator"> | </small>
+    <small class="md-caption inst-name">{{commentCtrl.currentComment.institution_name}}</small>
+    <b class="xs-bullet comment-bullet">&bull;</b>
+    <small>{{commentCtrl.currentComment.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats}}</small>
+  </div>
+  <div class="comment-text">
+    <p ng-bind-html="commentCtrl.currentComment.text"></p>
+    <!-- buttons -->
+    <div layout="row" class="btns-row">
+      <!-- delete -->
+      <button aria-label="Delete" title="Excluir comentário" ng-if="commentCtrl.canDeleteComment()" 
+        class="comment-btn" ng-click="commentCtrl.commentDeletionDialog($event)" >
+        <md-icon class="delete-btn">delete</md-icon>
+        <b class="comment-btn-text comment-delete-btn-txt">EXCLUIR</b>
+      </button>
+      <!-- like -->
+      <button class="left-align comment-btn" 
+        ng-click="commentCtrl.isLikedByUser() ? commentCtrl.dislike() : commentCtrl.like()"
+        ng-disabled="commentCtrl.disableButton()" aria-label="Favorite"
+        title="{{commentCtrl.isLikedByUser() ? 'Descurtir' : 'Curtir'}}">
+        <md-icon class="delete-btn">grade</md-icon>
+        <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfLikes()}}"></span>
+        <b class="comment-btn-text">
+          CURTIR
+        </b>
+      </button>
+      <!-- reply -->
+      <button style="margin-left: 8px;" ng-if="!commentCtrl.reply" ng-disabled="commentCtrl.hideReplies()"
+        class="comment-btn" ng-click="commentCtrl.toggleReplies()" aria-label="reply">
+        <md-icon class="delete-btn">reply</md-icon>
+        <span class="counter-likes-comments" data-badge="{{commentCtrl.numberOfReplies()}}"></span>
+        <b class="comment-btn-text">
+          RESPONDER
+        </b>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- Replies -->
+<div class="reply-container reply" ng-show="commentCtrl.showReplies && !commentCtrl.reply" >
+  <comment ng-if="!commentCtrl.reply"
+    ng-repeat="reply in commentCtrl.getReplies() | orderBy:'publication_date'"
+    user="commentCtrl.user" post="commentCtrl.post"
+    comment="commentCtrl.comment" reply="reply">
+  </comment>
+  <md-list-item class="md-2-line" ng-if="commentCtrl.canReply()">
+    <img ng-src="{{commentCtrl.user.photo_url}}" class="md-avatar" alt="{{commentCtrl.user.name}}" />
+    <div class="md-list-item-text grid-container">
+      <md-input-container class="reply-input-container" flex>
+        <label>Responder</label>
+        <textarea class="reply-input" ng-model="commentCtrl.newReply"
+            md-select-on-focus ng-disabled="commentCtrl.saving"></textarea>
+      </md-input-container>
+      <button class="comment-btn send-reply-btn" ng-click="commentCtrl.replyComment();"
+        ng-disabled="!commentCtrl.newReply" aria-label="Send">
+        <md-icon>send</md-icon>
+        <b class="comment-btn-text send-comment-btn-text">ENVIAR</b>
+      </button>
+    </div>
+  </md-list-item>
+</div>

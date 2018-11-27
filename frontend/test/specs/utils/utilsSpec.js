@@ -174,6 +174,33 @@
 			});
 		});
 	});
+
+	describe('clearArray()', function () {
+
+		it('should clear array', function () {
+			const emptyArray = [];
+			const elementsArray = ["element1", "element2"];
+
+			Utils.clearArray(emptyArray);
+			Utils.clearArray(elementsArray);
+			expect(emptyArray.length === 0).toBeTruthy();
+			expect(elementsArray.length === 0).toBeTruthy();			
+		});
+	});
+
+	describe('selectFieldBasedOnScreenSize', () => {
+		it('should return the second parameter when isMobileScreen returns true', () => {
+			spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+			const selectedHtml = Utils.selectFieldBasedOnScreenSize('notMobile.html', 'mobile.html');
+			expect(selectedHtml).toBe('mobile.html');
+		});
+
+		it('should return the second first when isMobileScreen returns false', () => {
+			spyOn(Utils, 'isMobileScreen').and.returnValue(false);
+			const selectedHtml = Utils.selectFieldBasedOnScreenSize('notMobile.html', 'mobile.html');
+			expect(selectedHtml).toBe('notMobile.html');
+		});
+	});
 }));
 
 

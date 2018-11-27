@@ -3,26 +3,22 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(PostService, AuthService, NotificationService,
-            $mdSidenav, $mdDialog, $state, ProfileService, EventService, $q) {
+    app.controller("HomeController", function HomeController(AuthService, $mdSidenav, $mdDialog, 
+        $state, EventService, ProfileService, $rootScope, POST_EVENTS) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
-        var morePosts = true;
-        var actualPage = 0;
-
-        homeCtrl.posts = [];
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
-        homeCtrl.refreshTimeline = false;
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
         homeCtrl.showMessageOfEmptyEvents = true;
         homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
+        
         function loadStateView(){
             homeCtrl.stateView = getStateView($state.current.name);
         }
@@ -97,7 +93,6 @@
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post')),
                 locals: {
-                    posts: homeCtrl.posts,
                     isEditing: false
                 },
                 bindToController: true
@@ -112,36 +107,8 @@
             return institution.state === ACTIVE;
         };
 
-        homeCtrl.loadMorePosts = function loadMorePosts(reload) {
-            var deferred = $q.defer();
-
-            if (reload) {
-                actualPage = 0;
-                morePosts = true;
-                homeCtrl.posts.splice(0, homeCtrl.posts.length);
-                homeCtrl.setRefreshTimelineButton();
-                homeCtrl.isLoadingPosts = true;
-            }
-
-            if (morePosts) {
-                loadPosts(deferred);
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred.promise;
-        };
-
         homeCtrl.isEventsEmpty = function isEventsEmpty() {
             return homeCtrl.events.length === 0 || homeCtrl.showMessageOfEmptyEvents;
-        };
-
-        homeCtrl.showRefreshTimelineButton = function showRefreshTimelineButton() {
-            return homeCtrl.refreshTimeline;
-         };
-
-        homeCtrl.setRefreshTimelineButton = function setRefreshTimelineButton() {
-            homeCtrl.refreshTimeline = !homeCtrl.refreshTimeline;
         };
 
         homeCtrl.openColorPicker = function openColorPicker(){
@@ -157,22 +124,6 @@
                  bindToController: true
             });
         };
-
-        function loadPosts(deferred) {
-            PostService.getNextPosts(actualPage).then(function success(response) {
-                actualPage += 1;
-                morePosts = response.next;
-
-                _.forEach(response.posts, function(post) {
-                    homeCtrl.posts.push(post);
-                });
-
-                homeCtrl.isLoadingPosts = false;
-                deferred.resolve();
-            }, function error() {
-                deferred.reject();
-            });
-        }
 
         function getFollowingInstitutions(){
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
@@ -214,12 +165,30 @@
             });
         };
 
+        /**
+         * Start the listeners to new post and delete post events.
+         * broadCasts the event to the hierachy by calling broadcastPostEvent() 
+         * when there is a new event.
+         */
+        function registerPostEvents() {
+            $rootScope.$on(POST_EVENTS.NEW_POST_EVENT_TO_UP, (event, data) => {
+                broadcastPostEvent(POST_EVENTS.NEW_POST_EVENT_TO_DOWN, data);
+            });
+
+            $rootScope.$on(POST_EVENTS.DELETED_POST_EVENT_TO_UP, (event, data) => {
+                broadcastPostEvent(POST_EVENTS.DELETED_POST_EVENT_TO_DOWN, data);
+            });
+        }
+        
+        function broadcastPostEvent(eventType, post) {
+            $rootScope.$broadcast(eventType, post);
+        }
+
         (function main() {
-            NotificationService.watchPostNotification(homeCtrl.user.key, homeCtrl.setRefreshTimelineButton);
             loadEvents();
-            homeCtrl.loadMorePosts();
             getFollowingInstitutions();
             loadStateView();
+            registerPostEvents();
         })();
     });
 })();

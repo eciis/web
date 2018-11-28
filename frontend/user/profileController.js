@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("ProfileController", function ProfileController(user, currentUserKey, UserService, $state, $mdDialog) {
+    app.controller("ProfileController", function ProfileController(user, currentUserKey, UserService, $state, $mdDialog, STATES) {
         var profileCtrl = this;
 
         profileCtrl.loading = true;

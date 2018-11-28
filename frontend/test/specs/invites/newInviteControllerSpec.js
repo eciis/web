@@ -42,8 +42,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, STATES, $state, $mdDialog, InstitutionService, UserService, InviteService, AuthService) {
-        userService = UserService;
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, STATES, $state, $mdDialog, InstitutionService, InviteService, AuthService) {
         inviteService = InviteService;
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -62,7 +61,7 @@
                     scope: scope,
                     institutionService: institutionService,
                     inviteService: InviteService,
-                    userService: UserService
+                    STATES: STATES
                 });
         };
         state.params.key = 'xyzcis';

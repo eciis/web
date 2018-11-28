@@ -4,8 +4,8 @@
 
     var app = angular.module("app");
 
-    var notificationComponentController = function(NotificationService, $state, STATES,
-        RequestDialogService, NOTIFICATION_TYPE){
+    var notificationComponentController = function(NotificationService, $state,
+        RequestDialogService, NOTIFICATION_TYPE, STATES){
 
         const ctrl = this;
 
@@ -90,7 +90,7 @@
             keyword: '=?'
         },
         controller: ["NotificationService", "$state", "RequestDialogService",
-                        "NOTIFICATION_TYPE", notificationComponentController],
+                        "NOTIFICATION_TYPE", "STATES", notificationComponentController],
         controllerAs: 'notificationListCtrl'
     });
 })();

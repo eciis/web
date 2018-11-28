@@ -115,7 +115,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith('states.CONFIG_PROFILE');
+            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE);
         });
 
         it("should create observer", function() {

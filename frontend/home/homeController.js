@@ -20,7 +20,7 @@
         homeCtrl.user = AuthService.getCurrentUser();
         
         function loadStateView(){
-            setStateView($state.current.name);
+            homeCtrl._setStateView($state.current.name);
         }
  
         homeCtrl.getSelectedItemClass = function getSelectedItemClass(selectedStateView){
@@ -49,30 +49,30 @@
         };
 
         homeCtrl.goHome = function goHome() {
-            UtilsService.selectNavOption(STATES.HOME, {}, setStateView);
+            UtilsService.selectNavOption(STATES.HOME, {}, homeCtrl._setStateView);
         };
 
         homeCtrl.goToProfile = function goToProfile() {
-            UtilsService.selectNavOption(STATES.CONFIG_PROFILE, {}, setStateView);
+            UtilsService.selectNavOption(STATES.CONFIG_PROFILE, {}, homeCtrl._setStateView);
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts}, setStateView);
+            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts}, homeCtrl._setStateView);
         };
 
         homeCtrl.goToInstitutions = function goToInstitutions() {
-            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS, {}, setStateView);
+            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS, {}, homeCtrl._setStateView);
         };
 
         homeCtrl.goInvite = function goInvite() {
-            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION, {}, setStateView);
+            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION, {}, homeCtrl._homeCtrl._setStateView);
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
             $state.go('app.user.event', {eventKey: event.key, posts: homeCtrl.posts});
         };
         
-        function setStateView(state) {
+        homeCtrl._setStateView = function (state) {
             homeCtrl.stateView = state.split(".")[2];
         }
 

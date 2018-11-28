@@ -120,41 +120,48 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, 
+                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, 
+                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, 
+                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.INST_TIMELINE, 
+                {institutionKey: institutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.INST_MEMBERS, 
+                {institutionKey: institutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, {institutionKey: institutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, 
+                {institutionKey: institutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, 
+                {institutionKey: institutionKey}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
-            UtilsService.selectNavOption(
-                STATES.INST_EVENTS, {institutionKey: institutionKey, posts: institutionCtrl.posts}, setStateView
-            );
+            UtilsService.selectNavOption(STATES.INST_EVENTS, 
+                {institutionKey: institutionKey, posts: institutionCtrl.posts}, institutionCtrl._setStateView);
         };
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_LINKS, {institutionKey: institutionKey}, setStateView);
+            UtilsService.selectNavOption(STATES.INST_LINKS,
+                {institutionKey: institutionKey}, institutionCtrl._setStateView);
         };
         
         institutionCtrl.goToHome = function goToHome() {
@@ -307,10 +314,10 @@
         };
 
         function loadStateView(){
-            setStateView($state.current.name);
+            institutionCtrl._setStateView($state.current.name);
         }
 
-        function setStateView(state) {
+        institutionCtrl._setStateView = function (state) {
             institutionCtrl.stateView = state.split(".")[2];
         }
 

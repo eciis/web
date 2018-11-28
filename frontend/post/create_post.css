@@ -5,20 +5,26 @@
     overflow: scroll;
 }
 
-.create-post-container-common {
-    background-color: white;
-    display: grid;
-    grid-template-rows: 82px auto 104px;
-    width: 96vw;
-    border-radius: 4px;
-}
-
-.create-post-container-survey {
+.create-post-container {
     background-color: white;
     display: grid;
     grid-template-rows: 82px auto 48px;
     width: 96vw;
     border-radius: 4px;
+}
+
+.form-container {
+    display: grid;
+    height: 100%;
+}
+
+.form-grid {
+    display: grid;
+    align-content: space-between;
+}
+
+.btn-submit {
+    margin-right: 0;
 }
 
 .post-head-container {
@@ -32,7 +38,7 @@
     display: grid; 
     justify-content: end; 
     grid-template-columns: auto auto; 
-    padding: 0 8px 8px;
+    padding: 0 0 8px;
 }
 
 .create-post-container-resp {
@@ -95,10 +101,6 @@
 @media screen and (max-width: 959px) {
     .create-post-container-resp {
         margin:auto;
-    }
-
-    .create-post-full-width {
-        width: 100%;
     }
 
     .create-post-title-placeholder {
@@ -194,19 +196,6 @@
         margin-left: auto;
         margin-right: auto;
         width: 90%;
-    }
-
-    .create-post-size {
-        max-width: 95%!important;
-        margin: auto;
-    }
-
-    .create-post-size-expand {
-        height: 84vh !important;
-        max-height: 84vh !important;
-        width: 96vh;
-        max-width: 95%!important;
-        margin: auto;
     }
 
     .create-post-textarea {

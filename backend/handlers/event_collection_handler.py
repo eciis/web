@@ -12,7 +12,6 @@ from util import login_required
 from utils import json_response
 from utils import NotAuthorizedException
 from utils import query_paginated
-from utils import to_int
 from datetime import datetime
 from custom_exceptions import QueryException
 
@@ -42,10 +41,15 @@ def get_filtered_events(filters, user):
     if date_filters:
         month = date_filters['month']
         year = date_filters['year']
-        return Event.query(Event.institution_key.IN(
-            user.follows), Event.state == 'published',
-            ndb.AND(ndb.OR(Event.start_year == year, Event.end_year == year),
-            ndb.OR(Event.start_month == month, Event.end_month == month))).order(Event.end_time, Event.key)
+        december = month == 12
+        current_date = datetime(year, month, 1, 3)
+        next_date = datetime(year if not december else year+1, month+1 if not december else 1, 1, 3)
+        query = ndb.gql("SELECT __key__ FROM Event WHERE institution_key IN :1 AND state =:2 AND start_time < DATETIME(:3)",
+            user.follows, 'published', next_date.strftime("%Y-%m-%d %H:%M:%S"))
+        if query.count() > 0:
+            return ndb.gql("SELECT * FROM Event WHERE __key__ IN :1 AND end_time >= DATETIME(:2)",
+                query.fetch(), current_date.strftime("%Y-%m-%d %H:%M:%S")).order(Event.start_time, Event.key)
+        return query.order(Event.start_time, Event.key)
     else:
         return Event.query(Event.institution_key.IN(
             user.follows), Event.state == 'published').order(Event.start_time, Event.key)

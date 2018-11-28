@@ -1,8 +1,8 @@
 'use strict';
 
-(describe('Test SearchInstitutionController', function() {
+(describe('Test searchInstitutionController ', function() {
 
-    let searchInstCtrl, httpBackend, institutionService, state, scope, deferred;
+    let searchInstCtrl, institutionService, state, scope, deferred;
 
     const institution = {
         name: 'institution',
@@ -25,10 +25,9 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($componentController, $httpBackend, $rootScope, $state,
+    beforeEach(inject(function($componentController, $rootScope, $state,
          AuthService, InstitutionService, $q) {
         
-        httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
         institutionService = InstitutionService;
@@ -72,6 +71,11 @@
             it('should be false when the institution is not the one selected and is loaded', function() {
                 searchInstCtrl.selectedInst = new Institution(otherInstitution);
                 searchInstCtrl.isInstLoaded = true;
+                expect(searchInstCtrl.isInstSelected(institution)).toBeFalsy();
+            });
+
+            it('should be false when no institution is selected', function() {
+                searchInstCtrl.selectedInst = undefined;
                 expect(searchInstCtrl.isInstSelected(institution)).toBeFalsy();
             });
         })

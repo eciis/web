@@ -47,17 +47,25 @@
 
     describe('UserRequestFormController functions', function() {
 
+        describe('$onInit()', function () {
+            it('shoul call the loadRequests function', function () {
+                spyOn(userReqFormCtrl, '_loadRequests');
+                userReqFormCtrl.$onInit();
+                expect(userReqFormCtrl._loadRequests).toHaveBeenCalled();
+            });
+        });
+
         describe('getMesage()', function () {
             const formMsg = "Para finalizar o pedido de convite, preencha suas informações institucionais";
             const requestSentMsg = `Sua solicitação de convite foi enviada e esta em analise pelo administrador
              de sua instituição na plataforma e-CIS. Voce recebera a confirmação em seu e-mail.`
 
-            it('should return the form message when the was not sent yet', function () {
+            it('should return the form message when the request was not sent yet', function () {
                 userReqFormCtrl.isRequestSent = false;
                 expect(userReqFormCtrl.getMessage()).toEqual(formMsg);
             });
 
-            it('should return the request sent message when the was already sent', function () {
+            it('should return the request sent message when the request was already sent', function () {
                 userReqFormCtrl.isRequestSent = true;
                 expect(userReqFormCtrl.getMessage()).toEqual(requestSentMsg);
             });
@@ -108,15 +116,19 @@
         describe('onClick()', function () {
             it('should call the logout function when the request was already sent', function () {
                 spyOn(authService, 'logout');
+                spyOn(userReqFormCtrl, '_verifyAndSendRequest');
                 userReqFormCtrl.isRequestSent = true;
                 userReqFormCtrl.onClick();
                 expect(authService.logout).toHaveBeenCalled();
+                expect(userReqFormCtrl._verifyAndSendRequest).not.toHaveBeenCalled();
             });
 
             it('should logout function when the request was not sent yet', function () {
+                spyOn(authService, 'logout');
                 spyOn(userReqFormCtrl, '_verifyAndSendRequest');
                 userReqFormCtrl.isRequestSent = false;
                 userReqFormCtrl.onClick();
+                expect(authService.logout).not.toHaveBeenCalled();
                 expect(userReqFormCtrl._verifyAndSendRequest).toHaveBeenCalled();
             });
         });
@@ -176,6 +188,11 @@
                     {...request}, 
                     {...request}
                 ];
+                expect(userReqFormCtrl._wasInstRequested()).toBeFalsy();
+            });
+
+            it('should be false when the institution has no requests', function () {
+                userReqFormCtrl.requests = [];
                 expect(userReqFormCtrl._wasInstRequested()).toBeFalsy();
             });
         });

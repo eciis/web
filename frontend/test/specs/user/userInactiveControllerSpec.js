@@ -43,7 +43,7 @@
                 expect(userInactiveCtrl.hasInstSelected()).toBeTruthy();
             });
 
-            it('Should be true when the institution was selected', function() {
+            it("should be false when there's no institution selected", function() {
                 expect(userInactiveCtrl.selectedInst).toEqual({});
                 expect(userInactiveCtrl.hasInstSelected()).toBeFalsy();
             });

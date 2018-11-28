@@ -19,7 +19,8 @@
         searchInstCtrl.keyword = "";
         searchInstCtrl.institutions = [];
         searchInstCtrl.selectedInst = {};
-
+        searchInstCtrl.isInstLoaded = false;
+        
         /**
          * Get the institution icon depending on whether the institution is selected
          */
@@ -31,7 +32,8 @@
          * Check if the institution is selected and loaded
          */
         searchInstCtrl.isInstSelected = function (institution){
-            return searchInstCtrl.selectedInst.key === institution.id && 
+            return searchInstCtrl.selectedInst && 
+                searchInstCtrl.selectedInst.key === institution.id && 
                 searchInstCtrl.isInstLoaded;
         };
 

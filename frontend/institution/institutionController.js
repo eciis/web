@@ -120,48 +120,40 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, 
-                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, 
-                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, 
-                {institutionKey: currentInstitutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_TIMELINE, 
-                {institutionKey: institutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_MEMBERS, 
-                {institutionKey: institutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, 
-                {institutionKey: institutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, 
-                {institutionKey: institutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
             UtilsService.selectNavOption(STATES.INST_EVENTS, 
-                {institutionKey: institutionKey, posts: institutionCtrl.posts}, institutionCtrl._setStateView);
+                {institutionKey: institutionKey, posts: institutionCtrl.posts});
         };
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_LINKS,
-                {institutionKey: institutionKey}, institutionCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INST_LINKS, {institutionKey: institutionKey});
         };
         
         institutionCtrl.goToHome = function goToHome() {
@@ -305,24 +297,15 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institution: institutionCtrl.institution,
-                    loadStateView: loadStateView
+                    institution: institutionCtrl.institution
                 },
                 controller: "RemoveInstController",
                 controllerAs: 'removeInstCtrl'
             });
         };
 
-        function loadStateView(){
-            institutionCtrl._setStateView($state.current.name);
-        }
-
-        institutionCtrl._setStateView = function (state) {
-            institutionCtrl.stateView = state.split(".")[2];
-        }
-
-        institutionCtrl.getSelectedItemClass = function getSelectedItemClass(state){
-            return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
+        institutionCtrl.getSelectedClass = function (stateName){
+            return $state.current.name === STATES[stateName] ? "selected" : "";
         };
 
         function changeCoverOnScroll() {
@@ -383,7 +366,6 @@
         };
 
         (function main(){
-            loadStateView();
             changeCoverOnScroll();
         })();
     });

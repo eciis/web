@@ -15,18 +15,12 @@
         homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
         homeCtrl.showMessageOfEmptyEvents = true;
-        homeCtrl.stateView = "";
 
         homeCtrl.user = AuthService.getCurrentUser();
         
-        function loadStateView(){
-            homeCtrl._setStateView($state.current.name);
-        }
- 
-        homeCtrl.getSelectedItemClass = function getSelectedItemClass(selectedStateView){
-            loadStateView();
-            return (selectedStateView === homeCtrl.stateView) ? "option-selected-left-bar":"";
-         };
+        homeCtrl.getSelectedClass = function (stateName){
+            return $state.current.name === STATES[stateName] ? "selected" : "";
+        };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
             $state.go('app.institution.timeline', {institutionKey: institutionKey});
@@ -49,32 +43,28 @@
         };
 
         homeCtrl.goHome = function goHome() {
-            UtilsService.selectNavOption(STATES.HOME, {}, homeCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.HOME);
         };
 
         homeCtrl.goToProfile = function goToProfile() {
-            UtilsService.selectNavOption(STATES.CONFIG_PROFILE, {}, homeCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.CONFIG_PROFILE);
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts}, homeCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts});
         };
 
         homeCtrl.goToInstitutions = function goToInstitutions() {
-            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS, {}, homeCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS);
         };
 
         homeCtrl.goInvite = function goInvite() {
-            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION, {}, homeCtrl._homeCtrl._setStateView);
+            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION);
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
             $state.go('app.user.event', {eventKey: event.key, posts: homeCtrl.posts});
         };
-        
-        homeCtrl._setStateView = function (state) {
-            homeCtrl.stateView = state.split(".")[2];
-        }
 
         homeCtrl.newPost = function newPost(event) {
             $mdDialog.show({
@@ -181,7 +171,6 @@
         (function main() {
             loadEvents();
             getFollowingInstitutions();
-            loadStateView();
             registerPostEvents();
         })();
     });

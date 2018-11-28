@@ -7,13 +7,12 @@
         const service = this;
 
         /**
-         * Select a sideNav option, go to the select state
-         * and call a callback function if it is present 
+         * Select a sideNav option, close the sideNav
+         * and go to the select state
          */
-        service.selectNavOption = function (state, params, callback) {
+        service.selectNavOption = function (state, params) {
             $state.go(state, params || {});
             $mdSidenav('leftNav').toggle();
-            if (callback) callback(state);
         };
     });
 })();

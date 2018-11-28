@@ -1,9 +1,10 @@
 .registered-institution-container {
     height: 14em;
     display: grid;
-    grid-template-rows: 50% 40% auto;
+    grid-template-rows: 50% 35% auto;
     grid-template-columns: auto;
     width: 100%;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
 .registered-institution-cover {
@@ -37,17 +38,57 @@
 }
 
 .registered-institution-content {
-    justify-self: center;
     grid-row-start: 2;
     grid-row-end: 3;
     width: 100%;
 }
 
-.registered-institution-content span {
-    justify-self: center;
+#reg-inst-content-grid {
+    display: grid;
+    grid-template-rows: 80% auto auto;
+    grid-template-columns: auto;
+    justify-content: left;
+    justify-items: left;
+    align-items: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    grid-row-gap: 0.3em;
+    margin-top: 0.3em;
+}
+
+#reg-content-inst-name {
     font-size: 12px;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    align-self: end;
+}
+
+.registered-institution-content hl {
+    width: 30%;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    height: 0.2em;
+}
+
+#reg-content-location {
+    font-size: 8px;
+    grid-row-start: 3;
+    grid-row-end: 4;
 }
 
 .registered-institution-action {
+    text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    align-self: start;
+    justify-self: end;
+    width: 45%;
+    border-color: #009688;
+    margin-right: 0.5em;
+}
 
+.registered-institution-action span {
+    font-size: 12px;
+    align-self: start;
 }

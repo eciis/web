@@ -18,6 +18,6 @@
 
 .registered-institutions-container {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 49% 49%;
     grid-column-gap: 0.4em;
 }

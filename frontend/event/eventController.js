@@ -8,8 +8,7 @@
             content = document.getElementById("content"),
             moreEvents = true,
             actualPage = 0,
-            isAnotherMonth = false,
-            currentDate, currentMonth, currentYear;
+            isAnotherMonth = false;
 
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
@@ -128,28 +127,44 @@
         };
 
         /**
+         * @param {object} event the event that be calculated the range that happens
+         * @returns {array} array with init day and end day in positions 0 and 1, respectively
+         * @private
+         */
+        eventCtrl._getDaysRange = (event) => {
+            const daysOfCurrentMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0).getDate();
+            const startTime = new Date(event.start_time);
+            const endTime = new Date(event.end_time);
+            let startDay = new Date(event.start_time).getDate();
+            let endDay = new Date(event.end_time).getDate();
+            if (startTime.getMonth() !== endTime.getMonth()) {
+                if (endTime.getMonth()+1 === eventCtrl.selectedMonth.month
+                    && endTime.getFullYear() === eventCtrl.selectedYear) {
+                    startDay = 1;
+                } else if(startTime.getMonth()+1 === eventCtrl.selectedMonth.month
+                    && startTime.getFullYear() === eventCtrl.selectedYear) {
+                    endDay = daysOfCurrentMonth;
+                } else {
+                    startDay = 1;
+                    endDay = daysOfCurrentMonth;
+                }
+            }
+            return [startDay, endDay];
+        };
+
+        /**
          * Distributes events on days that happens 
          * @param {object} event the event that be distributed
          * @param {object} eventsByDay the object with days in keys
          */
         eventCtrl._distributeEvents = (event, eventsByDay) => {
-            const daysOfCurrentMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0).getDate();
-            const startMonth = new Date(event.start_time).getMonth()+1;
-            const endMonth = new Date(event.end_time).getMonth()+1;
-            let startDay = new Date(event.start_time).getDate();
-            let endDay = new Date(event.end_time).getDate();
-            if(endDay <= startDay && eventCtrl.selectedMonth.month !== endMonth) {
-                endDay = daysOfCurrentMonth;
-            } else if(endDay <= startDay && eventCtrl.selectedMonth.month !== startMonth) {
-                startDay = 1;
-            } 
+            const rangeDays = eventCtrl._getDaysRange(event);
+            const startDay = rangeDays[0],
+                   endDay = rangeDays[1]; 
             for (let i = startDay; i <= endDay; i++) {
-                if(startMonth === eventCtrl.selectedMonth.month
-                    || endMonth === eventCtrl.selectedMonth.month) {
-                    if(!eventsByDay[i]) 
-                        eventsByDay[i] = [];
-                    eventsByDay[i].push(event);
-                }
+                if(!eventsByDay[i]) 
+                    eventsByDay[i] = [];
+                eventsByDay[i].push(event);
             }
         };
 
@@ -182,7 +197,7 @@
          * @private
          */
         eventCtrl._loadYears = () => {
-            for (let year = 2017; year <= currentYear + 30; year++) {
+            for (let year = 2017; year <= eventCtrl.selectedYear + 30; year++) {
                 eventCtrl.years.push(year);
             }
         };
@@ -194,8 +209,8 @@
         eventCtrl._getMonths = () => {
             EventService.getMonths().then(function success(response) {
                 eventCtrl.months = response;
-                eventCtrl.selectedMonth = eventCtrl.months[currentMonth];
-                eventCtrl.selectedYear = currentDate.getFullYear();
+                eventCtrl.selectedMonth = eventCtrl.months[new Date().getMonth()];
+                eventCtrl.selectedYear = new Date().getFullYear();
                 eventCtrl._loadYears();
                 eventCtrl.loadMoreEvents();
             });
@@ -204,9 +219,6 @@
         (function main() {
             eventCtrl.institutionKey = $state.params.institutionKey;
             if(Utils.isMobileScreen(475)) {
-                currentDate = new Date();
-                currentMonth = currentDate.getMonth();
-                currentYear = currentDate.getFullYear();
                 eventCtrl._getMonths();
             } else {
                 eventCtrl.loadMoreEvents();

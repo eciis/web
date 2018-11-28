@@ -83,7 +83,8 @@
                 url: "/events",
                 views: {
                     user_content: {
-                        templateUrl: Utils.isMobileScreen(475) ? "app/event/events_mobile.html" : "app/event/events.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/events.html",
+                            "app/event/events_mobile.html", 475),
                         controller: "EventController as eventCtrl",
                     }
                 }

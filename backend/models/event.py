@@ -7,6 +7,28 @@ from models import Address
 
 __all__ = ['Event']
 
+class EventDate(ndb.Model):
+
+    # The month that event happens
+    event_month = ndb.IntegerProperty(required=True)
+
+    # The year that event happens
+    event_year = ndb.IntegerProperty(required=True)
+
+    @staticmethod
+    def create(month, year):
+        event_date = EventDate()
+        event_date.event_month = month
+        event_date.event_year = year
+
+        return event_date
+
+    def __eq__(self, month_and_year):
+        if type(month_and_year).__name__ == 'tuple':
+            return month_and_year[0] == self.event_month and month_and_year[1] == self.event_year
+        return False
+
+
 class Event(ndb.Model):
     """Model of a event."""
 
@@ -75,17 +97,8 @@ class Event(ndb.Model):
     # Date and time of a end time of a event
     end_time = ndb.DateTimeProperty(required=True)
 
-    # The start month of the event
-    start_month = ndb.IntegerProperty(required=True)
-
-    # The end month of the event
-    end_month = ndb.IntegerProperty(required=True)
-
-    # The start year of the event
-    start_year = ndb.IntegerProperty(required=True)
-
-    # The end year of the event
-    end_year = ndb.IntegerProperty(required=True)
+    # The dates (month, year) that the event happens
+    dates = ndb.StructuredProperty(EventDate, repeated=True)
 
     # Local of the event
     local = ndb.StringProperty(required=True)
@@ -113,6 +126,20 @@ class Event(ndb.Model):
             if has_ended and p in forbidden_props:
                 raise FieldException("The event basic data can not be changed after it has ended")
     
+    def init_event_date_range(self, start_time, end_time):
+        current_month = start_time.month
+        current_year = start_time.year
+        while True:
+            self.dates.append(EventDate.create(current_month, current_year))
+            if current_month == end_time.month:
+                if current_year == end_time.year:
+                    return
+            else:
+                if end_time.month == 12:
+                    current_month = 1
+                    current_year += 1
+                else:
+                    current_month += 1
 
     @staticmethod
     def create(data, author, institution):
@@ -137,12 +164,9 @@ class Event(ndb.Model):
         event.local = data.get('local')
         event.start_time = datetime.strptime(
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")
-        event.start_month = event.start_time.month
-        event.start_year = event.start_time.year
         event.end_time = datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
-        event.end_month = event.end_time.month
-        event.end_year = event.end_time.year
+        event.init_event_date_range(event.start_time, event.end_time)
         event.address = Address.create(data.get('address'))
 
         event.isValid()

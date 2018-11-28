@@ -12,16 +12,19 @@
     </div>
     <div class="registered-institution-content">
         <div id="reg-inst-content-grid">
-            <span id="reg-content-inst-name" class="truncate">{{regInstCtrl.institution.name}}</span>
+            <span id="reg-content-inst-name">{{regInstCtrl.institution.name}}</span>
             <hl md-colors="{background: 'light-green'}"></hl>
-            <span id="reg-content-location">BRASILIA / DF</span>
+            <span id="reg-content-location">{{regInstCtrl.institution.address.city}} / {{regInstCtrl.getFederalStateAcronym()}}</span>
         </div>
     </div>
     <div class="registered-institution-action">
-        <div ng-if="regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}" 
+        <div ng-show="regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}" 
             id="reg-following-div">
             <span md-colors="{color: 'teal-500'}"><b>SEGUINDO</b></span>
         </div>
-        <div ng-if="!regInstCtrl.userIsFollowing()"></div>
+        <div ng-show="!regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}"
+            id="reg-not-following-div" ng-click="regInstCtrl.follow()">
+            <span md-colors="{color: 'teal-500'}"><b>SEGUIR</b></span>
+        </div>
     </div>
 </div>

@@ -12,7 +12,8 @@
         }
     });
 
-    app.controller("RegisteredInstitutionController", function regInstCtrl(AuthService) {
+    app.controller("RegisteredInstitutionController", function regInstCtrl(AuthService, 
+        InstitutionService, MessageService, FEDERAL_STATE_ACRONYM) {
         const regInstCtrl = this;
 
         const user = AuthService.getCurrentUser();
@@ -23,7 +24,7 @@
 
         regInstCtrl.userIsFollowing = function userIsFollowing() {
             let isFollowing = false;
-            
+
             user.follows.forEach(inst => {
                 if(regInstCtrl.institution.key === inst.key) {
                     isFollowing = true;
@@ -33,6 +34,18 @@
             return isFollowing;
         };
 
-        console.log(regInstCtrl.institution);
+        regInstCtrl.follow = function follow() {
+            var promise = InstitutionService.follow(regInstCtrl.institution.key);
+            promise.then(function success() {
+                user.follow(regInstCtrl.institution);
+                AuthService.save();
+                MessageService.showToast("Seguindo " + regInstCtrl.institution.name);
+            });
+            return promise;
+        };
+
+        regInstCtrl.getFederalStateAcronym = function () {
+            return FEDERAL_STATE_ACRONYM[regInstCtrl.institution.address.federal_state];
+        }
     });
 })();

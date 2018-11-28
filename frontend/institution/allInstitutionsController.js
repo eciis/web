@@ -12,8 +12,49 @@
 
         allInstitutionsCtrl.user = AuthService.getCurrentUser();
         allInstitutionsCtrl.isLoadingInstitutions = true;
+        allInstitutionsCtrl.allInstitutions = []
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
+
+        allInstitutionsCtrl.allInstTab = true;
+        allInstitutionsCtrl.followingInstTab = false;
+        allInstitutionsCtrl.memberInstTab = false;
+
+        allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
+            if(nextTab == 'all') {
+                allInstitutionsCtrl.allInstTab = true;
+                allInstitutionsCtrl.followingInstTab = false;
+                allInstitutionsCtrl.memberInstTab = false;
+                setAllInstitutions();
+            } else if(nextTab == 'following') {
+                allInstitutionsCtrl.allInstTab = false;
+                allInstitutionsCtrl.followingInstTab = true;
+                allInstitutionsCtrl.memberInstTab = false;
+                setFollowingInstitutions();
+            } else {
+                allInstitutionsCtrl.allInstTab = false;
+                allInstitutionsCtrl.followingInstTab = false;
+                allInstitutionsCtrl.memberInstTab = true;
+                setMemberInstitutions();
+            }
+        };
+
+        function setAllInstitutions() {
+            allInstitutionsCtrl.institutions = _.clone(allInstitutionsCtrl.allInstitutions);
+        }
+
+        function setFollowingInstitutions() {
+            allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
+                return _.find(allInstitutionsCtrl.user.follows, followedInst => followedInst.key === inst.key);
+            });
+        }
+
+        function setMemberInstitutions() {
+            allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
+                return _.find(allInstitutionsCtrl.user.institutions, institution => institution.key === inst.key);
+            });
+        }
+
 
         allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
             var deferred = $q.defer();
@@ -47,10 +88,11 @@
                 moreInstitutions = response.next;
                 
                 _.forEach(response.institutions, function(institution) {
-                    allInstitutionsCtrl.institutions.push(institution);
+                    allInstitutionsCtrl.allInstitutions.push(institution);
                 });
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
+                allInstitutionsCtrl.institutions = _.clone(allInstitutionsCtrl.allInstitutions);
                 deferred.resolve();
             }, function error() {
                 deferred.reject();

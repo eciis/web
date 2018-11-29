@@ -293,8 +293,7 @@
                     {
                         institutionKey: first_institution.key,
                         posts: posts
-                    }, 
-                    institutionCtrl._setStateView
+                    }
                 );
             });
         });

@@ -32,9 +32,8 @@
          * Check if the institution is selected and loaded
          */
         searchInstCtrl.isInstSelected = function (institution){
-            return searchInstCtrl.selectedInst && 
-                searchInstCtrl.selectedInst.key === institution.id && 
-                searchInstCtrl.isInstLoaded;
+            const selecteInstKey = _.get(searchInstCtrl, 'selectedInst.key', undefined);
+            return selecteInstKey === institution.id && searchInstCtrl.isInstLoaded;
         };
 
         /**

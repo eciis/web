@@ -880,7 +880,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     }
 }
 
-.option-selected-left-bar{
+.selected {
     color:#009688;
     background-color:#E0E0E0;
 }

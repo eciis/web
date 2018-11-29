@@ -2,7 +2,8 @@
 
 (describe('Test InstitutionController', function() {
 
-    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state, mdDialog, cropImageService, imageService;
+    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state,
+        mdDialog, cropImageService, imageService, utilsService;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
@@ -56,7 +57,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
-            InstitutionService, AuthService, UserService, $mdDialog, CropImageService, ImageService) {
+            InstitutionService, AuthService, UtilsService, $mdDialog, CropImageService, ImageService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -64,6 +65,7 @@
         institutionService = InstitutionService;
         cropImageService = CropImageService;
         imageService = ImageService;
+        utilsService = UtilsService;
 
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
@@ -283,10 +285,16 @@
         });
         describe('goToEvents', function() {
             it('should call state.go with the right params', function(){
-                spyOn(state, 'go');
+                spyOn(utilsService, 'selectNavOption');
                 institutionCtrl.posts = posts;
                 institutionCtrl.goToEvents(first_institution.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution.events', {institutionKey: first_institution.key});
+                expect(utilsService.selectNavOption).toHaveBeenCalledWith(
+                    'app.institution.events', 
+                    {
+                        institutionKey: first_institution.key,
+                        posts: posts
+                    }
+                );
             });
         });
         describe('goToLinks()', function() {

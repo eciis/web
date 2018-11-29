@@ -3,17 +3,19 @@
 (describe('Test SubmitFormListenerService', function() {
     beforeEach(module('app'));
 
-    var user = {
+    const user = {
         'name': 'name',
         'key': '123456789',
         'state': 'active'
     }
-    var state, scope, messageService, submitFormListenerService;
 
-    beforeEach(inject(function($rootScope, MessageService, $state, SubmitFormListenerService, AuthService, $transitions) {
+    let state, scope, messageService, submitFormListenerService, states;
+
+    beforeEach(inject(function($rootScope, MessageService, $state, SubmitFormListenerService, AuthService, STATES) {
         messageService = MessageService;
         scope = $rootScope;
         state = $state;
+        states = STATES;
         submitFormListenerService = SubmitFormListenerService;
         spyOn(messageService, 'showConfirmationDialog').and.callFake(function (){
             return {
@@ -28,13 +30,13 @@
 
 
     it('Should be call showConfirmationDialog()', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
         scope.$apply("vm.tst.name = 'test'");
         scope.$apply(function() {
-            state.go('app.user.home');
+            state.go(states.HOME);
         });
 
         expect(messageService.showConfirmationDialog).toHaveBeenCalledWith(
@@ -44,39 +46,39 @@
     });
 
     it('Should not be call showConfirmationDialog()', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
         scope.$apply(function() {
-            state.go('app.user.home');
+            state.go(states.HOME);
         });
 
         expect(messageService.showConfirmationDialog).not.toHaveBeenCalled();
     });
 
     it('Should not be call showConfirmationDialog() if onsubmit is called', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
         scope.$apply("vm.tst.name = 'test'");
         element.onsubmit();
         scope.$apply(function() {
-            state.go('app.user.home');
+            state.go(states.HOME);
         });
 
         expect(messageService.showConfirmationDialog).not.toHaveBeenCalled();
     });
 
     it('Should unobserve object', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
         scope.$apply("vm.tst.name = 'test'");
         scope.$apply(function() {
-            state.go('app.user.home');
+            state.go(states.HOME);
         });
 
         expect(messageService.showConfirmationDialog).toHaveBeenCalledWith(
@@ -88,7 +90,7 @@
         submitFormListenerService.unobserve("vm.tst");
 
         scope.$apply(function() {
-            state.go('app.user.home');
+            state.go(states.HOME);
         });
 
         expect(messageService.showConfirmationDialog.calls.count()).toEqual(1);

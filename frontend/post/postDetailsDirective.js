@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
-        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS) {
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS, STATES) {
 
         var postDetailsCtrl = this;
 
@@ -293,7 +293,7 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error(response) {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
                 postDetailsCtrl.savingLike = false;
             });
             return promise;
@@ -308,7 +308,7 @@
                 postDetailsCtrl.savingLike = false;
                 postDetailsCtrl.getLikes(postDetailsCtrl.post);
             }, function error(response) {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
                 postDetailsCtrl.savingLike = false;
             });
             return promise;
@@ -430,7 +430,7 @@
                     addComment(postDetailsCtrl.post, response);
                     postDetailsCtrl.savingComment = false;
                 }, function error(response) {
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                 });
             } else {
                 MessageService.showToast("Comentário não pode ser vazio.");

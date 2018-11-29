@@ -34,33 +34,32 @@
               <md-menu-content width="4" md-colors="{background: 'grey-100'}">
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.goToEditInfo()"
-                    ng-class="institutionCtrl.getSelectedItemClass('edit_info')">
+                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_EDIT')">
                     <md-icon>edit</md-icon>
                     <b>Editar Informações</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.goToManageMembers()"
-                    ng-class="institutionCtrl.getSelectedItemClass('members')">
+                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_MEMBERS')">
                     <md-icon>people</md-icon>
                     <b>Gerenciar membros</b>
                 </md-menu-item>
                 <md-menu-item>
                   <md-button ng-click="institutionCtrl.goToManageInstitutions()"
-                    ng-class="institutionCtrl.getSelectedItemClass('invite_inst')">
+                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_INVITE_INST')">
                     <md-icon>account_balance</md-icon>
                     <b>Vínculos Institucionais</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.removeInstitution()"
-                    ng-class="institutionCtrl.getSelectedItemClass('remove_inst')">
+                  <md-button ng-click="institutionCtrl.removeInstitution()">
                     <md-icon>delete</md-icon>
                     <b>Remover Instituição</b>
                   </md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToHome()" ng-class="institutionCtrl.getSelectedItemClass('remove_inst')">
+                  <md-button ng-click="institutionCtrl.goToHome()">
                     <md-icon>arrow_back</md-icon>
                     <b>Voltar</b>
                   </md-button>

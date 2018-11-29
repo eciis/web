@@ -1,14 +1,15 @@
 'use strict';
 
 (describe('notificationComponentController', function() {
-    let state, notCtrl, requestDialogService, NOTIFICATIONS_TYPE;
+    let state, notCtrl, requestDialogService, NOTIFICATIONS_TYPE, states;
     const event = "$event";
 
     const bindings = {'markAsRead': function(){}}
 
     beforeEach(module('app'));
-    beforeEach(inject(function(_$componentController_, $state, RequestDialogService, NOTIFICATION_TYPE) {
+    beforeEach(inject(function(_$componentController_, $state, RequestDialogService, NOTIFICATION_TYPE, STATES) {
       state = $state;
+      states = STATES;
       requestDialogService = RequestDialogService;
       NOTIFICATIONS_TYPE = NOTIFICATION_TYPE;
       notCtrl = _$componentController_('notificationList', null, bindings);
@@ -41,7 +42,7 @@
           };
          
           notCtrl.goTo(notificationWithoutState);
-          expect(state.go).toHaveBeenCalledWith("app.user.notifications");
+          expect(state.go).toHaveBeenCalledWith(states.NOTIFICATION);
       });
     });
 

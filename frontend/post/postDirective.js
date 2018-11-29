@@ -4,9 +4,9 @@
 
     var app = angular.module("app");
 
-    app.controller("PostController", function PostController($mdDialog, PostService, AuthService, UserService,
+    app.controller("PostController", function PostController($mdDialog, PostService, AuthService,
         $rootScope, ImageService, MessageService, $q, $scope, $state, PdfService, 
-        SubmitFormListenerService, POST_EVENTS) {
+        SubmitFormListenerService, POST_EVENTS, STATES) {
         var postCtrl = this;
 
         postCtrl.post = {};
@@ -245,7 +245,7 @@
                         AuthService.reload().then(function success() {
                             $mdDialog.hide();
                             postCtrl.loadingPost = false;
-                            $state.go("app.user.home");
+                            $state.go(STATES.HOME);
                         });
                     });
                 } else {

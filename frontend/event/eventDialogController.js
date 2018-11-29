@@ -51,9 +51,6 @@
 
         dialogCtrl.createInitDate = function createInitDate() {
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
-            if(dialogCtrl.isEditing) {
-                dialogCtrl.changeDate('startTime');
-            }
         };
 
         function saveImage(callback) {

@@ -20,11 +20,7 @@
             return HttpService.get(url);
         };
 
-        /**
-         * TODO: add month and year into the request url to filter events by date
-         * Author: Tiago Pereira 
-         */
-        service.getInstEvents = function getInstEvents(page, month, year, institution_key) {
+        service.getInstEvents = function getInstEvents(page, institution_key) {
             return HttpService.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT);
         };
 

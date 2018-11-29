@@ -31,8 +31,9 @@
               {{events.events[0].start_time | amUtc | amDateFormat:'ddd' }}
             </p>
           </div>
-          <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position">
-            <div ng-click="eventCtrl.goToEvent(event)">
+          <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position"
+            ng-click="eventCtrl.goToEvent(event)">
+            <div>
                 <md-card>
                   <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
                     <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">

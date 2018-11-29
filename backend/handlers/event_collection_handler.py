@@ -17,6 +17,19 @@ from custom_exceptions import QueryException
 
 __all__ = ['EventCollectionHandler']
 
+def get_page_params(params):
+    """Get a list with page and limit numbers.
+
+    Args:
+        params: the parameters received from frontend to get events paginated.
+    """
+    page_number = [param for param in params if param[0] == 'page']
+    limit_number = [param for param in params if param[0] == 'limit']
+    if page_number and limit_number:
+        return page_number + limit_number
+    else:
+        raise QueryException('The params list should have page and limit parameters')
+
 def get_date_filters(filters):
     """Get a dict with the filters month and year.
 
@@ -39,20 +52,19 @@ def get_filtered_events(filters, user):
     """
     date_filters = get_date_filters(filters)
     if date_filters:
-        month = date_filters['month']
-        year = date_filters['year']
+        month, year = date_filters['month'], date_filters['year']
         december = month == 12
-        current_date = datetime(year, month, 1, 3)
-        next_date = datetime(year if not december else year+1, month+1 if not december else 1, 1, 3)
+        begin_selected_month_utc = datetime(year, month, 1, 3)
+        end_selected_month_utc = datetime(year if not december else year+1, month+1 if not december else 1, 1, 3)
         query = ndb.gql("SELECT __key__ FROM Event WHERE institution_key IN :1 AND state =:2 AND start_time < DATETIME(:3)",
-            user.follows, 'published', next_date.strftime("%Y-%m-%d %H:%M:%S"))
+            user.follows, 'published', end_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
         if query.count() > 0:
             return ndb.gql("SELECT * FROM Event WHERE __key__ IN :1 AND end_time >= DATETIME(:2)",
-                query.fetch(), current_date.strftime("%Y-%m-%d %H:%M:%S")).order(Event.start_time, Event.key)
-        return query.order(Event.start_time, Event.key)
+                query.fetch(), begin_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
+        return query
     else:
         return Event.query(Event.institution_key.IN(
-            user.follows), Event.state == 'published').order(Event.start_time, Event.key)
+            user.follows), Event.state == 'published')
 
 class EventCollectionHandler(BaseHandler):
     """Event  Collection Handler."""
@@ -65,8 +77,8 @@ class EventCollectionHandler(BaseHandler):
         more = False
 
         if len(user.follows) > 0:
-            queryEvents = get_filtered_events(self.request.GET.items(), user)
-            page_params = self.request.GET.items()[0:2]
+            queryEvents = get_filtered_events(self.request.GET.items(), user).order(Event.start_time, Event.key)
+            page_params = get_page_params(self.request.GET.items())
             queryEvents, more = query_paginated(
                 page_params, queryEvents)
 

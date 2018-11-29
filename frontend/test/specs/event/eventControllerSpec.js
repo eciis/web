@@ -6,9 +6,9 @@
         eventCtrl, scope, httpBackend, rootScope,
         createCtrl, eventService, messageService, mdDialog, state;
 
-    let // variables to create the test scenario
+    const // variables to create the test scenario
         institution = { name: 'Institution', key: '098745' },
-        other_institution = { name: 'Ohter Institution', key: '75368' },
+        other_institution = { name: 'Other Institution', key: '75368' },
         date = new Date(2018, 11, 22),
         next_date = new Date(2018, 11, 25),
         months = [ {"month": 1}, {"month": 2},
@@ -149,7 +149,7 @@
             eventCtrl.selectedMonth = months[11];
             expect(eventCtrl.eventsByDay.length).toEqual(0);
             eventCtrl._getEventsByDay();
-            expect(eventCtrl.eventsByDay.length).toEqual(4);
+            expect(eventCtrl.eventsByDay.length).toEqual(10);
         });
     });
 

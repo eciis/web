@@ -105,8 +105,7 @@
                 spyOn($http, 'get').and.callThrough();
                 httpBackend.expect('GET', INST_URI + institution.key + '/events?page=' + page + "&limit=" + LIMIT).respond(events);
                 var result;
-                const date = new Date();
-                service.getInstEvents(page, date.getMonth(), date.getFullYear(), institution.key).then(function(data){
+                service.getInstEvents(page, institution.key).then(function(data){
                     result = data;
                 });
                 httpBackend.flush();

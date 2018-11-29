@@ -24,10 +24,10 @@
             let deferred = $q.defer();
             if (moreEvents) {
                 if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents, eventCtrl.selectedMonth && eventCtrl.selectedMonth.month,
+                    loadEvents(deferred, EventService.getInstEvents, _.get(eventCtrl.selectedMonth, 'month'),
                         eventCtrl.selectedYear);
                 } else {
-                    loadEvents(deferred, EventService.getEvents, eventCtrl.selectedMonth && eventCtrl.selectedMonth.month,
+                    loadEvents(deferred, EventService.getEvents, _.get(eventCtrl.selectedMonth, 'month'),
                         eventCtrl.selectedYear);
                 }
             } else {
@@ -40,7 +40,8 @@
 
 
         function loadEvents(deferred, getEvents, month, year) {
-            getEvents(actualPage, month, year, eventCtrl.institutionKey).then(function success(response) {
+            getEvents(actualPage, _.get(eventCtrl, 'institutionKey', month),
+                eventCtrl.institutionKey || month && year, year).then(function success(response) {
                 actualPage += 1;
                 moreEvents = response.next;
 
@@ -110,10 +111,7 @@
             const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
                 return prof.institution_key === event.institution_key;
             });
-            if(profile.length > 0) {
-                return _.first(profile).color;
-            }
-            return 'teal';
+            return _.get(_.first(profile), 'color', 'teal');
         };
 
         /**
@@ -127,27 +125,21 @@
         };
 
         /**
-         * @param {object} event the event that be calculated the range that happens
+         * @param {date} startDate of the event which the range of days it happens will be calculated
+         * @param {date} endDate of the event which the range of days it happens will be calculated
          * @returns {array} array with init day and end day in positions 0 and 1, respectively
          * @private
          */
-        eventCtrl._getDaysRange = (event) => {
-            const daysOfCurrentMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0).getDate();
-            const startTime = new Date(event.start_time);
-            const endTime = new Date(event.end_time);
-            let startDay = new Date(event.start_time).getDate();
-            let endDay = new Date(event.end_time).getDate();
-            if (startTime.getMonth() !== endTime.getMonth()) {
-                if (endTime.getMonth()+1 === eventCtrl.selectedMonth.month
-                    && endTime.getFullYear() === eventCtrl.selectedYear) {
-                    startDay = 1;
-                } else if(startTime.getMonth()+1 === eventCtrl.selectedMonth.month
-                    && startTime.getFullYear() === eventCtrl.selectedYear) {
-                    endDay = daysOfCurrentMonth;
-                } else {
-                    startDay = 1;
-                    endDay = daysOfCurrentMonth;
-                }
+        eventCtrl._getDaysRange = (startDate, endDate) => {
+            const beginSelectedMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month -1, 1);
+            const endSelectedMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0);
+            let startDay = startDate.getDate();
+            let endDay = endDate.getDate();
+            if (startDate < beginSelectedMonth) {
+                startDay = 1;
+            }
+            if (endDate > endSelectedMonth) {
+                endDay = endSelectedMonth.getDate();
             }
             return [startDay, endDay];
         };
@@ -158,7 +150,7 @@
          * @param {object} eventsByDay the object with days in keys
          */
         eventCtrl._distributeEvents = (event, eventsByDay) => {
-            const rangeDays = eventCtrl._getDaysRange(event);
+            const rangeDays = eventCtrl._getDaysRange(new Date(event.start_time), new Date(event.end_time));
             const startDay = rangeDays[0],
                    endDay = rangeDays[1]; 
             for (let i = startDay; i <= endDay; i++) {

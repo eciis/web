@@ -177,7 +177,7 @@ class EventCollectionHandlerTest(TestBaseHandler):
         query_events = get_filtered_events(filters, self.user).fetch()
 
         self.assertEqual(len(query_events), 0,
-                    "Should return nothing because no has past events")
+                    "Should return nothing because does not have past events")
 
     def test_get_filtered_events_without_date_filters(self):
         """Test the get query events not filtered"""

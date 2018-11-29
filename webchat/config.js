@@ -6,5 +6,5 @@ var Config = {
     SUPPORT_URL: 'http://localhost:8083',
     FRONTEND_URL: 'http://localhost:8081',
     WEBCHAT_URL: 'http://localhost:8084',
-    APP_VERSION: 'dev'
+    APP_VERSION: 'webchat'
 }

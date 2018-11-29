@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test AuthService', function() {
-    var authService, userService;
+    var authService, userService, $q;
 
     var userTest = {
         name : 'User',
@@ -16,19 +16,10 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function(AuthService, UserService) {
+    beforeEach(inject(function(AuthService, UserService, _$q_) {
         authService = AuthService;
         userService = UserService;
-
-        firebase.auth = () => {
-            return {
-                onAuthStateChanged: (callback) => callback(firebaseUser),
-                signOut: function signOut() {}
-            };
-        }
-
-        firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
-        AuthService.useOriginalGetUserToken();
+        $q = _$q_;
     }));
 
     describe('AuthService  setupUser', function() {
@@ -48,6 +39,16 @@
     describe('AuthService user informations', function() {
         beforeEach(function() {
             authService.setupUser(userTest.accessToken);
+
+            firebase.auth = () => {
+                return {
+                    onAuthStateChanged: $q.when(firebaseUser),
+                    signOut: function signOut() {}
+                };
+            }
+    
+            firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
+            authService.useOriginalGetUserToken();
         });
 
         it('should authService.getCurrentUser()', function() {

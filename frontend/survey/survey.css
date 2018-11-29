@@ -127,7 +127,7 @@
 
     @media screen and (max-height: 570px) {
         .save-survey-form {
-            height: 52vh;
+            height: 50vh;
         }
 
         .save-survey-scrollbar {

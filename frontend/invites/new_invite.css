@@ -4,6 +4,10 @@
     align-items: center;
 }
 
+.no-margin{
+    margin: 0px;
+}
+
 @media screen and (max-width: 400px) {
     .new-invite-page-card {
         max-width: 20em;

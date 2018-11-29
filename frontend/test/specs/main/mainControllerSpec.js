@@ -1,9 +1,9 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    var mainCtrl, httpBackend, scope, createCtrl, state, states;
-    var authService, requestInvitationService, notificationListenerService;
-    var user = {
+    let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
+    let authService, requestInvitationService, notificationListenerService, utilsService;
+    let user = {
         name: 'user',
         key: 'user-key',
         invites: [{
@@ -17,20 +17,20 @@
         }],
         state: 'active'
     };
-    var institution = {
+    let institution = {
         name: 'institution',
         key: '123456789',
         admin: user.key
     };
 
-    var otherInstitution = {
+    let otherInstitution = {
         name: 'otherInstitution',
         key: '1239'
     };
 
-    var institutionKey = institution.key;
+    let institutionKey = institution.key;
 
-    var EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
+    let EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
                                 "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
                                 "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_INSTITUTION", "ACCEPT_INVITE_USER_ADM",
                                 "REMOVE_INSTITUTION_LINK", "RE_ADD_ADM_PERMISSIONS"];
@@ -43,7 +43,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                RequestInvitationService, NotificationListenerService, STATES) {
+                RequestInvitationService, NotificationListenerService, STATES, UtilsService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -51,8 +51,12 @@
         authService = AuthService;
         requestInvitationService = RequestInvitationService;
         notificationListenerService = NotificationListenerService;
+        utilsService = UtilsService;
 
-        var callFake = function() {
+        mainToolbar = document.createElement('div');
+        mainToolbar.setAttribute("id", "main-toolbar");
+
+        let callFake = function() {
             return {
                 then: function(callback) {
                     return callback([]);
@@ -60,7 +64,7 @@
             };
         };
 
-        var eventsListenerFake = function eventsListenerFake(events, callback){
+        let eventsListenerFake = function eventsListenerFake(events, callback){
             events.forEach(event => {
                 $rootScope.$on(event, function () {
                     authService.reload();
@@ -99,7 +103,7 @@
     describe('main()', function() {
 
         it("should change state to config_profile if user name is Unknown", function() {
-            var unknownUser = {
+            const unknownUser = {
               name: 'Unknown',
               invites: [],
               institutions: [otherInstitution],
@@ -124,16 +128,11 @@
         });
     });
 
-    describe('MainController functions', function() {
-        it('Should be active', function() {
-            expect(mainCtrl.isActive(institution)).toBe(true);
-        });
-        it('Should be not active', function() {
-            expect(mainCtrl.isActive(otherInstitution)).toBe(false);
-        });
+    fdescribe('MainController functions', function() {
+
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
-            var user_inst = {
+            let user_inst = {
                 name: 'user_inst',
                 key: 'veqw56eqw7r89',
                 invites: [{
@@ -159,31 +158,26 @@
             expect(authService.getCurrentUser).toHaveBeenCalled();
             expect(mainCtrl.getPendingTasks).toHaveBeenCalled();
         });
+
         it('Should call state.go() in function goTo()', function(){
-            spyOn(state, 'go');
-            mainCtrl.goTo(states.HOME);
-            expect(state.go).toHaveBeenCalledWith(states.HOME);
-        });
-        it('Should call state.go() in function goToInstitution()', function(){
-            spyOn(state, 'go');
-            mainCtrl.goToInstitution(otherInstitution.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: '1239'});
+            spyOn(utilsService, 'selectNavOption');
+            spyOn(document, 'getElementById').and.returnValue(mainToolbar);
+            mainCtrl.goTo('HOME');
+            expect(utilsService.selectNavOption).toHaveBeenCalledWith(states.HOME);
         });
 
-        it('User should not be admin of your current institution', function(){
-            expect(mainCtrl.isAdmin(mainCtrl.user.current_institution.key)).toBe(true);
+        it("should return the css class 'color-icon-selected-navbar' when the HOME option is selected", function(){
+            spyOn(mainCtrl, '_getStateName').and.returnValue(states.HOME);            
+            expect(mainCtrl.getSelectedClass("HOME")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedClass("EVENTS")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedClass("NOTIFICATIONS")).toBe("color-icon-navbar");
         });
 
-        it("The class css of state selected should be 'color-icon-selected-navbar'", function(){
-            mainCtrl.stateView = states.HOME;
-            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-selected-navbar");
-            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-navbar");
-            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
-
-            mainCtrl.stateView = states.EVENTS;
-            expect(mainCtrl.getSelectedStateClass("home")).toBe("color-icon-navbar");
-            expect(mainCtrl.getSelectedStateClass("events")).toBe("color-icon-selected-navbar");
-            expect(mainCtrl.getSelectedStateClass("notifications")).toBe("color-icon-navbar");
+        it("should return the css class 'color-icon-selected-navbar' when the EVENTS option is selected", function(){
+            spyOn(mainCtrl, '_getStateName').and.returnValue(states.EVENTS);            
+            expect(mainCtrl.getSelectedClass("HOME")).toBe("color-icon-navbar");
+            expect(mainCtrl.getSelectedClass("EVENTS")).toBe("color-icon-selected-navbar");
+            expect(mainCtrl.getSelectedClass("NOTIFICATIONS")).toBe("color-icon-navbar");
         });
     });
     

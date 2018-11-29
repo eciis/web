@@ -46,14 +46,6 @@
             $mdSidenav('leftNav').toggle();
         };
 
-        mainCtrl.isActive = function isActive(inst) {
-            return mainCtrl.user.current_institution.key == inst.key;
-        };
-
-        mainCtrl.isAdmin = function isAdmin(keyInstitution) {
-            return mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution);
-        };
-
         mainCtrl.isSuperUser = function isSuperUser() {
             var current_institution_key = mainCtrl.user.current_institution.key;
             return mainCtrl.user.hasPermission('analyze_request_inst', current_institution_key);
@@ -152,7 +144,11 @@
         /** Return correct class according currently state.
          */
         mainCtrl.getSelectedClass = function (stateName){
-            return STATES[stateName] === $state.current.name ? "color-icon-selected-navbar" : "color-icon-navbar";
+            return STATES[stateName] === mainCtrl._getStateName() ? "color-icon-selected-navbar" : "color-icon-navbar";
+        };
+
+        mainCtrl._getStateName = function () {
+            return $state.current.name;
         };
 
         /** Reset properties CSS. 

@@ -283,14 +283,10 @@
 
         function generatePatch(patch, data) {
             if (dialogCtrl.dateToChange.startTime) {
-                patch.push({ op: 'replace', path: "/start_time", value: data.start_time },
-                    { op: 'replace', path: '/start_month', value: new Date(data.start_time).getMonth() + 1},
-                    { op: 'replace', path: '/start_year', value: new Date(data.start_time).getFullYear()});
+                patch.push({ op: 'replace', path: "/start_time", value: data.start_time });
             }
             if (dialogCtrl.dateToChange.endTime) {
-                patch.push({ op: 'replace', path: "/end_time", value: data.end_time },
-                    { op: 'replace', path: '/end_month', value: new Date(data.end_time).getMonth() + 1},
-                    { op: 'replace', path: '/end_year', value: new Date(data.end_time).getFullYear()});
+                patch.push({ op: 'replace', path: "/end_time", value: data.end_time });
             }
             return patch;
         }

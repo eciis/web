@@ -72,28 +72,28 @@
 <footer>
   <md-toolbar layout-align="space-around center" layout="row" id="navbar-bottom">
     <div class="icon-navbar-bottom">
-      <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goToOfBottomNav('home')">
-        <md-icon ng-class="mainCtrl.getSelectedStateClass('home')">home</md-icon>
+      <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goTo('HOME')">
+        <md-icon ng-class="mainCtrl.getSelectedClass('HOME')">home</md-icon>
       </md-button>
-      <p ng-class="mainCtrl.getSelectedStateClass('home')" id="label-icon-navbottom">Início</p>
+      <p ng-class="mainCtrl.getSelectedClass('HOME')" id="label-icon-navbottom">Início</p>
     </div> 
     <div class="icon-navbar-bottom">
-      <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goToOfBottomNav('events')">
-        <md-icon ng-class="mainCtrl.getSelectedStateClass('events')">event</md-icon>
+      <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goTo('EVENTS')">
+        <md-icon ng-class="mainCtrl.getSelectedClass('EVENTS')">event</md-icon>
       </md-button>
-      <p ng-class="mainCtrl.getSelectedStateClass('events')" id="label-icon-navbottom">Eventos</p>
+      <p ng-class="mainCtrl.getSelectedClass('EVENTS')" id="label-icon-navbottom">Eventos</p>
     </div>
     <div class="icon-navbar-bottom">
-      <md-button class="md-icon-button big-label-icon" aria-label="Instituições" ng-click="mainCtrl.goToOfBottomNav('institutions')">
-        <md-icon ng-class="mainCtrl.getSelectedStateClass('institutions')">account_balance</md-icon>
+      <md-button class="md-icon-button big-label-icon" aria-label="Instituições" ng-click="mainCtrl.goTo('USER_INSTITUTIONS')">
+        <md-icon ng-class="mainCtrl.getSelectedClass('USER_INSTITUTIONS')">account_balance</md-icon>
       </md-button>
-      <p ng-class="mainCtrl.getSelectedStateClass('institutions')" id="label-icon-navbottom">Instituições</p>
+      <p ng-class="mainCtrl.getSelectedClass('USER_INSTITUTIONS')" id="label-icon-navbottom">Instituições</p>
     </div>
-    <div class="icon-navbar-bottom" ng-click="mainCtrl.selectNotificationState()">
+    <div class="icon-navbar-bottom" ng-click="mainCtrl.goTo('NOTIFICATION')">
       <notification-button should-go-to-state="true"  style="justify-self:center"
-        class-button="{{mainCtrl.getSelectedStateClass('notifications')}}">
+        class-button="{{mainCtrl.getSelectedClass('NOTIFICATION')}}">
       </notification-button>
-      <p id="label-icon-navbottom" ng-class="mainCtrl.getSelectedStateClass('notifications')">Notificações</p>  
+      <p id="label-icon-navbottom" ng-class="mainCtrl.getSelectedClass('NOTIFICATION')">Notificações</p>  
     </div> 
   </md-toolbar>
 </footer>

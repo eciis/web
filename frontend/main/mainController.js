@@ -2,8 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService, STATES) {
+    app.controller("MainController", function MainController($mdSidenav, $state, AuthService, UtilsService,
+        UserService, RequestInvitationService, $window, NotificationListenerService, STATES) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -14,9 +14,7 @@
         mainCtrl.pendingManagerMember = 0;
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
-
-        mainCtrl.stateView =  $state.current.name;
-        
+       
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
         mainCtrl.search = function search() {
@@ -49,17 +47,11 @@
         };
 
         mainCtrl.isActive = function isActive(inst) {
-            if (mainCtrl.user.current_institution.key == inst.key) {
-                return true;
-            }
-            return false;
+            return mainCtrl.user.current_institution.key == inst.key;
         };
 
         mainCtrl.isAdmin = function isAdmin(keyInstitution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution)){
-                return true;
-            }
-            return false;
+            return mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution);
         };
 
         mainCtrl.isSuperUser = function isSuperUser() {
@@ -80,22 +72,9 @@
             enabled: true
         }];
 
-        mainCtrl.goTo = function goTo(state) {
-            $state.go(state);
-            mainCtrl.toggle();
-        };
-
-        mainCtrl.goInvite = function goInvite() {
-            $state.go(STATES.INVITE_INSTITUTION);
-        };
-
-        mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
-            mainCtrl.toggle();
-        };
-
-        mainCtrl.goEvents = function goEvents(){
-            $state.go(STATES.EVENTS);
+        mainCtrl.goTo = function (stateName) {
+            UtilsService.selectNavOption(STATES[stateName]);
+            resetNavBarDisplayStyle();
         };
 
         mainCtrl.logout = function logout() {
@@ -103,30 +82,25 @@
         };
 
         mainCtrl.goToManageMembers = function goToManageMembers(instKey){
-            $state.go('app.manage_institution.members', {
+            $state.go(STATES.MANAGE_INST_MEMBERS, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToManageInstitutions = function goToManageInstitutions(instKey){
-            $state.go('app.manage_institution.invite_inst', {
+            $state.go(STATES.MANAGE_INST_INVITE_INST, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToEditInstInfo = function goToEditInstInfo(instKey){
-            $state.go('app.manage_institution.edit_info', {
+            $state.go(STATES.MANAGE_INST_EDIT, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToReport = function goToReport() {
             $window.open(url_report);
-        };
-
-
-        mainCtrl.openConfigMenu = function openConfigMenu(ev) {
-            $mdMenu.open(ev);
         };
 
         function increaseInstInvitationsNumber(response) {
@@ -175,29 +149,10 @@
             $window.location.reload();
         };
 
-        /** Function used in bottom navbar to redirect to new state and
-         * reset properties of CSS that can be modified while using in mode mobile
-         * @param {string} state - state that should be redirect. 
+        /** Return correct class according currently state.
          */
-        mainCtrl.goToOfBottomNav = function goToOfBottomNav(state) {
-            mainCtrl.stateView = "app.user." + state;
-            resetNavBarDisplayStyle();
-            $state.go(mainCtrl.stateView);
-        };
-
-        /** Update the state view to notifications
-         *  and reset properties of CSS.
-         */
-        mainCtrl.selectNotificationState = function selectNotificationState(){
-            mainCtrl.stateView = STATES.NOTIFICATION;
-            resetNavBarDisplayStyle();
-        }
-
-        /** Return correct class according currently state view.
-         */
-        mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
-            state = "app.user." + state;
-            return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
+        mainCtrl.getSelectedClass = function (stateName){
+            return STATES[stateName] === $state.current.name ? "color-icon-selected-navbar" : "color-icon-navbar";
         };
 
         /** Reset properties CSS. 

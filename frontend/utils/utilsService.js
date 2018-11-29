@@ -12,7 +12,8 @@
          */
         service.selectNavOption = function (state, params) {
             $state.go(state, params || {});
-            $mdSidenav('leftNav').toggle();
+            $mdSidenav('leftNav').close();
         };
+
     });
 })();

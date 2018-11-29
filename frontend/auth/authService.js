@@ -38,19 +38,25 @@
          * @param {firebaseUser} user 
          */
         function getIdToken(user) {
+            const resolvePromise = token => {
+                if (resolveTokenPromise) {
+                    resolveTokenPromise(token);
+                    resolveTokenPromise = null;
+                }
+
+                tokenLoaded = true;
+            };
+
             user.getIdToken(true).then(function(userToken) {
                 if (userInfo) {
                     userInfo.accessToken = userToken;
                     service.save();
                 }
 
-                if (resolveTokenPromise) {
-                    resolveTokenPromise(userToken);
-                    resolveTokenPromise = null;
-                }
-
-                tokenLoaded = true;
-            })
+                resolvePromise(userToken);
+            }).catch(() => {
+                resolvePromise(userInfo.accessToken);
+            });
         }
 
         authObj.onAuthStateChanged(function(user) {

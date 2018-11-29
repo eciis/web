@@ -31,3 +31,13 @@
         max-width: 35em;
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .reduce-distance {
+        margin: 0px;
+    }
+    .increase-distance {
+        margin: 0px;
+        padding-bottom: 10px;
+    }
+}

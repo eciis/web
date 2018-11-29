@@ -867,13 +867,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     .small-text {
         font-size: 15px;
     }
-    .increase-distance {
-        margin-top: -15px;
-        padding-bottom: 10px;
-    }
-    .reduce-distance {
-        margin-top: -5px;
-    }
 }
 
 .option-selected-left-bar{

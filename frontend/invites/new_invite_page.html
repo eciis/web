@@ -1,5 +1,5 @@
 <md-content class="fill-screen" id="content-new-invite" md-colors="{background: 'teal-500'}">
-  <load-circle ng-show="newInviteCtrl.loading"></load-circle>
+  <load-circle ng-if="newInviteCtrl.loading"></load-circle>
   <md-card ng-if="!newInviteCtrl.isAlreadyProcessed" ng-show="!newInviteCtrl.loading" class="new-invite-page-card">
     <md-card-content style="background-color:#FFFFFF;">
       <center>
@@ -87,7 +87,7 @@
       </form>
     </md-card-content>
   </md-card>
-  <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" style="margin: 0">
+  <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" class="no-margin">
     <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center center">
         <div align="center">
           <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br" >
+<head>
+  <meta name="viewport" charset="UTF-8" content="width=device-width, initial-scale=1">
+
+  <base href="/" />
+
+  <title>Plataforma CIS</title>
+  
+  <!--Favicon-->
+  <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
+
+  <!-- Angular Material style sheet -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700"/>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Plataforma CIS">
+  <meta name="msapplication-TileColor" content="#2F3BA2">
+  <meta name="theme-color" content="#009688"/>
+  
+
+</head>
+<body ng-app="app" ng-cloak layout="column">
+
+  <div flex layout="column" ui-view="main"></div>
+
+  <script> 
+    var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
+    function $buo_f(){ 
+     var e = document.createElement("script"); 
+     e.src = "//browser-update.org/update.min.js"; 
+     document.body.appendChild(e);
+    };
+    try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+    catch(e){window.attachEvent("onload", $buo_f)}
+  </script>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material/1.1.5/angular-material.min.js"></script>
+
+  <!-- Firebase -->
+  <script src="app/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-messaging.js"></script>
+  <script>
+    // Initialize the Firebase SDK
+    var firebaseConfig = FIREBASE_CONFIG;
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- Main Application Library -->
+  <script src="app/config.js"></script>
+  <script src="app/app.js"></script>
+
+</body>
+</html>

@@ -5,5 +5,6 @@ var Config = {
     LANDINGPAGE_URL: 'http://localhost:8080',
     SUPPORT_URL: 'http://localhost:8083',
     FRONTEND_URL: 'http://localhost:8081',
-    APP_VERSION: 'master'
-};
+    WEBCHAT_URL: 'http://localhost:8084',
+    APP_VERSION: 'webchat'
+}

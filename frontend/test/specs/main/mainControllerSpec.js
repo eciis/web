@@ -128,7 +128,7 @@
         });
     });
 
-    fdescribe('MainController functions', function() {
+    describe('MainController functions', function() {
 
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');

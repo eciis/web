@@ -260,7 +260,7 @@ class ResetHandler(BaseHandler):
 
         # new User Bruno
         bruno = User()
-        bruno.name = 'Tiago Pereira'
+        bruno.name = 'Bruno Siqueira'
         bruno.cpf = '089.675.908-65'
         bruno.email = ['bruno.siqueira@ccc.ufcg.edu.br']
         bruno.photo_url = getGravatar(bruno.email)
@@ -291,7 +291,7 @@ class ResetHandler(BaseHandler):
         other_admin.state = 'active'
         other_admin.put()
 
-        commom_users = [maiana, luiz, raoni, ruan, tiago, other_admin, pedro, bruno]
+        commom_users = [julie, maiana, luiz, raoni, ruan, tiago, other_admin, pedro, bruno]
 
         jsonList.append({"msg": "database initialized with a few users"})
 
@@ -339,7 +339,7 @@ class ResetHandler(BaseHandler):
         deciis = createInstitution(data_deciis, admin)
         deciis.trusted = True
         
-        for user in (commom_users + [julie, admin]):
+        for user in (commom_users + [admin]):
             user.follow(deciis.key)
             user.follow(ms.key)
             deciis.follow(user.key)
@@ -388,7 +388,7 @@ class ResetHandler(BaseHandler):
             user.add_institution(certbio.key)
             user.follow(certbio.key)
             create_profile(user, certbio)
-        for user in (commom_users + [julie]):
+        for user in commom_users:
             certbio.follow(user.key)
             user.follow(certbio.key)
 
@@ -458,13 +458,13 @@ class ResetHandler(BaseHandler):
         }
 
         eciis = createInstitution(data, other_admin)
-        for user in (commom_users + [julie]):
+        for user in commom_users:
             eciis.add_member(user)
             user.add_institution(eciis.key)
             user.follow(eciis.key)
             create_profile(user, eciis)
 
-        for user in (commom_users + [julie]):
+        for user in commom_users:
             eciis.follow(user.key)
 
         eciis.parent_institution = splab.key

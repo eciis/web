@@ -3,7 +3,8 @@
 (describe('Test MainController', function() {
     let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
     let authService, requestInvitationService, notificationListenerService, utilsService;
-    let user = {
+    
+    const user = {
         name: 'user',
         key: 'user-key',
         invites: [{
@@ -17,20 +18,21 @@
         }],
         state: 'active'
     };
-    let institution = {
+
+    const institution = {
         name: 'institution',
         key: '123456789',
         admin: user.key
     };
 
-    let otherInstitution = {
+    const otherInstitution = {
         name: 'otherInstitution',
         key: '1239'
     };
 
-    let institutionKey = institution.key;
+    const institutionKey = institution.key;
 
-    let EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
+    const EVENTS_TO_UPDATE_USER = ["DELETED_INSTITUTION", "DELETE_MEMBER", "ACCEPTED_LINK",
                                 "ACCEPT_INSTITUTION_LINK", "TRANSFER_ADM_PERMISSIONS",
                                 "ADD_ADM_PERMISSIONS", "ACCEPT_INVITE_INSTITUTION", "ACCEPT_INVITE_USER_ADM",
                                 "REMOVE_INSTITUTION_LINK", "RE_ADD_ADM_PERMISSIONS"];
@@ -56,7 +58,7 @@
         mainToolbar = document.createElement('div');
         mainToolbar.setAttribute("id", "main-toolbar");
 
-        let callFake = function() {
+        const callFake = function() {
             return {
                 then: function(callback) {
                     return callback([]);
@@ -64,7 +66,7 @@
             };
         };
 
-        let eventsListenerFake = function eventsListenerFake(events, callback){
+        const eventsListenerFake = function eventsListenerFake(events, callback){
             events.forEach(event => {
                 $rootScope.$on(event, function () {
                     authService.reload();
@@ -132,7 +134,7 @@
 
         it('Should change active institution', function() {
             spyOn(mainCtrl.user, 'changeInstitution');
-            let user_inst = {
+            const user_inst = {
                 name: 'user_inst',
                 key: 'veqw56eqw7r89',
                 invites: [{

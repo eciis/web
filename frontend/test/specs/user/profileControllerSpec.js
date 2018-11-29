@@ -2,9 +2,9 @@
 
 (describe('Test ProfileController', function() {
 
-    var mdDialog, profileCtrl, scope, createCtrl, state, states;
+    let mdDialog, profileCtrl, scope, createCtrl, state, states;
 
-    var user = {
+    const user = {
         'name': 'name',
         'email': 'email@email.com',
         'institution_profiles': [],
@@ -70,7 +70,7 @@
 
     describe('showProperty()', function() {
 
-        var property, message;
+        let property, message;
 
         beforeEach(function() {
              property = null;

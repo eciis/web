@@ -3,12 +3,13 @@
 (describe('Test SubmitFormListenerService', function() {
     beforeEach(module('app'));
 
-    var user = {
+    const user = {
         'name': 'name',
         'key': '123456789',
         'state': 'active'
     }
-    var state, scope, messageService, submitFormListenerService, states;
+
+    let state, scope, messageService, submitFormListenerService, states;
 
     beforeEach(inject(function($rootScope, MessageService, $state, SubmitFormListenerService, AuthService, STATES) {
         messageService = MessageService;
@@ -29,7 +30,7 @@
 
 
     it('Should be call showConfirmationDialog()', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
@@ -45,7 +46,7 @@
     });
 
     it('Should not be call showConfirmationDialog()', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
@@ -57,7 +58,7 @@
     });
 
     it('Should not be call showConfirmationDialog() if onsubmit is called', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");
@@ -71,7 +72,7 @@
     });
 
     it('Should unobserve object', function() {
-        var element = {};
+        const element = {};
         scope.$apply();
         submitFormListenerService.addListener('vm.tst', element, scope);
         scope.$apply("vm.tst={name: 'tst'}");

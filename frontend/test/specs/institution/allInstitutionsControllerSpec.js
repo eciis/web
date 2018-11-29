@@ -101,4 +101,13 @@
             scope.$apply();
         });
     });
+
+    describe('changeTab', () => {
+        it('should set all institutions when nextTab = all', () => {
+            allInstitutionsController.followingInstTab = true;
+            allInstitutionsController.allInstTab = false;
+
+            allInstitutionsController.changeTab('all');
+        });
+    });
 }));

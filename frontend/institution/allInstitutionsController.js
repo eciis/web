@@ -20,13 +20,16 @@
         allInstitutionsCtrl.followingInstTab = false;
         allInstitutionsCtrl.memberInstTab = false;
 
+        const FOLLOWING_TAB = 'following';
+        const ALL_TAB = 'all';
+
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
-            if(nextTab == 'all') {
+            if (nextTab == ALL_TAB) {
                 allInstitutionsCtrl.allInstTab = true;
                 allInstitutionsCtrl.followingInstTab = false;
                 allInstitutionsCtrl.memberInstTab = false;
                 setAllInstitutions();
-            } else if(nextTab == 'following') {
+            } else if (nextTab == FOLLOWING_TAB) {
                 allInstitutionsCtrl.allInstTab = false;
                 allInstitutionsCtrl.followingInstTab = true;
                 allInstitutionsCtrl.memberInstTab = false;

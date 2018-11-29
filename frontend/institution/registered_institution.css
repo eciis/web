@@ -12,7 +12,7 @@
     grid-row-end: 2;
 }
 
-#tst {
+#card-cover-picture {
     height: 5.5em;
     width: 100%; 
 }
@@ -63,6 +63,7 @@
     grid-row-end: 2;
     align-self: end;
     width: 100%;
+    word-break: break-word;
 }
 
 .registered-institution-content hl {
@@ -80,7 +81,7 @@
 
 .registered-institution-action {
     text-align: center;
-    align-self: start;
+    align-self: center;
     justify-self: end;
     width: 45%;
 }

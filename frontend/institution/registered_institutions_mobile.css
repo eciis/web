@@ -1,6 +1,6 @@
 .registered-institutions-mobile-top-bar {
     display: grid;
-    grid-template-columns: 33% 33% 33%;
+    grid-template-columns: 33.3% 33.3% 33.3%;
     grid-template-rows: auto;
     height: 3em;
     width: 100%;
@@ -31,4 +31,12 @@
     display: grid;
     grid-template-columns: 49% 49%;
     grid-column-gap: 0.4em;
+}
+
+.member-tab-selected {
+    margin-left: 67%;
+}
+
+.following-tab-selected {
+    margin-left: 33%;
 }

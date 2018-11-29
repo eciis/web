@@ -13,7 +13,7 @@
     });
 
     app.controller("RegisteredInstitutionController", function regInstCtrl(AuthService, 
-        InstitutionService, MessageService, FEDERAL_STATE_ACRONYM) {
+        InstitutionService, MessageService, FEDERAL_STATE_ACRONYM, $state) {
         const regInstCtrl = this;
 
         const user = AuthService.getCurrentUser();
@@ -46,6 +46,19 @@
 
         regInstCtrl.getFederalStateAcronym = function () {
             return FEDERAL_STATE_ACRONYM[regInstCtrl.institution.address.federal_state];
-        }
+        };
+
+        regInstCtrl.limitString = (string, size) => {
+            return Utils.limitString(string, size);
+        };
+
+        regInstCtrl.getMaxInstNameSize = () => {
+            return screen.width <= 320? 45: 70;
+        };
+
+        regInstCtrl.goToInst = () => {
+            $state.go('app.institution.timeline', 
+                { institutionKey: regInstCtrl.institution.key });
+        };
     });
 })();

@@ -302,7 +302,7 @@
             it('should call state.go', function() {
                 spyOn(state, 'go');
                 institutionCtrl.goToLinks(first_institution.key);
-                expect(state.go).toHaveBeenCalledWith('app.institution.institutional_links', {institutionKey: first_institution.key});
+                expect(state.go).toHaveBeenCalledWith(states.INST_LINKS, {institutionKey: first_institution.key});
             });
         });
 

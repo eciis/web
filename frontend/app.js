@@ -142,7 +142,7 @@
                     }
                 }
             })
-            .state("STATES.INST_EVENTS", {
+            .state(STATES.INST_EVENTS, {
                 url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
@@ -151,7 +151,7 @@
                     }
                 }
             })
-            .state("STATES.INST_MEMBERS", {
+            .state(STATES.INST_MEMBERS, {
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {
@@ -160,7 +160,7 @@
                     }
                 }
             })
-            .state("app.institution.registration_data", {
+            .state(STATES.INST_REGISTRATION_DATA, {
                 url: "/institution/:institutionKey/registration_data",
                 views: {
                     institution_content: {
@@ -169,7 +169,7 @@
                     }
                 }
             })
-            .state("app.institution.institutional_links", {
+            .state(STATES.INST_LINKS, {
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {

@@ -187,7 +187,7 @@
                     }
                 }
             })
-            .state("app.manage_institution", {
+            .state(STATES.MANAGE_INST, {
                 abstract: true,
                 url: "/institution/:institutionKey",
                 views: {
@@ -197,7 +197,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.members", {
+            .state(STATES.MANAGE_INST_MEMBERS, {
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
@@ -215,7 +215,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.edit_info", {
+            .state(STATES.MANAGE_INST_EDIT, {
                 url: "/edit",
                 views: {
                     content_manage_institution: {
@@ -223,7 +223,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.invite_inst", {
+            .state(STATES.MANAGE_INST_INVITE_INST, {
                 url: "/inviteInstitution",
                 views: {
                     content_manage_institution: {

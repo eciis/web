@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, PushNotificationService) {
+        MessageService, PushNotificationService, STATES) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -165,7 +165,7 @@
 
             executeLogoutListeners();
 
-            $state.go("signin");
+            $state.go(STATES.SIGNIN);
         };
 
         service.getCurrentUser = function getCurrentUser() {

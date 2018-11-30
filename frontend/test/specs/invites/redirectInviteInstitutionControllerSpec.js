@@ -75,7 +75,7 @@
             authService.logout();
             redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith("signin");
+            expect(state.go).toHaveBeenCalledWith(states.SIGNIN);
         });
     });
 

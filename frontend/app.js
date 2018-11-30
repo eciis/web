@@ -241,7 +241,7 @@
                     }
                 }
             })
-            .state("signin", {
+            .state(STATES.SIGNIN, {
                 url: "/signin",
                 views: {
                     main: {
@@ -400,7 +400,7 @@
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
-                        $state.go("signin");
+                        $state.go(STATES.SIGNIN);
                     }
                 } else if(rejection.status === 403) {
                     rejection.data.msg = "Você não tem permissão para realizar esta operação!";
@@ -427,7 +427,7 @@
                 return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
             }
         }, function(transition) {
-            $state.go("signin", {
+            $state.go(STATES.SIGNIN, {
                 "redirect": $location.path()
             });
         });

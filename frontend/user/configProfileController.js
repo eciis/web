@@ -193,7 +193,7 @@
         };
 
         configProfileCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
+            const url = $state.href(STATES.INST_TIMELINE, {institutionKey: institutionKey});
             window.open(url, '_blank');
         };
 

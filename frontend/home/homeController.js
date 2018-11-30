@@ -23,7 +23,7 @@
         };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         homeCtrl.eventInProgress = function eventInProgress(event) {

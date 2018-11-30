@@ -1,7 +1,8 @@
 'use strict';
 
 (describe('Test InstitutionCardController', function () {
-    var instCardCtrl, httpBackend, createCtrl, state, mdDialog, scope, instService, clipBoard, authService;
+    let instCardCtrl, httpBackend, createCtrl, state, mdDialog,
+        scope, instService, clipBoard, authService, states;
 
     var inst = {
         name: 'inst',
@@ -20,7 +21,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $rootScope, $state,
-        AuthService, $mdDialog, InstitutionService, ngClipboard) {
+        AuthService, $mdDialog, InstitutionService, ngClipboard, STATES) {
         httpBackend = $httpBackend;
         state = $state;
         mdDialog = $mdDialog;
@@ -28,6 +29,7 @@
         instService = InstitutionService;
         clipBoard = ngClipboard;
         authService = AuthService;
+        states = STATES;
 
         authService.login(user);
 
@@ -52,7 +54,7 @@
         it('should call state.go', function () {
             spyOn(state, 'go');
             instCardCtrl.goToInstitution(inst.key);
-            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: inst.key});
+            expect(state.go).toHaveBeenCalledWith(states.INST_TIMELINE, {institutionKey: inst.key});
         });
     });
 

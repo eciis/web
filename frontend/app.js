@@ -124,7 +124,7 @@
                     }
                 }
             })
-            .state("app.institution.timeline", {
+            .state(STATES.INST_TIMELINE, {
                 url: "/institution/:institutionKey/home",
                 views: {
                     institution_content: {

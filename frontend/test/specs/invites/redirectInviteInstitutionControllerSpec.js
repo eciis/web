@@ -68,7 +68,7 @@
         it('should go to new_invite', function () {
             redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith("new_invite", {key: invite.key});
+            expect(state.go).toHaveBeenCalledWith(states.NEW_INVITE, {key: invite.key});
         });
 
         it('should go to signin', function () {

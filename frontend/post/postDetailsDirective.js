@@ -347,7 +347,7 @@
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key});
+            $state.go(STATES.EVENT_DETAILS, {eventKey: event.key});
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {

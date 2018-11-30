@@ -206,7 +206,7 @@
                     }
                 }
             })
-            .state("app.user.event", {
+            .state(STATES.EVENT_DETAILS, {
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
@@ -232,7 +232,7 @@
                     }
                 }
             })
-            .state("new_invite", {
+            .state(STATES.NEW_INVITE, {
                 url: "/:key/new_invite",
                 views: {
                     main: {
@@ -479,7 +479,7 @@
         }, function(transition) {
             var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
             var inviteKey = pendingInvite.key;
-            $state.go("new_invite", {key: inviteKey});
+            $state.go(STATES.NEW_INVITE, {key: inviteKey});
         });
     });
 

@@ -23,7 +23,7 @@
 
         controller.signin = function signin() {
             if (AuthService.isLoggedIn()) {
-                $state.go("new_invite", {key: inviteId});
+                $state.go(STATES.NEW_INVITE, {key: inviteId});
             } else {
                 $state.go('signin');
             }

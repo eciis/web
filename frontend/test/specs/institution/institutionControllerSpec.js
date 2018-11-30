@@ -2,8 +2,8 @@
 
 (describe('Test InstitutionController', function() {
 
-    var institutionCtrl, httpBackend, scope, institutionService, createCtrl, state,
-        mdDialog, cropImageService, imageService, utilsService;
+    let institutionCtrl, httpBackend, scope, institutionService, createCtrl, state,
+        mdDialog, cropImageService, imageService, utilsService, states;
 
     var INSTITUTIONS_URI = "/api/institutions/";
 
@@ -56,7 +56,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, 
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, STATES,
             InstitutionService, AuthService, UtilsService, $mdDialog, CropImageService, ImageService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -66,6 +66,7 @@
         cropImageService = CropImageService;
         imageService = ImageService;
         utilsService = UtilsService;
+        states = STATES;
 
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
@@ -289,7 +290,7 @@
                 institutionCtrl.posts = posts;
                 institutionCtrl.goToEvents(first_institution.key);
                 expect(utilsService.selectNavOption).toHaveBeenCalledWith(
-                    'app.institution.events', 
+                    states.INST_EVENTS, 
                     {
                         institutionKey: first_institution.key,
                         posts: posts

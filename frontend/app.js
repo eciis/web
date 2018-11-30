@@ -142,7 +142,7 @@
                     }
                 }
             })
-            .state("app.institution.events", {
+            .state("STATES.INST_EVENTS", {
                 url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {

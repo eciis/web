@@ -33,7 +33,6 @@
           </div>
           <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position"
             ng-click="eventCtrl.goToEvent(event)">
-            <div>
                 <md-card>
                   <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
                     <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
@@ -52,7 +51,6 @@
                     </div>
                   </div>
                 </md-card>
-            </div>
           </div>
           <md-divider class="event-divider"></md-divider>
       </div>

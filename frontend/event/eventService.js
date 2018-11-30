@@ -14,14 +14,14 @@
             return HttpService.post(EVENT_URI, event);
         };
 
-        service.getEvents = function getEvents(page, month, year) {
+        service.getEvents = function getEvents({page, month, year}) {
             let url = EVENT_URI + '?page=' + page + "&limit=" + LIMIT;
             if(month && year) url += "&month=" + month + "&year=" + year;
             return HttpService.get(url);
         };
 
-        service.getInstEvents = function getInstEvents(page, institution_key) {
-            return HttpService.get(INST_URI + institution_key + '/events?page=' + page + "&limit=" + LIMIT);
+        service.getInstEvents = function getInstEvents({page, institutionKey}) {
+            return HttpService.get(INST_URI + institutionKey + '/events?page=' + page + "&limit=" + LIMIT);
         };
 
         service.deleteEvent = function deleteEvent(event) {

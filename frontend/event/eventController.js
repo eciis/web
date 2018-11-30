@@ -4,12 +4,11 @@
 
     app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
         const eventCtrl = this;
-        let
-            content = document.getElementById("content"),
-            moreEvents = true,
-            actualPage = 0,
-            isAnotherMonth = false;
+        let content = document.getElementById("content");
 
+        eventCtrl._moreEvents = true;
+        eventCtrl._actualPage = 0;
+        eventCtrl._isAnotherMonth = false;
         eventCtrl.events = [];
         eventCtrl.eventsByDay = [];
         eventCtrl.months = [];
@@ -22,12 +21,12 @@
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
 
             let deferred = $q.defer();
-            if (moreEvents) {
+            if (eventCtrl._moreEvents) {
                 if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents, _.get(eventCtrl.selectedMonth, 'month'),
+                    eventCtrl._loadEvents(deferred, EventService.getInstEvents, _.get(eventCtrl.selectedMonth, 'month'),
                         eventCtrl.selectedYear);
                 } else {
-                    loadEvents(deferred, EventService.getEvents, _.get(eventCtrl.selectedMonth, 'month'),
+                    eventCtrl._loadEvents(deferred, EventService.getEvents, _.get(eventCtrl.selectedMonth, 'month'),
                         eventCtrl.selectedYear);
                 }
             } else {
@@ -38,16 +37,23 @@
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
+        /**
+         * Get events from backend 
+         * @param {*} deferred The promise to resolve before get events from backend
+         * @param {*} getEvents The function received to call and get events
+         * @param {*} month The month to filter the get of events
+         * @param {*} year The year to filter the get of events
+         * @private
+         */
+        eventCtrl._loadEvents = (deferred, getEvents, month, year) => {
+            getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
+                month: month, year: year}).then(function success(response) {
+                eventCtrl._actualPage += 1;
+                eventCtrl._moreEvents = response.next;
 
-        function loadEvents(deferred, getEvents, month, year) {
-            getEvents(actualPage, _.get(eventCtrl, 'institutionKey', month),
-                eventCtrl.institutionKey || month && year, year).then(function success(response) {
-                actualPage += 1;
-                moreEvents = response.next;
-
-                if(isAnotherMonth) {
+                if(eventCtrl._isAnotherMonth) {
                     eventCtrl.events = response.events;
-                    isAnotherMonth = false;
+                    eventCtrl._isAnotherMonth = false;
                 } else {
                     _.forEach(response.events, function(event) {
                         eventCtrl.events.push(event);
@@ -118,9 +124,9 @@
          * Loads the events when the filters of month and/or year is changed
          */
         eventCtrl.loadFilteredEvents = () => {
-            moreEvents = true;
-            actualPage = 0;
-            isAnotherMonth = true;
+            eventCtrl._moreEvents = true;
+            eventCtrl._actualPage = 0;
+            eventCtrl._isAnotherMonth = true;
             eventCtrl.loadMoreEvents();
         };
 
@@ -208,13 +214,13 @@
             });
         };
 
-        (function main() {
+        eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
             if(Utils.isMobileScreen(475)) {
                 eventCtrl._getMonths();
             } else {
                 eventCtrl.loadMoreEvents();
             }
-        })();
+        };
     });
 })();

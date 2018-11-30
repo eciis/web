@@ -10,7 +10,7 @@
         var authObj = firebase.auth();
         var userInfo;
         let tokenLoaded = false;
-        let resolveTokenPromise;
+        service.resolveTokenPromise;
         let loadTokenPromise;
         let refreshInterval;
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -24,7 +24,7 @@
         service.getUserToken = async () => {
             if (!tokenLoaded && !loadTokenPromise) {
                 loadTokenPromise = new Promise((resolve) => {
-                    resolveTokenPromise = resolve;
+                    service.resolveTokenPromise = resolve;
                 });
             } else if (tokenLoaded) {
                 return userInfo.accessToken;
@@ -37,34 +37,36 @@
          * Function to get token id of user and update object userInfo
          * @param {firebaseUser} user 
          */
-        function getIdToken(user) {
+        service._getIdToken = function getIdToken(user) {
             const resolvePromise = token => {
-                if (resolveTokenPromise) {
-                    resolveTokenPromise(token);
-                    resolveTokenPromise = null;
+                if (service.resolveTokenPromise) {
+                    service.resolveTokenPromise(token);
+                    service.resolveTokenPromise = null;
                 }
 
                 tokenLoaded = true;
             };
 
-            user.getIdToken(true).then(function(userToken) {
+            return user.getIdToken(true).then(function(userToken) {
                 if (userInfo) {
                     userInfo.accessToken = userToken;
                     service.save();
                 }
 
                 resolvePromise(userToken);
+                return userToken;
             }).catch(() => {
                 resolvePromise(userInfo.accessToken);
+                return userInfo.accessToken;
             });
         }
 
         authObj.onAuthStateChanged(function(user) {
             const timeToRefresh = 3500000;
             if (user) {
-                getIdToken(user);
+                service._getIdToken(user);
                 refreshInterval = setInterval(() => {
-                    getIdToken(user);
+                    service._getIdToken(user);
                 }, timeToRefresh);
             }
           });

@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test AuthService', function() {
-    var authService, userService, $q;
+    var authService, userService;
 
     var userTest = {
         name : 'User',
@@ -10,16 +10,25 @@
     };
 
     var firebaseUser = {
-        accessToken: 'gfdfggfdjdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
+        accessToken: 'ruioewyuirywieuryiuweyr876324875632487yiue',
         getIdToken: async () => firebaseUser.accessToken
     }
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function(AuthService, UserService, _$q_) {
+    beforeEach(inject(function(AuthService, UserService) {
         authService = AuthService;
         userService = UserService;
-        $q = _$q_;
+        
+        firebase.auth = () => {
+            return {
+                onAuthStateChanged: (callback) => callback(firebaseUser),
+                signOut: function signOut() {}
+            };
+        }
+
+        firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
+        authService.useOriginalGetUserToken();
     }));
 
     describe('AuthService  setupUser', function() {
@@ -39,16 +48,6 @@
     describe('AuthService user informations', function() {
         beforeEach(function() {
             authService.setupUser(userTest.accessToken);
-
-            firebase.auth = () => {
-                return {
-                    onAuthStateChanged: $q.when(firebaseUser),
-                    signOut: function signOut() {}
-                };
-            }
-    
-            firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
-            authService.useOriginalGetUserToken();
         });
 
         it('should authService.getCurrentUser()', function() {
@@ -62,7 +61,7 @@
         it('should authService.getUserToken()', function(done) {
             spyOn(authService, 'save');
             authService.getUserToken().then(userToken => {
-                expect(userToken).toEqual(userTest.accessToken);
+                expect(userToken).toEqual(firebaseUser.accessToken);
                 expect(authService.save).toHaveBeenCalled();
                 done();
             });
@@ -83,6 +82,42 @@
             var new_user = JSON.stringify(userTest);
 
             expect(userCache).toEqual(new_user);
+        });
+    });
+
+    describe('_getIdToken', function() {
+        beforeEach(function() {
+            authService.setupUser(userTest.accessToken);
+            authService.resolveTokenPromise = () => {};
+            spyOn(authService, 'resolveTokenPromise').and.callFake(() => {});
+        });
+
+        it('should refresh token', function(done) {
+            const user = {
+                accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
+                getIdToken: async () => user.accessToken
+            };
+            const savedResolveTokenPromisse = authService.resolveTokenPromise;
+
+            authService._getIdToken(user).then(function(accessToken) {
+                expect(accessToken).toEqual(user.accessToken);
+                expect(savedResolveTokenPromisse).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('should return actual token', function(done) {
+            const user = {
+                accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
+                getIdToken: async () => {throw "Network error!"}
+            };
+            const savedResolveTokenPromisse = authService.resolveTokenPromise;
+
+            authService._getIdToken(user).then(function(accessToken) {
+                expect(accessToken).toEqual(firebaseUser.accessToken);
+                expect(savedResolveTokenPromisse).toHaveBeenCalled();
+                done();
+            });
         });
     });
 }));

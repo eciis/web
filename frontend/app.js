@@ -293,7 +293,7 @@
                     }
                 }
             })
-            .state("reset_password", {
+            .state(STATES.RESET_PASSWORD, {
                 url: "/reset_password",
                 views: {
                     main: {
@@ -302,7 +302,7 @@
                     }
                 }
             })
-            .state("user_inactive", {
+            .state(STATES.USER_INACTIVE, {
                 url: "/user_inactive",
                 views: {
                     main: {
@@ -311,7 +311,7 @@
                     }
                 }
             })
-            .state("app.error", {
+            .state(STATES.ERROR, {
                 url: "/error",
                 views: {
                     content: {
@@ -362,7 +362,7 @@
         };
     });
 
-    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state, STATES) {
         return {
             request: function(config) {
                 var AuthService = $injector.get('AuthService');
@@ -415,7 +415,7 @@
         };
     });
 
-    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+    app.run(function authInterceptor(AuthService, $transitions, STATES, $state, $location) {
         var ignored_routes = [
             'signin',
             'reset_password',
@@ -438,7 +438,7 @@
      * @param {service} AuthService - Service of user authentication
      * @param {service} $transitions - Service of transitions states
      */
-    app.run(function userInactiveListener(AuthService, $transitions) {
+    app.run(function userInactiveListener(AuthService, $transitions, STATES) {
         var ignored_routes = [
             'create_institution',
             'create_institution_form',
@@ -458,11 +458,11 @@
                 return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            transition.router.stateService.transitionTo('user_inactive');
+            transition.router.stateService.transitionTo(STATES.USER_INACTIVE);
         });
     });
 
-    app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+    app.run(function inviteInterceptor(AuthService, $transitions, $state, STATES) {
         var ignored_routes = [
             'create_institution_form'
         ];

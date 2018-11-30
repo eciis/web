@@ -253,7 +253,7 @@
                     "redirect": undefined
                 }
             })
-            .state("create_institution", {
+            .state(STATES.CREATE_INST, {
                 url: "/create_institution",
                 views: {
                     main: {
@@ -261,7 +261,7 @@
                     }
                 }
             })
-            .state("create_institution_form", {
+            .state(STATES.CREATE_INST_FORM, {
                 url: "/create_institution_form",
                 views: {
                     main: {
@@ -275,7 +275,7 @@
                     inviteKey: undefined
                 }
             })
-            .state("accept_invite", {
+            .state(STATES.ACCEPT_INVITE, {
                 url: "/accept_invite?id",
                 views: {
                     main: {
@@ -284,7 +284,7 @@
                     }
                 }
             })
-            .state("email_verification", {
+            .state(STATES.EMAIL_VERIFICATION, {
                 url: "/email_verification",
                 views: {
                     main: {

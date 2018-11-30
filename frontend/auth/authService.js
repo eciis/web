@@ -204,7 +204,7 @@
             var auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
-                $state.go("email_verification");
+                $state.go(STATES.EMAIL_VERIFICATION);
             }, function error(error) {
                 console.error(error);
             });

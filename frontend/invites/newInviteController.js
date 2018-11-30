@@ -71,7 +71,7 @@
         };
 
         newInviteCtrl.goToInstForm =function goToInstForm() {
-            $state.go('create_institution_form', {
+            $state.go(STATES.CREATE_INST_FORM, {
                 senderName: getCurrentName(),
                 institutionKey: institutionKey,
                 inviteKey: newInviteCtrl.inviteKey

@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
-        $state, InstitutionService, AuthService, MessageService, $q) {
+        InstitutionService, AuthService, $q) {
         var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");
@@ -19,10 +19,16 @@
         allInstitutionsCtrl.allInstTab = true;
         allInstitutionsCtrl.followingInstTab = false;
         allInstitutionsCtrl.memberInstTab = false;
-
+        
         const FOLLOWING_TAB = 'following';
         const ALL_TAB = 'all';
-
+        
+        /**
+         * It sets the flags correctly according to the nextTab value.
+         * Besides, this function calls other aux functions that filter
+         * the institutions to achieve the expected behavior
+         * {string} nextTab
+         */
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
             if (nextTab == ALL_TAB) {
                 allInstitutionsCtrl.allInstTab = true;
@@ -42,16 +48,28 @@
             }
         };
 
+        /**
+         * Sets the institutions to allInstitutions.
+         * It is done by cloning the allInstitutions array do avoid
+         * it to keep reference.
+         */
         function setAllInstitutions() {
             allInstitutionsCtrl.institutions = _.clone(allInstitutionsCtrl.allInstitutions);
         }
 
+        /**
+         * Sets institutions as an array with the institutions that the
+         * user follows.
+         */
         function setFollowingInstitutions() {
             allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
                 return _.find(allInstitutionsCtrl.user.follows, followedInst => followedInst.key === inst.key);
             });
         }
 
+        /**
+         * Sets institutions with the user's institutions(institutions that he is part of). 
+         */
         function setMemberInstitutions() {
             allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
                 return _.find(allInstitutionsCtrl.user.institutions, institution => institution.key === inst.key);

@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller("SharePostController", function SharePostController(user, post, addPost, $mdDialog, PostService,
-        MessageService, $state, $rootScope, POST_EVENTS) {
+        MessageService, $state, $rootScope, POST_EVENTS, STATES) {
         var shareCtrl = this;
 
         var LIMIT_POST_CHARACTERS = 15;
@@ -71,7 +71,7 @@
             if (shareCtrl.isEvent()) {
                 $state.go('app.user.event', { eventKey: shareCtrl.post.key });
             }
-            $state.go('app.post', { postKey: shareCtrl.post.key });
+            $state.go(STATES.POST, { postKey: shareCtrl.post.key });
         };
 
         shareCtrl.showPdfFiles = function showPdfFiles() {

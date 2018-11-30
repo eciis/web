@@ -178,7 +178,7 @@
                     }
                 }
             })
-            .state("app.post", {
+            .state(STATES.POST, {
                 url: "/posts/:key",
                 views: {
                     content: {

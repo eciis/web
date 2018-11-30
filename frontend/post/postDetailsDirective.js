@@ -343,7 +343,7 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost(post) {
-             $state.go('app.post', {key: post.key});
+             $state.go(STATES.POST, {key: post.key});
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {

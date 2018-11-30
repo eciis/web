@@ -133,7 +133,7 @@
                     }
                 }
             })
-            .state("app.institution.followers", {
+            .state(STATES.INST_FOLLOWERS, {
                 url: "/institution/:institutionKey/followers",
                 views: {
                     institution_content: {

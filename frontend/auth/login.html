@@ -1,16 +1,18 @@
-<md-content class="fill-screen" layout="row" layout-align="center center" md-colors="{background: 'teal-500'}">
-  <div layout="row" layout-align="center center" ng-if="!loginCtrl.isRequestInvite">
+<div style="height: 100%; width: 100%; overflow: scroll;" md-colors="{background: 'teal-500'}">
+  <div ng-if="!loginCtrl.isRequestInvite" style="padding: 8px;">
       <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Voltar" hide-xs 
         md-colors="{background: 'light-green-600'}" ng-click="loginCtrl.goToLandingPage()">
         <md-icon>keyboard_arrow_left</md-icon>
       </md-button>
       
-      <md-card class="custom-card login-card">
-        <md-card-content layout="row" layout-align="center center">
-          <div class="custom-card-content login-card-content">
+      <div style="
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+        background-color: white" class="custom-card">
+        <div style="padding: 0 16px;">
+          <div style="display: grid; justify-items: center; margin: 0; width: 100%;" class="custom-card-content login-card-content">
             <img id="login-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
             
-            <form class="login-form" ng-submit="loginCtrl.loginWithEmailPassword()">
+            <form style="width: 100%;" class="login-form" ng-submit="loginCtrl.loginWithEmailPassword()">
               <md-input-container class="md-block custom-card-input-container">
                 <label>Email</label>
                 <input type="email" name="email" ng-model="loginCtrl.user.email" 
@@ -46,7 +48,7 @@
               <span>SOLICITAR CONVITE</span>
             </md-button>
           </div>
-        </md-card-content>
+        </div>
        
         <div class="login-card-footer">
           <md-card-actions layout="row" layout-align="start center">
@@ -55,9 +57,9 @@
             </md-button>
           </md-card-actions>
         </div>
-      </md-card>
+      </div>
   </div>
   <signup ng-if="loginCtrl.isRequestInvite" return-action="loginCtrl.requestInvite"
     card-title="Preencha o formulário para solicitar um convite">
   </signup>
-</md-content>
+</div>

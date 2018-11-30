@@ -5,7 +5,7 @@
 
         var EVENT_URI = "/api/events";
         var INST_URI = "/api/institutions/"
-        var LIMIT = "5";
+        var LIMIT = "15";
 
         var page = 1;
 

@@ -19,20 +19,14 @@
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-
-            let deferred = $q.defer();
+            
             if (eventCtrl._moreEvents) {
-                if(eventCtrl.institutionKey) {
-                    eventCtrl._loadEvents(deferred, EventService.getInstEvents, _.get(eventCtrl.selectedMonth, 'month'),
-                        eventCtrl.selectedYear);
-                } else {
-                    eventCtrl._loadEvents(deferred, EventService.getEvents, _.get(eventCtrl.selectedMonth, 'month'),
-                        eventCtrl.selectedYear);
-                }
-            } else {
-                deferred.resolve();
-            }
-            return deferred.promise;
+                const getEventsFunction = eventCtrl.institutionKey ? EventService.getInstEvents : EventService.getEvents;
+                return eventCtrl._loadEvents(getEventsFunction,
+                    _.get(eventCtrl.selectedMonth, 'month'),
+                    eventCtrl.selectedYear);
+            } 
+            return $q.when();
         };
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
@@ -45,8 +39,8 @@
          * @param {*} year The year to filter the get of events
          * @private
          */
-        eventCtrl._loadEvents = (deferred, getEvents, month, year) => {
-            getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
+        eventCtrl._loadEvents = (getEvents, month, year) => {
+            return getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
                 month: month, year: year}).then(function success(response) {
                 eventCtrl._actualPage += 1;
                 eventCtrl._moreEvents = response.next;
@@ -62,9 +56,7 @@
 
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
-                deferred.resolve();
             }, function error() {
-                deferred.reject();
                 $state.go("app.user.home");
             });
         }

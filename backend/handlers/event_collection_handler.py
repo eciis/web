@@ -21,12 +21,12 @@ def get_page_params(params):
     """Get a list with page and limit numbers.
 
     Args:
-        params: the parameters received from frontend to get events paginated.
+        params: A list of tuples with the parameters received from frontend to get events paginated.
     """
-    page_number = [param for param in params if param[0] == 'page']
-    limit_number = [param for param in params if param[0] == 'limit']
-    if page_number and limit_number:
-        return page_number + limit_number
+    page_param = [param for param in params if param[0] == 'page']
+    limit_param = [param for param in params if param[0] == 'limit']
+    if page_param and limit_param:
+        return page_param + limit_param
     else:
         raise QueryException('The params list should have page and limit parameters')
 

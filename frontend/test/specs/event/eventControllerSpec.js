@@ -4,11 +4,13 @@
 
     let // variables to be associated to the injected parameters
         eventCtrl, scope, httpBackend, rootScope,
-        createCtrl, eventService, messageService, mdDialog, state, q;
+        createCtrl, eventService, messageService, mdDialog, state;
 
     const // variables to create the test scenario
         institution = { name: 'Institution', key: '098745' },
         other_institution = { name: 'Other Institution', key: '75368' },
+        december = 12,
+        testYear = 2018,
         startDate = "2018-12-22T17:27:00Z",
         endDate = "2018-12-31T17:27:00Z",
         months = [ {month: 1}, {month: 2},
@@ -57,14 +59,14 @@
             events: [ event ],
             next: true
         },
-        GET_EVENTS_URI = '/api/events?page=0&limit=5',
+        GET_EVENTS_URI = '/api/events?page=0&limit=15',
         GET_EVENTS_INST_URI = '/api/institutions/'+institution.key+'/events?page=0&limit=5',
         GET_EVENTS_URI_WITH_FILTERS = GET_EVENTS_URI + '&month=' + new Date(startDate).getMonth() + '&year=' + new Date(startDate).getFullYear();
 
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog, $state, $q) {
+        $rootScope, EventService, MessageService, $mdDialog, $state) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -72,7 +74,6 @@
         messageService = MessageService;
         mdDialog = $mdDialog;
         state = $state;
-        q = $q;
         AuthService.login(user);
 
         httpBackend.when('GET', GET_EVENTS_URI || GET_EVENTS_URI_WITH_FILTERS).respond(requestEvent);
@@ -105,6 +106,11 @@
 
     describe('onInit()', () => {
 
+        beforeEach(() => {
+            spyOn(eventCtrl, '_getMonths');
+            spyOn(eventCtrl, 'loadMoreEvents');
+        });
+
         it("Should not have an institution_key", () => {
             eventCtrl.$onInit();
             expect(eventCtrl.institutionKey).toEqual(undefined);
@@ -118,16 +124,16 @@
 
         it("Should call _getMonths() if is mobile screen", () => {
             spyOn(Utils, 'isMobileScreen').and.returnValue(true);
-            spyOn(eventCtrl, '_getMonths');
             eventCtrl.$onInit();
             expect(eventCtrl._getMonths).toHaveBeenCalled();
+            expect(eventCtrl.loadMoreEvents).not.toHaveBeenCalled();
         });
 
         it("Should call loadMoreEvents() if is not mobile screen", () => {
             spyOn(Utils, 'isMobileScreen').and.returnValue(false);
-            spyOn(eventCtrl, 'loadMoreEvents');
             eventCtrl.$onInit();
             expect(eventCtrl.loadMoreEvents).toHaveBeenCalled();
+            expect(eventCtrl._getMonths).not.toHaveBeenCalled();
         });
     });
 
@@ -143,23 +149,12 @@
         });
     });
 
-    describe('loadFilteredEvents()', () => {
-
-        beforeEach(() => {
-            spyOn(eventCtrl, 'loadMoreEvents');
-        });
-
-        it('Should call loadMoreEvents', () => {
-            eventCtrl.loadFilteredEvents();
-            expect(eventCtrl.loadMoreEvents).toHaveBeenCalled();
-        });
-    });
-
     describe('_getEventsByDay()', () => {
 
         beforeEach(() => {
             eventCtrl.events = requestEvent.events;
             eventCtrl.selectedMonth = months[11];
+            eventCtrl.$onInit();
         });
 
         it('Should populate the eventsByDay array', () => {
@@ -258,18 +253,36 @@
 
     describe('loadMoreEvents()', () => {
 
+        beforeEach(() => {
+            eventCtrl._moreEvents = true;
+            eventCtrl.selectedMonth = months[11];
+            eventCtrl.selectedYear = testYear;
+        });
+
         it('Should call _loadEvents', () => {
             spyOn(eventCtrl, '_loadEvents');
-            eventCtrl._moreEvents = true;
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents).toHaveBeenCalled();
+        });
+
+        it('Should call _loadEvents with eventService.getEvents', () => {
+            spyOn(eventCtrl, '_loadEvents');
+            eventCtrl.institutionKey = null;
+            eventCtrl.loadMoreEvents();
+            expect(eventCtrl._loadEvents)
+                .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
+        });
+
+        it('Should call _loadEvents with eventService.getInstEvents', () => {
+            spyOn(eventCtrl, '_loadEvents');
+            eventCtrl.institutionKey = institution.key;
+            eventCtrl.loadMoreEvents();
+            expect(eventCtrl._loadEvents)
+                .toHaveBeenCalledWith(eventService.getInstEvents, december, testYear);
         });
     });
 
     describe('_loadEvents()', () => {
-
-        const december = 12;
-        const testYear = 2018;
 
         beforeEach(() => {
             spyOn(eventService, 'getEvents').and.callFake(function () {
@@ -282,25 +295,25 @@
         });
 
         it('Should call eventService.getEvents()', () => {
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventService.getEvents).toHaveBeenCalled();
         });
 
         it('Should call _getEventsByDay()', () => {
             spyOn(eventCtrl, '_getEventsByDay');
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventCtrl._getEventsByDay).toHaveBeenCalled();
         });
 
         it('Should increase +1 on _actualPage', () => {
             eventCtrl._actualPage = 0;
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventCtrl._actualPage).toEqual(1);
         });
 
         it('Should update _moreEvents', () => {
             eventCtrl._moreEvents = false;
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventCtrl._moreEvents).toBeTruthy();
         });
 
@@ -308,14 +321,14 @@
             eventCtrl._isAnotherMonth = false;
             eventCtrl.events = requestEvent.events;
             expect(eventCtrl.events.length).toEqual(2);
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventCtrl.events.length).toEqual(4);
         });
 
         it('Should update the events of controller if is another month', () => {
             eventCtrl._isAnotherMonth = true;
             eventCtrl.events = [];
-            eventCtrl._loadEvents(q.defer(), eventService.getEvents, december, testYear);
+            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
             expect(eventCtrl.events).toEqual(requestEvent.events);
             expect(eventCtrl._isAnotherMonth).toBeFalsy();
         });

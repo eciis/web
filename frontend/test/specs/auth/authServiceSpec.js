@@ -92,7 +92,7 @@
             spyOn(authService, 'resolveTokenPromise').and.callFake(() => {});
         });
 
-        it('should refresh token', function(done) {
+        it('should refresh token when the request of new token is successful', function(done) {
             const user = {
                 accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
                 getIdToken: async () => user.accessToken
@@ -106,7 +106,7 @@
             });
         });
 
-        it('should return actual token', function(done) {
+        it('should refresh token when the request of new token fail', function(done) {
             const user = {
                 accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
                 getIdToken: async () => {throw "Network error!"}

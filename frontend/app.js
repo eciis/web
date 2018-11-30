@@ -151,7 +151,7 @@
                     }
                 }
             })
-            .state("app.institution.members", {
+            .state("STATES.INST_MEMBERS", {
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {

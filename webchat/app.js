@@ -64,7 +64,6 @@
 
         $urlRouterProvider.otherwise("/");
 
-
     });
 
     (function main() {

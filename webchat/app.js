@@ -34,6 +34,15 @@
                    },
                },
            })
+           .state("webchat.call", {
+               url: "/call",
+               views: {
+                   content: {
+                       templateUrl: "app/video/call.html",
+                       controller: "CallController as controller",
+                   },
+               },
+           })
            .state("webchat.video", {
                url: "/video",
                views: {

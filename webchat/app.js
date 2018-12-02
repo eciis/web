@@ -5,7 +5,7 @@
         'ui.router',
     ]);
 
-    app.config(function($stateProvider) {
+    app.config(function($stateProvider, $urlRouterProvider) {
        $stateProvider
            .state("webchat", {
                abstract: true,
@@ -51,7 +51,11 @@
                        controller: "LoginController as controller",
                    },
                },
-           })
+           });
+
+        $urlRouterProvider.otherwise("/");
+
+
     });
 
     (function main() {

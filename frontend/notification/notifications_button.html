@@ -1,6 +1,6 @@
 <md-menu md-position-mode="target-right target">
   <div>
-    <span ng-if="notificationCtrl.notifications.length > 0" style="position:relative; bottom: -1px; right:-33px;"
+    <span ng-if="notificationCtrl.notifications.length > 0" id="span-integer"
       class="counter-of-notifications" data-badge="{{notificationCtrl.numberUnreadNotifications()}}">
     </span>
     <md-button aria-label="menu" class="md-icon-button" ng-click="notificationCtrl.showNotifications($mdMenu, ev)">
@@ -8,7 +8,6 @@
     </md-button>
   </div>
   <md-menu-content width="2" class="notifications-menu">
-    
     <div layout="column">
       <md-content class="custom-scrollbar" style="max-height: 25rem;">
         <notification-list notifications="notificationCtrl.notifications"

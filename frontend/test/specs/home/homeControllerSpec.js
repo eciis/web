@@ -42,7 +42,7 @@
         mdDialog = $mdDialog;
         state = $state;
         postService = PostService;
-        httpBackend.when('GET', "/api/events?page=0&limit=5").respond([event]);
+        httpBackend.when('GET', "/api/events?page=0&limit=15").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'error/error.html').respond(200);

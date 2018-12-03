@@ -83,7 +83,8 @@
                 url: "/events",
                 views: {
                     user_content: {
-                        templateUrl: "app/event/event.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/events.html",
+                            "app/event/events_mobile.html", 475),
                         controller: "EventController as eventCtrl",
                     }
                 }
@@ -211,7 +212,7 @@
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/event_page.html", "app/event/event_details_small_page.html"),
-                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl"),
+                        controller: Utils.selectFieldBasedOnScreenSize("EventPageController as eventCtrl", "EventDetailsController as eventDetailsCtrl")
                     }
                 }
             })
@@ -306,8 +307,20 @@
                 url: "/user_inactive",
                 views: {
                     main: {
-                      templateUrl: "app/user/user_inactive.html",
+                      templateUrl: "app/user/userInactive/user_inactive.html",
                       controller: "UserInactiveController as userInactiveCtrl"
+                    }
+                }
+            })
+            .state("user_request", {
+                url: '/user_request',
+                params: {
+                    institution: null
+                },
+                views: {
+                    main: {
+                        templateUrl: 'app/user/userRequestForm/user_request_form.html',
+                        controller: 'UserRequestFormController as userReqFormCtrl'
                     }
                 }
             })
@@ -447,6 +460,7 @@
             'email_verification',
             'reset_password',
             'user_inactive',
+            'user_request',
             'new_invite'
         ];
 

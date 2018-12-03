@@ -312,7 +312,7 @@
                     }
                 }
             })
-            .state("user_request", {
+            .state(STATES.USER_REQUEST, {
                 url: '/user_request',
                 params: {
                     institution: null
@@ -461,7 +461,7 @@
             STATES.RESET_PASSWORD,
             STATES.USER_INACTIVE,
             STATES.NEW_INVITE,
-            'user_request'
+            STATES.USER_REQUEST
         ];
 
         $transitions.onStart({

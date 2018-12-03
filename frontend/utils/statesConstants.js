@@ -34,6 +34,7 @@
         EMAIL_VERIFICATION: "email_verification",
         RESET_PASSWORD: "reset_password",
         USER_INACTIVE: "user_inactive",
+        USER_REQUEST: "user_request",
         ERROR: "app.error"
     });
 })();

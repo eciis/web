@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http, STATES) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 

@@ -12,7 +12,7 @@
         december = 12,
         testYear = 2018,
         startDate = "2018-12-22T17:27:00Z",
-        endDate = "2018-12-31T17:27:00Z",
+        endDate = "2018-12-26T17:27:00Z",
         months = [ {month: 1}, {month: 2},
         {month: 3}, {month: 4},
         {month: 5}, {month: 6},
@@ -152,22 +152,66 @@
     describe('_getEventsByDay()', () => {
 
         beforeEach(() => {
-            eventCtrl.events = requestEvent.events;
             eventCtrl.selectedMonth = months[11];
-            eventCtrl.$onInit();
+            eventCtrl.selectedYear = testYear;
         });
 
         it('Should populate the eventsByDay array', () => {
+            eventCtrl.events = requestEvent.events;
+            eventCtrl.$onInit();
             expect(eventCtrl.eventsByDay.length).toEqual(0);
             eventCtrl._getEventsByDay();
-            expect(eventCtrl.eventsByDay.length).toEqual(10);
+            expect(eventCtrl.eventsByDay.length).toEqual(5);
         });
 
-        it('Should have days 22 to 31', () => {
+        it('For same month: should have days 22 to 26', () => {
+            eventCtrl.events = requestEvent.events;
+            eventCtrl.$onInit();
             expect(eventCtrl.eventsByDay).toEqual([]);
             eventCtrl._getEventsByDay();
             expect(eventCtrl.eventsByDay.map(obj => obj.day))
-                .toEqual(['22', '23', '24', '25', '26', '27', '28', '29','30','31']);
+                .toEqual(['22', '23', '24', '25', '26']);
+        });
+
+        it('For start in a earlier month: should have days 1 to 5', () => {
+            eventCtrl.events = [{
+                'start_time': "2018-11-22T17:27:00Z",
+                'end_time': "2018-12-05T17:27:00Z"
+            }];
+            eventCtrl.$onInit();
+            expect(eventCtrl.eventsByDay).toEqual([]);
+            eventCtrl._getEventsByDay();
+            expect(eventCtrl.eventsByDay.map(obj => obj.day))
+                .toEqual(['1', '2', '3', '4', '5']);
+        });
+
+        it('For end in a later month: should have days 26 to 31', () => {
+            eventCtrl.events = [{
+                'start_time': "2018-12-26T17:27:00Z",
+                'end_time': "2019-01-15T17:27:00Z"
+            }];
+            eventCtrl.$onInit();
+            expect(eventCtrl.eventsByDay).toEqual([]);
+            eventCtrl._getEventsByDay();
+            expect(eventCtrl.eventsByDay.map(obj => obj.day))
+                .toEqual(['26', '27', '28', '29', '30', '31']);
+        });
+
+        it('For start and end in months different from selected: should have days 1 to 31', () => {
+            eventCtrl.events = [{
+                'start_time': "2018-11-26T17:27:00Z",
+                'end_time': "2019-01-15T17:27:00Z"
+            }];
+            eventCtrl.$onInit();
+            expect(eventCtrl.eventsByDay).toEqual([]);
+            eventCtrl._getEventsByDay();
+            expect(eventCtrl.eventsByDay.map(obj => obj.day))
+                .toEqual(['1', '2', '3', '4', '5',
+                '6', '7', '8', '9', '10', '11',
+                '12', '13', '14', '15', '16',
+                '17', '18', '19', '20', '21',
+                '22', '23', '24', '25', '26',
+                '27', '28', '29', '30', '31']);
         });
     });
 
@@ -215,7 +259,7 @@
             eventCtrl.selectedMonth = months[11].month;
             eventCtrl.selectedYear = new Date(startDate).getFullYear();
             expect(eventCtrl._getDaysRange(new Date(startDate), new Date(endDate)))
-                .toEqual([22, 31]);
+                .toEqual([22, 26]);
         });
     });
 

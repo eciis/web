@@ -26,11 +26,9 @@
           </md-card>
         </div>
         <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-        <md-card ng-if="eventCtrl.events.length === 0" class="centralized-event-content">
-            <md-content layout-align="center center" layout="column">
-              <h4>Nenhum evento a ser exibido.</h4>
-            </md-content>
-        </md-card>
+        <div ng-if="eventCtrl.events.length === 0" class="centralized-event-content">
+          <h4>Nenhum evento a ser exibido.</h4>
+        </div>
         <md-content id="content" class="body custom-scrollbar box">
           <div ng-repeat="event in eventCtrl.events | orderBy:'start_time'" ng-if="eventCtrl.events.length > 0"
               style="margin-left: 65px; border-left: 2px solid #8BC34A;" layut="colum">

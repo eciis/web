@@ -1,15 +1,13 @@
-<div style="height: 100%; width: 100%; overflow: scroll;" md-colors="{background: 'teal-500'}">
+<div class="login-content" md-colors="{background: 'teal-500'}">
   <div ng-if="!loginCtrl.isRequestInvite" style="padding: 8px;">
       <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Voltar" hide-xs 
         md-colors="{background: 'light-green-600'}" ng-click="loginCtrl.goToLandingPage()">
         <md-icon>keyboard_arrow_left</md-icon>
       </md-button>
       
-      <div style="
-        box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
-        background-color: white" class="custom-card">
+      <div class="custom-card login-card">
         <div style="padding: 0 16px;">
-          <div style="display: grid; justify-items: center; margin: 0; width: 100%;" class="custom-card-content login-card-content">
+          <div class="custom-card-content login-card-content">
             <img id="login-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
             
             <form style="width: 100%;" class="login-form" ng-submit="loginCtrl.loginWithEmailPassword()">
@@ -38,7 +36,7 @@
 
             <md-divider></md-divider>
 
-            <p class="login-text">
+            <p class="login-text" style="margin-top: 4px;">
               Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.
             </p>
 

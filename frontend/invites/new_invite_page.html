@@ -14,7 +14,7 @@
                 <div class="md-list-item-text" layout="column">
                   <h3><b>{{ newInviteCtrl.institution.name }}</b></h3>
                   <p ng-if="newInviteCtrl.institution.institutional_email">{{ newInviteCtrl.institution.institutional_email }}</p>
-                  <p>Convidado por : {{ newInviteCtrl.invite.admin_name }}</p>
+                  <p id="invite-by-text">Convidado por : {{ newInviteCtrl.invite.admin_name }}</p>
                 </div>
               </md-list-item>
             </md-list>
@@ -44,7 +44,8 @@
               </div>
 
               <!-- USER INFORMATION -->
-              <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()" style="margin-top:7px;">
+              <div layout="column" ng-if="
+               style="margin-top:7px;">
                 <md-input-container ng-if="newInviteCtrl.checkUserName()" class="no-margin">
                   <label>Seu Nome</label>
                 <input ng-model="newInviteCtrl.user_name" name="nome" required>

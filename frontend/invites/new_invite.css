@@ -12,6 +12,10 @@
     .new-invite-page-card {
         max-width: 20em;
     }
+
+    #invite-by-text{
+        font-size: 12px;
+    }
 }
 
 @media screen and (min-width: 400px) and (max-width:600px) {

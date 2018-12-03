@@ -62,8 +62,10 @@
          * user follows.
          */
         function setFollowingInstitutions() {
-            allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
-                return _.find(allInstitutionsCtrl.user.follows, followedInst => followedInst.key === inst.key);
+            allInstitutionsCtrl.institutions = allInstitutionsCtrl.allInstitutions.filter(inst => {
+                return allInstitutionsCtrl.user.follows.find(followingInst => {
+                    return followingInst.key == inst.key;
+                });
             });
         }
 
@@ -71,8 +73,10 @@
          * Sets institutions with the user's institutions(institutions that he is part of). 
          */
         function setMemberInstitutions() {
-            allInstitutionsCtrl.institutions = _.filter(allInstitutionsCtrl.allInstitutions, (inst) => {
-                return _.find(allInstitutionsCtrl.user.institutions, institution => institution.key === inst.key);
+            allInstitutionsCtrl.institutions = allInstitutionsCtrl.allInstitutions.filter(inst => {
+                return allInstitutionsCtrl.user.institutions.find(institution => {
+                    return institution.key == inst.key;
+                });
             });
         }
 

@@ -29,7 +29,7 @@
          * Checks if the user is following the institution tied to the controller
          */
         regInstCtrl.userIsFollowing = function userIsFollowing() {
-            return _.find(user.follows, { key: regInstCtrl.institution.key});
+            return user.follows.find(inst => { return inst.key === regInstCtrl.institution.key});
         };
 
         /**

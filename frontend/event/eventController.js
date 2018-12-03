@@ -2,49 +2,61 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q) {
-        var eventCtrl = this;
-        var content = document.getElementById("content");
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
+        const eventCtrl = this;
+        let content = document.getElementById("content");
 
-        var moreEvents = true;
-        var actualPage = 0;
-
+        eventCtrl._moreEvents = true;
+        eventCtrl._actualPage = 0;
+        eventCtrl._isAnotherMonth = false;
         eventCtrl.events = [];
-
+        eventCtrl.eventsByDay = [];
+        eventCtrl.months = [];
+        eventCtrl.years = [];
+        eventCtrl.selectedMonth = null;
+        eventCtrl.selectedYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-
-            var deferred = $q.defer();
-            if (moreEvents) {
-                if(eventCtrl.institutionKey) {
-                    loadEvents(deferred, EventService.getInstEvents);
-                } else {
-                    loadEvents(deferred, EventService.getEvents);
-                }
-            } else {
-                deferred.resolve();
-            }
-            return deferred.promise;
+            
+            if (eventCtrl._moreEvents) {
+                const getEventsFunction = eventCtrl.institutionKey ? EventService.getInstEvents : EventService.getEvents;
+                return eventCtrl._loadEvents(getEventsFunction,
+                    _.get(eventCtrl.selectedMonth, 'month'),
+                    eventCtrl.selectedYear);
+            } 
+            return $q.when();
         };
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
+        /**
+         * Get events from backend 
+         * @param {*} deferred The promise to resolve before get events from backend
+         * @param {*} getEvents The function received to call and get events
+         * @param {*} month The month to filter the get of events
+         * @param {*} year The year to filter the get of events
+         * @private
+         */
+        eventCtrl._loadEvents = (getEvents, month, year) => {
+            return getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
+                month: month, year: year}).then(function success(response) {
+                eventCtrl._actualPage += 1;
+                eventCtrl._moreEvents = response.next;
 
-        function loadEvents(deferred, getEvents) {
-            getEvents(actualPage, eventCtrl.institutionKey).then(function success(response) {
-                actualPage += 1;
-                moreEvents = response.next;
-
-                _.forEach(response.events, function(event) {
-                    eventCtrl.events.push(event);
-                });
+                if(eventCtrl._isAnotherMonth) {
+                    eventCtrl.events = response.events;
+                    eventCtrl._isAnotherMonth = false;
+                } else {
+                    _.forEach(response.events, function(event) {
+                        eventCtrl.events.push(event);
+                    });
+                }
 
                 eventCtrl.isLoadingEvents = false;
-                deferred.resolve();
+                eventCtrl._getEventsByDay();
             }, function error() {
-                deferred.reject();
                 $state.go("app.user.home");
             });
         }
@@ -60,6 +72,8 @@
                     events: eventCtrl.events
                 },
                 bindToController: true
+            }).then(() => {
+                eventCtrl._getEventsByDay();
             });
         };
 
@@ -79,9 +93,126 @@
             });
         };
 
-        (function main() {
-            eventCtrl.institutionKey = $state.params.institutionKey;
+        /**
+         * Go to the page of a specific event
+         * @param {object} event - The current event
+         */
+        eventCtrl.goToEvent = (event) => {
+            $state.go('app.user.event', { eventKey: event.key });
+        };
+
+        /**
+         * Get the color of institutional profile of the user
+         * @param {object} event - The current event
+         */
+        eventCtrl.getProfileColor = (event) => {
+            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
+                return prof.institution_key === event.institution_key;
+            });
+            return _.get(_.first(profile), 'color', 'teal');
+        };
+
+        /**
+         * Loads the events when the filters of month and/or year is changed
+         */
+        eventCtrl.loadFilteredEvents = () => {
+            eventCtrl._moreEvents = true;
+            eventCtrl._actualPage = 0;
+            eventCtrl._isAnotherMonth = true;
             eventCtrl.loadMoreEvents();
-        })();
+        };
+
+        /**
+         * @param {date} startDate of the event which the range of days it happens will be calculated
+         * @param {date} endDate of the event which the range of days it happens will be calculated
+         * @returns {array} array with init day and end day in positions 0 and 1, respectively
+         * @private
+         */
+        eventCtrl._getDaysRange = (startDate, endDate) => {
+            const beginSelectedMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month -1, 1);
+            const endSelectedMonth = new Date(eventCtrl.selectedYear, eventCtrl.selectedMonth.month, 0);
+            let startDay = startDate.getDate();
+            let endDay = endDate.getDate();
+            if (startDate < beginSelectedMonth) {
+                startDay = 1;
+            }
+            if (endDate > endSelectedMonth) {
+                endDay = endSelectedMonth.getDate();
+            }
+            return [startDay, endDay];
+        };
+
+        /**
+         * Distributes events on days that happens 
+         * @param {object} event the event that be distributed
+         * @param {object} eventsByDay the object with days in keys
+         */
+        eventCtrl._distributeEvents = (event, eventsByDay) => {
+            const rangeDays = eventCtrl._getDaysRange(new Date(event.start_time), new Date(event.end_time));
+            const startDay = rangeDays[0],
+                   endDay = rangeDays[1]; 
+            for (let i = startDay; i <= endDay; i++) {
+                if(!eventsByDay[i]) 
+                    eventsByDay[i] = [];
+                eventsByDay[i].push(event);
+            }
+        };
+
+        /**
+         * Group the events into an array of days of the selected month of year
+         * @private
+         */
+        eventCtrl._getEventsByDay = () => {
+            if(eventCtrl.events.length > 0 && eventCtrl.selectedMonth) {
+                eventCtrl.eventsByDay = [];
+                let eventsByDay = {};
+                _.forEach(eventCtrl.events, function(event) {
+                    eventCtrl._distributeEvents(event, eventsByDay);
+                });
+
+                let days = Object.keys(eventsByDay);
+                _.forEach(days, function(day) {
+                    let currentValue = {
+                        day: day,
+                        events: eventsByDay[day]
+                    };
+                    eventCtrl.eventsByDay.push(currentValue);
+                });
+            }
+        };
+
+        /**
+         * Loads the year 2017 to current_year + 30 to show in filter by year
+         * The year 2017 was chosen because it's the year that the project started to work
+         * @private
+         */
+        eventCtrl._loadYears = () => {
+            for (let year = 2017; year <= eventCtrl.selectedYear + 30; year++) {
+                eventCtrl.years.push(year);
+            }
+        };
+
+        /**
+         * Loads all the months of years into objects with number and name of the month
+         * @private
+         */
+        eventCtrl._getMonths = () => {
+            EventService.getMonths().then(function success(response) {
+                eventCtrl.months = response;
+                eventCtrl.selectedMonth = eventCtrl.months[new Date().getMonth()];
+                eventCtrl.selectedYear = new Date().getFullYear();
+                eventCtrl._loadYears();
+                eventCtrl.loadMoreEvents();
+            });
+        };
+
+        eventCtrl.$onInit = () => {
+            eventCtrl.institutionKey = $state.params.institutionKey;
+            if(Utils.isMobileScreen(475)) {
+                eventCtrl._getMonths();
+            } else {
+                eventCtrl.loadMoreEvents();
+            }
+        };
     });
 })();

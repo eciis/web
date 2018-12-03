@@ -55,18 +55,57 @@
     height: 100%; 
     width: 100%;
     display: grid;
-    align-content: center; 
+    overflow: scroll;
 }
 
-@media screen and (max-width: 420px) {
+#login-container {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    color: black;
+}
+
+#form-content {
+    padding: 0 35px;
+}
+
+@media screen and (max-width: 599px) {
     #login-logo {
         width: 50%; 
         margin: 1em 1em 7px 1em;
     }
-}
 
-@media screen and (max-width: 420px) {
     .login-content {
         overflow: scroll;
+    }
+
+    #login-container {
+        padding: 8px;
+        grid-template-columns: 100%;
+    }
+
+    #form-content {
+        padding: 0 16px;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+    #login-container {
+        grid-template-columns: 29px 65%;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    #login-container {
+        grid-template-columns: 29px 35%;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 1367px) {
+    #login-container {
+        grid-template-columns: 29px 30%;
+        align-items: center;
     }
 }

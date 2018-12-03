@@ -1,12 +1,12 @@
 <div class="login-content" md-colors="{background: 'teal-500'}">
-  <div ng-if="!loginCtrl.isRequestInvite" style="padding: 8px;">
+  <div id="login-container" ng-if="!loginCtrl.isRequestInvite">
       <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Voltar" hide-xs 
         md-colors="{background: 'light-green-600'}" ng-click="loginCtrl.goToLandingPage()">
         <md-icon>keyboard_arrow_left</md-icon>
       </md-button>
       
-      <div class="custom-card login-card">
-        <div style="padding: 0 16px;">
+      <div class="login-card">
+        <div id="form-content">
           <div class="custom-card-content login-card-content">
             <img id="login-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
             

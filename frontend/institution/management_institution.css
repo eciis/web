@@ -133,3 +133,20 @@
         width: 47%;
     }
 }
+
+.remove-inst-dialog-icon {
+    border-radius: 50%; 
+    height: 100px; 
+    width: 100px;
+}
+
+@media screen and (max-width: 450px) {
+    .remove-inst-dialog-icon {
+        width: 3em;
+        height: 3em;
+    }
+
+    .remove-inst-dialog-text {
+        font-size: 12px;
+    }
+}

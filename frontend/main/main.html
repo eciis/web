@@ -6,7 +6,7 @@
       <md-icon>menu</md-icon>
     </md-button>
 
-    <a ui-sref="app.user.home">
+    <a ui-sref="{{mainCtrl.getState('HOME')}}">
       <md-button disabled="true">
         <img id="logo-full" src="app/images/logo.png" aria-label="Plataforma Virtual CIS" class="logo">
         <img id="logo-resp" src="app/images/logo-responsive.png" aria-label="Plataforma Virtual CIS" class="logo">
@@ -15,7 +15,7 @@
 
     <div class="toolbar-btns" layout="row">
       
-      <a ui-sref="app.user.home" class="navbar-top">
+      <a ui-sref="{{mainCtrl.getState('HOME')}}" class="navbar-top">
         <md-button class="md-icon-button" title="Home">
           <md-icon>home</md-icon>
         </md-button>

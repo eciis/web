@@ -115,7 +115,7 @@
 
         function loadEvents() {
             var page = 0;
-            EventService.getEvents(page).then(function success(response) {
+            EventService.getEvents({page: page}).then(function success(response) {
                 homeCtrl.events = activeEvents(response.events);
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error() {

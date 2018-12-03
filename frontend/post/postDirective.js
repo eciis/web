@@ -13,6 +13,7 @@
         postCtrl.typePost = 'Common';
         postCtrl.loading = false;
         postCtrl.loadingPost = false;
+        postCtrl.loadingImage = false;
         postCtrl.deletePreviousImage = false;
         postCtrl.user = AuthService.getCurrentUser();
         postCtrl.photoUrl = "";
@@ -113,9 +114,9 @@
         function saveImage() {
             var deferred = $q.defer();
             if (postCtrl.photoBase64Data) {
-                postCtrl.loading = true;
+                postCtrl.loadingImage = true;
                 ImageService.saveImage(postCtrl.photoBase64Data).then(function success(data) {
-                    postCtrl.loading = false;
+                    postCtrl.loadingImage = false;
                     postCtrl.post.photo_url = data.url;
                     postCtrl.post.uploaded_images = [data.url];
                     deferred.resolve();

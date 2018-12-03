@@ -30,12 +30,12 @@
          * {string} nextTab
          */
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
-            if (nextTab == ALL_TAB) {
+            if (nextTab === ALL_TAB) {
                 allInstitutionsCtrl.allInstTab = true;
                 allInstitutionsCtrl.followingInstTab = false;
                 allInstitutionsCtrl.memberInstTab = false;
                 setAllInstitutions();
-            } else if (nextTab == FOLLOWING_TAB) {
+            } else if (nextTab === FOLLOWING_TAB) {
                 allInstitutionsCtrl.allInstTab = false;
                 allInstitutionsCtrl.followingInstTab = true;
                 allInstitutionsCtrl.memberInstTab = false;

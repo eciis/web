@@ -14,10 +14,8 @@
                 <img ng-src="{{removeInstCtrl.institution.photo_url}}" 
                     class="remove-inst-dialog-icon" />
             </a>
-            <div layout="column" layout-align="center start">
-                
-                    <b md-colors="{color: 'default-grey-900'}" class="remove-inst-dialog-text">{{removeInstCtrl.institution.name}}</b>
-                
+            <div layout="column" layout-align="center start" ng-click="removeInstCtrl.goToInstitution()">
+                <b md-colors="{color: 'default-grey-900'}" class="remove-inst-dialog-text">{{removeInstCtrl.institution.name}}</b>
                 <span ng-if="removeInstCtrl.institution.institutional_email" class="remove-inst-dialog-text">{{removeInstCtrl.institution.institutional_email}}</span>
             </div>
         </div>

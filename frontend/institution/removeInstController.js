@@ -37,6 +37,11 @@
 
         removeInstCtrl.thereIsNoChild = function thereIsNoChild() {
             return _.isEmpty(institution.children_institutions);
-        }
+        };
+        
+        removeInstCtrl.goToInstitution = () => {
+            $state.go('app.institution.timeline', { institutionKey: removeInstCtrl.institution.key});
+            removeInstCtrl.closeDialog();
+        };
     });
 })();

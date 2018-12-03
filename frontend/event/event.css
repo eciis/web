@@ -306,4 +306,12 @@
     .select-years {
         width: 6em;
     }
+
+    .create-event-mobile-top-bar {
+        height: 3em;
+        width: 100%;
+        background: #009688;
+        align-items: center;
+        position: absolute;
+    }
 }

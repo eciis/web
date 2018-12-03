@@ -16,6 +16,10 @@
         mainCtrl.pendingInstLinksInvitations = 0;
 
         mainCtrl.stateView =  $state.current.name;
+
+        mainCtrl._statesWithoutFooter = [
+            "app.user.create_event"
+        ];
         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
@@ -198,6 +202,14 @@
         mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
             state = "app.user." + state;
             return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
+        };
+
+        /**
+         * Verify if the current state is not included in the list of
+         * states that don't need the footer bar
+         */
+        mainCtrl.showFooterBar = () => {
+            return !mainCtrl._statesWithoutFooter.includes($state.current.name);
         };
 
         /** Reset properties CSS. 

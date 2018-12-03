@@ -62,19 +62,23 @@
         }
 
         eventCtrl.newEvent = function newEvent(event) {
-            $mdDialog.show({
-                controller: 'EventDialogController',
-                controllerAs: "controller",
-                templateUrl: 'app/event/event_dialog.html',
-                targetEvent: event,
-                clickOutsideToClose: true,
-                locals: {
-                    events: eventCtrl.events
-                },
-                bindToController: true
-            }).then(() => {
-                eventCtrl._getEventsByDay();
-            });
+            if(!Utils.isMobileScreen(475)) {
+                $mdDialog.show({
+                    controller: 'EventDialogController',
+                    controllerAs: "controller",
+                    templateUrl: 'app/event/event_dialog.html',
+                    targetEvent: event,
+                    clickOutsideToClose: true,
+                    locals: {
+                        events: eventCtrl.events
+                    },
+                    bindToController: true
+                }).then(() => {
+                    eventCtrl._getEventsByDay();
+                });
+            } else {
+                $state.go("app.user.create_event");
+            }
         };
 
         eventCtrl.share = function share(ev, event) {

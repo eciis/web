@@ -77,10 +77,10 @@
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                     .then(function success() {
-                        $mdDialog.hide(event);
+                        dialogCtrl.closeDialog();
                         MessageService.showToast('Evento editado com sucesso.');
                     }, function error() {
-                        $mdDialog.hide(event);
+                        dialogCtrl.closeDialog();
                     });
             } else {
                 MessageService.showToast('Evento inválido');
@@ -120,6 +120,9 @@
         };
 
         dialogCtrl.closeDialog = function closeDialog() {
+            if (Utils.isMobileScreen(475))
+                $state.go("app.user.events");
+
             $mdDialog.hide();
         };
 
@@ -299,7 +302,7 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    $mdDialog.hide();
+                    dialogCtrl.closeDialog();
                     dialogCtrl.events.push(response);
                     MessageService.showToast('Evento criado com sucesso!');
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);

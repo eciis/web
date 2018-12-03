@@ -89,6 +89,15 @@
                     }
                 }
             })
+            .state("app.user.create_event", {
+                url: "/create_event",
+                views: {
+                    user_content: {
+                        templateUrl: "app/event/create_event.html",
+                        controller: "EventDialogController as eventCtrl"
+                    }
+                }
+            })
             .state("app.user.invite_inst", {
                 url: "/inviteInstitution",
                 views: {

@@ -54,7 +54,7 @@
          * it to keep reference.
          */
         function setAllInstitutions() {
-            allInstitutionsCtrl.institutions = _.clone(allInstitutionsCtrl.allInstitutions);
+            allInstitutionsCtrl.institutions = [...allInstitutionsCtrl.allInstitutions];
         }
 
         /**
@@ -108,12 +108,10 @@
                 actualPage += 1;
                 moreInstitutions = response.next;
                 
-                _.forEach(response.institutions, function(institution) {
-                    allInstitutionsCtrl.allInstitutions.push(institution);
-                });
+                response.institutions.map(inst => allInstitutionsCtrl.allInstitutions.push(inst));
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
-                allInstitutionsCtrl.institutions = _.clone(allInstitutionsCtrl.allInstitutions);
+                allInstitutionsCtrl.institutions = [...allInstitutionsCtrl.allInstitutions];
                 deferred.resolve();
             }, function error() {
                 deferred.reject();

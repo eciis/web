@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("UserInactiveController", function UserInactiveController(AuthService, RequestInvitationService, InstitutionService, 
-                    $mdDialog, $state, $q, MessageService, $window) {
+        STATES, $mdDialog, $state, $q, MessageService, $window) {
         var userInactiveCtrl = this;
 
         userInactiveCtrl.user = AuthService.getCurrentUser();
@@ -126,7 +126,7 @@
         };
 
         userInactiveCtrl.createInst = function createInst() {
-            $state.go("create_institution_form");
+            $state.go(STATES.CREATE_INST_FORM);
             $mdDialog.hide();
         };
 

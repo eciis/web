@@ -21,9 +21,7 @@
       it('should call state.go if notification has a state', function() {
           spyOn(state, 'go');
 
-          const COMMENT_STATE = 'app.post';
-
-          var notificationWithState = {
+          const notificationWithState = {
               entity_type: 'COMMENT',
               entity: {
                   key: '12345'
@@ -31,7 +29,7 @@
           };
       
           notCtrl.goTo(notificationWithState);
-          expect(state.go).toHaveBeenCalledWith(COMMENT_STATE, {key: notificationWithState.entity.key});
+          expect(state.go).toHaveBeenCalledWith(states.POST, {key: notificationWithState.entity.key});
       });
 
       it('should go to app.user.notifications if notification has no state property', function() {

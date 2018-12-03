@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDetailsController', function($scope, SurveyService, $state, MessageService, $mdPanel) {
+    app.controller('SurveyDetailsController', function(STATES, SurveyService, $state, MessageService, $mdPanel) {
 
         var surveyCtrl = this;
         surveyCtrl.binaryOptionSelected;
@@ -12,7 +12,7 @@
         var MAX_CHAR_QUANTITY = 90;
 
         surveyCtrl.goToPost = function goToPost() {
-             $state.go('app.post', {key: surveyCtrl.post.key});
+             $state.go(STATES.POST, {key: surveyCtrl.post.key});
         };
 
         surveyCtrl.isDeleted = function(){

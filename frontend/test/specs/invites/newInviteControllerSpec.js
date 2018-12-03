@@ -223,7 +223,7 @@
             it('should go to user_inactive', function () {
                 spyOn(newInviteCtrl.user, 'isInactive').and.returnValue(true);
                 newInviteCtrl.addInstitution('$event');
-                expect(state.go).toHaveBeenCalledWith("user_inactive");
+                expect(state.go).toHaveBeenCalledWith(states.USER_INACTIVE);
                 expect(newInviteCtrl.user.isInactive).toHaveBeenCalled();
             });
         });

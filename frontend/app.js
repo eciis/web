@@ -417,9 +417,9 @@
 
     app.run(function authInterceptor(AuthService, $transitions, STATES, $state, $location) {
         var ignored_routes = [
-            'signin',
-            'reset_password',
-            'accept_invite'
+            STATES.SIGNIN,
+            STATES.RESET_PASSWORD,
+            STATES.ACCEPT_INVITE
         ];
 
         $transitions.onStart({
@@ -440,14 +440,14 @@
      */
     app.run(function userInactiveListener(AuthService, $transitions, STATES) {
         var ignored_routes = [
-            'create_institution',
-            'create_institution_form',
-            'error',
-            'signin',
-            'email_verification',
-            'reset_password',
-            'user_inactive',
-            'new_invite'
+            STATES.CREATE_INST,
+            STATES.CREATE_INST_FORM,
+            STATES.ERROR,
+            STATES.SIGNIN,
+            STATES.EMAIL_VERIFICATION,
+            STATES.RESET_PASSWORD,
+            STATES.USER_INACTIVE,
+            STATES.NEW_INVITE
         ];
 
         $transitions.onStart({
@@ -464,7 +464,7 @@
 
     app.run(function inviteInterceptor(AuthService, $transitions, $state, STATES) {
         var ignored_routes = [
-            'create_institution_form'
+            STATES.CREATE_INST_FORM
         ];
 
         $transitions.onSuccess({

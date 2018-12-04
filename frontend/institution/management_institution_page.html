@@ -1,74 +1,15 @@
 <div ng-if="institutionCtrl.canManageInst()" layout="row" flex md-colors="{background: 'grey-200'}" layout-align="center">
   <!-- CONTENT -->
-  <div flex-lg="90" flex-gt-lg="70" flex layout="row" layout-align="space-between"
-  md-colors="{background: 'grey-50'}">
+  <div flex-lg="90" flex-gt-lg="70" flex layout="row" layout-align="space-between" md-colors="{background: 'grey-50'}">
 
   <!-- LEFT SIDE PANEL -->
-    <md-sidenav class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row"
-    md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
-      <md-content class="custom-scrollbar" layout="column"
-      md-colors="{background: 'grey-100'}" flex>
-        <div class="container">
-          <div class="row">
-            <div class="card hovercard" 
-            md-colors="{background: institutionCtrl.user.getProfileColor()+'-800'}">
-              <div class="cardheader">
-                <div class="avatar">
-                  <img ng-click="institutionCtrl.goToInstitution(institutionCtrl.institution.key)" alt="Foto da Instituição" ng-src="{{ institutionCtrl.institution.photo_url || '/app/images/institution.png' }}">
-                </div>
-              </div>
-              <div class="info" 
-              md-colors="{background: institutionCtrl.user.getProfileColor()+'-600'}">
-                <div class="desc">
-                  <div class="md-title">
-                    <a style="color: #FFFFFF" href ng-click="institutionCtrl.goToInstitution(institutionCtrl.institution.key)">
-                      {{ institutionCtrl.institution.name }}
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="row section-menu">
-              <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToEditInfo()"
-                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_EDIT')">
-                    <md-icon>edit</md-icon>
-                    <b>Editar Informações</b>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToManageMembers()"
-                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_MEMBERS')">
-                    <md-icon>people</md-icon>
-                    <b>Gerenciar membros</b>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToManageInstitutions()"
-                    ng-class="institutionCtrl.getSelectedClass('MANAGE_INST_INVITE_INST')">
-                    <md-icon>account_balance</md-icon>
-                    <b>Vínculos Institucionais</b>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="institutionCtrl.removeInstitution()">
-                    <md-icon>delete</md-icon>
-                    <b>Remover Instituição</b>
-                  </md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="institutionCtrl.goToHome()">
-                    <md-icon>arrow_back</md-icon>
-                    <b>Voltar</b>
-                  </md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </div>
-        </div>
-      </md-content>
-    </md-sidenav>
+    <side-menu
+      items="institutionCtrl.sideMenuItems"
+      entity="institutionCtrl.institution"
+      is-institution="true"
+      on-click-image="institutionCtrl.goToInstitution"
+      on-click-title="institutionCtrl.goToInstitution">
+    </side-menu>
 
     <!-- CONTENT -->
     <div flex layout="row" layout-align="center">

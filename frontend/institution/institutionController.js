@@ -120,19 +120,20 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
+            $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
+            $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
+            $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey});
+            const instKey = institutionKey || currentInstitutionKey;
+            $state.go(STATES.INST_TIMELINE, {institutionKey: instKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
@@ -159,6 +160,39 @@
         institutionCtrl.goToHome = function goToHome() {
             $state.go(STATES.HOME);
         };
+
+        institutionCtrl.sideMenuItems = [
+            {
+                icon: 'edit',
+                description: 'Editar Informações',
+                stateName: 'MANAGE_INST_EDIT',
+                onClick: institutionCtrl.goToEditInfo
+            },
+            {
+                icon: 'people',
+                description: 'Gerenciar membros',
+                stateName: 'MANAGE_INST_MEMBERS',
+                onClick: institutionCtrl.goToManageMembers
+            },
+            {
+                icon: 'account_balance',
+                description: 'Vínculos Institucionais',
+                stateName: 'MANAGE_INST_INVITE_INST',
+                onClick: institutionCtrl.goToManageInstitutions
+            },
+            {
+                icon: 'delete',
+                description: 'Remover Instituição',
+                stateName: '',
+                onClick: event => institutionCtrl.removeInstitution(event)
+            },
+            {
+                icon: 'arrow_back',
+                description: 'Voltar',
+                stateName: '',
+                onClick: institutionCtrl.goToHome
+            }
+        ];
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
             return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});

@@ -1,0 +1,29 @@
+<md-sidenav class="md-sidenav-left side-menu" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
+    <md-content class="custom-scrollbar" layout="column" md-colors="{background: 'grey-100'}">
+        <!-- Menu header -->
+        <div class="card hovercard" md-colors="{background: sideMenuCtrl.getProfileColor(800)}">
+            <div class="cardheader">
+                <div class="avatar">
+                    <img ng-click="sideMenuCtrl.onClickImage()" ng-src="{{ sideMenuCtrl.getImage() }}">
+                </div>
+            </div>
+            <div class="info" md-colors="{background: sideMenuCtrl.getProfileColor(600)}">
+                <div class="desc">
+                    <a class="md-title sm-title" href ng-click="sideMenuCtrl.onClickTitle()">{{ sideMenuCtrl.getTitle() }}</a>
+                </div>
+            </div>
+        </div>
+        <!-- Menu items -->
+        <div class="row section-menu">
+            <md-menu-content width="4" md-colors="{background: 'grey-100'}">
+                <md-menu-item ng-repeat="item in sideMenuCtrl.items track by item.description">
+                    <md-button ng-click="item.onClick(); sideMenuCtrl.close();" 
+                        ng-class="sideMenuCtrl.getSelectedClass(item.stateName)">
+                        <md-icon>{{item.icon}}</md-icon>
+                        <b>{{item.description}}</b>
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </div>
+    </md-content>
+</md-sidenav>

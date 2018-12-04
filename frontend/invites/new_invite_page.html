@@ -1,6 +1,6 @@
 <md-content class="fill-screen" id="content-new-invite" md-colors="{background: 'teal-500'}">
   <load-circle ng-if="newInviteCtrl.loading"></load-circle>
-  <md-card ng-if="!newInviteCtrl.isAlreadyProcessed" ng-show="!newInviteCtrl.loading" class="new-invite-page-card">
+  <md-card ng-if="!newInviteCtrl.isAlreadyProcessed && !newInviteCtrl.loading" class="new-invite-page-card">
     <md-card-content style="background-color:#FFFFFF;">
       <center>
         <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">

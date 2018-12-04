@@ -23,9 +23,9 @@
 
         controller.signin = function signin() {
             if (AuthService.isLoggedIn()) {
-                $state.go("new_invite", {key: inviteId});
+                $state.go(STATES.NEW_INVITE, {key: inviteId});
             } else {
-                $state.go('signin');
+                $state.go(STATES.SIGNIN);
             }
         };
         
@@ -41,7 +41,7 @@
             InviteService.getInvite(inviteId).then(function(response) {
                 controller.invite = new Invite(response);
                 if (controller.invite.status === "accepted") {
-                    $state.go("signin");
+                    $state.go(STATES.SIGNIN);
                 }
             });
         })();

@@ -461,7 +461,7 @@
             } else if(isRequest()) {
                 loadRequestState();
             } else {
-                $state.go('signin');
+                $state.go(STATES.SIGNIN);
             }
         };
 

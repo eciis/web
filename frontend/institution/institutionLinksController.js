@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module("app");
     
-    app.controller("InstitutionLinksController", function InstitutionLinksController($state, InstitutionService, MessageService) {
+    app.controller("InstitutionLinksController", function InstitutionLinksController($state, InstitutionService, STATES) {
 
         var instLinksCtrl = this;
         var currentInstitutionKey = $state.params.institutionKey;
@@ -14,7 +14,7 @@
         instLinksCtrl.childrenInstitutions = [];
 
         instLinksCtrl.goToInst = function goToInst(institutionKey) {
-            const url = $state.href('app.institution.timeline', { institutionKey: institutionKey });
+            const url = $state.href(STATES.INST_TIMELINE, { institutionKey: institutionKey });
             window.open(url, '_blank');
         };
 

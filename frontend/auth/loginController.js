@@ -42,7 +42,7 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            $state.go("reset_password");
+            $state.go(STATES.RESET_PASSWORD);
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {

@@ -3,7 +3,8 @@
     var app = angular.module('app');
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
-        InviteService, STATES, $state, AuthService, InstitutionService, RequestInvitationService, $mdDialog, MessageService) {
+        InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
+        STATES, $mdDialog, MessageService) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -117,7 +118,7 @@
         };
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         inviteInstCtrl.resendInvite = function resendInvite(inviteKey, event) {

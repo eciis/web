@@ -339,15 +339,15 @@
         }
 
         postDetailsCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         postDetailsCtrl.goToPost = function goToPost(post) {
-             $state.go('app.post', {key: post.key});
+             $state.go(STATES.POST, {key: post.key});
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key});
+            $state.go(STATES.EVENT_DETAILS, {eventKey: event.key});
         };
 
         postDetailsCtrl.reloadPost = function reloadPost() {

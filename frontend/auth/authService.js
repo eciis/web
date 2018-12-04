@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, PushNotificationService) {
+        MessageService, PushNotificationService, STATES) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -173,7 +173,7 @@
 
             executeLogoutListeners();
 
-            $state.go("signin");
+            $state.go(STATES.SIGNIN);
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -212,7 +212,7 @@
             var auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
-                $state.go("email_verification");
+                $state.go(STATES.EMAIL_VERIFICATION);
             }, function error(error) {
                 console.error(error);
             });

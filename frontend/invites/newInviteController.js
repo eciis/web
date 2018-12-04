@@ -71,7 +71,7 @@
         };
 
         newInviteCtrl.goToInstForm =function goToInstForm() {
-            $state.go('create_institution_form', {
+            $state.go(STATES.CREATE_INST_FORM, {
                 senderName: getCurrentName(),
                 institutionKey: institutionKey,
                 inviteKey: newInviteCtrl.inviteKey
@@ -146,7 +146,7 @@
                 newInviteCtrl.user.removeInvite(newInviteCtrl.inviteKey);
                 AuthService.save();
                 if(newInviteCtrl.user.isInactive()) {
-                    $state.go("user_inactive");
+                    $state.go(STATES.USER_INACTIVE);
                 } else {
                     $state.go(STATES.HOME);
                 }
@@ -214,7 +214,7 @@
         }
 
        function redirectFromError() {
-           newInviteCtrl.user.isInactive() ? $state.go("user_inactive") : $state.go(STATES.HOME);
+           newInviteCtrl.user.isInactive() ? $state.go(STATES.USER_INACTIVE) : $state.go(STATES.HOME);
        }
 
         loadInvite();

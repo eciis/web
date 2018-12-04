@@ -151,6 +151,10 @@
             return $state.current.name;
         };
 
+        mainCtrl.getState = function (stateName) {
+            return STATES[stateName];
+        };
+
         /** Reset properties CSS. 
          * In mode mobile maybe changes some properties.
          */

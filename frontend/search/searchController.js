@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window) {
+        brCidadesEstados, HttpService, $mdDialog, $window, STATES) {
 
         var searchCtrl = this;
 
@@ -63,7 +63,7 @@
 
         searchCtrl.goToInstitution = function goToInstitution(institutionId) {
             if (institutionId) {
-                $state.go('app.institution.timeline', { institutionKey: institutionId });
+                $state.go(STATES.INST_TIMELINE, { institutionKey: institutionId });
             }
         };
 

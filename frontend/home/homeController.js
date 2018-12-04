@@ -23,7 +23,7 @@
         };
 
         homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         homeCtrl.eventInProgress = function eventInProgress(event) {
@@ -63,7 +63,7 @@
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', {eventKey: event.key, posts: homeCtrl.posts});
+            $state.go(STATES.EVENT_DETAILS, {eventKey: event.key, posts: homeCtrl.posts});
         };
 
         homeCtrl.newPost = function newPost(event) {
@@ -115,7 +115,7 @@
 
         function loadEvents() {
             var page = 0;
-            EventService.getEvents(page).then(function success(response) {
+            EventService.getEvents({page: page}).then(function success(response) {
                 homeCtrl.events = activeEvents(response.events);
                 homeCtrl.events = _.take(homeCtrl.events, LIMITE_EVENTS);
             }, function error() {

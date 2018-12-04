@@ -1,13 +1,26 @@
-'use strict';
-
 (function() {
-    var app = angular.module('app', [
+    'use strict';
+
+    const app = angular.module('webchat', [
         'ui.router',
     ]);
 
-    app.config(function($stateProvider, $urlRouterProvider) {
+    const rootName = 'webchat';
+    app.constant('WEBCHAT', {
+        states: {
+            abstract: 'webchat',
+            home: `${rootName}.home`,
+            call: `${rootName}.call`,
+            chat: `${rootName}.chat`,
+            video: `${rootName}.video`,
+            login: 'login',
+        },
+        currentUser: null,
+    });
+
+    app.config((WEBCHAT, $stateProvider, $urlRouterProvider) => {
        $stateProvider
-           .state("webchat", {
+           .state(WEBCHAT.states.abstract, {
                abstract: true,
                views: {
                     main: {
@@ -16,7 +29,7 @@
                     },
                },
            })
-           .state("webchat.home", {
+           .state(WEBCHAT.states.home, {
                url: "/",
                views: {
                    content: {
@@ -25,7 +38,7 @@
                    },
                },
            })
-           .state("webchat.chat", {
+           .state(WEBCHAT.states.chat, {
                url: "/chat",
                views: {
                    content: {
@@ -34,7 +47,7 @@
                    },
                },
            })
-           .state("webchat.call", {
+           .state(WEBCHAT.states.call, {
                url: "/call",
                views: {
                    content: {
@@ -43,7 +56,7 @@
                    },
                },
            })
-           .state("webchat.video", {
+           .state(WEBCHAT.states.video, {
                url: "/video",
                views: {
                    content: {
@@ -52,7 +65,7 @@
                    },
                },
            })
-           .state("login", {
+           .state(WEBCHAT.states.login, {
                url: "/login",
                views: {
                    main: {

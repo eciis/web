@@ -55,11 +55,12 @@
     height: 100%; 
     width: 100%;
     display: grid;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #login-container {
     display: grid;
+    padding: 8px;
     justify-content: center;
     align-content: center;
     color: black;
@@ -75,12 +76,7 @@
         margin: 1em 1em 7px 1em;
     }
 
-    .login-content {
-        overflow: scroll;
-    }
-
     #login-container {
-        padding: 8px;
         grid-template-columns: 100%;
     }
 

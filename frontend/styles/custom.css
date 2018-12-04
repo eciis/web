@@ -1137,3 +1137,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
         width: 35%;
     }
 }
+
+.content-main {
+    height: 100%;
+}

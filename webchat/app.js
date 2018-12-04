@@ -6,21 +6,18 @@
     ]);
 
     const rootName = 'webchat';
-    app.constant('WEBCHAT', {
-        states: {
+    app.constant('STATES', {
             abstract: 'webchat',
             home: `${rootName}.home`,
             call: `${rootName}.call`,
             chat: `${rootName}.chat`,
             video: `${rootName}.video`,
             login: 'login',
-        },
-        currentUser: null,
-    });
+        });
 
-    app.config((WEBCHAT, $stateProvider, $urlRouterProvider) => {
+    app.config((STATES, $stateProvider, $urlRouterProvider) => {
        $stateProvider
-           .state(WEBCHAT.states.abstract, {
+           .state(STATES.abstract, {
                abstract: true,
                views: {
                     main: {
@@ -29,7 +26,7 @@
                     },
                },
            })
-           .state(WEBCHAT.states.home, {
+           .state(STATES.home, {
                url: "/",
                views: {
                    content: {
@@ -38,7 +35,7 @@
                    },
                },
            })
-           .state(WEBCHAT.states.chat, {
+           .state(STATES.chat, {
                url: "/chat",
                views: {
                    content: {
@@ -47,7 +44,7 @@
                    },
                },
            })
-           .state(WEBCHAT.states.call, {
+           .state(STATES.call, {
                url: "/call",
                views: {
                    content: {
@@ -56,7 +53,7 @@
                    },
                },
            })
-           .state(WEBCHAT.states.video, {
+           .state(STATES.video, {
                url: "/video",
                views: {
                    content: {
@@ -65,7 +62,7 @@
                    },
                },
            })
-           .state(WEBCHAT.states.login, {
+           .state(STATES.login, {
                url: "/login",
                views: {
                    main: {

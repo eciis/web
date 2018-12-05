@@ -7,7 +7,7 @@
   </div>
   <div style="padding: 0 16px;">
     <div class="form-container">
-      <form name="saveForm" prevent-state-change="postCtrl.post" ng-submit="postCtrl.save(isEditing, originalPost, saveForm)" class="form-grid">
+      <form ng-if="postCtrl.typePost !== 'Survey'" name="saveForm" prevent-state-change="postCtrl.post" ng-submit="postCtrl.save(isEditing, originalPost, saveForm)" class="form-grid">
         <div ng-show="postCtrl.typePost !== 'Survey'">
             <div ng-if="postCtrl.typePost === 'Common'">
               <div ng-if="postCtrl.showImage()" class="image-view create-post-img" style="max-width: 100%;">
@@ -48,12 +48,8 @@
               </md-input-container>
             </div>
           </div>
-        <!-- SURVEY -->
-        <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
-            options="postCtrl.options" style="display: block;"></survey-directive>
-        
         <div class="action-post-container"
-        ng-show="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
+        ng-if="postCtrl.showActionButtons() && postCtrl.typePost === 'Common'">
           <md-button type="reset" class="create-post-cancel-button" ng-click="postCtrl.cancelDialog()">
               Cancelar
           </md-button>
@@ -62,6 +58,10 @@
           </md-button>
         </div>
       </form>
+      <!-- SURVEY -->
+      <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
+      options="postCtrl.options" style="display: grid;"></survey-directive>
+   
     </div>
   </div>
     <div valign="bottom">

@@ -10,10 +10,8 @@
             </div>
         </div>
         <div layout-padding layout="row" layout-align="start center" md-colors="{background: 'default-grey-300'}">
-            <a ui-sref="app.institution({institutionKey: '{{removeInstCtrl.institution.key}}'})" target="_blank">
-                <img ng-src="{{removeInstCtrl.institution.photo_url}}" 
-                    class="remove-inst-dialog-icon" />
-            </a>
+            <img ng-src="{{removeInstCtrl.institution.photo_url}}" 
+                class="remove-inst-dialog-icon" />
             <div layout="column" layout-align="center start" ng-click="removeInstCtrl.goToInstitution()">
                 <b md-colors="{color: 'default-grey-900'}" class="remove-inst-dialog-text">{{removeInstCtrl.institution.name}}</b>
                 <span ng-if="removeInstCtrl.institution.institutional_email" class="remove-inst-dialog-text">{{removeInstCtrl.institution.institutional_email}}</span>

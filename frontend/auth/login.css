@@ -27,29 +27,82 @@
 }
 
 .login-text {
+    margin-top: 4px;
     text-align: justify;
 }
 
 .login-form {
+    width: 100%;
     margin: 1em 0;
 }
 
 .login-card {
-    max-height: 96vh;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+    background-color: white;
+}
+
+.login-card-content {
+    display: grid; 
+    justify-items: center; 
+    margin: 0; 
+    width: 100%;
 }
 
 .login-card-footer {
     background-color: #E6E6E6;
 }
 
-@media screen and (max-width: 320px) {
+.login-content {
+    height: 100%; 
+    width: 100%;
+    display: grid;
+    overflow: auto;
+}
+
+#login-container {
+    display: grid;
+    padding: 8px;
+    justify-content: center;
+    align-content: center;
+    color: black;
+}
+
+#form-content {
+    padding: 0 35px;
+}
+
+@media screen and (max-width: 599px) {
     #login-logo {
-        width: 80%;
+        width: 50%; 
+        margin: 1em 1em 7px 1em;
+    }
+
+    #login-container {
+        grid-template-columns: 100%;
+    }
+
+    #form-content {
+        padding: 0 16px;
     }
 }
 
-@media screen and (max-width: 420px) {
-    .login-card-content {
-        width: 92%;
+@media screen and (min-width: 600px) and (max-width: 1024px) {
+    #login-container {
+        grid-template-columns: 29px 65%;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+    #login-container {
+        grid-template-columns: 29px 35%;
+        align-items: center;
+    }
+}
+
+@media screen and (min-width: 1367px) {
+    #login-container {
+        grid-template-columns: 29px 30%;
+        align-items: center;
     }
 }

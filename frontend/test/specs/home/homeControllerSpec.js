@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    var homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, http, postService;
+    let homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, states, http, postService;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -35,13 +35,15 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope,
-            PostService, $mdDialog, $state, AuthService, $http) {
+            PostService, $mdDialog, $state, AuthService, $http, STATES) {
         httpBackend = $httpBackend;
         http = $http;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
         state = $state;
         postService = PostService;
+        states = STATES;
+
         httpBackend.when('GET', "/api/events?page=0&limit=15").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -98,7 +100,7 @@
             it('should call state.go()', function() {
                 spyOn(state, 'go');
                 homeCtrl.goToInstitution('123456789');
-                expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: '123456789'});
+                expect(state.go).toHaveBeenCalledWith(states.INST_TIMELINE, {institutionKey: '123456789'});
             });
         });
 

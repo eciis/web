@@ -1,0 +1,32 @@
+#search-inst-content {
+    overflow-y: hidden;
+}
+
+#search-btn-container {
+    margin-top: 0.5em;
+}
+
+
+@media screen and (max-width: 320px) {
+    .search-inst-btn {
+        margin-bottom: -0.5em;
+    }
+    
+    #search-btn-container {
+        margin-top: 0.1em;
+    }
+    
+    #manifest-container {
+        font-size: smaller;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    #search-inst-card {
+        width: 95%;
+    }
+
+    #search-inst-logo {
+        width: 80%;
+    }
+}

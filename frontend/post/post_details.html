@@ -92,16 +92,7 @@
   </survey-details>
 
   <!-- BODY SHARED EVENT -->
-  <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
-    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
-    <div style="height: 70px; width: 70px;">
-      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
-    </div>
-    <div layout="column" layout-align-xs="center center">
-      <span style="font-size: 19px">ESTE EVENTO FOI REMOVIDO</span>
-      <span>por {{postDetailsCtrl.post.shared_event.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
-    </div>
-  </div>
+  <deleted-post message="ESTE EVENTO FOI REMOVIDO" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"></deleted-post>
   <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
 
   <!-- BODY SHARED POST -->
@@ -119,16 +110,7 @@
         <span class="md-subhead">por {{ postDetailsCtrl.post.shared_post.author }}</span>
       </md-card-header-text>
     </md-card-header>
-    <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"
-      style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
-      <div style="height: 70px; width: 70px;">
-        <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
-      </div>
-      <div layout="column" layout-align-xs="center center">
-        <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
-        <span>por {{postDetailsCtrl.post.last_modified_by}} {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.</span>
-      </div>
-    </div>
+    <deleted-post message="ESTA PUBLICAÇÃO FOI REMOVIDA" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"></deleted-post>
     <md-card-content layout="column" ng-class="postDetailsCtrl.post.shared_post.type_survey ? 'shared-survey' : ''">
       <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)"
         style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
@@ -174,20 +156,7 @@
       </a>
     </md-card-title-text>
   </md-card-title>
-  <div md-colors="{background: 'teal-500'}" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)"
-    style='margin: 0 9px 0 9px; height: 130px' layout-gt-xs="row" layout-xs="column" layout-align="center center">
-    <div style="height: 70px; width: 70px;">
-      <md-icon style="font-size:  70px; color: white">delete_forever</md-icon>
-    </div>
-    <div layout="column" layout-align-xs="center center">
-      <span style="font-size: 19px">ESTA PUBLICAÇÃO FOI REMOVIDA</span>
-      <span>
-        {{postDetailsCtrl.post.last_modified_by == postDetailsCtrl.post.author ? 'por' : 'pelo administrador'}} 
-        {{postDetailsCtrl.post.last_modified_by}} 
-        {{postDetailsCtrl.post.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
-      </span>
-    </div>
-  </div>  
+  <deleted-post message="ESTA PUBLICAÇÃO FOI REMOVIDA" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post)" ></deleted-post>
   <md-card-content ng-if="postDetailsCtrl.showTextPost()">
       <div>
           <p ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post).text" class="text">

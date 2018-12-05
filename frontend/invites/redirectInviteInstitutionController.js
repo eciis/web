@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("RedirectInviteInstitutionController", function RedirectInviteInstitutionController(
-            InviteService, $stateParams, $state, AuthService) {
+            InviteService, $stateParams, $state, AuthService, STATES) {
         var controller = this;
 
         var inviteId = $stateParams.id;
@@ -18,14 +18,14 @@
         };
 
         controller.goToHome = function goToHome() {
-            $state.go("app.user.home");
+            $state.go(STATES.HOME);
         };
 
         controller.signin = function signin() {
             if (AuthService.isLoggedIn()) {
-                $state.go("new_invite", {key: inviteId});
+                $state.go(STATES.NEW_INVITE, {key: inviteId});
             } else {
-                $state.go('signin');
+                $state.go(STATES.SIGNIN);
             }
         };
         
@@ -41,7 +41,7 @@
             InviteService.getInvite(inviteId).then(function(response) {
                 controller.invite = new Invite(response);
                 if (controller.invite.status === "accepted") {
-                    $state.go("signin");
+                    $state.go(STATES.SIGNIN);
                 }
             });
         })();

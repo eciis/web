@@ -1,29 +1,34 @@
 <md-sidenav class="md-sidenav-left side-menu" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
-    <md-content class="custom-scrollbar" layout="column" md-colors="{background: 'grey-100'}">
+    <md-content md-colors="{background: 'grey-100'}">
         <!-- Menu header -->
         <div class="card hovercard" md-colors="{background: sideMenuCtrl.getProfileColor(800)}">
             <div class="cardheader">
                 <div class="avatar">
-                    <img ng-click="sideMenuCtrl.onClickImage()" ng-src="{{ sideMenuCtrl.getImage() }}">
+                    <img ng-click="sideMenuCtrl.onClickImage()" ng-src="{{sideMenuCtrl.getImage()}}">
                 </div>
             </div>
             <div class="info" md-colors="{background: sideMenuCtrl.getProfileColor(600)}">
                 <div class="desc">
-                    <a class="md-title sm-title" href ng-click="sideMenuCtrl.onClickTitle()">{{ sideMenuCtrl.getTitle() }}</a>
+                    <a class="md-title sm-title" href ng-click="sideMenuCtrl.onClickTitle()">{{sideMenuCtrl.getTitle()}}</a>
                 </div>
             </div>
         </div>
         <!-- Menu items -->
-        <div class="row section-menu">
-            <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <md-menu-item ng-repeat="item in sideMenuCtrl.items track by item.description">
+        <md-content width="4" md-colors="{background: 'grey-100'}">
+            <div ng-repeat="item in sideMenuCtrl.items track by item.description" ng-if="sideMenuCtrl.show(item)">
+                <h4 ng-if="item.topDivider && item.sectionTitle" class="sm-section-title">{{item.sectionTitle}}</h4>
+                <md-divider ng-if="item.topDivider"></md-divider>
+                
+                <md-menu-item>
                     <md-button ng-click="item.onClick(); sideMenuCtrl.close();" 
                         ng-class="sideMenuCtrl.getSelectedClass(item.stateName)">
                         <md-icon>{{item.icon}}</md-icon>
                         <b>{{item.description}}</b>
                     </md-button>
                 </md-menu-item>
-            </md-menu-content>
-        </div>
+
+                <md-divider ng-if="item.bottomDivider"></md-divider>
+            </div>
+        </md-content>
     </md-content>
 </md-sidenav>

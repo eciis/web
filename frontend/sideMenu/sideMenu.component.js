@@ -10,7 +10,6 @@
         bindings: {
             items: '<',
             entity: '<',
-            isInstitution: '<',
             onClickImage: '<',
             onClickTitle: '<'
         }
@@ -20,16 +19,11 @@
         const sideMenuCtrl = this;
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
+        const isUser = sideMenuCtrl.entity instanceof User;
 
 
         sideMenuCtrl.$onInit = () => {
-            loadEntity();
-        };
 
-        const loadEntity = () => {
-            if(!sideMenuCtrl.isInstitution) {
-                sideMenuCtrl.entity = sideMenuCtrl.user;
-            }
         };
         
         sideMenuCtrl.close = () => {
@@ -43,16 +37,20 @@
         sideMenuCtrl.getImage = () => {
             const instAvatar = '/app/images/institution.png';
             const userAvatar = '/app/images/avatar.png';
-            const defaultImage = sideMenuCtrl.isInstitution ? instAvatar : userAvatar;
-            return _.get(sideMenuCtrl, 'entity.photo_url', defaultImage);
+            const defaultImage = isUser ? userAvatar : instAvatar;
+            return sideMenuCtrl.entity ? sideMenuCtrl.entity.photo_url : defaultImage;
         };
 
         sideMenuCtrl.getTitle = () => {
-            return _.get(sideMenuCtrl, 'entity.name', "");
+            return sideMenuCtrl.entity ? sideMenuCtrl.entity.name : "";
         };
 
         sideMenuCtrl.getSelectedClass = stateName => {
             return $state.current.name === STATES[stateName] ? "selected" : "";
         };
+
+        sideMenuCtrl.show = item => {
+            return item.showIf ? item.showIf() : true; 
+        }
     }
 })();

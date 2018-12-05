@@ -149,6 +149,80 @@
             });
         };
 
+        homeCtrl.sideMenuItems = [
+            {
+                icon: 'home',
+                description: 'Início',
+                stateName: 'HOME',
+                onClick: homeCtrl.goHome
+            },
+            {
+                icon: 'account_box',
+                description: 'Meu Perfil',
+                stateName: 'CONFIG_PROFILE',
+                onClick: homeCtrl.goToProfile
+            },
+            {
+                icon: 'date_range',
+                description: 'Eventos',
+                stateName: 'EVENTS',
+                onClick: homeCtrl.goToEvents
+            },
+            {
+                icon: 'mail_outline',
+                iconClass: 'notification-badge',
+                description: 'Convites',
+                stateName: 'INVITE_INSTITUTION',
+                onClick: homeCtrl.goInvite,
+                showIf: () => true
+            },
+            {
+                icon: 'account_balance',
+                description: 'Gerenciar instituição',
+                stateName: 'INVITE_INSTITUTION',
+                onClick: () => {},
+                showIf: homeCtrl.user.isAdminOfCurrentInst,
+                sectionTitle: 'INSTITUIÇÃO',
+                topDivider: true,
+                showIf: () => true
+            },
+            {
+                icon: 'account_circle',
+                iconClass: 'notification-badge',
+                description: 'Gerenciar Membros',
+                stateName: 'MANAGE_INST_MEMBERS',
+                onClick: () => {},
+                showIf: () => true
+            },
+            {
+                icon: 'account_balance',
+                iconClass: 'notification-badge',
+                description: 'Vínculos Institucionais',
+                stateName: 'MANAGE_INST_INVITE_INST',
+                onClick: () => {},
+                bottomDivider: true,
+                showIf: () => true
+            },
+            {
+                icon: 'card_travel',
+                description: 'Iniciar Tutorial',
+                stateName: '',
+                onClick: event => homeCtrl.takeTour(event)
+            },
+            {
+                icon: 'account_balance',
+                description: 'Instituições cadastradas',
+                stateName: 'USER_INSTITUTIONS',
+                onClick: homeCtrl.goToInstitutions
+            },
+            {
+                icon: 'exit_to_app',
+                description: 'Sair',
+                stateName: '',
+                onClick: () => {}
+            },
+        ];
+
         /**
          * Start the listeners to new post and delete post events.
          * broadCasts the event to the hierachy by calling broadcastPostEvent() 

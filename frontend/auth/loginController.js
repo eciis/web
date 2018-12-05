@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("LoginController", function LoginController(AuthService, $state, $mdDialog, 
+    app.controller("LoginController", function LoginController(AuthService, $state, STATES, 
             $stateParams, $window, MessageService) {
         var loginCtrl = this;
 
@@ -42,7 +42,7 @@
         };
 
         loginCtrl.resetPassword = function resetPassword(ev) {
-            $state.go("reset_password");
+            $state.go(STATES.RESET_PASSWORD);
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {
@@ -57,13 +57,13 @@
             if (path) {
                 window.location.pathname = path;
             } else {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             }
         }
 
         (function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             }
         })();
     });

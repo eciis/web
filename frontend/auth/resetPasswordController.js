@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller('ResetPasswordController', function (AuthService, $state, $scope, MessageService) {
+    app.controller('ResetPasswordController', function (AuthService, $state, $scope, MessageService, STATES) {
         var resetCtrl = this;
 
         resetCtrl.email = '';
@@ -28,7 +28,7 @@
          * It returns the user to the singin page
          */
         resetCtrl.return = function () {
-            $state.go("signin");
+            $state.go(STATES.SIGNIN);
         };
 
         /**

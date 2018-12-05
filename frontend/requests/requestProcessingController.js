@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, request, $state, $mdDialog) {
+        MessageService, InstitutionService, request, $state, $mdDialog, STATES) {
         var requestController = this;
 
         var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
@@ -138,7 +138,7 @@
         function makeUrl(institutionKey){
             var currentUrl = window.location.href;
             currentUrl = currentUrl.split('#');
-            return currentUrl[0] + $state.href('app.institution.timeline', {institutionKey: institutionKey});
+            return currentUrl[0] + $state.href(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         }
 
         function getLegalNature() {

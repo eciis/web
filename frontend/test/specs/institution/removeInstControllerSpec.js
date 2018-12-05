@@ -76,10 +76,8 @@
     describe("closeDialog()", function () {
         it('should call $mdDialog.cancel and loadStateView()', function () {
             spyOn(mdDialog, 'cancel');
-            spyOn(removeInstCtrl, 'loadStateView');
             removeInstCtrl.closeDialog();
             expect(mdDialog.cancel).toHaveBeenCalled();
-            expect(removeInstCtrl.loadStateView).toHaveBeenCalled();
         });
     });
 

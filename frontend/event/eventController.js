@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, $http) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -19,20 +19,20 @@
         eventCtrl.isLoadingEvents = true;
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-            
+
             if (eventCtrl._moreEvents) {
                 const getEventsFunction = eventCtrl.institutionKey ? EventService.getInstEvents : EventService.getEvents;
                 return eventCtrl._loadEvents(getEventsFunction,
                     _.get(eventCtrl.selectedMonth, 'month'),
                     eventCtrl.selectedYear);
-            } 
+            }
             return $q.when();
         };
 
         Utils.setScrollListener(content, eventCtrl.loadMoreEvents);
 
         /**
-         * Get events from backend 
+         * Get events from backend
          * @param {*} deferred The promise to resolve before get events from backend
          * @param {*} getEvents The function received to call and get events
          * @param {*} month The month to filter the get of events
@@ -57,7 +57,7 @@
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
 
@@ -143,16 +143,16 @@
         };
 
         /**
-         * Distributes events on days that happens 
+         * Distributes events on days that happens
          * @param {object} event the event that be distributed
          * @param {object} eventsByDay the object with days in keys
          */
         eventCtrl._distributeEvents = (event, eventsByDay) => {
             const rangeDays = eventCtrl._getDaysRange(new Date(event.start_time), new Date(event.end_time));
             const startDay = rangeDays[0],
-                   endDay = rangeDays[1]; 
+                   endDay = rangeDays[1];
             for (let i = startDay; i <= endDay; i++) {
-                if(!eventsByDay[i]) 
+                if(!eventsByDay[i])
                     eventsByDay[i] = [];
                 eventsByDay[i].push(event);
             }

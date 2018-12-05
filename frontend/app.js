@@ -20,7 +20,7 @@
     ]);
 
     app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
-        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider) {
+        $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -32,7 +32,7 @@
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
         $stateProvider
-            .state("app", {
+            .state(STATES.APP, {
                 abstract: true,
                 views: {
                     main: {
@@ -41,7 +41,7 @@
                     }
                 }
             })
-            .state("app.user", {
+            .state(STATES.USER, {
                 abstract: true,
                 views: {
                     content: {
@@ -50,7 +50,7 @@
                     }
                 }
             })
-            .state("app.user.search", {
+            .state(STATES.SEARCH, {
                 url: "/search/:search_keyword",
                 views: {
                     user_content: {
@@ -62,7 +62,7 @@
                     }
                 }
             })
-            .state("app.user.home", {
+            .state(STATES.HOME, {
                 url: "/",
                 views: {
                     user_content: {
@@ -70,7 +70,7 @@
                     }
                 }
             })
-            .state("app.user.institutions", {
+            .state(STATES.USER_INSTITUTIONS, {
                 url: "/all_institutions",
                 views: {
                     user_content: {
@@ -79,7 +79,7 @@
                     }
                 }
             })
-            .state("app.user.events", {
+            .state(STATES.EVENTS, {
                 url: "/events",
                 views: {
                     user_content: {
@@ -89,7 +89,7 @@
                     }
                 }
             })
-            .state("app.user.invite_inst", {
+            .state(STATES.INVITE_INSTITUTION, {
                 url: "/inviteInstitution",
                 views: {
                     user_content: {
@@ -98,7 +98,7 @@
                     }
                 }
             })
-            .state("app.user.config_profile", {
+            .state(STATES.CONFIG_PROFILE, {
                 url: "/config_profile",
                 views: {
                     user_content: {
@@ -107,7 +107,7 @@
                     }
                 }
             })
-            .state("app.user.notifications", {
+            .state(STATES.NOTIFICATION, {
                 url: "/notifications",
                 views: {
                     user_content: {
@@ -116,7 +116,7 @@
                     }
                 }
             })
-            .state("app.institution", {
+            .state(STATES.INSTITUTION, {
                 abstract: true,
                 views: {
                     content: {
@@ -125,7 +125,7 @@
                     }
                 }
             })
-            .state("app.institution.timeline", {
+            .state(STATES.INST_TIMELINE, {
                 url: "/institution/:institutionKey/home",
                 views: {
                     institution_content: {
@@ -134,7 +134,7 @@
                     }
                 }
             })
-            .state("app.institution.followers", {
+            .state(STATES.INST_FOLLOWERS, {
                 url: "/institution/:institutionKey/followers",
                 views: {
                     institution_content: {
@@ -143,7 +143,7 @@
                     }
                 }
             })
-            .state("app.institution.events", {
+            .state(STATES.INST_EVENTS, {
                 url: "/institution/:institutionKey/institution_events",
                 views: {
                     institution_content: {
@@ -152,7 +152,7 @@
                     }
                 }
             })
-            .state("app.institution.members", {
+            .state(STATES.INST_MEMBERS, {
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {
@@ -161,7 +161,7 @@
                     }
                 }
             })
-            .state("app.institution.registration_data", {
+            .state(STATES.INST_REGISTRATION_DATA, {
                 url: "/institution/:institutionKey/registration_data",
                 views: {
                     institution_content: {
@@ -170,7 +170,7 @@
                     }
                 }
             })
-            .state("app.institution.institutional_links", {
+            .state(STATES.INST_LINKS, {
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {
@@ -179,7 +179,7 @@
                     }
                 }
             })
-            .state("app.post", {
+            .state(STATES.POST, {
                 url: "/posts/:key",
                 views: {
                     content: {
@@ -188,7 +188,7 @@
                     }
                 }
             })
-            .state("app.manage_institution", {
+            .state(STATES.MANAGE_INST, {
                 abstract: true,
                 url: "/institution/:institutionKey",
                 views: {
@@ -198,7 +198,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.members", {
+            .state(STATES.MANAGE_INST_MEMBERS, {
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
@@ -207,7 +207,7 @@
                     }
                 }
             })
-            .state("app.user.event", {
+            .state(STATES.EVENT_DETAILS, {
                 url: "/event/:eventKey/details",
                 views: {
                     user_content: {
@@ -216,7 +216,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.edit_info", {
+            .state(STATES.MANAGE_INST_EDIT, {
                 url: "/edit",
                 views: {
                     content_manage_institution: {
@@ -224,7 +224,7 @@
                     }
                 }
             })
-            .state("app.manage_institution.invite_inst", {
+            .state(STATES.MANAGE_INST_INVITE_INST, {
                 url: "/inviteInstitution",
                 views: {
                     content_manage_institution: {
@@ -233,7 +233,7 @@
                     }
                 }
             })
-            .state("new_invite", {
+            .state(STATES.NEW_INVITE, {
                 url: "/:key/new_invite",
                 views: {
                     main: {
@@ -242,7 +242,7 @@
                     }
                 }
             })
-            .state("signin", {
+            .state(STATES.SIGNIN, {
                 url: "/signin",
                 views: {
                     main: {
@@ -254,7 +254,7 @@
                     "redirect": undefined
                 }
             })
-            .state("create_institution", {
+            .state(STATES.CREATE_INST, {
                 url: "/create_institution",
                 views: {
                     main: {
@@ -262,7 +262,7 @@
                     }
                 }
             })
-            .state("create_institution_form", {
+            .state(STATES.CREATE_INST_FORM, {
                 url: "/create_institution_form",
                 views: {
                     main: {
@@ -276,7 +276,7 @@
                     inviteKey: undefined
                 }
             })
-            .state("accept_invite", {
+            .state(STATES.ACCEPT_INVITE, {
                 url: "/accept_invite?id",
                 views: {
                     main: {
@@ -285,7 +285,7 @@
                     }
                 }
             })
-            .state("email_verification", {
+            .state(STATES.EMAIL_VERIFICATION, {
                 url: "/email_verification",
                 views: {
                     main: {
@@ -294,7 +294,7 @@
                     }
                 }
             })
-            .state("reset_password", {
+            .state(STATES.RESET_PASSWORD, {
                 url: "/reset_password",
                 views: {
                     main: {
@@ -303,7 +303,7 @@
                     }
                 }
             })
-            .state("user_inactive", {
+            .state(STATES.USER_INACTIVE, {
                 url: "/user_inactive",
                 views: {
                     main: {
@@ -312,7 +312,7 @@
                     }
                 }
             })
-            .state("user_request", {
+            .state(STATES.USER_REQUEST, {
                 url: '/user_request',
                 params: {
                     institution: null
@@ -324,7 +324,7 @@
                     }
                 }
             })
-            .state("app.error", {
+            .state(STATES.ERROR, {
                 url: "/error",
                 views: {
                     content: {
@@ -375,7 +375,7 @@
         };
     });
 
-    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state, STATES) {
         return {
             request: function(config) {
                 var AuthService = $injector.get('AuthService');
@@ -413,7 +413,7 @@
                         AuthService.logout();
                         rejection.data.msg = "Sua sessão expirou!";
                     } else {
-                        $state.go("signin");
+                        $state.go(STATES.SIGNIN);
                     }
                 } else if(rejection.status === 403) {
                     rejection.data.msg = "Você não tem permissão para realizar esta operação!";
@@ -428,11 +428,11 @@
         };
     });
 
-    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+    app.run(function authInterceptor(AuthService, $transitions, STATES, $state, $location) {
         var ignored_routes = [
-            'signin',
-            'reset_password',
-            'accept_invite'
+            STATES.SIGNIN,
+            STATES.RESET_PASSWORD,
+            STATES.ACCEPT_INVITE
         ];
 
         $transitions.onStart({
@@ -440,7 +440,7 @@
                 return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
             }
         }, function(transition) {
-            $state.go("signin", {
+            $state.go(STATES.SIGNIN, {
                 "redirect": $location.path()
             });
         });
@@ -451,17 +451,17 @@
      * @param {service} AuthService - Service of user authentication
      * @param {service} $transitions - Service of transitions states
      */
-    app.run(function userInactiveListener(AuthService, $transitions) {
+    app.run(function userInactiveListener(AuthService, $transitions, STATES) {
         var ignored_routes = [
-            'create_institution',
-            'create_institution_form',
-            'error',
-            'signin',
-            'email_verification',
-            'reset_password',
-            'user_inactive',
-            'user_request',
-            'new_invite'
+            STATES.CREATE_INST,
+            STATES.CREATE_INST_FORM,
+            STATES.ERROR,
+            STATES.SIGNIN,
+            STATES.EMAIL_VERIFICATION,
+            STATES.RESET_PASSWORD,
+            STATES.USER_INACTIVE,
+            STATES.NEW_INVITE,
+            STATES.USER_REQUEST
         ];
 
         $transitions.onStart({
@@ -472,13 +472,13 @@
                 return !(_.includes(ignored_routes, state.name)) && isInactive;
             }
         }, function(transition) {
-            transition.router.stateService.transitionTo('user_inactive');
+            transition.router.stateService.transitionTo(STATES.USER_INACTIVE);
         });
     });
 
-    app.run(function inviteInterceptor(AuthService, $transitions, $state) {
+    app.run(function inviteInterceptor(AuthService, $transitions, $state, STATES) {
         var ignored_routes = [
-            'create_institution_form'
+            STATES.CREATE_INST_FORM
         ];
 
         $transitions.onSuccess({
@@ -493,7 +493,7 @@
         }, function(transition) {
             var pendingInvite = AuthService.getCurrentUser().getPendingInvitation();
             var inviteKey = pendingInvite.key;
-            $state.go("new_invite", {key: inviteKey});
+            $state.go(STATES.NEW_INVITE, {key: inviteKey});
         });
     });
 

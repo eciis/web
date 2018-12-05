@@ -16,35 +16,30 @@
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
 
-        allInstitutionsCtrl.allInstTab = true;
-        allInstitutionsCtrl.followingInstTab = false;
-        allInstitutionsCtrl.memberInstTab = false;
-        
-        const FOLLOWING_TAB = 'following';
-        const ALL_TAB = 'all';
+        allInstitutionsCtrl.currentTab = 'all';
+
+        const possibleTabs = ['all', 'following', 'member'];
         
         /**
-         * It sets the flags correctly according to the nextTab value.
+         * It sets the currentTab correctly according to the nextTab value.
          * Besides, this function calls other aux functions that filter
          * the institutions to achieve the expected behavior
          * {string} nextTab
          */
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
-            if (nextTab === ALL_TAB) {
-                allInstitutionsCtrl.allInstTab = true;
-                allInstitutionsCtrl.followingInstTab = false;
-                allInstitutionsCtrl.memberInstTab = false;
-                setAllInstitutions();
-            } else if (nextTab === FOLLOWING_TAB) {
-                allInstitutionsCtrl.allInstTab = false;
-                allInstitutionsCtrl.followingInstTab = true;
-                allInstitutionsCtrl.memberInstTab = false;
-                setFollowingInstitutions();
-            } else {
-                allInstitutionsCtrl.allInstTab = false;
-                allInstitutionsCtrl.followingInstTab = false;
-                allInstitutionsCtrl.memberInstTab = true;
-                setMemberInstitutions();
+            allInstitutionsCtrl.currentTab = (
+              possibleTabs.includes(nextTab) ? nextTab : allInstitutionsCtrl.currentTab);
+
+            switch(nextTab) {
+                case 'all':
+                    setAllInstitutions();
+                    break;
+                case 'following':
+                    setFollowingInstitutions();
+                    break;
+                case 'member':
+                    setMemberInstitutions();
+                    break;
             }
         };
 
@@ -82,15 +77,7 @@
 
 
         allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
-            var deferred = $q.defer();
-
-            if (moreInstitutions) {
-                loadInstitutions(deferred);
-            } else {
-                deferred.resolve();
-            }
-
-            return deferred.promise;
+            return moreInstitutions? loadInstitutions() : $q.when();
         };
 
         allInstitutionsCtrl.getInstitutions = function getInstitutions() {
@@ -107,22 +94,22 @@
             return Utils.normalizeString(string);
         }
 
-        function loadInstitutions(deferred) {
-            InstitutionService.getNextInstitutions(actualPage).then(function success(response) {
+        function loadInstitutions() {
+            return InstitutionService.getNextInstitutions(actualPage)
+            .then(function success(response) {
                 actualPage += 1;
                 moreInstitutions = response.next;
                 
                 response.institutions.map(inst => allInstitutionsCtrl.allInstitutions.push(inst));
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
-                allInstitutionsCtrl.institutions = [...allInstitutionsCtrl.allInstitutions];
-                deferred.resolve();
-            }, function error() {
-                deferred.reject();
+                allInstitutionsCtrl.changeTab(allInstitutionsCtrl.currentTab);
             });
         }
         
-        allInstitutionsCtrl.loadMoreInstitutions();
-        Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions); 
+        allInstitutionsCtrl.$onInit = function () {
+            allInstitutionsCtrl.loadMoreInstitutions();
+            Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions);
+        };
     }); 
 })();

@@ -19,11 +19,11 @@
         </div>
     </div>
     <div class="registered-institution-action">
-        <div ng-show="regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}" 
+        <div ng-if="regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}" 
             id="reg-following-div">
             <span md-colors="{color: 'teal-500'}"><b>SEGUINDO</b></span>
         </div>
-        <div ng-show="!regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}"
+        <div ng-if="!regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}"
             id="reg-not-following-div" ng-click="regInstCtrl.follow()">
             <span md-colors="{color: 'teal-500'}"><b>SEGUIR</b></span>
         </div>

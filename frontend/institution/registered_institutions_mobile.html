@@ -3,23 +3,22 @@
         <div ng-click="allInstitutionsCtrl.changeTab('all')">
             <b>TODAS</b>
         </div>
-        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.allInstTab"></hl>
+        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.currentTab === 'all'"></hl>
         <div ng-click="allInstitutionsCtrl.changeTab('following')">
             <b>SEGUINDO</b>
         </div>
-        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.followingInstTab"
+        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.currentTab === 'following'"
             class="following-tab-selected"></hl>
         <div ng-click="allInstitutionsCtrl.changeTab('member')">
             <b>MEMBRO</b>
         </div>
-        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.memberInstTab"
+        <hl md-colors="{background: 'light-green'}" ng-if="allInstitutionsCtrl.currentTab === 'member'"
             class="member-tab-selected"></hl>
     </div>
 
     <div id="content" style="margin-top: 3.2em;" class="registered-institutions-container">
-        <div ng-repeat="institution in allInstitutionsCtrl.institutions" style="margin-bottom: 0.5em;">
-            <registered-institution institution="institution">
-            </registered-institution>
-        </div>
+          <registered-institution institution="institution" 
+            ng-repeat="institution in allInstitutionsCtrl.institutions" style="margin-bottom: 0.5em;">
+          </registered-institution>
     </div>
 </div>

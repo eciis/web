@@ -36,13 +36,12 @@
          * Follows the institution
          */
         regInstCtrl.follow = function follow() {
-            var promise = InstitutionService.follow(regInstCtrl.institution.key);
-            promise.then(function success() {
+            return InstitutionService.follow(regInstCtrl.institution.key)
+            .then(function success() {
                 user.follow(regInstCtrl.institution);
                 AuthService.save();
                 MessageService.showToast("Seguindo " + regInstCtrl.institution.name);
             });
-            return promise;
         };
 
         /**
@@ -50,7 +49,7 @@
          * using FEDERAL_STATE_ACRONYM constant
          */
         regInstCtrl.getFederalStateAcronym = function () {
-            return FEDERAL_STATE_ACRONYM[regInstCtrl.institution.address.federal_state];
+            return _.get(FEDERAL_STATE_ACRONYM, regInstCtrl.institution.address.federal_state);
         };
 
         /**

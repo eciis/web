@@ -1,4 +1,32 @@
 <div style="overflow: auto;">
     <div class="create-event-mobile-top-bar">
+        <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
+            <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
+        </md-button>
     </div>
+</div>
+<div style="margin-top: 3.2em;">
+    <md-menu>
+        <md-button aria-label="Open phone interactions menu" 
+            class="md-icon-button" ng-click="$mdMenu.open(ev)">
+            <md-icon>arrow_drop_down</md-icon>
+        </md-button>
+        <md-menu-content width="4" class="custom-scrollbar">
+            <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
+            <md-button ng-click="mainCtrl.changeInstitution(profile)">
+                <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                {{ profile.institution.name }}
+            </md-button> 
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</div>
+<div class="action-event-container"
+    ng-if="!createEventCtrl.loading">
+    <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
+        Cancelar
+    </md-button>
+    <md-button class="btn-submit" type="submit" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
+        <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
+    </md-button>
 </div>

@@ -94,7 +94,7 @@
                 views: {
                     user_content: {
                         templateUrl: "app/event/create_event.html",
-                        controller: "EventDialogController as eventCtrl"
+                        controller: "EventDialogController as createEventCtrl"
                     }
                 }
             })

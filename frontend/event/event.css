@@ -314,4 +314,24 @@
         align-items: center;
         position: absolute;
     }
+
+    .back-to-button {
+        color: white;
+        font-size: 2.5em;
+    }
+
+    .action-event-container {
+        display: grid; 
+        justify-content: end; 
+        grid-template-columns: auto auto; 
+        padding: 0 0 8px;
+        bottom:0;
+        position: fixed;
+        right: 0.6em;
+    }
+
+    .create-event-cancel-button {
+        background-color: rgb(173, 169, 169);
+        color: white;
+    }
 }

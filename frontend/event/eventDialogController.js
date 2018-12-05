@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http, $q, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, $q, ObserverRecorderService) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -77,10 +77,10 @@
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                     .then(function success() {
-                        dialogCtrl.closeDialog();
+                        dialogCtrl.cancelCreation();
                         MessageService.showToast('Evento editado com sucesso.');
                     }, function error() {
-                        dialogCtrl.closeDialog();
+                        dialogCtrl.cancelCreation();
                     });
             } else {
                 MessageService.showToast('Evento inválido');
@@ -119,7 +119,7 @@
             });
         };
 
-        dialogCtrl.closeDialog = function closeDialog() {
+        dialogCtrl.cancelCreation = () => {
             if (Utils.isMobileScreen(475))
                 $state.go("app.user.events");
 
@@ -255,11 +255,12 @@
         }
 
         dialogCtrl.previousStep = function previousStep() {
-            var currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
+            if (dialogCtrl.getStep(1)) dialogCtrl.cancelCreation();
+            let currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
             });
             dialogCtrl.steps[currentStep] = false;
-            var nextStep = currentStep - 1;
+            const nextStep = currentStep - 1;
             dialogCtrl.steps[nextStep] = true;
         };
 
@@ -302,7 +303,7 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    dialogCtrl.closeDialog();
+                    dialogCtrl.cancelCreation();
                     dialogCtrl.events.push(response);
                     MessageService.showToast('Evento criado com sucesso!');
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);

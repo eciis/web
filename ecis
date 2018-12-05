@@ -77,10 +77,11 @@ function set_config_file {
     url=$3;
     service_name=$4;
 
-    sed -i "$line s|.*|    $service: '$url',|" $FRONTEND_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $SUPPORT_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $LANDINGPAGE_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $WEBCHAT_CONFIG_FILE
+    tmpfile=$(mktemp)
+    sed "$line s|.*|    $service: '$url',|" $FRONTEND_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $FRONTEND_CONFIG_FILE
+    sed "$line s|.*|    $service: '$url',|" $SUPPORT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $SUPPORT_CONFIG_FILE
+    sed "$line s|.*|    $service: '$url',|" $LANDINGPAGE_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $LANDINGPAGE_CONFIG_FILE
+    sed "$line s|.*|    $service: '$url',|" $WEBCHAT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $WEBCHAT_CONFIG_FILE
 
     catch_error $? "Frontend will use ${bold}$url${_bold} as $service_name."
     catch_error $? "Support will use ${bold}$url${_bold} as $service_name."
@@ -91,7 +92,7 @@ function set_backend_url {
     service="BACKEND_URL";
     line=4;
     service_name="backend";
-    set_config_file $line $service $url $service_name; 
+    set_config_file $line $service $url $service_name;
 }
 
 function set_landingpage_url {
@@ -127,18 +128,20 @@ function set_webchat_url {
 }
 
 function set_app_version_config {
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE
+    tmpfile=$(mktemp)
+    sed "9s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $FRONTEND_CONFIG_FILE
     catch_error $? "APP VERSION on Frontend $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE
+    sed "9s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $SUPPORT_CONFIG_FILE
     catch_error $? "APP VERSION on Support $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE
+    sed "9s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $LANDINGPAGE_CONFIG_FILE
     catch_error $? "APP VERSION on LandingPage $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $WEBCHAT_CONFIG_FILE
+    sed "9s|.*|    APP_VERSION: '$1'|" $WEBCHAT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $WEBCHAT_CONFIG_FILE
     catch_error $? "APP VERSION on LandingPage $1"
 }
 
 function set_cache_suffix_sw {
-   sed -i "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+   tmpfile=$(mktemp)
+   sed "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE > "$tmpfile" && mv "$tmpfile" $SW_FILE
    catch_error $? "CACHE_SUFIX on SW $1"
 }
 
@@ -251,7 +254,7 @@ case "$1" in
                 if [ "$3" == "--clean" ]; then
                     rm -rf node_modules bower_components
                 fi
-                
+
                 if [ ! -e node_modules ]; then
                     yarn add package.json
                     catch_error $? "Node modules installed with success"
@@ -276,7 +279,7 @@ case "$1" in
                 echo "=========== Starting Backend Tests ==========="
                 source $PY_ENV/bin/activate
                 setup_app_version "master"
-                
+
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
                 echo 'SERVER_KEY = "SERVER_KEY"' >> firebase_config.py
@@ -342,9 +345,9 @@ case "$1" in
 
         DOMAIN="$APP_NAME.appspot.com"
         BACKEND_DOMAIN="backend-dot-$DOMAIN"
-        
+
         ENVIRONMENT="development"
-        read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT 
+        read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT
         if [ "$NEW_ENVIRONMENT" != "" ]; then
             ENVIRONMENT=$NEW_ENVIRONMENT
         fi

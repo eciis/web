@@ -5,28 +5,55 @@
         </md-button>
     </div>
 </div>
-<div style="margin-top: 3.2em;">
-    <md-menu>
+<div style="margin-top: 3.2em;" class="desc centralized-event-content">
+    <span>
+        {{ createEventCtrl.limitString(homeCtrl.user.current_institution.name, 30) }}
+    </span>
+    <md-menu style="min-width: 2em;">
         <md-button aria-label="Open phone interactions menu" 
             class="md-icon-button" ng-click="$mdMenu.open(ev)">
             <md-icon>arrow_drop_down</md-icon>
         </md-button>
-        <md-menu-content width="4" class="custom-scrollbar">
+        <md-menu-content class="custom-scrollbar">
             <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
-            <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                {{ profile.institution.name }}
-            </md-button> 
+                <md-button ng-click="mainCtrl.changeInstitution(profile)">
+                    <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                    {{ createEventCtrl.limitString(profile.institution.name, 30) }}
+                </md-button> 
             </md-menu-item>
         </md-menu-content>
     </md-menu>
 </div>
+<md-divider style="box-shadow: 0.07em 0.07em #8b8b8b"></md-divider>
+<form name="createEvent">
+    <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
+        <md-input-container md-no-float class="md-block">
+            <input ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO"
+            required ng-disabled="createEventCtrl.isEventOutdated()"/>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block fields-event-padding">
+            <input ng-model="createEventCtrl.event.local" placeholder="Local"
+            required ng-disabled="createEventCtrl.isEventOutdated()"/>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block fields-event-padding">
+            <input ng-required="!createEventCtrl.isAnotherCountry" placeholder="Rua"
+            ng-model="createEventCtrl.event.address.street"
+            ng-disabled="createEventCtrl.isEventOutdated()"/>
+        </md-input-container>
+    </div>
+    <div ng-if="createEventCtrl.getStep(2)">
+        2
+    </div>
+    <div ng-if="createEventCtrl.getStep(3)">
+        3
+    </div>
+</form>
 <div class="action-event-container"
     ng-if="!createEventCtrl.loading">
     <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
         Cancelar
     </md-button>
-    <md-button class="btn-submit" type="submit" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
+    <md-button class="btn-submit" ng-click="createEventCtrl.nextStepOrSave()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
         <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
     </md-button>
 </div>

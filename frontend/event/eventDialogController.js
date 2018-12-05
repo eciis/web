@@ -212,6 +212,8 @@
             return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
         };
 
+        dialogCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {

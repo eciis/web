@@ -1,4 +1,4 @@
-<md-content class="fill-screen" id="content-new-invite" md-colors="{background: 'teal-500'}">
+<md-content id="content-new-invite" md-colors="{background: 'teal-500'}">
   <load-circle ng-if="newInviteCtrl.loading"></load-circle>
   <md-card ng-if="!newInviteCtrl.isAlreadyProcessed && !newInviteCtrl.loading" class="new-invite-page-card">
     <md-card-content style="background-color:#FFFFFF;">
@@ -6,7 +6,7 @@
         <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
       </center>
       <form name="accetpInvite" ng-submit="newInviteCtrl.acceptInvite($event)" style="margin-left: 4px;">
-        <div layout="column" layout-align="center" layout-margin>
+        <div layout="column" layout-align="center">
           <p class="small-text md-title green-text">VOCÊ RECEBEU UM CONVITE DE:</p>
             <md-list class="reduce-distance">
               <md-list-item class="md-3-line" style="background-color:#F5F5F5;">
@@ -18,9 +18,9 @@
                 </div>
               </md-list-item>
             </md-list>
-            <div style="position: absolute; margin-left: -4em;">
-              <md-button class="md-fab md-primary" aria-label="Responder depois." ng-click="newInviteCtrl.answerLater()" md-colors="{background: 'light-green-500'}"
-                ng-if="newInviteCtrl.canAnswerLater()" hide-sm hide-xs>
+            <div id="keyboard-button-invite" ng-if="newInviteCtrl.canAnswerLater()" >
+              <md-button class="md-fab md-primary" aria-label="Responder depois."
+                ng-click="newInviteCtrl.answerLater()" md-colors="{background: 'light-green-500'}">
                 <md-icon>keyboard_arrow_left</md-icon>
               </md-button>
             </div>
@@ -73,7 +73,7 @@
               </div>
             </div>
         </div>
-        <md-card-actions layout="row" layout-align="end center">
+        <md-card-actions layout="row" layout-align="end center" class="no-margin">
           <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)"
             md-colors="{background: 'teal-500'}">
             Rejeitar

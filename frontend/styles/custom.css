@@ -875,6 +875,12 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     }
 }
 
+@media only screen and (max-width: 450px) {
+    .small-text {
+        font-size: 12px;
+    }
+}
+
 .selected {
     color:#009688;
     background-color:#E0E0E0;

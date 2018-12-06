@@ -167,10 +167,6 @@
         margin: 0;
         margin-top: 1.5em;
     }
-
-    .new-invite-page-card {
-      max-width: 350px;
-    }
 }
 
 .green-background{
@@ -877,12 +873,11 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     .small-text {
         font-size: 15px;
     }
-    .increase-distance {
-        margin-top: -15px;
-        padding-bottom: 10px;
-    }
-    .reduce-distance {
-        margin-top: -5px;
+}
+
+@media only screen and (max-width: 450px) {
+    .small-text {
+        font-size: 12px;
     }
 }
 

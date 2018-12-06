@@ -65,6 +65,17 @@
         httpBackend.verifyNoOutstandingRequest();
     });
 
+    describe('onInit', function() {
+        beforeEach(function() {
+            expect(surveyCtrl.options.lenght === 0).toBeTruthy();
+        });
+        
+        it('should set the post property to an instance of Post', function() {
+            surveyCtrl.$onInit();
+            expect(surveyCtrl.options.lenght > 0).toBeTruthy();
+        });
+    });
+
     describe('Save survey', function() {
         it('should create survey post', function(done) {
             spyOn(postService, 'createPost').and.callThrough();

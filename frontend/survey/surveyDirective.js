@@ -108,22 +108,18 @@
 
         function defaultoptions(){
             surveyCtrl.options = [];
-            surveyCtrl.options.push(angular.copy(option_empty));
-            surveyCtrl.options.push(angular.copy(option_empty));
-            if(MIN_QUANTITY_OPTION === 5){
-                surveyCtrl.options.push(angular.copy(option_empty));
-                surveyCtrl.options.push(angular.copy(option_empty));
-                surveyCtrl.options.push(angular.copy(option_empty));
-            }
+            _.range(MIN_QUANTITY_OPTION).map(
+                () => surveyCtrl.options.push(angular.copy(option_empty))
+            )
         }
 
         function unobserveNewPost() {
             SubmitFormListenerService.unobserve("postCtrl.post");
         }
 
-        (function main() {
+        surveyCtrl.$onInit = function() {
             defaultoptions();
-        })();
+        }
     });
 
     /**

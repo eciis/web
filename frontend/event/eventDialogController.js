@@ -209,7 +209,10 @@
         };
 
         dialogCtrl.isValidStepOne = function isValidStepOne() {
-            return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+            const isMobileScreen = Utils.isMobileScreen(475);
+            const isValidToMobile = isMobileScreen && dialogCtrl.isValidAddress();
+            const isValidToDesktop = !isMobileScreen && dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+            return isValidToMobile || isValidToDesktop;
         };
 
         dialogCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
@@ -223,6 +226,9 @@
                         dialogCtrl.event.address
                     ],
                     isValid: dialogCtrl.isValidStepOne
+                },
+                1: {
+                    isValid: dialogCtrl.isValidDate
                 }
             };
             return necessaryFieldsForStep;
@@ -231,7 +237,6 @@
         function isCurrentStepValid(currentStep) {
             var necessaryFieldsForStep = getFields();
             var isValid = true;
-
             if (!_.isUndefined(necessaryFieldsForStep[currentStep])) {
                 _.forEach(necessaryFieldsForStep[currentStep].fields, function (field) {
                     if (_.isUndefined(field) || _.isEmpty(field)) {

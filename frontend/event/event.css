@@ -326,11 +326,25 @@
     }
 
     .fields-event-container {
-        display: grid; 
-        justify-content: initial; 
-        grid-template-columns: auto; 
+        display: grid;
+        justify-content: initial;
+        grid-template-columns: auto;
         padding: 0 0.5em 0 0.5em;
         height: 1em;
+    }
+
+    .fields-event-split, .fields-event-split-reverse {
+        display: grid;
+        justify-content: initial;
+        grid-template-columns: 65% auto;
+    }
+
+    .fields-event-split-reverse {
+        grid-template-columns: 35% auto;
+    }
+
+    .event-input-margin {
+        margin-right: 0.7em;
     }
 
     .action-event-container {
@@ -346,5 +360,9 @@
     .create-event-cancel-button {
         background-color: rgb(173, 169, 169);
         color: white;
+    }
+
+    .event-select-inst-shadow {
+        box-shadow: 0.07em 0.07em #8b8b8b;
     }
 }

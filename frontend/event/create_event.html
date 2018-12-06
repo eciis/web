@@ -9,7 +9,7 @@
     <span>
         {{ createEventCtrl.limitString(homeCtrl.user.current_institution.name, 30) }}
     </span>
-    <md-menu style="min-width: 2em;">
+    <md-menu>
         <md-button aria-label="Open phone interactions menu" 
             class="md-icon-button" ng-click="$mdMenu.open(ev)">
             <md-icon>arrow_drop_down</md-icon>
@@ -24,21 +24,61 @@
         </md-menu-content>
     </md-menu>
 </div>
-<md-divider style="box-shadow: 0.07em 0.07em #8b8b8b"></md-divider>
+<md-divider class="event-select-inst-shadow"></md-divider>
 <form name="createEvent">
     <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
         <md-input-container md-no-float class="md-block">
-            <input ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO"
+            <input ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO*"
             required ng-disabled="createEventCtrl.isEventOutdated()"/>
         </md-input-container>
         <md-input-container md-no-float class="md-block fields-event-padding">
-            <input ng-model="createEventCtrl.event.local" placeholder="Local"
+            <input ng-model="createEventCtrl.event.local" placeholder="Local*"
             required ng-disabled="createEventCtrl.isEventOutdated()"/>
         </md-input-container>
-        <md-input-container md-no-float class="md-block fields-event-padding">
-            <input ng-required="!createEventCtrl.isAnotherCountry" placeholder="Rua"
-            ng-model="createEventCtrl.event.address.street"
-            ng-disabled="createEventCtrl.isEventOutdated()"/>
+        <div class="fields-event-split">
+            <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
+                <input ng-required="!createEventCtrl.isAnotherCountry" placeholder="Rua"
+                ng-model="createEventCtrl.event.address.street"
+                ng-disabled="createEventCtrl.isEventOutdated()"/>
+            </md-input-container>
+            <md-input-container md-no-float class="md-block fields-event-padding">
+                <input ng-model="createEventCtrl.event.address.number" placeholder="Número"
+                    ng-disabled="createEventCtrl.isEventOutdated()"/>
+            </md-input-container>
+        </div>
+        <div class="fields-event-split-reverse">
+            <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
+                <md-select md-container-class="container-resp select-resp" ng-model="createEventCtrl.event.address.country" ng-change="createEventCtrl.setAnotherCountry()"
+                ng-disabled="createEventCtrl.isEventOutdated()">
+                    <md-option ng-repeat="country in createEventCtrl.countries"
+                        ng-value="country.nome_pais">
+                        {{country.nome_pais}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
+                <input type="text" name="state" ng-model="createEventCtrl.event.address.federal_state"
+                ng-disabled="createEventCtrl.isEventOutdated()" placeholder="Estado"/>
+            </md-input-container>
+            <md-input-container md-no-float class="md-block fields-event-padding" ng-if="!createEventCtrl.isAnotherCountry">
+                <md-select name="state" ng-model="createEventCtrl.selectedFederalState" ng-change="createEventCtrl.getCitiesByState()"
+                ng-disabled="!createEventCtrl.event.address.country || createEventCtrl.isEventOutdated()" placeholder="Estado" required>
+                    <md-option ng-repeat="federal_state in createEventCtrl.federalStates"
+                    ng-value="federal_state">
+                        {{federal_state.nome}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <md-input-container md-no-float class="md-block" ng-if="createEventCtrl.isAnotherCountry">
+            <input type="text" name="city" ng-model="createEventCtrl.event.address.city"
+            placeholder="Cidade" ng-disabled="createEventCtrl.isEventOutdated()"/>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block" ng-if="!createEventCtrl.isAnotherCountry">
+            <md-select ng-model="createEventCtrl.event.address.city" required placeholder="Cidade"
+                ng-disabled="!createEventCtrl.selectedFederalState || createEventCtrl.isEventOutdated()"/>
+                <md-option ng-repeat="city in createEventCtrl.cities" ng-value="city">{{city}}</md-option>
+            </md-select>
         </md-input-container>
     </div>
     <div ng-if="createEventCtrl.getStep(2)">
@@ -54,6 +94,6 @@
         Cancelar
     </md-button>
     <md-button class="btn-submit" ng-click="createEventCtrl.nextStepOrSave()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
-        <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
+        <span style="color: white;">{{createEventCtrl.getStep(3) ? "publicar" : "avançar"}}</span>
     </md-button>
 </div>

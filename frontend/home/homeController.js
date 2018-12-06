@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(AuthService, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, UtilsService) {
+        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, SideMenuHomeItems) {
         var homeCtrl = this;
 
         var ACTIVE = "active";
@@ -12,19 +12,11 @@
 
         homeCtrl.events = [];
         homeCtrl.followingInstitutions = [];
-        homeCtrl.instMenuExpanded = false;
         homeCtrl.isLoadingPosts = true;
         homeCtrl.showMessageOfEmptyEvents = true;
-
-        homeCtrl.user = AuthService.getCurrentUser();
         
-        homeCtrl.getSelectedClass = function (stateName){
-            return $state.current.name === STATES[stateName] ? "selected" : "";
-        };
-
-        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
-        };
+        homeCtrl.user = AuthService.getCurrentUser();
+        homeCtrl.sideMenuItems = SideMenuHomeItems.new();
 
         homeCtrl.eventInProgress = function eventInProgress(event) {
             var end_time = event.end_time;
@@ -42,28 +34,16 @@
             ProfileService.showProfile(userKey, ev);
         };
 
-        homeCtrl.goHome = function goHome() {
-            UtilsService.selectNavOption(STATES.HOME);
-        };
-
-        homeCtrl.goToProfile = function goToProfile() {
-            UtilsService.selectNavOption(STATES.CONFIG_PROFILE);
+        homeCtrl.goToInstitution = function goToInstitution(institutionKey) {
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         homeCtrl.goToEvents = function goToEvents() {
-            UtilsService.selectNavOption(STATES.EVENTS, {posts: homeCtrl.posts});
-        };
-
-        homeCtrl.goToInstitutions = function goToInstitutions() {
-            UtilsService.selectNavOption(STATES.USER_INSTITUTIONS);
-        };
-
-        homeCtrl.goInvite = function goInvite() {
-            UtilsService.selectNavOption(STATES.INVITE_INSTITUTION);
+            $state.go(STATES.EVENTS);
         };
 
         homeCtrl.goToEvent = function goToEvent(event) {
-            $state.go(STATES.EVENT_DETAILS, {eventKey: event.key, posts: homeCtrl.posts});
+            $state.go(STATES.EVENT_DETAILS, {eventKey: event.key});
         };
 
         homeCtrl.newPost = function newPost(event) {
@@ -81,14 +61,6 @@
                 },
                 bindToController: true
             });
-        };
-
-        homeCtrl.expandInstMenu = function expandInstMenu(){
-            homeCtrl.instMenuExpanded = !homeCtrl.instMenuExpanded;
-        };
-
-        homeCtrl.isActive = function isActive(institution) {
-            return institution.state === ACTIVE;
         };
 
         homeCtrl.isEventsEmpty = function isEventsEmpty() {
@@ -109,7 +81,7 @@
             });
         };
 
-        function getFollowingInstitutions(){
+        function getFollowingInstitutions() {
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }
 
@@ -132,96 +104,6 @@
             });
             return actualEvents;
         }
-
-        homeCtrl.takeTour = function takeTour(event) {
-            $mdDialog.show({
-                templateUrl: 'app/invites/welcome_dialog.html',
-                controller: function WelcomeController() {
-                    var controller = this;
-                    controller.next = false;
-                    controller.cancel = function() {
-                        $mdDialog.cancel();
-                    };
-                },
-                controllerAs: "controller",
-                targetEvent: event,
-                clickOutsideToClose: false
-            });
-        };
-
-        homeCtrl.sideMenuItems = [
-            {
-                icon: 'home',
-                description: 'Início',
-                stateName: 'HOME',
-                onClick: homeCtrl.goHome
-            },
-            {
-                icon: 'account_box',
-                description: 'Meu Perfil',
-                stateName: 'CONFIG_PROFILE',
-                onClick: homeCtrl.goToProfile
-            },
-            {
-                icon: 'date_range',
-                description: 'Eventos',
-                stateName: 'EVENTS',
-                onClick: homeCtrl.goToEvents
-            },
-            {
-                icon: 'mail_outline',
-                iconClass: 'notification-badge',
-                description: 'Convites',
-                stateName: 'INVITE_INSTITUTION',
-                onClick: homeCtrl.goInvite,
-                showIf: () => true
-            },
-            {
-                icon: 'account_balance',
-                description: 'Gerenciar instituição',
-                stateName: 'INVITE_INSTITUTION',
-                onClick: () => {},
-                showIf: homeCtrl.user.isAdminOfCurrentInst,
-                sectionTitle: 'INSTITUIÇÃO',
-                topDivider: true,
-                showIf: () => true
-            },
-            {
-                icon: 'account_circle',
-                iconClass: 'notification-badge',
-                description: 'Gerenciar Membros',
-                stateName: 'MANAGE_INST_MEMBERS',
-                onClick: () => {},
-                showIf: () => true
-            },
-            {
-                icon: 'account_balance',
-                iconClass: 'notification-badge',
-                description: 'Vínculos Institucionais',
-                stateName: 'MANAGE_INST_INVITE_INST',
-                onClick: () => {},
-                bottomDivider: true,
-                showIf: () => true
-            },
-            {
-                icon: 'card_travel',
-                description: 'Iniciar Tutorial',
-                stateName: '',
-                onClick: event => homeCtrl.takeTour(event)
-            },
-            {
-                icon: 'account_balance',
-                description: 'Instituições cadastradas',
-                stateName: 'USER_INSTITUTIONS',
-                onClick: homeCtrl.goToInstitutions
-            },
-            {
-                icon: 'exit_to_app',
-                description: 'Sair',
-                stateName: '',
-                onClick: () => {}
-            },
-        ];
 
         /**
          * Start the listeners to new post and delete post events.

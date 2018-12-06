@@ -9,13 +9,14 @@
 
         var surveyCtrl = this;
 
-        surveyCtrl.options = $scope.options;
         surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
-                            };
+                            };        
+
+        const MIN_QUANTITY_OPTION = (Utils.isMobileScreen() && screen.height > 730) ? 5 : 2;
 
         surveyCtrl.removeOption = function(opt) {
              _.remove(surveyCtrl.options, function(option) {
@@ -24,7 +25,8 @@
         };
 
         surveyCtrl.changeOption = function(option) {
-            option.text ? surveyCtrl.addOption() : surveyCtrl.options.length > 2 && surveyCtrl.removeOption(option);
+            option.text ? surveyCtrl.addOption() : 
+            surveyCtrl.options.length > MIN_QUANTITY_OPTION && surveyCtrl.removeOption(option);
         }
 
         surveyCtrl.addOption = function(){
@@ -93,9 +95,7 @@
 
         surveyCtrl.resetSurvey = function resetSurvey() {
             surveyCtrl.post = {};
-            surveyCtrl.options = [];
-            surveyCtrl.options.push(angular.copy(option_empty));
-            surveyCtrl.options.push(angular.copy(option_empty));
+            defaultoptions();
             surveyCtrl.multipleChoice = false;
             unobserveNewPost();
             $mdDialog.hide();
@@ -106,9 +106,24 @@
             return surveyCtrl.post.title && !notEnoughOptions && surveyCtrl.post.deadline;
         };
 
+        function defaultoptions(){
+            surveyCtrl.options = [];
+            surveyCtrl.options.push(angular.copy(option_empty));
+            surveyCtrl.options.push(angular.copy(option_empty));
+            if(MIN_QUANTITY_OPTION === 5){
+                surveyCtrl.options.push(angular.copy(option_empty));
+                surveyCtrl.options.push(angular.copy(option_empty));
+                surveyCtrl.options.push(angular.copy(option_empty));
+            }
+        }
+
         function unobserveNewPost() {
             SubmitFormListenerService.unobserve("postCtrl.post");
         }
+
+        (function main() {
+            defaultoptions();
+        })();
     });
 
     /**
@@ -129,7 +144,6 @@
             bindToController: {
                 post: '=',
                 user: '=',
-                options: '=',
                 callback: '='
             }
         };

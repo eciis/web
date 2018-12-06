@@ -134,4 +134,16 @@
         });
     });
 
+
+    describe('goToInstitution()', () => {
+        it('should call state.go and mdDialog.close', () => {
+            spyOn(state, 'go');
+            spyOn(removeInstCtrl, 'closeDialog');
+
+            removeInstCtrl.goToInstitution();
+
+            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: removeInstCtrl.institution.key});
+            expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
+        });
+    });
 }));

@@ -4,13 +4,13 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, PushNotificationService) {
+        MessageService, PushNotificationService, STATES) {
         var service = this;
 
         var authObj = firebase.auth();
         var userInfo;
         let tokenLoaded = false;
-        let resolveTokenPromise;
+        service.resolveTokenPromise;
         let loadTokenPromise;
         let refreshInterval;
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -24,7 +24,7 @@
         service.getUserToken = async () => {
             if (!tokenLoaded && !loadTokenPromise) {
                 loadTokenPromise = new Promise((resolve) => {
-                    resolveTokenPromise = resolve;
+                    service.resolveTokenPromise = resolve;
                 });
             } else if (tokenLoaded) {
                 return userInfo.accessToken;
@@ -37,28 +37,36 @@
          * Function to get token id of user and update object userInfo
          * @param {firebaseUser} user 
          */
-        function getIdToken(user) {
-            user.getIdToken(true).then(function(userToken) {
+        service._getIdToken = function getIdToken(user) {
+            const resolvePromise = token => {
+                if (service.resolveTokenPromise) {
+                    service.resolveTokenPromise(token);
+                    service.resolveTokenPromise = null;
+                }
+
+                tokenLoaded = true;
+            };
+
+            return user.getIdToken(true).then(function(userToken) {
                 if (userInfo) {
                     userInfo.accessToken = userToken;
                     service.save();
                 }
 
-                if (resolveTokenPromise) {
-                    resolveTokenPromise(userToken);
-                    resolveTokenPromise = null;
-                }
-
-                tokenLoaded = true;
-            })
+                resolvePromise(userToken);
+                return userToken;
+            }).catch(() => {
+                resolvePromise(userInfo.accessToken);
+                return userInfo.accessToken;
+            });
         }
 
         authObj.onAuthStateChanged(function(user) {
             const timeToRefresh = 3500000;
             if (user) {
-                getIdToken(user);
+                service._getIdToken(user);
                 refreshInterval = setInterval(() => {
-                    getIdToken(user);
+                    service._getIdToken(user);
                 }, timeToRefresh);
             }
           });
@@ -165,7 +173,7 @@
 
             executeLogoutListeners();
 
-            $state.go("signin");
+            $state.go(STATES.SIGNIN);
         };
 
         service.getCurrentUser = function getCurrentUser() {
@@ -204,7 +212,7 @@
             var auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
-                $state.go("email_verification");
+                $state.go(STATES.EMAIL_VERIFICATION);
             }, function error(error) {
                 console.error(error);
             });

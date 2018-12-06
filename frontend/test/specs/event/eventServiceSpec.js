@@ -5,7 +5,7 @@
 
         var EVENT_URI = "/api/events";
         var INST_URI = "/api/institutions/"
-        var LIMIT = "5";
+        var LIMIT = "15";
 
         var page = 1;
 
@@ -93,7 +93,7 @@
                 spyOn($http, 'get').and.callThrough();
                 httpBackend.expect('GET', EVENT_URI + '?page=' + page + "&limit=" + LIMIT).respond(events);
                 var result;
-                service.getEvents(page).then(function(data){
+                service.getEvents({page: page}).then(function(data){
                     result = data;
                 });
                 httpBackend.flush();
@@ -105,7 +105,7 @@
                 spyOn($http, 'get').and.callThrough();
                 httpBackend.expect('GET', INST_URI + institution.key + '/events?page=' + page + "&limit=" + LIMIT).respond(events);
                 var result;
-                service.getInstEvents(page, institution.key).then(function(data){
+                service.getInstEvents({page: page, institutionKey: institution.key}).then(function(data){
                     result = data;
                 });
                 httpBackend.flush();

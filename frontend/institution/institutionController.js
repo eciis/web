@@ -3,8 +3,9 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("InstitutionController", function InstitutionController($state, InstitutionService,
-        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window, CropImageService, ImageService) {
+    app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
+        AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
+        CropImageService, ImageService, UtilsService) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -35,7 +36,7 @@
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
@@ -119,52 +120,44 @@
         };
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
-            institutionCtrl.stateView = "members";
-            $state.go('app.manage_institution.members', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            institutionCtrl.stateView = "invite_inst";
-            $state.go('app.manage_institution.invite_inst', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToEditInfo = function goToEditInfo(){
-            institutionCtrl.stateView = "edit_info";
-            $state.go('app.manage_institution.edit_info', {institutionKey: currentInstitutionKey});
+            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
         };
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            institutionCtrl.stateView = "timeline";
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
-            institutionCtrl.stateView = "members";
-            $state.go('app.institution.members', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToFollowers = function goToFollowers(institutionKey) {
-            institutionCtrl.stateView = "followers";
-            $state.go('app.institution.followers', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_FOLLOWERS, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            institutionCtrl.stateView = "registration_data";
-            $state.go('app.institution.registration_data', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey});
         };
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
-            institutionCtrl.stateView = "events";
-            $state.go('app.institution.events', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_EVENTS, 
+                {institutionKey: institutionKey, posts: institutionCtrl.posts});
         };
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {
-            institutionCtrl.stateView = "institutional_links";
-            $state.go('app.institution.institutional_links', {institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.INST_LINKS, {institutionKey: institutionKey});
         };
-
+        
         institutionCtrl.goToHome = function goToHome() {
-            $state.go('app.user.home');
+            $state.go(STATES.HOME);
         };
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
@@ -304,20 +297,15 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institution: institutionCtrl.institution,
-                    loadStateView: loadStateView
+                    institution: institutionCtrl.institution
                 },
                 controller: "RemoveInstController",
                 controllerAs: 'removeInstCtrl'
             });
         };
 
-        function loadStateView(){
-            institutionCtrl.stateView = $state.current.name.split(".")[2];
-        }
-
-        institutionCtrl.getSelectedItemClass = function getSelectedItemClass(state){
-            return (state === institutionCtrl.stateView) ? "option-selected-left-bar":"";
+        institutionCtrl.getSelectedClass = function (stateName){
+            return $state.current.name === STATES[stateName] ? "selected" : "";
         };
 
         function changeCoverOnScroll() {
@@ -370,7 +358,7 @@
         };
 
         institutionCtrl.canManageInst = function canManageInst() {
-            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go('app.user.home');
+            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go(STATES.HOME);
         };
 
         institutionCtrl.limitString = function limitString(string, size) {
@@ -378,7 +366,6 @@
         };
 
         (function main(){
-            loadStateView();
             changeCoverOnScroll();
         })();
     });

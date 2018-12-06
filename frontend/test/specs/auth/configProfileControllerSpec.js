@@ -2,7 +2,7 @@
 
 (describe('Test ConfigProfileController', function() {
     var configCtrl, httpBackend, deffered, scope, userService, createCrtl, state,
-    mdToast, authService, imageService, mdDialog, cropImageService;
+    mdToast, authService, imageService, mdDialog, cropImageService, states;
 
     var institution = {
         name: 'institution',
@@ -34,7 +34,7 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state,
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, STATES,
         $mdToast, $mdDialog, UserService, AuthService, ImageService, CropImageService) {
 
         httpBackend = $httpBackend;
@@ -43,6 +43,7 @@
         httpBackend.when('GET', 'auth/login.html').respond(200);
         scope = $rootScope.$new();
         state = $state;
+        states = STATES;
         imageService = ImageService;
         mdToast = $mdToast;
         mdDialog = $mdDialog;
@@ -125,7 +126,7 @@
             var promise = configCtrl.finish();
 
             promise.should.be.fulfilled.then(function() {
-                expect(state.go).toHaveBeenCalledWith('app.user.home');
+                expect(state.go).toHaveBeenCalledWith(states.HOME);
                 expect(userService.save).toHaveBeenCalled();
                 expect(authService.save).toHaveBeenCalled();
             }).should.notify(done);

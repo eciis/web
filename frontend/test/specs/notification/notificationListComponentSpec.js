@@ -1,14 +1,15 @@
 'use strict';
 
 (describe('notificationComponentController', function() {
-    let state, notCtrl, requestDialogService, NOTIFICATIONS_TYPE;
+    let state, notCtrl, requestDialogService, NOTIFICATIONS_TYPE, states;
     const event = "$event";
 
     const bindings = {'markAsRead': function(){}}
 
     beforeEach(module('app'));
-    beforeEach(inject(function(_$componentController_, $state, RequestDialogService, NOTIFICATION_TYPE) {
+    beforeEach(inject(function(_$componentController_, $state, RequestDialogService, NOTIFICATION_TYPE, STATES) {
       state = $state;
+      states = STATES;
       requestDialogService = RequestDialogService;
       NOTIFICATIONS_TYPE = NOTIFICATION_TYPE;
       notCtrl = _$componentController_('notificationList', null, bindings);
@@ -20,9 +21,7 @@
       it('should call state.go if notification has a state', function() {
           spyOn(state, 'go');
 
-          const COMMENT_STATE = 'app.post';
-
-          var notificationWithState = {
+          const notificationWithState = {
               entity_type: 'COMMENT',
               entity: {
                   key: '12345'
@@ -30,7 +29,7 @@
           };
       
           notCtrl.goTo(notificationWithState);
-          expect(state.go).toHaveBeenCalledWith(COMMENT_STATE, {key: notificationWithState.entity.key});
+          expect(state.go).toHaveBeenCalledWith(states.POST, {key: notificationWithState.entity.key});
       });
 
       it('should go to app.user.notifications if notification has no state property', function() {
@@ -41,7 +40,7 @@
           };
          
           notCtrl.goTo(notificationWithoutState);
-          expect(state.go).toHaveBeenCalledWith("app.user.notifications");
+          expect(state.go).toHaveBeenCalledWith(states.NOTIFICATION);
       });
     });
 

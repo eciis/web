@@ -2,7 +2,8 @@
 
 (describe('Test SharePostController', function() {
 
-    var shareCtrl, scope, httpBackend, rootScope, mdDialog, postService, deffered, state;
+    var shareCtrl, scope, httpBackend, rootScope, mdDialog,
+        postService, deffered, state, states;
 
     var institutions = [
         {name: 'Splab', key: '098745'},
@@ -40,7 +41,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog, $q,
-            PostService, AuthService, $rootScope, $state) {
+            PostService, AuthService, $rootScope, $state, STATES) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -48,6 +49,8 @@
         state = $state;
         deffered = $q.defer();
         postService = PostService;
+        states = STATES;
+        
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         AuthService.login(user);
@@ -91,14 +94,14 @@
         it('Should call state.go to post', function() {
             spyOn(state, 'go').and.callThrough();
             shareCtrl.goTo();
-            expect(state.go).toHaveBeenCalledWith('app.post', Object({postKey: shareCtrl.post.key}));
+            expect(state.go).toHaveBeenCalledWith(states.POST, Object({postKey: shareCtrl.post.key}));
         });
 
         it('Should call state.go to event', function() {
             shareCtrl.post = event;
             spyOn(state, 'go').and.callThrough();
             shareCtrl.goTo();
-            expect(state.go).toHaveBeenCalledWith('app.user.event', Object({ eventKey: shareCtrl.post.key}));
+            expect(state.go).toHaveBeenCalledWith(states.EVENT_DETAILS, Object({ eventKey: shareCtrl.post.key}));
         });
     });
 

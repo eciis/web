@@ -5,7 +5,7 @@
     var app = angular.module('app');
 
     app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
-        $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope, POST_EVENTS) {
+        $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope, POST_EVENTS, STATES) {
 
         var surveyCtrl = this;
 
@@ -82,7 +82,7 @@
                 }, function error() {
                     AuthService.reload().then(function success() {
                         $mdDialog.hide();
-                        $state.go("app.user.home");
+                        $state.go(STATES.HOME);
                     });
                 });
                 return promise;

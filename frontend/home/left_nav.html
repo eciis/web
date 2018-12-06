@@ -4,7 +4,8 @@
       <!-- LEFT SIDE PANEL -->
       <side-menu
         items="homeCtrl.sideMenuItems"
-        entity="homeCtrl.user">
+        entity="homeCtrl.user"
+        show-profile-selector="true">
       </side-menu>
 
       <md-sidenav ng-if="false" class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row" md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
@@ -16,14 +17,12 @@
                 <img style="background-color: white;" alt="Foto do Perfil" ng-src="{{ homeCtrl.user.photo_url }}">
               </div>
             </div>
-            <div class="info" 
-                md-colors="{background: homeCtrl.user.getProfileColor() +'-600'}">
+            <div class="info" md-colors="{background: homeCtrl.user.getProfileColor() +'-600'}">
               <div class="desc">
                 <div class="md-title">{{ homeCtrl.user.name }}</div>
                 <span>{{ homeCtrl.user.current_institution.name }}</span>
                 <md-menu>
-                  <md-button aria-label="Open phone interactions menu" 
-                      class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                  <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
                     <md-icon md-colors="{color: 'grey-50'}">arrow_drop_down</md-icon>
                   </md-button>
                   <md-menu-content width="4" class="custom-scrollbar">
@@ -34,7 +33,7 @@
                       </md-button> 
                     </md-menu-item>
                     <md-menu-item>
-                      <md-button ng-click="homeCtrl.openColorPicker(profile)">
+                      <md-button ng-click="homeCtrl.openColorPicker()">
                         <md-icon>color_lens</md-icon>
                         GERENCIAR CORES
                       </md-button>

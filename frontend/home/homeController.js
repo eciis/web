@@ -7,7 +7,6 @@
         $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, SideMenuHomeItems) {
         var homeCtrl = this;
 
-        var ACTIVE = "active";
         var LIMITE_EVENTS = 5;
 
         homeCtrl.events = [];

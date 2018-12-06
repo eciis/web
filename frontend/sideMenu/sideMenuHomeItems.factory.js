@@ -9,7 +9,7 @@
         const user = AuthService.getCurrentUser();
         
         const isSuperUser = () => {
-            return user.hasPermission('analyze_request_inst', user.current_institution.key);
+            return user.hasPermission('analyze_request_inst');
         };
 
         const takeTour = event => {
@@ -59,7 +59,7 @@
                 {
                     icon: 'account_balance',
                     description: 'Gerenciar instituição',
-                    stateName: 'INVITE_INSTITUTION',
+                    stateName: 'MANAGE_INST_EDIT',
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,

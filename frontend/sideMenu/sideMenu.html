@@ -1,5 +1,5 @@
 <md-sidenav class="md-sidenav-left side-menu" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
-    <md-content md-colors="{background: 'grey-100'}">
+    <md-content class="custom-scrollbar" md-colors="{background: 'grey-100'}">
         <!-- Menu header -->
         <div class="card hovercard" md-colors="{background: sideMenuCtrl.getProfileColor(800)}">
             <div class="cardheader">
@@ -9,7 +9,27 @@
             </div>
             <div class="info" md-colors="{background: sideMenuCtrl.getProfileColor(600)}">
                 <div class="desc">
-                    <a class="md-title sm-title" href ng-click="sideMenuCtrl.onClickTitle()">{{sideMenuCtrl.getTitle()}}</a>
+                    <div class="md-title sm-title" ng-click="sideMenuCtrl.onClickTitle()">{{sideMenuCtrl.getTitle()}}</div>
+                    <span ng-if="sideMenuCtrl.showProfileSelector">{{ sideMenuCtrl.user.current_institution.name }}</span>
+                    <md-menu ng-if="sideMenuCtrl.showProfileSelector">
+                        <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                            <md-icon md-colors="{color: 'grey-50'}">arrow_drop_down</md-icon>
+                        </md-button>
+                        <md-menu-content width="4" class="custom-scrollbar">
+                            <md-menu-item ng-repeat="profile in sideMenuCtrl.user.institution_profiles">
+                                <md-button ng-click="sideMenuCtrl.changeInstitution(profile)">
+                                    <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                                    {{ profile.institution.name }}
+                                </md-button> 
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="sideMenuCtrl.openColorPicker(profile)">
+                                    <md-icon>color_lens</md-icon>
+                                    GERENCIAR CORES
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu> 
                 </div>
             </div>
         </div>

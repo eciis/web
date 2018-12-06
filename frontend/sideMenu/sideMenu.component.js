@@ -11,11 +11,12 @@
             items: '<',
             entity: '<',
             onClickImage: '<',
-            onClickTitle: '<'
+            onClickTitle: '<',
+            showProfileSelector: '<'
         }
     });
 
-    function sideMenuController(AuthService, STATES, $state, $mdSidenav) {
+    function sideMenuController(AuthService, STATES, $state, $mdSidenav, $mdDialog) {
         const sideMenuCtrl = this;
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
@@ -51,6 +52,24 @@
 
         sideMenuCtrl.show = item => {
             return item.showIf ? item.showIf() : true; 
-        }
+        };
+
+        sideMenuCtrl.changeInstitution = profile => {
+            sideMenuCtrl.user.changeInstitution({'key': profile.institution_key});
+        };
+
+        sideMenuCtrl.openColorPicker = () => {
+            $mdDialog.show({
+               controller: "ColorPickerController",
+               controllerAs: "colorPickerCtrl",
+               templateUrl: 'app/home/color_picker.html',
+               parent: angular.element(document.body),
+               clickOutsideToClose: true,
+               locals: {
+                   user : sideMenuCtrl.user
+                },
+                bindToController: true
+           });
+       };
     }
 })();

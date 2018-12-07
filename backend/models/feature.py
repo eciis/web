@@ -6,23 +6,25 @@ __all__ = ['Feature']
 class Feature(ndb.Model):
     name = ndb.StringProperty()
     enabled = ndb.BooleanProperty()
+    group = ndb.StringProperty(
+        choices=set(["ADMIN", "COMMOM", "ALL"]))
 
     @staticmethod
-    def create(name, enable):
-        feature = Feature(id=name, name=name, enabled=enable)
+    def create(name, enable, group="ALL"):
+        feature = Feature(id=name, name=name, enabled=enable, group=group)
         feature.put()
         return feature
     
     @staticmethod
-    def enable(feature_name, enabled):
-        feature = Feature.get_by_id(feature_name)
+    def enable_all(features_dict):
+        features = Feature.query(Feature.name.IN(features_dict.keys())).fetch()
         
-        if feature:
-            feature.enabled = enabled
-            feature.put()
-            return feature
-        else:
-            raise Exception("Feature not found!")
+        for feature in features:
+            feature.enabled = features_dict[feature.name]['enabled']
+            feature.group = features_dict[feature.name]['group']
+
+        ndb.put_multi(features)
+        return features
 
     @staticmethod
     def isEnabled(feature_name):

@@ -365,4 +365,11 @@
     .event-select-inst-shadow {
         box-shadow: 0.07em 0.07em #8b8b8b;
     }
+
+    .event-textarea-border {
+        border-style: solid !important;
+        border-width: 0.06em !important;
+        border-color: #009688 !important;
+        border-radius: 0.3em !important;
+    }
 }

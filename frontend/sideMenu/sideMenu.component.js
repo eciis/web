@@ -9,7 +9,7 @@
         controllerAs: "sideMenuCtrl",
         bindings: {
             items: '<',
-            entity: '<',
+            entity: '<', //mudar para institution
             onClickImage: '<',
             onClickTitle: '<',
             showProfileSelector: '<'
@@ -20,12 +20,8 @@
         const sideMenuCtrl = this;
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
+        
         const isUser = sideMenuCtrl.entity instanceof User;
-
-
-        sideMenuCtrl.$onInit = () => {
-
-        };
         
         sideMenuCtrl.close = () => {
             $mdSidenav('sideMenu').close();

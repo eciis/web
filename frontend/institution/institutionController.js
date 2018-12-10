@@ -183,13 +183,11 @@
             {
                 icon: 'delete',
                 description: 'Remover Instituição',
-                stateName: '',
                 onClick: event => institutionCtrl.removeInstitution(event)
             },
             {
                 icon: 'arrow_back',
                 description: 'Voltar',
-                stateName: '',
                 onClick: institutionCtrl.goToHome
             }
         ];

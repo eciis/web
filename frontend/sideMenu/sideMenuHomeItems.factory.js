@@ -63,9 +63,7 @@
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,
-                    onClick: () => $state.go(
-                        STATES.MANAGE_INST_EDIT, {institutionKey: user.current_institution.key}
-                    ),
+                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: user.current_institution.key}),
                 },
                 {
                     icon: 'account_circle',
@@ -73,9 +71,7 @@
                     description: 'Gerenciar Membros',
                     stateName: 'MANAGE_INST_MEMBERS',
                     showIf: () => user.isAdminOfCurrentInst(),
-                    onClick: () => $state.go(
-                        STATES.MANAGE_INST_MEMBERS, {institutionKey: user.current_institution.key}
-                    ),
+                    onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey: user.current_institution.key}),
                 },
                 {
                     icon: 'account_balance',
@@ -84,9 +80,7 @@
                     stateName: 'MANAGE_INST_INVITE_INST',
                     bottomDivider: true,
                     showIf: () => user.isAdminOfCurrentInst(),
-                    onClick: () => $state.go(
-                        STATES.MANAGE_INST_INVITE_INST, {institutionKey: user.current_institution.key}
-                    ),
+                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey: user.current_institution.key}),
                 },
                 {
                     icon: 'account_balance',

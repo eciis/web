@@ -7,6 +7,15 @@
     margin: auto;
 }
 
+#save-survey-margin-buttons-mobile{
+    bottom: 50px;
+    padding-bottom: 8px;
+}
+
+#save-survey-post-button-mobile{
+    margin-right: 0;
+}
+
 .radio-checkbox-button{
     margin:auto;
     width: 20px;

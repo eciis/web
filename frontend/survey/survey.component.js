@@ -4,7 +4,7 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
+    app.controller('SurveyComponentController', function(PostService, AuthService, MessageService, 
         $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope, POST_EVENTS, STATES) {
 
         var surveyCtrl = this;
@@ -108,9 +108,9 @@
 
         function defaultoptions(){
             surveyCtrl.options = [];
-            _.range(MIN_QUANTITY_OPTION).map(
-                () => surveyCtrl.options.push(angular.copy(option_empty))
-            )
+            for (let i = 0; i < MIN_QUANTITY_OPTION; i++) { 
+                surveyCtrl.options.push(angular.copy(option_empty))
+            }
         }
 
         function unobserveNewPost() {
@@ -130,18 +130,15 @@
         return Utils.isMobileScreen() ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
     };
 
-    app.directive("surveyDirective", function() {
-        return {
-            restrict: 'E',
+    app.component("surveyComponent", {
             templateUrl: getTemplateUrl(),
             controllerAs: "surveyCtrl",
-            controller: "SurveyDirectiveController",
+            controller: "SurveyComponentController",
             scope: {},
             bindToController: {
                 post: '=',
                 user: '=',
                 callback: '='
             }
-        };
     });
 })();

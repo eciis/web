@@ -59,9 +59,8 @@
         </div>
       </form>
       <!-- SURVEY -->
-      <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" user="postCtrl.user" callback="postCtrl.choiceCommon"
-      style="display: grid;"></survey-directive>
-   
+      <survey-component ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" user="postCtrl.user" callback="postCtrl.choiceCommon"
+      style="display: grid;"></survey-component>
     </div>
   </div>
     <div valign="bottom">

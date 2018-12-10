@@ -49,7 +49,7 @@
          * using FEDERAL_STATE_ACRONYM constant
          */
         regInstCtrl.getFederalStateAcronym = function () {
-            return _.get(FEDERAL_STATE_ACRONYM, regInstCtrl.institution.address.federal_state);
+            return FEDERAL_STATE_ACRONYM[_.get(regInstCtrl.institution, 'address.federal_state')];
         };
 
         /**
@@ -62,7 +62,7 @@
         /**
          * Returns the maximum size of the inst name
          * according to the screen size.
-         * It can not be tested once it depends of the screen width
+         * It can not be tested once it depends on the screen width
          */
         regInstCtrl.getMaxInstNameSize = () => {
             return screen.width <= 320? 45: 70;

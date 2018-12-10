@@ -70,6 +70,8 @@
             authService: AuthService,
             institutionService: InstitutionService
         });
+
+        allInstitutionsController.$onInit();
     }));
 
 
@@ -97,67 +99,33 @@
     describe('Test loadMoreInstitutions()', function() {
         it('Should call getNextInstitution', function() {
             allInstitutionsController.loadMoreInstitutions();
-            expect(institutionService.getNextInstitutions).toHaveBeenCalledWith(1);
+            expect(institutionService.getNextInstitutions).toHaveBeenCalledWith(1, allInstitutionsController.currentTab);
         });
     });
 
     describe('changeTab', () => {
-        it('should set all institutions when nextTab = all', () => {
-            allInstitutionsController.followingInstTab = true;
-            allInstitutionsController.allInstTab = false;
-
+        it('should set currentTab to all', () => {
             allInstitutionsController.changeTab('all');
-
-            expect(allInstitutionsController.institutions).toEqual([
-                institution, 
-                other_institution, 
-                fifthInst, 
-                sixthInst
-            ]);
-            expect(allInstitutionsController.followingInstTab).toBe(false);
-            expect(allInstitutionsController.allInstTab).toBe(true);
-            expect(allInstitutionsController.memberInstTab).toBe(false);
+            expect(allInstitutionsController.currentTab).toEqual('all');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
         });
 
-        it('should set followingInstitutions when nextTab = following', () => {
-            expect(allInstitutionsController.followingInstTab).toBe(false);
-            expect(allInstitutionsController.institutions).toEqual([
-                institution,
-                other_institution,
-                fifthInst,
-                sixthInst
-            ]);
-            
+        it('should set currentTab to following', () => {
             allInstitutionsController.changeTab('following');
-
-            expect(allInstitutionsController.institutions).toEqual([
-                institution,
-                fifthInst,
-                sixthInst
-            ]);
-            expect(allInstitutionsController.followingInstTab).toBe(true);
-            expect(allInstitutionsController.allInstTab).toBe(false);
-            expect(allInstitutionsController.memberInstTab).toBe(false);
+            expect(allInstitutionsController.currentTab).toEqual('following');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
         });
 
-        it('should set memberInstitutions when nextTab != all and following', () => {
-            expect(allInstitutionsController.memberInstTab).toBe(false);
-            expect(allInstitutionsController.institutions).toEqual([
-                institution,
-                other_institution,
-                fifthInst,
-                sixthInst
-            ]);
+        it('should set currentTab to member', () => {
+            allInstitutionsController.changeTab('member');
+            expect(allInstitutionsController.currentTab).toEqual('member');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
+        });
 
-            allInstitutionsController.changeTab('');
-
-            expect(allInstitutionsController.institutions).toEqual([
-                institution,
-                fifthInst
-            ]);
-            expect(allInstitutionsController.followingInstTab).toBe(false);
-            expect(allInstitutionsController.allInstTab).toBe(false);
-            expect(allInstitutionsController.memberInstTab).toBe(true);
+        it('should not change the currentTab', () => {
+            allInstitutionsController.changeTab('tst');
+            expect(allInstitutionsController.currentTab).toEqual('all');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
         });
     });
 }));

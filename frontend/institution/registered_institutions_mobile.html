@@ -1,4 +1,4 @@
-<div style="overflow: auto;">
+<div style="overflow: auto;" id="content">
     <div class="registered-institutions-mobile-top-bar">
         <div ng-click="allInstitutionsCtrl.changeTab('all')">
             <b>TODAS</b>
@@ -16,7 +16,7 @@
             class="member-tab-selected"></hl>
     </div>
 
-    <div id="content" style="margin-top: 3.2em;" class="registered-institutions-container">
+    <div id="content" class="registered-institutions-container">
           <registered-institution institution="institution" 
             ng-repeat="institution in allInstitutionsCtrl.institutions" style="margin-bottom: 0.5em;">
           </registered-institution>

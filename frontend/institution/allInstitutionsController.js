@@ -8,11 +8,10 @@
 
         var content = document.getElementById("content");
         var moreInstitutions = true;
-        var actualPage = 0;
+        let currentPage = 0;
 
         allInstitutionsCtrl.user = AuthService.getCurrentUser();
         allInstitutionsCtrl.isLoadingInstitutions = true;
-        allInstitutionsCtrl.allInstitutions = []
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
 
@@ -21,61 +20,39 @@
         const possibleTabs = ['all', 'following', 'member'];
         
         /**
-         * It sets the currentTab correctly according to the nextTab value.
-         * Besides, this function calls other aux functions that filter
-         * the institutions to achieve the expected behavior
+         * It sets the currentTab correctly according to the nextTab value
+         * if nextTab is part of the possible values assured by possibleTabs constant
          * {string} nextTab
          */
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
             allInstitutionsCtrl.currentTab = (
               possibleTabs.includes(nextTab) ? nextTab : allInstitutionsCtrl.currentTab);
-
-            switch(nextTab) {
-                case 'all':
-                    setAllInstitutions();
-                    break;
-                case 'following':
-                    setFollowingInstitutions();
-                    break;
-                case 'member':
-                    setMemberInstitutions();
-                    break;
-            }
+            
+            currentPage = 0;
+            loadInstitutions();
         };
 
         /**
-         * Sets the institutions to allInstitutions.
-         * It is done by cloning the allInstitutions array do avoid
-         * it to keep reference.
+         * It sets the institutions array. If it isn't the first
+         * page the institutions's array must have the elements it
+         * has already have and the new ones.
+         * @param {Array} institutions 
          */
-        function setAllInstitutions() {
-            allInstitutionsCtrl.institutions = [...allInstitutionsCtrl.allInstitutions];
+        function setInstitutions(institutions) {
+            if(currentPage <= 1) {
+                allInstitutionsCtrl.institutions = [...institutions];
+            } else {
+                allInstitutionsCtrl.institutions = [
+                    ...allInstitutionsCtrl.institutions, 
+                    ...institutions
+                ];
+            }
         }
 
         /**
-         * Sets institutions as an array with the institutions that the
-         * user follows.
+         * If moreInstitutions is true, call loadInstitutions,
+         * else, return a promise.
          */
-        function setFollowingInstitutions() {
-            allInstitutionsCtrl.institutions = allInstitutionsCtrl.allInstitutions.filter(inst => {
-                return allInstitutionsCtrl.user.follows.find(followingInst => {
-                    return followingInst.key == inst.key;
-                });
-            });
-        }
-
-        /**
-         * Sets institutions with the user's institutions(institutions that he is part of). 
-         */
-        function setMemberInstitutions() {
-            allInstitutionsCtrl.institutions = allInstitutionsCtrl.allInstitutions.filter(inst => {
-                return allInstitutionsCtrl.user.institutions.find(institution => {
-                    return institution.key == inst.key;
-                });
-            });
-        }
-
-
         allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
             return moreInstitutions? loadInstitutions() : $q.when();
         };
@@ -94,19 +71,26 @@
             return Utils.normalizeString(string);
         }
 
+        /**
+         * Retrieves the institutions that belongs to
+         * the currentPage
+         */
         function loadInstitutions() {
-            return InstitutionService.getNextInstitutions(actualPage)
+            return InstitutionService.getNextInstitutions(currentPage, allInstitutionsCtrl.currentTab)
             .then(function success(response) {
-                actualPage += 1;
+                currentPage += 1;
                 moreInstitutions = response.next;
-                
-                response.institutions.map(inst => allInstitutionsCtrl.allInstitutions.push(inst));
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
-                allInstitutionsCtrl.changeTab(allInstitutionsCtrl.currentTab);
+                setInstitutions(response.institutions);
             });
         }
         
+        /**
+         * Start function.
+         * Sets the scrollListener and retrieve the first 10
+         * institutions.
+         */
         allInstitutionsCtrl.$onInit = function () {
             allInstitutionsCtrl.loadMoreInstitutions();
             Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions);

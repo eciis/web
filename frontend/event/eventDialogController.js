@@ -16,7 +16,7 @@
         dialogCtrl.videoUrls = [];
         dialogCtrl.usefulLinks = [];
         dialogCtrl.isAnotherCountry = false;
-        dialogCtrl.steps = [true, false, false];
+        dialogCtrl.steps = [true, false, false, false];
         dialogCtrl.now = Date.now();
         var emptyUrl = {
             url: '',
@@ -217,6 +217,13 @@
 
         dialogCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
 
+        dialogCtrl.lastStep = () => {
+            if(Utils.isMobileScreen(475)) {
+                return dialogCtrl.getStep(4);
+             }
+             return dialogCtrl.getStep(3);
+        };
+
         function getFields() {
             var necessaryFieldsForStep = {
                 0: {
@@ -253,7 +260,7 @@
         }
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
-            if (dialogCtrl.getStep(3)) {
+            if (dialogCtrl.lastStep()) {
                 dialogCtrl.blockReturnButton = true;
                 dialogCtrl.save();
             } else {

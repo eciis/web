@@ -125,12 +125,20 @@
     line-height: 3.1em;
 }
 
+.space-between-filters, .event-menu-button {
+    width: 0.8em;
+}
+
 .event-menu-button {
     margin: 0; 
-    padding: 0; 
-    width: 0.8em; 
+    padding: 0;
     background-color: white; 
     border: 0;
+}
+
+.centralized-event-content, .event-day-properties {
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #menu-button {
@@ -178,5 +186,124 @@
 
     .box {
         width: 100%;
+    }
+}
+
+/* MOBILE DEVICES */
+@media screen and (max-width: 475px) {
+
+    .create-event-button {
+        background-color: #7CB342 !important;
+    }
+
+    .events-grid {
+        display: grid;
+        grid-template-columns: 20% 78% auto;
+        grid-template-rows: 9em auto;
+        align-items: initial;
+        margin: 0;
+    }
+
+    .event-day-properties {
+        margin-top: 1em;;
+        font-weight: 1000;
+        font-size: 1.5em;
+    }
+
+    .event-weekday {
+        font-size: 0.5em;
+        margin-top: -0.4em;
+        margin-left: 0.3em;
+    }
+
+    .event-divider {
+        grid-column-start: 1;
+        grid-column-end: 4;
+        margin-right: 0.9em;
+        margin-left: 0.9em
+    }
+
+    .events-grid-position {
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+
+    .events-day-position {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+
+    .event-position {
+        grid-column-start: 2;
+        grid-column-end: 3;
+    }
+
+    .event-preview-image {
+        max-height: 8em;
+        height: 8em;
+        max-width: 100%;
+        min-width: 100%;
+        width: 100%;
+        padding: 0;
+        background-color: #009688;
+    }
+
+    .event-preview-border {
+        border-left: 0.55em solid;
+    }
+
+    .highlight {
+        background:rgba(0,0,0,0.65);
+        position: absolute;
+        height: 3.5em;
+        width: 100%;
+        background-color: rgba(0,0,0,0.40);
+        font-family: Verdana, Geneva, sans-serif;
+        color: #FFF;
+        bottom: 0em;
+        z-index: 1;
+    }
+
+    .hilight p {
+        font-family: Helvetica, Verdana;
+        color: #FFF;
+        z-index: 200;
+    }
+
+    .event-preview {
+        position: relative;
+    }
+
+    .event-preview img {
+        z-index: 1;
+    }
+
+    .event-title, .event-subtitle, .event-inst-name { 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .event-title, .event-subtitle {
+        font-size: 0.9em;
+        margin-left: 0.85em;
+        margin-top: 0.8em;
+    }
+
+    .event-subtitle {
+        margin-top: 0.1em;
+    }
+
+    .event-inst-name {
+        font-size: 0.65em;
+        margin-top: -0.08em;
+    }
+
+    .select-months {
+        width: 8em;
+    }
+
+    .select-years {
+        width: 6em;
     }
 }

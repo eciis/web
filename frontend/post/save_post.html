@@ -93,12 +93,14 @@
           </div>
         </div>
       </md-card-content>
-      <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo">
-        <div class="image-view" style="margin-left: auto; margin-right: auto;" ng-if="postCtrl.showImage()">
-          <md-button class="md-icon-button" ng-click="postCtrl.hideImage()" style="margin-left: -0.5em;" title="Remover">
+      <md-card-content ng-show="postCtrl.hasMedia() && !postCtrl.hasVideo" class="no-padding">
+        <div class="image-view post-img-container" ng-if="postCtrl.showImage()">
+          <md-button class="md-icon-button" ng-click="postCtrl.hideImage()" title="Remover">
             <md-icon>clear</md-icon>
           </md-button>
-          <img style="border-radius: 5%;" ng-src="{{ postCtrl.photoUrl }}"/>
+          <img ng-src="{{ postCtrl.photoUrl }}"/>
+          <md-progress-linear md-mode="indeterminate" 
+            ng-if="postCtrl.loadingImage" id="post-img-loading-bar"></md-progress-linear>
         </div>
         <pdf-view pdf-files='postCtrl.pdfFiles' is-editing="true"></pdf-view>
       </md-card-content>

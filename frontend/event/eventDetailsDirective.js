@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService) {
+        $state, $mdDialog, AuthService, STATES) {
 
         var eventCtrl = this;
 
@@ -93,7 +93,7 @@
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
-            $state.go('app.user.event', { eventKey: event.key, posts: eventCtrl.posts });
+            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key, posts: eventCtrl.posts });
         };
 
         eventCtrl.endInOtherMonth = function endInOtherMonth() {
@@ -152,7 +152,7 @@
                 eventCtrl.event = response;
             }, function error(response) {
                 MessageService.showToast(response);
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
         }
 

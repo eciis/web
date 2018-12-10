@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 """Calendar handler test."""
 
+from .. import mocks
 from ..test_base_handler import TestBaseHandler
 from models import User
 from models import Institution
 from models import Event
-from handlers.event_collection_handler import EventCollectionHandler
+from datetime import datetime
+from handlers.event_collection_handler import EventCollectionHandler, get_filtered_events
 from google.appengine.ext import ndb
 import json
-import datetime
 
 from mock import patch
 
@@ -122,41 +123,137 @@ class EventCollectionHandlerTest(TestBaseHandler):
                          'Event location',
                          "The event's local is not the expected one")
 
+    def test_get_filtered_events_with_date_filters(self):
+        """Test the get query of events filtered by date"""
+
+        # test events with filter by current month and year
+        filters = [('page', '0'), ('limit', '1'), ('month', str(self.date.month)), ('year', str(self.date.year))]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 2,
+                    "Should return only the events that happens the current month")
+
+        # test events that cross the month and year
+        # filter by november 2017
+        filters = [('page', '0'), ('limit', '1'), ('month', '11'), ('year', '2017')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertTrue(self.event_through_months in query_events,
+            "Should have the event that happens in november and december of 2017")
+
+        self.assertTrue(self.event_through_years in query_events,
+            "should have the event that happens on november 2017 to january 2018")
+
+        self.assertTrue(self.event_utc in query_events,
+            "should have the event that happens on november 2017")
+
+        # change filter to december 2017
+        filters = [('page', '0'), ('limit', '1'), ('month', '12'), ('year', '2017')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertTrue(self.event_through_months in query_events,
+            "Should have the event that happens in november and december of 2017")
+
+        self.assertTrue(self.event_through_years in query_events,
+            "should have the event that happens on november 2017 to january 2018")
+
+        self.assertEqual(self.event_utc.end_time.strftime("%Y-%m-%d %H:%M:%S"), "2017-12-01 02:55:00",
+                "The event ends 'fake' on december because of utc")
+
+        self.assertFalse(self.event_utc in query_events,
+                "Should NOT have the event that ends 'fake' on december 2017")
+
+        # change filter to january 2018
+        filters = [('page', '0'), ('limit', '1'), ('month', '1'), ('year', '2018')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertFalse(self.event_through_months in query_events,
+            "Should NOT have the event that happens in november and december of 2017")
+
+        self.assertTrue(self.event_through_years in query_events,
+            "should have the event that happens on november 2017 to january 2018")
+
+        filters = [('page', '0'), ('limit', '1'), ('month', str(self.date.month)), ('year', '2016')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 0,
+                    "Should return nothing because does not have past events")
+
+    def test_get_filtered_events_without_date_filters(self):
+        """Test the get query events not filtered"""
+
+        filters = [('page', '0'), ('limit', '1')]
+        query_events = get_filtered_events(filters, self.user).fetch()
+
+        self.assertEqual(len(query_events), 7,
+                    "Should return all created events in the initModels")
+
+def setup_title_and_local(event):
+    event.title = "New Event"
+    event.local = "Event location"
+    event.put()
+
+def setup_photo_url(entity):
+    entity.photo_url = 'urlphoto'
+    entity.put()
+
+def setup_date(event, date):
+    one_month_later = datetime(date.year if date.month < 12 else date.year+1, date.month+1 if date.month < 12 else 1, 15)
+    event.start_time = one_month_later
+    event.end_time = one_month_later
+    event.put()
 
 def initModels(cls):
     """Init the models."""
     # new User user
-    cls.user = User()
-    cls.user.name = 'user name'
-    cls.user.photo_url = 'urlphoto'
-    cls.user.cpf = '089.675.908-90'
-    cls.user.email = ['user@gmail.com']
-    cls.user.put()
+    cls.user = mocks.create_user("user@gmail.com")
+    setup_photo_url(cls.user)
+
     # new Institution CERTBIO
-    cls.certbio = Institution()
-    cls.certbio.name = 'CERTBIO'
-    cls.certbio.photo_url = 'urlphoto'
-    cls.certbio.members = [cls.user.key]
-    cls.certbio.followers = [cls.user.key]
-    cls.certbio.admin = cls.user.key
-    cls.certbio.state = "active"
-    cls.certbio.put()
+    cls.certbio = mocks.create_institution("CERTBIO")
+    setup_photo_url(cls.certbio)
 
     """ Update User."""
     cls.user.add_institution(cls.certbio.key)
     cls.user.follows = [cls.certbio.key]
     cls.user.put()
 
+    # Util date
+    cls.date = datetime.now()
+
     # Events
-    cls.event = Event()
-    cls.event.title = "New Event"
-    cls.event.author_key = cls.user.key
-    cls.event.author_name = cls.user.name
-    cls.event.author_photo = cls.user.photo_url
-    cls.event.institution_key = cls.certbio.key
-    cls.event.institution_name = cls.certbio.name
-    cls.event.institution_image = cls.certbio.photo_url
-    cls.event.start_time = datetime.datetime.now()
-    cls.event.end_time = datetime.datetime.now()
-    cls.event.local = "Event location"
-    cls.event.put()
+    cls.event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.event)
+
+    cls.other_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.other_event)
+
+    cls.distant_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.distant_event)
+    setup_date(cls.distant_event, cls.date)
+
+    cls.other_distant_event = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.other_distant_event)
+    setup_date(cls.other_distant_event, cls.date)
+
+    # Specific events cases
+    cls.event_through_months = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.event_through_months)
+    cls.event_through_months.start_time = datetime(2017,11,25)
+    cls.event_through_months.end_time = datetime(2017, 12, 5)
+    cls.event_through_months.put()
+
+    cls.event_through_years = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.event_through_years)
+    cls.event_through_years.start_time = datetime(2017,11,25)
+    cls.event_through_years.end_time = datetime(2018, 1, 5)
+    cls.event_through_years.put()
+
+    # Event that cross the month by UTC
+    cls.event_utc = mocks.create_event(cls.user, cls.certbio)
+    setup_title_and_local(cls.event_utc)
+    cls.event_utc.start_time = datetime.strptime(
+            '2017-11-29T12:15:00', "%Y-%m-%dT%H:%M:%S")
+    cls.event_utc.end_time = datetime.strptime(
+            '2017-12-01T02:55:00', "%Y-%m-%dT%H:%M:%S")
+    cls.event_utc.put()

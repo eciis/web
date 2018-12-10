@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller("PostPageController", function PostPageController(PostService, $state, MessageService) {
+    app.controller("PostPageController", function PostPageController(PostService, $state, STATES) {
         var postCtrl = this;
 
         postCtrl.post = null;
@@ -23,7 +23,7 @@
                 postCtrl.post = response;
                 postCtrl.post.data_comments = _.values(postCtrl.post.data_comments);
             }, function error() {
-                $state.go("app.user.home");
+                $state.go(STATES.HOME);
             });
             return promise;
         }

@@ -76,10 +76,8 @@
     describe("closeDialog()", function () {
         it('should call $mdDialog.cancel and loadStateView()', function () {
             spyOn(mdDialog, 'cancel');
-            spyOn(removeInstCtrl, 'loadStateView');
             removeInstCtrl.closeDialog();
             expect(mdDialog.cancel).toHaveBeenCalled();
-            expect(removeInstCtrl.loadStateView).toHaveBeenCalled();
         });
     });
 
@@ -136,4 +134,16 @@
         });
     });
 
+
+    describe('goToInstitution()', () => {
+        it('should call state.go and mdDialog.close', () => {
+            spyOn(state, 'go');
+            spyOn(removeInstCtrl, 'closeDialog');
+
+            removeInstCtrl.goToInstitution();
+
+            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: removeInstCtrl.institution.key});
+            expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
+        });
+    });
 }));

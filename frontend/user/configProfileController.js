@@ -3,8 +3,8 @@
 (function () {
     var app = angular.module("app");
 
-    app.controller("ConfigProfileController", function ConfigProfileController($state, InstitutionService,
-        CropImageService, AuthService, UserService, ImageService, $rootScope, $mdToast, $q, MessageService, $mdDialog, ObserverRecorderService) {
+    app.controller("ConfigProfileController", function ConfigProfileController($state, STATES,
+        CropImageService, AuthService, UserService, ImageService, $rootScope, $q, MessageService, $mdDialog, ObserverRecorderService) {
 
         var configProfileCtrl = this;
 
@@ -81,7 +81,7 @@
                     AuthService.save();
                     configProfileCtrl.loadingSubmission = false;
                     MessageService.showToast("Edição concluída com sucesso");
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                     deffered.resolve();
                 });
             } else {
@@ -193,7 +193,7 @@
         };
 
         configProfileCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
+            const url = $state.href(STATES.INST_TIMELINE, {institutionKey: institutionKey});
             window.open(url, '_blank');
         };
 

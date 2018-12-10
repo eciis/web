@@ -1,3 +1,46 @@
+.save-post-dialog {
+    display: grid;
+    height: 100%;
+    padding: 8px;
+    overflow: scroll;
+}
+
+.create-post-container {
+    background-color: white;
+    display: grid;
+    grid-template-rows: 82px auto 48px;
+    width: 96vw;
+    border-radius: 4px;
+}
+
+.form-container {
+    display: grid;
+    height: 100%;
+}
+
+.form-grid {
+    display: grid;
+    align-content: space-between;
+}
+
+.btn-submit {
+    margin-right: 0;
+}
+
+.post-head-container {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 50px auto;
+    grid-column-gap: 8px;
+}
+
+.action-post-container {
+    display: grid; 
+    justify-content: end; 
+    grid-template-columns: auto auto; 
+    padding: 0 0 8px;
+}
+
 .create-post-container-resp {
     width: 100%;
     -webkit-box-flex: 1;
@@ -58,10 +101,6 @@
 @media screen and (max-width: 959px) {
     .create-post-container-resp {
         margin:auto;
-    }
-
-    .create-post-full-width {
-        width: 100%;
     }
 
     .create-post-title-placeholder {
@@ -159,22 +198,6 @@
         width: 90%;
     }
 
-    .create-post-size {
-        height: 75vh !important;
-        max-height: 79vh !important;
-        width: 96vh;
-        max-width: 95%!important;
-        margin: auto;
-    }
-
-    .create-post-size-expand {
-        height: 84vh !important;
-        max-height: 84vh !important;
-        width: 96vh;
-        max-width: 95%!important;
-        margin: auto;
-    }
-
     .create-post-textarea {
         max-height: 45vh !important;
     }
@@ -193,7 +216,7 @@
         }
 
         .create-post-textarea-reduced {
-            max-height: 18vh !important;
+            max-height: 12vh !important;
         }
     }
 
@@ -226,4 +249,27 @@
     .create-post-text {
         font-size: 12px !important;
     }
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.post-img-container {
+    margin-left: auto; 
+    margin-right: auto;
+}
+
+.post-img-container md-button {
+    margin-left: -0.5em;
+}
+
+.post-img-container img {
+    border-radius: 5%; 
+    width: 100%;
+}
+
+#post-img-loading-bar {
+    margin-top: 0.1em; 
+    width: 100%;
 }

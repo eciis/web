@@ -13,7 +13,7 @@
     });
 
     app.controller("RegisteredInstitutionController", function regInstCtrl(AuthService, 
-        InstitutionService, MessageService, FEDERAL_STATE_ACRONYM, $state) {
+        InstitutionService, MessageService, FEDERAL_STATE_ACRONYM, $state, STATES) {
         const regInstCtrl = this;
 
         const user = AuthService.getCurrentUser();
@@ -72,7 +72,7 @@
          * Redirect the user to the institution's page
          */
         regInstCtrl.goToInst = () => {
-            $state.go('app.institution.timeline', 
+            $state.go(STATES.INST_TIMELINE, 
                 { institutionKey: regInstCtrl.institution.key });
         };
     });

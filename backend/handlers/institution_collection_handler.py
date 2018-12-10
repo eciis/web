@@ -8,7 +8,6 @@ from utils import to_int
 from util import login_required
 from utils import json_response
 from custom_exceptions import QueryException
-import hashlib
 
 from models import Institution
 

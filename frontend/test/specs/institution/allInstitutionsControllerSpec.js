@@ -33,7 +33,7 @@
         key: '6'
     };
 
-    var user = {
+    const user = {
         name: 'test',
         key: 'sahdkjsahdkj-IHAKJHAJKH8789AJHSJKHSA',
         follows: [institution, fifthInst, sixthInst],

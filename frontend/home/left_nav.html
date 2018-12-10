@@ -4,11 +4,10 @@
       <!-- LEFT SIDE PANEL -->
       <side-menu
         items="homeCtrl.sideMenuItems"
-        entity="homeCtrl.user"
         show-profile-selector="true">
       </side-menu>
 
-      <md-sidenav ng-if="false" class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row" md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
+      <!-- <md-sidenav ng-if="false" class="md-sidenav-left" md-component-id="leftNav" md-whiteframe="4" layout="row" md-is-locked-open="$mdMedia('gt-sm')" flex-gt-md="25">
         <md-content class="hide-scrollbar" layout="column" md-colors="{background: 'grey-100'}" flex>
           <div class="card hovercard" 
               md-colors="{background: homeCtrl.user.getProfileColor() +'-800'}">
@@ -132,7 +131,7 @@
             </md-menu-content>
           </div>
         </md-content>
-      </md-sidenav>
+      </md-sidenav> -->
   
       <!-- CONTENT -->
       <div flex ui-view="user_content" layout="column"></div>

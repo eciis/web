@@ -9,7 +9,7 @@
         controllerAs: "sideMenuCtrl",
         bindings: {
             items: '<',
-            entity: '<', //mudar para institution
+            institution: '<',
             onClickImage: '<',
             onClickTitle: '<',
             showProfileSelector: '<'
@@ -21,7 +21,9 @@
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
         
-        const isUser = sideMenuCtrl.entity instanceof User;
+        sideMenuCtrl.$onInit = () => {
+            sideMenuCtrl.entity = sideMenuCtrl.institution || sideMenuCtrl.user;
+        };
         
         sideMenuCtrl.close = () => {
             $mdSidenav('sideMenu').close();
@@ -34,7 +36,7 @@
         sideMenuCtrl.getImage = () => {
             const instAvatar = '/app/images/institution.png';
             const userAvatar = '/app/images/avatar.png';
-            const defaultImage = isUser ? userAvatar : instAvatar;
+            const defaultImage = sideMenuCtrl.institution ? instAvatar : userAvatar;
             return sideMenuCtrl.entity ? sideMenuCtrl.entity.photo_url : defaultImage;
         };
 

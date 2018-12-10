@@ -101,16 +101,16 @@
                 </div>
             </div>
         </md-input-container>
-        <md-input-container md-no-float class="md-block fields-event-padding">
-            <textarea ng-model="createEventCtrl.event.text" rows="3" md-select-on-focus
+        <div class="event-textarea fields-event-padding custom-scrollbar">
+            <textarea ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
                 placeholder="Descrição"
-                class="event-textarea-border"></textarea>
-        </md-input-container>
-        <md-input-container md-no-float class="md-block fields-event-padding">
-            <textarea ng-model="createEventCtrl.event.programation" rows="3" md-select-on-focus
+                class="event-textarea-size"></textarea>
+        </div>
+        <div class="event-textarea fields-event-padding custom-scrollbar">
+            <textarea ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
                 placeholder="Programação"
-                class="event-textarea-border"></textarea>
-        </md-input-container>
+                class="event-textarea-size"></textarea>
+        </div>
     </div>
     <div ng-if="createEventCtrl.getStep(3)">
         3

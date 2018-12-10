@@ -327,8 +327,8 @@
 
     .fields-event-container {
         display: grid;
-        justify-content: initial;
-        grid-template-columns: auto;
+        justify-content: center;
+        grid-template-columns: 98%;
         padding: 0 0.5em 0 0.5em;
         height: 1em;
     }
@@ -366,10 +366,15 @@
         box-shadow: 0.07em 0.07em #8b8b8b;
     }
 
-    .event-textarea-border {
-        border-style: solid !important;
-        border-width: 0.06em !important;
-        border-color: #009688 !important;
-        border-radius: 0.3em !important;
+    .event-textarea-size {
+        resize: none;
+        width: 98%;
+    }
+
+    .event-textarea {
+        position: relative;
+        padding: 0.2em;
+        margin: 0.3em 0;
+        vertical-align: middle;
     }
 }

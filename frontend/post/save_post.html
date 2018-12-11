@@ -36,8 +36,8 @@
                 </md-input-container>
             </div>
               <!-- SURVEY -->
-            <survey-directive ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" posts="posts" user="postCtrl.user" callback="postCtrl.choiceCommon"
-                options="postCtrl.options"></survey-directive>
+            <survey-component ng-if="postCtrl.typePost === 'Survey' && !isEditing" post="postCtrl.post" 
+              user="postCtrl.user" callback="postCtrl.choiceCommon"></survey-component>
         </div>
         <div>
           <div layout="column" float >

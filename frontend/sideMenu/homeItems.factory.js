@@ -3,7 +3,7 @@
 (function () {
     angular
     .module('app')
-    .factory('SideMenuHomeItems', function ($state, STATES, AuthService, $mdDialog) {
+    .factory('HomeItemsFactory', function ($state, STATES, AuthService, $mdDialog) {
         const factory = {};
         
         const isSuperUser = user => user.hasPermission('analyze_request_inst');
@@ -25,6 +25,7 @@
         };
 
         factory.getItems = user => {
+            const institutionKey = user.current_institution.key;
             return [
                 {
                     icon: 'home',
@@ -59,7 +60,7 @@
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,
-                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: user.current_institution.key}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey}),
                 },
                 {
                     icon: 'account_circle',
@@ -67,7 +68,7 @@
                     description: 'Gerenciar Membros',
                     stateName: 'MANAGE_INST_MEMBERS',
                     showIf: () => user.isAdminOfCurrentInst(),
-                    onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey: user.current_institution.key}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey}),
                 },
                 {
                     icon: 'account_balance',
@@ -76,7 +77,7 @@
                     stateName: 'MANAGE_INST_INVITE_INST',
                     bottomDivider: true,
                     showIf: () => user.isAdminOfCurrentInst(),
-                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey: user.current_institution.key}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey}),
                 },
                 {
                     icon: 'account_balance',

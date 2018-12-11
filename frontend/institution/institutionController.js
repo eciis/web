@@ -5,7 +5,7 @@
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
         AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
-        CropImageService, ImageService, UtilsService) {
+        CropImageService, ImageService, UtilsService, ManageInstItemsFactory) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -26,6 +26,11 @@
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
         const DEFAULT_INST_PHOTO = '/app/images/institution.png';
 
+        institutionCtrl.$onInit = () => {
+            institutionCtrl.canManageInst();
+            loadInstitution();
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response);
@@ -34,6 +39,7 @@
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
+                loadSideMenuItems();
                 institutionCtrl.isLoadingData = false;
             }, function error() {
                 $state.go(STATES.HOME);
@@ -64,8 +70,6 @@
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
         }
-
-        loadInstitution();
 
         institutionCtrl.isAdmin = function isAdmin() {
             var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
@@ -119,18 +123,6 @@
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
 
-        institutionCtrl.goToManageMembers = function goToManageMembers(){
-            $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
-        };
-
-        institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
-        };
-
-        institutionCtrl.goToEditInfo = function goToEditInfo(){
-            $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
-        };
-
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
             const instKey = institutionKey || currentInstitutionKey;
             $state.go(STATES.INST_TIMELINE, {institutionKey: instKey});
@@ -161,36 +153,9 @@
             $state.go(STATES.HOME);
         };
 
-        institutionCtrl.sideMenuItems = [
-            {
-                icon: 'edit',
-                description: 'Editar Informações',
-                stateName: 'MANAGE_INST_EDIT',
-                onClick: institutionCtrl.goToEditInfo
-            },
-            {
-                icon: 'people',
-                description: 'Gerenciar membros',
-                stateName: 'MANAGE_INST_MEMBERS',
-                onClick: institutionCtrl.goToManageMembers
-            },
-            {
-                icon: 'account_balance',
-                description: 'Vínculos Institucionais',
-                stateName: 'MANAGE_INST_INVITE_INST',
-                onClick: institutionCtrl.goToManageInstitutions
-            },
-            {
-                icon: 'delete',
-                description: 'Remover Instituição',
-                onClick: event => institutionCtrl.removeInstitution(event)
-            },
-            {
-                icon: 'arrow_back',
-                description: 'Voltar',
-                onClick: institutionCtrl.goToHome
-            }
-        ];
+        function loadSideMenuItems () {
+            institutionCtrl.sideMenuItems = ManageInstItemsFactory.getItems(institutionCtrl.institution);
+        }
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
             return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});
@@ -208,7 +173,6 @@
             var institutionKey = institutionCtrl.institution.key;
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
-
 
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
@@ -322,20 +286,6 @@
             ctrl.portfolioUrl = trustedUrl;
         }
 
-        institutionCtrl.removeInstitution = function removeInstitution(ev) {
-            institutionCtrl.stateView = "remove_inst";
-            $mdDialog.show({
-                templateUrl: 'app/institution/removeInstDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    institution: institutionCtrl.institution
-                },
-                controller: "RemoveInstController",
-                controllerAs: 'removeInstCtrl'
-            });
-        };
-
         institutionCtrl.getSelectedClass = function (stateName){
             return $state.current.name === STATES[stateName] ? "selected" : "";
         };
@@ -390,16 +340,17 @@
         };
 
         institutionCtrl.canManageInst = function canManageInst() {
-						if(!institutionCtrl.user.isAdmin(currentInstitutionKey)) $state.go(STATES.HOME);
+            const isOnManageInstPage = [
+                STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MEMBERS, 
+                STATES.MANAGE_INST_INVITE_INST
+            ].includes($state.current.name);
+            const isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
+            if(isOnManageInstPage && !isAdmin) $state.go(STATES.HOME);
         };
 
         institutionCtrl.limitString = function limitString(string, size) {
             return Utils.limitString(string, size);
-				};
-				
-				institutionCtrl.$onInit = () => {
-					institutionCtrl.canManageInst();
-				}
+        };
 
         (function main(){
             changeCoverOnScroll();

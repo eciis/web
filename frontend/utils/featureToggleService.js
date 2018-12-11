@@ -12,7 +12,6 @@
             return HttpService.get(`${uri}${query}`);
         };
 
-
         service.isEnabled = function isEnabled(feature_name) {
             return service.getFeatures(feature_name).then(function(response) {
                 return response[0].enabled;

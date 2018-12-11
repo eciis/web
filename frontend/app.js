@@ -505,6 +505,37 @@
         });
     });
 
+    app.run(function featureToggleInterceptor(FeatureToggleService, STATE_TO_FEATURE, $transitions, $state, STATES) {
+        let verified = false;
+        
+        $transitions.onStart({
+            to: function(state) {
+                const stateName = state.name;
+                if (!verified && (stateName in STATE_TO_FEATURE)) {
+                    return true;
+                } else {
+                    verified = false;
+                    return false;
+                }
+            }
+        }, function (transition) {
+            transition.abort();
+            const targetState = transition._targetState;
+
+            FeatureToggleService.isEnabled(STATE_TO_FEATURE[targetState._identifier]).then(function(enabled) {
+                if (enabled) {
+                    verified = true;
+                    $state.go(targetState._identifier, targetState._params);
+                } else {
+                    $state.go(STATES.ERROR, {
+                        "msg": "Desculpa! Este recurso ainda não está disponível.",
+                        "status": "401"
+                    });
+                }
+            });
+        });
+    });
+
     function initServiceWorker() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').then(function (registration) {

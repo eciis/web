@@ -177,14 +177,14 @@
         </div>
     </div>
 
-    <div ng-if="createEventCtrl.lastStep()">
-        <h2 style="margin-left: 0.4em;"><b>Inserir foto de capa</b></h2>
+    <div class="fields-event-container" ng-if="createEventCtrl.lastStep()">
+        <h2><b>Inserir foto de capa</b></h2>
         <div md-colors="{background: 'default-teal-500'}" layout="column"
-            class="event-image-view centralized-event-content event-img-thumbnail">
+            class="event-image-view event-img-thumbnail">
             <button ng-click="createEventCtrl.cleanImage()" type="button" class="event-image-view-button"
                 ng-if="createEventCtrl.showImage()">&times;</button>
-            <div ng-if="createEventCtrl.showImage()">
-                <img ng-src="{{createEventCtrl.photoUrl}}"/>
+            <div class="centralized-event-content" ng-if="createEventCtrl.showImage()">
+                <img ng-src="{{createEventCtrl.photoUrl}}" class="event-img-height"/>
             </div>
             <md-button class="event-img-button" ng-click="null" ng-model="createEventCtrl.file" ngf-pattern="'image/*'"
                 ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="createEventCtrl.addImage(createEventCtrl.file)"

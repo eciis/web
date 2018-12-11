@@ -390,18 +390,19 @@
     }
 
     .event-img-icon {
-        margin-top: 0.2em;
+        margin-top: 0.25em;
         height: 4.375em;
         width: 4.375em;
         font-size: 4.375em;
         color: white;
     }
 
+    .event-img-height, .event-img-thumbnail {
+        height: 9.375em;
+    }
     .event-img-thumbnail {
         overflow: hidden;
-        height: 9.375em;
         padding-left: 0;
         padding-right: 0;
-        width:95%;
     }
 }

@@ -485,6 +485,24 @@
         });
     });
 
+    /**
+     * Function to intercept the access of pages that should be displayed only on mobile screens.
+     * @param {service} $transitions - Service of transitions states
+     */
+    app.run(function mobileInterceptor($transitions) {
+        const permitted_routes = [
+            'app.user.create_event'
+        ];
+
+        $transitions.onSuccess({
+            to: (state) => {
+                return !Utils.isMobileScreen(475) && _.includes(permitted_routes, state.name);
+            }
+        }, (transition) => {
+            transition.router.stateService.transitionTo('app.user.home');
+        });
+    });
+
     app.run(function inviteInterceptor(AuthService, $transitions, $state) {
         var ignored_routes = [
             'create_institution_form'

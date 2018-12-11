@@ -5,7 +5,7 @@
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
         AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
-        CropImageService, ImageService, UtilsService, ManageInstItemsFactory) {
+        CropImageService, ImageService, UtilsService) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -39,7 +39,6 @@
                 getPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
-                loadSideMenuItems();
                 institutionCtrl.isLoadingData = false;
             }, function error() {
                 $state.go(STATES.HOME);
@@ -152,10 +151,6 @@
         institutionCtrl.goToHome = function goToHome() {
             $state.go(STATES.HOME);
         };
-
-        function loadSideMenuItems () {
-            institutionCtrl.sideMenuItems = ManageInstItemsFactory.getItems(institutionCtrl.institution);
-        }
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
             return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});

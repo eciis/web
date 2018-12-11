@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.controller("HomeController", function HomeController(AuthService, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, HomeItemsFactory) {
+        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES) {
         var homeCtrl = this;
 
         var LIMITE_EVENTS = 5;
@@ -15,7 +15,6 @@
         homeCtrl.showMessageOfEmptyEvents = true;
         
         homeCtrl.user = AuthService.getCurrentUser();
-        homeCtrl.sideMenuItems = HomeItemsFactory.getItems(homeCtrl.user);
 
         homeCtrl.eventInProgress = function eventInProgress(event) {
             var end_time = event.end_time;

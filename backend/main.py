@@ -97,7 +97,7 @@ app = webapp2.WSGIApplication([
     ("/api/user/institutions/(.*)", UserHandler),
     ("/api/user/timeline.*", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),
-    ("/api/feature-toggle", FeatureToggleHander),
+    ("/api/feature-toggle.*", FeatureToggleHander),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler)

@@ -10,22 +10,21 @@ from models import Feature
 __all__ = ['FeatureToggleHander']
 
 def to_json(feature_list):
-    features = {
-        feature.name: {
-            "enabled": feature.enabled,
-            "group": feature.group
-        } for feature in feature_list
-    }
-
+    features = [feature.make() for feature in feature_list]
     return features
 
 class FeatureToggleHander(BaseHandler):
     
-    @login_required
     @json_response
-    def get(self, user):
-        features = Feature.query().fetch()
-        self.response.write(json.dumps(to_json(features)))
+    def get(self):
+        feature_name = self.request.get('name')
+
+        if feature_name:
+            features = Feature.get_feature(feature_name).make()
+        else:
+            features = to_json(Feature.get_all_features())
+
+        self.response.write(json.dumps(features))
     
     @login_required
     @json_response

@@ -27,10 +27,29 @@ class Feature(ndb.Model):
         return features
 
     @staticmethod
-    def isEnabled(feature_name):
+    def get_all_features():
+        features = Feature.query().fetch()
+        return features
+
+    @staticmethod
+    def get_feature(feature_name):
         feature = Feature.get_by_id(feature_name)
         
         if feature:
-            return feature.enabled
+            return feature
         else:
             raise Exception("Feature not found!")
+
+    @staticmethod
+    def isEnabled(feature_name):
+        feature = Feature.get_feature(feature_name)
+        return feature.enabled
+
+    def make(self):
+        make_obj = {
+            'name': self.name,
+            'enabled': self.enabled,
+            'group': self.group
+        }
+
+        return make_obj

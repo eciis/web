@@ -7,12 +7,20 @@
         const service = this;
         const uri = '/api/feature-toggle';
 
-        service.getFeatures = function getFeatures() {
-            HttpService.get(uri).then(function(response) {
-                console.log(response);
+        service.getFeatures = function getFeatures(feature_name) {
+            const query = (feature_name) ? `?name=${feature_name}` : '';
+            return HttpService.get(`${uri}${query}`);
+        };
+
+
+        service.isEnabled = function isEnabled(feature_name) {
+            return service.getFeatures(feature_name).then(function(response) {
+                return response[feature_name].enabled;
             });
         };
 
-        service.getFeatures();
+        service.isEnabled('other').then(function(response) {
+            console.log(response);
+        });
     });
 })();

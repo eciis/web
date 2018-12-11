@@ -390,12 +390,16 @@
         };
 
         institutionCtrl.canManageInst = function canManageInst() {
-            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go(STATES.HOME);
+						if(!institutionCtrl.user.isAdmin(currentInstitutionKey)) $state.go(STATES.HOME);
         };
 
         institutionCtrl.limitString = function limitString(string, size) {
             return Utils.limitString(string, size);
-        };
+				};
+				
+				institutionCtrl.$onInit = () => {
+					institutionCtrl.canManageInst();
+				}
 
         (function main(){
             changeCoverOnScroll();

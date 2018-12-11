@@ -15,7 +15,7 @@
         homeCtrl.showMessageOfEmptyEvents = true;
         
         homeCtrl.user = AuthService.getCurrentUser();
-        homeCtrl.sideMenuItems = SideMenuHomeItems.new();
+        homeCtrl.sideMenuItems = SideMenuHomeItems.getItems(homeCtrl.user);
 
         homeCtrl.eventInProgress = function eventInProgress(event) {
             var end_time = event.end_time;

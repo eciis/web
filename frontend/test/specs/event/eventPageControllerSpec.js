@@ -2,7 +2,7 @@
 
 (describe('Test EventPageController', function() {
 
-  var eventCtrl, scope, httpBackend, rootScope, deffered, eventService, 
+  let eventCtrl, scope, httpBackend, rootScope, states, eventService, 
     postService, messageService, mdDialog, state;
 
   var institution = {name: 'institution', key: '098745'};
@@ -58,17 +58,17 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, $http, $q, AuthService, $state,
-        $rootScope, ImageService, EventService, PostService, MessageService, $mdDialog) {
+        $rootScope, STATES, EventService, PostService, MessageService, $mdDialog) {
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
       rootScope = $rootScope;
-      deffered = $q.defer();
       eventService = EventService;
       postService = PostService;
       messageService = MessageService;
       mdDialog = $mdDialog;
       AuthService.login(user);
       state = $state;
+      states = STATES;
       state.params.eventKey = event_convert_date.key;
       eventCtrl = $controller('EventPageController', {
             scope: scope,
@@ -185,7 +185,7 @@
     it('Should call state.go', function() {
       spyOn(state, 'go');
       eventCtrl.goToInstitution(institution.key);
-      expect(state.go).toHaveBeenCalledWith('app.institution.timeline', Object({ institutionKey: institution.key }));
+      expect(state.go).toHaveBeenCalledWith(states.INST_TIMELINE, Object({ institutionKey: institution.key }));
     });
   });
 }));

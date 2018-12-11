@@ -4,7 +4,7 @@
 
     app.controller("SuggestInstitutionController", function SuggestInstitutionController(
         $mdDialog, institution, institutions, invite, requested_invites, isHierarchy, inviteController, $state,
-        MessageService, InstitutionService){
+        MessageService, InstitutionService, STATES){
         var suggestInstCtrl = this;
         suggestInstCtrl.institution = institution;
         suggestInstCtrl.institutions = institutions;
@@ -16,7 +16,7 @@
         var PENDING_STATE = "pending";
 
         suggestInstCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            const url = $state.href('app.institution.timeline', {institutionKey: institutionKey});
+            const url = $state.href(STATES.INST_TIMELINE, {institutionKey: institutionKey});
             window.open(url, '_blank');
         };
 

@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     app.controller("NotificationController", function NotificationController(NotificationService, 
-            AuthService, $state) {
+            AuthService, $state, STATES) {
         var notificationCtrl = this;
 
         notificationCtrl.user = AuthService.getCurrentUser();
@@ -33,7 +33,7 @@
         };
 
         notificationCtrl.seeAll = function seeAll() {
-            $state.go('app.user.notifications');
+            $state.go(STATES.NOTIFICATION);
         };
 
         notificationCtrl.isMobileScreen = (mobileScreenSize) => {

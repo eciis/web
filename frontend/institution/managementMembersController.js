@@ -4,7 +4,7 @@
 
     app.controller("ManagementMembersController", function InviteUserController(
         InviteService, $state, $mdDialog, InstitutionService, AuthService, MessageService,
-        RequestInvitationService, ProfileService) {
+        RequestInvitationService, ProfileService, STATES) {
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
 
@@ -158,7 +158,7 @@
                 getSentInvitations(response.sent_invitations);
                 getRequests();
             }, function error() {
-                $state.go('app.institution.timeline', {institutionKey: currentInstitutionKey});
+                $state.go(STATES.INST_TIMELINE, {institutionKey: currentInstitutionKey});
             });
         }
 

@@ -5,7 +5,7 @@
     var app = angular.module("app");
 
     var notificationComponentController = function(NotificationService, $state,
-        RequestDialogService, NOTIFICATION_TYPE){
+        RequestDialogService, NOTIFICATION_TYPE, STATES){
 
         const ctrl = this;
 
@@ -73,7 +73,7 @@
         ctrl.goTo = function goTo(notification) {
             const state = NOTIFICATION_TYPE[notification.entity_type].state;
             state && $state.go(state, {key: notification.entity.key});
-            !state && $state.go('app.user.notifications');
+            !state && $state.go(STATES.NOTIFICATION);
         };
     };
 
@@ -90,7 +90,7 @@
             keyword: '=?'
         },
         controller: ["NotificationService", "$state", "RequestDialogService",
-                        "NOTIFICATION_TYPE", notificationComponentController],
+                        "NOTIFICATION_TYPE", "STATES", notificationComponentController],
         controllerAs: 'notificationListCtrl'
     });
 })();

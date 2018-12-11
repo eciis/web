@@ -24,7 +24,7 @@
             }
         });
 
-    function CommentController(CommentService, MessageService, ProfileService, $state, AuthService) {
+    function CommentController(CommentService, MessageService, ProfileService, $state, AuthService, STATES) {
         const commentCtrl = this;
 
         commentCtrl.user = AuthService.getCurrentUser();
@@ -52,7 +52,7 @@
         };
 
         commentCtrl.setShowReplies = function() {
-            commentCtrl.showReplies = $state.current.name === 'app.post';
+            commentCtrl.showReplies = $state.current.name === STATES.POST;
         }
 
         commentCtrl.like = function () {

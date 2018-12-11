@@ -4,7 +4,7 @@
     beforeEach(module('app'));
     
     const POSTS_URI = "/api/posts";
-    let commentCtrl, scope, httpBackend, state;
+    let commentCtrl, scope, httpBackend, state, states;
     let commentService, messageService, q, deferred;
     
     const user = {
@@ -47,7 +47,7 @@
         };
     };
 
-    beforeEach(inject(function ($controller, $httpBackend, $state,
+    beforeEach(inject(function ($controller, $httpBackend, $state, STATES,
             AuthService, $rootScope, CommentService, MessageService, $q) {
         httpBackend = $httpBackend;
         state = $state;
@@ -55,6 +55,7 @@
         messageService = MessageService;
         q = $q;
         deferred = q.defer();
+        states = STATES;
 
         AuthService.login(user);
 
@@ -156,7 +157,7 @@
 
         it(`should be true when the current 
             state on the post page`, function() {
-            state.current.name = 'app.post';
+            state.current.name = states.POST;
             commentCtrl.setShowReplies();
             expect(commentCtrl.showReplies).toBeTruthy();
         });

@@ -167,10 +167,6 @@
         margin: 0;
         margin-top: 1.5em;
     }
-
-    .new-invite-page-card {
-      max-width: 350px;
-    }
 }
 
 .green-background{
@@ -707,6 +703,12 @@ a:active {
    border-radius: 50%;
 }
 
+.survey-card{
+    margin-top: -1px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
@@ -715,6 +717,11 @@ a:active {
 .option{
     height: 25px;
     margin: 0px;
+}
+
+.option-selected{
+    background-color: #E0E0E0;
+    height: 48px;
 }
 
 .option-percentage{
@@ -726,6 +733,17 @@ a:active {
     color: #616161;
     padding-top: 16px;
     padding-bottom: 16px;
+}
+
+.percentage-selected{
+    margin-right: -16px;
+    background-color: #8BC34A;
+    text-align: center;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    width: 78px;
+    height: 20px;
+    color: #FFFFFF;
 }
 
 md-switch.md-checked .md-thumb {
@@ -855,16 +873,15 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     .small-text {
         font-size: 15px;
     }
-    .increase-distance {
-        margin-top: -15px;
-        padding-bottom: 10px;
-    }
-    .reduce-distance {
-        margin-top: -5px;
+}
+
+@media only screen and (max-width: 450px) {
+    .small-text {
+        font-size: 12px;
     }
 }
 
-.option-selected-left-bar{
+.selected {
     color:#009688;
     background-color:#E0E0E0;
 }
@@ -1136,4 +1153,8 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     .custom-card {
         width: 35%;
     }
+}
+
+.content-main {
+    height: 100%;
 }

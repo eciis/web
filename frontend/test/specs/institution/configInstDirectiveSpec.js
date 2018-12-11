@@ -3,7 +3,7 @@
 describe('Test ConfigInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
-    var authService, createCtrl, pdfService, messageService;
+    let authService, createCtrl, pdfService, messageService, states;
 
     var address = {
         cep: "11111-000",
@@ -83,7 +83,7 @@ describe('Test ConfigInstDirective', function() {
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast,
+    beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast, STATES,
         $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService, MessageService) {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
@@ -105,6 +105,7 @@ describe('Test ConfigInstDirective', function() {
         authService = AuthService;
         pdfService = PdfService;
         http = $http;
+        states = STATES;
 
         authService.login(userData);
         state.params.institutionKey = institution.key;
@@ -156,7 +157,7 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.user.state = 'pending';
             editInstCtrl.user.invites = [invite];
             editInstCtrl.initController();
-            expect(state.go).toHaveBeenCalledWith('signin');
+            expect(state.go).toHaveBeenCalledWith(states.SIGNIN);
         });
 
         afterEach(function() {

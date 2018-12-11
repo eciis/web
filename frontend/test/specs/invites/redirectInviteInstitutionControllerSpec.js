@@ -2,7 +2,7 @@
 
 (describe('Test RedirectInviteInstitutionController', function () {
 
-    var redirectInviteCtrl, scope, httpBackend, inviteService, state, authService;
+    var redirectInviteCtrl, scope, httpBackend, inviteService, state, authService, states;
 
     var invite = new Invite({
         'key': '12300'
@@ -11,12 +11,13 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $state, 
-        InviteService, $stateParams, AuthService) {
+        InviteService, $stateParams, AuthService, STATES) {
         httpBackend = $httpBackend;
         state = $state;
         inviteService = InviteService;
         authService = AuthService;
-        
+        states = STATES;
+
         spyOn(inviteService, 'getInvite').and.callFake(function () {
             return {
                 then: function (callback) {
@@ -54,7 +55,7 @@
         it('should call state.go', function () {
             spyOn(state, 'go');
             redirectInviteCtrl.goToHome();
-            expect(state.go).toHaveBeenCalledWith('app.user.home');
+            expect(state.go).toHaveBeenCalledWith(states.HOME);
         });
     });
 
@@ -67,14 +68,14 @@
         it('should go to new_invite', function () {
             redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith("new_invite", {key: invite.key});
+            expect(state.go).toHaveBeenCalledWith(states.NEW_INVITE, {key: invite.key});
         });
 
         it('should go to signin', function () {
             authService.logout();
             redirectInviteCtrl.signin();
             expect(authService.isLoggedIn).toHaveBeenCalled();
-            expect(state.go).toHaveBeenCalledWith("signin");
+            expect(state.go).toHaveBeenCalledWith(states.SIGNIN);
         });
     });
 

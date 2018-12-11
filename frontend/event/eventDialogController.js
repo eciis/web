@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, $q, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, ObserverRecorderService) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -121,7 +121,7 @@
 
         dialogCtrl.cancelCreation = () => {
             if (Utils.isMobileScreen(475))
-                $state.go("app.user.events");
+                $state.go(STATES.EVENTS);
 
             $mdDialog.hide();
         };
@@ -324,7 +324,7 @@
                 }, function error() {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;
-                    $state.go("app.user.events");
+                    $state.go(STATES.EVENTS);
                 });
             } else {
                 MessageService.showToast('Evento inválido!');

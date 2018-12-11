@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
-        InviteService,$mdToast, $mdDialog, $state, AuthService, InstitutionService,
+        InviteService, STATES, $mdDialog, $state, AuthService, InstitutionService,
         MessageService, RequestInvitationService, RequestDialogService, $q) {
 
         var inviteInstHierCtrl = this;
@@ -198,7 +198,7 @@
         };
 
         inviteInstHierCtrl.goToInst = function goToInst(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         inviteInstHierCtrl.isActive = function isActive(institution) {
@@ -212,7 +212,7 @@
                 inviteInstHierCtrl.hasParent = !_.isEmpty(inviteInstHierCtrl.institution.parent_institution);
                 getRequests();
             }, function error() {
-                $state.go('app.institution.timeline', {institutionKey: institutionKey});
+                $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
             });
             return promise;
         }

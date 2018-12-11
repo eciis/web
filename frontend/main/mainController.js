@@ -2,8 +2,8 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("MainController", function MainController($mdSidenav, $state, AuthService,
-        UserService, RequestInvitationService, $mdMenu, $window, NotificationListenerService) {
+    app.controller("MainController", function MainController($mdSidenav, $state, AuthService, UtilsService,
+        UserService, RequestInvitationService, $window, NotificationListenerService, STATES) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -18,16 +18,16 @@
         mainCtrl.stateView =  $state.current.name;
 
         mainCtrl._statesWithoutFooter = [
-            "app.user.create_event"
+            STATES.CREATE_EVENT
         ];
-        
+         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
         mainCtrl.search = function search() {
             if(mainCtrl.search_keyword) {
                 var search = mainCtrl.search_keyword;
                 mainCtrl.search_keyword = '';
-                $state.go('app.user.search', {search_keyword: search});
+                $state.go(STATES.SEARCH, {search_keyword: search});
             }
         };
         
@@ -38,7 +38,7 @@
          */
         mainCtrl.toogleSearch = function () {
             if(screen.width <= 450)  {
-                $state.go('app.user.search', {search_keyword: ''});
+                $state.go(STATES.SEARCH, {search_keyword: ''});
             } else {
                 mainCtrl.showSearch = !mainCtrl.showSearch;
             }
@@ -50,20 +50,6 @@
 
         mainCtrl.toggle = function toggle() {
             $mdSidenav('leftNav').toggle();
-        };
-
-        mainCtrl.isActive = function isActive(inst) {
-            if (mainCtrl.user.current_institution.key == inst.key) {
-                return true;
-            }
-            return false;
-        };
-
-        mainCtrl.isAdmin = function isAdmin(keyInstitution) {
-            if (mainCtrl.user && mainCtrl.user.isAdmin(keyInstitution)){
-                return true;
-            }
-            return false;
         };
 
         mainCtrl.isSuperUser = function isSuperUser() {
@@ -84,22 +70,9 @@
             enabled: true
         }];
 
-        mainCtrl.goTo = function goTo(state) {
-            $state.go(state);
-            mainCtrl.toggle();
-        };
-
-        mainCtrl.goInvite = function goInvite() {
-            $state.go('app.user.invite_inst');
-        };
-
-        mainCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
-            mainCtrl.toggle();
-        };
-
-        mainCtrl.goEvents = function goEvents(){
-            $state.go('app.user.events');
+        mainCtrl.goTo = function (stateName) {
+            UtilsService.selectNavOption(STATES[stateName]);
+            resetNavBarDisplayStyle();
         };
 
         mainCtrl.logout = function logout() {
@@ -107,30 +80,25 @@
         };
 
         mainCtrl.goToManageMembers = function goToManageMembers(instKey){
-            $state.go('app.manage_institution.members', {
+            $state.go(STATES.MANAGE_INST_MEMBERS, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToManageInstitutions = function goToManageInstitutions(instKey){
-            $state.go('app.manage_institution.invite_inst', {
+            $state.go(STATES.MANAGE_INST_INVITE_INST, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToEditInstInfo = function goToEditInstInfo(instKey){
-            $state.go('app.manage_institution.edit_info', {
+            $state.go(STATES.MANAGE_INST_EDIT, {
                 institutionKey: instKey || mainCtrl.user.current_institution.key
             });
         };
 
         mainCtrl.goToReport = function goToReport() {
             $window.open(url_report);
-        };
-
-
-        mainCtrl.openConfigMenu = function openConfigMenu(ev) {
-            $mdMenu.open(ev);
         };
 
         function increaseInstInvitationsNumber(response) {
@@ -179,29 +147,18 @@
             $window.location.reload();
         };
 
-        /** Function used in bottom navbar to redirect to new state and
-         * reset properties of CSS that can be modified while using in mode mobile
-         * @param {string} state - state that should be redirect. 
+        /** Return correct class according currently state.
          */
-        mainCtrl.goToOfBottomNav = function goToOfBottomNav(state) {
-            mainCtrl.stateView = "app.user." + state;
-            resetNavBarDisplayStyle();
-            $state.go(mainCtrl.stateView);
+        mainCtrl.getSelectedClass = function (stateName){
+            return STATES[stateName] === mainCtrl._getStateName() ? "color-icon-selected-navbar" : "color-icon-navbar";
         };
 
-        /** Update the state view to notifications
-         *  and reset properties of CSS.
-         */
-        mainCtrl.selectNotificationState = function selectNotificationState(){
-            mainCtrl.stateView = "app.user.notifications";
-            resetNavBarDisplayStyle();
-        }
+        mainCtrl._getStateName = function () {
+            return $state.current.name;
+        };
 
-        /** Return correct class according currently state view.
-         */
-        mainCtrl.getSelectedStateClass = function getSelectedStateClass(state){
-            state = "app.user." + state;
-            return (state === mainCtrl.stateView) ? "color-icon-selected-navbar":"color-icon-navbar";
+        mainCtrl.getState = function (stateName) {
+            return STATES[stateName];
         };
 
         /**
@@ -228,7 +185,7 @@
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
-                $state.go("app.user.config_profile");
+                $state.go(STATES.CONFIG_PROFILE);
             }
             notificationListener();
             mainCtrl.getPendingTasks();

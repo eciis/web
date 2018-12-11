@@ -3,14 +3,14 @@
     var app = angular.module('app');
 
     app.controller("InstitutionCardController", function InstitutionCardController(
-        $state, AuthService, InstitutionService, MessageService, ngClipboard, $mdDialog){
+        $state, AuthService, InstitutionService, STATES, MessageService, ngClipboard, $mdDialog){
         var institutionCardCtrl = this;
         var URL_INSTITUTION = '/institution/';
 
         institutionCardCtrl.user = AuthService.getCurrentUser();
 
         institutionCardCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            $state.go('app.institution.timeline', {institutionKey: institutionKey});
+            $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
         };
 
         institutionCardCtrl.limitString = function limitString(string, limit){

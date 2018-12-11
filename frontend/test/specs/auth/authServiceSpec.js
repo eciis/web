@@ -10,7 +10,7 @@
     };
 
     var firebaseUser = {
-        accessToken: 'gfdfggfdjdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
+        accessToken: 'ruioewyuirywieuryiuweyr876324875632487yiue',
         getIdToken: async () => firebaseUser.accessToken
     }
 
@@ -19,7 +19,7 @@
     beforeEach(inject(function(AuthService, UserService) {
         authService = AuthService;
         userService = UserService;
-
+        
         firebase.auth = () => {
             return {
                 onAuthStateChanged: (callback) => callback(firebaseUser),
@@ -28,7 +28,7 @@
         }
 
         firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
-        AuthService.useOriginalGetUserToken();
+        authService.useOriginalGetUserToken();
     }));
 
     describe('AuthService  setupUser', function() {
@@ -61,7 +61,7 @@
         it('should authService.getUserToken()', function(done) {
             spyOn(authService, 'save');
             authService.getUserToken().then(userToken => {
-                expect(userToken).toEqual(userTest.accessToken);
+                expect(userToken).toEqual(firebaseUser.accessToken);
                 expect(authService.save).toHaveBeenCalled();
                 done();
             });
@@ -82,6 +82,42 @@
             var new_user = JSON.stringify(userTest);
 
             expect(userCache).toEqual(new_user);
+        });
+    });
+
+    describe('_getIdToken', function() {
+        beforeEach(function() {
+            authService.setupUser(userTest.accessToken);
+            authService.resolveTokenPromise = () => {};
+            spyOn(authService, 'resolveTokenPromise').and.callFake(() => {});
+        });
+
+        it('should refresh token when the request of new token is successful', function(done) {
+            const user = {
+                accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
+                getIdToken: async () => user.accessToken
+            };
+            const savedResolveTokenPromisse = authService.resolveTokenPromise;
+
+            authService._getIdToken(user).then(function(accessToken) {
+                expect(accessToken).toEqual(user.accessToken);
+                expect(savedResolveTokenPromisse).toHaveBeenCalled();
+                done();
+            });
+        });
+
+        it('should refresh token when the request of new token fail', function(done) {
+            const user = {
+                accessToken: "riuewyirouyweiuryiu21y3iuyiuwyeiudsjikahkjsah",
+                getIdToken: async () => {throw "Network error!"}
+            };
+            const savedResolveTokenPromisse = authService.resolveTokenPromise;
+
+            authService._getIdToken(user).then(function(accessToken) {
+                expect(accessToken).toEqual(firebaseUser.accessToken);
+                expect(savedResolveTokenPromisse).toHaveBeenCalled();
+                done();
+            });
         });
     });
 }));

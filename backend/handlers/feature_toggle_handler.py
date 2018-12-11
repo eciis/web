@@ -20,7 +20,7 @@ class FeatureToggleHander(BaseHandler):
         feature_name = self.request.get('name')
 
         if feature_name:
-            features = Feature.get_feature(feature_name).make()
+            features = [Feature.get_feature(feature_name).make()]
         else:
             features = to_json(Feature.get_all_features())
 

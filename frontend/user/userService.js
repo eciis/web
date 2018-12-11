@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("UserService", function UserService(HttpService, $q, FeatureToggleService) {
+    app.service("UserService", function UserService(HttpService, $q) {
         var service = this;
 
         var USER_URI = "/api/user";

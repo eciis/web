@@ -15,12 +15,8 @@
 
         service.isEnabled = function isEnabled(feature_name) {
             return service.getFeatures(feature_name).then(function(response) {
-                return response[feature_name].enabled;
+                return response[0].enabled;
             });
         };
-
-        service.isEnabled('other').then(function(response) {
-            console.log(response);
-        });
     });
 })();

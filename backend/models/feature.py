@@ -16,7 +16,14 @@ class Feature(ndb.Model):
         return feature
     
     @staticmethod
-    def enable_all(features_dict):
+    def enable_all(features_list):
+        features_dict = {
+            feature['name']: {
+                'enabled': feature['enabled'],
+                'group': feature['group']
+            } for feature in features_list
+        }
+
         features = Feature.query(Feature.name.IN(features_dict.keys())).fetch()
         
         for feature in features:

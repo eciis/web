@@ -24,6 +24,13 @@ class InstitutionCollectionHandler(BaseHandler):
         """Get all institutions."""
         INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description', 'admin', 'cover_photo', 'institutional_email']
         ACTIVE_STATE = "active"
+        
+        filter_flag = self.request.get('filter')
+
+        map_filter_expression = {
+            "following": Institution.key.IN(user.follows),
+            "member": Institution.key.IN(user.institutions)
+        }
 
         page = to_int(
             self.request.get('page', Utils.DEFAULT_PAGINATION_OFFSET),
@@ -33,8 +40,13 @@ class InstitutionCollectionHandler(BaseHandler):
             self.request.get('limit', Utils.DEFAULT_PAGINATION_LIMIT),
             QueryException,
             "Query param limit must be an integer")
+        
+        filter_expression = map_filter_expression.get(filter_flag)
 
-        queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE)
+        if filter_expression:
+            queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE and filter_expression).order(Institution.key)
+        else :
+            queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE)
 
         queryInstitutions, more = offset_pagination(
             page,

@@ -131,14 +131,14 @@
     };
 
     app.component("surveyComponent", {
-            templateUrl: getTemplateUrl(),
-            controllerAs: "surveyCtrl",
-            controller: "SurveyComponentController",
-            scope: {},
-            bindToController: {
-                post: '=',
-                user: '=',
-                callback: '='
-            }
+        templateUrl: getTemplateUrl(),
+        controllerAs: "surveyCtrl",
+        controller: "SurveyComponentController",
+        scope: {},
+        bindings: {
+            post: '=',
+            user: '=',
+            callback: '='
+        }
     });
 })();

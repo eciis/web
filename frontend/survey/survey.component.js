@@ -134,7 +134,6 @@
         templateUrl: getTemplateUrl(),
         controllerAs: "surveyCtrl",
         controller: "SurveyComponentController",
-        scope: {},
         bindings: {
             post: '=',
             user: '=',

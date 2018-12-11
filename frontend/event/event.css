@@ -105,9 +105,12 @@
     margin-bottom: 0.3125em;
 }
 
+.event-buttons-color, .back-to-button, .create-event-cancel-button, .event-img-icon, .useful-links-icon {
+    color: white;
+}
+
 .useful-links-icon {
     background-color: #8cc04e; 
-    color: white; 
     height: 1.667em; 
     width: 1.667em; 
     text-align: center; 
@@ -316,7 +319,6 @@
     }
 
     .back-to-button {
-        color: white;
         font-size: 2.5em;
     }
 
@@ -359,7 +361,6 @@
 
     .create-event-cancel-button {
         background-color: rgb(173, 169, 169);
-        color: white;
     }
 
     .event-select-inst-shadow {
@@ -394,15 +395,33 @@
         height: 4.375em;
         width: 4.375em;
         font-size: 4.375em;
-        color: white;
     }
 
     .event-img-height, .event-img-thumbnail {
         height: 9.375em;
     }
+
     .event-img-thumbnail {
         overflow: hidden;
         padding-left: 0;
         padding-right: 0;
+    }
+
+    .event-overflow-navbar {
+        overflow: auto;
+    }
+
+    .event-form-margin {
+        margin-top: 3.2em;
+    }
+
+    .event-date-alert {
+        opacity: 0.9;
+        margin-top: 0.125em;
+        font-size: 0.8em;
+    }
+
+    .event-link-height {
+        height: 2.2em;
     }
 }

@@ -1,11 +1,11 @@
-<div style="overflow: auto;">
+<div class="event-overflow-navbar">
     <div class="create-event-mobile-top-bar">
         <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
             <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
         </md-button>
     </div>
 </div>
-<form name="createEvent" style="margin-top: 3.2em;">
+<form name="createEvent" class="event-form-margin">
 
     <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
         <div class="desc centralized-event-content">
@@ -106,8 +106,7 @@
                     ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
                     ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
                 <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.start_time"
-                        style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
                         Primeiro defina a data inicial
                     </div>
                 </div>
@@ -119,8 +118,7 @@
                     ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
                     ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
                 <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.start_time"
-                        style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
                         Primeiro defina a data final
                     </div>
                 </div>
@@ -143,7 +141,7 @@
             <p class="md-subheader">Vídeos</p>
             <div class="custom-scrollbar event-links-fields">
                 <div ng-repeat="videoUrl in createEventCtrl.videoUrls" layout="column">
-                    <md-input-container class="md-block" style="height: 2.2em;">
+                    <md-input-container class="md-block event-link-height">
                         <label>Link do Youtube</label>
                         <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
                         ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
@@ -152,7 +150,7 @@
                             <div ng-message="pattern">Link do Youtube inválido.</div>
                         </div>
                     </md-input-container>
-                    <md-input-container class="md-block" style="height: 2.2em;">
+                    <md-input-container class="md-block event-link-height">
                         <label>Descrição</label>
                         <input ng-required="videoUrl.url" class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />
                     </md-input-container>
@@ -163,12 +161,12 @@
             <p class="md-subheader">Links úteis</p>
             <div class="custom-scrollbar event-links-fields">
                 <div ng-repeat="usefulLink in createEventCtrl.usefulLinks" layout="column">
-                    <md-input-container class="md-block" style="height: 2.2em;">
+                    <md-input-container class="md-block event-link-height">
                         <label>Link</label>
                         <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..."
                         ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)" type="url"/>
                     </md-input-container>
-                    <md-input-container class="md-block" style="height: 2.2em;">
+                    <md-input-container class="md-block event-link-height">
                         <label>Descrição</label>
                         <input ng-required="usefulLink.url" class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />
                     </md-input-container>
@@ -201,6 +199,6 @@
         Cancelar
     </md-button>
     <md-button class="btn-submit" ng-click="createEventCtrl.nextStepOrSave()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
-        <span style="color: white;">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
+        <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
     </md-button>
 </div>

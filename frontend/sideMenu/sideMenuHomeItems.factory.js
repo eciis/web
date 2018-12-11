@@ -5,12 +5,8 @@
     .module('app')
     .factory('SideMenuHomeItems', function ($state, STATES, AuthService, $mdDialog) {
         const factory = {};
-
-        const user = AuthService.getCurrentUser();
         
-        const isSuperUser = () => {
-            return user.hasPermission('analyze_request_inst');
-        };
+        const isSuperUser = user => user.hasPermission('analyze_request_inst');
 
         const takeTour = event => {
             $mdDialog.show({
@@ -28,7 +24,7 @@
             });
         };
 
-        factory.new = () => {
+        factory.getItems = user => {
             return [
                 {
                     icon: 'home',
@@ -54,7 +50,7 @@
                     description: 'Convites',
                     stateName: 'INVITE_INSTITUTION',
                     onClick: () => $state.go(STATES.INVITE_INSTITUTION),
-                    showIf: () => isSuperUser()
+                    showIf: () => isSuperUser(user)
                 },
                 {
                     icon: 'account_balance',

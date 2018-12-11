@@ -77,7 +77,7 @@
                     eventCtrl._getEventsByDay();
                 });
             } else {
-                $state.go("app.user.create_event");
+                $state.go(STATES.CREATE_EVENT);
             }
         };
 
@@ -102,7 +102,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go('app.user.event', { eventKey: event.key });
+            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
         };
 
         /**

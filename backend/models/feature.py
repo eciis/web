@@ -7,11 +7,12 @@ class Feature(ndb.Model):
     name = ndb.StringProperty()
     enabled = ndb.BooleanProperty()
     group = ndb.StringProperty(
-        choices=set(["ADMIN", "COMMOM", "ALL"]))
+        choices=set(["SUPER_USER", "ADMIN", "ALL"]))
+    device = ndb.StringProperty(choices=set(["MOBILE", "DESKTOP", "ALL"]))
 
     @staticmethod
-    def create(name, enable, group="ALL"):
-        feature = Feature(id=name, name=name, enabled=enable, group=group)
+    def create(name, enable, group="ALL", device="ALL"):
+        feature = Feature(id=name, name=name, enabled=enable, group=group, device=device)
         feature.put()
         return feature
     
@@ -20,7 +21,8 @@ class Feature(ndb.Model):
         features_dict = {
             feature['name']: {
                 'enabled': feature['enabled'],
-                'group': feature['group']
+                'group': feature['group'],
+                'device': feature['device']
             } for feature in features_list
         }
 
@@ -29,6 +31,7 @@ class Feature(ndb.Model):
         for feature in features:
             feature.enabled = features_dict[feature.name]['enabled']
             feature.group = features_dict[feature.name]['group']
+            feature.device = features_dict[feature.name]['device']
 
         ndb.put_multi(features)
         return features
@@ -56,7 +59,8 @@ class Feature(ndb.Model):
         make_obj = {
             'name': self.name,
             'enabled': self.enabled,
-            'group': self.group
+            'group': self.group,
+            'device': self.device
         }
 
         return make_obj

@@ -14,7 +14,16 @@
 
         service.isEnabled = function isEnabled(feature_name) {
             return service.getFeatures(feature_name).then(function(response) {
-                return response[0].enabled;
+                const feature = response[0];
+                
+                if (!feature.enabled)
+                    return false;
+
+                const enableMobile = feature.device === 'MOBILE' && Utils.isMobileScreen();
+                const enableDesktop = feature.device === 'DESKTOP' && !Utils.isMobileScreen();
+                const enableALL = feature.device === 'ALL';
+
+                return enableALL || enableMobile || enableDesktop;
             });
         };
     });

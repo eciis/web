@@ -1,5 +1,5 @@
 <md-sidenav class="md-sidenav-left side-menu" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
-    <md-content class="custom-scrollbar" md-colors="{background: 'grey-100'}">
+    <md-content class="hide-scrollbar" md-colors="{background: 'grey-100'}" flex>
         <!-- Menu header -->
         <div class="card hovercard" md-colors="{background: sideMenuCtrl.getProfileColor(800)}">
             <div class="cardheader">
@@ -9,7 +9,7 @@
             </div>
             <div class="info" md-colors="{background: sideMenuCtrl.getProfileColor(600)}">
                 <div class="desc">
-                    <div class="md-title sm-title" ng-click="sideMenuCtrl.onClickTitle()">{{sideMenuCtrl.getTitle()}}</div>
+                    <div class="md-title" ng-click="sideMenuCtrl.onClickTitle()">{{sideMenuCtrl.getTitle()}}</div>
                     <div ng-if="sideMenuCtrl.isType('HOME')">
                         <span >{{ sideMenuCtrl.user.current_institution.name }}</span>
                         <md-menu>

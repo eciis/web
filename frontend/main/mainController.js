@@ -43,7 +43,6 @@
         };
 
         mainCtrl.toggle = function toggle() {
-            // $mdSidenav('leftNav').toggle();
             $mdSidenav('sideMenu').toggle();
         };
 

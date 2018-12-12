@@ -47,7 +47,6 @@
                 },
                 {
                     icon: 'mail_outline',
-                    iconClass: 'notification-badge',
                     description: 'Convites',
                     stateName: 'INVITE_INSTITUTION',
                     onClick: () => $state.go(STATES.INVITE_INSTITUTION),
@@ -64,7 +63,6 @@
                 },
                 {
                     icon: 'account_circle',
-                    iconClass: 'notification-badge',
                     description: 'Gerenciar Membros',
                     stateName: 'MANAGE_INST_MEMBERS',
                     showIf: () => user.isAdminOfCurrentInst(),
@@ -72,7 +70,6 @@
                 },
                 {
                     icon: 'account_balance',
-                    iconClass: 'notification-badge',
                     description: 'Vínculos Institucionais',
                     stateName: 'MANAGE_INST_INVITE_INST',
                     bottomDivider: true,

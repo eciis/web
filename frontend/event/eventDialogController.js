@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -120,7 +120,7 @@
         };
 
         dialogCtrl.cancelCreation = () => {
-            if (Utils.isMobileScreen(475))
+            if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE))
                 $state.go(STATES.EVENTS);
 
             $mdDialog.hide();
@@ -209,7 +209,7 @@
         };
 
         dialogCtrl.isValidStepOne = function isValidStepOne() {
-            const isMobileScreen = Utils.isMobileScreen(475);
+            const isMobileScreen = Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
             const isValidToMobile = isMobileScreen && dialogCtrl.isValidAddress();
             const isValidToDesktop = !isMobileScreen && dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
             return isValidToMobile || isValidToDesktop;
@@ -218,7 +218,7 @@
         dialogCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
 
         dialogCtrl.lastStep = () => {
-            if(Utils.isMobileScreen(475)) {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 return dialogCtrl.getStep(4);
              }
              return dialogCtrl.getStep(3);
@@ -286,6 +286,18 @@
             }
         };
 
+        /**
+         * Transfer the state params to the controller
+         * @private
+         */
+        dialogCtrl._loadStateParams = () => {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                dialogCtrl.event = $state.params.event;
+                dialogCtrl.events = $state.params.events;
+                dialogCtrl.isEditing = $state.params.isEditing;
+            }
+        };
+
         function clearSelectedState() {
             dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";
@@ -317,10 +329,10 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    dialogCtrl.cancelCreation();
                     dialogCtrl.events.push(response);
-                    MessageService.showToast('Evento criado com sucesso!');
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
+                    dialogCtrl.cancelCreation();
+                    MessageService.showToast('Evento criado com sucesso!');
                 }, function error() {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;
@@ -374,11 +386,12 @@
             }
         }
 
-        (function main() {
-            var address = { country: "Brasil" };
+        dialogCtrl.$onInit = () => {
+            const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
             initUrlFields();
+            dialogCtrl._loadStateParams();
             if (dialogCtrl.event) {
                 dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
                 dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
@@ -388,6 +401,6 @@
             } else {
                 dialogCtrl.event = { address: address };
             }
-        })();
+        };
     });
 })();

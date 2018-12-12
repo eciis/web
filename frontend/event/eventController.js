@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -62,7 +62,12 @@
         }
 
         eventCtrl.newEvent = function newEvent(event) {
-            if(!Utils.isMobileScreen(475)) {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                $state.go(STATES.CREATE_EVENT, {
+                    event: event,
+                    events: eventCtrl.events
+                });
+            } else {
                 $mdDialog.show({
                     controller: 'EventDialogController',
                     controllerAs: "controller",
@@ -76,8 +81,6 @@
                 }).then(() => {
                     eventCtrl._getEventsByDay();
                 });
-            } else {
-                $state.go(STATES.CREATE_EVENT);
             }
         };
 
@@ -212,7 +215,7 @@
 
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
-            if(Utils.isMobileScreen(475)) {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths();
             } else {
                 eventCtrl.loadMoreEvents();

@@ -72,7 +72,7 @@
         });
       controller.event = event;
       controller.events = [];
-
+      controller.$onInit();
       httpBackend.when('GET', 'app/institution/countries.json').respond(200);
       httpBackend.flush();
   }));

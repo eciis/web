@@ -96,6 +96,11 @@
                         templateUrl: "app/event/create_event.html",
                         controller: "EventDialogController as createEventCtrl"
                     }
+                },
+                params: {
+                    event: null,
+                    events: null,
+                    isEditing: null
                 }
             })
             .state(STATES.INVITE_INSTITUTION, {
@@ -489,14 +494,14 @@
      * Function to intercept the access of pages that should be displayed only on mobile screens.
      * @param {service} $transitions - Service of transitions states
      */
-    app.run(function mobileInterceptor($transitions, STATES) {
+    app.run(function mobileInterceptor($transitions, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT
         ];
 
         $transitions.onSuccess({
             to: (state) => {
-                return !Utils.isMobileScreen(475) && _.includes(permitted_routes, state.name);
+                return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && _.includes(permitted_routes, state.name);
             }
         }, (transition) => {
             transition.router.stateService.transitionTo(STATES.HOME);

@@ -15,8 +15,6 @@
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
 
-        mainCtrl.stateView =  $state.current.name;
-
         mainCtrl._statesWithoutFooter = [
             STATES.CREATE_EVENT
         ];

@@ -15,15 +15,13 @@
         service.isEnabled = function isEnabled(feature_name) {
             return service.getFeatures(feature_name).then(function(response) {
                 const feature = response[0];
+                const disabledMobile = feature.enable_mobile === 'DISABLED';
+                const disabeldDesktop = feature.enable_desktop === 'DISABLED';
                 
-                if (!feature.enabled)
+                if (disabledMobile && disabeldDesktop)
                     return false;
 
-                const enableMobile = feature.device === 'MOBILE' && Utils.isMobileScreen();
-                const enableDesktop = feature.device === 'DESKTOP' && !Utils.isMobileScreen();
-                const enableALL = feature.device === 'ALL';
-
-                return enableALL || enableMobile || enableDesktop;
+                return !disabeldDesktop && !Utils.isMobileScreen() || !disabledMobile && Utils.isMobileScreen();
             });
         };
     });

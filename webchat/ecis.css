@@ -1,0 +1,10 @@
+ec-content {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  overflow: auto;
+}

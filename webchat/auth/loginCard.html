@@ -1,0 +1,66 @@
+<!-- login card -->
+<md-card class="limit-width login-card">
+  <md-card-content class="">
+    <div>
+      <img id="login-logo" class="ec-logo" src="/app/images/logowithname.png" />
+      <div ng-if="ctrl.email">
+        <form class="login-form" ng-submit="ctrl.signIn()">
+          <md-input-container class="md-block">
+            <label>Email</label>
+            <input type="email" name="email" ng-model="ctrl.user.email" class="custom-card-input" required="false"
+              aria-label="Email">
+          </md-input-container>
+          <md-input-container class="md-block">
+            <label>Senha</label>
+            <input type="password" name="password" ng-model="ctrl.user.password" class="custom-card-input" required="false"
+              minlength="6" aria-label="Senha">
+          </md-input-container>
+          <div layout="row" layout-align-xs="center center" layout-align="end center">
+            <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+              Acessar
+            </md-button>
+          </div>
+        </form>
+      </div>
+
+      <div ng-if="ctrl.google">
+        <div ng-if="!ctlr.email">
+          <br>
+          <md-divider></md-divider>
+        </div>
+        <md-button class="login-btn" ng-click="ctrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
+          <md-icon md-svg-src="/app/icons/google-icon.svg"></md-icon>
+          <span>ACESSE COM GOOGLE</span>
+        </md-button>
+      </div>
+
+      <div ng-if="ctrl.invite">
+        <md-divider></md-divider>
+
+        <p class="login-text">
+          Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.
+        </p>
+
+        <md-button class="login-btn" md-colors="{background: 'teal-500'}" ng-click="ctrl.requestInvite()">
+          <md-icon>add_circle</md-icon>
+          <span>SOLICITAR CONVITE</span>
+        </md-button>
+      </div>
+    </div>
+  </md-card-content>
+  <!-- Esqueceu a senha
+          <div class="login-card-footer">
+            <md-card-actions layout="row" layout-align="start center">
+              <md-button md-colors="{color: 'teal-500'}" ng-click="ctrl.resetPassword()">
+                Esqueceu a senha?
+              </md-button>
+            </md-card-actions>
+          -->
+  </div>
+  </div>
+  <!-- Signup
+      <signup ng-if="ctrl.isRequestInvite" return-action="ctrl.requestInvite" card-title="Preencha o formulário para solicitar um convite">
+      </signup>
+      -->
+  </div>
+</md-card>

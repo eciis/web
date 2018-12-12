@@ -3,6 +3,7 @@
 
     const app = angular.module('webchat', [
         'ui.router',
+        'ngMaterial'
     ]);
 
     const rootName = 'webchat';
@@ -15,7 +16,14 @@
             login: 'login',
         });
 
-    app.config((STATES, $stateProvider, $urlRouterProvider) => {
+    app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider) => {
+        $mdIconProvider.fontSet('md', 'material-icons');
+        $mdThemingProvider.theme('docs-dark');
+        $mdThemingProvider.theme('input')
+            .primaryPalette('green');
+        $mdThemingProvider.theme('dialogTheme')
+            .primaryPalette('teal');
+
        $stateProvider
            .state(STATES.abstract, {
                abstract: true,

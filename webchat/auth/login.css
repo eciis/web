@@ -1,13 +1,38 @@
+img.ec-logo {
+  width: 80%;
+  margin: 1em;
+}
+
+.limit-width {
+  max-width: 480px;
+}
+
 .login-btn {
     margin: 0 0 1em auto;
-    text-align: left;
-    color: white;
     width: 100%;
 }
 
 .login-btn md-icon {
-    margin: 0 0.5em;
     color: white;
+    margin-right: 0.5em;
+    text-align: center;
+}
+
+#login-invite-icon {
+    font-size: 1.3em;
+    line-height: 24px;
+    margin-left: 0.3em;
+}
+
+#login-google-icon {
+    margin-left: 0.5em;
+}
+
+#login-google-icon svg {
+    height: auto;
+    width: 1.3em;
+    line-height: auto;
+    margin: 0.155em 0.2em;
 }
 
 .login-text {
@@ -18,32 +43,12 @@
     margin: 1em 0;
 }
 
-.login-card {
-    max-height: 96vh;
-    padding: 2em;
-}
-
-.limit-width {
-  max-width: 480px;
-}
-
-img.ec-logo {
-  width: 80%;
-  margin: 1em;
-}
-
 .login-card-footer {
     background-color: #E6E6E6;
 }
 
 @media screen and (max-width: 320px) {
-    #login-logo {
-        width: 80%;
-    }
-}
-
-@media screen and (max-width: 420px) {
-    .login-card-content {
-        width: 92%;
-    }
+  img.ec-logo {
+    width: 60%;
+  }
 }

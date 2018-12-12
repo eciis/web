@@ -7,24 +7,31 @@
 <form name="createEvent" class="event-form-margin">
 
     <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
-        <div class="desc centralized-event-content">
-            <span>
-                {{ createEventCtrl.limitString(homeCtrl.user.current_institution.name, 30) }}
-            </span>
-            <md-menu>
-                <md-button aria-label="Open phone interactions menu"
-                    class="md-icon-button" ng-click="$mdMenu.open(ev)">
-                    <md-icon>arrow_drop_down</md-icon>
-                </md-button>
-                <md-menu-content class="custom-scrollbar">
-                    <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
-                        <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                            <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                            {{ createEventCtrl.limitString(profile.institution.name, 30) }}
-                        </md-button>
-                    </md-menu-item>
-                </md-menu-content>
-            </md-menu>
+        <div class="event-select-inst">
+            <div class="event-select-ball">
+                <md-icon class="event-select-ball-margin" md-colors="{color: 'teal-900'}">brightness_1</md-icon>
+            </div>
+            <div class="event-select-inst-name">
+                <p class="event-limit-string">
+                    {{ homeCtrl.user.current_institution.name }}
+                </p>
+            </div>
+            <div class="event-select-button">
+                <md-menu>
+                    <md-button aria-label="Open phone interactions menu"
+                        class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                        <md-icon>arrow_drop_down</md-icon>
+                    </md-button>
+                    <md-menu-content class="custom-scrollbar">
+                        <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
+                            <md-button ng-click="mainCtrl.changeInstitution(profile)">
+                                <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                                {{ createEventCtrl.limitString(profile.institution.name, 30) }}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
         </div>
         <md-divider class="event-select-inst-shadow"></md-divider>
         <md-input-container md-no-float class="md-block">

@@ -281,7 +281,7 @@
         z-index: 1;
     }
 
-    .event-title, .event-subtitle, .event-inst-name { 
+    .event-title, .event-subtitle, .event-inst-name, .event-limit-string {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -327,12 +327,36 @@
         margin: 0;
     }
 
-    .fields-event-container {
+    .fields-event-container, .event-select-inst {
         display: grid;
         justify-content: center;
+    }
+
+    .fields-event-container {
         grid-template-columns: 98%;
         padding: 0 0.5em 0 0.5em;
         height: 1em;
+    }
+
+    .event-select-inst {
+        grid-template-columns: 15% 75% 10%;
+    }
+
+    .event-select-ball {
+        grid-column-start: 1;
+    }
+
+    .event-inst-select-name {
+        grid-column-start: 2;
+    }
+
+    .event-select-button {
+        grid-column-start: 3;
+    }
+
+    .event-select-ball-margin {
+        margin-top: 0.55em;
+        margin-left: 0.5em;
     }
 
     .fields-event-split, .fields-event-split-reverse {

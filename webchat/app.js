@@ -9,9 +9,7 @@
     app.constant('STATES', {
             abstract: 'webchat',
             home: `${rootName}.home`,
-            call: `${rootName}.call`,
             chat: `${rootName}.chat`,
-            video: `${rootName}.video`,
             login: 'login',
         });
 
@@ -41,24 +39,6 @@
                    content: {
                        templateUrl: "app/chat/chat.html",
                        controller: "ChatController as controller",
-                   },
-               },
-           })
-           .state(STATES.call, {
-               url: "/call",
-               views: {
-                   content: {
-                       templateUrl: "app/video/call.html",
-                       controller: "CallController as controller",
-                   },
-               },
-           })
-           .state(STATES.video, {
-               url: "/video",
-               views: {
-                   content: {
-                       templateUrl: "app/video/video.html",
-                       controller: "VideoController as controller",
                    },
                },
            })

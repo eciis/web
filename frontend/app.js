@@ -180,7 +180,7 @@
                 }
             })
             .state(STATES.POST, {
-                url: "/posts/:key",
+                url: "/posts/:key?focus",
                 views: {
                     content: {
                         templateUrl: "app/post/post_page.html",

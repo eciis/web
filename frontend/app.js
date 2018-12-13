@@ -505,13 +505,13 @@
         });
     });
 
-    app.run(function featureToggleInterceptor(FeatureToggleService, STATE_TO_FEATURE, $transitions, $state, STATES) {
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, $state, STATES) {
         let verified = false;
         
         $transitions.onStart({
             to: function(state) {
                 const stateName = state.name;
-                if (!verified && (stateName in STATE_TO_FEATURE)) {
+                if (!verified && MapStateToFeatureService.containsFeature(stateName)) {
                     return true;
                 } else {
                     verified = false;
@@ -522,7 +522,7 @@
             transition.abort();
             const targetState = transition._targetState;
 
-            FeatureToggleService.isEnabled(STATE_TO_FEATURE[targetState._identifier]).then(function(enabled) {
+            FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetState._identifier)).then(function(enabled) {
                 if (enabled) {
                     verified = true;
                     $state.go(targetState._identifier, targetState._params);

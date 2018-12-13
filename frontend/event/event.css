@@ -339,7 +339,7 @@
     }
 
     .event-select-inst {
-        grid-template-columns: 15% 75% 10%;
+        grid-template-columns: 15% 74% auto;
     }
 
     .event-select-ball {
@@ -447,5 +447,27 @@
 
     .event-link-height {
         height: 2.2em;
+    }
+
+    .md-open-menu-container.md-active {
+        width: 95%;
+    }
+
+    @media screen and (min-height: 600px) {
+        .event-links-fields {
+            max-height: 13em;
+        }
+    }
+
+    @media screen and (min-height: 700px) {
+        .event-links-fields {
+            max-height: 15em;
+        }
+    }
+
+    @media screen and (min-height: 800px) {
+        .event-links-fields {
+            max-height: 18em;
+        }
     }
 }

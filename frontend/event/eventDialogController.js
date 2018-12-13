@@ -53,6 +53,16 @@
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
         };
 
+        dialogCtrl.addInitHour = () => {
+            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startTime.getMinutes(), 0);
+            dialogCtrl.event.start_time = dialogCtrl.startTime;
+        };
+
+        dialogCtrl.addEndHour = () => {
+            dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
+            dialogCtrl.changeDate('endTime');
+        };
+
         function saveImage(callback) {
             if (dialogCtrl.photoBase64Data) {
                 dialogCtrl.loading = true;
@@ -235,6 +245,9 @@
                     isValid: dialogCtrl.isValidStepOne
                 },
                 1: {
+                    fields: [
+                        dialogCtrl.endHour && String(dialogCtrl.endHour)
+                    ],
                     isValid: dialogCtrl.isValidDate
                 }
             };
@@ -286,6 +299,11 @@
             }
         };
 
+        dialogCtrl.getStreetPlaceholder = () => {
+            const street = "Rua";
+            return dialogCtrl.isAnotherCountry ? street : street + " *";
+        };
+
         /**
          * Transfer the state params to the controller
          * @private
@@ -329,7 +347,7 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    dialogCtrl.events.push(response);
+                    !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.events.push(response);
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
                     dialogCtrl.cancelCreation();
                     MessageService.showToast('Evento criado com sucesso!');
@@ -362,7 +380,9 @@
 
         function loadEventDates() {
             dialogCtrl.event.start_time = new Date(dialogCtrl.event.start_time);
-            dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time);
+            dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time); 
+            dialogCtrl.endHour = new Date(dialogCtrl.event.end_time);
         }
 
         function loadSelectedState() {

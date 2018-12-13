@@ -4,12 +4,15 @@
     </md-button>
 </div>
 
-<form name="createEvent" class="event-form-margin">
+<form name="createEvent" class="event-form-margin" ng-submit="createEventCtrl.nextStepOrSave()">
 
     <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
         <div class="event-select-inst">
             <div class="event-select-ball">
-                <md-icon class="event-select-ball-margin" md-colors="{color: 'teal-900'}">brightness_1</md-icon>
+                <md-icon class="event-select-ball-margin"
+                    md-colors="{color: createEventCtrl.user.getProfileColor()+'-900'}">
+                    brightness_1
+                </md-icon>
             </div>
             <div class="event-select-inst-name">
                 <p class="event-limit-string">
@@ -25,8 +28,10 @@
                     <md-menu-content class="custom-scrollbar">
                         <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
                             <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                                <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                                {{ createEventCtrl.limitString(profile.institution.name, 30) }}
+                                <div class="event-limit-string">
+                                    <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                                        {{ profile.institution.name }}
+                                </div>
                             </md-button>
                         </md-menu-item>
                     </md-menu-content>
@@ -35,21 +40,25 @@
         </div>
         <md-divider class="event-select-inst-shadow"></md-divider>
         <md-input-container md-no-float class="md-block">
-            <input ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO*"
+            <input type="text" ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO *"
             required ng-disabled="createEventCtrl.isEventOutdated()"/>
         </md-input-container>
         <md-input-container md-no-float class="md-block fields-event-padding">
-            <input ng-model="createEventCtrl.event.local" placeholder="Local*"
+            <input type="text" ng-model="createEventCtrl.event.local" placeholder="Local *"
             required ng-disabled="createEventCtrl.isEventOutdated()"/>
+        </md-input-container>
+        <md-input-container md-no-float class="md-block fields-event-padding">
+            <input type="url" placeholder="Site oficial" ng-model="createEventCtrl.event.official_site"
+            ng-disabled="controller.isEventOutdated()"/>
         </md-input-container>
         <div class="fields-event-split">
             <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
-                <input ng-required="!createEventCtrl.isAnotherCountry" placeholder="Rua"
+                <input type="text" ng-required="!createEventCtrl.isAnotherCountry" placeholder="{{createEventCtrl.getStreetPlaceholder()}}"
                 ng-model="createEventCtrl.event.address.street"
                 ng-disabled="createEventCtrl.isEventOutdated()"/>
             </md-input-container>
             <md-input-container md-no-float class="md-block fields-event-padding">
-                <input ng-model="createEventCtrl.event.address.number" placeholder="Número"
+                <input type="text" ng-model="createEventCtrl.event.address.number" placeholder="Número"
                     ng-disabled="createEventCtrl.isEventOutdated()"/>
             </md-input-container>
         </div>
@@ -77,7 +86,7 @@
                 </md-select>
             </md-input-container>
         </div>
-        <md-input-container md-no-float class="md-block" ng-if="createEventCtrl.isAnotherCountry">
+        <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
             <input type="text" name="city" ng-model="createEventCtrl.event.address.city"
             placeholder="Cidade" ng-disabled="createEventCtrl.isEventOutdated()"/>
         </md-input-container>
@@ -93,24 +102,30 @@
         <div class="fields-event-split">
             <md-input-container md-no-float class="md-block event-input-margin">
                 <input mdc-datetime-picker="" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
-                    placeholder="Data inicial" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
+                    placeholder="Data inicial *" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
                     max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()" required
                     ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
             </md-input-container>
             <md-input-container md-no-float class="md-block">
                 <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
-                    placeholder="Hora inicial" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()" required
-                    ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
+                    placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
+                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addInitHour()" required
+                    ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
+                <div ng-messages>
+                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
+                        Primeiro defina a data inicial
+                    </div>
+                </div>
             </md-input-container>
         </div>
         <div class="fields-event-split">
             <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
                 <input mdc-datetime-picker="" ng-change="createEventCtrl.changeDate('endTime')" date="true" time="false"
-                    type="text" today-text="Hoje" placeholder="Data final" class="md-input" format="DD-MM-YYYY"
+                    type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
                     min-date="createEventCtrl.startTime" max-date="null"
                     ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
-                    ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                    ng-disabled="!createEventCtrl.event.start_time ||
+                        !createEventCtrl.startHour || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
                 <div ng-messages>
                     <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
                         Primeiro defina a data inicial
@@ -118,13 +133,13 @@
                 </div>
             </md-input-container>
             <md-input-container md-no-float class="md-block fields-event-padding">
-                <input mdc-datetime-picker="" ng-change="createEventCtrl.changeDate('endTime')" date="false" time="true"
-                    type="text" today-text="Hoje" placeholder="Hora final" class="md-input" format="HH:mm"
+                <input mdc-datetime-picker="" ng-change="createEventCtrl.addEndHour()" date="false" time="true"
+                    type="text" today-text="Hoje" placeholder="Hora final *" class="md-input" format="HH:mm"
                     min-date="createEventCtrl.startTime" max-date="null"
-                    ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
-                    ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                    ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
+                    ng-disabled="!createEventCtrl.event.end_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
                 <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
+                    <div ng-show="!createEventCtrl.event.end_time" class="event-date-alert">
                         Primeiro defina a data final
                     </div>
                 </div>
@@ -197,14 +212,13 @@
             </md-button>
         </div>
     </div>
-
-</form>
-<div class="action-event-container"
+    <div class="action-event-container"
     ng-if="!createEventCtrl.loading">
     <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
         Cancelar
     </md-button>
-    <md-button class="btn-submit" ng-click="createEventCtrl.nextStepOrSave()" class="md-raised" md-colors="{background: 'default-teal-500'}" title="Enviar">
+    <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
         <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
     </md-button>
 </div>
+</form>

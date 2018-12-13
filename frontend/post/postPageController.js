@@ -27,6 +27,7 @@
             });
             return promise;
         }
+
         loadPost($state.params.key);
     });
 })();

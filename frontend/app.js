@@ -505,29 +505,21 @@
         });
     });
 
-    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, $state, STATES) {
-        let verified = false;
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES) {
         
-        $transitions.onStart({
+        $transitions.onBefore({
             to: function(state) {
                 const stateName = state.name;
-                if (!verified && MapStateToFeatureService.containsFeature(stateName)) {
-                    return true;
-                } else {
-                    verified = false;
-                    return false;
-                }
+                return MapStateToFeatureService.containsFeature(stateName);
             }
         }, function (transition) {
-            transition.abort();
-            const targetState = transition._targetState;
+            const targetStateName = transition.to().name;
 
-            FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetState._identifier)).then(function(enabled) {
+            return FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetStateName)).then(function(enabled) {
                 if (enabled) {
-                    verified = true;
-                    $state.go(targetState._identifier, targetState._params);
+                    return transition;
                 } else {
-                    $state.go(STATES.ERROR, {
+                    return transition.router.stateService.target(STATES.ERROR, {
                         "msg": "Desculpa! Este recurso ainda não está disponível.",
                         "status": "500"
                     });

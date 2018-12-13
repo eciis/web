@@ -3,7 +3,6 @@
 
     const app = angular.module('app');
 
-
     app.service('MapStateToFeatureService', function(STATES) {
         const service = this;
 

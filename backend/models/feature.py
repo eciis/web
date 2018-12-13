@@ -5,9 +5,9 @@ __all__ = ['Feature']
 
 class Feature(ndb.Model):
     """
-    Model of Feature
+    Model of Feature.
     """
-    
+
     name = ndb.StringProperty()
     enable_mobile = ndb.StringProperty(
         choices=set(["SUPER_USER", "ADMIN", "ALL", "DISABLED"]))
@@ -31,7 +31,6 @@ class Feature(ndb.Model):
         return feature
     
     @staticmethod
-    @ndb.transactional(xg=True)
     def enable_all(features_list):
         """
         Method to enable or disable multiple features.

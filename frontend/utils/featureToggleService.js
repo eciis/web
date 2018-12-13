@@ -7,13 +7,28 @@
         const service = this;
         const uri = '/api/feature-toggle';
 
-        service.getFeatures = function getFeatures(feature_name) {
-            const query = (feature_name) ? `?name=${feature_name}` : '';
+
+        /**
+         * Function to get all features or filter by name
+         * 
+         * @param {String} featureName - (Optional) Feature name to use in query parameter
+         * @return {Promise} Promise that when it is resolved it returns the searched feature.
+         */
+        service.getFeatures = function getFeatures(featureName) {
+            const query = (featureName) ? `?name=${featureName}` : '';
             return HttpService.get(`${uri}${query}`);
         };
 
-        service.isEnabled = function isEnabled(feature_name) {
-            return service.getFeatures(feature_name).then(function(response) {
+
+        /**
+         * This function checks whether the feature passed by parameter 
+         * is enabled for the logged in user and the device that he uses.
+         * 
+         * @param {String} featureName - Feature name to check if is enabled
+         * @return {Promise} Promise that when it is resolved it returns a boolean indicating whether or not it is enabled.
+         */
+        service.isEnabled = function isEnabled(featureName) {
+            return service.getFeatures(featureName).then(function(response) {
                 const feature = response[0];
                 const disabledMobile = feature.enable_mobile === 'DISABLED';
                 const disabeldDesktop = feature.enable_desktop === 'DISABLED';

@@ -529,7 +529,7 @@
                 } else {
                     $state.go(STATES.ERROR, {
                         "msg": "Desculpa! Este recurso ainda não está disponível.",
-                        "status": "401"
+                        "status": "500"
                     });
                 }
             });

@@ -14,10 +14,10 @@
          * Function to get feature by state name
          * 
          * @param {String} stateName - name of state to get related feature
-         * @return {String} Feature name if the state is registered, otherwise returns null
+         * @return {String} Feature name if the state is registered, otherwise returns undefined
          */
         service.getFeatureByState = function getFeatureByState(stateName) {
-            return _.get(service._statesToFeature, stateName, null);
+            return _.get(service._statesToFeature, stateName);
         };
 
         /**

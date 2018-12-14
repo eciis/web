@@ -1,4 +1,4 @@
-"""Feature Toogle handler."""
+"""Feature Toggle handler."""
 
 import json
 from . import BaseHandler
@@ -7,7 +7,7 @@ from util import login_required
 from models import Feature
 
 
-__all__ = ['FeatureToggleHander']
+__all__ = ['FeatureToggleHandler']
 
 def to_json(feature_list):
     """
@@ -18,13 +18,14 @@ def to_json(feature_list):
     """
     
     features = [feature.make() for feature in feature_list]
-    return features
+    return json.dumps(features)
 
-class FeatureToggleHander(BaseHandler):
+class FeatureToggleHandler(BaseHandler):
     """Feature toggle hanler."""
     
     @json_response
-    def get(self):
+    @login_required
+    def get(self, user):
         """
         Method to get all features or filter by name using query parameter.
         """
@@ -32,11 +33,11 @@ class FeatureToggleHander(BaseHandler):
         feature_name = self.request.get('name')
 
         if feature_name:
-            features = [Feature.get_feature(feature_name).make()]
+            features = [Feature.get_feature(feature_name)]
         else:
-            features = to_json(Feature.get_all_features())
+            features = Feature.get_all_features()
 
-        self.response.write(json.dumps(features))
+        self.response.write(to_json(features))
     
     @login_required
     @json_response
@@ -47,4 +48,4 @@ class FeatureToggleHander(BaseHandler):
 
         features_body = json.loads(self.request.body)
         features = Feature.enable_all(features_body)
-        self.response.write(json.dumps(to_json(features)))
+        self.response.write(to_json(features))

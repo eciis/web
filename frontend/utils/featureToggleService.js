@@ -29,14 +29,14 @@
          */
         service.isEnabled = function isEnabled(featureName) {
             return service.getFeatures(featureName).then(function(response) {
-                const feature = response[0];
-                const disabledMobile = feature.enable_mobile === 'DISABLED';
-                const disabeldDesktop = feature.enable_desktop === 'DISABLED';
+                const feature = _.first(response);
+                const disableMobile = _.get(feature, 'enable_mobile') === 'DISABLED';
+                const disableDesktop = _.get(feature, 'enable_desktop') === 'DISABLED';
                 
-                if (disabledMobile && disabeldDesktop)
+                if (disableMobile && disableDesktop)
                     return false;
 
-                return !disabeldDesktop && !Utils.isMobileScreen() || !disabledMobile && Utils.isMobileScreen();
+                return !disableDesktop && !Utils.isMobileScreen() || !disableMobile && Utils.isMobileScreen();
             });
         };
     });

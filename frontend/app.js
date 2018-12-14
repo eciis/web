@@ -521,7 +521,7 @@
                 } else {
                     return transition.router.stateService.target(STATES.ERROR, {
                         "msg": "Desculpa! Este recurso ainda não está disponível.",
-                        "status": "500"
+                        "status": "403"
                     });
                 }
             });

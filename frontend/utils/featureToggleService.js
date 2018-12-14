@@ -13,12 +13,20 @@
          * 
          * @param {String} featureName - (Optional) Feature name to use in query parameter
          * @return {Promise} Promise that when it is resolved it returns the searched feature.
+         * @private
          */
-        service.getFeatures = function getFeatures(featureName) {
+        service._getFeatures = function getFeatures(featureName) {
             const query = (featureName) ? `?name=${featureName}` : '';
             return HttpService.get(`${uri}${query}`);
         };
 
+        service.getFeature = function getFeature(featureName) {
+            return service._getFeatures(featureName);
+        };
+
+        service.getAllFeatures = function getAllFeatures() {
+            return service._getFeatures();
+        };
 
         /**
          * This function checks whether the feature passed by parameter 
@@ -28,7 +36,7 @@
          * @return {Promise} Promise that when it is resolved it returns a boolean indicating whether or not it is enabled.
          */
         service.isEnabled = function isEnabled(featureName) {
-            return service.getFeatures(featureName).then(function(response) {
+            return service.getFeature(featureName).then(function(response) {
                 const feature = _.first(response);
                 const disableMobile = _.get(feature, 'enable_mobile') === 'DISABLED';
                 const disableDesktop = _.get(feature, 'enable_desktop') === 'DISABLED';

@@ -180,12 +180,15 @@
                 }
             })
             .state(STATES.POST, {
-                url: "/posts/:key?focus",
+                url: "/posts/:key",
                 views: {
                     content: {
                         templateUrl: "app/post/post_page.html",
                         controller: "PostPageController as postCtrl",
                     }
+                },
+                params: {
+                    "focus": undefined
                 }
             })
             .state(STATES.MANAGE_INST, {

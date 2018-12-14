@@ -64,6 +64,7 @@
         eventCtrl.newEvent = function newEvent(event) {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 $state.go(STATES.CREATE_EVENT, {
+                    eventKey: null,
                     event: event,
                     events: eventCtrl.events
                 });

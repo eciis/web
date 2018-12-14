@@ -18,6 +18,7 @@
         dialogCtrl.isAnotherCountry = false;
         dialogCtrl.steps = [true, false, false, false];
         dialogCtrl.now = Date.now();
+        dialogCtrl.entireDay = false;
         var emptyUrl = {
             url: '',
             description: ''
@@ -51,16 +52,6 @@
 
         dialogCtrl.createInitDate = function createInitDate() {
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
-        };
-
-        dialogCtrl.addInitHour = () => {
-            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startTime.getMinutes(), 0);
-            dialogCtrl.event.start_time = dialogCtrl.startTime;
-        };
-
-        dialogCtrl.addEndHour = () => {
-            dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
-            dialogCtrl.changeDate('endTime');
         };
 
         function saveImage(callback) {
@@ -166,9 +157,12 @@
         };
 
         dialogCtrl.isEventOutdated = function isEventOutdated() {
-            var endDate = new Date(dialogCtrl.event.end_time);
-            var now = Date.now();
-            return now > endDate;
+            if(_.get(dialogCtrl.event, 'end_time')) {
+                var endDate = new Date(dialogCtrl.event.end_time);
+                var now = Date.now();
+                return now > endDate;
+            }
+            return false;
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
@@ -224,8 +218,6 @@
             const isValidToDesktop = !isMobileScreen && dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
             return isValidToMobile || isValidToDesktop;
         };
-
-        dialogCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
 
         dialogCtrl.lastStep = () => {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
@@ -299,6 +291,9 @@
             }
         };
 
+        /**
+         * Get the string with required symbol or not based on country.
+         */
         dialogCtrl.getStreetPlaceholder = () => {
             const street = "Rua";
             return dialogCtrl.isAnotherCountry ? street : street + " *";
@@ -314,6 +309,45 @@
                 dialogCtrl.events = $state.params.events;
                 dialogCtrl.isEditing = $state.params.isEditing;
             }
+        };
+
+        /**
+         * Add a start hour to the start_time of event.
+         */
+        dialogCtrl.addStartHour = () => {
+            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startTime.getMinutes(), 0);
+            dialogCtrl.event.start_time = dialogCtrl.startTime;
+        };
+
+        /**
+         * Add a end hour to the end_time of event.
+         */
+        dialogCtrl.addEndHour = () => {
+            dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
+            dialogCtrl.changeDate('endTime');
+        };
+
+        /**
+         * Set the duration of event to 8AM to 6PM of the same day.
+         */
+        dialogCtrl.setToEntireDay = () => {
+            dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.startHour.setHours(8, 0, 0);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.endHour.setHours(18, 0, 0);
+            dialogCtrl.addEndHour();
+        };
+
+        /**
+         * Loads the current states of event to init the edition.
+         */
+        dialogCtrl._loadStatesToEdit = () => {
+            dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
+            loadSelectedState();
+            loadEventDates();
+            initPatchObserver();
         };
 
         function clearSelectedState() {
@@ -406,6 +440,24 @@
             }
         }
 
+        /**
+         * Loads event from backend.
+         * @param {String} eventKey Key of the event.
+         */
+        function loadEvent(eventKey) {
+            return EventService.getEvent(eventKey).then(function success(response) {
+                dialogCtrl.event = response;
+                if(dialogCtrl.event.author_key !== dialogCtrl.user.key)
+                    $state.go(STATES.EVENTS);
+
+                dialogCtrl.isEditing = true;
+                dialogCtrl._loadStatesToEdit();
+            }, function error(response) {
+                MessageService.showToast(response);
+                $state.go(STATES.HOME);
+            });
+        }
+
         dialogCtrl.$onInit = () => {
             const address = { country: "Brasil" };
             getCountries();
@@ -413,11 +465,9 @@
             initUrlFields();
             dialogCtrl._loadStateParams();
             if (dialogCtrl.event) {
-                dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
-                dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
-                loadSelectedState();
-                loadEventDates();
-                initPatchObserver();
+                dialogCtrl._loadStatesToEdit();
+            } else if(!dialogCtrl.event && $state.params.eventKey) {
+                loadEvent($state.params.eventKey);
             } else {
                 dialogCtrl.event = { address: address };
             }

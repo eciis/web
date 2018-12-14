@@ -109,7 +109,7 @@
             <md-input-container md-no-float class="md-block">
                 <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
                     placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addInitHour()" required
+                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
                     ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
                 <div ng-messages>
                     <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
@@ -145,6 +145,11 @@
                 </div>
             </md-input-container>
         </div>
+        <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"
+        ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)"
+        ng-change="createEventCtrl.entireDay && createEventCtrl.setToEntireDay()">
+            Dia inteiro
+        </md-checkbox>
         <div class="event-textarea fields-event-padding custom-scrollbar">
             <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
                 placeholder="Descrição"

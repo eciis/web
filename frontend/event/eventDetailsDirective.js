@@ -66,6 +66,7 @@
         eventCtrl.editEvent = function editEvent(ev, event) {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 $state.go(STATES.CREATE_EVENT, {
+                    eventKey: event.key,
                     event: _.clone(event),
                     isEditing: true
                 });

@@ -90,7 +90,7 @@
                 }
             })
             .state(STATES.CREATE_EVENT, {
-                url: "/create_event",
+                url: "/create_event/:eventKey",
                 views: {
                     user_content: {
                         templateUrl: "app/event/create_event.html",

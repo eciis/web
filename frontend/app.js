@@ -187,6 +187,9 @@
                         templateUrl: "app/post/post_page.html",
                         controller: "PostPageController as postCtrl",
                     }
+                },
+                params: {
+                    "focus": undefined
                 }
             })
             .state(STATES.MANAGE_INST, {

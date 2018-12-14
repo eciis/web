@@ -146,6 +146,10 @@
     width: 0.8em;
 }
 
+#video-youtube{
+    height:500px;
+}
+
 @media screen and (max-width: 450px) {
     .font-resp {
         font-size: 12px;

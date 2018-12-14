@@ -134,7 +134,7 @@
           <md-divider class="ligth-green-divider"></md-divider>
           <md-card-content flex>
             <h2>Vídeos</h2>
-            <div layout="column" ng-repeat="video in eventDetailsCtrl.event.video_url">
+            <div layout="column" ng-repeat="video in eventDetailsCtrl.event.video_url" id="video-youtube">
               <h3 style="color: #03b3a1; margin-left: 5px;">{{video.description}}</h3>
               <div class="youtube-player">
                 <iframe ng-src="{{ eventDetailsCtrl.getVideoUrl(video.url) }}"></iframe>

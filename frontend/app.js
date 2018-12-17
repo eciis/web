@@ -74,7 +74,8 @@
                 url: "/all_institutions",
                 views: {
                     user_content: {
-                        templateUrl: "app/institution/institutions.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/institutions.html", 
+                            "app/institution/registered_institutions_mobile.html", 450),
                         controller: "AllInstitutionsController as allInstitutionsCtrl"
                     }
                 }
@@ -200,6 +201,9 @@
                         templateUrl: "app/post/post_page.html",
                         controller: "PostPageController as postCtrl",
                     }
+                },
+                params: {
+                    "focus": undefined
                 }
             })
             .state(STATES.MANAGE_INST, {

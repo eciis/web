@@ -3,28 +3,58 @@
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
-        $state, InstitutionService, AuthService, MessageService, $q) {
+        InstitutionService, AuthService, $q) {
         var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");
         var moreInstitutions = true;
-        var actualPage = 0;
+        let currentPage = 0;
 
         allInstitutionsCtrl.user = AuthService.getCurrentUser();
         allInstitutionsCtrl.isLoadingInstitutions = true;
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
 
-        allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
-            var deferred = $q.defer();
+        allInstitutionsCtrl.currentTab = 'all';
 
-            if (moreInstitutions) {
-                loadInstitutions(deferred);
+        const possibleTabs = ['all', 'following', 'member'];
+        
+        /**
+         * It sets the currentTab correctly according to the nextTab value
+         * if nextTab is part of the possible values assured by possibleTabs constant
+         * {string} nextTab
+         */
+        allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
+            allInstitutionsCtrl.currentTab = (
+              possibleTabs.includes(nextTab) ? nextTab : allInstitutionsCtrl.currentTab);
+            
+            currentPage = 0;
+            loadInstitutions();
+        };
+
+        /**
+         * It sets the institutions array. If it isn't the first
+         * page the institutions's array must have the elements it
+         * has already have and the new ones.
+         * @param {Array} institutions 
+         */
+        function setInstitutions(institutions) {
+            if(currentPage <= 1) {
+                allInstitutionsCtrl.institutions = [...institutions];
             } else {
-                deferred.resolve();
+                allInstitutionsCtrl.institutions = [
+                    ...allInstitutionsCtrl.institutions, 
+                    ...institutions
+                ];
             }
+        }
 
-            return deferred.promise;
+        /**
+         * If moreInstitutions is true, call loadInstitutions,
+         * else, return a promise.
+         */
+        allInstitutionsCtrl.loadMoreInstitutions = function loadMoreInstitutions() {
+            return moreInstitutions? loadInstitutions() : $q.when();
         };
 
         allInstitutionsCtrl.getInstitutions = function getInstitutions() {
@@ -41,23 +71,29 @@
             return Utils.normalizeString(string);
         }
 
-        function loadInstitutions(deferred) {
-            InstitutionService.getNextInstitutions(actualPage).then(function success(response) {
-                actualPage += 1;
+        /**
+         * Retrieves the institutions that belongs to
+         * the currentPage
+         */
+        function loadInstitutions() {
+            return InstitutionService.getNextInstitutions(currentPage, allInstitutionsCtrl.currentTab)
+            .then(function success(response) {
+                currentPage += 1;
                 moreInstitutions = response.next;
-                
-                _.forEach(response.institutions, function(institution) {
-                    allInstitutionsCtrl.institutions.push(institution);
-                });
 
                 allInstitutionsCtrl.isLoadingInstitutions = false;
-                deferred.resolve();
-            }, function error() {
-                deferred.reject();
+                setInstitutions(response.institutions);
             });
         }
         
-        allInstitutionsCtrl.loadMoreInstitutions();
-        Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions); 
+        /**
+         * Start function.
+         * Sets the scrollListener and retrieve the first 10
+         * institutions.
+         */
+        allInstitutionsCtrl.$onInit = function () {
+            allInstitutionsCtrl.loadMoreInstitutions();
+            Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions);
+        };
     }); 
 })();

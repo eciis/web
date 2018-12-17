@@ -10,10 +10,6 @@
         state: 'active',
         permissions: {}
     };
-    var option_empty = {'text': '',
-                        'number_votes': 0,
-                        'voters': []
-                        };
 
     var options = [{'id' : 0,
                     'text': 'Option number 1',
@@ -80,11 +76,8 @@
     describe('Choice survey', function() {
         it('should be survey post', function() {
             expect(postCtrl.typePost).toEqual("Common");
-            expect(postCtrl.options.length).toEqual(0);
             postCtrl.choiceSurvey();
-
             expect(postCtrl.typePost).toEqual("Survey");
-            expect(postCtrl.options.length).toEqual(2);
         });
     });
 

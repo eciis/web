@@ -453,6 +453,28 @@
         });
     });
 
+    describe('goToPostComment()', function() {
+        beforeEach(function() {
+            postDetailsCtrl.post = posts[2];
+        });        
+        it('Should call window location with tag', function() {
+            spyOn(state, 'go').and.callThrough();
+            postDetailsCtrl.goToPostComment(postDetailsCtrl.post);
+            expect(state.go).toHaveBeenCalledWith(states.POST, Object({ key: postDetailsCtrl.post.key, focus:true}));
+        });
+    });
+
+    describe('postLink()', function() {
+        beforeEach(function () {
+            state.params.focus = true; 
+        });
+        it('Should call window location with tag', function() {
+            expect(window.location.href.includes('#comment-input')).toBeFalsy();
+            postDetailsCtrl.$postLink();
+            expect(window.location.href.includes('#comment-input')).toBeTruthy();
+        });
+    });
+
     describe('number_of_comments()', function() {
         beforeEach(function() {
             postDetailsCtrl.post = posts[2];

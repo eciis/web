@@ -60,11 +60,11 @@ def get_filtered_events(filters, user):
             user.follows, 'published', end_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
         if query.count() > 0:
             return ndb.gql("SELECT * FROM Event WHERE __key__ IN :1 AND end_time >= DATETIME(:2)",
-                query.fetch(), begin_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
-        return query
+                query.fetch(), begin_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S")).order(Event.end_time, Event.key)
+        return query.order(Event.start_time, Event.key)
     else:
         return Event.query(Event.institution_key.IN(
-            user.follows), Event.state == 'published')
+            user.follows), Event.state == 'published').order(Event.start_time, Event.key)
 
 class EventCollectionHandler(BaseHandler):
     """Event  Collection Handler."""
@@ -77,7 +77,7 @@ class EventCollectionHandler(BaseHandler):
         more = False
 
         if len(user.follows) > 0:
-            queryEvents = get_filtered_events(self.request.GET.items(), user).order(Event.start_time, Event.key)
+            queryEvents = get_filtered_events(self.request.GET.items(), user)
             page_params = get_page_params(self.request.GET.items())
             queryEvents, more = query_paginated(
                 page_params, queryEvents)

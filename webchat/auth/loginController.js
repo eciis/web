@@ -7,11 +7,9 @@
         const controller = this;
 
         controller.success = () => {
-          console.log('Login done');
         }
 
         const main = () => {
-            console.log('LoginController running');
         };
 
         main();

@@ -1,10 +1,10 @@
 img.ec-logo {
-  width: 80%;
-  margin: 1em;
+    width: 80%;
+    margin: 1em;
 }
 
 .limit-width {
-  max-width: 480px;
+    max-width: 480px;
 }
 
 .login-btn {
@@ -40,7 +40,14 @@ img.ec-logo {
 }
 
 .login-form {
+    display: grid;
+    grid-template-areas: "email" "password" "submit";
+    align-items: center;
     margin: 1em 0;
+}
+
+.login-form-submit {
+    justify-self: right;
 }
 
 .login-card-footer {
@@ -48,7 +55,7 @@ img.ec-logo {
 }
 
 @media screen and (max-width: 320px) {
-  img.ec-logo {
-    width: 60%;
-  }
+    img.ec-logo {
+        width: 60%;
+    }
 }

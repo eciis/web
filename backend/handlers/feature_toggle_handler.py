@@ -47,5 +47,5 @@ class FeatureToggleHandler(BaseHandler):
         """
 
         features_body = json.loads(self.request.body)
-        features = Feature.enable_all(features_body)
+        features = Feature.set_visibility(features_body)
         self.response.write(to_json(features))

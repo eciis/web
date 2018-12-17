@@ -5,6 +5,7 @@ from models import Feature
 
 
 class FeatureTest(TestBase):
+    """Feature model test."""
     
     @classmethod
     def setUp(cls):
@@ -17,6 +18,7 @@ class FeatureTest(TestBase):
         cls.test.init_memcache_stub()
 
     def test_create(self):
+        """Teste create a new feature."""
         feature = Feature.create('feature-test')
         self.assertEqual(feature.name, 'feature-test')
         self.assertEqual(feature.enable_desktop, 'ALL')
@@ -41,7 +43,25 @@ class FeatureTest(TestBase):
             "Value 'asjdkhd' for property enable_mobile is not an allowed choice"
         )
 
+    def test_set_visibility(self):
+        """Test set visibility."""
+        Feature.create('feature-test')
+        
+        feature_dict = {
+            'name': 'feature-test',
+            'enable_mobile': 'DISABLED',
+            'enable_desktop': 'ADMIN'
+        }
+
+        Feature.set_visibility([feature_dict])
+
+        feature = Feature.get_feature('feature-test')
+
+        self.assertEqual(feature.enable_mobile, 'DISABLED')
+        self.assertEqual(feature.enable_desktop, 'ADMIN')
+
     def test_get_all_features(self):
+        """Test get all features."""
         feature = Feature.create('feature-test')
         feature2 = Feature.create('feature-test2')
 
@@ -56,6 +76,7 @@ class FeatureTest(TestBase):
         self.assertIn(feature3, features)
     
     def test_get_feature(self):
+        """Test get feature."""
         feature = Feature.create('feature-test')
         feature2 = Feature.create('feature-test2')
 
@@ -72,6 +93,7 @@ class FeatureTest(TestBase):
         )
 
     def test_make(self):
+        """Test make feature."""
         feature = Feature.create('feature-test')
         make = {
             'name': 'feature-test',

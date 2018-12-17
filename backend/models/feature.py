@@ -31,7 +31,7 @@ class Feature(ndb.Model):
         return feature
     
     @staticmethod
-    def enable_all(features_list):
+    def set_visibility(features_list):
         """
         Method to enable or disable multiple features.
 

@@ -1,6 +1,5 @@
 """Feature Test."""
 
-from .. import mocks
 from ..test_base import TestBase
 from models import Feature
 
@@ -35,3 +34,49 @@ class FeatureTest(TestBase):
 
         with self.assertRaises(Exception) as raises_context:
             Feature.create('feature-test', 'asjdkhd')
+        
+        exception_message = raises_context.exception
+        self.assertEquals(
+            str(exception_message), 
+            "Value 'asjdkhd' for property enable_mobile is not an allowed choice"
+        )
+
+    def test_get_all_features(self):
+        feature = Feature.create('feature-test')
+        feature2 = Feature.create('feature-test2')
+
+        features = Feature.get_all_features()
+        self.assertIn(feature, features)
+        self.assertIn(feature2, features)
+
+        feature3 = Feature.create('feature-test3')
+        self.assertNotIn(feature3, features)
+
+        features = Feature.get_all_features()
+        self.assertIn(feature3, features)
+    
+    def test_get_feature(self):
+        feature = Feature.create('feature-test')
+        feature2 = Feature.create('feature-test2')
+
+        self.assertEqual(feature, Feature.get_feature('feature-test'))
+        self.assertEqual(feature2, Feature.get_feature('feature-test2'))
+
+        with self.assertRaises(Exception) as raises_context:
+            Feature.get_feature('djsasadj')
+        
+        exception_message = raises_context.exception
+        self.assertEquals(
+            str(exception_message), 
+            "Feature not found!"
+        )
+
+    def test_make(self):
+        feature = Feature.create('feature-test')
+        make = {
+            'name': 'feature-test',
+            'enable_mobile': 'ALL',
+            'enable_desktop': 'ALL'
+        }
+
+        self.assertEqual(make, feature.make())

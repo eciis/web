@@ -315,7 +315,7 @@
          * Add a start hour to the start_time of event.
          */
         dialogCtrl.addStartHour = () => {
-            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startTime.getMinutes(), 0);
+            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startHour.getMinutes(), 0);
             dialogCtrl.event.start_time = dialogCtrl.startTime;
         };
 
@@ -333,6 +333,7 @@
         dialogCtrl.setToEntireDay = () => {
             dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.startHour.setHours(8, 0, 0);
+            dialogCtrl.addStartHour();
             dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
             dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.endHour.setHours(18, 0, 0);
@@ -444,7 +445,7 @@
          * Loads event from backend.
          * @param {String} eventKey Key of the event.
          */
-        function loadEvent(eventKey) {
+        dialogCtrl._loadEvent = (eventKey) => {
             return EventService.getEvent(eventKey).then(function success(response) {
                 dialogCtrl.event = response;
                 if(dialogCtrl.event.author_key !== dialogCtrl.user.key)
@@ -453,7 +454,7 @@
                 dialogCtrl.isEditing = true;
                 dialogCtrl._loadStatesToEdit();
             }, function error(response) {
-                MessageService.showToast(response);
+                MessageService.showToast("Erro ao carregar evento.");
                 $state.go(STATES.HOME);
             });
         }
@@ -467,7 +468,7 @@
             if (dialogCtrl.event) {
                 dialogCtrl._loadStatesToEdit();
             } else if(!dialogCtrl.event && $state.params.eventKey) {
-                loadEvent($state.params.eventKey);
+                dialogCtrl._loadEvent($state.params.eventKey);
             } else {
                 dialogCtrl.event = { address: address };
             }

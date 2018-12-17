@@ -493,6 +493,8 @@
     /**
      * Function to intercept the access of pages that should be displayed only on mobile screens.
      * @param {service} $transitions - Service of transitions states
+     * @param {const} STATES - Const with the states of application
+     * @param {const} SCREEN_SIZES - Const with the screen sizes
      */
     app.run(function mobileInterceptor($transitions, STATES, SCREEN_SIZES) {
         const permitted_routes = [
@@ -504,7 +506,10 @@
                 return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && _.includes(permitted_routes, state.name);
             }
         }, (transition) => {
-            transition.router.stateService.transitionTo(STATES.HOME);
+            $state.go(STATES.ERROR, {
+                "msg": "Esta página está disponível apenas para mobile.",
+                "status": "403"
+            });
         });
     });
 

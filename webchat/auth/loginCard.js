@@ -2,7 +2,7 @@
 
 (function() {
   function LoginCardController() {
-    let ctrl = this;
+    const ctrl = this;
     ctrl.user = {};
 
     ctrl.signIn = () => {
@@ -11,11 +11,11 @@
     }
 
     ctrl.$onInit = () => {
-      if (angular.isUndefined(ctrl.email) || ctrl.email === null)
+      if (_.isUndefined(ctrl.email) || ctrl.email === null)
         ctrl.email = true;
-      if (angular.isUndefined(ctrl.google) || ctrl.google === null)
+      if (_.isUndefined(ctrl.google) || ctrl.google === null)
         ctrl.google = true;
-      if (angular.isUndefined(ctrl.email) || ctrl.invite === null)
+      if (_.isUndefined(ctrl.email) || ctrl.invite === null)
         ctrl.invite = true;
     }
   }

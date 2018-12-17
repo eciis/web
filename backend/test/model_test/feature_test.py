@@ -32,3 +32,6 @@ class FeatureTest(TestBase):
         self.assertEqual(feature.name, 'feature-test3')
         self.assertEqual(feature.enable_desktop, 'DISABLED')
         self.assertEqual(feature.enable_mobile, 'DISABLED')
+
+        with self.assertRaises(Exception) as raises_context:
+            Feature.create('feature-test', 'asjdkhd')

@@ -1,10 +1,10 @@
 "use strict";
 
-(fdescribe("SideMenuComponent tests", () => {
+(describe("SideMenuComponent tests", () => {
 
-    let componentController, authService, states, state, rootScope,
-        homeItemsFactory, manageInstItemsFactory, institutionService,
-        sideMenuCtrl, scope, deferred, institution, user, item;
+    let componentController, authService, states, state, rootScope, 
+     homeItemsFactory, manageInstItemsFactory, institutionService,
+     sideMenuCtrl, scope, deferred, institution, user, item;
 
     const HOME_TYPE = "HOME";
     const MANAG_INST_TYPE = "MANAGE_INSTITUTION";
@@ -41,14 +41,13 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(($componentController, AuthService, STATES, $state, $mdDialog, 
+    beforeEach(inject(($componentController, AuthService, STATES, $state, 
         HomeItemsFactory, ManageInstItemsFactory, InstitutionService, $rootScope, $q) => {
 
         componentController = $componentController;
         authService = AuthService;
         states = STATES;
         state = $state;
-        mdDialog = $mdDialog;
         homeItemsFactory = HomeItemsFactory;
         manageInstItemsFactory = ManageInstItemsFactory;
         institutionService = InstitutionService;

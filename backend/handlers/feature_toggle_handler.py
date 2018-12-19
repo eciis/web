@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
 """Feature Toggle handler."""
 
 import json
 from . import BaseHandler
-from utils import json_response
+from utils import json_response, Utils
 from util import login_required
-from models import Feature
+from models import Feature, get_deciis
+from custom_exceptions import NotAuthorizedException
 
 
 __all__ = ['FeatureToggleHandler']
@@ -45,6 +47,14 @@ class FeatureToggleHandler(BaseHandler):
         """
         Method for modifying the properties of one or more features.
         """
+
+        """
+            The super user is the admin of 
+            'Departamento do Complexo Industrial e Inovação em Saúde".
+        """
+        super_user = get_deciis().admin
+
+        Utils._assert(not (super_user == user.key), "User not allowed to modify features!", NotAuthorizedException)
 
         features_body = json.loads(self.request.body)
         features = Feature.set_visibility(features_body)

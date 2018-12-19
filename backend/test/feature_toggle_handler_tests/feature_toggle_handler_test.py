@@ -1,9 +1,11 @@
 """Feature toggle handler test"""
 
+import json
 from ..test_base_handler import TestBaseHandler
 from handlers import FeatureToggleHandler
 from models import Feature
 from mock import patch
+from .. import mocks
 
 
 USER = {'email': 'user@email.com'}
@@ -51,3 +53,21 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         exception_message = self.get_message_exception(str(raises_context.exception))
         
         self.assertEquals(exception_message, "Error! Feature not found!")
+
+    @patch('util.login_service.verify_token', return_value=USER)
+    def test_put(self, verify_token):
+        user_admin = mocks.create_user('user@email.com')
+        deciis = mocks.create_institution('DECIIS')
+        deciis.trusted = True
+        deciis.add_member(user_admin)
+        deciis.set_admin(user_admin.key)
+        user_admin.add_institution(deciis.key)
+        user_admin.add_institution_admin(deciis.key)
+
+        feature = self.feature.make()
+        other_feature = self.other_feature.make()
+
+        feature['enable_mobile'] = 'DISABLED'
+        other_feature['enable_desktop'] = 'DISABLED'
+
+        #self.testapp.put_json('/api/feature-toggle',)

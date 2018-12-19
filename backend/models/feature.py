@@ -80,16 +80,6 @@ class Feature(ndb.Model):
         else:
             raise Exception("Feature not found!")
 
-    def is_enabled(self):
-        """
-        Method to verify if the feature is enabled.
-        """
-
-        disabled_mobile = self.enable_mobile == 'DISABLED'
-        disabled_desktop = self.enable_desktop == 'DISABLED'
-
-        return not (disabled_desktop and disabled_mobile)
-
     def make(self):
         """
         Method to make feature.

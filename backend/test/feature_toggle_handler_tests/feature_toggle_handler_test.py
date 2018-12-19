@@ -11,6 +11,9 @@ from .. import mocks
 USER = {'email': 'user@email.com'}
 
 class FeatureToggleHandlerTest(TestBaseHandler):
+    """
+    Feature Toggle Handler Test.
+    """
     
     @classmethod
     def setUp(cls):
@@ -28,6 +31,8 @@ class FeatureToggleHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value=USER)
     def test_get_all(self, verify_token):
+        """Test get all features."""
+
         features = self.testapp.get('/api/feature-toggles').json
         features_make = [self.feature.make(), self.other_feature.make()]
 
@@ -36,6 +41,8 @@ class FeatureToggleHandlerTest(TestBaseHandler):
     
     @patch('util.login_service.verify_token', return_value=USER)
     def test_get_by_query(self, verify_token):
+        """Test get feature with query parameter."""
+
         feature = self.testapp.get('/api/feature-toggles?name=feature-test').json
         feature_make = [self.feature.make()]
 
@@ -56,7 +63,10 @@ class FeatureToggleHandlerTest(TestBaseHandler):
 
     @patch('util.login_service.verify_token', return_value=USER)
     def test_put(self, verify_token):
+        """Test put features."""
+
         user_admin = mocks.create_user('user@email.com')
+        user = mocks.create_user()
         deciis = mocks.create_institution('DECIIS')
         deciis.trusted = True
         deciis.add_member(user_admin)
@@ -70,4 +80,21 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         feature['enable_mobile'] = 'DISABLED'
         other_feature['enable_desktop'] = 'DISABLED'
 
-        #self.testapp.put_json('/api/feature-toggle',)
+        self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+
+        self.feature = self.feature.key.get()
+        self.other_feature = self.other_feature.key.get()
+
+        self.assertEquals(self.feature.enable_desktop, 'ALL')
+        self.assertEquals(self.feature.enable_mobile, 'DISABLED')
+        self.assertEquals(self.other_feature.enable_desktop, 'DISABLED')
+        self.assertEquals(self.other_feature.enable_mobile, 'ALL')
+
+        verify_token._mock_return_value = {'email': user.email[0]}
+
+        with self.assertRaises(Exception) as raises_context:
+            self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+
+        exception_message = self.get_message_exception(str(raises_context.exception))
+        
+        self.assertEquals(exception_message, 'Error! User not allowed to modify features!')

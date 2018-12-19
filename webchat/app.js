@@ -3,7 +3,8 @@
 
     const app = angular.module('webchat', [
         'ui.router',
-        'ngMaterial'
+        'ngMaterial',
+        'firebase'
     ]);
 
     const rootName = 'webchat';
@@ -16,7 +17,8 @@
             login: 'login',
         });
 
-    app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider) => {
+    app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider,
+      $httpProvider) => {
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
         $mdThemingProvider.theme('input')
@@ -81,8 +83,63 @@
            });
 
         $urlRouterProvider.otherwise("/");
+        $httpProvider.interceptors.push('BearerAuthInterceptor');
 
     });
+
+    app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+        return {
+            request: function(config) {
+                var AuthService = $injector.get('AuthService');
+                config.headers = config.headers || {};
+                if (AuthService.isLoggedIn()) {
+                    return AuthService.getUserToken().then(token => {
+                        config.headers.Authorization = 'Bearer ' + token;
+
+                        var API_URL = "/api/";
+                        var FIRST_POSITION = 0;
+                        var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+
+                        if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
+                            config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
+                        }
+
+                        Utils.updateBackendUrl(config);
+                        return config || $q.when(config);
+                    });
+                }
+
+                Utils.updateBackendUrl(config);
+                return config || $q.when(config);
+            },
+            response: function(response) {
+                var app_version = response.headers("app_version");
+                var AuthService = $injector.get('AuthService');
+                AuthService.setAppVersion(app_version);
+                return response || $q.when(response);
+            },
+            responseError: function(rejection) {
+                var AuthService = $injector.get('AuthService');
+                if (rejection.status === 401) {
+                    if (AuthService.isLoggedIn()) {
+                        AuthService.logout();
+                        rejection.data.msg = "Sua sessão expirou!";
+                    } else {
+                        $state.go("signin");
+                    }
+                } else if(rejection.status === 403) {
+                    rejection.data.msg = "Você não tem permissão para realizar esta operação!";
+                } else {
+                    $state.go("error", {
+                        "msg": rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                        "status": rejection.status
+                    });
+                }
+                return $q.reject(rejection);
+            }
+        };
+    });
+
 
     const main = () => {
         console.log("app running");

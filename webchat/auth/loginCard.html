@@ -4,12 +4,12 @@
     <img id="login-logo" class="ec-logo" src="/app/images/logowithname.png" />
     <div ng-if="ctrl.email">
       <form class="login-form" ng-submit="ctrl.signIn()">
-        <md-input-container class="md-block">
+        <md-input-container class="form">
           <label>Email</label>
           <input type="email" name="email" ng-model="ctrl.user.email" class="custom-card-input" required="false"
             aria-label="Email">
         </md-input-container>
-        <md-input-container class="md-block">
+        <md-input-container class="form">
           <label>Senha</label>
           <input type="password" name="password" ng-model="ctrl.user.password" class="custom-card-input" required="false"
             minlength="6" aria-label="Senha">

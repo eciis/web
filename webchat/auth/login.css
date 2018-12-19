@@ -1,6 +1,6 @@
 img.ec-logo {
     width: 80%;
-    margin: 1em;
+    margin: 0.8em;
 }
 
 .limit-width {
@@ -8,7 +8,7 @@ img.ec-logo {
 }
 
 .login-btn {
-    margin: 0 0 1em auto;
+    margin: 0;
     width: 100%;
 }
 
@@ -24,17 +24,6 @@ img.ec-logo {
     margin-left: 0.3em;
 }
 
-#login-google-icon {
-    margin-left: 0.5em;
-}
-
-#login-google-icon svg {
-    height: auto;
-    width: 1.3em;
-    line-height: auto;
-    margin: 0.155em 0.2em;
-}
-
 .login-text {
     text-align: justify;
 }
@@ -46,8 +35,18 @@ img.ec-logo {
     margin: 1em 0;
 }
 
+.form {
+  margin: 0.4em;
+}
+
 .login-form-submit {
     justify-self: right;
+}
+
+.login-card {
+  display: grid;
+  max-height: 80vmax;
+  padding: 0;
 }
 
 .login-card-footer {
@@ -57,5 +56,12 @@ img.ec-logo {
 @media screen and (max-width: 320px) {
     img.ec-logo {
         width: 60%;
+    }
+}
+
+@media screen and (orientation: landscape) {
+
+    .limit-width {
+      width: 360px;
     }
 }

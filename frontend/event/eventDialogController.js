@@ -158,8 +158,8 @@
 
         dialogCtrl.isEventOutdated = function isEventOutdated() {
             if(_.get(dialogCtrl.event, 'end_time')) {
-                var endDate = new Date(dialogCtrl.event.end_time);
-                var now = Date.now();
+                const endDate = new Date(dialogCtrl.event.end_time);
+                const now = Date.now();
                 return now > endDate;
             }
             return false;

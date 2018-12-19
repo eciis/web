@@ -3,7 +3,7 @@
 (describe('Test EventDialogController', function() {
 
   let controller, scope, httpBackend, rootScope, imageService, eventService,
-    messageService, newCtrl, state, mdDialog;
+    messageService, newCtrl, state, mdDialog, states;
 
   const
     splab = {name: 'Splab', key: '098745'},
@@ -48,7 +48,7 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, AuthService,
-        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog) {
+        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -58,6 +58,7 @@
       newCtrl = $controller;
       state = $state;
       mdDialog = $mdDialog;
+      states = STATES;
       AuthService.login(user);
       controller = newCtrl('EventDialogController', {
             scope: scope,
@@ -321,19 +322,88 @@
       });
     });
 
+    describe('isValidStepOne()', () => {
+
+      describe('if is mobile screen', () => {
+        beforeEach(() => {
+          spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+        });
+
+        it('Should return true if is valid address', () => {
+          spyOn(controller, 'isValidAddress').and.returnValue(true);
+          expect(controller.isValidStepOne()).toBeTruthy();
+        });
+  
+        it('Should return false if is not valid address', () => {
+          spyOn(controller, 'isValidAddress').and.returnValue(false);
+          expect(controller.isValidStepOne()).toBeFalsy();
+        });
+      });
+
+      describe('if is not mobile screen', () => {
+        beforeEach(() => {
+          spyOn(Utils, 'isMobileScreen').and.returnValue(false);
+        });
+
+        it('Should return true if is valid address and is valid date', () => {
+          spyOn(controller, 'isValidAddress').and.returnValue(true);
+          spyOn(controller, 'isValidDate').and.returnValue(true);
+          expect(controller.isValidStepOne()).toBeTruthy();
+        });
+
+        it('Should return false if is valid address and is not valid date', () => {
+          spyOn(controller, 'isValidAddress').and.returnValue(true);
+          spyOn(controller, 'isValidDate').and.returnValue(false);
+          expect(controller.isValidStepOne()).toBeFalsy();
+        });
+
+        it('Should return false if is not valid address and is valid date', () => {
+          spyOn(controller, 'isValidAddress').and.returnValue(false);
+          spyOn(controller, 'isValidDate').and.returnValue(true);
+          expect(controller.isValidStepOne()).toBeFalsy();
+        });
+      });
+    });
+
+    describe('previousStep()', () => {
+      it('Should return call cancelCreation if the currentStep is the first step', () => {
+        controller.steps = [true, false, false, false];
+        controller.$onInit();
+        spyOn(controller, 'cancelCreation');
+        expect(controller.getStep(1)).toBeTruthy();
+        controller.previousStep();
+        expect(controller.cancelCreation).toHaveBeenCalled();
+      });
+
+      it('Should return to previous step if is not the first step', () => {
+        controller.steps = [false, true, false, false];
+        controller.$onInit();
+        expect(controller.getStep(2)).toBeTruthy();
+        expect(controller.getStep(1)).toBeFalsy();
+        controller.previousStep();
+        expect(controller.getStep(2)).toBeFalsy();
+        expect(controller.getStep(1)).toBeTruthy();
+      });
+    });
+
     describe('cancelCreation()', () => {
+
+      beforeEach(() => {
+        spyOn(state, 'go');
+        spyOn(mdDialog, 'hide');
+      });
+
       it('should call state.go if is mobile screen', () => {
         spyOn(Utils, 'isMobileScreen').and.returnValue(true);
-        spyOn(state, 'go');
         controller.cancelCreation();
-        expect(state.go).toHaveBeenCalled();
+        expect(state.go).toHaveBeenCalledWith(states.EVENTS);
       });
 
       it('should call mdDialog.hide if is not mobile screen', () => {
         spyOn(Utils, 'isMobileScreen').and.returnValue(false);
-        spyOn(mdDialog, 'hide');
         controller.cancelCreation();
         expect(mdDialog.hide).toHaveBeenCalled();
+        expect(state.go).not.toHaveBeenCalled();
       });
     });
 
@@ -371,17 +441,17 @@
         state.params.event = event;
         state.params.events = [event];
         state.params.isEditing = true;
-        controller.event = null;
-        controller.events = null;
-        controller.isEditing = null;
+        controller.event = undefined;
+        controller.events = undefined;
+        controller.isEditing = undefined;
       });
 
       it('should not load the state params if is not mobile screen', () => {
         spyOn(Utils, 'isMobileScreen').and.returnValue(false);
         controller._loadStateParams();
-        expect(controller.event).toEqual(null);
-        expect(controller.events).toEqual(null);
-        expect(controller.isEditing).toEqual(null);
+        expect(controller.event).toBe(undefined);
+        expect(controller.events).toBe(undefined);
+        expect(controller.isEditing).toBe(undefined);
       });
 
       it('should load the state params if is mobile screen', () => {
@@ -455,7 +525,7 @@
         spyOn(state, 'go');
         event.author_key = '000';
         controller._loadEvent(event.key);
-        expect(state.go).toHaveBeenCalled();
+        expect(state.go).toHaveBeenCalledWith(states.EVENTS);
       });
 
       it('Should change isEditing to true', () => {
@@ -488,9 +558,20 @@
       it('should call _loadEvent if not have an event and have eventKey in state params', () => {
         spyOn(controller, '_loadEvent');
         controller.event = null;
-        state.params.eventKey = event.key
+        state.params.eventKey = event.key;
         controller.$onInit();
         expect(controller._loadEvent).toHaveBeenCalled();
+      });
+
+      it('should set the event object with default address', () => {
+        controller.event = undefined;
+        state.params.eventKey = undefined;
+        controller.$onInit();
+        expect(controller.event).toEqual(
+          {
+            address: {
+              country: "Brasil"
+        }});
       });
     });
   });

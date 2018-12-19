@@ -1,0 +1,14 @@
+<div ng-if="smItemCtrl.show()">
+    <h4 ng-if="smItemCtrl.item.sectionTitle" class="sm-section-title">{{smItemCtrl.item.sectionTitle}}</h4>
+    <md-divider ng-if="smItemCtrl.item.topDivider"></md-divider>
+    
+    <md-menu-item>
+        <md-button ng-click="smItemCtrl.item.onClick(); smItemCtrl.close();" 
+            ng-class="smItemCtrl.getSelectedClass(item.stateName)">
+            <md-icon>{{smItemCtrl.item.icon}}</md-icon>
+            <b>{{smItemCtrl.item.description}}</b>
+        </md-button>
+    </md-menu-item>
+    
+    <md-divider ng-if="smItemCtrl.item.bottomDivider"></md-divider>
+</div>

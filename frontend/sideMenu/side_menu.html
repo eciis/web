@@ -37,19 +37,8 @@
         </div>
         <!-- Menu items -->
         <md-content width="4" md-colors="{background: 'grey-100'}">
-            <div ng-repeat="item in sideMenuCtrl.items track by item.description" ng-if="sideMenuCtrl.show(item)">
-                <h4 ng-if="item.topDivider && item.sectionTitle" class="sm-section-title">{{item.sectionTitle}}</h4>
-                <md-divider ng-if="item.topDivider"></md-divider>
-                
-                <md-menu-item>
-                    <md-button ng-click="item.onClick(); sideMenuCtrl.close();" 
-                        ng-class="sideMenuCtrl.getSelectedClass(item.stateName)">
-                        <md-icon>{{item.icon}}</md-icon>
-                        <b>{{item.description}}</b>
-                    </md-button>
-                </md-menu-item>
-
-                <md-divider ng-if="item.bottomDivider"></md-divider>
+            <div ng-repeat="item in sideMenuCtrl.items track by $id(item)">
+                <side-menu-item item="item"></side-menu-item>
             </div>
         </md-content>
     </md-content>

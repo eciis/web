@@ -4,7 +4,7 @@
     angular
     .module('app')
     .component('sideMenu', {
-        templateUrl: "app/sideMenu/sideMenu.html",
+        templateUrl: "app/sideMenu/side_menu.html",
         controller: sideMenuController,
         controllerAs: "sideMenuCtrl",
         bindings: {
@@ -13,12 +13,9 @@
     });
 
     function sideMenuController(AuthService, STATES, $state, $mdSidenav, 
-        $mdDialog, HomeItemsFactory, ManageInstItemsFactory, InstitutionService) {
+        $mdDialog, HomeItemsFactory, ManageInstItemsFactory, InstitutionService, SideMenuTypes) {
         
         const sideMenuCtrl = this;
-        const HOME_TYPE = "HOME";
-        const MANAG_INST_TYPE = "MANAGE_INSTITUTION";
-        const INST_PAGE_TYPE = "INSTITUTION_PAGE";
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
         
@@ -27,34 +24,34 @@
         };
         
         const setup = () => {
-            if(sideMenuCtrl.isType(HOME_TYPE)) {
-                sideMenuCtrl.entity = sideMenuCtrl.user;
-                loadItems();
-            } else {
-                const instKey = $state.params.institutionKey;
-                InstitutionService.getInstitution(instKey)
-                .then(inst => {
-                    sideMenuCtrl.entity = new Institution(inst);
-                    loadItems();
-                }).catch(err => console.error(err));
-            }
-        };
-
-        const loadItems = () => {
-            switch(sideMenuCtrl.type){
-                case HOME_TYPE: 
-                    sideMenuCtrl.items = HomeItemsFactory.getItems(sideMenuCtrl.entity);
-                    break;
-                case MANAG_INST_TYPE:
-                    sideMenuCtrl.items = ManageInstItemsFactory.getItems(sideMenuCtrl.entity);
-                    break;
-                case INST_PAGE_TYPE:
-                    break;
+            switch(sideMenuCtrl.type) {
+                case SideMenuTypes.HOME: setupHomeMenu(); break;
+                default: setupIntitutionMenu();
             }
         };
         
-        sideMenuCtrl.close = () => {
-            $mdSidenav('sideMenu').close();
+        const setupHomeMenu = () => {
+            sideMenuCtrl.entity = sideMenuCtrl.user;
+            setItems();
+        };
+        
+        const setupIntitutionMenu = () => {
+            InstitutionService.getInstitution($state.params.institutionKey)
+            .then(inst => {
+                sideMenuCtrl.entity = new Institution(inst);
+                setItems();
+            });
+        };
+
+        const setItems = () => {
+            sideMenuCtrl.items = getFactory().getItems(sideMenuCtrl.entity);
+        };
+        
+        const getFactory = () => {
+            switch(sideMenuCtrl.type){
+                case SideMenuTypes.HOME: return HomeItemsFactory;
+                case SideMenuTypes.MANAG_INSTITUTION: return ManageInstItemsFactory;
+            }
         };
 
         sideMenuCtrl.getProfileColor = intensity => {
@@ -64,7 +61,7 @@
         sideMenuCtrl.getImage = () => {
             const instAvatar = '/app/images/institution.png';
             const userAvatar = '/app/images/avatar.png';
-            const defaultImage = sideMenuCtrl.isType(HOME_TYPE) ? userAvatar : instAvatar;
+            const defaultImage = sideMenuCtrl.isType(SideMenuTypes.HOME) ? userAvatar : instAvatar;
             return sideMenuCtrl.entity ? sideMenuCtrl.entity.photo_url : defaultImage;
         };
 
@@ -73,23 +70,15 @@
         };
 
         sideMenuCtrl.onClickTitle = () => {
-            if(sideMenuCtrl.isType(MANAG_INST_TYPE)) goToInstitution();
+            if(sideMenuCtrl.isType(SideMenuTypes.MANAG_INSTITUTION)) goToInstitution();
         };
 
         sideMenuCtrl.onClickImage = () => {
-            if(sideMenuCtrl.isType(MANAG_INST_TYPE)) goToInstitution();
+            if(sideMenuCtrl.isType(SideMenuTypes.MANAG_INSTITUTION)) goToInstitution();
         };
 
         const goToInstitution = () => {
             $state.go(STATES.INST_TIMELINE, {institutionKey: sideMenuCtrl.entity.key});
-        };
-
-        sideMenuCtrl.getSelectedClass = stateName => {
-            return $state.current.name === STATES[stateName] ? "selected" : "";
-        };
-
-        sideMenuCtrl.show = item => {
-            return item.showIf ? item.showIf() : true; 
         };
 
         sideMenuCtrl.changeInstitution = profile => {

@@ -500,16 +500,16 @@
      * @param {const} STATES - Const with the states of application
      * @param {const} SCREEN_SIZES - Const with the screen sizes
      */
-    app.run(function mobileInterceptor($transitions, STATES, SCREEN_SIZES) {
+    app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT
         ];
 
-        $transitions.onSuccess({
+        $transitions.onStart({
             to: (state) => {
                 return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && _.includes(permitted_routes, state.name);
             }
-        }, (transition) => {
+        }, () => {
             $state.go(STATES.ERROR, {
                 "msg": "Esta página está disponível apenas para mobile.",
                 "status": "403"

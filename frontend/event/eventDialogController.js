@@ -179,6 +179,16 @@
             return dialogCtrl.steps[step - 1];
         };
 
+        /**
+         * Return the message to show when the user try to go to next step
+         * according by mobile screen or not
+         */
+        dialogCtrl._getRequiredFieldsMsg = () => {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.getStep(2))
+                return "Preencha a data e hora inicial e final.";
+            return "Preencha os campos obrigatórios corretamente.";
+        };
+
         dialogCtrl.nextStep = function nextStep() {
             var currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
@@ -188,7 +198,7 @@
                 var nextStep = currentStep + 1;
                 dialogCtrl.steps[nextStep] = true;
             } else {
-                MessageService.showToast("Preencha os campos obrigatórios corretamente.");
+                MessageService.showToast(dialogCtrl._getRequiredFieldsMsg());
             }
         };
 
@@ -238,6 +248,7 @@
                 },
                 1: {
                     fields: [
+                        dialogCtrl.startHour && String(dialogCtrl.startHour),
                         dialogCtrl.endHour && String(dialogCtrl.endHour)
                     ],
                     isValid: dialogCtrl.isValidDate

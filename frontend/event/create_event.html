@@ -112,13 +112,8 @@
             <md-input-container md-no-float class="md-block">
                 <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
                     placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
+                    max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
                     ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
-                <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
-                        Primeiro defina a data inicial
-                    </div>
-                </div>
             </md-input-container>
         </div>
         <div class="fields-event-split">
@@ -127,13 +122,7 @@
                     type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
                     min-date="createEventCtrl.startTime" max-date="null"
                     ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
-                    ng-disabled="!createEventCtrl.event.start_time ||
-                        !createEventCtrl.startHour || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
-                <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.start_time" class="event-date-alert">
-                        Primeiro defina a data inicial
-                    </div>
-                </div>
+                    ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
             </md-input-container>
             <md-input-container md-no-float class="md-block fields-event-padding">
                 <input mdc-datetime-picker="" ng-change="createEventCtrl.addEndHour()" date="false" time="true"
@@ -141,11 +130,6 @@
                     min-date="createEventCtrl.startTime" max-date="null"
                     ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
                     ng-disabled="!createEventCtrl.event.end_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
-                <div ng-messages>
-                    <div ng-show="!createEventCtrl.event.end_time" class="event-date-alert">
-                        Primeiro defina a data final
-                    </div>
-                </div>
             </md-input-container>
         </div>
         <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"

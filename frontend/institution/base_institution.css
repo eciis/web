@@ -1,0 +1,21 @@
+#buttons-institution-page{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: center;
+}
+
+#inst-name-mobile{
+    display: grid;
+}
+
+#divider-institution{
+    width: 45%;
+    justify-self: center;
+}
+
+#inst-image-mobile{
+    height: 9em;
+    width: 9em;
+    margin: -7em auto -0.8em auto;
+    border-radius: 50%;
+}

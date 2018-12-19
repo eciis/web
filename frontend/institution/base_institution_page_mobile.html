@@ -1,0 +1,63 @@
+<md-content layout-align="center">
+    <div flex layout="column" md-colors="{background: 'grey-50'}">
+        <!-- COVER -->
+        <div style="box-shadow: 0 -2px 5px 0px grey;" id="bigCover">
+            <div ng-if="institutionCtrl.isAdmin()" layout="row" layout-align="end start" style="height: 0px; position: relative;">
+                <div layout="column" layout-align="end start">
+                    <div layout="row" layout-align="center center" class="cover-photo">
+                        <span class="cover-photo-text">Adicionar foto de capa</span>
+                        <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
+                            ng-click="null">
+                            <md-icon>add_a_photo</md-icon>
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+            <div md-colors="{background: 'light-green-500'}" style="margin: 0; height: 11em; overflow: hidden;">
+                <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
+                <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
+                    layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>
+            </div>
+            <div id="inst-name-mobile">
+                <img id="inst-image-mobile"  ng-src="{{ institutionCtrl.getPhoto() }}"/>
+                <center  class="md-title">
+                    <p style="font-size:1.2em">{{ institutionCtrl.getLimitedName(110) }}</p>
+                </center>
+                <md-divider id="divider-institution"></md-divider>
+                <div id="buttons-institution-page">
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon style="color: color: rgba(255, 255, 255, 0.87)">assignment</md-icon>
+                        CADASTRO
+                    </md-button>
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon>account_balance</md-icon>
+                        VÍNCULOS
+                    </md-button>
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon>account_circle</md-icon>
+                        MEMBROS
+                    </md-button>
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon>description</md-icon>
+                        PORTFOLIO
+                    </md-button>
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon>people</md-icon>
+                        SEGUIDORES
+                    </md-button>
+                    <md-button md-colors="{background: 'teal-500'}">
+                        <md-icon>date_range</md-icon>
+                        EVENTOS
+                    </md-button>
+                </div>
+            </div>
+        </div>
+
+        <div layout="row" flex="70" style="margin-top: 1.25em;">
+            <!-- INSTITUTION TIMELINE -->
+            <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}" style="z-index: 1;"></div>
+        </div>
+    </div>
+</md-content>
+    

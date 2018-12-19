@@ -19,3 +19,8 @@
     margin: -7em auto -0.8em auto;
     border-radius: 50%;
 }
+
+.icon-button-color{
+    color: rgba(255, 255, 255, 0.87);
+    font-size: 20px;
+}

@@ -3,7 +3,7 @@
 (describe('Test EventDialogController', function() {
 
   let controller, scope, httpBackend, rootScope, imageService, eventService,
-    messageService, newCtrl, state, mdDialog, states;
+    messageService, newCtrl, state, mdDialog, states, deferred;
 
   const
     splab = {name: 'Splab', key: '098745'},
@@ -48,7 +48,7 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, AuthService,
-        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES) {
+        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES, $q) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -59,6 +59,7 @@
       state = $state;
       mdDialog = $mdDialog;
       states = STATES;
+      deferred = $q.defer();
       AuthService.login(user);
       controller = newCtrl('EventDialogController', {
             scope: scope,
@@ -504,40 +505,55 @@
 
     describe('_loadEvent()', () => {
 
-      beforeEach(() => {
-        spyOn(eventService, 'getEvent').and.callFake(() => {
-          return {
-            then: function (callback) {
-              return callback(event);
-            }
-          };
+      describe('in success case', () => {
+        beforeEach(() => {
+          spyOn(eventService, 'getEvent').and.callFake(() => {
+            return {
+              then: function (callback) {
+                return callback(event);
+              }
+            };
+          });
+        });
+
+        it('Should load the event in controller', () => {
+          controller.event = null;
+          controller._loadEvent(event.key);
+          expect(eventService.getEvent).toHaveBeenCalledWith(event.key);
+          expect(controller.event).toEqual(event);
+        });
+
+        it('Should call state.go if the user is not the author of event', () => {
+          spyOn(state, 'go');
+          event.author_key = '000';
+          controller._loadEvent(event.key);
+          expect(state.go).toHaveBeenCalledWith(states.EVENTS);
+        });
+
+        it('Should change isEditing to true', () => {
+          controller.isEditing = false;
+          controller._loadEvent(event.key);
+          expect(controller.isEditing).toBeTruthy();
+        });
+
+        it('Should call _loadStatesToEdit()', () => {
+          spyOn(controller, '_loadStatesToEdit');
+          controller._loadEvent(event.key);
+          expect(controller._loadStatesToEdit).toHaveBeenCalled();
         });
       });
 
-      it('Should load the event in controller', () => {
-        controller.event = null;
-        controller._loadEvent(event.key);
-        expect(eventService.getEvent).toHaveBeenCalledWith(event.key);
-        expect(controller.event).toEqual(event);
-      });
-
-      it('Should call state.go if the user is not the author of event', () => {
-        spyOn(state, 'go');
-        event.author_key = '000';
-        controller._loadEvent(event.key);
-        expect(state.go).toHaveBeenCalledWith(states.EVENTS);
-      });
-
-      it('Should change isEditing to true', () => {
-        controller.isEditing = false;
-        controller._loadEvent(event.key);
-        expect(controller.isEditing).toBeTruthy();
-      });
-
-      it('Should call _loadStatesToEdit()', () => {
-        spyOn(controller, '_loadStatesToEdit');
-        controller._loadEvent(event.key);
-        expect(controller._loadStatesToEdit).toHaveBeenCalled();
+      describe('in fail case', () => {
+        it('Should call messageService.showToast and state.go', () => {
+          spyOn(eventService, 'getEvent').and.returnValue(deferred.promise);
+          spyOn(messageService, 'showToast');
+          spyOn(state, 'go');
+          deferred.reject();
+          controller._loadEvent(event.key);
+          scope.$apply();
+          expect(state.go).toHaveBeenCalledWith(states.HOME);
+          expect(messageService.showToast).toHaveBeenCalledWith("Erro ao carregar evento.");
+        });
       });
     });
 

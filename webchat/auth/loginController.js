@@ -7,6 +7,7 @@
         const controller = this;
 
         controller.success = () => {
+          $state.go('webchat.home');
         }
 
         const main = () => {

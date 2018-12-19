@@ -1,13 +1,29 @@
 'use strict';
 
 (function() {
-  function LoginCardController() {
+  function LoginCardController(AuthService) {
     const ctrl = this;
     ctrl.user = {};
 
-    ctrl.signIn = () => {
-      // login with AuthService
-      ctrl.onLogin();
+    ctrl.signIn = async () => {
+      try {
+        await AuthService.loginWithEmailAndPassword(ctrl.user.email, ctrl.user.password);
+        ctrl.onLogin();
+      } catch (e) {
+        console.log("Error ocurred")
+        console.log(e)
+      }
+    }
+
+    ctrl.loginWithGoogle = async () => {
+      try {
+        await AuthService.loginWithGoogle();
+        console.log(AuthService.getCurrentUser());
+        ctrl.onLogin();
+      } catch (e) {
+        console.log("Error ocurred")
+        console.log(e)
+      }
     }
 
     ctrl.$onInit = () => {

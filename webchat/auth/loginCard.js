@@ -11,11 +11,11 @@
     }
 
     ctrl.$onInit = () => {
-      if (_.isUndefined(ctrl.email) || ctrl.email === null)
+      if (_.isNil(ctrl.email))
         ctrl.email = true;
-      if (_.isUndefined(ctrl.google) || ctrl.google === null)
+      if (_.isNil(ctrl.google))
         ctrl.google = true;
-      if (_.isUndefined(ctrl.email) || ctrl.invite === null)
+      if (_.isNil(ctrl.email))
         ctrl.invite = true;
     }
   }

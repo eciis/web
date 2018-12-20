@@ -333,15 +333,19 @@
         margin: 0;
     }
 
-    .fields-event-container, .event-select-inst {
+    .fields-event-container, .event-select-inst, .fields-event-split, .fields-event-split-reverse,
+    .create-event-grid, .create-event-form-grid {
         display: grid;
+    }
+
+    .fields-event-container, .event-select-inst {
         justify-content: center;
     }
 
     .fields-event-container {
         grid-template-columns: 98%;
         padding: 0 0.5em 0 0.5em;
-        height: auto;
+        height: 75%;
     }
 
     .event-select-inst {
@@ -366,7 +370,6 @@
     }
 
     .fields-event-split, .fields-event-split-reverse {
-        display: grid;
         justify-content: initial;
         grid-template-columns: 65% auto;
     }
@@ -384,6 +387,8 @@
         justify-content: end;
         grid-template-columns: auto auto; 
         margin-right: 1em;
+        align-self: center;
+        overflow: scroll;
     }
 
     .create-event-cancel-button {
@@ -392,6 +397,7 @@
 
     .event-select-inst-shadow {
         box-shadow: 0.07em 0.07em #8b8b8b;
+        height: 0.001em;
     }
 
     .event-textarea-size {
@@ -461,14 +467,20 @@
     }
 
     .create-event-grid {
-        display: grid;
         grid-template-rows: 3em auto;
         grid-template-columns: 100%;
         height: 100%;
+        overflow: scroll;
     }
 
     .create-event-form {
-        grid-row-start: 2; grid-row-end: 3; overflow:scroll;
+        grid-row-start: 2; grid-row-end: 3;
+    }
+
+    .create-event-form-grid {
+        grid-template-rows: 88% auto;
+        height: 100%;
+        grid-template-columns: 100%;
     }
 
     @media screen and (min-height: 600px) {

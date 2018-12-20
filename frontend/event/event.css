@@ -317,9 +317,11 @@
     .create-event-mobile-top-bar {
         height: 3em;
         width: 100%;
-        background: #009688;
+        background-color: #009688;
         align-items: center;
-        position: absolute;
+        position: fixed;
+        z-index: 3;
+        grid-row-start: 1; grid-row-end: 2;
     }
 
     .back-to-button {
@@ -339,7 +341,7 @@
     .fields-event-container {
         grid-template-columns: 98%;
         padding: 0 0.5em 0 0.5em;
-        height: 1em;
+        height: auto;
     }
 
     .event-select-inst {
@@ -379,12 +381,9 @@
 
     .action-event-container {
         display: grid; 
-        justify-content: end; 
+        justify-content: end;
         grid-template-columns: auto auto; 
-        padding: 0 0 8px;
-        bottom:0;
-        position: fixed;
-        right: 0.6em;
+        margin-right: 1em;
     }
 
     .create-event-cancel-button {
@@ -459,6 +458,17 @@
     .event-checkbox {
         margin-left: 0.2em !important;
         margin-bottom: 0.4em !important;
+    }
+
+    .create-event-grid {
+        display: grid;
+        grid-template-rows: 3em auto;
+        grid-template-columns: 100%;
+        height: 100%;
+    }
+
+    .create-event-form {
+        grid-row-start: 2; grid-row-end: 3; overflow:scroll;
     }
 
     @media screen and (min-height: 600px) {

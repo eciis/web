@@ -1,216 +1,221 @@
-<div class="event-overflow-navbar create-event-mobile-top-bar">
-    <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
-        <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
-    </md-button>
-</div>
+<div class="create-event-grid">
+    <div class="create-event-mobile-top-bar">
+        <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
+            <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
+        </md-button>
+    </div>
 
-<form name="createEvent" class="event-form-margin" ng-submit="createEventCtrl.nextStepOrSave()">
+    <div class="create-event-form">
+        <form  name="createEvent" ng-submit="createEventCtrl.nextStepOrSave()">
 
-    <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
-        <div class="event-select-inst">
-            <div class="event-select-ball">
-                <md-icon class="event-select-ball-margin"
-                    md-colors="{color: createEventCtrl.user.getProfileColor()+'-900'}">
-                    brightness_1
-                </md-icon>
-            </div>
-            <div class="event-select-inst-name">
-                <p class="event-limit-string">
-                    {{ homeCtrl.user.current_institution.name }}
-                </p>
-            </div>
-            <div class="event-select-button">
-                <md-menu>
-                    <md-button aria-label="Open phone interactions menu"
-                        class="md-icon-button" ng-click="$mdMenu.open(ev)">
-                        <md-icon>arrow_drop_down</md-icon>
-                    </md-button>
-                    <md-menu-content class="custom-scrollbar">
-                        <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
-                            <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                                <div class="event-limit-string">
-                                    <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                                        {{ profile.institution.name }}
-                                </div>
+            <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
+                <div class="event-select-inst">
+                    <div class="event-select-ball">
+                        <md-icon class="event-select-ball-margin"
+                            md-colors="{color: createEventCtrl.user.getProfileColor()+'-900'}">
+                            brightness_1
+                        </md-icon>
+                    </div>
+                    <div class="event-select-inst-name">
+                        <p class="event-limit-string">
+                            {{ homeCtrl.user.current_institution.name }}
+                        </p>
+                    </div>
+                    <div class="event-select-button">
+                        <md-menu>
+                            <md-button aria-label="Open phone interactions menu"
+                                class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                                <md-icon>arrow_drop_down</md-icon>
                             </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
+                            <md-menu-content class="event-select-inst-name custom-scrollbar">
+                                <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
+                                    <md-button ng-click="mainCtrl.changeInstitution(profile)">
+                                        <div class="event-limit-string">
+                                            <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                                                {{ profile.institution.name }}
+                                        </div>
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+                </div>
+                <md-divider class="event-select-inst-shadow"></md-divider>
+                <md-input-container md-no-float class="md-block">
+                    <input type="text" ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO *"
+                    required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um título.')"
+                    oninput="setCustomValidity('')"/>
+                </md-input-container>
+                <md-input-container md-no-float class="md-block fields-event-padding">
+                    <input type="text" ng-model="createEventCtrl.event.local" placeholder="Local *"
+                    required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um local.')"
+                    oninput="setCustomValidity('')"/>
+                </md-input-container>
+                <md-input-container md-no-float class="md-block fields-event-padding">
+                    <input type="url" placeholder="Site oficial" ng-model="createEventCtrl.event.official_site"
+                    ng-disabled="controller.isEventOutdated()"/>
+                </md-input-container>
+                <div class="fields-event-split">
+                    <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
+                        <input type="text" ng-required="!createEventCtrl.isAnotherCountry" placeholder="{{createEventCtrl.getStreetPlaceholder()}}"
+                        ng-model="createEventCtrl.event.address.street"
+                        ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('Por favor, defina o nome da rua.')"
+                        oninput="setCustomValidity('')"/>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block fields-event-padding">
+                        <input type="text" ng-model="createEventCtrl.event.address.number" placeholder="Número"
+                            ng-disabled="createEventCtrl.isEventOutdated()"/>
+                    </md-input-container>
+                </div>
+                <div class="fields-event-split-reverse">
+                    <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
+                        <md-select md-container-class="container-resp select-resp" ng-model="createEventCtrl.event.address.country" ng-change="createEventCtrl.setAnotherCountry()"
+                        ng-disabled="createEventCtrl.isEventOutdated()">
+                            <md-option ng-repeat="country in createEventCtrl.countries"
+                                ng-value="country.nome_pais">
+                                {{country.nome_pais}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
+                        <input type="text" name="state" ng-model="createEventCtrl.event.address.federal_state"
+                        ng-disabled="createEventCtrl.isEventOutdated()" placeholder="Estado"/>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block fields-event-padding" ng-if="!createEventCtrl.isAnotherCountry">
+                        <md-select name="state" ng-model="createEventCtrl.selectedFederalState" ng-change="createEventCtrl.getCitiesByState()"
+                        ng-disabled="!createEventCtrl.event.address.country || createEventCtrl.isEventOutdated()" placeholder="Estado" required>
+                            <md-option ng-repeat="federal_state in createEventCtrl.federalStates"
+                            ng-value="federal_state">
+                                {{federal_state.nome}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+                <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
+                    <input type="text" name="city" ng-model="createEventCtrl.event.address.city"
+                    placeholder="Cidade" ng-disabled="createEventCtrl.isEventOutdated()"/>
+                </md-input-container>
+                <md-input-container md-no-float class="md-block" ng-if="!createEventCtrl.isAnotherCountry">
+                    <md-select ng-model="createEventCtrl.event.address.city" required placeholder="Cidade"
+                        ng-disabled="!createEventCtrl.selectedFederalState || createEventCtrl.isEventOutdated()"/>
+                        <md-option ng-repeat="city in createEventCtrl.cities" ng-value="city">{{city}}</md-option>
+                    </md-select>
+                </md-input-container>
             </div>
-        </div>
-        <md-divider class="event-select-inst-shadow"></md-divider>
-        <md-input-container md-no-float class="md-block">
-            <input type="text" ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO *"
-            required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um título.')"
-            oninput="setCustomValidity('')"/>
-        </md-input-container>
-        <md-input-container md-no-float class="md-block fields-event-padding">
-            <input type="text" ng-model="createEventCtrl.event.local" placeholder="Local *"
-            required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um local.')"
-            oninput="setCustomValidity('')"/>
-        </md-input-container>
-        <md-input-container md-no-float class="md-block fields-event-padding">
-            <input type="url" placeholder="Site oficial" ng-model="createEventCtrl.event.official_site"
-            ng-disabled="controller.isEventOutdated()"/>
-        </md-input-container>
-        <div class="fields-event-split">
-            <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
-                <input type="text" ng-required="!createEventCtrl.isAnotherCountry" placeholder="{{createEventCtrl.getStreetPlaceholder()}}"
-                ng-model="createEventCtrl.event.address.street"
-                ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('Por favor, defina o nome da rua.')"
-                oninput="setCustomValidity('')"/>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block fields-event-padding">
-                <input type="text" ng-model="createEventCtrl.event.address.number" placeholder="Número"
-                    ng-disabled="createEventCtrl.isEventOutdated()"/>
-            </md-input-container>
-        </div>
-        <div class="fields-event-split-reverse">
-            <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
-                <md-select md-container-class="container-resp select-resp" ng-model="createEventCtrl.event.address.country" ng-change="createEventCtrl.setAnotherCountry()"
-                ng-disabled="createEventCtrl.isEventOutdated()">
-                    <md-option ng-repeat="country in createEventCtrl.countries"
-                        ng-value="country.nome_pais">
-                        {{country.nome_pais}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
-                <input type="text" name="state" ng-model="createEventCtrl.event.address.federal_state"
-                ng-disabled="createEventCtrl.isEventOutdated()" placeholder="Estado"/>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block fields-event-padding" ng-if="!createEventCtrl.isAnotherCountry">
-                <md-select name="state" ng-model="createEventCtrl.selectedFederalState" ng-change="createEventCtrl.getCitiesByState()"
-                ng-disabled="!createEventCtrl.event.address.country || createEventCtrl.isEventOutdated()" placeholder="Estado" required>
-                    <md-option ng-repeat="federal_state in createEventCtrl.federalStates"
-                    ng-value="federal_state">
-                        {{federal_state.nome}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-        <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
-            <input type="text" name="city" ng-model="createEventCtrl.event.address.city"
-            placeholder="Cidade" ng-disabled="createEventCtrl.isEventOutdated()"/>
-        </md-input-container>
-        <md-input-container md-no-float class="md-block" ng-if="!createEventCtrl.isAnotherCountry">
-            <md-select ng-model="createEventCtrl.event.address.city" required placeholder="Cidade"
-                ng-disabled="!createEventCtrl.selectedFederalState || createEventCtrl.isEventOutdated()"/>
-                <md-option ng-repeat="city in createEventCtrl.cities" ng-value="city">{{city}}</md-option>
-            </md-select>
-        </md-input-container>
-    </div>
 
-    <div class="fields-event-container" ng-if="createEventCtrl.getStep(2)">
-        <div class="fields-event-split">
-            <md-input-container md-no-float class="md-block event-input-margin">
-                <input mdc-datetime-picker="" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
-                    placeholder="Data inicial *" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                    max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()" required
-                    ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block">
-                <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
-                    placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                    max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
-                    ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
-            </md-input-container>
-        </div>
-        <div class="fields-event-split">
-            <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
-                <input mdc-datetime-picker="" ng-change="createEventCtrl.changeDate('endTime')" date="true" time="false"
-                    type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
-                    min-date="createEventCtrl.startTime" max-date="null"
-                    ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
-                    ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
-            </md-input-container>
-            <md-input-container md-no-float class="md-block fields-event-padding">
-                <input mdc-datetime-picker="" ng-change="createEventCtrl.addEndHour()" date="false" time="true"
-                    type="text" today-text="Hoje" placeholder="Hora final *" class="md-input" format="HH:mm"
-                    min-date="createEventCtrl.startTime" max-date="null"
-                    ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
-                    ng-disabled="!createEventCtrl.event.end_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
-            </md-input-container>
-        </div>
-        <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"
-        ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)"
-        ng-change="createEventCtrl.entireDay && createEventCtrl.setToEntireDay()">
-            Dia inteiro
-        </md-checkbox>
-        <div class="event-textarea fields-event-padding custom-scrollbar">
-            <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
-                placeholder="Descrição"
-                class="event-textarea-size"></textarea>
-        </div>
-        <div class="event-textarea fields-event-padding custom-scrollbar">
-            <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
-                placeholder="Programação"
-                class="event-textarea-size"></textarea>
-        </div>
-    </div>
+            <div class="fields-event-container" ng-if="createEventCtrl.getStep(2)">
+                <div class="fields-event-split">
+                    <md-input-container md-no-float class="md-block event-input-margin">
+                        <input mdc-datetime-picker="" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
+                            placeholder="Data inicial *" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
+                            max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()" required
+                            ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block">
+                        <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
+                            placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
+                            max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
+                            ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
+                    </md-input-container>
+                </div>
+                <div class="fields-event-split">
+                    <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
+                        <input mdc-datetime-picker="" ng-change="createEventCtrl.changeDate('endTime')" date="true" time="false"
+                            type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
+                            min-date="createEventCtrl.startTime" max-date="null"
+                            ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
+                            ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block fields-event-padding">
+                        <input mdc-datetime-picker="" ng-change="createEventCtrl.addEndHour()" date="false" time="true"
+                            type="text" today-text="Hoje" placeholder="Hora final *" class="md-input" format="HH:mm"
+                            min-date="createEventCtrl.startTime" max-date="null"
+                            ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
+                            ng-disabled="!createEventCtrl.event.end_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                    </md-input-container>
+                </div>
+                <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"
+                ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)"
+                ng-change="createEventCtrl.entireDay && createEventCtrl.setToEntireDay()">
+                    Dia inteiro
+                </md-checkbox>
+                <div class="event-textarea fields-event-padding custom-scrollbar">
+                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
+                        placeholder="Descrição"
+                        class="event-textarea-size"></textarea>
+                </div>
+                <div class="event-textarea fields-event-padding custom-scrollbar">
+                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
+                        placeholder="Programação"
+                        class="event-textarea-size"></textarea>
+                </div>
+            </div>
 
-    <div ng-if="createEventCtrl.getStep(3)">
-        <div layout-margin>
-            <p class="md-subheader">Vídeos</p>
-            <div class="custom-scrollbar event-links-fields">
-                <div ng-repeat="videoUrl in createEventCtrl.videoUrls" layout="column">
-                    <md-input-container class="md-block event-link-height">
-                        <label>Link do Youtube</label>
-                        <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
-                        ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
-                        name="video"/>
-                        <div ng-messages="createEvent.video.$error">
-                            <div ng-message="pattern">Link do Youtube inválido.</div>
+            <div class="fields-event-container" ng-if="createEventCtrl.getStep(3)">
+                <div layout-margin>
+                    <p class="md-subheader">Vídeos</p>
+                    <div class="custom-scrollbar event-links-fields">
+                        <div ng-repeat="videoUrl in createEventCtrl.videoUrls" layout="column">
+                            <md-input-container class="md-block event-link-height">
+                                <label>Link do Youtube</label>
+                                <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
+                                ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
+                                name="video"/>
+                                <div ng-messages="createEvent.video.$error">
+                                    <div ng-message="pattern">Link do Youtube inválido.</div>
+                                </div>
+                            </md-input-container>
+                            <md-input-container class="md-block event-link-height">
+                                <label>Descrição</label>
+                                <input ng-required="videoUrl.url" class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />
+                            </md-input-container>
                         </div>
-                    </md-input-container>
-                    <md-input-container class="md-block event-link-height">
-                        <label>Descrição</label>
-                        <input ng-required="videoUrl.url" class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />
-                    </md-input-container>
+                    </div>
+                </div>
+                <div layout-margin>
+                    <p class="md-subheader">Links úteis</p>
+                    <div class="custom-scrollbar event-links-fields">
+                        <div ng-repeat="usefulLink in createEventCtrl.usefulLinks" layout="column">
+                            <md-input-container class="md-block event-link-height">
+                                <label>Link</label>
+                                <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..."
+                                ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)" type="url"/>
+                            </md-input-container>
+                            <md-input-container class="md-block event-link-height">
+                                <label>Descrição</label>
+                                <input ng-required="usefulLink.url" class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />
+                            </md-input-container>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div layout-margin>
-            <p class="md-subheader">Links úteis</p>
-            <div class="custom-scrollbar event-links-fields">
-                <div ng-repeat="usefulLink in createEventCtrl.usefulLinks" layout="column">
-                    <md-input-container class="md-block event-link-height">
-                        <label>Link</label>
-                        <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..."
-                        ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)" type="url"/>
-                    </md-input-container>
-                    <md-input-container class="md-block event-link-height">
-                        <label>Descrição</label>
-                        <input ng-required="usefulLink.url" class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />
-                    </md-input-container>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="fields-event-container" ng-if="createEventCtrl.lastStep()">
-        <h2><b>Inserir foto de capa</b></h2>
-        <div md-colors="{background: 'default-teal-500'}" layout="column"
-            class="event-image-view event-img-thumbnail">
-            <button ng-click="createEventCtrl.cleanImage()" type="button" class="event-image-view-button"
-                ng-if="createEventCtrl.showImage()">&times;</button>
-            <div class="centralized-event-content" ng-if="createEventCtrl.showImage()">
-                <img ng-src="{{createEventCtrl.photoUrl}}" class="event-img-height"/>
+            <div class="fields-event-container" ng-if="createEventCtrl.lastStep()">
+                <h2><b>Inserir foto de capa</b></h2>
+                <div md-colors="{background: 'default-teal-500'}" layout="column"
+                    class="event-image-view event-img-thumbnail">
+                    <button ng-click="createEventCtrl.cleanImage()" type="button" class="event-image-view-button"
+                        ng-if="createEventCtrl.showImage()">&times;</button>
+                    <div class="centralized-event-content" ng-if="createEventCtrl.showImage()">
+                        <img ng-src="{{createEventCtrl.photoUrl}}" class="event-img-height"/>
+                    </div>
+                    <md-button class="event-img-button" ng-click="null" ng-model="createEventCtrl.file" ngf-pattern="'image/*'"
+                        ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="createEventCtrl.addImage(createEventCtrl.file)"
+                        ng-if="!createEventCtrl.showImage()">
+                        <md-icon class="event-img-icon">add_a_photo</md-icon>
+                    </md-button>
+                </div>
             </div>
-            <md-button class="event-img-button" ng-click="null" ng-model="createEventCtrl.file" ngf-pattern="'image/*'"
-                ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="createEventCtrl.addImage(createEventCtrl.file)"
-                ng-if="!createEventCtrl.showImage()">
-                <md-icon class="event-img-icon">add_a_photo</md-icon>
+
+            <div class="action-event-container"
+            ng-if="!createEventCtrl.loading">
+            <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
+                Cancelar
             </md-button>
-        </div>
+            <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
+                <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
+            </md-button>
+            </div>
+        </form>
     </div>
-    <div class="action-event-container"
-    ng-if="!createEventCtrl.loading">
-    <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
-        Cancelar
-    </md-button>
-    <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
-        <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
-    </md-button>
 </div>
-</form>

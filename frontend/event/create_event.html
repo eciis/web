@@ -1,46 +1,44 @@
-<div class="create-event-grid">
+<div ng-class="createEventCtrl.getStep(1) ? 'create-event-grid-inst' : 'create-event-grid'">
     <div class="create-event-mobile-top-bar">
         <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
             <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
         </md-button>
     </div>
-
-    <div class="create-event-form">
+    <div class="event-select-inst" ng-if="createEventCtrl.getStep(1)">
+        <div class="event-select-ball">
+            <md-icon class="event-select-ball-margin"
+                md-colors="{color: createEventCtrl.user.getProfileColor()+'-900'}">
+                brightness_1
+            </md-icon>
+        </div>
+        <div class="event-select-inst-name">
+            <p class="event-limit-string">
+                {{ homeCtrl.user.current_institution.name }}
+            </p>
+        </div>
+        <div class="event-select-button">
+            <md-menu>
+                <md-button aria-label="Open phone interactions menu"
+                    class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                    <md-icon>arrow_drop_down</md-icon>
+                </md-button>
+                <md-menu-content class="event-select-inst-name custom-scrollbar">
+                    <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
+                        <md-button ng-click="mainCtrl.changeInstitution(profile)">
+                            <div class="event-limit-string">
+                                <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
+                                    {{ profile.institution.name }}
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+    <div ng-class="createEventCtrl.getStep(1) ? 'create-event-form-third-line' : 'create-event-form-second-line'">
         <form name="createEvent" class="create-event-form-grid" ng-submit="createEventCtrl.nextStepOrSave()">
 
             <div class="fields-event-container" ng-if="createEventCtrl.getStep(1)">
-                <div class="event-select-inst">
-                    <div class="event-select-ball">
-                        <md-icon class="event-select-ball-margin"
-                            md-colors="{color: createEventCtrl.user.getProfileColor()+'-900'}">
-                            brightness_1
-                        </md-icon>
-                    </div>
-                    <div class="event-select-inst-name">
-                        <p class="event-limit-string">
-                            {{ homeCtrl.user.current_institution.name }}
-                        </p>
-                    </div>
-                    <div class="event-select-button">
-                        <md-menu>
-                            <md-button aria-label="Open phone interactions menu"
-                                class="md-icon-button" ng-click="$mdMenu.open(ev)">
-                                <md-icon>arrow_drop_down</md-icon>
-                            </md-button>
-                            <md-menu-content class="event-select-inst-name custom-scrollbar">
-                                <md-menu-item ng-repeat="profile in mainCtrl.user.institution_profiles">
-                                    <md-button ng-click="mainCtrl.changeInstitution(profile)">
-                                        <div class="event-limit-string">
-                                            <md-icon md-colors="{color: profile.color+'-900'}">brightness_1</md-icon>
-                                                {{ profile.institution.name }}
-                                        </div>
-                                    </md-button>
-                                </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                    </div>
-                </div>
-                <md-divider class="event-select-inst-shadow"></md-divider>
                 <md-input-container md-no-float class="md-block">
                     <input type="text" ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO *"
                     required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um título.')"

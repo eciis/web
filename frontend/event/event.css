@@ -334,7 +334,7 @@
     }
 
     .fields-event-container, .event-select-inst, .fields-event-split, .fields-event-split-reverse,
-    .create-event-grid, .create-event-form-grid {
+    .create-event-grid, .create-event-form-grid, .create-event-grid-inst {
         display: grid;
     }
 
@@ -349,7 +349,10 @@
     }
 
     .event-select-inst {
-        grid-template-columns: 15% 74% auto;
+        grid-template-columns: 15% 70% auto;
+        grid-row-start: 2;
+        width: 100%;
+        box-shadow: 0px 3px 6px grey;
     }
 
     .event-select-ball {
@@ -466,15 +469,23 @@
         margin-bottom: 0.4em !important;
     }
 
-    .create-event-grid {
+    .create-event-grid, .create-event-grid-inst {
         grid-template-rows: 3em auto;
         grid-template-columns: 100%;
         height: 100%;
         overflow: scroll;
     }
 
-    .create-event-form {
-        grid-row-start: 2; grid-row-end: 3;
+    .create-event-grid-inst {
+        grid-template-rows: 3em 3em auto;
+    }
+
+    .create-event-form-second-line {
+        grid-row-start: 2;
+    }
+
+    .create-event-form-third-line {
+        grid-row-start: 3;
     }
 
     .create-event-form-grid {

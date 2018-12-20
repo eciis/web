@@ -1,10 +1,10 @@
-<md-content layout-align="center" hide-top-navbar>
+<md-content layout-align="center" hide-navbar="both">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
         <div style="box-shadow: 0 -2px 5px 0px grey;">
             <div class="cover-photo" id="buttons-navbar-inst-container">
                 <md-button class="md-icon-button cover-photo-button button-navbar-inst"
-                    ng-click="null">
+                    ng-click="institutionCtrl.goToHome()">
                     <md-icon class="icon-button-menu-inst">arrow_back</md-icon>
                 </md-button>
                 <md-button class="md-icon-button cover-photo-button button-navbar-inst"
@@ -25,7 +25,7 @@
                     <md-icon>add_a_photo</md-icon>
                 </md-button> -->
             </div>
-            <div md-colors="{background: 'teal-500'}" style="margin: 0; height: 11em; overflow: hidden;">
+            <div md-colors="{background: 'teal-500'}" id="image-cover-inst">
                 <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
                 <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
                     layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>

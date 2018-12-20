@@ -54,3 +54,9 @@
 #btn-description{
     grid-column-start: 3;
 }
+
+#image-cover-inst{
+    margin: 0;
+    height: 13em;
+    overflow: hidden;
+}

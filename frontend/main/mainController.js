@@ -66,7 +66,7 @@
 
         mainCtrl.goTo = function (stateName) {
             UtilsService.selectNavOption(STATES[stateName]);
-            resetNavBarDisplayStyle();
+            Utils.resetNavBarDisplayStyle();
         };
 
         mainCtrl.logout = function logout() {
@@ -154,13 +154,6 @@
         mainCtrl.getState = function (stateName) {
             return STATES[stateName];
         };
-
-        /** Reset properties CSS. 
-         * In mode mobile maybe changes some properties.
-         */
-        function resetNavBarDisplayStyle(){
-            document.getElementById('main-toolbar').style.display = 'block';
-        }
 
         /** Add new observers to listen events that user should be refresh. 
          */ 

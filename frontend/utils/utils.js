@@ -222,5 +222,12 @@ var Utils = {
      */
     selectFieldBasedOnScreenSize: function selectFieldBasedOnScreenSize(notMobileField, mobileField, mobileScreenSize) {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
+    },
+
+     /** Reset properties CSS. 
+     * In mode mobile maybe changes some properties.
+     */
+    resetNavBarDisplayStyle: function resetNavBarDisplayStyle(){
+        document.getElementById('main-toolbar').style.display = 'block';
     }
 };

@@ -372,6 +372,20 @@
             initPatchObserver();
         };
 
+        /**
+         * Verify if the event begin and end in the same day
+         */
+        dialogCtrl.happensInOnlyDay = () => {
+            if(dialogCtrl.event.start_time && dialogCtrl.event.end_time) {
+                const initDate = new Date(dialogCtrl.event.start_time.getFullYear(),
+                    dialogCtrl.event.start_time.getMonth(), dialogCtrl.event.start_time.getDate()).getTime();
+                const endDate = new Date(dialogCtrl.event.end_time.getFullYear(),
+                dialogCtrl.event.end_time.getMonth(), dialogCtrl.event.end_time.getDate()).getTime();
+                return initDate == endDate;
+            }
+            return false; 
+        };
+
         function clearSelectedState() {
             dialogCtrl.event.address.federal_state = "";
             dialogCtrl.selectedFederalState = "";

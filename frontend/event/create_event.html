@@ -44,12 +44,12 @@
                 <md-input-container md-no-float class="md-block">
                     <input type="text" ng-model="createEventCtrl.event.title" placeholder="NOME DO EVENTO *"
                     required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um título.')"
-                    oninput="setCustomValidity('')"/>
+                    oninput="this.setCustomValidity('')"/>
                 </md-input-container>
                 <md-input-container md-no-float class="md-block fields-event-padding">
                     <input type="text" ng-model="createEventCtrl.event.local" placeholder="Local *"
                     required ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('O evento precisa ter um local.')"
-                    oninput="setCustomValidity('')"/>
+                    oninput="this.setCustomValidity('')"/>
                 </md-input-container>
                 <md-input-container md-no-float class="md-block fields-event-padding">
                     <input type="url" placeholder="Site oficial" ng-model="createEventCtrl.event.official_site"
@@ -60,7 +60,7 @@
                         <input type="text" ng-required="!createEventCtrl.isAnotherCountry" placeholder="{{createEventCtrl.getStreetPlaceholder()}}"
                         ng-model="createEventCtrl.event.address.street"
                         ng-disabled="createEventCtrl.isEventOutdated()" oninvalid="this.setCustomValidity('Por favor, defina o nome da rua.')"
-                        oninput="setCustomValidity('')"/>
+                        oninput="this.setCustomValidity('')"/>
                     </md-input-container>
                     <md-input-container md-no-float class="md-block fields-event-padding">
                         <input type="text" ng-model="createEventCtrl.event.address.number" placeholder="Número"
@@ -91,7 +91,7 @@
                         </md-select>
                     </md-input-container>
                 </div>
-                <md-input-container md-no-float class="md-block fields-event-padding" ng-if="createEventCtrl.isAnotherCountry">
+                <md-input-container md-no-float class="md-block fields-event-padding create-event-city-margin" ng-if="createEventCtrl.isAnotherCountry">
                     <input type="text" name="city" ng-model="createEventCtrl.event.address.city"
                     placeholder="Cidade" ng-disabled="createEventCtrl.isEventOutdated()"/>
                 </md-input-container>
@@ -108,13 +108,13 @@
                     <md-input-container md-no-float class="md-block event-input-margin">
                         <input mdc-datetime-picker="" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
                             placeholder="Data inicial *" ng-model="createEventCtrl.event.start_time" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                            max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()" required
+                            max-date="createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.createInitDate()"
                             ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
                     </md-input-container>
                     <md-input-container md-no-float class="md-block">
                         <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
                             placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
-                            max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
+                            max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()"
                             ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
                     </md-input-container>
                 </div>
@@ -124,14 +124,14 @@
                             type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
                             min-date="createEventCtrl.startTime" max-date="null"
                             ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
-                            ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                            ng-disabled="!createEventCtrl.event.start_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)">
                     </md-input-container>
                     <md-input-container md-no-float class="md-block fields-event-padding">
                         <input mdc-datetime-picker="" ng-change="createEventCtrl.addEndHour()" date="false" time="true"
                             type="text" today-text="Hoje" placeholder="Hora final *" class="md-input" format="HH:mm"
-                            min-date="createEventCtrl.startTime" max-date="null"
+                            min-date="createEventCtrl.happensInOnlyDay() && createEventCtrl.startTime" max-date="null"
                             ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
-                            ng-disabled="(createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                            ng-disabled="!(createEventCtrl.event.start_time && createEventCtrl.startHour) || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)">
                     </md-input-container>
                 </div>
                 <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"
@@ -157,7 +157,7 @@
                     <div class="custom-scrollbar event-links-fields">
                         <div ng-repeat="videoUrl in createEventCtrl.videoUrls" layout="column">
                             <md-input-container class="md-block event-link-height">
-                                <label>Link do Youtube</label>
+                                <label class="event-links-color">Link do Youtube</label>
                                 <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
                                 ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
                                 name="video"/>
@@ -166,7 +166,7 @@
                                 </div>
                             </md-input-container>
                             <md-input-container class="md-block event-link-height">
-                                <label>Descrição</label>
+                                <label class="event-links-color">Descrição</label>
                                 <input ng-required="videoUrl.url" class="md-input" ng-model="videoUrl.description" placeholder="Adicione uma descrição para o vídeo..." maxlength="150" />
                             </md-input-container>
                         </div>
@@ -177,12 +177,12 @@
                     <div class="custom-scrollbar event-links-fields">
                         <div ng-repeat="usefulLink in createEventCtrl.usefulLinks" layout="column">
                             <md-input-container class="md-block event-link-height">
-                                <label>Link</label>
+                                <label class="event-links-color">Link</label>
                                 <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..."
                                 ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)" type="url"/>
                             </md-input-container>
                             <md-input-container class="md-block event-link-height">
-                                <label>Descrição</label>
+                                <label class="event-links-color">Descrição</label>
                                 <input ng-required="usefulLink.url" class="md-input" ng-model="usefulLink.description" placeholder="Adicione uma descrição para o link..." maxlength="150" />
                             </md-input-container>
                         </div>

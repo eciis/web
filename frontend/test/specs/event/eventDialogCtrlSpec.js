@@ -579,6 +579,20 @@
       });
     });
 
+    describe('happensInOnlyDay()', () => {
+      it('Should return true if the event begin and end in the same day', () => {
+        controller.event.start_time = new Date(2018, 12, 12);
+        controller.event.end_time = new Date(2018, 12, 12);
+        expect(controller.happensInOnlyDay()).toBeTruthy();
+      });
+
+      it('Should return false if the event begin and end in different days', () => {
+        controller.event.start_time = new Date(2018, 12, 12);
+        controller.event.end_time = new Date(2018, 12, 13);
+        expect(controller.happensInOnlyDay()).toBeFalsy();
+      });
+    });
+
     describe('$onInit()', () => {
       it('should call _loadStateParams()', () => {
         spyOn(controller, '_loadStateParams');

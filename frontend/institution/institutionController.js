@@ -113,6 +113,10 @@
             institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
+        institutionCtrl.showDescription = function showDescription(){
+            return !Utils.isMobileScreen(475);
+        }
+
         institutionCtrl.showFollowButton = function showFollowButton() {
            return institutionCtrl.institution && !institutionCtrl.isMember && 
                 institutionCtrl.institution.name !== "Ministério da Saúde" &&

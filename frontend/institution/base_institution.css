@@ -1,7 +1,9 @@
 #buttons-institution-page{
     display: grid;
     grid-template-columns: auto auto;
-    justify-content: center;
+    padding: 0 1.3em;
+    margin-bottom: 1em;
+    margin-top: 1em;
 }
 
 #inst-name-mobile{
@@ -9,8 +11,10 @@
 }
 
 #divider-institution{
-    width: 45%;
+    width: 30%;
     justify-self: center;
+    border: solid;
+    color: #84C45E;
 }
 
 #inst-image-mobile{
@@ -20,7 +24,33 @@
     border-radius: 50%;
 }
 
-.icon-button-color{
-    color: rgba(255, 255, 255, 0.87);
+.button-navbar-inst{
+    position: relative;
+    z-index: 3;
+    width: auto !important;
+    color: rgba(255, 255, 255);
+}
+
+.icon-button-menu-inst{
+    color: rgba(255, 255, 255);
     font-size: 20px;
+}
+
+#buttons-navbar-inst-container{
+    height: 0px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 53px auto 107px 79px 48px;
+}
+
+#btn-more{
+    grid-column-start: 5;
+}
+
+#btn-follow{
+    grid-column-start: 4;
+}
+
+#btn-description{
+    grid-column-start: 3;
 }

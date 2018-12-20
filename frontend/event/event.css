@@ -483,6 +483,10 @@
         grid-template-columns: 100%;
     }
 
+    .create-event-img-field {
+        height: 20%;
+    }
+
     @media screen and (min-height: 600px) {
         .event-links-fields {
             max-height: 13em;

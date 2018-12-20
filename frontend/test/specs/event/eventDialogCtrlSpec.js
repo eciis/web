@@ -557,6 +557,28 @@
       });
     });
 
+    describe('_loadStatesToEdit()', () => {
+      it('PhotoURL of the controller should be equal to the event photoURL', () => {
+        controller.photoUrl = undefined;
+        controller.event.photo_url = "photo.jpeg";
+        controller._loadStatesToEdit();
+        expect(controller.photoUrl).toEqual(controller.event.photo_url);
+      });
+
+      it('The property isAnotherCountry of the controller should be true if selected country is not Brazil', () => {
+        controller.isAnotherCountry = undefined;
+        controller._loadStatesToEdit();
+        expect(controller.isAnotherCountry).toBeTruthy();
+      });
+
+      it('The property isAnotherCountry of the controller should be false if selected country is Brazil', () => {
+        controller.isAnotherCountry = undefined;
+        controller.event.address.country = "Brasil";
+        controller._loadStatesToEdit();
+        expect(controller.isAnotherCountry).toBeFalsy();
+      });
+    });
+
     describe('$onInit()', () => {
       it('should call _loadStateParams()', () => {
         spyOn(controller, '_loadStateParams');

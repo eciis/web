@@ -115,12 +115,12 @@
                         <input mdc-datetime-picker="" short-time="false" date="false" time="true" type="text" format="HH:mm"
                             placeholder="Hora inicial *" ng-model="createEventCtrl.startHour" class="md-input" today-text="Hoje" min-date="createEventCtrl.now"
                             max-date="createEventCtrl.endHour && createEventCtrl.event.end_time" cancel-text="Cancelar" ng-change="createEventCtrl.addStartHour()" required
-                            ng-disabled="!createEventCtrl.event.start_time || createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
+                            ng-disabled="createEventCtrl.isEventOutdated() && createEventCtrl.isEditing"/>
                     </md-input-container>
                 </div>
                 <div class="fields-event-split">
                     <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
-                        <input mdc-datetime-picker="" ng-change="createEventCtrl.changeDate('endTime')" date="true" time="false"
+                        <input mdc-datetime-picker="" ng-change="createEventCtrl.createEndDate()" date="true" time="false"
                             type="text" today-text="Hoje" placeholder="Data final *" class="md-input" format="DD-MM-YYYY"
                             min-date="createEventCtrl.startTime" max-date="null"
                             ng-model="createEventCtrl.event.end_time" cancel-text="Cancelar"
@@ -131,7 +131,7 @@
                             type="text" today-text="Hoje" placeholder="Hora final *" class="md-input" format="HH:mm"
                             min-date="createEventCtrl.startTime" max-date="null"
                             ng-model="createEventCtrl.endHour" cancel-text="Cancelar"
-                            ng-disabled="!createEventCtrl.event.end_time || (createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
+                            ng-disabled="(createEventCtrl.isEventOutdated() && createEventCtrl.isEditing)" required>
                     </md-input-container>
                 </div>
                 <md-checkbox class="event-checkbox" ng-model="createEventCtrl.entireDay"
@@ -190,7 +190,7 @@
                 </div>
             </div>
 
-            <div class="fields-event-container" ng-if="createEventCtrl.lastStep()">
+            <div class="fields-event-container create-event-img-field" ng-if="createEventCtrl.lastStep()">
                 <h2><b>Inserir foto de capa</b></h2>
                 <div md-colors="{background: 'default-teal-500'}" layout="column"
                     class="event-image-view event-img-thumbnail">

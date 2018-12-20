@@ -52,6 +52,12 @@
 
         dialogCtrl.createInitDate = function createInitDate() {
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
+            dialogCtrl.addStartHour();
+        };
+
+        dialogCtrl.createEndDate = () => {
+            dialogCtrl.addEndHour();
+            dialogCtrl.changeDate('endTime');
         };
 
         function saveImage(callback) {
@@ -285,7 +291,7 @@
         }
 
         dialogCtrl.previousStep = function previousStep() {
-            if (dialogCtrl.getStep(1)) dialogCtrl.cancelCreation();
+            if (dialogCtrl.getStep(1)) return dialogCtrl.cancelCreation();
             let currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
             });
@@ -326,16 +332,20 @@
          * Add a start hour to the start_time of event.
          */
         dialogCtrl.addStartHour = () => {
-            dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startHour.getMinutes(), 0);
-            dialogCtrl.event.start_time = dialogCtrl.startTime;
+            if(dialogCtrl.event.start_time && dialogCtrl.startHour) {
+                dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startHour.getMinutes(), 0);
+                dialogCtrl.event.start_time = dialogCtrl.startTime;
+            }
         };
 
         /**
          * Add a end hour to the end_time of event.
          */
         dialogCtrl.addEndHour = () => {
-            dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
-            dialogCtrl.changeDate('endTime');
+            if(dialogCtrl.event.end_time && dialogCtrl.endHour) {
+                dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
+                dialogCtrl.changeDate('endTime');    
+            }
         };
 
         /**

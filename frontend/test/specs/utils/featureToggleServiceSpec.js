@@ -111,7 +111,7 @@ describe('Test FeatureToggleService', function() {
         it('Should be return false with test-feature', function(done) {
             window.screen = {width: 1000};
             featureToggleService.isEnabled(feature.name).then(function(response) {
-                expect(response).toBeFalsy();
+                expect(response).toEqual(false);
                 done();
             });
             httpBackend.flush();
@@ -120,7 +120,7 @@ describe('Test FeatureToggleService', function() {
         it('Should be return false with test-other-feature', function(done) {
             window.screen = {width: 100};
             featureToggleService.isEnabled(otherFeature.name).then(function(response) {
-                expect(response).toBeFalsy();
+                expect(response).toEqual(false);
                 done();
             });
             httpBackend.flush();

@@ -33,6 +33,18 @@ describe('MapStateToFeatureService Test', function() {
 
     describe('Test containsFeature', function() {
 
-        
+        it('Should be return true', function() {
+            let contain = mapStateToFeatureService.containsFeature('app.edit-inst');
+            expect(contain).toBeTruthy();
+
+            contain = mapStateToFeatureService.containsFeature('app.manage-user');
+            expect(contain).toBeTruthy();
+        });
+
+
+        it('Should be return false', function() {
+            let contain = mapStateToFeatureService.containsFeature('app.manage-inst');
+            expect(contain).toEqual(false);
+        });
     });
 });

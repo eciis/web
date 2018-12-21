@@ -22,9 +22,10 @@
                   class="custom-card-input" required="true"  minlength="6" aria-label="Senha">
               </md-input-container>
               <div layout="row" layout-align-xs="center center" layout-align="end center">
-                <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}" ng-if="!loginCtrl.isLoading">
                   Acessar
                 </md-button>
+                <load-circle ng-if="loginCtrl.isLoading"></load-circle>
               </div>
             </form>
 

@@ -28,8 +28,10 @@
         };
 
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
+            loginCtrl.isLoading = true;
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {
+                    loginCtrl.isLoading = false;
                     redirectTo(redirectPath);
                 }
             ).catch(function(error) {

@@ -78,8 +78,22 @@ login-card-footer {
   background-color: #E6E6E6;
 }
 
-@media screen and (max-width: 960px) {
-    img#login-logo {
-        width: 60%;
-    }
+@media screen and (max-width: 360px) {
+  img#login-logo {
+    width: 50%;
+  }
+
+  login-card-content {
+      display: grid;
+      margin: 0;
+      padding: 0;
+  }
+
+  login-card-footer > .md-button {
+    margin: 2px 8px;
+  }
+
+  login-container > p {
+    margin-bottom: 0.2em;
+  }
 }

@@ -18,7 +18,10 @@
          * Retrieves the application instance of
          * firebase messaging.
          */
-        const messaging = firebase.messaging();
+        let messaging = null;
+
+        if(Notification)
+            messaging = firebase.messaging();
 
         const ref = firebase.database().ref();
         
@@ -65,7 +68,7 @@
         service.requestNotificationPermission = function requestNotificationPermission(user) {
             service.currentUser = user;
             const isOnMobile = service._isMobile.any();
-            if (!service._hasNotificationPermission() && isOnMobile) {
+            if (!service._hasNotificationPermission() && isOnMobile && messaging) {
                 return messaging.requestPermission().then(() => {
                     return messaging.getToken().then(token => {
                         service._saveToken(token);

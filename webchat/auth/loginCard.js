@@ -30,7 +30,7 @@
         ctrl.email = true;
       if (_.isNil(ctrl.google))
         ctrl.google = true;
-      if (_.isNil(ctrl.email))
+      if (_.isNil(ctrl.invite))
         ctrl.invite = true;
     }
   }

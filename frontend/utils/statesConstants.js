@@ -10,6 +10,7 @@
         HOME: "app.user.home",
         USER_INSTITUTIONS: "app.user.institutions",
         EVENTS: "app.user.events",
+        CREATE_EVENT: "app.user.create_event",
         INVITE_INSTITUTION: "app.user.invite_inst",
         CONFIG_PROFILE: "app.user.config_profile",
         NOTIFICATION: "app.user.notifications",

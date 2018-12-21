@@ -51,7 +51,8 @@
                 </md-input-container>
                 <md-input-container md-no-float class="md-block fields-event-padding">
                     <input type="url" placeholder="Site oficial" ng-model="createEventCtrl.event.official_site"
-                    ng-disabled="controller.isEventOutdated()"/>
+                    ng-disabled="controller.isEventOutdated()" oninvalid="this.setCustomValidity('Insira um link válido.')"
+                    oninput="this.setCustomValidity('')"/>
                 </md-input-container>
                 <div class="fields-event-split">
                     <md-input-container md-no-float class="md-block fields-event-padding event-input-margin">
@@ -188,7 +189,7 @@
                 </div>
             </div>
 
-            <div class="fields-event-container create-event-img-field" ng-if="createEventCtrl.lastStep()">
+            <div class="fields-event-container create-event-img-field" ng-if="createEventCtrl.lastStep() && !createEventCtrl.loading">
                 <h2><b>Inserir foto de capa</b></h2>
                 <div md-colors="{background: 'default-teal-500'}" layout="column"
                     class="event-image-view event-img-thumbnail">
@@ -205,14 +206,18 @@
                 </div>
             </div>
 
+            <div class="fields-event-container create-event-loading" ng-if="createEventCtrl.lastStep() && createEventCtrl.loading">
+                <load-circle></load-circle>
+            </div>
+
             <div class="action-event-container"
-            ng-if="!createEventCtrl.loading">
-            <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
-                Cancelar
-            </md-button>
-            <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
-                <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
-            </md-button>
+                ng-if="!createEventCtrl.loading">
+                <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
+                    Cancelar
+                </md-button>
+                <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
+                    <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
+                </md-button>
             </div>
         </form>
     </div>

@@ -380,7 +380,8 @@
 
     describe('newEvent()', () => {
 
-        it('should call mdDialog.show', () => {
+        it('should call mdDialog.show if is mobile screen', () => {
+            spyOn(Utils, 'isMobileScreen').and.returnValue(false);
             spyOn(mdDialog, 'show').and.callFake(() => {
                 return {
                     then: function (callback) {
@@ -390,6 +391,13 @@
             });
             eventCtrl.newEvent();
             expect(mdDialog.show).toHaveBeenCalled();
+        });
+
+        it('should call state.go if is not mobile screen', () => {
+            spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+            spyOn(state, 'go');
+            eventCtrl.newEvent();
+            expect(state.go).toHaveBeenCalled();
         });
     });
 

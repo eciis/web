@@ -90,6 +90,20 @@
                     }
                 }
             })
+            .state(STATES.CREATE_EVENT, {
+                url: "/create_event/:eventKey",
+                views: {
+                    user_content: {
+                        templateUrl: "app/event/create_event.html",
+                        controller: "EventDialogController as createEventCtrl"
+                    }
+                },
+                params: {
+                    event: null,
+                    events: null,
+                    isEditing: null
+                }
+            })
             .state(STATES.INVITE_INSTITUTION, {
                 url: "/inviteInstitution",
                 views: {
@@ -187,6 +201,9 @@
                         templateUrl: "app/post/post_page.html",
                         controller: "PostPageController as postCtrl",
                     }
+                },
+                params: {
+                    "focus": undefined
                 }
             })
             .state(STATES.MANAGE_INST, {
@@ -474,6 +491,29 @@
             }
         }, function(transition) {
             transition.router.stateService.transitionTo(STATES.USER_INACTIVE);
+        });
+    });
+
+    /**
+     * Function to intercept the access of pages that should be displayed only on mobile screens.
+     * @param {service} $transitions - Service of transitions states
+     * @param {const} STATES - Const with the states of application
+     * @param {const} SCREEN_SIZES - Const with the screen sizes
+     */
+    app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
+        const permitted_routes = [
+            STATES.CREATE_EVENT
+        ];
+
+        $transitions.onStart({
+            to: (state) => {
+                return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && _.includes(permitted_routes, state.name);
+            }
+        }, () => {
+            $state.go(STATES.ERROR, {
+                "msg": "Esta página está disponível apenas para mobile.",
+                "status": "403"
+            });
         });
     });
 

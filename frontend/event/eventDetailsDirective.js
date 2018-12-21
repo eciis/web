@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService, STATES) {
+        $state, $mdDialog, AuthService, STATES, SCREEN_SIZES) {
 
         var eventCtrl = this;
 
@@ -64,22 +64,30 @@
         };
 
         eventCtrl.editEvent = function editEvent(ev, event) {
-            $mdDialog.show({
-                controller: 'EventDialogController',
-                controllerAs: "controller",
-                templateUrl: 'app/event/event_dialog.html',
-                targetEvent: ev,
-                clickOutsideToClose: true,
-                locals: {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                $state.go(STATES.CREATE_EVENT, {
+                    eventKey: event.key,
                     event: _.clone(event),
                     isEditing: true
-                },
-                bindToController: true
-            }).then(function success(event){
-                (event && event.title && eventCtrl.event !== event) ?  
-                    eventCtrl.event = event : null;
-                eventCtrl.showImage = hasImage(event);
-            })
+                });
+            } else {
+                $mdDialog.show({
+                    controller: 'EventDialogController',
+                    controllerAs: "controller",
+                    templateUrl: 'app/event/event_dialog.html',
+                    targetEvent: ev,
+                    clickOutsideToClose: true,
+                    locals: {
+                        event: _.clone(event),
+                        isEditing: true
+                    },
+                    bindToController: true
+                }).then(function success(event){
+                    (event && event.title && eventCtrl.event !== event) ?
+                        eventCtrl.event = event : null;
+                    eventCtrl.showImage = hasImage(event);
+                });
+            }
         };
 
         function hasImage(event) {

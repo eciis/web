@@ -18,10 +18,7 @@
          * Retrieves the application instance of
          * firebase messaging.
          */
-        let messaging = null;
-
-        if("Notification" in window)
-            messaging = firebase.messaging();
+        const messaging = ("Notification" in window) ? firebase.messaging() : null;
 
         const ref = firebase.database().ref();
         

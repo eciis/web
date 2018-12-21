@@ -1,9 +1,18 @@
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+#webchat {
+  height: 100%;
+}
+
 ec-content {
   display: grid;
   align-items: center;
   justify-items: center;
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
   width: 100%;
   margin: 0;
   overflow: auto;

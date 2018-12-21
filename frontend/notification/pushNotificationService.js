@@ -20,7 +20,7 @@
          */
         let messaging = null;
 
-        if(Notification)
+        if("Notification" in window)
             messaging = firebase.messaging();
 
         const ref = firebase.database().ref();

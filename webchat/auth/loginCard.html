@@ -1,49 +1,48 @@
 <!-- login card -->
-<md-card class="limit-width login-card">
-  <md-card-content class="">
-    <img id="login-logo" class="ec-logo" src="/app/images/logowithname.png" />
-    <div ng-if="ctrl.email">
-      <form class="login-form" ng-submit="ctrl.signIn()">
-        <md-input-container class="form">
-          <label>Email</label>
-          <input type="email" name="email" ng-model="ctrl.user.email" class="custom-card-input" required="false"
-            aria-label="Email">
-        </md-input-container>
-        <md-input-container class="form">
-          <label>Senha</label>
-          <input type="password" name="password" ng-model="ctrl.user.password" class="custom-card-input" required="false"
-            minlength="6" aria-label="Senha">
-        </md-input-container>
-        <div class="login-form-submit">
-          <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
-            Acessar
-          </md-button>
-        </div>
-      </form>
-    </div>
+<login-card-content>
+  <img id="login-logo" src="/app/images/logowithname.png" />
+  <login-email-form ng-if="ctrl.email">
+    <form class="login-form" ng-submit="ctrl.signIn()">
+      <md-input-container class="form">
+        <label>Email</label>
+        <input type="email" name="email" ng-model="ctrl.user.email" class="login-card-input" required="false"
+          aria-label="Email">
+      </md-input-container>
+      <md-input-container class="form">
+        <label>Senha</label>
+        <input type="password" name="password" ng-model="ctrl.user.password" class="login-card-input" required="false"
+          minlength="6" aria-label="Senha">
+      </md-input-container>
+      <login-email-form-submit>
+        <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+          Acessar
+        </md-button>
+      </login-email-form-submit>
+    </form>
+  </login-email-form>
 
-    <div ng-if="ctrl.google">
-      <div ng-if="!ctlr.email">
-        <br>
-        <md-divider></md-divider>
-      </div>
-      <md-button class="login-btn" ng-click="ctrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
-        <md-icon md-svg-src="/app/icons/google-icon.svg"></md-icon>
-        <span>ACESSE COM GOOGLE</span>
-      </md-button>
-    </div>
+  <login-container ng-if="ctrl.google">
+    <md-button class="login-btn" ng-click="ctrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
+      <md-icon class="login-google-icon" md-svg-src="/app/icons/google-icon.svg"></md-icon>
+      <span>ACESSE COM GOOGLE</span>
+    </md-button>
+  </login-container>
 
-    <div ng-if="ctrl.invite">
-      <md-divider></md-divider>
+  <login-container ng-if="ctrl.invite">
+    <md-divider class="login-divider"></md-divider>
 
-      <p class="login-text">
-        Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.
-      </p>
+    <p class="login-text">
+      Se você ainda não possui uma conta na Plataforma CIS solicite abaixo um convite.
+    </p>
 
-      <md-button class="login-btn" md-colors="{background: 'teal-500'}" ng-click="ctrl.requestInvite()">
-        <md-icon>add_circle</md-icon>
-        <span>SOLICITAR CONVITE</span>
-      </md-button>
-    </div>
-  </md-card-content>
-</md-card>
+    <md-button class="login-btn" md-colors="{background: 'teal-500'}" ng-click="ctrl.requestInvite()">
+      <md-icon>add_circle</md-icon>
+      <span>SOLICITAR CONVITE</span>
+    </md-button>
+  </login-container>
+</login-card-content>
+<login-card-footer class="login-card-footer">
+  <md-button md-colors="{color: 'teal-500'}" ng-click="loginCtrl.resetPassword()">
+    Esqueceu a senha?
+  </md-button>
+</div>

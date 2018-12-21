@@ -68,7 +68,7 @@
         service.requestNotificationPermission = function requestNotificationPermission(user) {
             service.currentUser = user;
             const isOnMobile = service._isMobile.any();
-            if (!service._hasNotificationPermission() && isOnMobile && messaging) {
+            if (messaging && !service._hasNotificationPermission() && isOnMobile) {
                 return messaging.requestPermission().then(() => {
                     return messaging.getToken().then(token => {
                         service._saveToken(token);

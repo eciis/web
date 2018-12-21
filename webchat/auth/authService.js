@@ -3,7 +3,7 @@
 
     var app = angular.module("webchat");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService, PushNotificationService) {
+    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -120,9 +120,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            return PushNotificationService.requestNotificationPermission(service.getCurrentUser()).finally(() => {
                                 return userInfo;
-                            });
                         });
                     });
                 } else {

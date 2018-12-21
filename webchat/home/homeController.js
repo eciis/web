@@ -8,8 +8,6 @@
 
         const main = () => {
             console.log('HomeController running');
-            console.log('Redirecting to login');
-            $state.go('login')
         };
 
         main();

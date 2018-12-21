@@ -18,7 +18,6 @@
     ctrl.loginWithGoogle = async () => {
       try {
         await AuthService.loginWithGoogle();
-        console.log(AuthService.getCurrentUser());
         ctrl.onLogin();
       } catch (e) {
         console.log("Error ocurred")

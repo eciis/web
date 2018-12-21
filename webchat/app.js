@@ -140,11 +140,17 @@
         };
     });
 
+    app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
+        var ignored_routes = [
+            'login',
+        ];
 
-    const main = () => {
-        console.log("app running");
-    };
-
-     main();
-
+        $transitions.onStart({
+            to: function(state) {
+                return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
+            }
+        }, function(transition) {
+            $state.go("login");
+        });
+    });
 })();

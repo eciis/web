@@ -77,3 +77,9 @@ md-icon svg {
 login-card-footer {
   background-color: #E6E6E6;
 }
+
+@media screen and (max-width: 960px) {
+    img#login-logo {
+        width: 60%;
+    }
+}

@@ -468,9 +468,10 @@
       it('should set the hours of start time', () => {
         controller.event.start_time = new Date(2018, 12, 12);
         controller.createInitDate();
-        controller.startHour = new Date(2018,12,12, 9, 55);
+        controller.startHour = undefined;
         expect(controller.event.start_time.getHours()).not.toEqual(9);
         expect(controller.event.start_time.getMinutes()).not.toEqual(55);
+        controller.startHour = new Date(2018,12,12, 9, 55);
         controller.addStartHour();
         expect(controller.event.start_time.getHours()).toEqual(9);
         expect(controller.event.start_time.getMinutes()).toEqual(55);

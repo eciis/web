@@ -1,6 +1,7 @@
 .left-nav-container {
     display: grid;
     grid-template-columns: auto auto auto;
+    grid-template-rows: auto;
 }
 
 .left-nav-item {
@@ -17,4 +18,18 @@
     .left-nav-container {
         grid-template-columns: auto 70% auto;
     }
+}
+
+.left-nav-inner-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+}
+
+.left-nav-menu {
+    grid-column: 1;
+}
+
+.left-nav-content {
+    grid-column: 2;
 }

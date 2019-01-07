@@ -36,6 +36,9 @@
          * @return {Promise} Promise that when it is resolved it returns a boolean indicating whether or not it is enabled.
          */
         service.isEnabled = function isEnabled(featureName) {
+            if (!featureName)
+                throw new Error("Required param featureName");
+
             return service.getFeature(featureName).then(function(response) {
                 const feature = _.first(response);
                 const disableMobile = _.get(feature, 'enable_mobile') === 'DISABLED';

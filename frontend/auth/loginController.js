@@ -13,6 +13,14 @@
 
         var redirectPath = $stateParams.redirect;
 
+        /**
+         * Verify if the Auth Service is loading User.
+         * @returns {boolean} True if it is loading user, false if not.
+         */
+        loginCtrl.isLoadingUser = function () {
+            return AuthService.isLoadingUser;
+        };
+
         loginCtrl.loginWithGoogle = function loginWithGoogle() {
             var promise = AuthService.loginWithGoogle();
             promise.then(function success() {

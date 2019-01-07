@@ -126,8 +126,11 @@ describe('Test FeatureToggleService', function() {
             httpBackend.flush();
         });
 
-        it('Should be generated exception', function() {
-            expect(() => featureToggleService.isEnabled()).toThrow(new Error("Required param featureName"));
+        it('Should be generated exception', function(done) {
+            featureToggleService.isEnabled().catch(function(message) {
+                expect(message).toEqual("Required param featureName");
+                done();
+            });
         });
     });
 });

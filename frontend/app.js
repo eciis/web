@@ -505,7 +505,7 @@
         });
     });
 
-    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES) {
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES, MessageService) {
         
         $transitions.onBefore({
             to: function(state) {
@@ -524,6 +524,12 @@
                         "status": "403"
                     });
                 }
+            }).catch(function(message) {
+                MessageService.showToast(message);
+                return transition.router.stateService.target(STATES.ERROR, {
+                    "msg": "Desculpa! Este recurso ainda não está disponível.",
+                    "status": "403"
+                });
             });
         });
     });

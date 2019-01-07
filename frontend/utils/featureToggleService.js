@@ -37,7 +37,9 @@
          */
         service.isEnabled = function isEnabled(featureName) {
             if (!featureName)
-                throw new Error("Required param featureName");
+                return new Promise((resolve, reject) => {
+                    reject("Required param featureName");
+                });
 
             return service.getFeature(featureName).then(function(response) {
                 const feature = _.first(response);

@@ -17,6 +17,7 @@ from models import Post
 from models import Comment
 from models import Invite
 from models import Event
+from models import Feature
 from utils import NotAuthorizedException
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -36,6 +37,21 @@ TEXT = 'At vero eos et accusamus et iusto odio dignissimos \
         et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
         delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
         aut perferendis doloribus asperiores repellat.'
+
+features = [
+    {
+        "name": 'manage-inst-edit',
+        "enable_mobile": "DISABLED",
+        "enable_desktop": "ALL"
+    }
+]
+
+def reset_features():
+    features_query = Feature.query().fetch(keys_only=True)
+    ndb.delete_multi(features_query)
+
+    for feature in features:
+        Feature.create(**feature)
 
 
 def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
@@ -520,11 +536,20 @@ class ResetHandler(BaseHandler):
         splab.posts = []
         splab.put()
 
+        reset_features()
+
         jsonList.append({"msg": "database initialized with a few posts"})
 
         self.response.write(json.dumps(jsonList))
+
+class ResetFeaturesHandler(BaseHandler):
+    def get(self):
+        reset_features()
+        self.response.write({"msg": "database initialized with a few features"})
+
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
+    ('/admin/reset-features', ResetFeaturesHandler)
 ], debug=True)
 
 

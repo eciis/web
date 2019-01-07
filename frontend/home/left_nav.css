@@ -1,0 +1,20 @@
+.left-nav-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.left-nav-item {
+    grid-column: 2;
+}
+
+@media screen and (min-width: 1280px) and (max-width: 1919px) {
+    .left-nav-container {
+        grid-template-columns: auto 90% auto;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .left-nav-container {
+        grid-template-columns: auto 70% auto;
+    }
+}

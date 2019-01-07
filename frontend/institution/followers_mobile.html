@@ -1,0 +1,35 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+    md-colors="{background: 'grey-50'}">
+        <!-- CONTENT -->
+        <div flex="95" layout-align="center top" layout="row">
+            <div flex layout="column">
+                <div flex class="body">
+					<div layout-margin>
+						<form ng-submit="">
+							<md-input-container layout="row" class="md-icon-float">
+							<label>Buscar</label>
+							<input aria-label="Pesquisar por seguidor" class="md-icon-float" ng-model="followersCtrl.currentFollower">
+							<md-icon md-colors="{color: 'grey-500'}">search</md-icon>
+							</md-input-container>
+						</form>
+					</div>
+					<md-content flex class="custom-scrollbar">
+						<md-list flex>
+							<md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+							ng-repeat="follower in followersCtrl.followers | filter: followersCtrl.currentFollower" 
+							ng-click="followersCtrl.showUserProfile(follower.key, $event)" flex-xs>
+							<img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar" 
+								style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+							<div layout="column" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
+								<b style="position: relative; margin-top: 20px; font-size: 15px;">{{ follower.name }}</b>
+								<span style="position: relative; bottom: 20px; font-size: 15px;">{{ follower.email[0]}}</span>
+							</div>
+							</md-list-item>
+						</md-list>
+					</md-content>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

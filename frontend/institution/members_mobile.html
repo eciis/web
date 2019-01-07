@@ -1,0 +1,47 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+    md-colors="{background: 'grey-50'}">
+        <!-- CONTENT -->
+        <div flex="95" layout-align="center top" layout="row">
+            <div flex layout="column">
+                <div flex class="body">
+                    <h3 style="margin-top: 0.5em">ADMINISTRADOR</h3>
+					<div layout="row" style="margin-top: 1%; margin-bottom: 3%" 
+						md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  
+						<img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar"
+						style="width: 60px; height: 60px; margin-right: 2%; border-radius: 50%;"/>
+						<div layout="column" layout-align="center">
+							<b>{{ membersCtrl.institution.admin.name }}</b>
+							<span>{{ membersCtrl.institution.admin.email[0]}}</span>
+						</div>
+					</div>
+					<h3>CORPO TÉCNICO</h3>
+					<div layout-margin>
+						<form ng-submit="">
+							<md-input-container layout="row" class="md-icon-float">
+							<label>Buscar</label>
+							<input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="membersCtrl.currentMember">
+							<md-icon md-colors="{color: 'grey-500'}">search</md-icon>
+							</md-input-container>
+						</form>
+					</div>
+					<md-content flex class="custom-scrollbar">
+						<md-list flex>
+							<md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
+							ng-repeat="member in membersCtrl.members | filter: membersCtrl.currentMember" 
+							ng-click="membersCtrl.showUserProfile(member.key, $event)" flex-xs>
+							<img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" 
+								style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
+							<div layout="column" 
+								ng-click="membersCtrl.showUserProfile(member.key, $event)">
+								<b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
+								<span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
+							</div>
+							</md-list-item>
+						</md-list>
+					</md-content>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

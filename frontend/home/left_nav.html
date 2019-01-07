@@ -1,10 +1,6 @@
-<div class="left-nav-container">
-    <div class="left-nav-item left-nav-inner-container" md-colors="{background: 'grey-50'}">
-  
-      <!-- LEFT SIDE PANEL -->
-      <side-menu type="HOME" class="left-nav-menu"></side-menu>
-  
-      <!-- CONTENT -->
-      <div ui-view="user_content" class="left-nav-content"></div>
+<div flex="100" layout="row" layout-align="center">	
+    <div flex flex-lg="90" flex-gt-lg="70" layout="row"	md-colors="{background: 'grey-50'}">
+        <side-menu type="HOME" ></side-menu>
+        <div ui-view="user_content"></div>
     </div>
 </div>

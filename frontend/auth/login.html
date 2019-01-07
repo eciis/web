@@ -21,11 +21,12 @@
                 <input type="password" name="password" ng-model="loginCtrl.user.password"
                   class="custom-card-input" required="true"  minlength="6" aria-label="Senha">
               </md-input-container>
-              <div layout="row" layout-align-xs="center center" layout-align="end center">
-                <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+              <div layout="row" layout-align-xs="center center" layout-align="end center" ng-if="!loginCtrl.isLoadingUser()">
+                <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}" >
                   Acessar
                 </md-button>
               </div>
+              <load-circle ng-if="loginCtrl.isLoadingUser()"></load-circle>
             </form>
 
             <md-button layout="row" layout-align="start center" class="login-btn"

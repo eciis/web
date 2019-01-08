@@ -24,7 +24,7 @@
             $mdSidenav('sideMenu').close();
         };
 
-        smItemCtrl.show = item => {
+        smItemCtrl.show = _ => {
             return smItemCtrl.item.showIf ? smItemCtrl.item.showIf() : true; 
         };
     };

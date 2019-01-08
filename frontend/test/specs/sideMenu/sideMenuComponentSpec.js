@@ -1,6 +1,6 @@
 "use strict";
 
-(describe("SideMenuComponent tests", () => {
+(describe("SideMenuComponent", () => {
 
     let componentController, authService, states, state, rootScope, 
      homeItemsFactory, manageInstItemsFactory, institutionService,
@@ -185,34 +185,6 @@
                 sideMenuCtrl.type = HOME_TYPE;
                 sideMenuCtrl.onClickImage();
                 expect(state.go).not.toHaveBeenCalled();
-            });
-        });
-
-        describe('getSelectedClass', () => {
-            it(`should return the selected state when the
-                selected item matchs the current state`, () => {
-                state.current.name = states.HOME;
-                expect(sideMenuCtrl.getSelectedClass("HOME")).toBe("selected");
-            });
-
-            it(`should return an empty string when the
-                the current item does not match the current state`, () => {
-                state.current.name = states.HOME;
-                expect(sideMenuCtrl.getSelectedClass("MANAGE_INST")).toBe("");
-            });
-        });
-
-        describe('show()', () => {
-            it('should call the showIf function when it is defined', () => {
-                const item = {showIf: () => true};
-                spyOn(item, 'showIf');
-                sideMenuCtrl.show(item);
-                expect(item.showIf).toHaveBeenCalled();
-            });
-
-            it('should return true when the showIf function is not defined', () => {
-                const item = {showIf: undefined};
-                expect(sideMenuCtrl.show(item)).toBe(true);
             });
         });
 

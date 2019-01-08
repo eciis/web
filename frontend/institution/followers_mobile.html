@@ -5,6 +5,7 @@
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
                 <div flex class="body">
+                    <h3 class="followers-title">Seguidores</h3>
 					<div layout-margin>
 						<form ng-submit="">
 							<md-input-container layout="row" class="md-icon-float">
@@ -14,19 +15,15 @@
 							</md-input-container>
 						</form>
 					</div>
-					<md-content flex class="custom-scrollbar">
-						<md-list flex>
-							<md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
-							ng-repeat="follower in followersCtrl.followers | filter: followersCtrl.currentFollower" 
-							ng-click="followersCtrl.showUserProfile(follower.key, $event)" flex-xs>
-							<img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar" 
-								style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-							<div layout="column" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
-								<b style="position: relative; margin-top: 20px; font-size: 15px;">{{ follower.name }}</b>
-								<span style="position: relative; bottom: 20px; font-size: 15px;">{{ follower.email[0]}}</span>
+					<md-content>
+						<div class="followers-grid"
+							ng-repeat="follower in followersCtrl.followers | filter: followersCtrl.currentFollower | orderBy: 'name'"
+							ng-click="followersCtrl.showUserProfile(follower.key, $event)">
+							<img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar follower-img"/>
+							<div class="follower-name" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
+								<p >{{ follower.name }}</p>
 							</div>
-							</md-list-item>
-						</md-list>
+                        </div>
 					</md-content>
                 </div>
             </div>

@@ -5,17 +5,17 @@
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
                 <div flex class="body">
-                    <h3 style="margin-top: 0.5em">ADMINISTRADOR</h3>
-					<div layout="row" style="margin-top: 1%; margin-bottom: 3%" 
-						md-colors="{background: 'grey-300'}" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">  
-						<img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}" class="md-avatar"
-						style="width: 60px; height: 60px; margin-right: 2%; border-radius: 50%;"/>
-						<div layout="column" layout-align="center">
-							<b>{{ membersCtrl.institution.admin.name }}</b>
-							<span>{{ membersCtrl.institution.admin.email[0]}}</span>
-						</div>
-					</div>
-					<h3>CORPO TÉCNICO</h3>
+                    <h3 class="members-title">Administrador</h3>
+                    <md-content>
+                        <div class="members-grid" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+                            <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
+                            class="md-avatar member-img"/>
+                            <div class="member-name">
+                                <p>{{ membersCtrl.institution.admin.name }}</p>
+                            </div>
+                        </div>
+                    </md-content>
+					<h3 class="members-title">Membros</h3>
 					<div layout-margin>
 						<form ng-submit="">
 							<md-input-container layout="row" class="md-icon-float">
@@ -25,20 +25,16 @@
 							</md-input-container>
 						</form>
 					</div>
-					<md-content flex class="custom-scrollbar">
-						<md-list flex>
-							<md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}"
-							ng-repeat="member in membersCtrl.members | filter: membersCtrl.currentMember" 
-							ng-click="membersCtrl.showUserProfile(member.key, $event)" flex-xs>
-							<img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" 
-								style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-							<div layout="column" 
-								ng-click="membersCtrl.showUserProfile(member.key, $event)">
-								<b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
-								<span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
-							</div>
-							</md-list-item>
-						</md-list>
+					<md-content>
+                        <div class="members-grid"
+                            ng-repeat="member in membersCtrl.members | filter: membersCtrl.currentMember | orderBy: 'name'"
+                            ng-click="membersCtrl.showUserProfile(member.key, $event)">
+                            <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar member-img"/>
+                            <div class="member-name"
+                                ng-click="membersCtrl.showUserProfile(member.key, $event)">
+                                <p>{{ member.name }}</p>
+                            </div>
+                        </div>
 					</md-content>
                 </div>
             </div>

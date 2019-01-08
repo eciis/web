@@ -16,8 +16,8 @@
 
         const smItemCtrl = this;
 
-        smItemCtrl.getSelectedClass = stateName => {
-            return $state.current.name === STATES[stateName] ? "selected" : "";
+        smItemCtrl.getSelectedClass = _ => {
+            return $state.current.name === STATES[smItemCtrl.item.stateName] ? "selected" : "";
         };
 
         smItemCtrl.close = () => {

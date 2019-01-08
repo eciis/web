@@ -1,12 +1,12 @@
 'use strict';
 
 (function() {
-    var app = angular.module("webchat");
+    const app = angular.module("webchat");
 
     app.service("MessageService", function MessageService($mdToast, $mdDialog) {
-        var service = this;
+        const service = this;
 
-        var msg = {
+        const msg = {
             "auth/email-already-in-use": "Email informado já está cadastrado.",
             "auth/wrong-password": "Senha incorreta ou usuário não possui senha.",
             "auth/user-not-found": "Usuário não existe.",
@@ -59,7 +59,7 @@
         }
 
         service.showConfirmationDialog = function showConfirmationDialog(event, title, textContent) {
-            var confirm = $mdDialog.confirm()
+            const confirm = $mdDialog.confirm()
                 .clickOutsideToClose(true)
                 .title(title)
                 .textContent(textContent)

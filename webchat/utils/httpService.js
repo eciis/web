@@ -1,16 +1,16 @@
 'use strict';
 
 (function () {
-    var app = angular.module('webchat');
+    const app = angular.module('webchat');
 
-    app.service('HttpService', function HttpService($http, $q) {
-        var service = this;
+    app.service('HttpService', function HttpService($http) {
+        const service = this;
 
-        var POST = 'POST';
-        var GET = 'GET';
-        var PUT = 'PUT';
-        var DELETE = 'DELETE';
-        var PATCH = 'PATCH';
+        const POST = 'POST';
+        const GET = 'GET';
+        const PUT = 'PUT';
+        const DELETE = 'DELETE';
+        const PATCH = 'PATCH';
 
         service.get = function getMethod(url) {
             return request(GET, url);
@@ -33,20 +33,11 @@
         };
 
         function request(method, url, data) {
-            var deferred = $q.defer();
-
-            $http({
+            return $http({
                 method: method,
                 url: url,
                 data: data
-            }).then(function success(response) {
-                deferred.resolve(response.data);
-            }, function error(response) {
-                //MessageService.showToast(response.data.msg);
-                deferred.reject(response);
             });
-
-            return deferred.promise;
         }
     });
 })();

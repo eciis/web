@@ -162,7 +162,7 @@
 
             executeLogoutListeners();
 
-            $state.go("signin");
+            $state.go("login");
         };
 
         service.getCurrentUser = function getCurrentUser() {

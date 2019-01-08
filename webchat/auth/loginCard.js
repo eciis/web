@@ -1,7 +1,7 @@
 'use strict';
 
 (function() {
-  function LoginCardController(AuthService) {
+  function LoginCardController(AuthService, MessageService) {
     const ctrl = this;
     ctrl.user = {};
 
@@ -10,8 +10,7 @@
         await AuthService.loginWithEmailAndPassword(ctrl.user.email, ctrl.user.password);
         ctrl.onLogin();
       } catch (e) {
-        console.log("Error ocurred")
-        console.log(e)
+        MessageService.showToast(e);
       }
     }
 
@@ -20,8 +19,7 @@
         await AuthService.loginWithGoogle();
         ctrl.onLogin();
       } catch (e) {
-        console.log("Error ocurred")
-        console.log(e)
+        MessageService.showToast(e);
       }
     }
 

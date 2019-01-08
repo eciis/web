@@ -1,13 +1,13 @@
 (function() {
     'use strict';
 
-    var app = angular.module("webchat");
+    const app = angular.module("webchat");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService, PushNotificationService) {
-        var service = this;
+    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService) {
+        const service = this;
 
-        var authObj = firebase.auth();
-        var userInfo;
+        const authObj = firebase.auth();
+        let userInfo;
         let tokenLoaded = false;
         let resolveTokenPromise;
         let loadTokenPromise;
@@ -65,9 +65,9 @@
         /**
         * Store listeners to be executed when user logout is called.
         */
-        var onLogoutListeners = [];
+        let onLogoutListeners = [];
 
-        var versionAvailable = false;
+        let versionAvailable = false;
 
         Object.defineProperty(service, 'user', {
             get: function() {
@@ -93,8 +93,8 @@
         };
 
         service.setupUser = function setupUser(idToken, emailVerified) {
-            var deferred = $q.defer();
-            var firebaseUser = {
+            const deferred = $q.defer();
+            const firebaseUser = {
                 accessToken : idToken,
                 emailVerified: emailVerified
             };
@@ -120,9 +120,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            return PushNotificationService.requestNotificationPermission(service.getCurrentUser()).finally(() => {
                                 return userInfo;
-                            });
                         });
                     });
                 } else {
@@ -141,7 +139,7 @@
         };
 
         service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
-            var deferred = $q.defer();
+            const deferred = $q.defer();
             authObj.createUserWithEmailAndPassword(email, password).then(function(response) {
                 let user = response.user;
                 var idToken = user.toJSON().stsTokenManager.accessToken;
@@ -183,7 +181,7 @@
         };
 
         service.reload = function reload() {
-            var deferred = $q.defer();
+            const deferred = $q.defer();
             UserService.load().then(function success(userLoaded) {
                 service.updateUser(userLoaded);
                 service.save();
@@ -200,7 +198,7 @@
         };
 
         service.sendEmailVerification = function sendEmailVerification(user) {
-            var auth_user = user || authObj.currentUser;
+            const auth_user = user || authObj.currentUser;
             auth_user.sendEmailVerification().then(
             function success() {
                 $state.go("email_verification");
@@ -241,7 +239,7 @@
 
         function init() {
             if ($window.localStorage.userInfo) {
-                var parse = JSON.parse($window.localStorage.userInfo);
+                const parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
             }
         }

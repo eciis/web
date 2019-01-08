@@ -1,16 +1,12 @@
-<div style="padding: 16px;" md-colors="{background: 'teal-900'}">
-    <img style="height: 35px;" src="app/images/logo.png"/>
+<div class="content" md-colors="{background: 'teal-900'}">
+    <img src="app/images/logo.png"/>
 </div>
 <div>
-    <div style="
-    display: grid; 
-    grid-template-columns: auto auto;
-    justify-content: center;
-    grid-gap: 10px;">
+    <div class="toggle-content">
         <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
             Gerenciar instituição
         </md-switch>
-        <md-select style="margin: 16px 0;" ng-model="oi" placeholder="Permissão" class="md-no-underline">
+        <md-select ng-model="oi" placeholder="Permissão" class="md-no-underline">
             <md-option value="ALL">ALL</md-option>
             <md-option value="ADMIN">ADMIN</md-option>
             <md-option value="SUPER USER">SUPER USER</md-option>

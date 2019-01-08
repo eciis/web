@@ -4,7 +4,5 @@
 
     app.controller('SigninController', function() {
         const signinCtrl = this;
-
-
     });
 })();

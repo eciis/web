@@ -1,0 +1,18 @@
+.content {
+    padding: 16px;
+}
+
+.content > img {
+    height: 35px;
+}
+
+.toggle-content {
+    display: grid; 
+    grid-template-columns: auto auto;
+    justify-content: center;
+    grid-gap: 10px;
+}
+
+.toggle-content > md-select {
+    margin: 16px 0;
+}

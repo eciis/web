@@ -142,7 +142,7 @@
             const deferred = $q.defer();
             authObj.createUserWithEmailAndPassword(email, password).then(function(response) {
                 let user = response.user;
-                var idToken = user.toJSON().stsTokenManager.accessToken;
+                const idToken = user.toJSON().stsTokenManager.accessToken;
                 service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
                     service.sendEmailVerification();
                     deferred.resolve(userInfo);

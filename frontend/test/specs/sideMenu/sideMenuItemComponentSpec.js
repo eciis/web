@@ -1,6 +1,6 @@
 "use strict";
 
-(describe("SideMenuItemComponent", () => {
+(fdescribe("SideMenuItemComponent", () => {
 
     let componentController, states, state, rootScope, smItemCtrl, scope, item;
 
@@ -9,7 +9,7 @@
         item = {
             icon: 'some icon',
             description: 'some description',
-            stateName: 'some state',
+            stateName: 'HOME',
             onClick: () => {},
             showIf: () => true
         };
@@ -35,13 +35,15 @@
             it(`should return the selected state when the
                 selected item matchs the current state`, () => {
                 state.current.name = states.HOME;
-                expect(smItemCtrl.getSelectedClass("HOME")).toBe("selected");
+                expect(smItemCtrl.item.stateName).toBe("HOME");
+                expect(smItemCtrl.getSelectedClass()).toBe("selected");
             });
 
             it(`should return an empty string when the
                 the current item does not match the current state`, () => {
-                state.current.name = states.HOME;
-                expect(smItemCtrl.getSelectedClass("MANAGE_INST")).toBe("");
+                state.current.name = states.MANAGE_INST;
+                expect(smItemCtrl.item.stateName).toBe("HOME");
+                expect(smItemCtrl.getSelectedClass()).toBe("");
             });
         });
 

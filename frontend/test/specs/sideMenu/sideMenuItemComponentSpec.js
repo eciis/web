@@ -1,6 +1,6 @@
 "use strict";
 
-(fdescribe("SideMenuItemComponent", () => {
+(describe("SideMenuItemComponent", () => {
 
     let componentController, states, state, rootScope, smItemCtrl, scope, item;
 

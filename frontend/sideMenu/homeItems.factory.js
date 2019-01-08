@@ -26,11 +26,13 @@
 
         factory.getItems = user => {
             const institutionKey = user.current_institution.key;
+            const isNotMobileScreen = window.screen >= 600;
             return [
                 {
                     icon: 'home',
                     description: 'Início',
                     stateName: 'HOME',
+                    showIf: () => isNotMobileScreen,
                     onClick: () => $state.go(STATES.HOME)
                 },
                 {
@@ -65,21 +67,21 @@
                     icon: 'account_circle',
                     description: 'Gerenciar Membros',
                     stateName: 'MANAGE_INST_MEMBERS',
-                    showIf: () => user.isAdminOfCurrentInst(),
+                    showIf: () => user.isAdminOfCurrentInst() && isNotMobileScreen,
                     onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey}),
                 },
                 {
                     icon: 'account_balance',
                     description: 'Vínculos Institucionais',
                     stateName: 'MANAGE_INST_INVITE_INST',
-                    bottomDivider: true,
-                    showIf: () => user.isAdminOfCurrentInst(),
+                    showIf: () => user.isAdminOfCurrentInst() && isNotMobileScreen,
                     onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey}),
                 },
                 {
                     icon: 'account_balance',
                     description: 'Instituições cadastradas',
                     stateName: 'USER_INSTITUTIONS',
+                    topDivider: true,
                     onClick: () => $state.go(STATES.USER_INSTITUTIONS)
                 },
                 {

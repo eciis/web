@@ -12,8 +12,8 @@
         }
     });
 
-    function sideMenuController(AuthService, STATES, $state, $mdSidenav, 
-        $mdDialog, HomeItemsFactory, ManageInstItemsFactory, InstitutionService, SideMenuTypes) {
+    function sideMenuController(AuthService, STATES, $state, $mdDialog, MessageService,
+        HomeItemsFactory, ManageInstItemsFactory, InstitutionService, SIDE_MENU_TYPES) {
         
         const sideMenuCtrl = this;
 
@@ -25,7 +25,7 @@
         
         const setup = () => {
             switch(sideMenuCtrl.type) {
-                case SideMenuTypes.HOME: setupHomeMenu(); break;
+                case SIDE_MENU_TYPES.HOME: setupHomeMenu(); break;
                 default: setupIntitutionMenu();
             }
         };
@@ -40,6 +40,9 @@
             .then(inst => {
                 sideMenuCtrl.entity = new Institution(inst);
                 setItems();
+            })
+            .catch(err => {
+                MessageService.showToast("Um erro ocorreu. Não foi possível carregar a instituição.");
             });
         };
 
@@ -49,8 +52,8 @@
         
         const getFactory = () => {
             switch(sideMenuCtrl.type){
-                case SideMenuTypes.HOME: return HomeItemsFactory;
-                case SideMenuTypes.MANAG_INSTITUTION: return ManageInstItemsFactory;
+                case SIDE_MENU_TYPES.HOME: return HomeItemsFactory;
+                case SIDE_MENU_TYPES.MANAG_INSTITUTION: return ManageInstItemsFactory;
             }
         };
 
@@ -61,7 +64,7 @@
         sideMenuCtrl.getImage = () => {
             const instAvatar = '/app/images/institution.png';
             const userAvatar = '/app/images/avatar.png';
-            const defaultImage = sideMenuCtrl.isType(SideMenuTypes.HOME) ? userAvatar : instAvatar;
+            const defaultImage = sideMenuCtrl.isType(SIDE_MENU_TYPES.HOME) ? userAvatar : instAvatar;
             return sideMenuCtrl.entity ? sideMenuCtrl.entity.photo_url : defaultImage;
         };
 
@@ -70,11 +73,11 @@
         };
 
         sideMenuCtrl.onClickTitle = () => {
-            if(sideMenuCtrl.isType(SideMenuTypes.MANAG_INSTITUTION)) goToInstitution();
+            if(sideMenuCtrl.isType(SIDE_MENU_TYPES.MANAG_INSTITUTION)) goToInstitution();
         };
 
         sideMenuCtrl.onClickImage = () => {
-            if(sideMenuCtrl.isType(SideMenuTypes.MANAG_INSTITUTION)) goToInstitution();
+            if(sideMenuCtrl.isType(SIDE_MENU_TYPES.MANAG_INSTITUTION)) goToInstitution();
         };
 
         const goToInstitution = () => {

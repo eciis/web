@@ -78,7 +78,7 @@ login-card-footer {
   background-color: #E6E6E6;
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 400px) {
   img#login-logo {
     width: 50%;
   }

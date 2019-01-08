@@ -5,10 +5,10 @@
 
     app.service('ManageTogglesService', function($http) {
         const service = this;
-        const uri = 'api/feature-toggles';
+        const URI = 'api/feature-toggles';
 
         service.getAllFeatureToggles = function() {
-            return $http.get(uri).then(function(response) {
+            return $http.get(URI).then(function(response) {
                 return response.data;
             });
         };

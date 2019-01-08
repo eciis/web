@@ -20,19 +20,20 @@
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
         $stateProvider
-            .state("main", {
-                abstract: true,
+            .state("signin", {
+                url: "/signin",
                 views: {
                     main: {
-                        templateUrl: "app/main/main.html",
-                        controller: "MainController as mainCtrl"
+                        templateUrl: "app/signin/signin.html",
+                        controller: "SigninController as signinCtrl"
                     }
                 }
             }).state("manage-features", {
                 url: "/",
                 views: {
-                    content: {
-                        templateUrl: "app/manage/manage-toggles.html"
+                    main: {
+                        templateUrl: "app/manage/manage-toggles.html",
+                        constroller: "ManageTogglesController as ManageTogglesCtrl"
                     }
                 }
             });
@@ -40,5 +41,6 @@
         $urlRouterProvider.otherwise("/");
 
         $locationProvider.html5Mode(true);
+        
     });
 })();

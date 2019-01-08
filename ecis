@@ -227,7 +227,7 @@ case "$1" in
         set_landingpage_url local $LANDINGPAGE_LOCAL
         set_support_url local $SUPPORT_LOCAL
         set_frontend_url local $FRONTEND_LOCAL
-        set_feature_url local $FRONTEND_LOCAL
+        set_feature_url local $FEATURE_LOCAL
 
         if [[ -n $2 ]] && [ $2 = "--enable_datastore_emulator" ] ; then
             gcloud beta emulators datastore start --host-port=0.0.0.0:8586 &
@@ -311,14 +311,14 @@ case "$1" in
                     APP_NAME="development-cis"
                     SUPPORT_DOMAIN="support-dot-$APP_NAME.appspot.com"
                     FRONTEND_DOMAIN="frontend-dot-$APP_NAME.appspot.com"
-                    FEATURE_DOMAIN="frontend-dot-$APP_NAME.appspot.com"
+                    FEATURE_DOMAIN="feature-dot-$APP_NAME.appspot.com"
                     break
                     ;;
                 "eciis-splab")
                     APP_NAME="eciis-splab"
                     SUPPORT_DOMAIN="support.plataformacis.org"
                     FRONTEND_DOMAIN="frontend.plataformacis.org"
-                    FEATURE_DOMAIN="frontend.plataformacis.org"
+                    FEATURE_DOMAIN="feature.plataformacis.org"
                     break
                     ;;
                 "Other")

@@ -7,7 +7,7 @@
         const service = this;
         const uri = 'api/feature-toggles';
 
-        service.getFeatureToggles = function() {
+        service.getAllFeatureToggles = function() {
             return $http.get(uri).then(function(response) {
                 return response.data;
             });

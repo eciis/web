@@ -3,8 +3,19 @@
     
     var app = angular.module('app');
 
-    app.service('HttpService', function HttpService($http, $q, MessageService) {
+    app.service('HttpService', function HttpService($http, $q) {
         var service = this;
+
+        service.showToast = function showToast(message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
+        };
 
         var POST = 'POST';
         var GET = 'GET';
@@ -42,7 +53,7 @@
             }).then(function success(response) {
                 deferred.resolve(response.data);
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                service.showToast(response.data.msg);
                 deferred.reject(response);
             });
 

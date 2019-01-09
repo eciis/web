@@ -4,7 +4,7 @@
     var app = angular.module("app");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, STATES) {
+        $mdToast) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -84,6 +84,17 @@
             }
         });
 
+        service.showToast = function showToast(message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
+        };
+
         // It receives the app version and verify if it matches with
         // the actual frontend version, setting up the private variable
         // versionAvailable with true, if matches, or false, otherwise.
@@ -114,7 +125,7 @@
                 configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
-                MessageService.showToast(error);
+                service.showToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -155,7 +166,7 @@
 
             executeLogoutListeners();
 
-            $state.go(STATES.SIGNIN);
+            $state.go("signin");
         };
 
         service.getCurrentUser = function getCurrentUser() {

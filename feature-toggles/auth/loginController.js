@@ -12,12 +12,23 @@
 
         var redirectPath = $stateParams.redirect;
 
+        loginCtrl.showToast = function showToast(message) {
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
+        };
+
         loginCtrl.loginWithGoogle = function loginWithGoogle() {
             var promise = AuthService.loginWithGoogle();
             promise.then(function success() {
                 redirectTo(redirectPath);
             }).catch(function(error) {
-                MessageService.showToast(error);
+                loginCtrl.showToast(error);
             });
             return promise;
         };
@@ -32,7 +43,7 @@
                     redirectTo(redirectPath);
                 }
             ).catch(function(error) {
-                MessageService.showToast(error);
+                loginCtrl.showToast(error);
             });
         };
 
@@ -56,13 +67,13 @@
             if (path) {
                 window.location.pathname = path;
             } else {
-                $state.go(STATES.HOME);
+                $state.go("manage-features");
             }
         }
 
         (function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go(STATES.HOME);
+                $state.go("manage-features");
             }
         })();
     });

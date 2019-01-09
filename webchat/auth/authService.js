@@ -124,7 +124,6 @@
                         });
                     });
                 } else {
-                    service.sendEmailVerification(user);
                     throw "Error! Email not verified.";
                 }
             });
@@ -136,22 +135,6 @@
 
         service.loginWithEmailAndPassword = function loginWithEmailAndPassword(email, password) {
             return login(authObj.signInWithEmailAndPassword(email, password));
-        };
-
-        service.signupWithEmailAndPassword = function signupWithEmailAndPassword(email, password) {
-            const deferred = $q.defer();
-            authObj.createUserWithEmailAndPassword(email, password).then(function(response) {
-                let user = response.user;
-                const idToken = user.toJSON().stsTokenManager.accessToken;
-                service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                    service.sendEmailVerification();
-                    deferred.resolve(userInfo);
-                });
-            }).catch(function(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
         };
 
         service.logout = function logout() {
@@ -178,33 +161,6 @@
 
         service.save = function() {
             $window.localStorage.userInfo = JSON.stringify(userInfo);
-        };
-
-        service.reload = function reload() {
-            const deferred = $q.defer();
-            UserService.load().then(function success(userLoaded) {
-                service.updateUser(userLoaded);
-                service.save();
-                deferred.resolve(userInfo);
-            }, function error(error) {
-                MessageService.showToast(error);
-                deferred.reject(error);
-            });
-            return deferred.promise;
-        };
-
-        service.updateUser = function updateUser(data){
-            return Object.assign(userInfo, data);
-        };
-
-        service.sendEmailVerification = function sendEmailVerification(user) {
-            const auth_user = user || authObj.currentUser;
-            auth_user.sendEmailVerification().then(
-            function success() {
-                $state.go("email_verification");
-            }, function error(error) {
-                console.error(error);
-            });
         };
 
         service.resetPassword = function resetPassword(email) {

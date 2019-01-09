@@ -24,8 +24,8 @@
                 url: "/signin",
                 views: {
                     main: {
-                        templateUrl: "app/signin/signin.html",
-                        controller: "SigninController as signinCtrl"
+                        templateUrl: "app/auth/login.html",
+                        controller: "LoginController as loginCtrl"
                     }
                 }
             }).state("manage-features", {

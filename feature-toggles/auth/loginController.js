@@ -2,7 +2,7 @@
     'use strict';
     const app = angular.module('app');
 
-    app.controller('SigninController', function() {
-        const signinCtrl = this;
+    app.controller('LoginController', function() {
+        const loginCtrl = this;
     });
 })();

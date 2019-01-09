@@ -17,9 +17,10 @@
         <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.2.1/firebaseui.css" />
 
         <link type="text/css" rel="stylesheet" href="app/manage/manage-toggles.css" />
+        <link type="text/css" rel="stylesheet" href="app/auth/login.css" />
     </head>
     <body ng-app="app" ng-cloak>
-        <div style="height: 100%; width: 100%;" layout="column" ui-view="main"></div>
+        <div style="height: 100%; width: 100%;" ui-view="main"></div>
 
         <!-- Angular Material requires Angular.js Libraries -->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
@@ -35,14 +36,18 @@
         <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
 
         <!-- Firebase -->
-        <!-- <script src="app/firebase-config.js"></script> -->
+        <script src="app/firebase-config.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-auth.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-database.js"></script>
+        <script>
+            // Initialize the Firebase SDK
+            var firebaseConfig = FIREBASE_CONFIG;
+            firebase.initializeApp(firebaseConfig);
+        </script>
 
         <script src="app/app.js"></script>
 
-        <script src="app/signin/signinController.js"></script>
+        <script src="app/auth/loginController.js"></script>
         <script src="app/manage/manageToggles.js"></script>
     </body>
 </html>

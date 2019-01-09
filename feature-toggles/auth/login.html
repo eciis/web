@@ -1,0 +1,48 @@
+<div class="login-content" md-colors="{background: 'teal-500'}">
+        <div id="login-container" ng-if="!loginCtrl.isRequestInvite">
+            <md-button class="md-fab md-primary custom-card-back-btn" aria-label="Voltar" hide-xs 
+              md-colors="{background: 'light-green-600'}" ng-click="loginCtrl.goToLandingPage()">
+              <md-icon>keyboard_arrow_left</md-icon>
+            </md-button>
+            
+            <div class="login-card">
+              <div id="form-content">
+                <div class="custom-card-content login-card-content">
+                  <img id="login-logo" class="custom-card-logo" src="/app/images/logowithname.png"/>
+                  
+                  <form class="login-form" ng-submit="loginCtrl.loginWithEmailPassword()">
+                    <md-input-container class="md-block custom-card-input-container">
+                      <label>Email</label>
+                      <input type="email" name="email" ng-model="loginCtrl.user.email" 
+                        class="custom-card-input" required="true" aria-label="Email">
+                    </md-input-container>
+                    <md-input-container class="md-block custom-card-input-container">
+                      <label>Senha</label>
+                      <input type="password" name="password" ng-model="loginCtrl.user.password"
+                        class="custom-card-input" required="true"  minlength="6" aria-label="Senha">
+                    </md-input-container>
+                    <div layout="row" layout-align-xs="center center" layout-align="end center">
+                      <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+                        Acessar
+                      </md-button>
+                    </div>
+                  </form>
+      
+                  <md-button layout="row" layout-align="start center" class="login-btn"
+                    ng-click="loginCtrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
+                    <md-icon md-svg-src="/app/icons/google-icon.svg" id="login-google-icon"></md-icon>
+                    <span>ACESSE COM GOOGLE</span>
+                  </md-button>
+                </div>
+              </div>
+             
+              <div class="login-card-footer">
+                <md-card-actions layout="row" layout-align="start center">
+                  <md-button md-colors="{color: 'teal-500'}" ng-click="loginCtrl.resetPassword()">
+                    Esqueceu a senha?
+                  </md-button>
+                </md-card-actions>
+              </div>
+            </div>
+        </div>
+      </div>

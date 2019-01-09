@@ -1,5 +1,5 @@
-<md-sidenav class="md-sidenav-left side-menu" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
-    <md-content class="hide-scrollbar" md-colors="{background: 'grey-100'}">
+<md-sidenav class="md-sidenav-left side-menu hide-scrollbar" md-component-id="sideMenu" md-whiteframe="4" md-is-locked-open="$mdMedia('gt-sm')">
+    <md-content>
         <!-- Menu header -->
         <div class="card hovercard" md-colors="{background: sideMenuCtrl.getProfileColor(800)}">
             <div class="cardheader">
@@ -36,10 +36,6 @@
             </div>
         </div>
         <!-- Menu items -->
-        <md-menu>
-            <md-menu-content width="4" md-colors="{background: 'grey-100'}">
-                <side-menu-item ng-repeat="item in sideMenuCtrl.items track by $id(item)" item="item"></side-menu-item>
-            </md-menu-content>
-        </md-menu>
+        <side-menu-item ng-repeat="item in sideMenuCtrl.items track by $id(item)" item="item"></side-menu-item>
     </md-content>
 </md-sidenav>

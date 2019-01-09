@@ -7,23 +7,42 @@
                     ng-click="institutionCtrl.goToHome()">
                     <md-icon class="icon-button-menu-inst">arrow_back</md-icon>
                 </md-button>
-                <md-button class="md-icon-button cover-photo-button button-navbar-inst"
+                <md-button class="cover-photo-button button-navbar-inst"
                     id="btn-description" ng-click="null">
-                    DESCRIÇÃO
+                    <b>DESCRIÇÃO</b>
                 </md-button>
-                <md-button class="md-icon-button cover-photo-button button-navbar-inst" 
-                    id="btn-follow" ng-click="null">
-                    SEGUIR
-                </md-button>
-                <md-button class="md-icon-button cover-photo-button button-navbar-inst"
-                    id="btn-more" ng-click="null">
-                    <md-icon class="icon-button-menu-inst">more_vert</md-icon>
-                </md-button>
-                <!-- <md-button style="position: relative; z-index:3" class="md-icon-button cover-photo-button" ng-model="institutionCtrl.file" ngf-pattern="'image/*'"
-                    ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)"
-                    ng-click="null">
-                    <md-icon>add_a_photo</md-icon>
-                </md-button> -->
+                <div>
+                    <md-button class="cover-photo-button button-navbar-inst" ng-if="institutionCtrl.isUserFollower"
+                    ng-click=" institutionCtrl.unfollow()" id="btn-unfollow">
+                            <b>SEGUINDO</b>
+                    </md-button>
+                    <md-button class="cover-photo-button button-navbar-inst" ng-if="!institutionCtrl.isUserFollower"
+                        ng-click="institutionCtrl.follow()"
+                        id="btn-follow"> <b>SEGUIR</b>
+                    </md-button>
+                </div>
+                <md-menu style="overflow:hidden">
+                    <md-button class="md-icon-button cover-photo-button button-navbar-inst"
+                        ng-mouseenter="$mdMenu.open()" id="btn-more">
+                        <md-icon class="icon-button-menu-inst">more_vert</md-icon>
+                    </md-button>
+                    <md-menu-content width="3">
+                        <md-menu-item>
+                            <md-button ng-model="institutionCtrl.file" ngf-pattern="'image/*'"  ng-click="null"
+                            ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)">
+                                Adicionar capa
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                                ng-disabled="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)"
+                                ng-click="institutionCtrl.requestInvitation($event)">
+                                <span ng-if="!institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Solicitar vínculo</span>
+                                <span ng-if="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Vínculo pendente</span>
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
             </div>
             <div md-colors="{background: 'teal-500'}" id="image-cover-inst">
                 <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
@@ -37,27 +56,33 @@
                 </center>
                 <hr id="divider-institution"/>
                 <div id="buttons-institution-page">
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                        ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.institution.key)">
                         <md-icon class="icon-button-menu-inst">assignment</md-icon>
                         CADASTRO
                     </md-button>
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                        ng-click="institutionCtrl.goToLinks(institutionCtrl.institution.key)">
                         <md-icon class="icon-button-menu-inst">account_balance</md-icon>
                         VÍNCULOS
                     </md-button>
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                         ng-click="institutionCtrl.goToMembers(institutionCtrl.institution.key)">
                         <md-icon class="icon-button-menu-inst">account_circle</md-icon>
                         MEMBROS
                     </md-button>
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                        ng-click="institutionCtrl.portfolioDialog($event)">
                         <md-icon class="icon-button-menu-inst">description</md-icon>
                         PORTFOLIO
                     </md-button>
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                        ng-click="institutionCtrl.goToFollowers(institutionCtrl.institution.key)">
                         <md-icon class="icon-button-menu-inst">people</md-icon>
                         SEGUIDORES
                     </md-button>
-                    <md-button md-colors="{background: 'teal-500'}">
+                    <md-button md-colors="{background: 'teal-500'}"
+                        ng-click="institutionCtrl.goToEvents(institutionCtrl.institution.key)">
                         <md-icon class="icon-button-menu-inst">date_range</md-icon>
                         EVENTOS
                     </md-button>

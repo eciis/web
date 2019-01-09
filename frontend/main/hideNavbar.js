@@ -18,21 +18,20 @@
                 const hideBoth = attrs.hideNavbar === "both";
                 const hideBottom = attrs.hideNavbar === "bottom";
 
-                const STATES_WITHOUT_TOP_NAVBAR = [STATES.INST_TIMELINE];
+                const STATES_WITHOUT_TOP_NAVBAR = [STATES.INSTITUTION];
                 let isNotAllowedState;
 
                 if(Utils.isMobileScreen(450)){
                     if(!hideBottom){
                         isNotAllowedState  = STATES_WITHOUT_TOP_NAVBAR.reduce(function(acum, element){
                             if(acum) return acum;
-                            return element === $state.current.name;
+                            return (element === $state.current.name) || ($state.current.name).includes(element);
                         }, false);
     
                         if (isNotAllowedState){
                             topNavbar.style.display = 'none';
                         }
                         if(hideBoth) bottomNavbar.style.display = 'none';
-
                     }
                     
                     content.addEventListener('scroll', function() {

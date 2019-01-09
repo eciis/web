@@ -117,6 +117,7 @@ var Utils = {
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
 
+        if(!content) return;
         content.onscroll = function onscroll() {
             var screenPosition = content.scrollTop + content.offsetHeight;
             var maxHeight = content.scrollHeight;

@@ -40,7 +40,18 @@
     height: 0px;
     position: relative;
     display: grid;
-    grid-template-columns: 53px auto 107px 79px 48px;
+    grid-template-columns: 53px auto 107px 90px 48px;
+    align-items: center;
+}
+
+#btn-unfollow{
+    margin: 0px;
+    border: 1px solid;
+    border-radius: 3px 3px 3px 3px;
+    border-color: #84C45E;
+    color: #84C45E;
+    grid-column-start: 4;
+    height: 15px;
 }
 
 #btn-more{
@@ -48,6 +59,9 @@
 }
 
 #btn-follow{
+    grid-column-start: 4;
+}
+#btn-unfollow{
     grid-column-start: 4;
 }
 

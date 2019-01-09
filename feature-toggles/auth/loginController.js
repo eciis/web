@@ -3,7 +3,7 @@
     const app = angular.module('app');
 
     app.controller('LoginController', function(AuthService, $state, 
-        $stateParams, $window) {
+        $stateParams, $window, $mdToast) {
         const loginCtrl = this;
 
         loginCtrl.user = {};
@@ -49,10 +49,6 @@
 
         loginCtrl.redirect = function success() {
             redirectTo(redirectPath);
-        };
-
-        loginCtrl.resetPassword = function resetPassword(ev) {
-            $state.go(STATES.RESET_PASSWORD);
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {

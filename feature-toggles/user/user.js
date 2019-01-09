@@ -31,22 +31,6 @@ User.prototype.isMember = function isMember(institutionKey){
     return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
 };
 
-User.prototype.isValid = function isValid() {
-    if (_.isUndefined(this.name) || _.isEmpty(this.name)) {
-        return false;
-    }
-
-    if (_.isUndefined(this.email) || _.isEmpty(this.email)) {
-        return false;
-    }
-
-    var cpfNotNull = this.cpf !== null;
-    if (cpfNotNull && (_.isUndefined(this.cpf) || _.isEmpty(this.cpf))) {
-        return false;
-    }
-    return true;
-};
-
 User.prototype.isInactive = function isInactive() {
     var notActive = this.state != 'active';
     return notActive;

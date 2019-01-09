@@ -3,8 +3,7 @@
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        $mdToast) {
+    app.service("AuthService", function AuthService($state, $window, UserService) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -76,44 +75,13 @@
         */
         var onLogoutListeners = [];
 
-        var versionAvailable = false;
-
         Object.defineProperty(service, 'user', {
             get: function() {
                 return userInfo;
             }
         });
 
-        service.showToast = function showToast(message) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(message)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        };
-
-        // It receives the app version and verify if it matches with
-        // the actual frontend version, setting up the private variable
-        // versionAvailable with true, if matches, or false, otherwise.
-        service.setAppVersion = function setAppVersion(appVersion) {
-            if (appVersion) {
-                if (appVersion === Config.APP_VERSION) {
-                    versionAvailable = false;
-                } else {
-                    versionAvailable = true;
-                } 
-            }
-        };
-
-        service.newVersionAvailable = function newVersionAvailable() {
-            return versionAvailable;
-        };
-
         service.setupUser = function setupUser(idToken, emailVerified) {
-            var deferred = $q.defer();
             var firebaseUser = {
                 accessToken : idToken,
                 emailVerified: emailVerified
@@ -121,14 +89,10 @@
 
             userInfo = firebaseUser;
 
-            UserService.load().then(function success(userLoaded) {
+            return UserService.load().then(function success(userLoaded) {
                 configUser(userLoaded, firebaseUser);
-                deferred.resolve(userInfo);
-            }, function error(error) {
-                service.showToast(error);
-                deferred.reject(error);
+                return userInfo;
             });
-            return deferred.promise;
         };
 
         function login(loginMethodPromisse) {

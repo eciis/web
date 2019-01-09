@@ -1,20 +1,20 @@
 .followers-grid, .members-grid {
     display: grid;
-    grid-template-columns: 20% 15% auto;
-    grid-template-rows: 100%;
-    align-items: center;
-    margin: 0 0 0.8em 0;
+    grid-template-columns: 28% 70% auto;
+    grid-template-rows: 3em auto;
+    align-items: initial;
+    align-content: space-between;
+    margin: 0.3em 0 0.3em 0;
+    grid-row-gap: 0.2em;
 }
 
 .follower-img, .member-img {
-    grid-column-start: 2;
     width: 2.8em;
     height: 2.8em;
     border-radius: 50%
 }
 
 .follower-name, .member-name {
-    grid-column-start: 3;
     margin-left: 0.8em;
     font-size: 0.9em;
 }
@@ -22,4 +22,32 @@
 .followers-title, .members-title {
     text-align: center;
     font-weight: bold;
+}
+
+.follower-char-properties, .member-char-properties {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5em;;
+    font-weight: 1000;
+    font-size: 1.5em;
+    color: #746d6d;
+}
+
+.followers-grid-position, .members-grid-position {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.follower-char-position, .member-char-position {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.follower-position, .member-position {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.char-color {
+    color: #746d6d;
 }

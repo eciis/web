@@ -151,6 +151,10 @@
             return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
+        manageMemberCtrl.initialCharOfName = (user) => {
+            return user.name.toUpperCase().charAt(0);
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response;
@@ -170,8 +174,9 @@
 
         function getMembers() {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.members = response;
-                getAdmin();
+                manageMemberCtrl.members = Utils.isMobileScreen(475) ?
+                    Utils.groupUsersByInitialLetter(response) : response;
+                getAdmin(response);
                 manageMemberCtrl.isLoadingMembers = false;
             }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
@@ -185,8 +190,8 @@
             });
         }
 
-        function getAdmin() {
-            manageMemberCtrl.institution.admin = _.find(manageMemberCtrl.members, 
+        function getAdmin(members) {
+            manageMemberCtrl.institution.admin = _.find(members, 
                 function(member){
                     return member.key === manageMemberCtrl.institution.admin.key;
             });

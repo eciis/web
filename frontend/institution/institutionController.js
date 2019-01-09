@@ -382,12 +382,17 @@
 
         function getFollowers() {
             InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                followersCtrl.followers = response;
+                followersCtrl.followers = Utils.isMobileScreen(475) ?
+                    Utils.groupUsersByInitialLetter(response) : response;
                 followersCtrl.isLoadingFollowers = false;
             }, function error() {
                 followersCtrl.isLoadingFollowers = true;
             });
         }
+
+        followersCtrl.initialCharOfName = (user) => {
+            return user.name.toUpperCase().charAt(0);
+        };
 
         followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);

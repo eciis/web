@@ -3,7 +3,8 @@
 
     const app = angular.module("webchat");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService) {
+    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService,
+      User) {
         const service = this;
 
         const authObj = firebase.auth();

@@ -11,7 +11,7 @@
   app.constant('STATES', {
           abstract: 'webchat',
           home: `${rootName}.home`,
-          call: `${rootName}.chat`,
+          chat: `${rootName}.chat`,
           login: 'login',
       });
 

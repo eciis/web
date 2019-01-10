@@ -114,7 +114,7 @@
         };
 
         institutionCtrl.showDescription = function showDescription(){
-            return !Utils.isMobileScreen(475);
+            return !Utils.isMobileScreen(450);
         }
 
         institutionCtrl.showFollowButton = function showFollowButton() {

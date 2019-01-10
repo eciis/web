@@ -3,8 +3,6 @@
 (function () {
     const app = angular.module('app');
 
-    const controller = 
-
     app.directive('hideNavbar', function(STATES, $state) {
         return {
             restrict: 'A',
@@ -19,7 +17,8 @@
                 const hideBottom = attrs.hideNavbar === "bottom";
 
                 const STATES_WITHOUT_TOP_TOOLBAR_MOBILE = [
-                    STATES.INSTITUTION
+                    STATES.INST_TIMELINE, STATES.INST_FOLLOWERS, STATES.INST_EVENTS,
+                    STATES.INST_MEMBERS, STATES.INST_REGISTRATION_DATA, STATES.INST_LINKS
                 ];
                 const STATES_WITHOUT_BOTTOM_TOOLBAR = [
                     STATES.CREATE_EVENT
@@ -32,8 +31,8 @@
                         if (screenPosition <= limitScrol) {
                             topTollbar.style.animation='1.0s fadeNav ease';
                             topTollbar.style.animationDelay='0s';
-                            if(!hideBottom && isAllowed)topTollbar.style.display = 'block';
-                            if(!hideTop) bottomToolbar.style.display = 'none';
+                            if((hideTop ||hideBoth) && isAllowed)topTollbar.style.display = 'block';
+                            if(hideBottom || hideBoth) bottomToolbar.style.display = 'none';
                         } else {
                             if(!hideBottom && isAllowed) topTollbar.style.display = 'none';
                             if(!hideTop) bottomToolbar.style.display = 'flex';
@@ -42,17 +41,10 @@
                 }
 
                 function isAllowedState(){
-                    var isNotAllowedTopMobile = STATES_WITHOUT_TOP_TOOLBAR_MOBILE.reduce(function(acum, element){
-                        if(acum) return acum;
-                        return (element === $state.current.name) || ($state.current.name).includes(element);
-                    }, false);
+                    var isNotAllowedTopMobile = STATES_WITHOUT_TOP_TOOLBAR_MOBILE.includes($state.current.name);
+                    var isNotAllowedBottom  = STATES_WITHOUT_BOTTOM_TOOLBAR.includes($state.current.name);
 
-                    var isNotAllowedBottom  = STATES_WITHOUT_BOTTOM_TOOLBAR.reduce(function(acum, element){
-                        if(acum) return acum;
-                        return (element === $state.current.name) || ($state.current.name).includes(element);
-                    }, false);
-
-                    if (isNotAllowedTop) topTollbar.style.display = 'none';
+                    if (isNotAllowedTopMobile) topTollbar.style.display = 'none';
                     if (isNotAllowedBottom) bottomToolbar.style.display = 'none';
                     
                     return !isNotAllowedBottom && !isNotAllowedTopMobile;

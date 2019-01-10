@@ -3,16 +3,16 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('LoginController', function LoginController (AuthService, $state) {
+    webchat.controller('LoginController', function LoginController (AuthService, $state, STATES) {
         const controller = this;
 
         controller.success = () => {
-          $state.go('webchat.home');
+          $state.go(STATES.home);
         }
 
         controller.$onInit = () => {
           if (AuthService.isLoggedIn()) {
-            $state.go('webchat.home');
+            $state.go(STATES.home);
           }
         }
     });

@@ -5,6 +5,8 @@
     const ctrl = this;
     ctrl.user = {};
 
+    ctrl.isLoadingUser = () => AuthService.isLoadingUser;
+
     ctrl.signIn = async () => {
       try {
         await AuthService.loginWithEmailAndPassword(ctrl.user.email, ctrl.user.password);

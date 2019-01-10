@@ -1,7 +1,9 @@
 <!-- login card -->
 <login-card-content>
   <img id="login-logo" src="/app/images/logowithname.png" />
-  <login-email-form ng-if="ctrl.email">
+  <md-progress-circular md-mode="indeterminate" ng-if="ctrl.isLoadingUser()" md-diameter="96">
+  </md-progress-circular>
+  <login-email-form ng-if="ctrl.email && !ctrl.isLoadingUser()">
     <form class="login-form" ng-submit="ctrl.signIn()">
       <md-input-container class="form">
         <label>Email</label>
@@ -21,14 +23,14 @@
     </form>
   </login-email-form>
 
-  <login-container ng-if="ctrl.google">
+  <login-container ng-if="ctrl.google && !ctrl.isLoadingUser()">
     <md-button class="login-btn" ng-click="ctrl.loginWithGoogle()" md-colors="{background: 'red-500'}">
       <md-icon class="login-google-icon" md-svg-src="/app/icons/google-icon.svg"></md-icon>
       <span>ACESSE COM GOOGLE</span>
     </md-button>
   </login-container>
 
-  <login-container ng-if="ctrl.invite">
+  <login-container ng-if="ctrl.invite && !ctrl.isLoadingUser()">
     <md-divider class="login-divider"></md-divider>
 
     <p class="login-text">

@@ -121,6 +121,7 @@
         };
 
         function login(loginMethodPromisse) {
+            service.isLoadingUser = true;
             return authObj.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
                 return loginMethodPromisse.then(function(response) {
                     return response.user;
@@ -138,6 +139,8 @@
                     service.sendEmailVerification(user);
                     throw "Error! Email not verified.";
                 }
+            }).finally(() => {
+                service.isLoadingUser = false;
             });
         }
 

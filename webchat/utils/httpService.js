@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module('webchat');
 
-    app.service('HttpService', function HttpService($http, MessageService) {
+    app.service('HttpService', function HttpService($http) {
         const service = this;
 
         const POST = 'POST';

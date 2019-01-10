@@ -22,7 +22,8 @@
                views: {
                     main: {
                         templateUrl: "app/webchat/webchat.html",
-                        controller: "WebchatController as controller",
+                        controller: "WebchatController",
+                        controllerAs: "webchatCtrl",
                     },
                },
            })
@@ -31,7 +32,8 @@
                views: {
                    content: {
                        templateUrl: "app/home/home.html",
-                       controller: "HomeController as controller",
+                       controller: "HomeController",
+                       controllerAs: "homeCtrl",
                    },
                },
            })

@@ -3,6 +3,8 @@
 
     const app = angular.module('webchat', [
         'ui.router',
+        'ngMaterial',
+        'ngMessages'
     ]);
 
     const rootName = 'webchat';

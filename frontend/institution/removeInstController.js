@@ -4,16 +4,14 @@
     const app = angular.module("app");
 
     app.controller("RemoveInstController", function RemoveInstController($mdDialog, institution,
-        InstitutionService, $state, AuthService, loadStateView, MessageService) {
+        InstitutionService, $state, AuthService, MessageService, STATES) {
         var removeInstCtrl = this;
 
         removeInstCtrl.institution = institution;
         removeInstCtrl.user = AuthService.getCurrentUser();
-        removeInstCtrl.loadStateView = loadStateView;
 
         removeInstCtrl.closeDialog = function () {
             $mdDialog.cancel();
-            removeInstCtrl.loadStateView();
         };
 
         removeInstCtrl.removeInst = function removeInst() {
@@ -25,7 +23,7 @@
                 if (_.isEmpty(removeInstCtrl.user.institutions)) {
                     AuthService.logout();
                 } else {
-                    $state.go("app.user.home");
+                    $state.go(STATES.HOME);
                 }
                 MessageService.showToast("Instituição removida com sucesso.");
             });

@@ -2,9 +2,9 @@
 
 (describe('Test ProfileController', function() {
 
-    var mdDialog, profileCtrl, scope, createCtrl, state;
+    let mdDialog, profileCtrl, scope, createCtrl, state, states;
 
-    var user = {
+    const user = {
         'name': 'name',
         'email': 'email@email.com',
         'institution_profiles': [],
@@ -13,10 +13,12 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($mdDialog, $controller, $rootScope, $state) {
+    beforeEach(inject(function($mdDialog, $controller, $rootScope, $state, STATES) {
         mdDialog = $mdDialog;
         scope = $rootScope.$new();
         state = $state;
+        states = STATES;
+        
         createCtrl = function() {
             return $controller('ProfileController', {
                 scope: scope,
@@ -36,7 +38,7 @@
         });
 
         it('should call state.go()', function() {
-            expect(state.go).toHaveBeenCalledWith('app.user.config_profile');
+            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE);
         });
 
         it('should call mdDialog.cancel()', function() {
@@ -68,7 +70,7 @@
 
     describe('showProperty()', function() {
 
-        var property, message;
+        let property, message;
 
         beforeEach(function() {
              property = null;

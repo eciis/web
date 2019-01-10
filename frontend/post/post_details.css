@@ -36,3 +36,57 @@
     border-radius:50%;
     box-shadow:0 0 1px #333;
 }
+
+.deleted-post-container {
+    margin: 0 0.57em;
+    height: 8.125em;
+    background: rgb(0, 150, 136);
+    color: rgb(255, 255, 255);
+    display: grid;
+    grid-template-columns: 4.38em auto;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.deleted-post-icon {
+    font-size:  4.27em; 
+    color: white; 
+    width: 1em; 
+    height: 1em;
+}
+
+#removed-by {
+    font-size: 1.19em;
+    margin: 0;
+}
+
+#removed-details {
+    margin: 0;
+}
+
+@media screen and (max-width: 599px) {
+    .deleted-post-container {
+        grid-template-columns: auto;
+        grid-template-rows: 3.75em auto;
+        justify-items: center;
+    }
+
+    .deleted-post-icon {
+        font-size: 3.75em; 
+        color: white; 
+        margin: 0;
+    }
+
+    .delete-post-text {
+        text-align: center;
+    }
+
+    #removed-by {
+        font-size: 1em;
+    }
+
+    #removed-details {
+        font-size: 0.75em;
+    }
+}

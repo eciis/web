@@ -1,6 +1,6 @@
 """Event Model."""
-import datetime
 import json
+from datetime import datetime
 from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from models import Address
@@ -80,7 +80,7 @@ class Event(ndb.Model):
 
     def isValid(self, is_patch=False):
         """Check if is valid event."""
-        date_now = datetime.datetime.today()
+        date_now = datetime.today()
 
         if (self.end_time is None) or (self.start_time is None):
             raise FieldException("Event must contains start time and end time")
@@ -92,7 +92,7 @@ class Event(ndb.Model):
     def verify_patch(self, patch):
         """Check if the patch is valid."""
         INDEX_AFTER_SLASH = 1
-        has_ended = datetime.datetime.today() > self.end_time
+        has_ended = datetime.today() > self.end_time
         forbidden_props = ["title", "official_site", "address", "local"]
         patch_props = [update['path'][INDEX_AFTER_SLASH:] for update in json.loads(patch)]
 
@@ -100,7 +100,6 @@ class Event(ndb.Model):
             p = "address" if "address" in p else p
             if has_ended and p in forbidden_props:
                 raise FieldException("The event basic data can not be changed after it has ended")
-    
 
     @staticmethod
     def create(data, author, institution):
@@ -123,9 +122,9 @@ class Event(ndb.Model):
         event.last_modified_by = author.key
         event.last_modified_by_name = author.name
         event.local = data.get('local')
-        event.start_time = datetime.datetime.strptime(
+        event.start_time = datetime.strptime(
             data.get('start_time'), "%Y-%m-%dT%H:%M:%S")
-        event.end_time = datetime.datetime.strptime(
+        event.end_time = datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
         event.address = Address.create(data.get('address'))
 
@@ -172,9 +171,9 @@ class Event(ndb.Model):
         if the attribute is of type date and the value passed is a string,
         it converts to type datetime.
         """
-        is_value_datetime = isinstance(value, datetime.datetime)
+        is_value_datetime = isinstance(value, datetime)
         is_attr_data = attr == 'start_time' or attr == 'end_time'
 
         if is_attr_data and not is_value_datetime:
-            value = datetime.datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+            value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         super(Event, self).__setattr__(attr, value)

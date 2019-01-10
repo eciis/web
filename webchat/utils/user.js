@@ -38,7 +38,7 @@
     };
 
     User.prototype.isFollower = function isFollower(institution) {
-      const isFollower = false;
+      let isFollower = false;
       _.forEach(this.follows, function (followingInst) {
         if (followingInst.key == institution.key) {
           isFollower = true;

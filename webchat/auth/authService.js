@@ -4,7 +4,7 @@
     const app = angular.module("webchat");
 
     app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService,
-      User) {
+      User, STATES) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -146,7 +146,7 @@
 
             executeLogoutListeners();
 
-            $state.go("login");
+            $state.go(STATES.login);
         };
 
         service.getCurrentUser = function getCurrentUser() {

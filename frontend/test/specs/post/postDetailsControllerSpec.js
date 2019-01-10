@@ -3,8 +3,8 @@
 (describe('Test postDetailsController', function() {
     beforeEach(module('app'));
 
-    var postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http,
-    commentService, state, posts, rootscope;
+    let postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http,
+    commentService, state, posts, rootscope, states;
     var user = {
         name: 'name',
         key: 'asd234jk2l',
@@ -45,7 +45,7 @@
     var POSTS_URI = "/api/posts";
 
 
-    beforeEach(inject(function($controller, $httpBackend, HttpService, $mdDialog,
+    beforeEach(inject(function($controller, $httpBackend, HttpService, $mdDialog, STATES,
             PostService, AuthService, $mdToast, $rootScope, CommentService, $state) {
         scope = $rootScope.$new();
         rootscope = $rootScope;
@@ -56,6 +56,7 @@
         mdToast = $mdToast;
         http = HttpService;
         state = $state;
+        states = STATES;
         commentService = CommentService;
         commentService.user = user;
         postService.user = user;
@@ -246,7 +247,7 @@
 
             postDetailsCtrl.goToInstitution(institutions[0].key);
 
-            expect(state.go).toHaveBeenCalledWith('app.institution.timeline', Object({ institutionKey: institutions[0].key }));
+            expect(state.go).toHaveBeenCalledWith(states.INST_TIMELINE, Object({ institutionKey: institutions[0].key }));
         });
     });
 

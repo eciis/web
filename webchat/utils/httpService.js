@@ -33,11 +33,11 @@
         };
 
         function request(method, url, data) {
-            return $http({
-                method: method,
-                url: url,
-                data: data
-            });
-        }
+          return $http({
+            method: method,
+            url: url,
+            data: data
+          }).then(response => response.data);
+       }
     });
 })();

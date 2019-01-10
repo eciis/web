@@ -12,8 +12,6 @@
           abstract: 'webchat',
           home: `${rootName}.home`,
           call: `${rootName}.call`,
-          chat: `${rootName}.chat`,
-          video: `${rootName}.video`,
           login: 'login',
       });
 
@@ -54,24 +52,6 @@
                  },
              },
          })
-         .state(STATES.call, {
-             url: "/call",
-             views: {
-                 content: {
-                     templateUrl: "app/video/call.html",
-                     controller: "CallController as controller",
-                 },
-             },
-         })
-         .state(STATES.video, {
-             url: "/video",
-             views: {
-                 content: {
-                     templateUrl: "app/video/video.html",
-                     controller: "VideoController as controller",
-                 },
-             },
-         })
          .state(STATES.login, {
              url: "/login",
              views: {
@@ -87,7 +67,7 @@
 
   });
 
-  app.factory('BearerAuthInterceptor', function ($injector, $q, $state) {
+  app.factory('BearerAuthInterceptor', function (STATES, $injector, $q, $state) {
       return {
           request: function(config) {
               var AuthService = $injector.get('AuthService');
@@ -125,7 +105,7 @@
                       AuthService.logout();
                       rejection.data.msg = "Sua sessão expirou!";
                   } else {
-                      $state.go("signin");
+                      $state.go(STATES.login);
                   }
               } else if(rejection.status === 403) {
                   rejection.data.msg = "Você não tem permissão para realizar esta operação!";
@@ -140,9 +120,9 @@
       };
   });
 
-  app.run(function authInterceptor(AuthService, $transitions, $injector, $state, $location) {
-      var ignored_routes = [
-          'login',
+  app.run(function authInterceptor(STATES, AuthService, $transitions, $state) {
+      const ignored_routes = [
+          STATES.login,
       ];
 
       $transitions.onStart({
@@ -150,7 +130,7 @@
               return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
           }
       }, function(transition) {
-          $state.go("login");
+          $state.go(STATES.login);
       });
   });
 })();

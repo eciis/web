@@ -1,7 +1,8 @@
 <!-- login card -->
 <login-card-content>
   <img id="login-logo" src="/app/images/logowithname.png" />
-  <md-progress-circular md-mode="indeterminate" ng-if="ctrl.isLoadingUser()" md-diameter="96">
+  <md-progress-circular md-mode="indeterminate" ng-show="ctrl.isLoadingUser()"
+    md-diameter="96">
   </md-progress-circular>
   <login-email-form ng-if="ctrl.email && !ctrl.isLoadingUser()">
     <form class="login-form" ng-submit="ctrl.signIn()">
@@ -16,7 +17,7 @@
           minlength="6" aria-label="Senha">
       </md-input-container>
       <login-email-form-submit>
-        <md-button type="submit" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+        <md-button type="submit" class="md-raised md-primary push-right" md-colors="{background: 'teal-500'}">
           Acessar
         </md-button>
       </login-email-form-submit>

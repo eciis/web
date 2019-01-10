@@ -8,6 +8,14 @@ login-card {
   border-radius: 2px;
 }
 
+md-progress-circular {
+  margin: 15%;
+}
+
+md-progress-circular > svg > path {
+  stroke: #009688;
+}
+
 login-card-content {
   display: grid;
   padding: 0.6em;
@@ -41,6 +49,10 @@ login-email-form {
 
 login-email-form-submit {
   justify-self: right;
+}
+
+.push-right {
+  margin-right: 0px;
 }
 
 .login-btn {

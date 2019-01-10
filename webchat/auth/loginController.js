@@ -6,12 +6,6 @@
     webchat.controller('LoginController', function LoginController ($scope, $state) {
         const controller = this;
 
-        const main = () => {
-            console.log('LoginController running');
-        };
-
-        main();
-
     });
 
 })();

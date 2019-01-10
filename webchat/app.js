@@ -60,10 +60,4 @@
 
     });
 
-    const main = () => {
-        console.log("app running");
-    };
-
-     main();
-
 })();

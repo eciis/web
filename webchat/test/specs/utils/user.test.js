@@ -54,7 +54,6 @@
   beforeEach(inject((User) => {
     createUser = () => new User(userData);
     Institution = function Institution(data) {
-      let t = this;
       _.extend(this, data);
     }
   }));

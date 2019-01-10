@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $state, $rootScope, $mdDialog, $http, STATES, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -16,8 +16,9 @@
         dialogCtrl.videoUrls = [];
         dialogCtrl.usefulLinks = [];
         dialogCtrl.isAnotherCountry = false;
-        dialogCtrl.steps = [true, false, false];
+        dialogCtrl.steps = [true, false, false, false];
         dialogCtrl.now = Date.now();
+        dialogCtrl.entireDay = false;
         var emptyUrl = {
             url: '',
             description: ''
@@ -51,6 +52,12 @@
 
         dialogCtrl.createInitDate = function createInitDate() {
             dialogCtrl.startTime = dialogCtrl.event.start_time && new Date(dialogCtrl.event.start_time);
+            dialogCtrl.addStartHour();
+        };
+
+        dialogCtrl.createEndDate = () => {
+            dialogCtrl.addEndHour();
+            dialogCtrl.changeDate('endTime');
         };
 
         function saveImage(callback) {
@@ -77,10 +84,10 @@
                 var formatedPatch = formatPatch(generatePatch(patch, event));
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                     .then(function success() {
-                        $mdDialog.hide(event);
+                        dialogCtrl.cancelCreation();
                         MessageService.showToast('Evento editado com sucesso.');
                     }, function error() {
-                        $mdDialog.hide(event);
+                        dialogCtrl.cancelCreation();
                     });
             } else {
                 MessageService.showToast('Evento inválido');
@@ -119,7 +126,10 @@
             });
         };
 
-        dialogCtrl.closeDialog = function closeDialog() {
+        dialogCtrl.cancelCreation = () => {
+            if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE))
+                $state.go(STATES.EVENTS);
+
             $mdDialog.hide();
         };
 
@@ -153,9 +163,12 @@
         };
 
         dialogCtrl.isEventOutdated = function isEventOutdated() {
-            var endDate = new Date(dialogCtrl.event.end_time);
-            var now = Date.now();
-            return now > endDate;
+            if(_.get(dialogCtrl.event, 'end_time')) {
+                const endDate = new Date(dialogCtrl.event.end_time);
+                const now = Date.now();
+                return now > endDate;
+            }
+            return false;
         };
 
         dialogCtrl.getCitiesByState = function getCitiesByState() {
@@ -172,6 +185,16 @@
             return dialogCtrl.steps[step - 1];
         };
 
+        /**
+         * Return the message to show when the user try to go to next step
+         * according by mobile screen or not
+         */
+        dialogCtrl._getRequiredFieldsMsg = () => {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.getStep(2))
+                return "Preencha a data e hora inicial e final.";
+            return "Preencha os campos obrigatórios corretamente.";
+        };
+
         dialogCtrl.nextStep = function nextStep() {
             var currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
@@ -181,7 +204,7 @@
                 var nextStep = currentStep + 1;
                 dialogCtrl.steps[nextStep] = true;
             } else {
-                MessageService.showToast("Preencha os campos obrigatórios corretamente.");
+                MessageService.showToast(dialogCtrl._getRequiredFieldsMsg());
             }
         };
 
@@ -206,7 +229,17 @@
         };
 
         dialogCtrl.isValidStepOne = function isValidStepOne() {
-            return dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+            const isMobileScreen = Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+            const isValidToMobile = isMobileScreen && dialogCtrl.isValidAddress();
+            const isValidToDesktop = !isMobileScreen && dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+            return isValidToMobile || isValidToDesktop;
+        };
+
+        dialogCtrl.lastStep = () => {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                return dialogCtrl.getStep(4);
+             }
+             return dialogCtrl.getStep(3);
         };
 
         function getFields() {
@@ -218,6 +251,13 @@
                         dialogCtrl.event.address
                     ],
                     isValid: dialogCtrl.isValidStepOne
+                },
+                1: {
+                    fields: [
+                        dialogCtrl.startHour && String(dialogCtrl.startHour),
+                        dialogCtrl.endHour && String(dialogCtrl.endHour)
+                    ],
+                    isValid: dialogCtrl.isValidDate
                 }
             };
             return necessaryFieldsForStep;
@@ -226,7 +266,6 @@
         function isCurrentStepValid(currentStep) {
             var necessaryFieldsForStep = getFields();
             var isValid = true;
-
             if (!_.isUndefined(necessaryFieldsForStep[currentStep])) {
                 _.forEach(necessaryFieldsForStep[currentStep].fields, function (field) {
                     if (_.isUndefined(field) || _.isEmpty(field)) {
@@ -243,7 +282,7 @@
         }
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
-            if (dialogCtrl.getStep(3)) {
+            if (dialogCtrl.lastStep()) {
                 dialogCtrl.blockReturnButton = true;
                 dialogCtrl.save();
             } else {
@@ -252,11 +291,12 @@
         }
 
         dialogCtrl.previousStep = function previousStep() {
-            var currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
+            if (dialogCtrl.getStep(1)) return dialogCtrl.cancelCreation();
+            let currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
             });
             dialogCtrl.steps[currentStep] = false;
-            var nextStep = currentStep - 1;
+            const nextStep = currentStep - 1;
             dialogCtrl.steps[nextStep] = true;
         };
 
@@ -266,6 +306,84 @@
             } else {
                 return dialogCtrl.getStep(3);
             }
+        };
+
+        /**
+         * Get the string with required symbol or not based on country.
+         */
+        dialogCtrl.getStreetPlaceholder = () => {
+            const street = "Rua";
+            return dialogCtrl.isAnotherCountry ? street : street + " *";
+        };
+
+        /**
+         * Transfer the state params to the controller
+         * @private
+         */
+        dialogCtrl._loadStateParams = () => {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                dialogCtrl.event = $state.params.event;
+                dialogCtrl.events = $state.params.events;
+                dialogCtrl.isEditing = $state.params.isEditing;
+            }
+        };
+
+        /**
+         * Add a start hour to the start_time of event.
+         */
+        dialogCtrl.addStartHour = () => {
+            if(dialogCtrl.event.start_time && dialogCtrl.startHour) {
+                dialogCtrl.startTime.setHours(dialogCtrl.startHour.getHours(), dialogCtrl.startHour.getMinutes(), 0);
+                dialogCtrl.event.start_time = dialogCtrl.startTime;
+            }
+        };
+
+        /**
+         * Add a end hour to the end_time of event.
+         */
+        dialogCtrl.addEndHour = () => {
+            if(dialogCtrl.event.end_time && dialogCtrl.endHour) {
+                dialogCtrl.event.end_time.setHours(dialogCtrl.endHour.getHours(), dialogCtrl.endHour.getMinutes(), 0);
+                dialogCtrl.changeDate('endTime');    
+            }
+        };
+
+        /**
+         * Set the duration of event to 8AM to 6PM of the same day.
+         */
+        dialogCtrl.setToEntireDay = () => {
+            dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.startHour.setHours(8, 0, 0);
+            dialogCtrl.addStartHour();
+            dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.endHour.setHours(18, 0, 0);
+            dialogCtrl.addEndHour();
+        };
+
+        /**
+         * Loads the current states of event to init the edition.
+         */
+        dialogCtrl._loadStatesToEdit = () => {
+            dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
+            dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
+            loadSelectedState();
+            loadEventDates();
+            initPatchObserver();
+        };
+
+        /**
+         * Verify if the event begin and end in the same day
+         */
+        dialogCtrl.happensInOnlyDay = () => {
+            if(dialogCtrl.event.start_time && dialogCtrl.event.end_time) {
+                const initDate = new Date(dialogCtrl.event.start_time.getFullYear(),
+                    dialogCtrl.event.start_time.getMonth(), dialogCtrl.event.start_time.getDate()).getTime();
+                const endDate = new Date(dialogCtrl.event.end_time.getFullYear(),
+                dialogCtrl.event.end_time.getMonth(), dialogCtrl.event.end_time.getDate()).getTime();
+                return initDate == endDate;
+            }
+            return false; 
         };
 
         function clearSelectedState() {
@@ -299,10 +417,10 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    $mdDialog.hide();
-                    dialogCtrl.events.push(response);
-                    MessageService.showToast('Evento criado com sucesso!');
+                    !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.events.push(response);
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
+                    dialogCtrl.cancelCreation();
+                    MessageService.showToast('Evento criado com sucesso!');
                 }, function error() {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;
@@ -332,7 +450,9 @@
 
         function loadEventDates() {
             dialogCtrl.event.start_time = new Date(dialogCtrl.event.start_time);
-            dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time);
+            dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = new Date(dialogCtrl.event.end_time); 
+            dialogCtrl.endHour = new Date(dialogCtrl.event.end_time);
         }
 
         function loadSelectedState() {
@@ -356,20 +476,37 @@
             }
         }
 
-        (function main() {
-            var address = { country: "Brasil" };
+        /**
+         * Loads event from backend.
+         * @param {String} eventKey Key of the event.
+         */
+        dialogCtrl._loadEvent = (eventKey) => {
+            return EventService.getEvent(eventKey).then(function success(response) {
+                dialogCtrl.event = response;
+                if(dialogCtrl.event.author_key !== dialogCtrl.user.key)
+                    $state.go(STATES.EVENTS);
+
+                dialogCtrl.isEditing = true;
+                dialogCtrl._loadStatesToEdit();
+            }, function error(response) {
+                MessageService.showToast("Erro ao carregar evento.");
+                $state.go(STATES.HOME);
+            });
+        }
+
+        dialogCtrl.$onInit = () => {
+            const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
             initUrlFields();
+            dialogCtrl._loadStateParams();
             if (dialogCtrl.event) {
-                dialogCtrl.photoUrl = dialogCtrl.event.photo_url;
-                dialogCtrl.isAnotherCountry = dialogCtrl.event.address.country !== "Brasil";
-                loadSelectedState();
-                loadEventDates();
-                initPatchObserver();
+                dialogCtrl._loadStatesToEdit();
+            } else if(!dialogCtrl.event && $state.params.eventKey) {
+                dialogCtrl._loadEvent($state.params.eventKey);
             } else {
                 dialogCtrl.event = { address: address };
             }
-        })();
+        };
     });
 })();

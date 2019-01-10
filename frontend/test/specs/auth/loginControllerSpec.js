@@ -60,4 +60,16 @@
             expect(state.go).toHaveBeenCalledWith(states.HOME);
         });
     });
+
+    describe('isLoadingUser()', function() {
+        it('should return true if AuthService.isLoadingUser is true', () => {
+            authService.isLoadingUser = true;
+            expect(logginCtrl.isLoadingUser()).toBe(true);
+        });
+
+        it('should return false if AuthService.isLoadingUser is false', () => {
+            authService.isLoadingUser = false;
+            expect(logginCtrl.isLoadingUser()).toBe(false);
+        });
+    });
 }));

@@ -161,7 +161,7 @@
         };
         
         institutionCtrl.goToHome = function goToHome() {
-            Utils.resetNavBarDisplayStyle();
+            Utils.resetToolbarDisplayStyle();
             $state.go(STATES.HOME);
         };
 

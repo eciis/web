@@ -225,10 +225,10 @@ var Utils = {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
     },
 
-     /** Reset properties CSS. 
+     /** Reset properties CSS of elements toolbar. 
      * In mode mobile maybe changes some properties.
      */
-    resetNavBarDisplayStyle: function resetNavBarDisplayStyle(){
+    resetToolbarDisplayStyle: function resetToolBarDisplayStyle(){
         document.getElementById('main-toolbar').style.display = 'block';
         document.getElementById('navbar-bottom').style.display = 'flex';
     }

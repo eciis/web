@@ -19,13 +19,13 @@
 						<div class="followers-grid followers-grid-position"
 							ng-repeat="groupedFollowers in followersCtrl.followers | filter: followersCtrl.currentFollower">
                             <div class="follower-char-position follower-char-properties">
-                                <span>{{followersCtrl.initialCharOfName(groupedFollowers[0])}}</span>
+                                <span>{{followersCtrl.initialLetterOfName(groupedFollowers[0])}}</span>
                             </div>
                             <div layout="row" ng-repeat="follower in groupedFollowers | filter: followersCtrl.currentFollower | orderBy: 'name'"
                                 ng-click="followersCtrl.showUserProfile(follower.key, $event)" class="follower-position">
                                 <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar follower-img"/>
                                 <div class="follower-name" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
-                                    <p >{{ follower.name }}</p>
+                                    <p>{{ followersCtrl.limitString(follower.name, 17) }}</p>
                                 </div>
                             </div>
                         </div>

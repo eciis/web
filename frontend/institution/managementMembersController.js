@@ -151,14 +151,22 @@
             return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
-        manageMemberCtrl.initialCharOfName = (user) => {
-            return user.name.toUpperCase().charAt(0);
+        /**
+        * Get the initial letter of the user name
+        * @param {Object} user : user object
+        */
+        manageMemberCtrl.initialLetterOfName = (user) => {
+            if(user) return user.name.toUpperCase().charAt(0);
+        };
+
+        manageMemberCtrl.limitString = (string, limit) => {
+            return Utils.limitString(string, limit);
         };
 
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response;
-                getMembers();
+                manageMemberCtrl._getMembers();
                 getSentInvitations(response.sent_invitations);
                 getRequests();
             }, function error() {
@@ -172,7 +180,7 @@
             manageMemberCtrl.sentInvitationsAdm = invitations.filter(invite => invite.type_of_invite === 'INVITE_USER_ADM');
         }
 
-        function getMembers() {
+        manageMemberCtrl._getMembers = () => {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.members = Utils.isMobileScreen(475) ?
                     Utils.groupUsersByInitialLetter(response) : response;
@@ -181,7 +189,7 @@
             }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
             });
-        }
+        };
 
         function getRequests() {
             RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {

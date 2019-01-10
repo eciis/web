@@ -8,11 +8,14 @@
                     <h3 class="members-title">Administrador</h3>
                     <md-content>
                         <div class="members-grid members-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+                            <div class="member-char-position member-char-properties">
+                                <span>{{membersCtrl.initialLetterOfName(membersCtrl.institution.admin)}}</span>
+                            </div>
                             <div layout="row" class="member-position">
                                 <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
                                 class="md-avatar member-img"/>
                                 <div class="member-name">
-                                    <p>{{ membersCtrl.institution.admin.name }}</p>
+                                    <p>{{ membersCtrl.limitString(membersCtrl.institution.admin.name, 17) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -31,13 +34,13 @@
                         <div class="members-grid members-grid-position"
                             ng-repeat="groupedMembers in membersCtrl.members | filter: membersCtrl.currentMember">
                             <div class="member-char-position member-char-properties">
-                                <span>{{membersCtrl.initialCharOfName(groupedMembers[0])}}</span>
+                                <span>{{membersCtrl.initialLetterOfName(groupedMembers[0])}}</span>
                             </div>
                             <div layout="row" ng-repeat="member in groupedMembers | filter: membersCtrl.currentMember | orderBy: 'name'"
                                 ng-click="membersCtrl.showUserProfile(member.key, $event)" class="member-position">
                                 <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar member-img"/>
                                 <div class="member-name">
-                                    <p >{{ member.name }}</p>
+                                    <p >{{ membersCtrl.limitString(member.name, 17) }}</p>
                                 </div>
                             </div>
                         </div>

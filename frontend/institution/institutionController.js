@@ -380,7 +380,7 @@
         followersCtrl.currentFollower = "";
         followersCtrl.isLoadingFollowers = true;
 
-        function getFollowers() {
+        followersCtrl._getFollowers = () => {
             InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
                 followersCtrl.followers = Utils.isMobileScreen(475) ?
                     Utils.groupUsersByInitialLetter(response) : response;
@@ -388,17 +388,26 @@
             }, function error() {
                 followersCtrl.isLoadingFollowers = true;
             });
-        }
+        };
 
-        followersCtrl.initialCharOfName = (user) => {
-            return user.name.toUpperCase().charAt(0);
+        /**
+         * Get the initial letter of the user name
+         * @param {Object} user : user object
+         */
+        followersCtrl.initialLetterOfName = (user) => {
+            if(user) return user.name.toUpperCase().charAt(0);
         };
 
         followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);
         };
 
-        getFollowers();
+        followersCtrl.limitString = (string, limit) => {
+            return Utils.limitString(string, limit);
+        };
 
+        followersCtrl.$onInit = () => {
+            followersCtrl._getFollowers();
+        };
     });
 })();

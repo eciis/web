@@ -230,5 +230,6 @@ var Utils = {
      */
     resetNavBarDisplayStyle: function resetNavBarDisplayStyle(){
         document.getElementById('main-toolbar').style.display = 'block';
+        document.getElementById('navbar-bottom').style.display = 'flex';
     }
 };

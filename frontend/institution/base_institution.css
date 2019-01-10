@@ -74,3 +74,53 @@
     height: 13em;
     overflow: hidden;
 }
+
+@media screen and (min-height: 620px) and (max-height:660px){
+    #image-cover-inst {
+        height: 14em;
+    }
+    #buttons-institution-page{
+        height: 10em;
+    }
+    #inst-image-mobile{
+        margin: -5.8em auto -0.8em auto;
+    }
+}
+
+@media screen and (min-height: 660px) and (max-height:700px){
+    #image-cover-inst {
+        height: 16em;
+    }
+    #buttons-institution-page{
+        height: 12em;
+    }
+    #inst-image-mobile{
+        margin: -6em auto -0.8em auto;
+    }
+}
+
+@media screen and (min-height: 700px) and (max-height:800px){
+    #image-cover-inst {
+        height: 18em;
+    }
+    #buttons-institution-page{
+        margin-top: 2em;
+        height: 12em;
+    }
+    #inst-image-mobile{
+        margin: -5.6em auto -0.8em auto;
+    }
+}
+
+@media screen and (min-height: 800px){
+    #image-cover-inst {
+        height: 20em;
+    }
+    #buttons-institution-page{
+        margin-top: 3em;
+        height: 12em;
+    }
+    #inst-image-mobile{
+        margin: -6em auto -0.8em auto;
+    }
+}

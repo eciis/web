@@ -1,7 +1,7 @@
 <md-content layout-align="center" hide-navbar="both">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
-        <div style="box-shadow: 0 -2px 5px 0px grey;">
+        <div style="box-shadow: 0 -2px 5px 0px grey; height: 100vh;">
             <div class="cover-photo" id="buttons-navbar-inst-container">
                 <md-button class="md-icon-button cover-photo-button button-navbar-inst"
                     ng-click="institutionCtrl.goToHome()">
@@ -33,8 +33,8 @@
                                 Adicionar capa
                             </md-button>
                         </md-menu-item>
-                        <md-menu-item>
-                            <md-button ng-if="!institutionCtrl.isMember" style="text-align: left;"
+                        <md-menu-item ng-if="!institutionCtrl.isMember">
+                            <md-button style="text-align: left;"
                                 ng-disabled="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)"
                                 ng-click="institutionCtrl.requestInvitation($event)">
                                 <span ng-if="!institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Solicitar vínculo</span>

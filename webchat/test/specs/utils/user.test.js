@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test User model', function () {
+(describe('Test User Factory', function () {
   let user, createUser, Institution;
 
   const inst = {

@@ -7,48 +7,73 @@
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
-                const content = element[0];
-                const topTollbar = document.getElementById('main-toolbar');
-                const bottomToolbar = document.getElementById('navbar-bottom');
-                const limitScrol =  30;
-
-                const hideTop = attrs.hideNavbar === "top";
-                const hideBoth = attrs.hideNavbar === "both";
-                const hideBottom = attrs.hideNavbar === "bottom";
-
-                const STATES_WITHOUT_TOP_TOOLBAR_MOBILE = [
+                scope.topTollbar = document.getElementById('main-toolbar');
+                scope.bottomToolbar = document.getElementById('navbar-bottom');
+                scope.INSTITUTION_STATES = [
                     STATES.INST_TIMELINE, STATES.INST_FOLLOWERS, STATES.INST_EVENTS,
                     STATES.INST_MEMBERS, STATES.INST_REGISTRATION_DATA, STATES.INST_LINKS
                 ];
-                const STATES_WITHOUT_BOTTOM_TOOLBAR = [
+                scope.STATES_WITHOUT_BOTTOM_TOOLBAR = [
                     STATES.CREATE_EVENT
                 ];
-                let isAllowed = isAllowedState();
-
-                if(Utils.isMobileScreen(450) && isAllowed){                    
-                    content.addEventListener('scroll', function() {
-                        const screenPosition = content.scrollTop;
-                        if (screenPosition <= limitScrol) {
-                            topTollbar.style.animation='1.0s fadeNav ease';
-                            topTollbar.style.animationDelay='0s';
-                            if((hideTop ||hideBoth) && isAllowed)topTollbar.style.display = 'block';
-                            if(hideBottom || hideBoth) bottomToolbar.style.display = 'none';
-                        } else {
-                            if(!hideBottom && isAllowed) topTollbar.style.display = 'none';
-                            if(!hideTop) bottomToolbar.style.display = 'flex';
-                        }
-                    });
+                
+                scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
+                    const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
+                        scope.INSTITUTION_STATES.includes($state.current.name);
+                    console.log(!scope.isStateAllowedTopMobile, shouldHideBottomToolbar);
+                    if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
+                    if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar);
+                
                 }
 
-                function isAllowedState(){
-                    var isNotAllowedTopMobile = STATES_WITHOUT_TOP_TOOLBAR_MOBILE.includes($state.current.name);
-                    var isNotAllowedBottom  = STATES_WITHOUT_BOTTOM_TOOLBAR.includes($state.current.name);
-
-                    if (isNotAllowedTopMobile) topTollbar.style.display = 'none';
-                    if (isNotAllowedBottom) bottomToolbar.style.display = 'none';
-                    
-                    return !isNotAllowedBottom && !isNotAllowedTopMobile;
+                scope.isTopToolbarAllowed = function isTopToolbarAllowed() {
+                    const statesAllowed = scope.INSTITUTION_STATES;
+                    return !statesAllowed.includes($state.current.name);
                 }
+
+                scope.isBottomToolbarAllowed = function isBottomToolbarAllowed() {
+                    return !scope.STATES_WITHOUT_BOTTOM_TOOLBAR.includes($state.current.name);
+                }
+
+                scope.hideElement = function hideElement(element){
+                    element.style.display = 'none';
+                }
+
+                scope.hideToolbarListenner = function hideToolbarListenner(){
+                    const hideBoth = attrs.hideNavbar === "both";
+                    const hideTop = attrs.hideNavbar === "top" || hideBoth;
+                    const hideBottom = attrs.hideNavbar === "bottom" || hideBoth;
+
+                    if(Utils.isMobileScreen(450)){
+                        const content = element[0];
+                        const limitScrol =  30;
+    
+                        const hideTopDynamically = hideTop && scope.isStateAllowedTopMobile;
+                        const hideBottomDynamically = hideBottom && scope.isStateAllowedBottom;
+    
+                        content.addEventListener('scroll', function() {
+                            const screenPosition = content.scrollTop;
+                            if (screenPosition <= limitScrol) {
+                                scope.topTollbar.style.animation='1.0s fadeNav ease';
+                                scope.topTollbar.style.animationDelay='0s';
+                                if(hideTopDynamically) scope.topTollbar.style.display = 'block';
+                                if(hideBottomDynamically) scope.hideElement(scope.bottomToolbar);
+                            } else {
+                                if(hideTopDynamically) scope.hideElement(scope.topTollbar);
+                                if(hideBottomDynamically) scope.bottomToolbar.style.display = 'flex';
+                            }
+                        });
+                    }
+    
+                }
+
+                scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
+                scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();
+                
+                scope.initialToolbarDisplayState();
+                scope.hideToolbarListenner();
+
+
             }
         };
     });

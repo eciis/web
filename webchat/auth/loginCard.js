@@ -4,25 +4,22 @@
   function LoginCardController(AuthService, MessageService) {
     const ctrl = this;
     ctrl.user = {};
-
     ctrl.isLoadingUser = () => AuthService.isLoadingUser;
 
-    ctrl.signIn = async () => {
-      try {
-        await AuthService.loginWithEmailAndPassword(ctrl.user.email, ctrl.user.password);
+    ctrl.signIn = () => {
+      return AuthService.loginWithEmailAndPassword(ctrl.user.email, ctrl.user.password).then(() => {
         ctrl.onLogin();
-      } catch (e) {
+      }).catch((e) => {
         MessageService.showToast(e);
-      }
+      });
     }
 
-    ctrl.loginWithGoogle = async () => {
-      try {
-        await AuthService.loginWithGoogle();
+    ctrl.loginWithGoogle = () => {
+      return AuthService.loginWithGoogle().then(() => {
         ctrl.onLogin();
-      } catch (e) {
+      }).catch((e) => {
         MessageService.showToast(e);
-      }
+      });
     }
 
     ctrl.$onInit = () => {
@@ -32,6 +29,8 @@
         ctrl.google = true;
       if (_.isNil(ctrl.invite))
         ctrl.invite = true;
+      if (_.isNil(ctrl.onLogin))
+        ctrl.onLogin = () => {};
     }
   }
 

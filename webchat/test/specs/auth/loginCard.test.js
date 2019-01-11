@@ -25,13 +25,13 @@
     expect(authService.isLoggedIn()).toBe(false);
   }))
 
-  it('logs in, calls onLogin after logging in with email and password', () => {
+  it('should log in and call onLogin after logging in with email and password', () => {
     ctrl.signIn();
     scope.$digest();
     expect(authService.loginWithEmailAndPassword).toHaveBeenCalled();
   })
 
-  it('logs in, calls onLogin after logging in with google', () => {
+  it('should log in and call onLogin after logging in with google', () => {
     ctrl.loginWithGoogle();
     scope.$digest();
     expect(authService.loginWithGoogle).toHaveBeenCalled();

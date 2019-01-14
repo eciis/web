@@ -33,6 +33,15 @@
             return promise;
         };
 
+        /**
+         * Verify if the Auth Service is loading User.
+         * @returns {boolean} True if it is loading user, false if not.
+         */
+        loginCtrl.isLoadingUser = function () {
+            return AuthService.isLoadingUser;
+        };
+
+
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {

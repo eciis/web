@@ -96,6 +96,7 @@
         };
 
         function login(loginMethodPromisse) {
+            service.isLoadingUser = true;
             return authObj.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
                 return loginMethodPromisse.then(function(response) {
                     return response.user;
@@ -106,6 +107,8 @@
                         return userInfo;
                     });
                 });
+            }).finally(() => {
+                service.isLoadingUser = false;
             });
         }
 

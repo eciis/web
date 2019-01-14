@@ -343,7 +343,11 @@
         };
 
         postDetailsCtrl.goToPost = function goToPost(post) {
-             $state.go(STATES.POST, {key: post.key});
+            $state.go(STATES.POST, {key: post.key});
+        };
+
+        postDetailsCtrl.goToPostComment = function goToPostComment(post) {
+            $state.go(STATES.POST, {key: post.key, focus:true});
         };
 
         postDetailsCtrl.goToEvent = function goToEvent(event) {
@@ -386,7 +390,7 @@
             if (window.screen.width > 600)
                 return postDetailsCtrl.getComments();
             else
-                postDetailsCtrl.goToPost(postDetailsCtrl.post); 
+                postDetailsCtrl.goToPostComment(postDetailsCtrl.post); 
         };
 
         postDetailsCtrl.getComments = function getComments() {
@@ -510,7 +514,13 @@
         function adjustText(text){
             return (!postDetailsCtrl.isPostPage && text) ?
                 Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
-        }  
+        }
+
+        postDetailsCtrl.$postLink = function() {
+            if($state.params.focus){
+                window.location.href= window.location.href + '#comment-input';
+            }
+        };
     });
 
     app.directive("postDetails", function() {

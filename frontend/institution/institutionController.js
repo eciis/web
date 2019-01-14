@@ -372,18 +372,6 @@
             });
         };
 
-        followersCtrl.getInitialLetterOfName = (user) => {
-            return Utils.getInitialLetterOfName(user);
-        };
-
-        followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
-            ProfileService.showProfile(userKey, ev);
-        };
-
-        followersCtrl.limitString = (string, limit) => {
-            return Utils.limitString(string, limit);
-        };
-
         followersCtrl.$onInit = () => {
             followersCtrl._getFollowers();
         };

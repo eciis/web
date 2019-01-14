@@ -5,38 +5,22 @@
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
                 <div flex class="body">
-                    <h3 class="members-title">{{ membersCtrl.getAdminLabel() }}</h3>
+                    <h3 class="list-users-title">{{ membersCtrl.getAdminLabel() }}</h3>
                     <md-content>
-                        <div class="members-grid members-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
-                            <div class="member-char-position member-char-properties">
+                        <div class="list-users-grid list-users-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+                            <div class="list-users-char-position list-users-char-properties">
                                 <span>{{membersCtrl.getInitialLetterOfName(membersCtrl.institution.admin)}}</span>
                             </div>
-                            <div layout="row" class="member-position">
+                            <div layout="row" class="list-users-position">
                                 <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
-                                class="md-avatar member-img"/>
-                                <div class="member-name">
+                                class="md-avatar list-users-img"/>
+                                <div class="list-users-name">
                                     <p>{{ membersCtrl.limitString(membersCtrl.institution.admin.name, 17) }}</p>
                                 </div>
                             </div>
                         </div>
                     </md-content>
-                    <h3 class="members-title">Membros</h3>
-                    <search-user keyword="membersCtrl.currentMember"></search-user>
-					<md-content>
-                        <div class="members-grid members-grid-position"
-                            ng-repeat="groupedMembers in membersCtrl.members | filter: membersCtrl.currentMember">
-                            <div class="member-char-position member-char-properties">
-                                <span>{{membersCtrl.getInitialLetterOfName(groupedMembers[0])}}</span>
-                            </div>
-                            <div layout="row" ng-repeat="member in groupedMembers | filter: membersCtrl.currentMember | orderBy: 'name'"
-                                ng-click="membersCtrl.showUserProfile(member.key, $event)" class="member-position">
-                                <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar member-img"/>
-                                <div class="member-name">
-                                    <p >{{ membersCtrl.limitString(member.name, 17) }}</p>
-                                </div>
-                            </div>
-                        </div>
-					</md-content>
+                    <list-users page-label="'Membros'" users="membersCtrl.members"></list-users>
                 </div>
             </div>
         </div>

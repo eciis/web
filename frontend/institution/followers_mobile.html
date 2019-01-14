@@ -5,23 +5,7 @@
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
                 <div flex class="body">
-                    <h3 class="followers-title">Seguidores</h3>
-                    <search-user keyword="followersCtrl.currentFollower"></search-user>
-					<md-content>
-						<div class="followers-grid followers-grid-position"
-							ng-repeat="groupedFollowers in followersCtrl.followers | filter: followersCtrl.currentFollower">
-                            <div class="follower-char-position follower-char-properties">
-                                <span>{{followersCtrl.getInitialLetterOfName(groupedFollowers[0])}}</span>
-                            </div>
-                            <div layout="row" ng-repeat="follower in groupedFollowers | filter: followersCtrl.currentFollower | orderBy: 'name'"
-                                ng-click="followersCtrl.showUserProfile(follower.key, $event)" class="follower-position">
-                                <img title="{{follower.name}}" ng-src="{{follower.photo_url}}" class="md-avatar follower-img"/>
-                                <div class="follower-name" ng-click="followersCtrl.showUserProfile(follower.key, $event)">
-                                    <p>{{ followersCtrl.limitString(follower.name, 17) }}</p>
-                                </div>
-                            </div>
-                        </div>
-					</md-content>
+                    <list-users page-label="'Seguidores'" users="followersCtrl.followers"></list-users>
                 </div>
             </div>
         </div>

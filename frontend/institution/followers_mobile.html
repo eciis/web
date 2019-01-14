@@ -6,15 +6,7 @@
             <div flex layout="column">
                 <div flex class="body">
                     <h3 class="followers-title">Seguidores</h3>
-					<div layout-margin>
-						<form ng-submit="">
-							<md-input-container layout="row" class="md-icon-float">
-							<label>Pesquisar</label>
-							<input aria-label="Pesquisar por seguidor" class="md-icon-float" ng-model="followersCtrl.currentFollower">
-							<md-icon md-colors="{color: 'grey-500'}">search</md-icon>
-							</md-input-container>
-						</form>
-					</div>
+                    <search-user keyword="followersCtrl.currentFollower"></search-user>
 					<md-content>
 						<div class="followers-grid followers-grid-position"
 							ng-repeat="groupedFollowers in followersCtrl.followers | filter: followersCtrl.currentFollower">

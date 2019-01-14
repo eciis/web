@@ -20,16 +20,8 @@
                             </div>
                         </div>
                     </md-content>
-					<h3 class="members-title">Membros</h3>
-					<div layout-margin>
-						<form ng-submit="">
-							<md-input-container layout="row" class="md-icon-float">
-							<label>Pesquisar</label>
-							<input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="membersCtrl.currentMember">
-							<md-icon md-colors="{color: 'grey-500'}">search</md-icon>
-							</md-input-container>
-						</form>
-					</div>
+                    <h3 class="members-title">Membros</h3>
+                    <search-user keyword="membersCtrl.currentMember"></search-user>
 					<md-content>
                         <div class="members-grid members-grid-position"
                             ng-repeat="groupedMembers in membersCtrl.members | filter: membersCtrl.currentMember">

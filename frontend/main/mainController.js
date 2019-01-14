@@ -14,7 +14,11 @@
         mainCtrl.pendingManagerMember = 0;
         mainCtrl.pendingInstInvitations = 0;
         mainCtrl.pendingInstLinksInvitations = 0;
-       
+
+        mainCtrl._statesWithoutFooter = [
+            STATES.CREATE_EVENT
+        ];
+         
         mainCtrl.APP_VERSION = Config.APP_VERSION;
         
         mainCtrl.search = function search() {
@@ -153,6 +157,14 @@
 
         mainCtrl.getState = function (stateName) {
             return STATES[stateName];
+        };
+
+        /**
+         * Verify if the current state is not included in the list of
+         * states that don't need the footer bar
+         */
+        mainCtrl.showFooterBar = () => {
+            return !mainCtrl._statesWithoutFooter.includes($state.current.name);
         };
 
         /** Reset properties CSS. 

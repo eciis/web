@@ -3,7 +3,7 @@
 
     const app = angular.module('app');
 
-    app.factory('UserFactory', function() {
+    app.factory('UserFactory', () => {
 
         function User(data) {
             data = data || {};

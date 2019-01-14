@@ -159,6 +159,9 @@
             return Utils.limitString(string, limit);
         };
 
+        /**
+         * Return the label in plural when has more than one admin in the institution
+         */
         manageMemberCtrl.getAdminLabel = () => {
             if(manageMemberCtrl.institution.admin) {
                 let label = "Administrador";

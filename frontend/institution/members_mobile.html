@@ -9,7 +9,7 @@
                     <md-content>
                         <div class="members-grid members-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
                             <div class="member-char-position member-char-properties">
-                                <span>{{membersCtrl.initialLetterOfName(membersCtrl.institution.admin)}}</span>
+                                <span>{{membersCtrl.getInitialLetterOfName(membersCtrl.institution.admin)}}</span>
                             </div>
                             <div layout="row" class="member-position">
                                 <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
@@ -34,7 +34,7 @@
                         <div class="members-grid members-grid-position"
                             ng-repeat="groupedMembers in membersCtrl.members | filter: membersCtrl.currentMember">
                             <div class="member-char-position member-char-properties">
-                                <span>{{membersCtrl.initialLetterOfName(groupedMembers[0])}}</span>
+                                <span>{{membersCtrl.getInitialLetterOfName(groupedMembers[0])}}</span>
                             </div>
                             <div layout="row" ng-repeat="member in groupedMembers | filter: membersCtrl.currentMember | orderBy: 'name'"
                                 ng-click="membersCtrl.showUserProfile(member.key, $event)" class="member-position">

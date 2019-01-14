@@ -151,12 +151,8 @@
             return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
-        /**
-        * Get the initial letter of the user name
-        * @param {Object} user : user object
-        */
-        manageMemberCtrl.initialLetterOfName = (user) => {
-            if(user) return user.name.toUpperCase().charAt(0);
+        manageMemberCtrl.getInitialLetterOfName = (user) => {
+            return Utils.getInitialLetterOfName(user);
         };
 
         manageMemberCtrl.limitString = (string, limit) => {

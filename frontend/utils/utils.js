@@ -225,6 +225,14 @@ var Utils = {
     },
 
     /**
+    * Get the initial letter of the user name
+    * @param {Object} user : user object
+    */
+    getInitialLetterOfName: function getInitialLetterOfName(user) {
+        if(user) return user.name.toUpperCase().charAt(0);
+    },
+
+    /**
      * Group users into Array of Arrays, wich the initial letter of username is the index of array
      * Index 0 to letter 'A', 1 to letter 'B'...
      * @param {Array} users : Array of users
@@ -234,7 +242,7 @@ var Utils = {
         const ASCIIAlphabetNumber = 65;
         let filteredUsers = [];
         users.forEach(user => {
-            const initialLetterIndex = user.name.toUpperCase().charCodeAt(0) - ASCIIAlphabetNumber;
+            const initialLetterIndex = Utils.getInitialLetterOfName(user).charCodeAt(0) - ASCIIAlphabetNumber;
             if(filteredUsers[initialLetterIndex]) {
                 filteredUsers[initialLetterIndex].push(user);
             } else {

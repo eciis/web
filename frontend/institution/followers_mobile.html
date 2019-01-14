@@ -19,7 +19,7 @@
 						<div class="followers-grid followers-grid-position"
 							ng-repeat="groupedFollowers in followersCtrl.followers | filter: followersCtrl.currentFollower">
                             <div class="follower-char-position follower-char-properties">
-                                <span>{{followersCtrl.initialLetterOfName(groupedFollowers[0])}}</span>
+                                <span>{{followersCtrl.getInitialLetterOfName(groupedFollowers[0])}}</span>
                             </div>
                             <div layout="row" ng-repeat="follower in groupedFollowers | filter: followersCtrl.currentFollower | orderBy: 'name'"
                                 ng-click="followersCtrl.showUserProfile(follower.key, $event)" class="follower-position">

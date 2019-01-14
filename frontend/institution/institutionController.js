@@ -390,12 +390,8 @@
             });
         };
 
-        /**
-         * Get the initial letter of the user name
-         * @param {Object} user : user object
-         */
-        followersCtrl.initialLetterOfName = (user) => {
-            if(user) return user.name.toUpperCase().charAt(0);
+        followersCtrl.getInitialLetterOfName = (user) => {
+            return Utils.getInitialLetterOfName(user);
         };
 
         followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {

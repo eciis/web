@@ -159,6 +159,13 @@
             return Utils.limitString(string, limit);
         };
 
+        manageMemberCtrl.getAdminLabel = () => {
+            if(manageMemberCtrl.institution.admin) {
+                let label = "Administrador";
+                return manageMemberCtrl.institution.admin.length > 0 ? label + "es" : label;
+            }
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response;

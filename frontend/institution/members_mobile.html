@@ -5,7 +5,7 @@
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
                 <div flex class="body">
-                    <h3 class="members-title">Administrador</h3>
+                    <h3 class="members-title">{{ membersCtrl.getAdminLabel() }}</h3>
                     <md-content>
                         <div class="members-grid members-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
                             <div class="member-char-position member-char-properties">

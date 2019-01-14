@@ -33,10 +33,6 @@
             return promise;
         };
 
-        loginCtrl.limpar = function limpar() {
-            loginCtrl.user = {};
-        };
-
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
             AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {
@@ -67,10 +63,10 @@
             }
         }
 
-        (function main() {
+        loginCtrl.$onInit = function main() {
             if (AuthService.isLoggedIn()) {
                 $state.go("manage-features");
             }
-        })();
+        };
     });
 })();

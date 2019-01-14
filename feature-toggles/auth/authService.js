@@ -1,13 +1,13 @@
 (function() {
     'use strict';
 
-    var app = angular.module("app");
+    const app = angular.module("app");
 
     app.service("AuthService", function AuthService($state, $window, UserService) {
-        var service = this;
+        const service = this;
 
-        var authObj = firebase.auth();
-        var userInfo;
+        const authObj = firebase.auth();
+        let userInfo;
         let tokenLoaded = false;
         service.resolveTokenPromise;
         let loadTokenPromise;
@@ -101,16 +101,11 @@
                     return response.user;
                 });
             }).then(function(user) {
-                if (user.emailVerified) {
-                    return user.getIdToken(true).then(function(idToken) {
-                        return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            return userInfo;
-                        });
+                return user.getIdToken(true).then(function(idToken) {
+                    return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                        return userInfo;
                     });
-                } else {
-                    service.sendEmailVerification(user);
-                    throw "Error! Email not verified.";
-                }
+                });
             });
         }
 

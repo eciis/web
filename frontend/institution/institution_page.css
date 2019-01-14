@@ -1,6 +1,6 @@
 .followers-grid, .members-grid {
     display: grid;
-    grid-template-columns: 28% 70% auto;
+    grid-template-columns: 25% 74% auto;
     grid-template-rows: 3em auto;
     align-items: initial;
     align-content: space-between;
@@ -25,11 +25,11 @@
 }
 
 .follower-char-properties, .member-char-properties {
-    margin-left: auto;
+    margin-left: 0.9em;
     margin-right: auto;
     margin-top: 0.5em;;
-    font-weight: 1000;
-    font-size: 1.5em;
+    font-weight: 900;
+    font-size: 1.2em;
     color: #746d6d;
 }
 

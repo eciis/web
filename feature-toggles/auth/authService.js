@@ -3,7 +3,7 @@
 
     const app = angular.module("app");
 
-    app.service("AuthService", function AuthService($state, $window, UserService) {
+    app.service("AuthService", function AuthService($state, $window, UserService, UserFactory) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -158,7 +158,7 @@
         }
 
         function configUser(userLoaded, firebaseUser) {
-            userInfo = new User(userLoaded);
+            userInfo = new UserFactory.user(userLoaded);
             _.extend(userInfo, firebaseUser);
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         }
@@ -166,7 +166,7 @@
         function init() {
             if ($window.localStorage.userInfo) {
                 var parse = JSON.parse($window.localStorage.userInfo);
-                userInfo = new User(parse);
+                userInfo = new UserFactory.user(parse);
             }
         }
 

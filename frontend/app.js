@@ -189,7 +189,10 @@
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/institutional_links.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/institutional_links.html", 
+                            "app/institution/institutional_links_mobile.html"
+                        ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }
                 }

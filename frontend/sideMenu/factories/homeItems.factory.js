@@ -26,7 +26,7 @@
 
         factory.getItems = user => {
             const institutionKey = user.current_institution.key;
-            const isNotMobileScreen = screen.width >= 600;
+            const isNotMobileScreen = !Utils.isMobileScreen(600);
             return [
                 {
                     icon: 'home',

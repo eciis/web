@@ -2,14 +2,22 @@
     <img src="app/images/logo.png"/>
 </div>
 <div>
-    <div class="toggle-content">
+    <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
         <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
-            Gerenciar instituição
+            {{feature.name}}
         </md-switch>
-        <md-select ng-model="oi" placeholder="Permissão" class="md-no-underline">
+        <md-select ng-model="feature.enable_mobile" placeholder="Permissão" class="md-no-underline">
+            <md-option value="DISABLED">DISABLED</md-option>
+            <md-option value="ALL">ALL</md-option>
+            <md-option value="ADMIN">ADMIN</md-option>
+            <md-option value="SUPER USER">SUPER USER</md-option>
+        </md-select>
+        <md-select ng-model="feature.enable_desktop" placeholder="Permissão" class="md-no-underline">
+            <md-option value="DISABLED">DISABLED</md-option>
             <md-option value="ALL">ALL</md-option>
             <md-option value="ADMIN">ADMIN</md-option>
             <md-option value="SUPER USER">SUPER USER</md-option>
         </md-select>
     </div>
+    {{manageTogglesCtrl.features}}
 </div>

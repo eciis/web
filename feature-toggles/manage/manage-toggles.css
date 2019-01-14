@@ -8,7 +8,7 @@
 
 .toggle-content {
     display: grid; 
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto auto;
     justify-content: center;
     grid-gap: 10px;
 }

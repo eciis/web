@@ -35,7 +35,7 @@
                 views: {
                     main: {
                         templateUrl: "app/manage/manage-toggles.html",
-                        constroller: "ManageTogglesController as ManageTogglesCtrl"
+                        controller: "ManageTogglesController as manageTogglesCtrl"
                     }
                 }
             });
@@ -92,5 +92,19 @@
                 return $q.reject(rejection);
             }
         };
+    });
+
+    app.run(function authInterceptor(AuthService, $transitions) {
+        var ignored_routes = [
+            "singin"
+        ];
+
+        $transitions.onBefore({
+            to: function(state) {
+                return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
+            }
+        }, function(transition) {
+            return transition.router.stateService.target("singin");
+        });
     });
 })();

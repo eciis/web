@@ -1,5 +1,8 @@
 <md-content>
-    <div ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp'"
+    <h3 id="mobile-notification-empty" ng-if="notificationListCtrl.notifications.length === 0">
+        <b>Nenhuma notificação no momento</b>
+    </h3>
+    <div ng-if="notificationListCtrl.notifications.length > 0" ng-repeat="notification in notificationListCtrl.notifications | orderBy:'-timestamp'"
         ng-class="notification.status === 'READ'? 'read-mobile-notification': 'unread-mobile-notification'" 
         class="mobile-notification-list" ng-click="notificationListCtrl.action(notification, $event)">
         <div class="mobile-notification-list-item">

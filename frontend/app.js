@@ -45,7 +45,7 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/user/left_nav.html",
+                        templateUrl: "app/home/left_nav.html",
                         controller: "HomeController as homeCtrl"
                     }
                 }

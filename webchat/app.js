@@ -67,18 +67,19 @@
 
   });
 
-  app.factory('BearerAuthInterceptor', function (STATES, $injector, $q, $state) {
+  app.factory('BearerAuthInterceptor', ['STATES', '$injector', '$q', '$state',
+    function (STATES, $injector, $q, $state) {
       return {
           request: function(config) {
-              var AuthService = $injector.get('AuthService');
+              const AuthService = $injector.get('AuthService');
               config.headers = config.headers || {};
               if (AuthService.isLoggedIn()) {
                   return AuthService.getUserToken().then(token => {
                       config.headers.Authorization = 'Bearer ' + token;
 
-                      var API_URL = "/api/";
-                      var FIRST_POSITION = 0;
-                      var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+                      const API_URL = "/api/";
+                      const FIRST_POSITION = 0;
+                      const requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
 
                       if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
                           config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
@@ -93,13 +94,13 @@
               return config || $q.when(config);
           },
           response: function(response) {
-              var app_version = response.headers("app_version");
-              var AuthService = $injector.get('AuthService');
+              const app_version = response.headers("app_version");
+              const AuthService = $injector.get('AuthService');
               AuthService.setAppVersion(app_version);
               return response || $q.when(response);
           },
           responseError: function(rejection) {
-              var AuthService = $injector.get('AuthService');
+              const AuthService = $injector.get('AuthService');
               if (rejection.status === 401) {
                   if (AuthService.isLoggedIn()) {
                       AuthService.logout();
@@ -115,7 +116,7 @@
               return $q.reject(rejection);
           }
       };
-  });
+  }]);
 
   app.run(function authInterceptor(STATES, AuthService, $transitions, $state) {
       const ignored_routes = [

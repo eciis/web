@@ -17,7 +17,7 @@
         <div layout="row" ng-repeat="user in groupedUsers | filter: listUsersCtrl.keyword | orderBy: 'name'"
             ng-click="listUsersCtrl.showUserProfile(user.key, $event)" class="list-users-position">
             <img title="{{user.name}}" ng-src="{{user.photo_url}}" class="md-avatar list-users-img"/>
-            <div class="list-users-name" ng-click="listUsersCtrl.showUserProfile(user.key, $event)">
+            <div class="list-users-name">
                 <p>{{ listUsersCtrl.limitString(user.name, 18) }}</p>
             </div>
         </div>

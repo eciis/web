@@ -6,7 +6,7 @@
   <base href="/" />
 
   <title>Plataforma CIS</title>
-  
+
   <!--Favicon-->
   <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
 
@@ -23,18 +23,18 @@
   <meta name="apple-mobile-web-app-title" content="Plataforma CIS">
   <meta name="msapplication-TileColor" content="#2F3BA2">
   <meta name="theme-color" content="#009688"/>
-  
+
 
 </head>
 <body ng-app="webchat" ng-cloak layout="column">
 
   <div flex layout="column" ui-view="main"></div>
 
-  <script> 
+  <script>
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
-    function $buo_f(){ 
-     var e = document.createElement("script"); 
-     e.src = "//browser-update.org/update.min.js"; 
+    function $buo_f(){
+     var e = document.createElement("script");
+     e.src = "//browser-update.org/update.min.js";
      document.body.appendChild(e);
     };
     try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
@@ -65,6 +65,8 @@
 
   <!-- Extra Libraries -->
   <script src="app/libs/angular-ui-router.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angularFire/2.3.0/angularfire.min.js"></script>
 
   <!-- Main Application Library -->
   <script src="app/config.js"></script>
@@ -74,5 +76,13 @@
   <script src="app/chat/chatController.js"></script>
   <script src="app/home/homeController.js"></script>
   <script src="app/webchat/webchatController.js"></script>
+
+  <script src="app/auth/authService.js"></script>
+
+  <script src="app/utils/utils.js"></script>
+  <script src="app/utils/user.js"></script>
+  <script src="app/utils/userService.js"></script>
+  <script src="app/utils/messageService.js"></script>
+  <script src="app/utils/httpService.js"></script>
 </body>
 </html>

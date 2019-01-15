@@ -67,6 +67,14 @@
 
         loadInstitution();
 
+        institutionCtrl.inTimelineState = function inTimelineState(){
+            return $state.current.name === STATES.INST_TIMELINE;
+        };
+
+        institutionCtrl.inRegistrationDataState = function inRegistrationDataState(){
+            return $state.current.name === STATES.INST_REGISTRATION_DATA;
+        }
+
         institutionCtrl.isAdmin = function isAdmin() {
             var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
             var isloggedWithInstitution = (institutionCtrl.user.current_institution.key === currentInstitutionKey);

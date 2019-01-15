@@ -2,53 +2,7 @@
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
         <div id="cover-inst-mobile">
-            <div class="cover-photo" id="buttons-navbar-inst-container">
-                <md-button class="md-icon-button cover-photo-button button-navbar-inst"
-                    ng-click="institutionCtrl.goToHome()">
-                    <md-icon class="icon-button-menu-inst">arrow_back</md-icon>
-                </md-button>
-                <md-button class="cover-photo-button button-navbar-inst"
-                    id="btn-description">
-                    <b>DESCRIÇÃO</b>
-                </md-button>
-                <div>
-                    <md-button class="cover-photo-button button-navbar-inst" ng-if="institutionCtrl.isUserFollower"
-                    ng-click=" institutionCtrl.unfollow()" id="btn-unfollow">
-                            <b>SEGUINDO</b>
-                    </md-button>
-                    <md-button class="cover-photo-button button-navbar-inst" ng-if="!institutionCtrl.isUserFollower"
-                        ng-click="institutionCtrl.follow()"
-                        id="btn-follow"> <b>SEGUIR</b>
-                    </md-button>
-                </div>
-                <md-menu style="overflow:hidden">
-                    <md-button class="md-icon-button cover-photo-button button-navbar-inst"
-                        ng-mouseenter="$mdMenu.open()" id="btn-more">
-                        <md-icon class="icon-button-menu-inst">more_vert</md-icon>
-                    </md-button>
-                    <md-menu-content width="3">
-                        <md-menu-item>
-                            <md-button ng-model="institutionCtrl.file" ngf-pattern="'image/*'"  ng-click="null"
-                            ngf-accept="'image/*'" ngf-max-size="5MB" ngf-select="institutionCtrl.cropImage(institutionCtrl.file, $event)">
-                                Adicionar capa
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-if="!institutionCtrl.isMember">
-                            <md-button style="text-align: left;"
-                                ng-disabled="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)"
-                                ng-click="institutionCtrl.requestInvitation($event)">
-                                <span ng-if="!institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Solicitar vínculo</span>
-                                <span ng-if="institutionCtrl.user.isInstitutionRequested(institutionCtrl.institution.key)">Vínculo pendente</span>
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-            </div>
-            <div md-colors="{background: 'teal-500'}" id="image-cover-inst">
-                <img ng-if="institutionCtrl.showImageCover()" ng-src="{{institutionCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
-                <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
-                    layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>
-            </div>
+           <institution-header></institution-header>
             <div id="inst-name-mobile">
                 <img id="inst-image-mobile"  ng-src="{{ institutionCtrl.getPhoto() }}"/>
                 <center  class="md-title">

@@ -4,7 +4,7 @@
     angular.module('webchat').component('ecisHeader', {
         templateUrl: "app/components/header/ecis-header.html",
         controller: [
-            $mdSidenav,
+            '$mdSidenav',
             headerController,
         ],
         controllerAs: "headerCtrl",

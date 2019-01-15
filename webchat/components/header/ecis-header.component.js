@@ -3,7 +3,10 @@
 
     angular.module('webchat').component('ecisHeader', {
         templateUrl: "app/components/header/ecis-header.html",
-        controller: headerController,
+        controller: [
+            $mdSidenav,
+            headerController,
+        ],
         controllerAs: "headerCtrl",
         bindings: {
             className: "@",

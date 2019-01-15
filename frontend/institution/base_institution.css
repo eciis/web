@@ -24,10 +24,14 @@
     border-radius: 50%;
 }
 
+#cover-inst-mobile{
+    box-shadow: 0 -2px 5px 0px grey;
+    height: 100vh;
+}
+
 .button-navbar-inst{
     position: relative;
     z-index: 3;
-    width: auto !important;
     color: rgba(255, 255, 255);
 }
 

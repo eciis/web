@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module('app');
 
-    app.directive('hideNavbar', function(STATES, $state) {
+    app.directive('hideNavbar', ['STATES','$state', function(STATES, $state) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -17,6 +17,8 @@
                     STATES.CREATE_EVENT
                 ];
                 
+                /** Definy initial style of toolbars according the current state.
+                 */
                 scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
                     const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
                         scope.INSTITUTION_STATES.includes($state.current.name);
@@ -25,20 +27,29 @@
                 
                 }
 
+                /** Verify if current states is allowed to show top toolbar.
+                 */
                 scope.isTopToolbarAllowed = function isTopToolbarAllowed() {
                     let statesAllowed = [STATES.CREATE_EVENT];
                     statesAllowed = statesAllowed.concat(scope.INSTITUTION_STATES);
                     return !statesAllowed.includes($state.current.name);
                 }
 
+                /** Verify if current states is allowed to show bottom toolbar.
+                 */
                 scope.isBottomToolbarAllowed = function isBottomToolbarAllowed() {
                     return !scope.STATES_WITHOUT_BOTTOM_TOOLBAR.includes($state.current.name);
                 }
-
+                
+                /** Set property CSS to hide element.
+                 * @param(element HTMLElement) Element that should be hide.
+                 */
                 scope.hideElement = function hideElement(element){
                     element.style.display = 'none';
                 }
 
+                /** Add listenner on element to hide bottom and/or top toolbar according scroll position on mobile. 
+                 */
                 scope.hideToolbarListenner = function hideToolbarListenner(){
                     const hideBoth = attrs.hideNavbar === "both";
                     const hideTop = attrs.hideNavbar === "top" || hideBoth;
@@ -76,5 +87,5 @@
 
             }
         };
-    });
+    }]);
 })();

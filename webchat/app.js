@@ -90,7 +90,6 @@
 
       $httpProvider.interceptors.push('BearerAuthInterceptor');
       $locationProvider.html5Mode(true);
-      $locationProvider.hashPrefix('');
   });
 
   app.factory('BearerAuthInterceptor', ['STATES', '$injector', '$q', '$state',

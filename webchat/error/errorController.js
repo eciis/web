@@ -15,7 +15,7 @@
         };
 
         errorCtrl.goToReport = function goToReport() {
-            $window.open('http://support.plataformacis.org/report');
+            $window.open(`${Config.SUPPORT_URL}/report`);
         }
     }]);
 })();

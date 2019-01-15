@@ -1,0 +1,39 @@
+#webchat {
+    height: 100vh;
+    display: flex;
+}
+
+#content {
+    display: flex;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.custom-scrollbar::-webkit-scrollbar {
+    width: .3em;
+    height: .3em;
+}
+.custom-scrollbar::-webkit-scrollbar-button {
+    background: #009688
+}
+.custom-scrollbar::-webkit-scrollbar-track-piece {
+    background: #ccc
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #009688
+}
+
+@media screen and (min-width: 1280px) {
+    .hide-on-desktop {
+        display: none;
+    }
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-margin {
+    margin: 0;
+}

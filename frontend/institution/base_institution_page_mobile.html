@@ -2,12 +2,10 @@
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
         <div id="cover-inst-mobile">
-           <institution-header></institution-header>
+           <institution-header title="{{institutionCtrl.getLimitedName(110)}}"
+                photo="institutionCtrl.getPhoto()">
+           </institution-header>
             <div id="inst-name-mobile">
-                <img id="inst-image-mobile"  ng-src="{{ institutionCtrl.getPhoto() }}"/>
-                <center  class="md-title">
-                    <p style="font-size:1.2em">{{ institutionCtrl.getLimitedName(110) }}</p>
-                </center>
                 <hr id="divider-institution"/>
                 <div id="buttons-institution-page">
                     <md-button md-colors="{background: 'teal-500'}"

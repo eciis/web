@@ -6,9 +6,13 @@
 
     app.component("institutionHeader", {
         templateUrl: "/app/institution/institution_header.html",
-        controller: "InstitutionController as institutionCtrl",
+        controller: function(){},
+        controllerAs: "instHeaderCtrl",
         bindings: {
-            institution: '='
+            title: '@',
+            photo: '=',
+            className: '@',
+            
         }
     });
 })();

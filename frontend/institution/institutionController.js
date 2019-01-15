@@ -378,6 +378,20 @@
             return Utils.limitString(string, size);
         };
 
+        /** Return object that contais all functions necessary in institution header,
+         * when is in timeline page.
+         */
+        institutionCtrl.getActionsButtonHeader = function getActionsButtonHeader(){
+            return {
+                goHome: institutionCtrl.goToHome,
+                showDescribe: null,
+                isUserFollower: institutionCtrl.isUserFollower,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                fileBackground: institutionCtrl.file
+            }
+        }
+
         (function main(){
             changeCoverOnScroll();
         })();

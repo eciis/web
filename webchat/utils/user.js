@@ -2,7 +2,7 @@
 (function () {
   const app = angular.module('webchat');
 
-  app.factory('User', () => {
+  app.factory('User', [() => {
     function User(data) {
       data = data || {};
       _.extend(this, data);
@@ -71,5 +71,5 @@
     }
 
     return User;
-  })
+  }])
 })();

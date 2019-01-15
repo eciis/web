@@ -3,8 +3,8 @@
 
     const app = angular.module("webchat");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, MessageService,
-      User, STATES) {
+    app.service("AuthService", ['$q', '$state', '$window', 'UserService', 'MessageService', 'User', 'STATES',
+      function AuthService($q, $state, $window, UserService, MessageService, User, STATES) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -164,11 +164,6 @@
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
-        service.resetPassword = function resetPassword(email) {
-            return authObj.sendPasswordResetEmail(email);
-
-        };
-
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
         };
@@ -202,5 +197,5 @@
         }
 
         init();
-    });
+    }]);
 })();

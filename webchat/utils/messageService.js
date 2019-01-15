@@ -3,7 +3,7 @@
 (function() {
     const app = angular.module("webchat");
 
-    app.service("MessageService", function MessageService($mdToast, $mdDialog) {
+    app.service("MessageService", ['$mdToast', '$mdDialog', function MessageService($mdToast, $mdDialog) {
         const service = this;
 
         const msg = {
@@ -61,5 +61,5 @@
                 clickOutsideToClose:true
             });
         }
-    });
+    }]);
 })();

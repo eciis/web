@@ -3,6 +3,11 @@
     display: flex;
 }
 
+#content {
+    display: flex;
+    height: 100%;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }

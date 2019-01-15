@@ -2,61 +2,61 @@
 
 (describe('Test InstitutionController', function() {
 
-    let institutionCtrl, httpBackend, scope, institutionService, createCtrl, state,
+    let institutionCtrl, httpBackend, scope, institutionService, state,
         mdDialog, cropImageService, imageService, utilsService, states;
 
-    var INSTITUTIONS_URI = "/api/institutions/";
+    const INSTITUTIONS_URI = "/api/institutions/";
 
-    var legal_nature = {
+    const legal_nature = {
         "private for-profit":"Privada com fins lucrativos",
         "private non-profit":"Privada sem fins lucrativos",
         "public":"Pública" 
     };
-    var area = {
+    const area = {
         "OFFICIAL_BANK": "Banco Oficial",
         "COMMISSION": "Comissão",
         "COUNCIL": "Conselho",
         "PRIVATE_COMPANY": "Empresa Privada",
     };
 
-    var first_institution = {
+    const first_institution = new Institution({
         acronym: 'first_institution',
         key: '987654321',
         photo_url: "photo_url",
         actuation_area : "COMMISSION",
         legal_nature : "public"
-    };
+    });
 
-    var sec_institution = {
+    const sec_institution = new Institution({
         acronym: 'sec_institution',
         key: '123456789',
         photo_url: "photo_url",
         actuation_area : "COMMISSION",
         legal_nature : "public"
-    };
+    });
 
-    var first_user = {
+    const first_user = new User({
         name: 'first_user',
         institutions: [first_institution],
         follows: [sec_institution],
         institutions_admin: first_institution,
         current_institution: first_institution
-    };
+    });
 
-    var sec_user = {
+    const sec_user = new User({
         name: 'sec_user',
         institutions: [sec_institution],
         follows: [first_institution]
-    };
+    });
 
-    var posts = [{
+    const posts = [{
         author: 'sec_user',
         author_key: "abcdefg"
     }];
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, STATES,
+    beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, STATES,
             InstitutionService, AuthService, UtilsService, $mdDialog, CropImageService, ImageService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -71,23 +71,15 @@
         httpBackend.expect('GET', INSTITUTIONS_URI + first_institution.key).respond(first_institution);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(area);
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
-        httpBackend.when('GET', 'institution/institution_page.html').respond(200);
-        httpBackend.when('GET', 'institution/removeInstDialog.html').respond(200);
-        httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.when('GET', "home/home.html").respond(200);
 
         AuthService.login(first_user);
 
-        createCtrl = function() {
-            return $controller('InstitutionController',
-                {
-                    scope: scope,
-                    institutionService: institutionService
-                });
-        };
-
         state.params.institutionKey = first_institution.key;
-        institutionCtrl = createCtrl();
+        institutionCtrl = $controller('InstitutionController',{
+            scope: scope,
+            institutionService: institutionService
+        });
+        institutionCtrl.$onInit();
         httpBackend.flush();
     }));
 
@@ -132,19 +124,12 @@
         describe('follow()', function() {
 
             beforeEach(function() {
-                spyOn(institutionService, 'follow').and.callFake(function() {
-                    return {
-                        then: function(callback) {
-                            return callback();
-                        }
-                    };
-                });
+                spyOn(institutionService, 'follow').and.returnValue(Promise.resolve(first_institution));
                 spyOn(institutionCtrl.user, 'follow');
             });
 
             it('should call institutionService.follow() ', function(done) {
-                var promise = institutionCtrl.follow();
-                promise.then(function() {
+                institutionCtrl.follow().then(function() {
                     expect(institutionService.follow).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
@@ -152,10 +137,8 @@
             });
 
             it('should call user.follow()', function(done) {
-                first_institution = new Institution(first_institution);
-                var promise = institutionCtrl.follow();
-                promise.then(function() {
-                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(first_institution);
+                institutionCtrl.follow().then(function() {
+                    expect(institutionCtrl.user.follow).toHaveBeenCalledWith(new Institution(first_institution));
                     done();
                 });
                 scope.$apply();
@@ -184,8 +167,7 @@
             });
 
             it('should call user.isMember()', function(done) {
-                var promise = institutionCtrl.unfollow();
-                promise.then(function() {
+                institutionCtrl.unfollow().then(function() {
                     expect(institutionCtrl.user.isMember).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
@@ -193,8 +175,7 @@
             });
 
             it('should call institutionService.unfollow()', function(done) {
-                var promise = institutionCtrl.unfollow();
-                promise.then(function() {
+                institutionCtrl.unfollow().then(function() {
                     expect(institutionService.unfollow).toHaveBeenCalledWith(first_institution.key);
                     done();
                 });
@@ -202,21 +183,11 @@
             });
 
             it('should call user.unfollow()', function(done) {
-                var promise = institutionCtrl.unfollow();
-                promise.then(function() {
+                institutionCtrl.unfollow().then(function() {
                     expect(institutionCtrl.user.unfollow).toHaveBeenCalledWith(institutionCtrl.institution);
                     done();
                 });
                 scope.$apply();
-            });
-        });
-
-        describe('removeInstitution()', function() {
-
-            it('should call $mdDialog.show()', function() {
-                spyOn(mdDialog, 'show');
-                institutionCtrl.removeInstitution('$event');
-                expect(mdDialog.show).toHaveBeenCalled();
             });
         });
 

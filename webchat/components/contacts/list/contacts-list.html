@@ -1,0 +1,4 @@
+<md-list-item aria-label="user-contact" ng-repeat="user in contactsListCtrl.contacts | filter : contactsListCtrl.searchQuery" ng-click="contactsListCtrl.openChat(user)">
+    <user-description class="user-contact" name="{{user.name}}" avatar="{{user.avatar}}" description="{{user.description}}"></user-description>
+    <md-divider></md-divider>
+</md-list-item>

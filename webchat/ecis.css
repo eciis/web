@@ -1,0 +1,48 @@
+body, html {
+  height: 100%;
+  width: 100%;
+}
+
+#webchat {
+  height: 100%;
+}
+
+ec-content {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  overflow: auto;
+}
+
+.ec-card {
+  display: grid;
+  max-width: 480px;
+  margin: 0.6em;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  background-color: white;
+  color: black;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ec-card > card-header {
+  background-color: #009688;
+  color: white;
+  display: grid;
+}
+
+.ec-card > card-header > h1 {
+  font-size: 1.2em;
+  margin: 0.6em;
+}
+
+.ec-card > card-content {
+  display: grid;
+  margin: 0.4em;
+  padding: 0.6em;
+  justify-items: center;
+}

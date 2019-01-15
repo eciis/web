@@ -13,10 +13,11 @@
           home: `${rootName}.home`,
           chat: `${rootName}.chat`,
           login: 'login',
+          error: 'error',
       });
 
   app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider,
-    $httpProvider) => {
+    $httpProvider, $locationProvider) => {
       $mdIconProvider.fontSet('md', 'material-icons');
       $mdThemingProvider.theme('docs-dark');
       $mdThemingProvider.theme('input')
@@ -59,12 +60,36 @@
                      templateUrl: "app/auth/login.html",
                      controller: "LoginController as controller",
                  },
+            }
+          })
+         .state(STATES.error, {
+             url: '/error',
+             views: {
+                 main: {
+                     templateUrl: 'app/error/error.html',
+                     controller: 'ErrorController as errorCtrl',
+                 },
              },
-         });
 
-      $urlRouterProvider.otherwise("/");
+             params: {
+                 'msg': 'Desculpe! Ocorreu um erro.',
+                 'status': '500'
+             },
+         })
+
+      $urlRouterProvider.otherwise(($injector, $location) => {
+        const state = $injector.get('$state');
+
+        state.go(STATES.error, {
+            msg: `Página não encontrada! "${$location.path()}"`,
+            status: '404'
+        })
+
+        return;
+      });
+
       $httpProvider.interceptors.push('BearerAuthInterceptor');
-
+      $locationProvider.html5Mode(true);
   });
 
   app.factory('BearerAuthInterceptor', ['STATES', '$injector', '$q', '$state',
@@ -110,8 +135,16 @@
                   }
               } else if(rejection.status === 403) {
                   rejection.data.msg = "Você não tem permissão para realizar esta operação!";
+              } else if(rejection.status === 404) {
+                  $state.go(STATES.error, {
+                      msg: `URL não encontrada! "${Utils.getApiPath(rejection.config.url)}"`,
+                      status: '404'
+                  });
               } else {
-                  $state.go(STATES.home);
+                  $state.go(STATES.error, {
+                      msg: rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                      status: rejection.status
+                  });
               }
               return $q.reject(rejection);
           }
@@ -121,6 +154,7 @@
   app.run(function authInterceptor(STATES, AuthService, $transitions, $state) {
       const ignored_routes = [
           STATES.login,
+          STATES.error,
       ];
 
       $transitions.onStart({

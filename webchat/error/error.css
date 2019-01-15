@@ -1,0 +1,25 @@
+error-page-background {
+  width: 100%;
+  height: calc(32% + 2.2em);
+  position: absolute;
+  align-self: start;
+}
+
+error-card {
+  align-self: center;
+  justify-self: center;
+  z-index: 10;
+}
+
+error-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: end;
+  margin-left: auto;
+}
+
+error-card > card-content > p {
+  justify-self: start;
+  text-align: justify;
+  word-break: break-all;
+}

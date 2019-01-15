@@ -20,14 +20,14 @@
                 scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
                     const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
                         scope.INSTITUTION_STATES.includes($state.current.name);
-                    console.log(!scope.isStateAllowedTopMobile, shouldHideBottomToolbar);
                     if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
                     if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar);
                 
                 }
 
                 scope.isTopToolbarAllowed = function isTopToolbarAllowed() {
-                    const statesAllowed = scope.INSTITUTION_STATES;
+                    let statesAllowed = [STATES.CREATE_EVENT];
+                    statesAllowed = statesAllowed.concat(scope.INSTITUTION_STATES);
                     return !statesAllowed.includes($state.current.name);
                 }
 

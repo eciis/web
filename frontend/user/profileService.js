@@ -10,7 +10,8 @@
 
         service.showProfile  = function showProfile(userKey, ev) {
              $mdDialog.show({
-                templateUrl: 'app/user/profile.html',
+                templateUrl: Utils.selectFieldBasedOnScreenSize('app/user/profile_mobile.html',
+                    'app/user/profile.html', 475),
                 controller: "ProfileController",
                 controllerAs: "profileCtrl",
                 locals: {

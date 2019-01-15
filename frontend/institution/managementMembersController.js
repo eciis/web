@@ -151,14 +151,6 @@
             return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
-        manageMemberCtrl.getInitialLetterOfName = (user) => {
-            return Utils.getInitialLetterOfName(user);
-        };
-
-        manageMemberCtrl.limitString = (string, limit) => {
-            return Utils.limitString(string, limit);
-        };
-
         /**
          * Return the label in plural when has more than one admin in the institution
          */

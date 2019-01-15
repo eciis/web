@@ -372,6 +372,10 @@
             });
         };
 
+        followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
+            ProfileService.showProfile(userKey, ev);
+        };
+
         followersCtrl.$onInit = () => {
             followersCtrl._getFollowers();
         };

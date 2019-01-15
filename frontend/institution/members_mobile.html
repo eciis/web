@@ -8,9 +8,6 @@
                     <h3 class="list-users-title">{{ membersCtrl.getAdminLabel() }}</h3>
                     <md-content>
                         <div class="list-users-grid list-users-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
-                            <div class="list-users-char-position list-users-char-properties">
-                                <span>{{membersCtrl.getInitialLetterOfName(membersCtrl.institution.admin)}}</span>
-                            </div>
                             <div layout="row" class="list-users-position">
                                 <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
                                 class="md-avatar list-users-img"/>

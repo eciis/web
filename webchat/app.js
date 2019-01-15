@@ -81,7 +81,6 @@
         const state = $injector.get('$state');
 
         state.go(STATES.error, {
-            // msg: `Página não encontrada! "${$location.$location.$$absUrl}"`,
             msg: `Página não encontrada! "${$location.path()}"`,
             status: '404'
         })

@@ -83,8 +83,6 @@
                 
                 scope.initialToolbarDisplayState();
                 scope.hideToolbarListenner();
-
-
             }
         };
     }]);

@@ -19,3 +19,4 @@ class ErroHandler(BaseHandler):
             "msg": "Not found",
             "status": 404
         }))
+        self.response.set_status(404)

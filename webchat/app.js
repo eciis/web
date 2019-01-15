@@ -135,6 +135,11 @@
                   }
               } else if(rejection.status === 403) {
                   rejection.data.msg = "Você não tem permissão para realizar esta operação!";
+              } else if(rejection.status === 404) {
+                  $state.go(STATES.error, {
+                      msg: `URL não encontrada! "${Utils.getApiPath(rejection.config.url)}"`,
+                      status: '404'
+                  });
               } else {
                   $state.go(STATES.error, {
                       msg: rejection.data.msg || "Desculpa! Ocorreu um erro.",
@@ -160,14 +165,4 @@
           $state.go(STATES.login);
       });
   });
-
-  function initServiceWorker() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('app/sw.js');
-    }
-  }
-
-  (function() {
-    initServiceWorker();
-  })();
 })();

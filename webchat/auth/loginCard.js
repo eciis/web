@@ -22,6 +22,10 @@
       });
     }
 
+    ctrl.resetPassword = () => {
+      window.open(Config.FRONTEND_URL);
+    }
+
     ctrl.$onInit = () => {
       if (_.isNil(ctrl.email))
         ctrl.email = true;

@@ -166,11 +166,6 @@
             $window.localStorage.userInfo = JSON.stringify(userInfo);
         };
 
-        service.resetPassword = function resetPassword(email) {
-            return authObj.sendPasswordResetEmail(email);
-
-        };
-
         service.$onLogout = function $onLogout(callback) {
             onLogoutListeners.push(callback);
         };

@@ -229,7 +229,7 @@ var Utils = {
     * @param {Object} user : user object
     */
     getInitialLetterOfName: function getInitialLetterOfName(user) {
-        if(user) return user.name.toUpperCase().charAt(0);
+        if(user) return Utils.normalizeString(user.name).toUpperCase().charAt(0);
     },
 
     /**

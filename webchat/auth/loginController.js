@@ -3,7 +3,8 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('LoginController', function LoginController (AuthService, $state, STATES) {
+    webchat.controller('LoginController', ['AuthService', '$state', 'STATES',
+      function LoginController(AuthService, $state, STATES) {
         const controller = this;
 
         controller.success = () => {
@@ -15,5 +16,5 @@
             $state.go(STATES.home);
           }
         }
-    });
+    }]);
 })();

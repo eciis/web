@@ -41,7 +41,7 @@
   angular.module('webchat')
     .component('loginCard', {
       templateUrl: 'app/auth/loginCard.html',
-      controller: LoginCardController,
+      controller: ['AuthService', 'MessageService', LoginCardController],
       controllerAs: 'ctrl',
       bindings: {
         email: '<',

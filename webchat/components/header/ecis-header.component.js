@@ -20,5 +20,8 @@
     function headerController ($mdSidenav) {
         const headerCtrl = this;
 
+        headerCtrl.toggleNavbar = (componentId) => {
+            $mdSidenav(componentId).toggle();
+        };
     }
 })();

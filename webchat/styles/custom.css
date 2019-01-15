@@ -3,10 +3,6 @@
     display: flex;
 }
 
-#content {
-    display: flex;
-}
-
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }

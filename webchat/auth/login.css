@@ -8,6 +8,29 @@ login-card {
   border-radius: 2px;
 }
 
+.smooth-if.ng-enter, .smooth-if.ng-leave {
+  transition: 1s ease-in-out all;
+}
+
+.smooth-if.ng-enter {
+  opacity: 0.1;
+}
+
+.smooth-if.ng-enter-active {
+  opacity: 1;
+}
+
+.smooth-if.ng-leave {
+  opacity: 0;
+  z-index: 10;
+}
+
+.smooth-if.ng-leave.ng-leave-active {
+  opacity: 0;
+  z-index: 10;
+  position: absolute;
+}
+
 md-progress-circular {
   margin: 15%;
 }

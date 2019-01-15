@@ -1,0 +1,23 @@
+<ec-content>
+  <error-page-background md-colors="{background: 'light-green'}">
+
+  </error-page-background>
+  <error-card class='ec-card'>
+    <card-header>
+      <h1> ERRO {{errorCtrl.status}} </h1>
+    </card-header>
+    <card-content>
+      <h3> Ocorreu um erro ao acessar esta informação. </h3>
+      <p> {{ errorCtrl.msg }} </p>
+      <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+      <p>Loremipsumdolorsitamet,consecteturadipiscingelit,seddoeiusmodtemporincididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
+      <error-buttons>
+        <md-button ng-click="errorCtrl.goToHome()" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+          Voltar
+        </md-button>
+        <md-button ng-click="errorCtrl.goToReport()" class="md-raised md-primary" md-colors="{background: 'teal-500'}">
+          Reportar erro
+        </md-button>
+      </error-buttons>
+    </card-content>
+</error-card>

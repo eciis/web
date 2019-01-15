@@ -13,10 +13,11 @@
           home: `${rootName}.home`,
           chat: `${rootName}.chat`,
           login: 'login',
+          error: 'error',
       });
 
   app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider,
-    $httpProvider) => {
+    $httpProvider, $locationProvider) => {
       $mdIconProvider.fontSet('md', 'material-icons');
       $mdThemingProvider.theme('docs-dark');
       $mdThemingProvider.theme('input')
@@ -59,12 +60,38 @@
                      templateUrl: "app/auth/login.html",
                      controller: "LoginController as controller",
                  },
+            }
+          })
+         .state(STATES.error, {
+             url: '/error',
+             views: {
+                 main: {
+                     templateUrl: 'app/error/error.html',
+                     controller: 'ErrorController as errorCtrl',
+                 },
              },
-         });
 
-      $urlRouterProvider.otherwise("/");
+             params: {
+                 'msg': 'Desculpe! Ocorreu um erro.',
+                 'status': '500'
+             },
+         })
+
+      $urlRouterProvider.otherwise(($injector, $location) => {
+        const state = $injector.get('$state');
+
+        state.go(STATES.error, {
+            // msg: `Página não encontrada! "${$location.$location.$$absUrl}"`,
+            msg: `Página não encontrada! "${$location.path()}"`,
+            status: '404'
+        })
+
+        return;
+      });
+
       $httpProvider.interceptors.push('BearerAuthInterceptor');
-
+      $locationProvider.html5Mode(true);
+      $locationProvider.hashPrefix('');
   });
 
   app.factory('BearerAuthInterceptor', ['STATES', '$injector', '$q', '$state',
@@ -121,6 +148,7 @@
   app.run(function authInterceptor(STATES, AuthService, $transitions, $state) {
       const ignored_routes = [
           STATES.login,
+          STATES.error,
       ];
 
       $transitions.onStart({
@@ -131,4 +159,14 @@
           $state.go(STATES.login);
       });
   });
+
+  function initServiceWorker() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('app/sw.js');
+    }
+  }
+
+  (function() {
+    initServiceWorker();
+  })();
 })();

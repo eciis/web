@@ -3,7 +3,7 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('WebchatController', function WebchatController ($scope, $state) {
+    webchat.controller('WebchatController', function WebchatController () {
         const webchatCtrl = this;
 
         webchatCtrl.user = {

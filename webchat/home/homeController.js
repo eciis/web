@@ -3,7 +3,7 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('HomeController', function HomeController ($scope, $state) {
+    webchat.controller('HomeController', function HomeController () {
         const homeCtrl = this;
 
     });

@@ -25,7 +25,7 @@
         };
 
         factory.getItems = user => {
-            const institutionKey = user.current_institution.key;
+            const getInstitutionKey = () => user.current_institution.key;
             const isNotMobileScreen = !Utils.isMobileScreen(600);
             return [
                 {
@@ -61,21 +61,21 @@
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,
-                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: getInstitutionKey()}),
                 },
                 {
                     icon: 'account_circle',
                     description: 'Gerenciar Membros',
                     stateName: 'MANAGE_INST_MEMBERS',
                     showIf: () => user.isAdminOfCurrentInst() && isNotMobileScreen,
-                    onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_MEMBERS, {institutionKey: getInstitutionKey()}),
                 },
                 {
                     icon: 'account_balance',
                     description: 'Vínculos Institucionais',
                     stateName: 'MANAGE_INST_INVITE_INST',
                     showIf: () => user.isAdminOfCurrentInst() && isNotMobileScreen,
-                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey}),
+                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey: getInstitutionKey()}),
                 },
                 {
                     icon: 'account_balance',

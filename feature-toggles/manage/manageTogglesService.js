@@ -5,7 +5,7 @@
 
     app.service('ManageTogglesService', function(HttpService) {
         const service = this;
-        const URI = '/api/feature-toggles';
+        const URI = '/api/feature-toggles?lang=pt-br';
 
         service.getAllFeatureToggles = function getAllFeatureToggles() {
             return HttpService.get(URI);

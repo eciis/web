@@ -1,4 +1,5 @@
 """Feature model."""
+import json
 from google.appengine.ext import ndb
 
 __all__ = ['Feature']
@@ -13,10 +14,11 @@ class Feature(ndb.Model):
         choices=set(["SUPER_USER", "ADMIN", "ALL", "DISABLED"]))
     enable_desktop = ndb.StringProperty(
         choices=set(["SUPER_USER", "ADMIN", "ALL", "DISABLED"]))
+    translation = ndb.JsonProperty(default="{}")
 
     @staticmethod
     @ndb.transactional(xg=True)
-    def create(name, enable_mobile="ALL", enable_desktop="ALL"):
+    def create(name, translation_dict, enable_mobile="ALL", enable_desktop="ALL"):
         """
         Method to create new feature.
 
@@ -27,6 +29,7 @@ class Feature(ndb.Model):
         """
 
         feature = Feature(id=name, name=name, enable_desktop=enable_desktop, enable_mobile=enable_mobile)
+        feature.translation = json.dumps(translation_dict)
         feature.put()
         return feature
     
@@ -80,15 +83,15 @@ class Feature(ndb.Model):
         else:
             raise Exception("Feature not found!")
 
-    def make(self):
+    def make(self, language="pt-br"):
         """
         Method to make feature.
         """
-
         make_obj = {
             'name': self.name,
             'enable_mobile': self.enable_mobile,
-            'enable_desktop': self.enable_desktop
+            'enable_desktop': self.enable_desktop,
+            'translation': json.loads(self.translation).get(language)
         }
 
         return make_obj

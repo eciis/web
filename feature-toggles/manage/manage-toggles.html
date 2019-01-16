@@ -8,7 +8,7 @@
         <div style="display: grid; justify-content: center; margin: 16px;">
             <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
                 <b>
-                    {{feature.name}}
+                    {{feature.translation || feature.name}}
                 </b>
                 <md-input-container>
                     <label>Permissão Mobile</label>

@@ -362,20 +362,22 @@
         followersCtrl.currentFollower = "";
         followersCtrl.isLoadingFollowers = true;
 
-        function getFollowers() {
+        followersCtrl._getFollowers = () => {
             InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                followersCtrl.followers = response;
+                followersCtrl.followers = Utils.isMobileScreen(475) ?
+                    Utils.groupUsersByInitialLetter(response) : response;
                 followersCtrl.isLoadingFollowers = false;
             }, function error() {
                 followersCtrl.isLoadingFollowers = true;
             });
-        }
+        };
 
         followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);
         };
 
-        getFollowers();
-
+        followersCtrl.$onInit = () => {
+            followersCtrl._getFollowers();
+        };
     });
 })();

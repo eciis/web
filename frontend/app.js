@@ -153,7 +153,8 @@
                 url: "/institution/:institutionKey/followers",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/followers.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/followers.html",
+                            "app/institution/followers_mobile.html", 475),
                         controller: "FollowersInstController as followersCtrl"
                     }
                 }
@@ -171,7 +172,8 @@
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/members.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/members.html",
+                            "app/institution/members_mobile.html", 475),
                         controller: "ManagementMembersController as membersCtrl"
                     }
                 }

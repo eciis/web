@@ -151,10 +151,20 @@
             return _.find(manageMemberCtrl.requests, request => request.status === 'sent');
         };
 
+        /**
+         * Return the label in plural when has more than one admin in the institution
+         */
+        manageMemberCtrl.getAdminLabel = () => {
+            if(manageMemberCtrl.institution.admin) {
+                let label = "Administrador";
+                return manageMemberCtrl.institution.admin.length > 1 ? label + "es" : label;
+            }
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 manageMemberCtrl.institution = response;
-                getMembers();
+                manageMemberCtrl._getMembers();
                 getSentInvitations(response.sent_invitations);
                 getRequests();
             }, function error() {
@@ -168,15 +178,16 @@
             manageMemberCtrl.sentInvitationsAdm = invitations.filter(invite => invite.type_of_invite === 'INVITE_USER_ADM');
         }
 
-        function getMembers() {
+        manageMemberCtrl._getMembers = () => {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.members = response;
-                getAdmin();
+                manageMemberCtrl.members = Utils.isMobileScreen(475) ?
+                    Utils.groupUsersByInitialLetter(response) : response;
+                getAdmin(response);
                 manageMemberCtrl.isLoadingMembers = false;
             }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
             });
-        }
+        };
 
         function getRequests() {
             RequestInvitationService.getRequests(currentInstitutionKey).then(function success(response) {
@@ -185,8 +196,8 @@
             });
         }
 
-        function getAdmin() {
-            manageMemberCtrl.institution.admin = _.find(manageMemberCtrl.members, 
+        function getAdmin(members) {
+            manageMemberCtrl.institution.admin = _.find(members, 
                 function(member){
                     return member.key === manageMemberCtrl.institution.admin.key;
             });

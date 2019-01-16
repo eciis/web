@@ -1,6 +1,8 @@
 #webchat {
     height: 100vh;
     display: flex;
+    animation-name: simple-fade-in;
+    animation-duration: 2s;
 }
 
 #content {
@@ -41,4 +43,22 @@
 
 .fill-height {
     height: 100%;
+}
+
+@keyframes simple-fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes simple-fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
 }

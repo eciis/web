@@ -1,4 +1,4 @@
 <div class="search-container">
     <icon-button ng-click="expansiveSearchBarCtrl.toggleSearch()" icon="search"></icon-button>
-    <input ng-model="expansiveSearchBarCtrl.searchQuery" ng-show="expansiveSearchBarCtrl.isExpanded" class="expansive-search-input"/>
+    <input ng-model="expansiveSearchBarCtrl.searchQuery" ng-if="expansiveSearchBarCtrl.isExpanded" class="expansive-search-input"/>
 </div>

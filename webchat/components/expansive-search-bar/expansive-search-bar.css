@@ -12,3 +12,13 @@
     border: none;
     outline: none;
 }
+
+.expansive-search-input.ng-enter {
+    animation-name: simple-fade-in;
+    animation-duration: 0.25s;
+}
+
+.expansive-search-input.ng-leave {
+    animation-name: simple-fade-out;
+    animation-duration: 0.25s;
+}

@@ -1,7 +1,9 @@
 'use strict';
 
 (describe('Test LoginCardController', () => {
-  let scope, authService, ctrl, q, user;
+  let scope, authService, ctrl, q;
+
+  const user = { name: 'User', active: 'true' };
 
   beforeEach(module('webchat'));
 
@@ -10,35 +12,42 @@
     q = $q;
     scope = $rootScope.$new();
     ctrl = $componentController('loginCard', { $scope: scope });
-    user = { name: 'User', active: 'true' };
-
     authService.logout();
     ctrl.$onInit();
-    spyOn(authService, 'loginWithEmailAndPassword').and.callFake(() => {
-      return q.when(AuthService.login(user));
-    });
-    spyOn(authService, 'loginWithGoogle').and.callFake(() => {
-      return q.when(AuthService.login(user));
-    });
-    spyOn(ctrl, 'signIn').and.callThrough();
+
     spyOn(ctrl, 'onLogin');
     expect(authService.isLoggedIn()).toBe(false);
   }))
 
-  it('should log in and call onLogin after logging in with email and password', () => {
-    ctrl.signIn();
-    scope.$digest();
-    expect(authService.loginWithEmailAndPassword).toHaveBeenCalled();
+  it('should take to main frontend page on "Esqueci minha senha"', () => {
+    spyOn(window, 'open').and.callThrough();
+    ctrl.resetPassword();
+    expect(window.open).toHaveBeenCalledWith(Config.FRONTEND_URL);
   })
 
-  it('should log in and call onLogin after logging in with google', () => {
-    ctrl.loginWithGoogle();
-    scope.$digest();
-    expect(authService.loginWithGoogle).toHaveBeenCalled();
-  })
+  describe('login functions', () => {
+    it('should log in and call onLogin after logging in with email and password', () => {
+      spyOn(authService, 'loginWithEmailAndPassword').and.callFake(() => {
+        return q.when(authService.login(user));
+      });
+      spyOn(ctrl, 'signIn').and.callThrough();
+      ctrl.signIn();
+      scope.$digest();
+      expect(authService.loginWithEmailAndPassword).toHaveBeenCalled();
+    })
 
-  afterEach(() => {
-    expect(authService.isLoggedIn()).toBe(true);
-    expect(ctrl.onLogin).toHaveBeenCalledWith();
+    it('should log in and call onLogin after logging in with google', () => {
+      spyOn(authService, 'loginWithGoogle').and.callFake(() => {
+        return q.when(authService.login(user));
+      });
+      ctrl.loginWithGoogle();
+      scope.$digest();
+      expect(authService.loginWithGoogle).toHaveBeenCalled();
+    })
+
+    afterEach(() => {
+      expect(authService.isLoggedIn()).toBe(true);
+      expect(ctrl.onLogin).toHaveBeenCalledWith();
+    })
   })
 }));

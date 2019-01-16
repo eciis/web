@@ -1,9 +1,9 @@
-html {
-    overflow: hidden
+html, body {
+    height: 100%;
+    max-height: 100%;
 }
 
 #webchat {
-    min-height: 100vh;
     overflow: hidden;
     display: flex;
     animation-name: simple-fade-in;
@@ -11,6 +11,9 @@ html {
 }
 
 #content {
+    flex: 1;
+    min-height: 100%;
+    max-height: 100%;
     display: flex;
     height: 100%;
     overflow: hidden;

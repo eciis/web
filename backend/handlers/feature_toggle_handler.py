@@ -11,7 +11,7 @@ from custom_exceptions import NotAuthorizedException
 
 __all__ = ['FeatureToggleHandler']
 
-def to_json(feature_list, language=None):
+def to_json(feature_list, language="pt-br"):
     """
     Method to generate list of feature models in json format object.
 

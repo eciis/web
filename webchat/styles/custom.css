@@ -1,5 +1,5 @@
 #webchat {
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
     animation-name: simple-fade-in;
     animation-duration: 2s;

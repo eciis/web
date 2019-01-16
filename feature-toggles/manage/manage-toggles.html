@@ -29,8 +29,10 @@
                     </md-select>
                 </md-input-container>
             </div>
-            <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}" style="justify-self: end;"
-             ng-click="manageTogglesCtrl.save()">SALVAR</md-button>
+            <md-button ng-if="!manageTogglesCtrl.isLoading" class="md-raised md-primary" 
+                md-colors="{background: 'teal-500'}" style="justify-self: end;"
+                ng-click="manageTogglesCtrl.save()">SALVAR</md-button>
+            <load-circle ng-if="manageTogglesCtrl.isLoading" style="justify-self: end;"></load-circle>
         </div>
     </div>
 </div>

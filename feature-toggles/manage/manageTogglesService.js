@@ -12,7 +12,7 @@
         };
 
         service.saveFeatures = function saveFeatures(features) {
-            HttpService.put(URI, features);
+            return HttpService.put(URI, features);
         };
     });
 })();

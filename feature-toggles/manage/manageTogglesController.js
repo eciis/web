@@ -5,6 +5,7 @@
 
     app.controller('ManageTogglesController', function(ManageTogglesService, AuthService, MessageService) {
         const manageTogglesCtrl = this;
+        manageTogglesCtrl.isLoading = false;
         manageTogglesCtrl.features = [];
         manageTogglesCtrl.modifiedFeatures = [];
 
@@ -21,9 +22,16 @@
         };
 
         manageTogglesCtrl.save = function save() {
-            const promise = ManageTogglesService.saveFeatures(manageTogglesCtrl.modifiedFeatures).catch(response => {
-                MessageService.showToast(response.msg);
-            });
+            manageTogglesCtrl.isLoading = true;
+            const promise = ManageTogglesService.saveFeatures(manageTogglesCtrl.modifiedFeatures)
+                .then(response => {
+                    MessageService.showToast("Alterações salvas com sucesso.");
+                    return response;
+                }).catch(response => {
+                    MessageService.showToast(response.msg);
+                }).finally(function() {
+                    manageTogglesCtrl.isLoading = false;
+                });
             manageTogglesCtrl.modifiedFeatures = [];
             return promise;
         };

@@ -13,5 +13,9 @@
 }
 
 .close-button {
+    margin-right: auto;
+}
+
+.contacts-search {
     margin-left: auto;
 }

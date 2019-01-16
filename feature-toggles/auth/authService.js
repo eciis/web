@@ -109,6 +109,9 @@
                 });
             }).finally(() => {
                 service.isLoadingUser = false;
+                if (!userInfo.hasPermission('analyze_request_inst')) {
+                    service.logout();
+                }
             });
         }
 

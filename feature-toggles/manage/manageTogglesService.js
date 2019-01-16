@@ -3,14 +3,16 @@
 
     const app = angular.module('app');
 
-    app.service('ManageTogglesService', function($http) {
+    app.service('ManageTogglesService', function(HttpService) {
         const service = this;
         const URI = '/api/feature-toggles';
 
-        service.getAllFeatureToggles = function() {
-            return $http.get(URI).then(function(response) {
-                return response.data;
-            });
+        service.getAllFeatureToggles = function getAllFeatureToggles() {
+            return HttpService.get(URI);
+        };
+
+        service.saveFeatures = function saveFeatures(features) {
+            HttpService.put(URI, features);
         };
     });
 })();

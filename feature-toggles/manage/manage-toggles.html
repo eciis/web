@@ -16,7 +16,7 @@
                         <md-option value="DISABLED">DESABILITADO</md-option>
                         <md-option value="ALL">TODOS</md-option>
                         <md-option value="ADMIN">TESTE</md-option>
-                        <md-option value="SUPER USER">SUPER USÁRIO</md-option>
+                        <md-option value="SUPER_USER">SUPER USÁRIO</md-option>
                     </md-select>
                 </md-input-container>
                 <md-input-container>
@@ -25,11 +25,12 @@
                         <md-option value="DISABLED">DESABILITADO</md-option>
                         <md-option value="ALL">TODOS</md-option>
                         <md-option value="ADMIN">TESTE</md-option>
-                        <md-option value="SUPER USER">SUPER USÁRIO</md-option>
+                        <md-option value="SUPER_USER">SUPER USÁRIO</md-option>
                     </md-select>
                 </md-input-container>
             </div>
-            <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}" style="justify-self: end;">SALVAR</md-button>
+            <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}" style="justify-self: end;"
+             ng-click="manageTogglesCtrl.save()">SALVAR</md-button>
         </div>
     </div>
 </div>

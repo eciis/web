@@ -18,8 +18,12 @@
             if (!featureFound) {
                 manageTogglesCtrl.modifiedFeatures.push(feature);
             }
+        };
 
-            console.log(manageTogglesCtrl.modifiedFeatures);
+        manageTogglesCtrl.save = function save() {
+            const promise = ManageTogglesService.saveFeatures(manageTogglesCtrl.modifiedFeatures);
+            manageTogglesCtrl.modifiedFeatures = [];
+            return promise;
         };
 
         manageTogglesCtrl.$onInit = function() {

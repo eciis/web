@@ -3,7 +3,7 @@
 
     const app = angular.module('app');
 
-    app.controller('ManageTogglesController', function(ManageTogglesService, AuthService) {
+    app.controller('ManageTogglesController', function(ManageTogglesService, AuthService, MessageService) {
         const manageTogglesCtrl = this;
         manageTogglesCtrl.features = [];
         manageTogglesCtrl.modifiedFeatures = [];
@@ -21,7 +21,9 @@
         };
 
         manageTogglesCtrl.save = function save() {
-            const promise = ManageTogglesService.saveFeatures(manageTogglesCtrl.modifiedFeatures);
+            const promise = ManageTogglesService.saveFeatures(manageTogglesCtrl.modifiedFeatures).catch(response => {
+                MessageService.showToast(response.msg);
+            });
             manageTogglesCtrl.modifiedFeatures = [];
             return promise;
         };

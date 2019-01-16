@@ -3,7 +3,7 @@
 
     const app = angular.module("app");
 
-    app.service("AuthService", function AuthService($state, $window, UserService, UserFactory) {
+    app.service("AuthService", function AuthService($state, $window, UserService, UserFactory, MessageService) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -111,6 +111,7 @@
                 service.isLoadingUser = false;
                 if (!userInfo.hasPermission('analyze_request_inst')) {
                     service.logout();
+                    MessageService.showToast("Você não possui permissão para acessar esta página.");
                 }
             });
         }

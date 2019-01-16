@@ -27,12 +27,6 @@
     }
 
     ctrl.$onInit = () => {
-      if (_.isNil(ctrl.email))
-        ctrl.email = true;
-      if (_.isNil(ctrl.google))
-        ctrl.google = true;
-      if (_.isNil(ctrl.invite))
-        ctrl.invite = true;
       if (_.isNil(ctrl.onLogin))
         ctrl.onLogin = () => {};
     }
@@ -44,9 +38,6 @@
       controller: ['AuthService', 'MessageService', LoginCardController],
       controllerAs: 'ctrl',
       bindings: {
-        email: '<',
-        google: '<',
-        invite: '<',
         onLogin: '&',
       },
     });

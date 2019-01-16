@@ -1,5 +1,10 @@
+html {
+    overflow: hidden
+}
+
 #webchat {
     min-height: 100vh;
+    overflow: hidden;
     display: flex;
     animation-name: simple-fade-in;
     animation-duration: 2s;
@@ -8,6 +13,7 @@
 #content {
     display: flex;
     height: 100%;
+    overflow: hidden;
 }
 
 .hide-scrollbar::-webkit-scrollbar {

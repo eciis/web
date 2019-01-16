@@ -4,7 +4,7 @@
     angular.module('webchat').component('ecisHeader', {
         templateUrl: "app/components/header/ecis-header.html",
         controller: [
-            '$mdSidenav',
+            'NavbarManagementService',
             headerController,
         ],
         controllerAs: "headerCtrl",
@@ -17,11 +17,11 @@
         },
     });
 
-    function headerController ($mdSidenav) {
+    function headerController (NavbarManagementService) {
         const headerCtrl = this;
 
-        headerCtrl.toggleNavbar = (componentId) => {
-            $mdSidenav(componentId).toggle();
+        headerCtrl.toggleNavbar = () => {
+            NavbarManagementService.toggleSidenav('left');
         };
     }
 })();

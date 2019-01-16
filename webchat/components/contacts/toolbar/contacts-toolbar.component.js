@@ -3,7 +3,10 @@
 
     angular.module("webchat").component("contactsToolbar", {
         templateUrl: "app/components/contacts/toolbar/contacts-toolbar.html",
-        controller: contactsToolbarController,
+        controller: [
+            'NavbarManagementService',
+            contactsToolbarController,
+        ],
         controllerAs: "contactsToolbarCtrl",
         bindings: {
             className: "@",
@@ -13,11 +16,11 @@
         },
     });
 
-    function contactsToolbarController($mdSidenav) {
+    function contactsToolbarController(NavbarManagementService) {
         const contactsToolbarCtrl = this;
 
-        contactsToolbarCtrl.toggleNavbar = (componentId) => {
-            $mdSidenav(componentId).toggle();
+        contactsToolbarCtrl.toggleNavbar = () => {
+            NavbarManagementService.toggleSidenav('left');
         };
 
     }

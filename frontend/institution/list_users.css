@@ -1,6 +1,6 @@
 .list-users-grid {
     display: grid;
-    grid-template-columns: 25% 74% auto;
+    grid-template-columns: 25% 75%;
     grid-template-rows: 3em auto;
     align-items: initial;
     align-content: space-between;

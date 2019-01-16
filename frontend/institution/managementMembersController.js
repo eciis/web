@@ -157,7 +157,7 @@
         manageMemberCtrl.getAdminLabel = () => {
             if(manageMemberCtrl.institution.admin) {
                 let label = "Administrador";
-                return manageMemberCtrl.institution.admin.length > 0 ? label + "es" : label;
+                return manageMemberCtrl.institution.admin.length > 1 ? label + "es" : label;
             }
         };
 

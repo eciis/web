@@ -12,7 +12,7 @@
             title: '@',
             photo: '=',
             className: '@',
-            
+            actionsButtons: '='
         }
     });
 })();

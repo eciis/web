@@ -13,10 +13,11 @@
           home: `${rootName}.home`,
           chat: `${rootName}.chat`,
           login: 'login',
+          error: 'error',
       });
 
   app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider,
-    $httpProvider) => {
+    $httpProvider, $locationProvider) => {
       $mdIconProvider.fontSet('md', 'material-icons');
       $mdThemingProvider.theme('docs-dark');
       $mdThemingProvider.theme('input')
@@ -59,26 +60,51 @@
                      templateUrl: "app/auth/login.html",
                      controller: "LoginController as controller",
                  },
+            }
+          })
+         .state(STATES.error, {
+             url: '/error',
+             views: {
+                 main: {
+                     templateUrl: 'app/error/error.html',
+                     controller: 'ErrorController as errorCtrl',
+                 },
              },
-         });
 
-      $urlRouterProvider.otherwise("/");
+             params: {
+                 'msg': 'Desculpe! Ocorreu um erro.',
+                 'status': '500'
+             },
+         })
+
+      $urlRouterProvider.otherwise(($injector, $location) => {
+        const state = $injector.get('$state');
+
+        state.go(STATES.error, {
+            msg: `Página não encontrada! "${$location.path()}"`,
+            status: '404'
+        })
+
+        return;
+      });
+
       $httpProvider.interceptors.push('BearerAuthInterceptor');
-
+      $locationProvider.html5Mode(true);
   });
 
-  app.factory('BearerAuthInterceptor', function (STATES, $injector, $q, $state) {
+  app.factory('BearerAuthInterceptor', ['STATES', '$injector', '$q', '$state',
+    function (STATES, $injector, $q, $state) {
       return {
           request: function(config) {
-              var AuthService = $injector.get('AuthService');
+              const AuthService = $injector.get('AuthService');
               config.headers = config.headers || {};
               if (AuthService.isLoggedIn()) {
                   return AuthService.getUserToken().then(token => {
                       config.headers.Authorization = 'Bearer ' + token;
 
-                      var API_URL = "/api/";
-                      var FIRST_POSITION = 0;
-                      var requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
+                      const API_URL = "/api/";
+                      const FIRST_POSITION = 0;
+                      const requestToApi = config.url.indexOf(API_URL) == FIRST_POSITION;
 
                       if (!_.isEmpty(AuthService.getCurrentUser().institutions) && requestToApi) {
                           config.headers['Institution-Authorization'] = AuthService.getCurrentUser().current_institution.key;
@@ -93,13 +119,13 @@
               return config || $q.when(config);
           },
           response: function(response) {
-              var app_version = response.headers("app_version");
-              var AuthService = $injector.get('AuthService');
+              const app_version = response.headers("app_version");
+              const AuthService = $injector.get('AuthService');
               AuthService.setAppVersion(app_version);
               return response || $q.when(response);
           },
           responseError: function(rejection) {
-              var AuthService = $injector.get('AuthService');
+              const AuthService = $injector.get('AuthService');
               if (rejection.status === 401) {
                   if (AuthService.isLoggedIn()) {
                       AuthService.logout();
@@ -109,17 +135,26 @@
                   }
               } else if(rejection.status === 403) {
                   rejection.data.msg = "Você não tem permissão para realizar esta operação!";
+              } else if(rejection.status === 404) {
+                  $state.go(STATES.error, {
+                      msg: `URL não encontrada! "${Utils.getApiPath(rejection.config.url)}"`,
+                      status: '404'
+                  });
               } else {
-                  $state.go(STATES.home);
+                  $state.go(STATES.error, {
+                      msg: rejection.data.msg || "Desculpa! Ocorreu um erro.",
+                      status: rejection.status
+                  });
               }
               return $q.reject(rejection);
           }
       };
-  });
+  }]);
 
   app.run(function authInterceptor(STATES, AuthService, $transitions, $state) {
       const ignored_routes = [
           STATES.login,
+          STATES.error,
       ];
 
       $transitions.onStart({

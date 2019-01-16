@@ -12,4 +12,17 @@ const Utils = {
 
         config.url = config.url.replace(restApiRegex, restApiUrl + '/api/$1');
     },
+
+    /**
+     * Extract an api path from url
+     * @param {string} url that contains the api request
+     * @returns the path if it exists, or the url, otherwise
+     */
+    getApiPath : function getApiPath(url) {
+        if (_.isNil(url) || _.isNil(url.split)) {
+            return url;
+        }
+
+        return '/' + url.split('/').splice(3).join('/');
+    },
 };

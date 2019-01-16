@@ -38,3 +38,7 @@
 .no-margin {
     margin: 0;
 }
+
+.fill-height {
+    height: 100%;
+}

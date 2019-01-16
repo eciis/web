@@ -1,4 +1,4 @@
-<md-list class="no-margin no-padding custom-scrollbar custom-scrollbar contacts-list">
+<md-list class="no-margin no-padding custom-scrollbar custom-scrollbar contacts-list-container fill-height">
     <md-list-item aria-label="user-contact" ng-repeat="user in contactsListCtrl.contacts | filter : contactsListCtrl.searchQuery | orderBy : ['name', 'description']" ng-click="contactsListCtrl.openChat(user)">
         <user-description class="user-contact" name="{{user.name}}" avatar="{{user.avatar}}" description="{{user.description}}"></user-description>
         <md-divider></md-divider>

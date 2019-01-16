@@ -1,7 +1,10 @@
 .contacts-list {
-    overflow-y: scroll;
+    overflow: hidden;
     flex: 1;
-    height: 100%;
+}
+
+.contacts-list-container {
+    overflow-y: scroll;
 }
 
 .user-contact {

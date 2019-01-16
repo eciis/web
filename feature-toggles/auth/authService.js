@@ -128,7 +128,7 @@
 
             executeLogoutListeners();
 
-            $state.go("signin");
+            $state.go("singin");
         };
 
         service.getCurrentUser = function getCurrentUser() {

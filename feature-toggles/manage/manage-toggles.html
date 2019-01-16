@@ -1,23 +1,35 @@
-<div class="content" md-colors="{background: 'teal-900'}">
-    <img src="app/images/logo.png"/>
-</div>
-<div>
-    <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
-        <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
-            {{feature.name}}
-        </md-switch>
-        <md-select ng-model="feature.enable_mobile" placeholder="Permissão" class="md-no-underline">
-            <md-option value="DISABLED">DISABLED</md-option>
-            <md-option value="ALL">ALL</md-option>
-            <md-option value="ADMIN">ADMIN</md-option>
-            <md-option value="SUPER USER">SUPER USER</md-option>
-        </md-select>
-        <md-select ng-model="feature.enable_desktop" placeholder="Permissão" class="md-no-underline">
-            <md-option value="DISABLED">DISABLED</md-option>
-            <md-option value="ALL">ALL</md-option>
-            <md-option value="ADMIN">ADMIN</md-option>
-            <md-option value="SUPER USER">SUPER USER</md-option>
-        </md-select>
+<div style="height: 100%; display: grid; grid-template-rows: auto 1fr;">
+    <div class="content" md-colors="{background: 'teal-900'}">
+        <img src="app/images/logo.png"/>
+        <button ng-click="manageTogglesCtrl.logout()">SAIR</button>
     </div>
-    {{manageTogglesCtrl.features}}
+    <div style="max-height: 100%; overflow-y: auto;">
+        <h1 style="text-align: center;">Gerenciar features do sistema</h1>
+        <div style="display: grid; justify-content: center; margin: 16px;">
+            <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
+                <b>
+                    {{feature.name}}
+                </b>
+                <md-input-container>
+                    <label>Permissão Mobile</label>
+                    <md-select ng-change="manageTogglesCtrl.addModifiedFeature(feature)" ng-model="feature.enable_mobile" placeholder="Permissão" class="md-no-underline">
+                        <md-option value="DISABLED">DESABILITADO</md-option>
+                        <md-option value="ALL">TODOS</md-option>
+                        <md-option value="ADMIN">TESTE</md-option>
+                        <md-option value="SUPER USER">SUPER USÁRIO</md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label>Permissão Desktop</label>
+                    <md-select ng-change="manageTogglesCtrl.addModifiedFeature(feature)" ng-model="feature.enable_desktop" placeholder="Permissão" class="md-no-underline">
+                        <md-option value="DISABLED">DESABILITADO</md-option>
+                        <md-option value="ALL">TODOS</md-option>
+                        <md-option value="ADMIN">TESTE</md-option>
+                        <md-option value="SUPER USER">SUPER USÁRIO</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <md-button class="md-raised md-primary" md-colors="{background: 'teal-500'}" style="justify-self: end;">SALVAR</md-button>
+        </div>
+    </div>
 </div>

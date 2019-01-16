@@ -1,16 +1,26 @@
 .content {
+    display: grid;
     padding: 16px;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
 }
 
 .content > img {
     height: 35px;
 }
 
+.content > button {
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
 .toggle-content {
     display: grid; 
-    grid-template-columns: auto auto auto;
-    justify-content: center;
+    grid-template-columns: auto 154px 154px;
     grid-gap: 10px;
+    align-items: center;
 }
 
 .toggle-content > md-select {

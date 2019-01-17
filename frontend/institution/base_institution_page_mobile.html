@@ -1,9 +1,17 @@
 <md-content layout-align="center" hide-navbar="both">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
-        <div id="cover-inst-mobile">
-           <institution-header title="{{institutionCtrl.getLimitedName(110)}}"
-                photo="institutionCtrl.getPhoto()" actions-buttons="institutionCtrl.getActionsButtonHeader()">
+        <div ng-class="institutionCtrl.inTimilineMobile() ? 'cover-inst-mobile': ''">
+            <institution-header title="{{institutionCtrl.getTitle()}}"
+                user="institutionCtrl.user"
+                institution="institutionCtrl.institution"
+                photo="institutionCtrl.getPhoto()"
+                is-user-follower="institutionCtrl.isUserFollower"
+                is-member="institutionCtrl.isMember"
+                file-background="institutionCtrl.file"
+                in-timiline-page="institutionCtrl.inTimilineMobile()"
+                in-registration-date="institutionCtrl.inRegistrationDataMobile()"
+                actions-buttons="institutionCtrl.timelineButtonsHeaderMob">
            </institution-header>
             <div id="inst-name-mobile">
                 <hr id="divider-institution"/>

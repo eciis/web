@@ -35,6 +35,7 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
+                loadTimelineButtonsHeaderMob();                 
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
@@ -48,6 +49,22 @@
         institutionCtrl.getInstKey = () => {
             return currentInstitutionKey;
         };
+
+        /** Create the object that contais all functions necessary in institution header,
+         * when is in timeline page on mobile.
+         */
+        function loadTimelineButtonsHeaderMob(){
+            institutionCtrl.timelineButtonsHeaderMob =  {
+                goBack: institutionCtrl.goBack,
+                showDescribe: null,
+                isAdmin: institutionCtrl.isAdmin,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                cropImage: institutionCtrl.cropImage,
+                showImageCover: institutionCtrl.showImageCover,
+                requestInvitation: institutionCtrl.requestInvitation
+            }
+        }
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
@@ -66,14 +83,6 @@
         }
 
         loadInstitution();
-
-        institutionCtrl.inTimelineState = function inTimelineState(){
-            return $state.current.name === STATES.INST_TIMELINE;
-        };
-
-        institutionCtrl.inRegistrationDataState = function inRegistrationDataState(){
-            return $state.current.name === STATES.INST_REGISTRATION_DATA;
-        }
 
         institutionCtrl.isAdmin = function isAdmin() {
             var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
@@ -130,6 +139,20 @@
                 institutionCtrl.institution.name !== "Ministério da Saúde" &&
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
+
+        institutionCtrl.inTimilineMobile = function inTimilineMobile(){
+            const inTimiline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimiline;
+        }
+
+        institutionCtrl.inRegistrationDataMobile = function inRegistrationDataMobile(){
+            const inTimiline = $state.current.name == STATES.INST_REGISTRATION_DATA;
+            return Utils.isMobileScreen(450) && inTimiline;
+        }
+
+        institutionCtrl.goBack = function goBack(){
+            window.history.back();
+        }
 
         institutionCtrl.goToManageMembers = function goToManageMembers(){
             UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
@@ -233,6 +256,11 @@
         institutionCtrl.getInfo = function getInfo(information) {
             return information ? information : "Não informado";
         };
+
+        institutionCtrl.getTitle = function getTitle(){
+            if(institutionCtrl.inTimilineMobile())
+                return institutionCtrl.getLimitedName(110);
+        }
 
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
@@ -360,20 +388,6 @@
             }
 
             leftMenu.style.width = width;
-        }
-
-        /** Return object that contais all functions necessary in institution header,
-         * when is in timeline page.
-         */
-        institutionCtrl.getActionsButtonHeader = function getActionsButtonHeader(){
-            return {
-                goHome: institutionCtrl.goToHome,
-                showDescribe: null,
-                isUserFollower: institutionCtrl.isUserFollower,
-                follow: institutionCtrl.follow,
-                unfollow: institutionCtrl.unfollow,
-                fileBackground: institutionCtrl.file
-            }
         }
         
         institutionCtrl.getPhoto = function getPhoto() {

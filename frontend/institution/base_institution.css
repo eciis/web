@@ -24,7 +24,7 @@
     border-radius: 50%;
 }
 
-#cover-inst-mobile{
+.cover-inst-mobile{
     box-shadow: 0 -2px 5px 0px grey;
     height: 100vh;
 }
@@ -44,8 +44,15 @@
     height: 0px;
     position: relative;
     display: grid;
-    grid-template-columns: 53px auto 107px 90px 48px;
+    grid-template-columns: 53px auto;
     align-items: center;
+}
+
+#buttons-navbar-inst-container-end{
+    display: grid;
+    grid-template-columns: 107px 90px auto;
+    align-items: center;
+    justify-content: end
 }
 
 #btn-unfollow{
@@ -57,20 +64,12 @@
     grid-column-start: 4;
     height: 15px;
 }
-
 #btn-more{
-    grid-column-start: 5;
+    width: 48px;
 }
 
-#btn-follow{
-    grid-column-start: 4;
-}
-#btn-unfollow{
-    grid-column-start: 4;
-}
-
-#btn-description{
-    grid-column-start: 3;
+#btn-edit{
+    grid-column-start: -1;
 }
 
 #image-cover-inst{

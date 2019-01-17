@@ -1,0 +1,25 @@
+<h3 class="list-users-title">{{listUsersCtrl.pageLabel}}</h3>
+<div layout-margin>
+    <form ng-submit="">
+        <md-input-container layout="row" class="md-icon-float">
+        <label>Pesquisar</label>
+        <input aria-label="Pesquisar por membros" class="md-icon-float" ng-model="listUsersCtrl.keyword">
+        <md-icon md-colors="{color: 'grey-500'}">search</md-icon>
+        </md-input-container>
+    </form>
+</div>
+<md-content>
+    <div class="list-users-grid list-users-grid-position"
+        ng-repeat="groupedUsers in listUsersCtrl.users | filter: listUsersCtrl.keyword">
+        <div class="list-users-char-position list-users-char-properties">
+            <span>{{listUsersCtrl.getInitialLetterOfName(groupedUsers[0])}}</span>
+        </div>
+        <div layout="row" ng-repeat="user in groupedUsers | filter: listUsersCtrl.keyword | orderBy: 'name'"
+            ng-click="listUsersCtrl.showUserProfile(user.key, $event)" class="list-users-position">
+            <img title="{{user.name}}" ng-src="{{user.photo_url}}" class="md-avatar list-users-img"/>
+            <div class="list-users-name">
+                <p>{{ listUsersCtrl.limitString(user.name, 18) }}</p>
+            </div>
+        </div>
+    </div>
+</md-content>

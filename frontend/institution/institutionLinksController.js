@@ -35,12 +35,13 @@
             const parentInstitution = instLinksCtrl.parentInstitution;
             const childrenInstitutionsOfParent = parentInstitution.children_institutions
             const institutionKey = instLinksCtrl.institution.key;
-            return instLinksCtrl.parentInstitution && _.find(childrenInstitutionsOfParent, inst => inst.key === institutionKey ) ?
-                "confirmado" : "não confirmado";
+            const isParentConfirmed = instLinksCtrl.parentInstitution && _.find(childrenInstitutionsOfParent, inst => inst.key === institutionKey );
+            return isParentConfirmed ? "Confirmado" : "Não confirmado";
         };
 
         instLinksCtrl.childStatus = function childStatus(institution) {
-            return institution.parent_institution && institution.parent_institution === instLinksCtrl.institution.key ? "confirmado" : "não confirmado";
+            const isChildConfirmed = institution.parent_institution && institution.parent_institution === instLinksCtrl.institution.key;;
+            return isChildConfirmed ? "Confirmado" : "Não confirmado";
         };
 
         function loadInstitution() {

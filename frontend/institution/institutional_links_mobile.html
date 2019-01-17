@@ -1,24 +1,32 @@
-<div layout="row" layout-align="center">
-    <div layout-align="center">
-        <div layout="row" layout-align="center">
-            <h2>Vínculos Institucionais</h2>
-        </div>
-    
-        <div ng-if="instLinksCtrl.hasParentInst()">
-            <md-list>
-                <md-list-item class="md-3-line">
-                    <!-- <img ng-src="{{instLinksCtrl.parentInstitution.photo_url}}" class="md-avatar"/> -->
-                    <div class="md-list-item-text" layout="column">
-                        <h3>LABORATÓRIO DE ANÁLISES CLINÍC...</h3>
-                        <h4 class="links-info-tags">CARGO</h4> 
-                        <p>Diretor de Assuntos Estratégicos</p>
-                        <h4 class="links-info-tags">TELEFONE</h4>
-                        <p>(88) 99999 999999 </p>
-                        <h4 class="links-info-tags">E-MAIL</h4> 
-                        <p>joaolopes@labanalise.org.br</p>
-                    </div>
-                </md-list-item>
-            </md-list>
+<div class="main-links-container">
+        
+    <div class="link-section" ng-if="instLinksCtrl.hasParentInst()">
+        <h4 class="link-section-title">INSTITUIÇÃO SUPERIOR</h4>
+        <div class="link-info-container"  
+            ng-click="instLinksCtrl.goToInst(instLinksCtrl.parentInstitution.key)">
+            <img ng-src="{{instLinksCtrl.parentInstitution.photo_url}}" class="link-avatar"/>
+            <div class="link-description">
+                <h4 class="link-info-inst">{{instLinksCtrl.parentInstitution.name}}</h4>
+                <h5 class="link-info-tag">Status do Vínculo</h5> 
+                <p class="link-info-status">{{instLinksCtrl.parentStatus()}}</p>
+            </div>
         </div>
     </div>
+
+    <div class="link-section">
+        <h4 class="link-section-title">INSTITUIÇÕES SUBORDINADAS</h4>
+        <div class="link-info-container" ng-if="instLinksCtrl.hasChildrenInst()"
+            ng-repeat="institution in instLinksCtrl.childrenInstitutions | filter: instLinksCtrl.currentInstitution"
+            ng-click="instLinksCtrl.goToInst(institution.key)">
+            <img ng-src="{{institution.photo_url}}" class="link-avatar"/>
+            <div class="link-description">
+                <h4 class="link-info-inst">{{institution.name}}</h4>
+                <h5 class="link-info-tag">Status do Vínculo: </h5>
+                <p class="link-info-status">{{instLinksCtrl.childStatus(institution)}}</p>
+            </div>
+            <md-divider class="link-divider"></md-divider>
+        </div>
+    </div>
+
+    
 </div>

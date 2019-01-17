@@ -560,6 +560,6 @@
     }
 
     (function main() {
-        //initServiceWorker();
+        initServiceWorker();
     })();
 })();

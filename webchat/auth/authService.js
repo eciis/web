@@ -3,8 +3,8 @@
 
     const app = angular.module("webchat");
 
-    app.service("AuthService", ['$q', '$state', '$window', 'UserService', 'MessageService', 'User', 'STATES',
-      function AuthService($q, $state, $window, UserService, MessageService, User, STATES) {
+    app.service("AuthService", ['$q', '$state', '$window', 'UserService', 'MessageService', 'User', 'STATES', 'ChatClient',
+      function AuthService($q, $state, $window, UserService, MessageService, User, STATES, ChatClient) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -13,7 +13,7 @@
         let resolveTokenPromise;
         let loadTokenPromise;
         let refreshInterval;
-        let isLoadingUser;
+        let chatClient;
         const provider = new firebase.auth.GoogleAuthProvider();
 
         /**
@@ -77,6 +77,12 @@
             }
         });
 
+        Object.defineProperty(service, 'chatClient', {
+            get: function() {
+                return chatClient;
+            }
+        });
+
         // It receives the app version and verify if it matches with
         // the actual frontend version, setting up the private variable
         // versionAvailable with true, if matches, or false, otherwise.
@@ -123,6 +129,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
+                                chatClient = new ChatClient(userInfo.key);
                                 return userInfo;
                         });
                     });
@@ -175,6 +182,10 @@
             return false;
         };
 
+        service.getChatClient = () => {
+          return chatClient;
+        }
+
         /**
         * Execute each function stored to be thriggered when user logout
         * is called.
@@ -195,6 +206,7 @@
             if ($window.localStorage.userInfo) {
                 const parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
+                chatClient = new ChatClient(userInfo.key);
             }
         }
 

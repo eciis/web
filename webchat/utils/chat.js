@@ -44,7 +44,6 @@
 
     Chat.prototype.init = function(stream) {
       stream.getTracks().forEach(t => this.rpc.addTrack(t, stream));
-      // this.rpc.addTrack(stream.getTracks()[1], stream);
       this.sendChannel = this.rpc.createDataChannel('sendChannel');
       this.rpc.ondatachannel = this.handleDataChannel.bind(this);
       this.rpc.ontrack = this.handleTrack.bind(this);
@@ -52,8 +51,8 @@
     }
 
     Chat.prototype.offer = function() {
-      this.rpc.createOffer().then(offer => {
-        this.rpc.setLocalDescription(offer).then(() => {
+      return this.rpc.createOffer().then(offer => {
+        return this.rpc.setLocalDescription(offer).then(() => {
           return offer;
         })
       });
@@ -68,14 +67,16 @@
     }
 
     Chat.prototype.accept = function() {
-      this.rpc.createAnswer().then(answer => {
-        this.rpc.setLocalDescription(answer).then(() => {
-          if (this.pendingCandidates > 0) {
-            this.pendingCandidates.forEach(c => this.receiveCandidate(c));
-          }
-          return answer;
-        })
-      });
+      return this.rpc.setRemoteDescription(this.tempRemote).then(() => {
+        return this.rpc.createAnswer().then(answer => {
+          return this.rpc.setLocalDescription(answer).then(() => {
+            if (this.pendingCandidates > 0) {
+              this.pendingCandidates.forEach(c => this.receiveCandidate(c));
+            }
+            return answer;
+          })
+        });
+      })
     }
 
     Chat.prototype.handleTrack = function(e) {

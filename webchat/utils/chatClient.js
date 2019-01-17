@@ -2,7 +2,7 @@
 (function () {
   const app = angular.module('webchat');
 
-  app.factory('ChatClient', [(Chat, UserService) => {
+  app.factory('ChatClient', ['Chat', (Chat) => {
     const hostname = 'localhost';
     const port = 8090;
 
@@ -24,7 +24,6 @@
           name: this.id,
         };
         this.ws.send(JSON.stringify(user));
-        this.requestUsers();
       };
       // we have to explictly pass a function with the event argument
       // otherwise "this" will refer to the websocket instead of the Client object
@@ -80,20 +79,18 @@
       }
     }
 
-    ChatClient.prototype.acceptChat = function(id, stream) {
+    ChatClient.prototype.acceptCall = function(id, stream) {
       const chat = this.chats[id];
-      chat.setRemote(chat.tempRemote);
-      chat.init(stream).then(() => {
-        chat.accept().then(connection => {
-          this.ws.send(JSON.stringify({
-            type: connection.type,
-            sdp: connection.sdp,
-            name: this.id,
-            dest: id,
-          }))
-          chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(id, e));
-        });
-      })
+      chat.init(stream)
+      chat.accept().then(connection => {
+        this.ws.send(JSON.stringify({
+          type: connection.type,
+          sdp: connection.sdp,
+          name: this.id,
+          dest: id,
+        }))
+        chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(id, e));
+      });
     }
 
     ChatClient.prototype.handleDiscoveredIceCandidates = function(id, e) {
@@ -115,17 +112,16 @@
 
     ChatClient.prototype.call = function(dest, stream) {
       const chat = this.createChat(dest);
-      chat.init(stream).then(() => {
-        chat.offer().then(connection => {
-          const requestObj = {
-            name: this.id,
-            dest,
-            type: connection.type,
-            sdp: connection.sdp,
-          };
-          this.ws.send(JSON.stringify(requestObj));
-          chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(dest, e));
-        });
+      chat.init(stream)
+      chat.offer().then(connection => {
+        const requestObj = {
+          name: this.id,
+          dest,
+          type: connection.type,
+          sdp: connection.sdp,
+        };
+        this.ws.send(JSON.stringify(requestObj));
+        chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(dest, e));
       });
     }
 

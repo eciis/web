@@ -34,18 +34,17 @@
       this.ws.onmessage = e => this.handleWebSocket(e);
     }
 
-    ChatClient.prototype.createChat = function(id) {
-      const chat = new Chat();
+    ChatClient.prototype.createChat = function (id, stream) {
+      const chat = new Chat(stream);
       this.chats[id] = chat;
       this.emit('chat-created', { id, chat });
       return chat;
     }
 
-    ChatClient.prototype.handleWebSocket = function(e) {
+    ChatClient.prototype.handleWebSocket = function (e) {
       const data = JSON.parse(e.data);
       if (data.type === 'offer') {
-        const chat = this.createChat(data.name);
-        chat.setTempRemote(data);
+        this.remotes[data.name] = data;
         this.emit('offer-received', data.name);
       } else if (data.type === 'answer') {
         this.handleAnswer(data);
@@ -58,7 +57,7 @@
       }
     }
 
-    ChatClient.prototype.emit = function(eventName, e) {
+    ChatClient.prototype.emit = function (eventName, e) {
       if (this.eventHandlers[eventName]) {
         this.eventHandlers[eventName].forEach((f) => {
           f(e);
@@ -66,35 +65,36 @@
       }
     }
 
-    ChatClient.prototype.on = function(eventName, f) {
+    ChatClient.prototype.on = function (eventName, f) {
       if (!this.eventHandlers[eventName]) {
         this.eventHandlers[eventName] = [];
       }
       this.eventHandlers[eventName].push(f);
     }
 
-    ChatClient.prototype.addIceCandidate = function(e) {
+    ChatClient.prototype.addIceCandidate = function (e) {
       if (this.chats[e.name]) {
         this.chats[e.name].receiveCandidate(e.candidate);
       }
     }
 
-    ChatClient.prototype.acceptCall = function(id, stream) {
-      const chat = this.chats[id];
-      chat.init(stream)
-      chat.accept().then(connection => {
+    ChatClient.prototype.acceptCall = function (id, stream) {
+      const remote = this.remotes[id];
+      const chat = this.createChat(id, stream);
+      chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(id, e));
+      chat.accept(remote).then(connection => {
         this.ws.send(JSON.stringify({
           type: connection.type,
           sdp: connection.sdp,
           name: this.id,
           dest: id,
         }))
-        chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(id, e));
       });
     }
 
-    ChatClient.prototype.handleDiscoveredIceCandidates = function(id, e) {
+    ChatClient.prototype.handleDiscoveredIceCandidates = function (id, e) {
       if (e.candidate) {
+        console.log('candidate discovered');
         const msg = {
           type: 'newCandidate',
           name: this.id,
@@ -105,14 +105,14 @@
       }
     }
 
-    ChatClient.prototype.handleAnswer = function(data) {
+    ChatClient.prototype.handleAnswer = function (data) {
       const chat = this.chats[data.name];
       chat.setRemote(data);
     }
 
-    ChatClient.prototype.call = function(dest, stream) {
-      const chat = this.createChat(dest);
-      chat.init(stream)
+    ChatClient.prototype.call = function (dest, stream) {
+      const chat = this.createChat(dest, stream);
+      chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(dest, e));
       chat.offer().then(connection => {
         const requestObj = {
           name: this.id,
@@ -121,20 +121,19 @@
           sdp: connection.sdp,
         };
         this.ws.send(JSON.stringify(requestObj));
-        chat.on('ice-candidate', e => this.handleDiscoveredIceCandidates(dest, e));
       });
     }
 
-    ChatClient.prototype.requestUsers = function() {
+    ChatClient.prototype.requestUsers = function () {
       this.ws.send(JSON.stringify({
         name: this.id,
         type: 'requestUsers',
       }));
     }
 
-    ChatClient.prototype.handleUserListUpdate = function(users) {
+    ChatClient.prototype.handleUserListUpdate = function (users) {
       this.users = users;
-      this.emit('userListUpdate', users);
+      this.emit('user-list-update', users);
     }
 
     return ChatClient;

@@ -11,6 +11,9 @@
         UserService.getUser(user).then(function success(response) {
             profileCtrl.user = response;
             profileCtrl.loading = false;
+            profileCtrl.currentProfile = _.find(profileCtrl.user.institution_profiles, (profile) => {
+                return profile.institution_key === institutionKey;
+            });
         });
 
         profileCtrl.isToShow = function () {
@@ -35,13 +38,6 @@
 
         profileCtrl.closeDialog = () => {
             $mdDialog.cancel();
-        };
-
-        profileCtrl.getInstitutionProfile = () => {
-            if(profileCtrl.user)
-                return _.find(profileCtrl.user.institution_profiles, (profile) => {
-                    return profile.institution_key === institutionKey;
-                });
         };
     });
 })();

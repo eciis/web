@@ -15,11 +15,11 @@
                 <hl md-colors="{background: 'default-light-green-500'}" class="user-profile-center"></hl>
                 <div id="user-profile-info">
                     <p class="user-profile-title user-profile-default-color"><b>CARGO</b></p>
-                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().office}}</p>
+                    <p class="user-profile-subtitle">{{profileCtrl.currentProfile.office}}</p>
                     <p class="user-profile-title user-profile-default-color"><b>TELEFONE</b></p>
-                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().phone}}</p>
+                    <p class="user-profile-subtitle">{{profileCtrl.currentProfile.phone ? profileCtrl.currentProfile.phone : 'Não informado'}}</p>
                     <p class="user-profile-title user-profile-default-color"><b>E-MAIL</b></p>
-                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().email}}</p>
+                    <p class="user-profile-subtitle">{{profileCtrl.currentProfile.email ? profileCtrl.currentProfile.email : 'Não informado'}}</p>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <span class="user-profile-title">FECHAR</span>
             </div>
             <div md-colors="{color: 'default-teal-500'}"
-                id="user-profile-show-div" ng-click="profileCtrl.getInstitutionProfile()">
+                id="user-profile-show-div" ng-click="profileCtrl.goToUserProfile()">
                 <span class="user-profile-title">VER PERFIL</span>
             </div>
         </div>

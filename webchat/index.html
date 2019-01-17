@@ -31,6 +31,8 @@
   <link type="text/css" rel="stylesheet" href="app/components/user-description/user-description.css"/>
   <link type="text/css" rel="stylesheet" href="app/components/logo/logo.css"/>
   <link type="text/css" rel="stylesheet" href="app/components/icon-button/icon-button.css"/>
+  <link type="text/css" rel="stylesheet" href="app/components/contacts/contacts.css" />
+  <link type="text/css" rel="stylesheet" href="app/components/expansive-search-bar/expansive-search-bar.css" />
 
 </head>
 <body ng-app="webchat" ng-cloak layout="column">
@@ -76,14 +78,24 @@
   <!-- Main Application Library -->
   <script src="app/config.js"></script>
   <script src="app/app.js"></script>
+  <script src="app/utils/utils.js"></script>
+
+  <script src="app/services/WebchatService.js"></script>
+  <script src="app/services/NavbarManagementService.js"></script>
 
   <script src="app/auth/loginController.js"></script>
   <script src="app/chat/chatController.js"></script>
   <script src="app/home/homeController.js"></script>
   <script src="app/webchat/webchatController.js"></script>
+
   <script src="app/components/header/ecis-header.component.js"></script>
   <script src="app/components/logo/logo.component.js"></script>
   <script src="app/components/icon-button/icon-button.component.js"></script>
   <script src="app/components/user-description/user-description.component.js"></script>
+
+  <script src="app/components/contacts/list/contacts-list.component.js"></script>
+  <script src="app/components/contacts/toolbar/contacts-toolbar.component.js"></script>
+  <script src="app/components/contacts/sidenav/contacts-sidenav.component.js"></script>
+  <script src="app/components/expansive-search-bar/expansive-search-bar.component.js"></script>
 </body>
 </html>

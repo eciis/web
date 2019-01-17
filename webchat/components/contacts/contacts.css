@@ -1,0 +1,21 @@
+.contacts-list {
+    overflow: hidden;
+    flex: 1;
+}
+
+.contacts-list-container {
+    overflow-y: scroll;
+}
+
+.user-contact {
+    font-size: 1.5em;
+    line-height: 1em;
+}
+
+.close-button {
+    margin-right: auto;
+}
+
+.contacts-search {
+    margin-left: auto;
+}

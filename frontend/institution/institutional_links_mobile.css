@@ -4,6 +4,7 @@
     grid-row-gap: 0.5em;
     grid-column-gap: 1em;
     margin: 0 auto;
+    width: 95%;
 }
 
 .link-section {
@@ -25,7 +26,7 @@
     grid-template-columns: 10% auto;
     grid-template-rows: min-content;
     align-items: initial;
-    column-gap: 1em;
+    column-gap: 1.5em;
     height: 5em;
 }
 

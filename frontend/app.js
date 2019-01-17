@@ -191,7 +191,8 @@
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
                             "app/institution/institutional_links.html", 
-                            "app/institution/institutional_links_mobile.html"
+                            "app/institution/institutional_links_mobile.html",
+                            420
                         ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }

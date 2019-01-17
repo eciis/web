@@ -135,7 +135,8 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/institution/base_institution_page.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/base_institution_page.html",
+                        "app/institution/base_institution_page_mobile.html"),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -559,6 +560,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        //initServiceWorker();
     })();
 })();

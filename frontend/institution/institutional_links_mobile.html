@@ -13,11 +13,10 @@
         </div>
     </div>
 
-    <div class="link-section">
+    <div class="link-section" ng-if="instLinksCtrl.hasChildrenInst()">
         <h4 class="link-section-title">INSTITUIÇÕES SUBORDINADAS</h4>
-        <div class="link-info-container" ng-if="instLinksCtrl.hasChildrenInst()"
-            ng-repeat="institution in instLinksCtrl.childrenInstitutions | filter: instLinksCtrl.currentInstitution"
-            ng-click="instLinksCtrl.goToInst(institution.key)">
+        <div class="link-info-container" ng-click="instLinksCtrl.goToInst(institution.key)"
+            ng-repeat="institution in instLinksCtrl.childrenInstitutions | filter: instLinksCtrl.currentInstitution">
             <img ng-src="{{institution.photo_url}}" class="link-avatar"/>
             <div class="link-description">
                 <h4 class="link-info-inst">{{institution.name}}</h4>
@@ -28,5 +27,8 @@
         </div>
     </div>
 
+    <div ng-if="!instLinksCtrl.hasInstitutions()" class="no-links-msg">
+        <h3>Esta instituição não possui nenhum vínculo institucional</h3>
+    </div>
     
 </div>

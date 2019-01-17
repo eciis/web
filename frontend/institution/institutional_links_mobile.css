@@ -1,9 +1,9 @@
 .main-links-container {
     display: grid;
-    grid-template-columns: 5% auto 5%;
     grid-template-rows: min-content;
     grid-row-gap: 0.5em;
     grid-column-gap: 1em;
+    margin: 0 auto;
 }
 
 .link-section {
@@ -33,11 +33,12 @@
     height: 3em;
     width: 3em;
     border-radius: 50%;
-    justify-self: center;
+    place-self: center;
 }
 
 .link-description {
     display: grid;
+    grid-row-gap: 0.2em;
 }
 
 .link-info-tag {
@@ -61,4 +62,9 @@
 .link-divider {
     grid-column: span 3;
     grid-row: 5;
+}
+
+.no-links-msg {
+    grid-column: 2;
+    text-align: center;
 }

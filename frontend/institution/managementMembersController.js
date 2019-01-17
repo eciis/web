@@ -94,7 +94,7 @@
         };
 
         manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
-            ProfileService.showProfile(userKey, ev);
+            ProfileService.showProfile(userKey, ev, manageMemberCtrl.institution.key);
         };
 
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {

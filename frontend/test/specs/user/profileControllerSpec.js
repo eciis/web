@@ -23,7 +23,8 @@
             return $controller('ProfileController', {
                 scope: scope,
                 user: user.key,
-                currentUserKey: user.key
+                currentUserKey: user.key,
+                institutionKey: '12345'
             });
         };
         profileCtrl = createCtrl();

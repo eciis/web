@@ -1,60 +1,37 @@
-<div layout="column" layout-align="center center">
-    <md-dialog aria-label="Profiles" layout-padding style="padding: 0; max-height: 46em; width: 33em; overflow: hidden;">
-        <div layout="column" ng-if="profileCtrl.isToShow()" style="padding: 0; margin-bottom: 3%">
-            <div md-colors="{background: 'default-teal-600'}" layout="row" layout-align="center">
-                <img alt="Foto do Perfil" ng-src="{{ profileCtrl.user.photo_url }}" alt="{{profileCtrl.user.name}}"
-                    style="border-radius: 50%; height: 10em; margin: 3em 0 -2em 0;">
+<md-dialog id="user-profile-size">
+    <div class="user-profile-dialog">
+        <div class="user-profile-cover">
+            <div md-colors="{background: 'default-teal-600'}">
+                <img>
             </div>
-            <div style="margin-top: 2em;">
-                <h2 style="text-align: center;">{{profileCtrl.user.name}}</h2>
-                <p style="text-align: center; margin-top:-3% " md-colors="{color: 'default-teal-600'}">{{profileCtrl.user.email[0]}}</p>
-            </div>
-            <md-divider style="align-self: center;width: 45%;"></md-divider>
-            <h2 style="text-align: center;" md-colors="{color: 'default-teal-600'}">Vínculos Institucionais</h2>
-            <div layout-padding>
-                <md-content class="custom-scrollbar" style="max-height: 19em;">
-                    <md-list ng-repeat="profile in profileCtrl.user.institution_profiles">
-                        <md-list-item class="md-3-line" md-colors="{background: 'default-grey-200'}">
-                            <md-icon class="md-avatar-icon" md-colors="{background: 'default-light-green-500', color: 'default-grey-50'}">
-                                account_balance</md-icon>
-                            <div class="md-list-item-text" layout="column">
-                              <h3><b>{{ profile.institution.name }}</b> </h3>
-                              <h5 layout-gt-sm="row" style="margin: 0;font-weight: normal;">
-                                <span style="margin-right: 3px;" md-colors="{color: 'default-teal-600'}"><b>Cargo:</b></span>
-                                <span md-colors="{color: 'default-grey-600'}"><b>{{ profile.office}}</b></span>
-                              </h5>
-                              <h5 layout-gt-sm="row" style="margin: 0;font-weight: normal;">
-                                <span style="margin-right: 3px;" md-colors="{color: 'default-teal-600'}"><b>Telefone institucional: </b></span>
-                                <span md-colors="{color: 'default-grey-600'}"><b>{{ profileCtrl.showProperty(profile.phone)}}</b></span>
-                              </h5>
-                              <h5 layout-gt-sm="row" style="margin: 0;font-weight: normal;">
-                                <span style="margin-right: 3px;" md-colors="{color: 'default-teal-600'}"><b>
-                                    Email institucional:</b></span>
-                                <span md-colors="{color: 'default-grey-600'}"><b>{{profileCtrl.showProperty(profile.email)}}</b></span>
-                              </h5>
-                              <h5 layout-gt-sm="row" style="margin: 0;font-weight: normal;">
-                                <span style="margin-right: 3px;" md-colors="{color: 'default-teal-600'}"><b>
-                                    Ramal:</b></span>
-                                <span md-colors="{color: 'default-grey-600'}"><b>{{profileCtrl.showProperty(profile.branch_line)}}</b></span>
-                              </h5>
-                            </div>
-                        </md-list-item>
-                    </md-list>
-                </md-content>
+            <div id="user-profile-img">
+                <img ng-src="{{profileCtrl.user.photo_url}}" />
             </div>
         </div>
-        <div ng-if="!profileCtrl.loading && !profileCtrl.isToShow()">
-            <h2>O usuário não possui instituições.</h2>
+        <div class="user-profile-content">
+            <div id="user-profile-content-grid">
+                <span id="user-profile-content-name" class="user-profile-center">
+                    {{ profileCtrl.user.name }}</span>
+                <hl md-colors="{background: 'default-light-green-500'}" class="user-profile-center"></hl>
+                <div id="user-profile-info">
+                    <p class="user-profile-title user-profile-default-color"><b>CARGO</b></p>
+                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().office}}</p>
+                    <p class="user-profile-title user-profile-default-color"><b>TELEFONE</b></p>
+                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().phone}}</p>
+                    <p class="user-profile-title user-profile-default-color"><b>E-MAIL</b></p>
+                    <p class="user-profile-subtitle">{{profileCtrl.getInstitutionProfile().email}}</p>
+                </div>
+            </div>
         </div>
-        <div ng-show="profileCtrl.loading" layout-margin layout="row" layout-align="center center" style="padding: 0;">
-            <load-circle></load-circle>
+        <div layout="row" class="user-profile-action">
+            <div md-colors="{color: 'default-grey-600'}"
+                id="user-profile-show-div" ng-click="profileCtrl.closeDialog()">
+                <span class="user-profile-title">FECHAR</span>
+            </div>
+            <div md-colors="{color: 'default-teal-500'}"
+                id="user-profile-show-div" ng-click="profileCtrl.getInstitutionProfile()">
+                <span class="user-profile-title">VER PERFIL</span>
+            </div>
         </div>
-    </md-dialog>
-    <div>
-        <md-button ng-if="profileCtrl.isOwnProfile()" class="md-fab md-primary md-padding" aria-label="Editar" 
-            style="margin-top: -25%;"
-                ng-click="profileCtrl.goToConfigProfile()" md-colors="{background: 'default-light-green-500'}">
-            <md-icon>edit</md-icon>
-        </md-button>
     </div>
- </div>
+</md-dialog>

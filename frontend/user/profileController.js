@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("ProfileController", function ProfileController(user, currentUserKey, UserService, $state, $mdDialog, STATES) {
+    app.controller("ProfileController", function ProfileController(user, currentUserKey, institutionKey, UserService, $state, $mdDialog, STATES) {
         var profileCtrl = this;
 
         profileCtrl.loading = true;
@@ -31,6 +31,17 @@
 
         profileCtrl.isOwnProfile = function isOwnProfile() {
             return user === currentUserKey;
+        };
+
+        profileCtrl.closeDialog = () => {
+            $mdDialog.cancel();
+        };
+
+        profileCtrl.getInstitutionProfile = () => {
+            if(profileCtrl.user)
+                return _.find(profileCtrl.user.institution_profiles, (profile) => {
+                    return profile.institution_key === institutionKey;
+                });
         };
     });
 })();

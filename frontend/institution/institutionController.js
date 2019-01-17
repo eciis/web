@@ -355,15 +355,16 @@
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
             MessageService, ProfileService){
 
-        var followersCtrl = this;
-        var currentInstitutionKey = $state.params.institutionKey;
+        const followersCtrl = this;
+
+        followersCtrl.currentInstitutionKey = $state.params.institutionKey;
 
         followersCtrl.followers = [];
         followersCtrl.currentFollower = "";
         followersCtrl.isLoadingFollowers = true;
 
         followersCtrl._getFollowers = () => {
-            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
+            InstitutionService.getFollowers(followersCtrl.currentInstitutionKey).then(function success(response) {
                 followersCtrl.followers = Utils.isMobileScreen(475) ?
                     Utils.groupUsersByInitialLetter(response) : response;
                 followersCtrl.isLoadingFollowers = false;

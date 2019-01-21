@@ -3,9 +3,13 @@
 
     const app = angular.module('app');
 
-    app.service('MessageService', function($mdToast) {
+    app.service('MessageService', ['$mdToast', function($mdToast) {
         const service = this;
 
+        /**
+         * This function displays a small dialog containing the received message per parameter.
+         * @param {String} message - Message to show
+         */
         service.showToast = function showToast(message) {
             $mdToast.show(
                 $mdToast.simple()
@@ -16,5 +20,5 @@
                     .position('bottom right')
             );
         };
-    });
+    }]);
 })();

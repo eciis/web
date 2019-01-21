@@ -94,8 +94,11 @@
         };
     });
 
+    /**
+     * Auth interceptor to check if the usr is logged in, if not, redirect to login page.
+     */
     app.run(function authInterceptor(AuthService, $transitions) {
-        var ignored_routes = [
+        const ignored_routes = [
             "singin"
         ];
 

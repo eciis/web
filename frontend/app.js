@@ -19,7 +19,7 @@
         'br.cidades.estados'
     ]);
 
-    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
+    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider, SCREEN_SIZES,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
@@ -192,7 +192,7 @@
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
                             "app/institution/institutionalLinks/institutional_links.html", 
                             "app/institution/institutionalLinks/institutional_links_mobile.html",
-                            420
+                            SCREEN_SIZES.SMARTPHONE
                         ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }

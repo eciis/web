@@ -129,23 +129,23 @@
         });
 
         describe('parentStatus()', function() {
-            it('should return the string "confirmado" when the status of link is confirmed', function() {
-                expect(instLinksCtrl.parentStatus()).toEqual('confirmado');
+            it('should return the string "Confirmado" when the status of link is confirmed', function() {
+                expect(instLinksCtrl.parentStatus()).toEqual('Confirmado');
             });
 
-            it('should return the string "não confirmado" when the status of link is not confirmed', function() {
+            it('should return the string "Não confirmado" when the status of link is not confirmed', function() {
                 instLinksCtrl.parentInstitution.children_institutions = [];
-                expect(instLinksCtrl.parentStatus()).toEqual('não confirmado');
+                expect(instLinksCtrl.parentStatus()).toEqual('Não confirmado');
             });
         });
 
         describe('childStatus()', function() {
-            it('should return the string "confirmado" when the status of link is confirmed', function() {
-                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[0])).toEqual('confirmado');
+            it('should return the string "Confirmado" when the status of link is confirmed', function() {
+                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[0])).toEqual('Confirmado');
             });
 
-            it('should return the string "não confirmado" when the status of link is not confirmed', function() {
-                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[1])).toEqual('não confirmado');
+            it('should return the string "Não confirmado" when the status of link is not confirmed', function() {
+                expect(instLinksCtrl.childStatus(childrenInstitutionsTest[1])).toEqual('Não confirmado');
             });
         });
     });

@@ -86,7 +86,7 @@
 
             it('should call window.open', function() {
                 spyOn(window, 'open');
-                instLinksCtrl.goToInst(parentInstitutionTest.key);
+                instLinksCtrl.goToInst(parentInstitutionTest);
                 expect(window.open).toHaveBeenCalledWith('/institution/' + parentInstitutionTest.key + '/home', '_blank');
             });
         });

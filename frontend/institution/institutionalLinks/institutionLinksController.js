@@ -13,8 +13,8 @@
         instLinksCtrl.parentInstitution = {};
         instLinksCtrl.childrenInstitutions = [];
 
-        instLinksCtrl.goToInst = function goToInst(institutionKey) {
-            const url = $state.href(STATES.INST_TIMELINE, { institutionKey: institutionKey });
+        instLinksCtrl.goToInst = function goToInst(institution) {
+            const url = $state.href(STATES.INST_TIMELINE, { institutionKey: institution.key });
             window.open(url, '_blank');
         };
 

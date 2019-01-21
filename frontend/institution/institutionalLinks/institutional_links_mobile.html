@@ -1,33 +1,22 @@
-<div class="main-links-container">
+<div class="links__container">
         
-    <div class="link-section" ng-if="instLinksCtrl.hasParentInst()">
-        <h4 class="link-section-title">INSTITUIÇÃO SUPERIOR</h4>
-        <div class="link-info-container"  
-            ng-click="instLinksCtrl.goToInst(instLinksCtrl.parentInstitution.key)">
-            <img ng-src="{{instLinksCtrl.parentInstitution.photo_url}}" class="link-avatar"/>
-            <div class="link-description">
-                <h4 class="link-info-inst">{{instLinksCtrl.parentInstitution.name}}</h4>
-                <h5 class="link-info-tag">Status do Vínculo</h5> 
-                <h5 class="link-info-status">{{instLinksCtrl.parentStatus()}}</h5>
-            </div>
-        </div>
-    </div>
+    <inst-links class="links__item"
+        show-if="instLinksCtrl.hasParentInst"
+        title="instituição superior"
+        institutions="[instLinksCtrl.parentInstitution]"
+        on-click="instLinksCtrl.goToInst"
+        check-status="instLinksCtrl.parentStatus">
+    </inst-links>
 
-    <div class="link-section" ng-if="instLinksCtrl.hasChildrenInst()">
-        <h4 class="link-section-title">INSTITUIÇÕES SUBORDINADAS</h4>
-        <div class="link-info-container" ng-click="instLinksCtrl.goToInst(institution.key)"
-            ng-repeat="institution in instLinksCtrl.childrenInstitutions | filter: instLinksCtrl.currentInstitution">
-            <img ng-src="{{institution.photo_url}}" class="link-avatar"/>
-            <div class="link-description">
-                <h4 class="link-info-inst">{{institution.name}}</h4>
-                <h5 class="link-info-tag">Status do Vínculo: </h5>
-                <h5 class="link-info-status">{{instLinksCtrl.childStatus(institution)}}</h5>
-            </div>
-            <md-divider class="link-divider"></md-divider>
-        </div>
-    </div>
+    <inst-links class="links__item"
+        show-if="instLinksCtrl.hasChildrenInst"
+        title="instituições subordinadas"
+        institutions="instLinksCtrl.childrenInstitutions"
+        on-click="instLinksCtrl.goToInst"
+        check-status="instLinksCtrl.childStatus">
+    </inst-links>
 
-    <div ng-if="!instLinksCtrl.hasInstitutions()" class="no-links-msg">
+    <div ng-if="!instLinksCtrl.hasInstitutions()" class="links__empty__msg">
         <h3>Esta instituição não possui nenhum vínculo institucional</h3>
     </div>
     

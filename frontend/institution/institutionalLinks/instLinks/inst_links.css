@@ -34,7 +34,7 @@
 }
 
 .link__info__inst {
-    font-weight: bold;
+    font-weight: 500;
     margin: 0;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -42,7 +42,7 @@
 }
 
 .link__info__tag {
-    font-weight: bold;
+    font-weight: 500;
     color: #009688;
     margin: 0;
     text-transform: uppercase;

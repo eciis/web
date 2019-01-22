@@ -11,7 +11,6 @@
         
         const manageTogglesCtrl = this;
         manageTogglesCtrl.isLoading = false;
-        manageTogglesCtrl.oddFeatures = [];
         manageTogglesCtrl.features = [];
 
         /**
@@ -43,8 +42,7 @@
          */
         function loadFeatures() {
             return ManageTogglesService.getAllFeatureToggles().then(function(features) {
-                manageTogglesCtrl.oddFeatures = features;
-                manageTogglesCtrl.features = _.cloneDeep(features);
+                manageTogglesCtrl.features = features;
                 return features;
             }).catch(response => {
                 MessageService.showToast(response.data.msg);

@@ -3,7 +3,7 @@
   const app = angular.module('webchat');
 
   app.factory('ChatClient', ['Chat', (Chat) => {
-    const hostname = 'localhost';
+    const hostname = window.location.hostname;
     const port = 8090;
 
     function ChatClient(id) {
@@ -35,7 +35,7 @@
     }
 
     ChatClient.prototype.createChat = function (id, stream) {
-      const chat = new Chat(stream);
+      const chat = new Chat(stream, this.id);
       this.chats[id] = chat;
       this.emit('chat-created', { id, chat });
       return chat;
@@ -73,6 +73,7 @@
     }
 
     ChatClient.prototype.addIceCandidate = function (e) {
+      console.log('ws candidate received', e);
       if (this.chats[e.name]) {
         this.chats[e.name].receiveCandidate(e.candidate);
       }
@@ -94,7 +95,7 @@
 
     ChatClient.prototype.handleDiscoveredIceCandidates = function (id, e) {
       if (e.candidate) {
-        console.log('candidate discovered');
+        console.log('candidate discovered', e.candidate);
         const msg = {
           type: 'newCandidate',
           name: this.id,

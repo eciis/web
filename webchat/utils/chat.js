@@ -2,20 +2,27 @@
 (function () {
   const app = angular.module('webchat');
 
-  app.factory('Chat', [() => {
-    function Chat(stream) {
-      this.rpc = new RTCPeerConnection([
-        { url: 'stun:stun.l.google.com:19302' }
-      ]);
+  app.factory('Chat', ['ChatMessage', (ChatMessage) => {
+    let messages = [];
+
+    function Chat(stream, selfId) {
+      this.selfId = selfId;
+      this.rpc = new RTCPeerConnection([{
+        url: 'stun:stun.l.google.com:19302',
+        url: 'stun:stun2.l.google.com:19302',
+        url: 'stun:stun3.l.google.com:19302'
+      }]);
       this.eventHandlers = {};
-      this.pendingCandidates = [];
+      stream.getTracks().forEach(t => {
+        this.rpc.addTrack(t, stream)
+      });
       this.rpc.onicecandidate = e => this.emit('ice-candidate', e);
-      stream.getTracks().forEach(t => this.rpc.addTrack(t, stream));
       this.sendChannel = this.rpc.createDataChannel('sendChannel');
       this.rpc.ondatachannel = this.handleDataChannel.bind(this);
       this.rpc.ontrack = e => this.emit('track-received', e);
       this.rpc.oniceconnectionstatechange = this.iceConnectionCB.bind(this);
       this.rpc.onsignalingstatechange = this.stateCB.bind(this);
+      this.currentMessages;
     }
 
     Chat.prototype.emit = function(eventName, e) {
@@ -34,12 +41,7 @@
     }
 
     Chat.prototype.receiveCandidate = function(candidate) {
-      console.log('candidate received');
-      if (this.rpc.remoteDescription == null) {
-        console.log('no remote');
-        this.pendingCandidates.push(candidate);
-        return;
-      }
+      console.log('candidate received', candidate);
       const rtcCandidate = new RTCIceCandidate(candidate);
 
       this.rpc.addIceCandidate(rtcCandidate);
@@ -47,10 +49,13 @@
 
     Chat.prototype.handleDataChannel = function(e) {
       const chat = this;
-      e.channel.onmessage = channelEv => chat.emit('msg-received', channelEv);
-    }
-
-    Chat.prototype.init = function(stream) {
+      e.channel.onmessage = channelEv => {
+        if (channelEv.data) {
+          const msg = new ChatMessage(channelEv.data);
+          chat.currentMessages.push(msg);
+          chat.emit('msg-list-updated', msg.msg)
+        }
+      };
     }
 
     Chat.prototype.iceConnectionCB = function() {
@@ -65,7 +70,11 @@
       return this.rpc.createOffer().then(offer => {
         return this.rpc.setLocalDescription(offer).then(() => {
           return offer;
-        })
+        }).catch(e => {
+          console.log('Erro em local description apos offer', e);
+        });
+      }).catch(e => {
+        console.log('Erro em offer', e);
       });
     }
 
@@ -81,11 +90,10 @@
       return this.rpc.setRemoteDescription(remote).then(() => {
         return this.rpc.createAnswer().then(answer => {
           return this.rpc.setLocalDescription(answer).then(() => {
-            if (this.pendingCandidates > 0) {
-              this.pendingCandidates.forEach(c => this.receiveCandidate(c));
-            }
             return answer;
           })
+        }).catch(e => {
+          console.log('Erro em answer', e);
         });
       })
     }
@@ -95,9 +103,21 @@
     }
 
     Chat.prototype.sendMessage = function(message) {
-      this.sendChannel.send(message);
-      this.emit('msg-sent', message);
+      const msgString = JSON.stringify({
+        sender: this.selfId,
+        timestamp: Date.now(),
+        msg: message,
+        type: 'text',
+      })
+      this.sendChannel.send(msgString);
+      messages.push(new ChatMessage(msgString));
     }
+
+    Object.defineProperty(Chat.prototype, 'currentMessages', {
+      get: () => {
+        return messages.sort((p, n) => p.timestamp - n.timestamp);
+      }
+    })
 
     return Chat;
   }])

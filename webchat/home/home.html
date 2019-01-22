@@ -1,22 +1,30 @@
+<div style="margin: 10%">
 <h2>HOME</h2>
 <div>
-  {{controller.userList}}
+  <span ng-repeat='(id, usr) in controller.userList'>
+    <md-button ng-click='controller.call(id)'>
+      {{ usr }}
+    </md-button>
+  </span>
 </div>
-<input type='text' ng-model='controller.dest'>
-<span>msg</span>
+<div>
+  <span ng-repeat='msg in controller.msgList()'>
+    <h4>{{ controller.getName(msg.sender)}}</h4>
+    <p>{{ msg.msg }} <i>({{ controller.formatTime(msg.timestamp) }})</i></p>
+  </span>
+</div>
 <input type='text' ng-model='controller.msg'>
-<button type='button' ng-click='controller.sendMessage()'>Send</button>
-<button type='button' ng-click='controller.call()'>Call</button>
-<video width="320"
-height="240"
+<md-button ng-disabled='!controller.chat.sendMessage' class='md-primary md-raised' ng-click='controller.sendMessage()'>Send</md-button>
+<video width="160"
+height="120"
 autoplay
 playsinline
 id="video-selfie">
 </video>
-<video width="320"
-height="240"
+<video width="160"
+height="120"
 autoplay
 playsinline
 id="video-remote">
 </video>
-
+</div>

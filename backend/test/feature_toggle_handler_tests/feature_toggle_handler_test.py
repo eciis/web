@@ -78,7 +78,8 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         feature['enable_mobile'] = 'DISABLED'
         other_feature['enable_desktop'] = 'DISABLED'
 
-        self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+        self.testapp.put_json('/api/feature-toggles', feature)
+        self.testapp.put_json('/api/feature-toggles', other_feature)
 
         self.feature = self.feature.key.get()
         self.other_feature = self.other_feature.key.get()
@@ -91,7 +92,7 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': user.email[0]}
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+            self.testapp.put_json('/api/feature-toggles', feature)
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         

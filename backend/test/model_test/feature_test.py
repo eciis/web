@@ -53,7 +53,7 @@ class FeatureTest(TestBase):
             'enable_desktop': 'ADMIN'
         }
 
-        Feature.set_visibility([feature_dict])
+        Feature.set_visibility(feature_dict)
 
         feature = Feature.get_feature('feature-test')
 

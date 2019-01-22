@@ -1,6 +1,14 @@
 (function() {
     "use strict";
-
+    
+    /**
+     * Institutional links Component
+     * @param {function} predicate to determine whether the component should be loaded or not
+     * @param {string} title to be showed over the links
+     * @param {array} linked institutions
+     * @param {function} callback to be called when one item is clicked
+     * @param {function} callback to be called on each link to determine its current status
+     */
     angular
     .module("app")
     .component("instLinks", {

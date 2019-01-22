@@ -81,7 +81,7 @@
         templateUrl: Utils.selectFieldBasedOnScreenSize(
             "app/notification/notifications_list.html", 
             "app/notification/notifications_list_mobile.html",
-            600
+            450
         ),
         bindings: {
             lengthTextNotification: '=?',

@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -62,19 +62,27 @@
         }
 
         eventCtrl.newEvent = function newEvent(event) {
-            $mdDialog.show({
-                controller: 'EventDialogController',
-                controllerAs: "controller",
-                templateUrl: 'app/event/event_dialog.html',
-                targetEvent: event,
-                clickOutsideToClose: true,
-                locals: {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+                $state.go(STATES.CREATE_EVENT, {
+                    eventKey: null,
+                    event: event,
                     events: eventCtrl.events
-                },
-                bindToController: true
-            }).then(() => {
-                eventCtrl._getEventsByDay();
-            });
+                });
+            } else {
+                $mdDialog.show({
+                    controller: 'EventDialogController',
+                    controllerAs: "controller",
+                    templateUrl: 'app/event/event_dialog.html',
+                    targetEvent: event,
+                    clickOutsideToClose: true,
+                    locals: {
+                        events: eventCtrl.events
+                    },
+                    bindToController: true
+                }).then(() => {
+                    eventCtrl._getEventsByDay();
+                });
+            }
         };
 
         eventCtrl.share = function share(ev, event) {
@@ -98,7 +106,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go('app.user.event', { eventKey: event.key });
+            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
         };
 
         /**
@@ -208,7 +216,7 @@
 
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
-            if(Utils.isMobileScreen(475)) {
+            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths();
             } else {
                 eventCtrl.loadMoreEvents();

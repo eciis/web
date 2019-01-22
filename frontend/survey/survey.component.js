@@ -4,18 +4,19 @@
 
     var app = angular.module('app');
 
-    app.controller('SurveyDirectiveController', function(PostService, AuthService, MessageService, 
+    app.controller('SurveyComponentController', function(PostService, AuthService, MessageService, 
         $scope, $mdDialog, $state, SubmitFormListenerService, $rootScope, POST_EVENTS, STATES) {
 
         var surveyCtrl = this;
 
-        surveyCtrl.options = $scope.options;
         surveyCtrl.now = new Date();
         surveyCtrl.multipleChoice = false;
         var option_empty = {'text': '',
                             'number_votes': 0,
                             'voters': []
-                            };
+                            };        
+
+        const MIN_QUANTITY_OPTION = (Utils.isMobileScreen() && screen.height > 730) ? 5 : 2;
 
         surveyCtrl.removeOption = function(opt) {
              _.remove(surveyCtrl.options, function(option) {
@@ -24,7 +25,8 @@
         };
 
         surveyCtrl.changeOption = function(option) {
-            option.text ? surveyCtrl.addOption() : surveyCtrl.options.length > 2 && surveyCtrl.removeOption(option);
+            option.text ? surveyCtrl.addOption() : 
+            surveyCtrl.options.length > MIN_QUANTITY_OPTION && surveyCtrl.removeOption(option);
         }
 
         surveyCtrl.addOption = function(){
@@ -93,9 +95,7 @@
 
         surveyCtrl.resetSurvey = function resetSurvey() {
             surveyCtrl.post = {};
-            surveyCtrl.options = [];
-            surveyCtrl.options.push(angular.copy(option_empty));
-            surveyCtrl.options.push(angular.copy(option_empty));
+            defaultoptions();
             surveyCtrl.multipleChoice = false;
             unobserveNewPost();
             $mdDialog.hide();
@@ -106,8 +106,19 @@
             return surveyCtrl.post.title && !notEnoughOptions && surveyCtrl.post.deadline;
         };
 
+        function defaultoptions(){
+            surveyCtrl.options = [];
+            for (let i = 0; i < MIN_QUANTITY_OPTION; i++) { 
+                surveyCtrl.options.push(angular.copy(option_empty))
+            }
+        }
+
         function unobserveNewPost() {
             SubmitFormListenerService.unobserve("postCtrl.post");
+        }
+
+        surveyCtrl.$onInit = function() {
+            defaultoptions();
         }
     });
 
@@ -119,19 +130,14 @@
         return Utils.isMobileScreen() ? "app/survey/save_survey_mobile.html" : "app/survey/save_survey.html";
     };
 
-    app.directive("surveyDirective", function() {
-        return {
-            restrict: 'E',
-            templateUrl: getTemplateUrl(),
-            controllerAs: "surveyCtrl",
-            controller: "SurveyDirectiveController",
-            scope: {},
-            bindToController: {
-                post: '=',
-                user: '=',
-                options: '=',
-                callback: '='
-            }
-        };
+    app.component("surveyComponent", {
+        templateUrl: getTemplateUrl(),
+        controllerAs: "surveyCtrl",
+        controller: "SurveyComponentController",
+        bindings: {
+            post: '=',
+            user: '=',
+            callback: '='
+        }
     });
 })();

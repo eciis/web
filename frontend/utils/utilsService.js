@@ -12,7 +12,7 @@
          */
         service.selectNavOption = function (state, params) {
             $state.go(state, params || {});
-            $mdSidenav('leftNav').close();
+            $mdSidenav('sideMenu').close();
         };
 
     });

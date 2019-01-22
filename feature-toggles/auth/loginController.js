@@ -3,7 +3,7 @@
     const app = angular.module('app');
 
     app.controller('LoginController', function(AuthService, $state, 
-        $stateParams, $window, MessageService) {
+        $stateParams, $window, MessageService, STATES) {
         const loginCtrl = this;
 
         loginCtrl.user = {};
@@ -57,13 +57,13 @@
             if (path) {
                 window.location.pathname = path;
             } else {
-                $state.go("manage-features");
+                $state.go(STATES.MANAGE_FEATURES);
             }
         }
 
         loginCtrl.$onInit = function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go("manage-features");
+                $state.go(STATES.MANAGE_FEATURES);
             }
         };
     });

@@ -3,7 +3,7 @@
 
     const app = angular.module("app");
 
-    app.service("AuthService", function AuthService($state, $window, UserService, UserFactory, MessageService) {
+    app.service("AuthService", function AuthService($state, $window, UserService, UserFactory, MessageService, STATES) {
         const service = this;
 
         const authObj = firebase.auth();
@@ -132,7 +132,7 @@
 
             executeLogoutListeners();
 
-            $state.go("singin");
+            $state.go(STATES.SIGNIN);
         };
 
         service.getCurrentUser = function getCurrentUser() {

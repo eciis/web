@@ -122,7 +122,7 @@ function set_frontend_url {
 function set_feature_url {
     url=$(set_service_url $1 $2);
     service="FEATURE_URL";
-    line=7;
+    line=8;
     service_name="feature";
     set_config_file $line $service $url $service_name;
 }

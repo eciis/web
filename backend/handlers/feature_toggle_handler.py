@@ -11,7 +11,7 @@ from custom_exceptions import NotAuthorizedException
 
 __all__ = ['FeatureToggleHandler']
 
-def to_json(feature_list):
+def to_json(feature_list, language="pt-br"):
     """
     Method to generate list of feature models in json format object.
 
@@ -19,7 +19,7 @@ def to_json(feature_list):
     feature_list -- List of features objects
     """
     
-    features = [feature.make() for feature in feature_list]
+    features = [feature.make(language) for feature in feature_list]
     return json.dumps(features)
 
 class FeatureToggleHandler(BaseHandler):
@@ -33,13 +33,14 @@ class FeatureToggleHandler(BaseHandler):
         """
 
         feature_name = self.request.get('name')
+        language = self.request.get('lang')
 
         if feature_name:
             features = [Feature.get_feature(feature_name)]
         else:
             features = Feature.get_all_features()
 
-        self.response.write(to_json(features))
+        self.response.write(to_json(features, language))
     
     @login_required
     @json_response
@@ -56,6 +57,6 @@ class FeatureToggleHandler(BaseHandler):
 
         Utils._assert(not (super_user == user.key), "User not allowed to modify features!", NotAuthorizedException)
 
-        features_body = json.loads(self.request.body)
-        features = Feature.set_visibility(features_body)
-        self.response.write(to_json(features))
+        feature_body = json.loads(self.request.body)
+        feature = Feature.set_visibility(feature_body)
+        self.response.write(json.dumps(feature.make()))

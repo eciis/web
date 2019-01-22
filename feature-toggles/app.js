@@ -10,7 +10,7 @@
 
 
     app.config(function($mdIconProvider, $mdThemingProvider, $urlMatcherFactoryProvider, $urlRouterProvider, 
-        $locationProvider, $stateProvider, $httpProvider) {
+        $locationProvider, $stateProvider, $httpProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
         $mdThemingProvider.theme('docs-dark');
@@ -22,20 +22,20 @@
         $urlMatcherFactoryProvider.caseInsensitive(true);
 
         $stateProvider
-            .state("singin", {
-                url: "/singin",
+            .state(STATES.SIGNIN, {
+                url: "/signin",
                 views: {
                     main: {
                         templateUrl: "app/auth/login.html",
                         controller: "LoginController as loginCtrl"
                     }
                 }
-            }).state("manage-features", {
+            }).state(STATES.MANAGE_FEATURES, {
                 url: "/",
                 views: {
                     main: {
                         templateUrl: "app/manage/manage-toggles.html",
-                        constroller: "ManageTogglesController as ManageTogglesCtrl"
+                        controller: "ManageTogglesController as manageTogglesCtrl"
                     }
                 }
             });
@@ -92,5 +92,22 @@
                 return $q.reject(rejection);
             }
         };
+    });
+
+    /**
+     * Auth interceptor to check if the usr is logged in, if not, redirect to login page.
+     */
+    app.run(function authInterceptor(AuthService, STATES, $transitions) {
+        const ignored_routes = [
+            STATES.SIGNIN
+        ];
+
+        $transitions.onBefore({
+            to: function(state) {
+                return !(_.includes(ignored_routes, state.name)) && !AuthService.isLoggedIn();
+            }
+        }, function(transition) {
+            return transition.router.stateService.target(STATES.SIGNIN);
+        });
     });
 })();

@@ -3,7 +3,7 @@
     const app = angular.module('app');
 
     app.controller('LoginController', function(AuthService, $state, 
-        $stateParams, $window, $mdToast) {
+        $stateParams, $window, MessageService, STATES) {
         const loginCtrl = this;
 
         loginCtrl.user = {};
@@ -12,23 +12,12 @@
 
         var redirectPath = $stateParams.redirect;
 
-        loginCtrl.showToast = function showToast(message) {
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(message)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
-        };
-
         loginCtrl.loginWithGoogle = function loginWithGoogle() {
             var promise = AuthService.loginWithGoogle();
             promise.then(function success() {
                 redirectTo(redirectPath);
             }).catch(function(error) {
-                loginCtrl.showToast(error);
+                MessageService.showToast(error);
             });
             return promise;
         };
@@ -48,7 +37,7 @@
                     redirectTo(redirectPath);
                 }
             ).catch(function(error) {
-                loginCtrl.showToast(error);
+                MessageService.showToast(error);
             });
         };
 
@@ -68,13 +57,13 @@
             if (path) {
                 window.location.pathname = path;
             } else {
-                $state.go("manage-features");
+                $state.go(STATES.MANAGE_FEATURES);
             }
         }
 
         loginCtrl.$onInit = function main() {
             if (AuthService.isLoggedIn()) {
-                $state.go("manage-features");
+                $state.go(STATES.MANAGE_FEATURES);
             }
         };
     });

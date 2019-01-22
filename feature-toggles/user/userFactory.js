@@ -5,6 +5,10 @@
 
     app.factory('UserFactory', () => {
 
+        /**
+         * User model.
+         * @param {*} data - data of user. 
+         */
         function User(data) {
             data = data || {};
             _.extend(this, data);
@@ -14,6 +18,10 @@
             }
         }
 
+        /**
+         * This function modifies the user's current institution.
+         * @param {Object} institution - institution to be change.
+         */
         User.prototype.changeInstitution = function changeInstitution(institution) {
             if (this.institutions && this.institutions.length > 0) {
                 institution = institution || this.institutions[0];
@@ -22,45 +30,14 @@
             }
         };
 
-        User.prototype.isAdmin = function isAdmin(keyInstitution) {
-            var managed_institution = _.find(this.institutions_admin, function(institution) {
-            return getKey(institution) == keyInstitution; });
-            return managed_institution;
+        /**
+         * This function checks whether the user has the permission passed by parameter.
+         * @param {String} permissionType - permission to be checked.
+         */
+        User.prototype.hasPermission = function hasPermission(permissionType) {
+            return permissionType in this.permissions;
         };
 
-        User.prototype.isAdminOfCurrentInst = function isAdminOfCurrentInst() {
-            return this.institutions_admin.map(getKey).includes(this.current_institution.key);
-        };
-
-        User.prototype.isMember = function isMember(institutionKey){
-            return _.includes(_.map(this.institutions, getKeyObj), institutionKey);
-        };
-
-        User.prototype.isInactive = function isInactive() {
-            var notActive = this.state != 'active';
-            return notActive;
-        };
-
-        User.prototype.hasPermission = function hasPermission(permissionType, entityKey) {
-            var key = entityKey || this.current_institution.key;
-            if (this.permissions[permissionType]) {
-                return this.permissions[permissionType][key];
-            }
-            return false;
-        };
-
-        function getKeyObj(obj) {
-            if(obj.key){
-            return obj.key;
-            }
-        }
-
-        function getKey(obj){
-            var key = obj.split("/");
-            key = key[key.length -1];
-
-            return key;
-        }
 
         return {
             user: User

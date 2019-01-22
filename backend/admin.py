@@ -42,7 +42,10 @@ features = [
     {
         "name": 'manage-inst-edit',
         "enable_mobile": "DISABLED",
-        "enable_desktop": "ALL"
+        "enable_desktop": "ALL",
+        "translation_dict": {
+            "pt-br": "Editar informações da instituição"
+        }
     }
 ]
 

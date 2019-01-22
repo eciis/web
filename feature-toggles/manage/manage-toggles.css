@@ -1,16 +1,43 @@
+.navbar-content {
+    height: 100%; 
+    display: grid; 
+    grid-template-rows: auto 1fr;
+}
+
 .content {
+    display: grid;
     padding: 16px;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
 }
 
 .content > img {
     height: 35px;
 }
 
+.content > button {
+    border-radius: 50%;
+    border: none;
+    background-color: transparent;
+    color: white;
+}
+
+#toggles-box {
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+#toggles-box > div {
+    display: grid;
+    justify-content: center;
+    margin: 16px;
+}
+
 .toggle-content {
     display: grid; 
-    grid-template-columns: auto auto;
-    justify-content: center;
+    grid-template-columns: auto 154px 154px 105px;
     grid-gap: 10px;
+    align-items: center;
 }
 
 .toggle-content > md-select {

@@ -1,15 +1,24 @@
-<div class="content" md-colors="{background: 'teal-900'}">
-    <img src="app/images/logo.png"/>
-</div>
-<div>
-    <div class="toggle-content">
-        <md-switch class="md-primary" md-no-ink aria-label="Switch No Ink" ng-model="data.cb5">
-            Gerenciar instituição
-        </md-switch>
-        <md-select ng-model="oi" placeholder="Permissão" class="md-no-underline">
-            <md-option value="ALL">ALL</md-option>
-            <md-option value="ADMIN">ADMIN</md-option>
-            <md-option value="SUPER USER">SUPER USER</md-option>
-        </md-select>
+<div class="navbar-content">
+    <div class="content" md-colors="{background: 'teal-900'}">
+        <img src="app/images/logo.png"/>
+        <button ng-click="manageTogglesCtrl.logout()">SAIR</button>
+    </div>
+    <div id="toggles-box">
+        <h1 style="text-align: center;">Gerenciar funcionalidades do sistema</h1>
+        <div>
+            <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
+                <b>
+                    {{feature.translation || feature.name}}
+                </b>
+                <permission-select label="Permissão Mobile" feature="feature" attr="enable_mobile"></permission-select>
+                <permission-select label="Permissão Desktop" feature="feature" attr="enable_desktop"></permission-select>
+                <md-button ng-if="!feature.isLoading" class="md-raised md-primary" 
+                    md-colors="{background: 'teal-500'}"
+                    ng-click="manageTogglesCtrl.save(feature)">
+                    SALVAR
+                </md-button>
+                <load-circle ng-if="feature.isLoading"></load-circle>
+            </div>
+        </div>
     </div>
 </div>

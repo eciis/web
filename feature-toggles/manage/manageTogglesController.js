@@ -46,6 +46,8 @@
                 manageTogglesCtrl.oddFeatures = features;
                 manageTogglesCtrl.features = _.cloneDeep(features);
                 return features;
+            }).catch(response => {
+                MessageService.showToast(response.data.msg);
             });
         }
 

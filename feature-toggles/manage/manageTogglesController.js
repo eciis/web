@@ -14,22 +14,6 @@
         manageTogglesCtrl.oddFeatures = [];
         manageTogglesCtrl.features = [];
 
-        manageTogglesCtrl.options = [
-            {
-                value: 'DISABLED',
-                name: 'DESABILITADO'
-            }, {
-                value: 'ALL',
-                name: 'TODOS'
-            }, {
-                value: 'ADMIN',
-                name: 'TESTE'
-            }, {
-                value: 'SUPER_USER',
-                name: 'SUPER USÁRIO'
-            }
-        ];
-
         manageTogglesCtrl.logout = function() {
             AuthService.logout();
         };

@@ -10,21 +10,13 @@
                 <b>
                     {{feature.translation || feature.name}}
                 </b>
-                <md-input-container>
-                    <label>Permissão Mobile</label>
-                    <md-select ng-model="feature.enable_mobile" placeholder="Permissão" class="md-no-underline">
-                        <md-option ng-repeat="option in manageTogglesCtrl.options" value="{{option.value}}">{{option.name}}</md-option>
-                    </md-select>
-                </md-input-container>
-                <md-input-container>
-                    <label>Permissão Desktop</label>
-                    <md-select ng-model="feature.enable_desktop" placeholder="Permissão" class="md-no-underline">
-                        <md-option ng-repeat="option in manageTogglesCtrl.options" value="{{option.value}}">{{option.name}}</md-option>
-                    </md-select>
-                </md-input-container>
+                <permission-select label="Permissão Mobile" feature="feature" attr="enable_mobile"></permission-select>
+                <permission-select label="Permissão Desktop" feature="feature" attr="enable_desktop"></permission-select>
                 <md-button ng-if="!feature.isLoading" class="md-raised md-primary" 
-                md-colors="{background: 'teal-500'}"
-                ng-click="manageTogglesCtrl.save(feature)">SALVAR</md-button>
+                    md-colors="{background: 'teal-500'}"
+                    ng-click="manageTogglesCtrl.save(feature)">
+                    SALVAR
+                </md-button>
                 <load-circle ng-if="feature.isLoading"></load-circle>
             </div>
         </div>

@@ -3,7 +3,8 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("ProfileController", function ProfileController(user, currentUserKey, institutionKey, UserService, $state, $mdDialog, STATES) {
+    app.controller("ProfileController", ['user', 'currentUserKey', 'institutionKey', 'UserService', '$state', '$mdDialog', 'STATES', 
+        function ProfileController(user, currentUserKey, institutionKey, UserService, $state, $mdDialog, STATES) {
         var profileCtrl = this;
 
         profileCtrl.loading = true;
@@ -39,5 +40,5 @@
         profileCtrl.closeDialog = () => {
             $mdDialog.cancel();
         };
-    });
+    }]);
 })();

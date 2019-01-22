@@ -15,7 +15,7 @@
     grid-row-end: 2;
 }
 
-.user-profile-cover-size {
+.user-profile-cover-background, .user-profile-cover div img{
     height: 7em;
     width: 100%;
 }
@@ -33,20 +33,13 @@
     border-radius: 50%;
 }
 
-.user-profile-content {
+#user-profile-content-grid {
     grid-row-start: 2;
     grid-row-end: 3;
-    width: 100%;
-}
-
-#user-profile-content-grid {
     display: grid;
     grid-template-columns: 85%;
-    justify-content: center;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
     grid-row-gap: 0.3em;
+    justify-content: center;
     margin-top: 0.3em;
 }
 
@@ -60,7 +53,7 @@
     text-align: center;
 }
 
-.user-profile-content hl {
+.user-profile-content-hl {
     width: 4.5em;
     grid-row-start: 2;
     grid-row-end: 3;

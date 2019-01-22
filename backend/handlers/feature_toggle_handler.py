@@ -57,6 +57,6 @@ class FeatureToggleHandler(BaseHandler):
 
         Utils._assert(not (super_user == user.key), "User not allowed to modify features!", NotAuthorizedException)
 
-        features_body = json.loads(self.request.body)
-        features = Feature.set_visibility(features_body)
-        self.response.write(to_json(features))
+        feature_body = json.loads(self.request.body)
+        feature = Feature.set_visibility(feature_body)
+        self.response.write(json.dumps(feature.make()))

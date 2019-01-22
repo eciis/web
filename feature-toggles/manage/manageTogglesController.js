@@ -26,12 +26,12 @@
          */
         manageTogglesCtrl.save = function save(feature) {
                 feature.isLoading = true;
-                return ManageTogglesService.saveFeatures([feature])
+                return ManageTogglesService.saveFeatures(feature)
                     .then(response => {
                         MessageService.showToast("Alterações salvas com sucesso.");
                         return response;
                     }).catch(response => {
-                        MessageService.showToast(response.msg);
+                        MessageService.showToast(response.data.msg);
                     }).finally(function() {
                         feature.isLoading = false;
                     });

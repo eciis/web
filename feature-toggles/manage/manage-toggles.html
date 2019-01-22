@@ -1,11 +1,11 @@
-<div style="height: 100%; display: grid; grid-template-rows: auto 1fr;">
+<div class="navbar-content">
     <div class="content" md-colors="{background: 'teal-900'}">
         <img src="app/images/logo.png"/>
         <button ng-click="manageTogglesCtrl.logout()">SAIR</button>
     </div>
-    <div style="max-height: 100%; overflow-y: auto;">
+    <div id="toggles-box">
         <h1 style="text-align: center;">Gerenciar funcionalidades do sistema</h1>
-        <div style="display: grid; justify-content: center; margin: 16px;">
+        <div>
             <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
                 <b>
                     {{feature.translation || feature.name}}

@@ -19,11 +19,11 @@
         };
 
         /**
-         * Function to save one or more features.
-         * @param {Object} features - list of features to be save.
+         * Function to save feature.
+         * @param {Object} features - features to be save.
          */
-        service.saveFeatures = function saveFeatures(features) {
-            return HttpService.put(URI, features);
+        service.saveFeature = function saveFeature(feature) {
+            return HttpService.put(URI, feature);
         };
     }]);
 })();

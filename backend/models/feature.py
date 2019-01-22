@@ -36,27 +36,11 @@ class Feature(ndb.Model):
     @staticmethod
     def set_visibility(feature_dict):
         """
-        Method to enable or disable multiple features.
+        Method to enable or disable feature.
 
         Params:
-        features_list -- list of dictionaries containing the properties of the features model to be modified.
+        features_dict -- dictionary containing the properties of the feature model to be modified.
         """
-
-        """
-        features_dict = {
-            feature['name']: {
-                'enable_mobile': feature['enable_mobile'],
-                'enable_desktop': feature['enable_desktop']
-            } for feature in features_list
-        }
-
-        features = Feature.query(Feature.name.IN(features_dict.keys())).fetch()
-        
-        for feature in features:
-            feature.enable_desktop = features_dict[feature.name]['enable_desktop']
-            feature.enable_mobile = features_dict[feature.name]['enable_mobile']
-
-        ndb.put_multi(features)"""
 
         feature = Feature.get_feature(feature_dict.get('name'))
         feature.enable_desktop = feature_dict['enable_desktop']

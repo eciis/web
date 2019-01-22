@@ -26,7 +26,7 @@
          */
         manageTogglesCtrl.save = function save(feature) {
                 feature.isLoading = true;
-                return ManageTogglesService.saveFeatures(feature)
+                return ManageTogglesService.saveFeature(feature)
                     .then(response => {
                         MessageService.showToast("Alterações salvas com sucesso.");
                         return response;

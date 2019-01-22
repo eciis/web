@@ -117,7 +117,11 @@
                 url: "/config_profile",
                 views: {
                     user_content: {
-                        templateUrl: "app/user/config_profile.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/user/configProfile/config_profile.html",
+                            "app/user/configProfile/config_profile_mobile.html",
+                            420
+                        ),
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
@@ -564,6 +568,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        // initServiceWorker();
     })();
 })();

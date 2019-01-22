@@ -9,9 +9,6 @@
         ],
         controllerAs: "contactsToolbarCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
             searchQuery: "="
         },
     });

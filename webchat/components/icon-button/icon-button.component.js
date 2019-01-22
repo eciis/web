@@ -6,9 +6,6 @@
         controller: iconButtonController,
         controllerAs: "iconButtonCtrl",
         bindings: {
-            className: "@",
-            innerStyle: "@",
-            ariaLabel: "@",
             icon: "@",
             iconColor: "@",
         },

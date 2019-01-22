@@ -6,13 +6,9 @@
         controller: userDescriptionController,
         controllerAs: "userDescriptionCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
             name: "@",
             description: "@",
             avatar: "@",
-            onClick: "&",
         },
     });
 

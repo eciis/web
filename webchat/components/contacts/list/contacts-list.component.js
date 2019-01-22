@@ -6,9 +6,6 @@
         controller: contactsListController,
         controllerAs: "contactsListCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
             searchQuery: "<",
             contacts: "<"
         },

@@ -6,9 +6,6 @@
         controller: contactsSidenavController,
         controllerAs: "contactsSidenavCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
             contacts: "<",
         },
     });

@@ -6,9 +6,6 @@
         controller: expansiveSearchBarController,
         controllerAs: "expansiveSearchBarCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
             searchQuery: "="
         },
     });

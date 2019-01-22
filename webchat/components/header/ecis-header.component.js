@@ -9,10 +9,6 @@
         ],
         controllerAs: "headerCtrl",
         bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
-            mdColors: "@",
             user: "<"
         },
     });

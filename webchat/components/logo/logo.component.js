@@ -5,11 +5,6 @@
         templateUrl: "app/components/logo/logo.html",
         controller: logoController,
         controllerAs: "logoCtrl",
-        bindings: {
-            className: "@",
-            style: "@",
-            ariaLabel: "@",
-        },
     });
 
     function logoController() {

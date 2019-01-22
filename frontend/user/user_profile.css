@@ -5,7 +5,7 @@
 .user-profile-dialog {
     height: 80%;
     display: grid;
-    grid-template-rows: 40% 50% auto;
+    grid-template-rows: 37% 52% auto;
     grid-template-columns: auto;
     width: 100%;
 }
@@ -38,9 +38,9 @@
     grid-row-end: 3;
     display: grid;
     grid-template-columns: 85%;
-    grid-row-gap: 0.3em;
+    grid-row-gap: 0.6em;
     justify-content: center;
-    margin-top: 0.3em;
+    margin-top: 0.6em;
 }
 
 #user-profile-content-name {
@@ -51,13 +51,14 @@
     align-self: end;
     word-break: break-word;
     text-align: center;
+    margin-top: 0.5em
 }
 
 .user-profile-content-hl {
     width: 4.5em;
     grid-row-start: 2;
     grid-row-end: 3;
-    height: 0.2em;
+    height: 0.18em;
 }
 
 #user-profile-info {
@@ -77,7 +78,8 @@
     align-self: center;
     justify-self: end;
     margin-left: 0.8em;
-    height: 2.5em;
+    margin-top: 0.3em;
+    height: 2.7em;
 }
 
 .user-profile-title {

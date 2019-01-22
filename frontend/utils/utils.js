@@ -222,5 +222,33 @@ var Utils = {
      */
     selectFieldBasedOnScreenSize: function selectFieldBasedOnScreenSize(notMobileField, mobileField, mobileScreenSize) {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
+    },
+
+    /**
+    * Get the initial letter of the user name
+    * @param {Object} user : user object
+    */
+    getInitialLetterOfName: function getInitialLetterOfName(user) {
+        if(user) return Utils.normalizeString(user.name).toUpperCase().charAt(0);
+    },
+
+    /**
+     * Group users into Array of Arrays, wich the initial letter of username is the index of array
+     * Index 0 to letter 'A', 1 to letter 'B'...
+     * @param {Array} users : Array of users
+     * @returns {Array} The array of arrays grouped by alphabet letters
+     */
+    groupUsersByInitialLetter: function groupUsersByInitialLetter(users) {
+        const ASCIIAlphabetNumber = 65;
+        let filteredUsers = [];
+        users.forEach(user => {
+            const initialLetterIndex = Utils.getInitialLetterOfName(user).charCodeAt(0) - ASCIIAlphabetNumber;
+            if(filteredUsers[initialLetterIndex]) {
+                filteredUsers[initialLetterIndex].push(user);
+            } else {
+                filteredUsers[initialLetterIndex] = [user];
+            }
+        });
+        return filteredUsers;
     }
 };

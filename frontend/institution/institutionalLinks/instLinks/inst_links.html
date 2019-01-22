@@ -1,0 +1,13 @@
+<div class="link__section" ng-if="linksCtrl.showIf()">
+    <h4 class="link__title">{{linksCtrl.title}}</h4>
+    <div class="link__container" ng-repeat="institution in linksCtrl.institutions"
+        ng-click="linksCtrl.onClick(institution)">
+        <img ng-src="{{institution.photo_url}}" class="link__avatar"/>
+        <div class="link__description">
+            <h4 class="link__info__inst">{{institution.name}}</h4>
+            <h5 class="link__info__tag">Status do Vínculo: </h5>
+            <h5 class="link__info__status">{{linksCtrl.checkStatus(institution)}}</h5>
+        </div>
+        <md-divider class="link__divider"></md-divider>
+    </div>
+</div>

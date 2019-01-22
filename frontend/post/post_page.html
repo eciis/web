@@ -1,10 +1,18 @@
-<md-content layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
-    <div flex-gt-lg="60" flex-lg="60" layout="row" layout-wrap layout-align="center" class="fill-screen">
-        <div layout="column" flex ng-if="postCtrl.post && !postCtrl.isHiden()">
-            <post-details post="postCtrl.post" is-post-page=true></post-details>  
-        </div>
-        <div layout="row" layout-align="center center" ng-if="postCtrl.post && postCtrl.isHiden()">
-            <h2>Esta publicação foi removida.</h2> 
+<div layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
+    <div flex flex-lg="90" flex-gt-lg="70" layout="row" layout-align="space-between" >
+
+        <side-menu type="HOME"></side-menu>
+
+        <div flex layout="row" layout-align="center">
+            <md-content class="custom-scrollbar" flex="95">
+                <div layout="row" ng-if="postCtrl.post && !postCtrl.isHiden()">
+                    <post-details post="postCtrl.post" is-post-page=true></post-details>  
+                </div>
+            </md-content>
+            
+            <div layout="row" layout-align="center center" ng-if="postCtrl.post && postCtrl.isHiden()">
+                <h2>Esta publicação foi removida.</h2> 
+            </div>
         </div>
     </div>
-</md-content>
+</div>

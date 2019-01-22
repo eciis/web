@@ -87,10 +87,6 @@
             expect(homeCtrl.followingInstitutions[0]).toEqual({
                 acronym: 'Certbio', key: '123456789', photo_url: 'photo_url'});
         });
-
-        it('should be false the instMenuExpanded propertie', function() {
-            expect(homeCtrl.instMenuExpanded).toBe(false);
-        });
     });
 
     describe('HomeController functions', function() {
@@ -110,14 +106,6 @@
                 spyOn(mdDialog, 'show');
                 homeCtrl.newPost('$event');
                 expect(mdDialog.show).toHaveBeenCalled();
-            });
-        });
-
-        describe('expandInstMenu()' , function() {
-
-            it('should be true the instMenuExpanded propertie', function() {
-                homeCtrl.expandInstMenu();
-                expect(homeCtrl.instMenuExpanded).toBe(true);
             });
         });
 

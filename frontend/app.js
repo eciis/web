@@ -19,7 +19,7 @@
         'br.cidades.estados'
     ]);
 
-    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
+    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider, SCREEN_SIZES,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
@@ -45,7 +45,7 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/user/left_nav.html",
+                        templateUrl: "app/home/left_nav.html",
                         controller: "HomeController as homeCtrl"
                     }
                 }
@@ -153,7 +153,8 @@
                 url: "/institution/:institutionKey/followers",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/followers.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/followers.html",
+                            "app/institution/followers_mobile.html", 475),
                         controller: "FollowersInstController as followersCtrl"
                     }
                 }
@@ -171,7 +172,8 @@
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/members.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/members.html",
+                            "app/institution/members_mobile.html", 475),
                         controller: "ManagementMembersController as membersCtrl"
                     }
                 }
@@ -189,7 +191,11 @@
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/institutional_links.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/institutionalLinks/institutional_links.html", 
+                            "app/institution/institutionalLinks/institutional_links_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }
                 }

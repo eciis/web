@@ -1,0 +1,23 @@
+<div class="links__container">
+        
+    <inst-links class="links__item"
+        show-if="instLinksCtrl.hasParentInst"
+        title="instituição superior"
+        institutions="[instLinksCtrl.parentInstitution]"
+        on-click="instLinksCtrl.goToInst"
+        check-status="instLinksCtrl.parentStatus">
+    </inst-links>
+
+    <inst-links class="links__item"
+        show-if="instLinksCtrl.hasChildrenInst"
+        title="instituições subordinadas"
+        institutions="instLinksCtrl.childrenInstitutions"
+        on-click="instLinksCtrl.goToInst"
+        check-status="instLinksCtrl.childStatus">
+    </inst-links>
+
+    <div ng-if="!instLinksCtrl.hasInstitutions()" class="links__empty__msg">
+        <h3>Esta instituição não possui nenhum vínculo institucional</h3>
+    </div>
+    
+</div>

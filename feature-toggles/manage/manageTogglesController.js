@@ -34,32 +34,17 @@
             AuthService.logout();
         };
 
-        function getChangedFeatures() {
-            return manageTogglesCtrl.features.filter((feature, index) => {
-                const oddFeature = manageTogglesCtrl.oddFeatures[index];
-                const isEqualMobile = oddFeature.enable_mobile === feature.enable_mobile;
-                const isEqualDesktop = oddFeature.enable_desktop === feature.enable_desktop;
-                return !isEqualMobile || !isEqualDesktop;
-            });
-        }
-
-        manageTogglesCtrl.save = function save() {
-            const modifiedFeatures = getChangedFeatures();
-            if (modifiedFeatures.length !== 0) {
-                manageTogglesCtrl.isLoading = true;
-                return ManageTogglesService.saveFeatures(modifiedFeatures)
-                    .then(() => {
-                        return loadFeatures().then(features => {
-                            MessageService.showToast("Alterações salvas com sucesso.");
-                            return features;
-                        });
+        manageTogglesCtrl.save = function save(feature) {
+                feature.isLoading = true;
+                return ManageTogglesService.saveFeatures([feature])
+                    .then(response => {
+                        MessageService.showToast("Alterações salvas com sucesso.");
+                        return response;
                     }).catch(response => {
                         MessageService.showToast(response.msg);
                     }).finally(function() {
-                        manageTogglesCtrl.isLoading = false;
+                        feature.isLoading = false;
                     });
-            }
-
         };
 
         function loadFeatures() {

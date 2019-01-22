@@ -4,7 +4,7 @@
         <button ng-click="manageTogglesCtrl.logout()">SAIR</button>
     </div>
     <div style="max-height: 100%; overflow-y: auto;">
-        <h1 style="text-align: center;">Gerenciar features do sistema</h1>
+        <h1 style="text-align: center;">Gerenciar funcionalidades do sistema</h1>
         <div style="display: grid; justify-content: center; margin: 16px;">
             <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
                 <b>
@@ -22,11 +22,11 @@
                         <md-option ng-repeat="option in manageTogglesCtrl.options" value="{{option.value}}">{{option.name}}</md-option>
                     </md-select>
                 </md-input-container>
+                <md-button ng-if="!feature.isLoading" class="md-raised md-primary" 
+                md-colors="{background: 'teal-500'}"
+                ng-click="manageTogglesCtrl.save(feature)">SALVAR</md-button>
+                <load-circle ng-if="feature.isLoading"></load-circle>
             </div>
-            <md-button ng-if="!manageTogglesCtrl.isLoading" class="md-raised md-primary" 
-                md-colors="{background: 'teal-500'}" style="justify-self: end;"
-                ng-click="manageTogglesCtrl.save()">SALVAR</md-button>
-            <load-circle ng-if="manageTogglesCtrl.isLoading" style="justify-self: end;"></load-circle>
         </div>
     </div>
 </div>

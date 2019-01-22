@@ -18,7 +18,7 @@
 
 .toggle-content {
     display: grid; 
-    grid-template-columns: auto 154px 154px;
+    grid-template-columns: auto 154px 154px 105px;
     grid-gap: 10px;
     align-items: center;
 }

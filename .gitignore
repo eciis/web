@@ -549,3 +549,7 @@ backend/Pipfile
 #Frontend tests
 frontend/test/package-lock.json
 frontend/test/yarn.lock
+
+# Webchat tests
+webchat/test/package-lock.json
+frontend/test/yarn.lock

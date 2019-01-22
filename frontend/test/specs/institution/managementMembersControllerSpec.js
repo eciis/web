@@ -322,5 +322,26 @@
                 expect(Utils.limitString).toHaveBeenCalled();
             });
         });
+
+        describe('_getMembers', () => {
+
+            beforeEach(() => {
+                spyOn(institutionService, 'getMembers').and.callFake(() => {
+                    return {
+                        then: (callback) => {
+                            return callback([member, user]);
+                        }
+                    };
+                });
+                manageMemberCtrl.institution = institution;
+            });
+
+            it('should call Utils.groupUsersByInitialLetter if is mobile screen', () => {
+                spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+                spyOn(Utils, 'groupUsersByInitialLetter');
+                manageMemberCtrl._getMembers();
+                expect(Utils.groupUsersByInitialLetter).toHaveBeenCalledWith([member, user]);
+            });
+        });
     });
 }));

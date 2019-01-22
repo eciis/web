@@ -1,0 +1,53 @@
+.list-users-grid {
+    display: grid;
+    grid-template-columns: 25% 75%;
+    grid-template-rows: 3em auto;
+    align-items: initial;
+    align-content: space-between;
+    margin: 0.3em 0 0.3em 0;
+    grid-row-gap: 0.2em;
+}
+
+.list-users-img {
+    width: 2.8em;
+    height: 2.8em;
+    border-radius: 50%
+}
+
+.list-users-name {
+    margin-left: 0.8em;
+    font-size: 0.9em;
+}
+
+.list-users-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.list-users-char-properties {
+    margin-left: 0.9em;
+    margin-right: auto;
+    margin-top: 0.5em;;
+    font-weight: 500;
+    font-size: 1.2em;
+    color: #746d6d;
+}
+
+.list-users-grid-position {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.list-users-char-position {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.list-users-position {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.char-color {
+    color: #746d6d;
+}

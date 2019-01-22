@@ -5,7 +5,7 @@
 .user-profile-dialog {
     height: 80%;
     display: grid;
-    grid-template-rows: 50% 35% 15%;
+    grid-template-rows: 40% 50% auto;
     grid-template-columns: auto;
     width: 100%;
 }
@@ -15,7 +15,7 @@
     grid-row-end: 2;
 }
 
-.user-profile-cover div img {
+.user-profile-cover-size {
     height: 7em;
     width: 100%;
 }
@@ -41,7 +41,6 @@
 
 #user-profile-content-grid {
     display: grid;
-    grid-template-rows: 80% auto auto;
     grid-template-columns: 85%;
     justify-content: center;
     width: 100%;
@@ -80,6 +79,7 @@
 }
 
 .user-profile-action {
+    grid-row-start: 3;
     text-align: center;
     align-self: center;
     justify-self: end;

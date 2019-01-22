@@ -10,7 +10,6 @@
 
         service.showProfile  = function showProfile(userKey, ev, institutionKey) {
              $mdDialog.show({
-                parent: angular.element(document.body),
                 templateUrl: Utils.selectFieldBasedOnScreenSize('app/user/profile.html',
                     'app/user/profile_mobile.html', 475),
                 controller: "ProfileController",

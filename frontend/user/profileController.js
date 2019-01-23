@@ -25,12 +25,20 @@
         };
 
         profileCtrl.showProperty = (property, limit) => {
-            return Utils.limitString(property, limit || 35) || 'Não informado';
+            return Utils.limitString(property, limit) || 'Não informado';
         };
 
         profileCtrl.goToConfigProfile = function goToConfigProfile() {
             $state.go(STATES.CONFIG_PROFILE);
             $mdDialog.cancel();
+        };
+
+        profileCtrl.goToUserProfilePage = (userKey) => {
+            /**
+             * TODO: implements this function to go to the user profile page
+             * when the same be implemented
+             * @tiagolimpe - Jan - 23 - 2019
+             */
         };
 
         profileCtrl.isOwnProfile = function isOwnProfile() {

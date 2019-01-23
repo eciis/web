@@ -44,7 +44,7 @@
 }
 
 #user-profile-content-name {
-    font-size: 1.5em;
+    font-size: 1.45em;
     font-weight: 1000;
     grid-row-start: 1;
     grid-row-end: 2;
@@ -61,8 +61,7 @@
     height: 0.18em;
 }
 
-#user-profile-info {
-    font-size: 8px;
+.user-profile-info-position {
     grid-row-start: 3;
     grid-row-end: 4;
 }
@@ -73,7 +72,7 @@
 }
 
 .user-profile-action {
-    grid-row-start: 3;
+    grid-row-start: 4;
     text-align: center;
     align-self: center;
     justify-self: end;

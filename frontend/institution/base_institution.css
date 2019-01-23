@@ -3,14 +3,18 @@
     padding: 5px;
 }
 
+.timeline-z-index{
+    z-index: 1;
+}
+
 .title-inst{
-    font-size:1.8em;
+    font-size:1.2em;
     font-weight: 500;
     margin-left:0.5em;
 }
 
 .title-inst-page{
-    font-size:1.5em;
+    font-size:1em;
     font-weight: 500;
     text-align: center;
 }
@@ -43,11 +47,12 @@
     height: 9em;
     width: 9em;
     margin: -7em auto -0.8em auto;
+    box-shadow: 0 -2px 5px 0px grey;
     border-radius: 50%;
 }
 
 .cover-inst-mobile{
-    box-shadow: 0 -2px 5px 0px grey;
+    box-shadow: 0 -1px 5px 0px grey;
     height: 100vh;
 }
 
@@ -107,6 +112,12 @@
 }
 
 @media screen and (min-height: 620px) and (max-height:660px){
+    .title-inst{
+        font-size:1.4em;
+    }
+    .title-inst-page{
+        font-size:1.2em;
+    }
     .image-cover-inst-timeline {
         height: 14em;
     }
@@ -116,6 +127,12 @@
 }
 
 @media screen and (min-height: 660px) and (max-height:700px){
+    .title-inst{
+        font-size:1.6em;
+    }
+    .title-inst-page{
+        font-size:1.3em;
+    }
     .image-cover-inst-timeline {
         height: 16em;
     }
@@ -125,6 +142,12 @@
 }
 
 @media screen and (min-height: 700px) and (max-height:800px){
+    .title-inst{
+        font-size:1.8em;
+    }
+    .title-inst-page{
+        font-size:1.4em;
+    }
     .image-cover-inst-timeline {
         height: 18em;
     }
@@ -134,6 +157,12 @@
 }
 
 @media screen and (min-height: 800px){
+    .title-inst{
+        font-size:1.8em;
+    }
+    .title-inst-page{
+        font-size:1.5em;
+    }
     .image-cover-inst-timeline {
         height: 20em;
     }

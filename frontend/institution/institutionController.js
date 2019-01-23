@@ -284,6 +284,11 @@
             }
         };
 
+        institutionCtrl.isTimelineMobile = function isTimelineMobile(){
+            const inTimiline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimiline;
+        }
+
         function updateCoverImage(data) {
             var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {

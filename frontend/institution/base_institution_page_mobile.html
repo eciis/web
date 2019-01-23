@@ -1,7 +1,7 @@
 <md-content layout-align="center">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
-        <div ng-class="institutionCtrl.inTimilineMobile() ? 'cover-inst-mobile': ''">
+        <div ng-class="institutionCtrl.isTimelineMobile() ? 'cover-inst-mobile': ''">
             <institution-header title="{{institutionCtrl.getTitle()}}"
                 user="institutionCtrl.user"
                 institution="institutionCtrl.institution"
@@ -15,7 +15,7 @@
 
         <div layout="row" flex="70" class="timeline-inst">
             <!-- INSTITUTION TIMELINE -->
-            <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}" style="z-index: 1;"></div>
+            <div layout="row" class="timeline-z-index" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
         </div>
     </div>
 </md-content>

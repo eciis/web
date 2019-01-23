@@ -4,15 +4,16 @@
         <button ng-click="manageTogglesCtrl.logout()">SAIR</button>
     </div>
     <div id="toggles-box">
-        <h1 style="text-align: center;">Gerenciar funcionalidades do sistema</h1>
+        <h1 class="large-title">Gerenciar funcionalidades do sistema</h1>
+        <h2 class="small-title">Gerenciar funcionalidades do sistema</h2>
         <div>
             <div class="toggle-content" ng-repeat="feature in manageTogglesCtrl.features">
-                <b>
+                <b id="name">
                     {{feature.translation || feature.name}}
                 </b>
-                <permission-select label="Permissão Mobile" feature="feature" attr="enable_mobile"></permission-select>
-                <permission-select label="Permissão Desktop" feature="feature" attr="enable_desktop"></permission-select>
-                <md-button ng-if="!feature.isLoading" class="md-raised md-primary" 
+                <permission-select id="mobile" label="Permissão Mobile" feature="feature" attr="enable_mobile"></permission-select>
+                <permission-select id="desktop" label="Permissão Desktop" feature="feature" attr="enable_desktop"></permission-select>
+                <md-button id="save" ng-if="!feature.isLoading" class="md-raised md-primary" 
                     md-colors="{background: 'teal-500'}"
                     ng-click="manageTogglesCtrl.save(feature)">
                     SALVAR

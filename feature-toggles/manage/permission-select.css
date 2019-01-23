@@ -1,0 +1,9 @@
+.select-container {
+    min-width: 140px;
+}
+
+@media screen and (max-width: 599px) {
+    .select-container {
+        margin-bottom: 0;
+    }
+}

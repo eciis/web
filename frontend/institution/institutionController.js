@@ -59,6 +59,7 @@
                 unfollow: institutionCtrl.unfollow,
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
+                getLimitedName: institutionCtrl.getLimitedName,
                 requestInvitation: institutionCtrl.requestInvitation
             }
         }
@@ -140,16 +141,6 @@
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
 
-        institutionCtrl.inTimilineMobile = function inTimilineMobile(){
-            const inTimiline = $state.current.name == STATES.INST_TIMELINE;
-            return Utils.isMobileScreen(450) && inTimiline;
-        }
-
-        institutionCtrl.inRegistrationDataMobile = function inRegistrationDataMobile(){
-            const inTimiline = $state.current.name == STATES.INST_REGISTRATION_DATA;
-            return Utils.isMobileScreen(450) && inTimiline;
-        }
-
         institutionCtrl.goBack = function goBack(){
             window.history.back();
         }
@@ -183,19 +174,6 @@
         institutionCtrl.goToHome = function goToHome() {
             $state.go(STATES.HOME);
         };
-
-        institutionCtrl.getTitle = function getTitle(){
-            if(institutionCtrl.inTimilineMobile())
-                return institutionCtrl.getLimitedName(110);
-            if(institutionCtrl.inRegistrationDataMobile())
-                return "Dados cadastrais";
-            if(STATES.INST_LINKS === $state.current.name)
-                return "Vínculos Institucionais";
-            if(STATES.INST_MEMBERS === $state.current.name)
-                return "Membros";
-            if(STATES.INST_FOLLOWERS === $state.current.name)
-                return "Seguidores";
-        }
 
         institutionCtrl.hasChildrenActive = function hasChildrenActive(institution) {
             return institution && !_.isEmpty(institution.children_institutions) && _.some(institution.children_institutions, {'state' :'active'});

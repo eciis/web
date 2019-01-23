@@ -21,7 +21,6 @@
         controller: ['ProfileService', ListUsersController],
         controllerAs: 'listUsersCtrl',
         bindings: {
-            pageLabel: '@',
             users: '<'
         }
     });

@@ -9,13 +9,11 @@
                 is-user-follower="institutionCtrl.isUserFollower"
                 is-member="institutionCtrl.isMember"
                 file-background="institutionCtrl.file"
-                in-timiline-page="institutionCtrl.inTimilineMobile()"
-                in-registration-date="institutionCtrl.inRegistrationDataMobile()"
                 actions-buttons="institutionCtrl.timelineButtonsHeaderMob">
            </institution-header>
         </div>
 
-        <div layout="row" flex="70" style="margin-top: 1.25em;">
+        <div layout="row" flex="70" class="timeline-inst">
             <!-- INSTITUTION TIMELINE -->
             <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}" style="z-index: 1;"></div>
         </div>

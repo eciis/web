@@ -3,9 +3,33 @@
     padding: 5px;
 }
 
-#title-inst{
-    font-size:1.2em;
+.title-inst{
+    font-size:1.8em;
     font-weight: 500;
+    margin-left:0.5em;
+}
+
+.title-inst-page{
+    font-size:1.5em;
+    font-weight: 500;
+    text-align: center;
+}
+
+.button-request-link{
+    text-align: left;
+}
+
+.timeline-inst{
+    margin-top: 1.25em;
+}
+
+.no-overflow{
+    overflow:hidden;
+}
+
+.image-backround-color{
+    width: 100%;
+    background: white;
 }
 
 .inst-image-mobile{

@@ -2,5 +2,5 @@
     <icon-button icon="menu" ng-click="headerCtrl.toggleNavbar()" class="hide-on-desktop"></icon-button>
     <logo style="margin-right: auto"></logo>
     <user-description name="{{headerCtrl.user.name}}" avatar="{{headerCtrl.user.photo_url}}" description="{{headerCtrl.user.current_institution.name}}"></user-description>
-    <icon-button icon="exit_to_app"></icon-button>
+    <icon-button icon="exit_to_app" ng-click="headerCtrl.logout()"></icon-button>
 </div>

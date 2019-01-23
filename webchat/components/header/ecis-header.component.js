@@ -12,6 +12,7 @@
     angular.module('webchat').component('ecisHeader', {
         templateUrl: "app/components/header/ecis-header.html",
         controller: [
+            'AuthService',
             'NavbarManagementService',
             headerController,
         ],
@@ -21,11 +22,15 @@
         },
     });
 
-    function headerController (NavbarManagementService) {
+    function headerController (AuthService, NavbarManagementService) {
         const headerCtrl = this;
 
         headerCtrl.toggleNavbar = () => {
             NavbarManagementService.toggleSidenav('left');
+        };
+
+        headerCtrl.logout = () => {
+            AuthService.logout();
         };
     }
 })();

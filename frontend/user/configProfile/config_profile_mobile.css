@@ -1,7 +1,9 @@
 .user-profile__container {
     display: grid;
-    grid-template-rows: 10em 5em auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: 10em 7em auto;
     grid-row-gap: 1em;
+    justify-content: center;
     height: 100%;
 }
 
@@ -19,7 +21,7 @@
 
 .user-profile__avatar--container {
     grid-area: 2/1/4/2;
-    margin: 0 auto;
+    justify-self: center;
 }
 
 .user-profile__avatar {
@@ -34,18 +36,18 @@
     grid-template-rows: 1fr 1fr 1fr 1fr;
 }
 
-.user-profile__info > h2 {
-    margin: 0.2em 0;
-}
-
-.user-profile__info > div {
-    font-size: 12px;
+div.user-profile__info--name {
+    margin: 0 1em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 1em;
 }
 
 .user-profile__info--item {
     place-self: center;
     text-transform: uppercase;
     font-weight: 500;
+    font-size: 12px;
 }
 
 .user-profile__info--item > span {
@@ -53,9 +55,10 @@
 }
 
 .user-profile__info--divider {
-    /* place-self: center; */
     background-color: #84C45E;
     height: 4px;
+    width: 25%;
+    place-self: center;
 }
 
 .user-profile__content {

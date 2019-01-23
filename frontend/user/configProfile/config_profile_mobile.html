@@ -6,15 +6,17 @@
         </div>
     </div>
     <div class="user-profile__info">
-        <h2 class="user-profile__info--item">JOÃO LOPES DA CUNHA</h2>
-        <div class="user-profile__info--item">
-            <span>e-mail: </span>joao@saude.gov.br
+        <div class="user-profile__info--item user-profile__info--name">
+            {{configProfileCtrl.getUserName()}}
         </div>
         <div class="user-profile__info--item">
-            <span>cpf: </span>999.123.188-89
+            <span>e-mail: </span>{{configProfileCtrl.user.email[0]}}
+        </div>
+        <div class="user-profile__info--item">
+            <span>cpf: </span>{{configProfileCtrl.user.cpf}}
         </div>
 
-        <div class="user-profile__info--divider"></div>
+        <hl class="user-profile__info--divider"></hl>
     </div>
 
 </div>

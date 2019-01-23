@@ -205,6 +205,10 @@
             return promise;
         }
         
+        configProfileCtrl.getUserName = () => {
+            return Utils.limitString(configProfileCtrl.user.name, 100);
+        };
+
         (function main() {
             observer = ObserverRecorderService.register(configProfileCtrl.user);
 

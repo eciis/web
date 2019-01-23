@@ -285,8 +285,8 @@
         };
 
         institutionCtrl.isTimelineMobile = function isTimelineMobile(){
-            const inTimiline = $state.current.name == STATES.INST_TIMELINE;
-            return Utils.isMobileScreen(450) && inTimiline;
+            const inTimeline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimeline;
         }
 
         function updateCoverImage(data) {

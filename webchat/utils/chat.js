@@ -53,7 +53,7 @@
         if (channelEv.data) {
           const msg = new ChatMessage(channelEv.data);
           chat.currentMessages.push(msg);
-          chat.emit('msg-list-updated', msg.msg)
+          chat.emit('msg-list-updated', this.currentMessages)
         }
       };
     }

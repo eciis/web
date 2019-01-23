@@ -3,16 +3,20 @@
 (describe("Test hiveNavbar", function() {
     beforeEach(module('app'));
 
-    let scope, hideDirective, STATES, element;
+    let scope, hideDirective, STATES, elem, scopeIs;
     beforeEach(inject(function($rootScope, $compile, STATES, $state) {
         STATES = STATES;
-        element = angular.element("<div hide-navbar></div>");
+
         scope = $rootScope.$new();
-        $compile(element)(scope);
-        scope.$digest();
-        hideDirective = element.isolateScope();
+
+        elem = angular.element('<div hide-navbar="bottom"></div>');
+        elem = $compile(elem)(scope);
+        console.log(elem.isolateScope());
+        $rootScope.$digest();
     }));
 
-    it("should have content", function() {
+    it("should have content", function(done) {
+        scopeIs = elem.isolateScope();
+        console.log(scopeIs)
     })
 }));

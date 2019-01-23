@@ -1,0 +1,6 @@
+.inst-registration-data-grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: 20% 20% 20% 20% 20%;
+    grid-column-gap: 0.6em;
+}

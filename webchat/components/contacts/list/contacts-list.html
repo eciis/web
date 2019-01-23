@@ -3,4 +3,5 @@
         <user-description class="user-contact" name="{{user.name}}" avatar="{{user.avatar}}" description="{{user.description}}"></user-description>
         <md-divider></md-divider>
     </md-list-item>
+    <h2 ng-show="contactsListCtrl.isMessageShown" class="no-contacts-message">Não há contatos online no momento.</h2>
 </md-list>

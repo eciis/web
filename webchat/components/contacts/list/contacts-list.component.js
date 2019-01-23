@@ -21,6 +21,17 @@
     function contactsListController() {
         const contactsListCtrl = this;
 
+        contactsListCtrl.$postLink = () => {
+            contactsListCtrl.updateMessage();
+        };
+
+        contactsListCtrl.$onChange = (obj) => {
+            contactsListCtrl.updateMessage();
+        };
+
+        contactsListCtrl.updateMessage = () => {
+            contactsListCtrl.isMessageShown = contactsListCtrl.contacts.length === 0;
+        };
     }
 
 })();

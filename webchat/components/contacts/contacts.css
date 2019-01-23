@@ -19,3 +19,8 @@
 .contacts-search {
     margin-left: auto;
 }
+
+.no-contacts-message {
+    text-align: center;
+    align-self: center;
+}

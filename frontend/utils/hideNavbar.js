@@ -24,15 +24,14 @@
                         scope.INSTITUTION_STATES.includes($state.current.name);
                     if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
                     if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar);
-                
                 }
 
                 /** Verify if current states is allowed to show top toolbar.
                  */
                 scope.isTopToolbarAllowed = function isTopToolbarAllowed() {
-                    let statesAllowed = [STATES.CREATE_EVENT];
-                    statesAllowed = statesAllowed.concat(scope.INSTITUTION_STATES);
-                    return !statesAllowed.includes($state.current.name);
+                    let statesNotAllowed = [STATES.CREATE_EVENT];
+                    statesNotAllowed = statesNotAllowed.concat(scope.INSTITUTION_STATES);
+                    return !statesNotAllowed.includes($state.current.name);
                 }
 
                 /** Verify if current states is allowed to show bottom toolbar.

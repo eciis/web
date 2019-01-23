@@ -1,10 +1,8 @@
 .user-profile__container {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 10em 7em auto;
+    grid-template-rows: 10em 6em auto;
     grid-row-gap: 1em;
-    justify-content: center;
-    height: 100%;
 }
 
 .user-profile__header {
@@ -34,17 +32,20 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr;
+    place-items: center;
 }
 
-div.user-profile__info--name {
+p.user-profile__info--item {
     margin: 0 1em;
+    font-size: 1em;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: 1em;
+    text-align: center;
+    overflow: hidden;
+    max-width: 80%;
 }
 
 .user-profile__info--item {
-    place-self: center;
     text-transform: uppercase;
     font-weight: 500;
     font-size: 12px;
@@ -58,7 +59,6 @@ div.user-profile__info--name {
     background-color: #84C45E;
     height: 4px;
     width: 25%;
-    place-self: center;
 }
 
 .user-profile__content {

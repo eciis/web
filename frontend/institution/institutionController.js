@@ -141,6 +141,8 @@
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
 
+        /** Go back to before page accessed.
+         */
         institutionCtrl.goBack = function goBack(){
             window.history.back();
         }
@@ -284,6 +286,8 @@
             }
         };
 
+        /** Verify if current state is timeline institution on mobile.
+         */
         institutionCtrl.isTimelineMobile = function isTimelineMobile(){
             const inTimeline = $state.current.name == STATES.INST_TIMELINE;
             return Utils.isMobileScreen(450) && inTimeline;

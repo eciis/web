@@ -40,6 +40,7 @@
     height: 9em;
     width: 9em;
     margin: -5em auto -0.8em auto;
+    box-shadow: 0 -1px 5px 0px grey;
     border-radius: 50%;
 }
 
@@ -47,7 +48,7 @@
     height: 9em;
     width: 9em;
     margin: -7em auto -0.8em auto;
-    box-shadow: 0 -2px 5px 0px grey;
+    box-shadow: 0 -1px 5px 0px grey;
     border-radius: 50%;
 }
 

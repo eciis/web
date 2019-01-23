@@ -32,18 +32,14 @@
             /** Return the title of page according current state.
              */
             instHeaderCtrl.getTitle = function getTitle(){
-                switch($state.current.name){
-                    case STATES.INST_TIMELINE:
-                        return instHeaderCtrl.actionsButtons.getLimitedName(110);
-                    case STATES.INST_REGISTRATION_DATA:
-                        return "Dados cadastrais";
-                    case STATES.INST_LINKS:
-                        return "Vínculos Institucionais";
-                    case STATES.INST_MEMBERS:
-                        return "Membros";
-                    case STATES.INST_FOLLOWERS:
-                        return "Seguidores";
-                }   
+                const tileState = {
+                    [STATES.INST_TIMELINE]: instHeaderCtrl.actionsButtons.getLimitedName(110),
+                    [STATES.INST_REGISTRATION_DATA]: "Dados cadastrais",
+                    [STATES.INST_LINKS]: "Vínculos Institucionais",
+                    [STATES.INST_MEMBERS]: "Membros",
+                    [STATES.INST_FOLLOWERS]: "Seguidores"
+                };
+                return tileState[$state.current.name];   
             }
         }],
         controllerAs: "instHeaderCtrl",

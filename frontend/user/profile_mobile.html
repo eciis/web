@@ -1,0 +1,33 @@
+<md-dialog id="user-profile-size">
+    <div ng-if="profileCtrl.isToShow()" class="user-profile-dialog">
+        <div class="user-profile-cover">
+            <div class="user-profile-cover-background" md-colors="{background: 'default-teal-600'}">
+            </div>
+            <div id="user-profile-img">
+                <img ng-src="{{profileCtrl.user.photo_url}}" />
+            </div>
+        </div>
+        <div id="user-profile-content-grid">
+            <span id="user-profile-content-name" class="user-profile-center">
+                {{ profileCtrl.showProperty(profileCtrl.user.name, 32) }}</span>
+            <hl md-colors="{background: 'default-light-green-500'}" class="user-profile-content-hl user-profile-center"></hl>
+            <user-profile-info class="user-profile-info-position"
+            office="profileCtrl.currentProfile.office"
+            phone="profileCtrl.currentProfile.phone"
+            email="profileCtrl.currentProfile.email"></user-profile-info>
+        </div>
+        <div layout="row" class="user-profile-action">
+            <div md-colors="{color: 'default-grey-600'}"
+                id="user-profile-show-div" ng-click="profileCtrl.closeDialog()">
+                <span class="user-profile-title">FECHAR</span>
+            </div>
+            <div md-colors="{color: 'default-teal-500'}"
+                id="user-profile-show-div" ng-click="profileCtrl.goToUserProfilePage()">
+                <span class="user-profile-title">VER PERFIL</span>
+            </div>
+        </div>
+    </div>
+    <div ng-show="profileCtrl.loading" layout-margin layout="row" layout-align="center center">
+        <load-circle></load-circle>
+    </div>
+</md-dialog>

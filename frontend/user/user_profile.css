@@ -103,3 +103,15 @@
     font-size: 0.8em;
     align-self: start;
 }
+
+@media screen and (min-height: 650px) {
+    .user-profile-dialog {
+        grid-template-rows: 24% 66% auto;
+    }
+}
+
+@media screen and (min-height: 730px) {
+    .user-profile-dialog {
+        grid-template-rows: 18% 66% auto;
+    }
+}

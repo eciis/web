@@ -3,10 +3,10 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('WebchatController', ['WebchatService', function WebchatController (WebchatService) {
+    webchat.controller('WebchatController', ['AuthService', function WebchatController (AuthService) {
         const webchatCtrl = this;
 
-        webchatCtrl.user = WebchatService.getCurrentUser();
+        webchatCtrl.user = AuthService.getCurrentUser();
     }]);
 
 })();

@@ -16,7 +16,7 @@
       stream.getTracks().forEach(t => {
         this.rpc.addTrack(t, stream)
       });
-      this.rpc.onicecandidate = e => this.emit('ice-candidate', e);
+      this.rpc.onicecandidate = e => this.emit('ice-candidate-discovered', e);
       this.sendChannel = this.rpc.createDataChannel('sendChannel');
       this.rpc.ondatachannel = this.handleDataChannel.bind(this);
       this.rpc.ontrack = e => this.emit('track-received', e);

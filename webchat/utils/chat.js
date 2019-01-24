@@ -10,7 +10,7 @@
       this.rpc = new RTCPeerConnection([{
         url: 'stun:stun.l.google.com:19302',
         url: 'stun:stun2.l.google.com:19302',
-        url: 'stun:stun3.l.google.com:19302'
+        url: 'stun:stun3.l.google.com:19302',
       }]);
       this.eventHandlers = {};
       stream.getTracks().forEach(t => {
@@ -20,9 +20,8 @@
       this.sendChannel = this.rpc.createDataChannel('sendChannel');
       this.rpc.ondatachannel = this.handleDataChannel.bind(this);
       this.rpc.ontrack = e => this.emit('track-received', e);
-      this.rpc.oniceconnectionstatechange = this.iceConnectionCB.bind(this);
-      this.rpc.onsignalingstatechange = this.stateCB.bind(this);
-      this.currentMessages;
+      this.rpc.oniceconnectionstatechange = this.iceConnectionCB;
+      this.rpc.onsignalingstatechange = this.stateCB;
     }
 
     Chat.prototype.emit = function(eventName, e) {
@@ -43,7 +42,6 @@
     Chat.prototype.receiveCandidate = function(candidate) {
       console.log('candidate received', candidate);
       const rtcCandidate = new RTCIceCandidate(candidate);
-
       this.rpc.addIceCandidate(rtcCandidate);
     }
 
@@ -58,12 +56,12 @@
       };
     }
 
-    Chat.prototype.iceConnectionCB = function() {
-      console.log(`Ice connection changed to ${this.rpc.iceConnectionState}`)
+    Chat.prototype.iceConnectionCB = function(ev) {
+      console.log('ice connection changed', ev.target.iceConnectionState)
     }
 
-    Chat.prototype.stateCB = function() {
-      console.log(`State connection changed to ${this.rpc.signalingState}`)
+    Chat.prototype.stateCB = function(ev) {
+      console.log('state changed', ev.target.signalingState);
     }
 
     Chat.prototype.offer = function() {
@@ -76,10 +74,6 @@
       }).catch(e => {
         console.log('Erro em offer', e);
       });
-    }
-
-    Chat.prototype.setTempRemote = function(remote) {
-      this.tempRemote = remote;
     }
 
     Chat.prototype.setRemote = function(remote) {

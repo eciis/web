@@ -1,3 +1,42 @@
 <div class="inst-registration-data-grid">
-
+    <div class="inst-registration-data-name">
+        <p class="inst-registration-data-title">Nome</p>
+        <p class="inst-registration-data-subtitle">{{institutionCtrl.institution.name ?
+                institutionCtrl.institution.name : "Não informado"}}</p>
+    </div>
+    <div class="inst-registration-data-acronym">
+        <p class="inst-registration-data-title">Sigla</p>
+        <p class="inst-registration-data-subtitle">
+            {{institutionCtrl.limitString(institutionCtrl.institution.acronym, 30) ?
+                institutionCtrl.limitString(institutionCtrl.institution.acronym, 30) :
+                 "Não informado"}}
+        </p>
+    </div>
+    <div class="inst-registration-data-actuation">
+        <p class="inst-registration-data-title">Áreas de atuação</p>
+        <p class="inst-registration-data-subtitle">
+            {{institutionCtrl.instActuationArea ?
+                institutionCtrl.instActuationArea : "Não informado"}}
+        </p>
+    </div>
+    <div class="inst-registration-data-admin">
+        <p class="inst-registration-data-title">Responsável</p>
+        <p class="inst-registration-data-subtitle">
+            {{institutionCtrl.institution.admin.name ?
+                institutionCtrl.institution.admin.name : "Não informado"}}
+        </p>
+    </div>
+    <div class="inst-registration-data-legal-nature">
+        <p class="inst-registration-data-title">Natureza legal</p>
+        <p class="inst-registration-data-subtitle">
+            {{institutionCtrl.instLegalNature ? institutionCtrl.instLegalNature : "Não informado"}}
+        </p>
+    </div>
+    <div class="inst-registration-data-cnpj">
+        <p class="inst-registration-data-title">CNPJ</p>
+        <p class="inst-registration-data-subtitle">
+            {{institutionCtrl.institution.cnpj ?
+                institutionCtrl.institution.cnpj : "Não informado"}}
+        </p>
+    </div>
 </div>

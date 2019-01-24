@@ -3,4 +3,72 @@
     grid-template-columns: 30% 70%;
     grid-template-rows: 20% 20% 20% 20% 20%;
     grid-column-gap: 0.6em;
+    width: 93%;
+}
+
+.inst-registration-data-name {
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+}
+
+.inst-registration-data-acronym {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.inst-registration-data-actuation {
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.inst-registration-data-acronym, .inst-registration-data-actuation {
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+.inst-registration-data-admin {
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.inst-registration-data-legal-nature {
+    grid-row-start: 4;
+    grid-row-end: 5;
+}
+
+.inst-registration-data-cnpj {
+    grid-row-start: 5;
+    grid-row-end: 6;
+}
+
+.inst-registration-data-name, .inst-registration-data-admin,
+    .inst-registration-data-legal-nature, .inst-registration-data-cnpj {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.inst-registration-data-title {
+    color: #004D40;
+    font-size: 0.8em;
+    margin-left: 1.8em;
+    margin-top: -0.1em;
+}
+
+.inst-registration-data-subtitle {
+    font-size: 0.9em;
+    color: gray;
+    margin-top: -0.7em;
+    margin-left: 1.55em;
+}
+
+@media screen and (max-height: 640px) {
+
+    .inst-registration-data-subtitle {
+        margin-top: -0.9em;
+        margin-left: 1.6em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

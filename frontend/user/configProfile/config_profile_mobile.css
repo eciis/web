@@ -1,6 +1,6 @@
 .user-profile__container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 100vw;
     grid-template-rows: 10em 6em auto;
     grid-row-gap: 1em;
 }
@@ -35,20 +35,24 @@
     place-items: center;
 }
 
-p.user-profile__info--item {
+.user-profile__info--name {
     margin: 0 1em;
     font-size: 1em;
+    text-align: center;
+    max-width: 80%;
+}
+
+.responsive__title {
     white-space: nowrap;
     text-overflow: ellipsis;
-    text-align: center;
     overflow: hidden;
-    max-width: 80%;
 }
 
 .user-profile__info--item {
     text-transform: uppercase;
     font-weight: 500;
     font-size: 12px;
+    margin: 0;
 }
 
 .user-profile__info--item > span {
@@ -63,7 +67,32 @@ p.user-profile__info--item {
 
 .user-profile__content {
     display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr
+    grid-template-columns: 100vw;
+    grid-template-rows: auto;
+    grid-row-gap: 1em;
 }
 
+.user-profile__data {
+    display: grid;
+    grid-template-columns: 20% auto;
+    grid-template-rows: 1fr 10%;
+}
+
+.user-profile__data > img {
+    height: 3em;
+    width: 3em;
+    justify-self: center
+}
+
+.user-profile__data > div {
+    min-width: 0;
+    max-width: 95%; 
+}
+
+.user-profile__data > div > p {
+    margin: 0;  
+}
+
+.user-profile__data > md-divider {
+    grid-column: 1/3; 
+}

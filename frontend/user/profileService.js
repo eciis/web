@@ -8,14 +8,16 @@
     app.service("ProfileService", function UserService($mdDialog, HttpService, $q, AuthService) {
         var service = this;
 
-        service.showProfile  = function showProfile(userKey, ev) {
+        service.showProfile  = function showProfile(userKey, ev, institutionKey) {
              $mdDialog.show({
-                templateUrl: 'app/user/profile.html',
+                templateUrl: Utils.selectFieldBasedOnScreenSize('app/user/profile.html',
+                    'app/user/profile_mobile.html', 475),
                 controller: "ProfileController",
                 controllerAs: "profileCtrl",
                 locals: {
                     user: userKey,
-                    currentUserKey: AuthService.getCurrentUser().key
+                    currentUserKey: AuthService.getCurrentUser().key,
+                    institutionKey: institutionKey
                 },
                 targetEvent: ev,
                 clickOutsideToClose: true

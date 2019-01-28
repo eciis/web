@@ -19,7 +19,7 @@
         'br.cidades.estados'
     ]);
 
-    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
+    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider, SCREEN_SIZES,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
@@ -192,7 +192,11 @@
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/institutional_links.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/institutionalLinks/institutional_links.html", 
+                            "app/institution/institutionalLinks/institutional_links_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }
                 }

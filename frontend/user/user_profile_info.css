@@ -1,0 +1,16 @@
+#user-profile-info {
+    font-size: 8px;
+}
+
+.user-profile-info-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.user-profile-info-subtitle {
+    font-size: 1.4em;
+}
+
+.user-profile-info-default-color {
+    color: #009688;
+}

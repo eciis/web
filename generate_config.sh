@@ -1,5 +1,33 @@
 #!/bin/bash
 
+
+config_local_list=(
+    "http://localhost:8082"  #BACKEND
+    "http://localhost:8080"  #LANDING
+    "http://localhost:8083"  #SUPPORT
+    "http://localhost:8081"  #FRONTEND
+    "http://localhost:8084"  #FEATURE
+);
+
+APP_DOMAIN="development-cis.appspot.com";
+config_development_list=(
+    "https://backend-dot-$APP_DOMAIN"  #BACKEND
+    "https://$APP_DOMAIN"              #LANDING
+    "https://support-dot-$APP_DOMAIN"  #SUPPORT
+    "https://frontend-dot-$APP_DOMAIN" #FRONTEND
+    "https://feature-dot-$APP_DOMAIN"  #FEATURE
+);
+
+APP_DOMAIN="plataformacis.org";
+config_production_list=(
+    "https://backend-dot-eciis-splab.appspot.com"  #BACKEND
+    "https://$APP_DOMAIN"                          #LANDING
+    "https://support.$APP_DOMAIN"                  #SUPPORT
+    "https://frontend.$APP_DOMAIN"                 #FRONTEND
+    "https://feature.$APP_DOMAIN"                  #FEATURE
+);
+
+
 function create_config {
     if [ $# -lt 6 ] ; then
         echo "This function requires 6 arguments!";
@@ -21,15 +49,31 @@ var Config = {
 }
 
 
-function create_local_config {
+function generate_config {
+    app_version=$2;
+    
+    case $1 in
+        local)
+            config_list=${config_local_list[@]};
+        ;;
+        dev)
+            config_list=${config_development_list[@]};
+        ;;
+        prod)
+            config_list=${config_production_list[@]};
+        ;;
+        *)
+            echo "Invalid option!";
+            exit 1;
+        ;;
+    esac
+
     config_list=(
-        'http://localhost:8082'  #BACKEND
-        'http://localhost:8080'  #LANDING
-        'http://localhost:8083'  #SUPPORT
-        'http://localhost:8081'  #FRONTEND
-        'http://localhost:8084'  #FEATURE
-        'refact-ecis-script'     #APP VERSION
+        ${config_list[@]}
+        $app_version
     )
+
     create_config ${config_list[@]}
 }
-create_local_config
+
+generate_config prod "minha-versao"

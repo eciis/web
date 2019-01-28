@@ -228,7 +228,7 @@ var Utils = {
      /** Reset properties CSS of elements toolbar. 
      * In mode mobile maybe changes some properties.
      */
-    resetToolbarDisplayStyle: function resetToolBarDisplayStyle(){
+    resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
         document.getElementById('main-toolbar').style.display = 'block';
         document.getElementById('navbar-bottom').style.display = 'flex';
     }

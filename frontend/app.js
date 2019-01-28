@@ -120,7 +120,7 @@
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
                             "app/user/configProfile/config_profile.html",
                             "app/user/configProfile/config_profile_mobile.html",
-                            420
+                            SCREEN_SIZES.SMARTPHONE
                         ),
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
@@ -568,6 +568,6 @@
     }
 
     (function main() {
-        // initServiceWorker();
+        initServiceWorker();
     })();
 })();

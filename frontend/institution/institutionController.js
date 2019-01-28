@@ -40,11 +40,30 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
+                loadTimelineButtonsHeaderMob();
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
+
+          /** Create the object that contais all functions necessary in institution header,
+         * when is in timeline page on mobile.
+         */
+        function loadTimelineButtonsHeaderMob(){
+            institutionCtrl.timelineButtonsHeaderMob =  {
+                goBack: institutionCtrl.goBack,
+                showDescribe: null,
+                isAdmin: institutionCtrl.isAdmin,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                cropImage: institutionCtrl.cropImage,
+                showImageCover: institutionCtrl.showImageCover,
+                getLimitedName: institutionCtrl.getLimitedName,
+                requestInvitation: institutionCtrl.requestInvitation
+            }
+        }
+
 
         /**
          * Returns the key of the current institution
@@ -121,6 +140,12 @@
                 institutionCtrl.institution.name !== "Ministério da Saúde" &&
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
+
+        /** Go to previous page.
+         */
+        institutionCtrl.goBack = function goBack(){
+            window.history.back();
+        }
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
             const instKey = institutionKey || currentInstitutionKey;
@@ -260,6 +285,13 @@
                 });
             }
         };
+
+        /** Verify if current state is timeline institution on mobile.
+         */
+        institutionCtrl.isTimelineMobile = function isTimelineMobile(){
+            const inTimeline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimeline;
+        }
 
         function updateCoverImage(data) {
             var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];

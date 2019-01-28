@@ -1,0 +1,22 @@
+<md-content layout-align="center">
+    <div flex layout="column" md-colors="{background: 'grey-50'}">
+        <!-- COVER -->
+        <div ng-class="institutionCtrl.isTimelineMobile() ? 'cover-inst-mobile': ''">
+            <institution-header title="{{institutionCtrl.getTitle()}}"
+                user="institutionCtrl.user"
+                institution="institutionCtrl.institution"
+                photo="institutionCtrl.getPhoto()"
+                is-user-follower="institutionCtrl.isUserFollower"
+                is-member="institutionCtrl.isMember"
+                file-background="institutionCtrl.file"
+                actions-buttons="institutionCtrl.timelineButtonsHeaderMob">
+           </institution-header>
+        </div>
+
+        <div layout="row" flex="70" class="timeline-inst">
+            <!-- INSTITUTION TIMELINE -->
+            <div layout="row" class="timeline-z-index" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
+        </div>
+    </div>
+</md-content>
+    

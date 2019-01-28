@@ -10,6 +10,13 @@
             const indexes = Utils.getIndexesOf(substring, string);
             expect(indexes).toEqual([5,17,25]);
         });
+
+        it('should return an empty array', () => {
+           const string = 'test substring other';
+           const substring = 'X';
+           const indexes = Utils.getIndexesOf(substring, string);
+           expect(indexes).toEqual([]);
+        });
     });
 
     describe('limitString()', function () {

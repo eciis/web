@@ -1,13 +1,4 @@
-body, html {
-  height: 100%;
-  width: 100%;
-}
-
-#webchat {
-  height: 100%;
-}
-
-ec-content {
+ ec-content {
   display: grid;
   align-items: center;
   justify-items: center;

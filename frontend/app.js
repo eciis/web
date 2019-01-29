@@ -19,7 +19,7 @@
         'br.cidades.estados'
     ]);
 
-    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider,
+    app.config(function($mdIconProvider, $mdThemingProvider, $stateProvider, $urlMatcherFactoryProvider, SCREEN_SIZES,
         $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, ScrollBarsProvider, STATES) {
 
         $mdIconProvider.fontSet('md', 'material-icons');
@@ -45,7 +45,7 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/user/left_nav.html",
+                        templateUrl: "app/home/left_nav.html",
                         controller: "HomeController as homeCtrl"
                     }
                 }
@@ -74,7 +74,8 @@
                 url: "/all_institutions",
                 views: {
                     user_content: {
-                        templateUrl: "app/institution/institutions.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/institutions.html", 
+                            "app/institution/registered_institutions_mobile.html", 450),
                         controller: "AllInstitutionsController as allInstitutionsCtrl"
                     }
                 }
@@ -87,6 +88,20 @@
                             "app/event/events_mobile.html", 475),
                         controller: "EventController as eventCtrl",
                     }
+                }
+            })
+            .state(STATES.CREATE_EVENT, {
+                url: "/create_event/:eventKey",
+                views: {
+                    user_content: {
+                        templateUrl: "app/event/create_event.html",
+                        controller: "EventDialogController as createEventCtrl"
+                    }
+                },
+                params: {
+                    event: null,
+                    events: null,
+                    isEditing: null
                 }
             })
             .state(STATES.INVITE_INSTITUTION, {
@@ -138,7 +153,8 @@
                 url: "/institution/:institutionKey/followers",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/followers.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/followers.html",
+                            "app/institution/followers_mobile.html", 475),
                         controller: "FollowersInstController as followersCtrl"
                     }
                 }
@@ -156,7 +172,8 @@
                 url: "/institution/:institutionKey/members",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/members.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/members.html",
+                            "app/institution/members_mobile.html", 475),
                         controller: "ManagementMembersController as membersCtrl"
                     }
                 }
@@ -174,7 +191,11 @@
                 url: "/institution/:institutionKey/institutional_links",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/institutional_links.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/institutionalLinks/institutional_links.html", 
+                            "app/institution/institutionalLinks/institutional_links_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "InstitutionLinksController as instLinksCtrl"
                     }
                 }
@@ -186,6 +207,9 @@
                         templateUrl: "app/post/post_page.html",
                         controller: "PostPageController as postCtrl",
                     }
+                },
+                params: {
+                    "focus": undefined
                 }
             })
             .state(STATES.MANAGE_INST, {
@@ -473,6 +497,29 @@
             }
         }, function(transition) {
             transition.router.stateService.transitionTo(STATES.USER_INACTIVE);
+        });
+    });
+
+    /**
+     * Function to intercept the access of pages that should be displayed only on mobile screens.
+     * @param {service} $transitions - Service of transitions states
+     * @param {const} STATES - Const with the states of application
+     * @param {const} SCREEN_SIZES - Const with the screen sizes
+     */
+    app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
+        const permitted_routes = [
+            STATES.CREATE_EVENT
+        ];
+
+        $transitions.onStart({
+            to: (state) => {
+                return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && _.includes(permitted_routes, state.name);
+            }
+        }, () => {
+            $state.go(STATES.ERROR, {
+                "msg": "Esta página está disponível apenas para mobile.",
+                "status": "403"
+            });
         });
     });
 

@@ -1,0 +1,10 @@
+.side-menu {
+    height: 100%;
+}
+
+.sm-section-title {
+    margin: 10px 0 10px 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #019587;
+}

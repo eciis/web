@@ -1,0 +1,31 @@
+<div class="registered-institution-container">
+    <div class="registered-institution-cover">
+        <div ng-if="regInstCtrl.hasCoverPhoto()"
+            style="background-image: url({{regInstCtrl.institution.cover_photo}});" id="card-cover-picture">
+        </div>
+        <div ng-if="!regInstCtrl.hasCoverPhoto()" md-colors="{background: 'light-green'}">
+            <img ng-src="{{'app/images/institution.png'}}">
+        </div>
+        <div id="registered-institution-img">
+            <img ng-src="{{regInstCtrl.institution.photo_url}}" />
+        </div>
+    </div>
+    <div class="registered-institution-content">
+        <div id="reg-inst-content-grid">
+            <span id="reg-content-inst-name" ng-click="regInstCtrl.goToInst()">
+                {{regInstCtrl.limitString(regInstCtrl.institution.name, regInstCtrl.getMaxInstNameSize())}}</span>
+            <hl md-colors="{background: 'light-green'}"></hl>
+            <span id="reg-content-location">{{regInstCtrl.institution.address.city | uppercase}} / {{regInstCtrl.getFederalStateAcronym()}}</span>
+        </div>
+    </div>
+    <div class="registered-institution-action">
+        <div ng-if="regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}" 
+            id="reg-following-div">
+            <span md-colors="{color: 'teal-500'}"><b>SEGUINDO</b></span>
+        </div>
+        <div ng-if="!regInstCtrl.userIsFollowing()" md-colors="{color: 'teal-500'}"
+            id="reg-not-following-div" ng-click="regInstCtrl.follow()">
+            <span md-colors="{color: 'teal-500'}"><b>SEGUIR</b></span>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test SurveyDirective', function() {
+(describe('Test SurveyComponent', function() {
     beforeEach(module('app'));
 
     var surveyCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
@@ -43,7 +43,7 @@
         http = $http;
         AuthService.login(user);
 
-        surveyCtrl = $controller('SurveyDirectiveController', {
+        surveyCtrl = $controller('SurveyComponentController', {
             scope: scope,
             imageService : imageService,
             $rootScope: rootScope,
@@ -53,7 +53,6 @@
         surveyCtrl.user = new User(user);
         surveyCtrl.posts = [];
         surveyCtrl.post = survey;
-        surveyCtrl.options = options;
 
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
@@ -63,6 +62,17 @@
     afterEach(function() {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
+    });
+
+    describe('onInit', function() {
+        beforeEach(function() {
+            expect(surveyCtrl.options).toBeFalsy();
+        });
+        
+        it('should set the options surveyCtrl', function() {
+            surveyCtrl.$onInit();
+            expect(surveyCtrl.options.length > 0).toBeTruthy();
+        });
     });
 
     describe('Save survey', function() {

@@ -51,10 +51,18 @@
   <link rel="stylesheet" type="text/css" href="app/auth/login.css">
   <link rel="stylesheet" type="text/css" href="app/search/search.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_list_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/registered_institutions_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/registered_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/list_users.css">
+  <link rel="stylesheet" type="text/css" href="app/invites/new_invite.css">
+  <link rel="stylesheet" type="text/css" href="app/sideMenu/side_menu.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/institutional_links_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/instLinks/inst_links.css">
+  
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
-  <div flex layout="column" ui-view="main"></div>
+  <div flex class="content-main" layout="column" ui-view="main"></div>
 
   <script> 
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
@@ -130,6 +138,13 @@
   <script src="app/main/mainController.js"></script>
   <script src="app/main/hideTopNavbar.js"></script>
 
+  <!-- SideMenu -->
+  <script src="app/sideMenu/sideMenu.component.js"></script>
+  <script src="app/sideMenu/sideMenuConstants.js"></script>
+  <script src="app/sideMenu/factories/homeItems.factory.js"></script>
+  <script src="app/sideMenu/factories/manageInstItems.factory.js"></script>
+  <script src="app/sideMenu/sideMenuItem/sideMenuItem.component.js"></script>
+  
   <!--Utils-->
   <script src="app/utils/utils.js"></script>
   <script src="app/utils/messageService.js"></script>
@@ -137,6 +152,7 @@
   <script src="app/utils/httpService.js"></script>
   <script src="app/utils/loadCircleDirective.js"></script>
   <script src="app/utils/statesConstants.js"></script>
+  <script src="app/utils/screenSizesConstants.js"></script>
   <script src="app/utils/utilsService.js"></script>
 
   <!-- Auth/Login Library -->
@@ -176,7 +192,7 @@
   <script src="app/post/postEventsConstants.js"></script>
 
   <!-- Survey Library -->
-  <script src="app/survey/surveyDirective.js"></script>
+  <script src="app/survey/survey.component.js"></script>
   <script src="app/survey/surveyDetailsDirective.js"></script>
   <script src="app/survey/surveyService.js"></script>
 
@@ -196,10 +212,14 @@
   <script src="app/institution/allInstitutionsController.js"></script>
   <script src="app/institution/institutionCardDirective.js"></script>
   <script src="app/institution/removeInstController.js"></script>
-  <script src="app/institution/institutionLinksController.js"></script>
+  <script src="app/institution/institutionalLinks/institutionLinksController.js"></script>
+  <script src="app/institution/institutionalLinks/instLinks/instLinks.component.js"></script>
   <script src="app/institution/selectEmailsController.js"></script>
   <script src="app/institution/transferAdminController.js"></script>
   <script src="app/institution/hierarchicalInstitutionDialogController.js"></script>
+  <script src="app/institution/registeredInstitution.component.js"></script>
+  <script src="app/institution/federal_state_acronym.js"></script>
+  <script src="app/institution/listUsers.component.js"></script>
 
   <!-- Invite Library -->
   <script src="app/invites/inviteService.js"></script>

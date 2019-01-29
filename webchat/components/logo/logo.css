@@ -1,0 +1,28 @@
+.logo {
+    height: 40px;
+    width: auto;
+    margin: 0 10px;
+}
+
+.logo-responsive {
+    margin: 0;
+}
+
+@media screen and (max-width: 450px) {
+    .logo-full {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 451px) {
+    .logo-responsive {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .logo-responsive {
+        width: auto;
+        height: 28px;
+    }
+}

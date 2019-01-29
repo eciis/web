@@ -13,8 +13,8 @@
             return HttpService.get(INSTITUTIONS_URI);
         };
 
-        service.getNextInstitutions = function getNextInstitutions(page) {
-            return HttpService.get("/api/institutions?page=" + page + "&limit=" + LIMIT);
+        service.getNextInstitutions = function getNextInstitutions(page, filterFlag) {
+            return HttpService.get("/api/institutions?page=" + page + "&limit=" + LIMIT + "&filter=" + filterFlag);
         };
 
         service.searchInstitutions = function searchInstitutions(value, state, type) {

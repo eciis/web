@@ -1,0 +1,7 @@
+<md-list class="no-margin no-padding custom-scrollbar custom-scrollbar contacts-list-container fill-height">
+    <md-list-item aria-label="user-contact" ng-repeat="user in contactsListCtrl.contacts | filter : contactsListCtrl.searchQuery | orderBy : ['name', 'description']" ng-click="contactsListCtrl.openChat(user)">
+        <user-description class="user-contact" name="{{user.name}}" avatar="{{user.photo_url}}" description="{{user.current_institution.name}}"></user-description>
+        <md-divider></md-divider>
+    </md-list-item>
+    <h2 ng-show="contactsListCtrl.isMessageShown" class="no-contacts-message">Não há contatos online no momento.</h2>
+</md-list>

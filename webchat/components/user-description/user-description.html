@@ -1,0 +1,7 @@
+<div class="user-description-container">
+    <img ng-src="{{userDescriptionCtrl.avatar}}" class="avatar"/>
+    <div class="user-text" layout="column">
+        <span class="user-name">{{userDescriptionCtrl.limitString(userDescriptionCtrl.name, userDescriptionCtrl.charLimitName)}}</span>
+        <span class="user-description">{{userDescriptionCtrl.limitString(userDescriptionCtrl.description, userDescriptionCtrl.charLimitDescription)}}</span>
+    </div>
+</div>

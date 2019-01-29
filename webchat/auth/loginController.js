@@ -3,14 +3,8 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('LoginController', function LoginController ($scope, $state) {
+    webchat.controller('LoginController', function LoginController () {
         const controller = this;
-
-        const main = () => {
-            console.log('LoginController running');
-        };
-
-        main();
 
     });
 

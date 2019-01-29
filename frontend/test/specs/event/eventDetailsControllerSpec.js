@@ -2,46 +2,43 @@
 
 (describe('Test EventDetailsController', function () {
 
-    var eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog;
+    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state;
 
-    var splab = { name: 'Splab', key: '098745' };
-    var EVENTS_URI = '/api/events';
-
-    var date = new Date('2017-12-14');
-    var date_next_month = new Date('2018-01-14');
-
-    var user = {
-        name: 'User',
-        institutions: [splab],
-        follows: splab,
-        institutions_admin: splab,
-        current_institution: splab,
-        key: '123'
-    };
+    const
+        splab = { name: 'Splab', key: '098745' },
+        EVENTS_URI = '/api/events',
+        date = new Date('2017-12-14'),
+        date_next_month = new Date('2018-01-14'),
+        user = {
+            name: 'User',
+            institutions: [splab],
+            follows: splab,
+            institutions_admin: splab,
+            current_institution: splab,
+            key: '123'
+        },
 
     // Event of SPLAB by User
-    var event = {
-        'title': 'Title',
-        'text': 'Text',
-        'local': 'Local',
-        'photo_url': null,
-        'start_time': date,
-        'end_time': date,
-        'video_url': { url: 'https://www.youtube.com/watch?v=123456789' }
-    };
+        event = {
+            'title': 'Title',
+            'text': 'Text',
+            'local': 'Local',
+            'photo_url': null,
+            'start_time': date,
+            'end_time': date,
+            'video_url': { url: 'https://www.youtube.com/watch?v=123456789' }
+        },
+        post = new Post({}, splab.key),
+        event_convert_date = new Event(event, splab.key),
+        other_event = new Event(event, splab.key);
 
-    var post = new Post({}, splab.key);
-    post.shared_event = event.key;
-
-    var event_convert_date = new Event(event, splab.key);
-
-    event.end_time = date_next_month;
-    var other_event = new Event(event, splab.key);
+        post.shared_event = event.key;
+        event.end_time = date_next_month;
 
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $http, $q, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog) {
+        $rootScope, EventService, MessageService, $mdDialog, $state) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -49,6 +46,7 @@
         eventService = EventService;
         messageService = MessageService;
         mdDialog = $mdDialog;
+        state = $state;
         AuthService.login(user);
 
         eventCtrl = $controller('EventDetailsController', {
@@ -106,12 +104,20 @@
         });
     });
 
-    describe('editEvent', function () {
+    describe('editEvent', () => {
 
-        it('should call $mdDialog.show', function () {
+        it('should call $mdDialog.show', () => {
+            spyOn(Utils, 'isMobileScreen').and.returnValue(false);
             spyOn(mdDialog, 'show').and.returnValue(deffered.promise);
             eventCtrl.editEvent('$event', event);
             expect(mdDialog.show).toHaveBeenCalled();
+        });
+
+        it('should call state.go if is mobile screen', () => {
+            spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+            spyOn(state, 'go');
+            eventCtrl.editEvent('$event', event);
+            expect(state.go).toHaveBeenCalled();
         });
     });
 

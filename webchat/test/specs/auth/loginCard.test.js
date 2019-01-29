@@ -25,6 +25,12 @@
     expect(window.open).toHaveBeenCalledWith(Config.FRONTEND_URL);
   })
 
+  it('backButton should take to Config.FRONTEND_URL by default', () => {
+    spyOn(window, 'open').and.callThrough();
+    ctrl.backButton();
+    expect(window.open).toHaveBeenCalledWith(Config.FRONTEND_URL);
+  })
+
   describe('login functions', () => {
     it('should log in and call onLogin after logging in with email and password', () => {
       spyOn(authService, 'loginWithEmailAndPassword').and.callFake(() => {

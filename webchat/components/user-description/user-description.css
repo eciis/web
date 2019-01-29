@@ -1,0 +1,25 @@
+.user-description-container {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.8em;
+}
+
+.avatar {
+    padding: 10px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.user-text {
+    align-content: center;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+.user-description {
+    font-size: 0.8em;
+}

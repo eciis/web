@@ -1,6 +1,6 @@
 'use strict';
 
-(function() {
+(function () {
   function LoginCardController(AuthService, MessageService) {
     const ctrl = this;
     ctrl.user = {};
@@ -27,8 +27,14 @@
     }
 
     ctrl.$onInit = () => {
-      if (_.isNil(ctrl.onLogin))
-        ctrl.onLogin = () => {};
+      if (_.isNil(ctrl.onLogin)) {
+        ctrl.onLogin = () => { };
+      }
+      if (_.isNil(ctrl.backButton)) {
+        ctrl.backButton = () => {
+          window.open(Config.FRONTEND_URL);
+        };
+      }
     }
   }
 
@@ -39,6 +45,7 @@
       controllerAs: 'ctrl',
       bindings: {
         onLogin: '&',
+        backButton: '&',
       },
     });
 })();

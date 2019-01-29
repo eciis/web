@@ -3,15 +3,11 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('HomeController', function HomeController ($scope, $state) {
-        const controller = this;
+    webchat.controller('HomeController', ['WebchatService', function HomeController (WebchatService) {
+        const homeCtrl = this;
 
-        const main = () => {
-            console.log('HomeController running');
-        };
+        homeCtrl.contacts = WebchatService.getContacts();
 
-        main();
-
-    });
+    }]);
 
 })();

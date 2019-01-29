@@ -1,4 +1,8 @@
 <!-- login card -->
+<button class='card-back-button' id='login-card-back-button'
+  ng-click='ctrl.backButton()'>
+  <md-icon>keyboard_arrow_left</md-icon>
+</button>
 <card-content class='login-card-content'>
   <img id='login-logo' src='/app/images/logowithname.png'/>
   <md-progress-circular class='smooth-if' md-mode='indeterminate' ng-if='ctrl.isLoadingUser()'

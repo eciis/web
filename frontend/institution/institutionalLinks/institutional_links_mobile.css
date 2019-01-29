@@ -1,0 +1,17 @@
+.links__container {
+    display: grid;
+    grid-template-rows: min-content;
+    grid-row-gap: 0.5em;
+    grid-column-gap: 1em;
+    margin: 0 auto;
+    width: 95%;
+}
+
+.links__item {
+    grid-column: 2;
+}
+
+.links__empty__msg {
+    grid-column: 2;
+    text-align: center;
+}

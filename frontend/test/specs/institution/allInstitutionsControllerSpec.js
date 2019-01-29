@@ -3,25 +3,41 @@
 (describe('AllInstitutionsController Test', function() {
     beforeEach(module('app'));
 
-    var user = {
-        name: 'test',
-        key: 'sahdkjsahdkj-IHAKJHAJKH8789AJHSJKHSA'
-    };
-
     var institution = {
-        name: 'institution'
+        name: 'institution',
+        key: '1'
     };
 
     var other_institution = {
-        name: 'other_inst'
+        name: 'other_inst',
+        key: '2'
     };
 
     var third_institution = {
-        name: 'third_inst'
+        name: 'third_inst',
+        key: '3'
     };
 
     var fourth_institution = {
-        name: 'fourth_institution'
+        name: 'fourth_institution',
+        key: '4'
+    };
+
+    const fifthInst = {
+        name: 'fifthInst',
+        key: '5'
+    };
+
+    const sixthInst = {
+        name: 'sixthInst',
+        key: '6'
+    };
+
+    const user = {
+        name: 'test',
+        key: 'sahdkjsahdkj-IHAKJHAJKH8789AJHSJKHSA',
+        follows: [institution, fifthInst, sixthInst],
+        institutions: [institution, fifthInst]
     };
 
     var authService, institutionService, allInstitutionsController, scope;
@@ -34,28 +50,37 @@
         authService.login(user);
         spyOn(Utils, 'setScrollListener').and.callFake(function() {});
 
-        $httpBackend.expect('GET', '/api/institutions?page=0&limit=10').respond({
-            institutions: [
-                institution, 
-                other_institution
-            ], next: true
-        });
+        spyOn(institutionService, 'getNextInstitutions').and.callFake(() => {
+            return {
+                then: function (callback) {
+                    return callback({
+                                institutions: [
+                                institution,
+                                other_institution,
+                                fifthInst,
+                                sixthInst
+                            ], next: true
+                        }
+                    )
+                }
+            }
+        })
 
         allInstitutionsController = $controller('AllInstitutionsController', {
             authService: AuthService,
             institutionService: InstitutionService
         });
 
-        $httpBackend.flush();
+        allInstitutionsController.$onInit();
     }));
 
 
     describe('Test getInstitutions()', function() {
 
         it('Should return all institutions', function() {
-            expect(allInstitutionsController.getInstitutions()).toEqual([institution, other_institution]);
+            expect(allInstitutionsController.getInstitutions()).toEqual([institution, other_institution, fifthInst, sixthInst]);
             allInstitutionsController.filterKeyword = "*";
-            expect(allInstitutionsController.getInstitutions()).toEqual([institution, other_institution]);
+            expect(allInstitutionsController.getInstitutions()).toEqual([institution, other_institution, fifthInst, sixthInst]);
         });
 
         it('Should return institution found', function() {
@@ -72,33 +97,35 @@
     });
 
     describe('Test loadMoreInstitutions()', function() {
-        beforeEach(function() {
-            spyOn(institutionService, 'getNextInstitutions').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        callback(
-                            {
-                                institutions: [
-                                    third_institution, 
-                                    fourth_institution
-                                ],
-                                next: false
-                            }
-                        );
-                    }
-                };
-            });
+        it('Should call getNextInstitution', function() {
+            allInstitutionsController.loadMoreInstitutions();
+            expect(institutionService.getNextInstitutions).toHaveBeenCalledWith(1, allInstitutionsController.currentTab);
+        });
+    });
+
+    describe('changeTab', () => {
+        it('should set currentTab to all', () => {
+            allInstitutionsController.changeTab('all');
+            expect(allInstitutionsController.currentTab).toEqual('all');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
         });
 
-        it('Should get institutions', function(done) {
-            expect(allInstitutionsController.institutions).toEqual([institution, other_institution]);
-            var promise = allInstitutionsController.loadMoreInstitutions();
-            promise.then(function succsses() {
-                expect(allInstitutionsController.institutions).toEqual([institution, other_institution, third_institution, fourth_institution]);
-                done();
-            });
+        it('should set currentTab to following', () => {
+            allInstitutionsController.changeTab('following');
+            expect(allInstitutionsController.currentTab).toEqual('following');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
+        });
 
-            scope.$apply();
+        it('should set currentTab to member', () => {
+            allInstitutionsController.changeTab('member');
+            expect(allInstitutionsController.currentTab).toEqual('member');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
+        });
+
+        it('should not change the currentTab', () => {
+            allInstitutionsController.changeTab('tst');
+            expect(allInstitutionsController.currentTab).toEqual('all');
+            expect(institutionService.getNextInstitutions).toHaveBeenCalled();
         });
     });
 }));

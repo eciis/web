@@ -21,11 +21,6 @@
         postCtrl.deletedFiles = [];
         postCtrl.hasVideo = false;
         postCtrl.videoRegex = '(https?\:\/\/)?((www\.)?youtube\.com|youtu\.?be)\/.+';
-        postCtrl.options = [];
-        var option_empty = {'text': '',
-                            'number_votes': 0,
-                            'voters': []
-                            };
         var timelineContent = document.getElementById('content');
         var MAXIMUM_PDF_SIZE = 5242880; // 5Mb in bytes
 
@@ -61,8 +56,6 @@
             if(postCtrl.typePost === "Common"){
                 postCtrl.typePost = "Survey";
                 postCtrl.clearPost();
-                postCtrl.options.push(angular.copy(option_empty));
-                postCtrl.options.push(angular.copy(option_empty));
             }
         };
 
@@ -267,7 +260,6 @@
             if (postCtrl.typePost === "Common") postCtrl.post = {};
             postCtrl.pdfFiles = [];
             postCtrl.hideImage();
-            postCtrl.options = [];
             postCtrl.hasVideo = false;
         };
 

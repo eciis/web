@@ -34,12 +34,12 @@
        * Mimics node's on/emit event handlers.
        * Raises an event.
        * @param {string} eventName - name of the event
-       * @param {object} e - event data
+       * @param {object} event - event data
        */
-      emit(eventName, e) {
+      emit(eventName, event) {
         if (this.eventHandlers[eventName]) {
-          this.eventHandlers[eventName].forEach((f) => {
-            f(e);
+          this.eventHandlers[eventName].forEach((callback) => {
+            callback(event);
           });
         }
       }
@@ -48,13 +48,13 @@
        * Mimics node's on/emit event handlers.
        * Adds a callback to an event.
        * @param {string} eventName - name of the event
-       * @param {Function} f - function to be called when event is raised.
+       * @param {Function} callback - function to be called when event is raised.
        */
-      on(eventName, f) {
+      on(eventName, callback) {
         if (!this.eventHandlers[eventName]) {
           this.eventHandlers[eventName] = [];
         }
-        this.eventHandlers[eventName].push(f);
+        this.eventHandlers[eventName].push(callback);
       }
 
       /**

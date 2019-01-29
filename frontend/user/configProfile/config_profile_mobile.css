@@ -35,11 +35,12 @@
     place-items: center;
 }
 
-.user-profile__info--name {
+.user-profile__info > p.user-profile__info--name {
     margin: 0 1em;
-    font-size: 1em;
+    font-size: 1.1em;
     text-align: center;
     max-width: 80%;
+    font-weight: 500;
 }
 
 .user-profile__info--item {
@@ -54,9 +55,17 @@
 }
 
 .user-profile__info--divider {
+    border: none;
     background-color: #84C45E;
     height: 4px;
     width: 25%;
+}
+
+.user-profile__section__title {
+    margin: 0.5em auto;
+    text-transform: uppercase;
+    color: #004D41;
+    font-weight: 500;
 }
 
 .user-profile__content {
@@ -84,7 +93,10 @@
 }
 
 .user-profile__data > div > p {
-    margin: 0;  
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9em;
 }
 
 .user-profile__data > md-divider {

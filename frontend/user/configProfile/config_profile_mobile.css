@@ -1,25 +1,25 @@
 .user-profile__container {
     display: grid;
     grid-template-columns: 100vw;
-    grid-template-rows: 10em 6em auto;
-    grid-row-gap: 1em;
+    grid-template-rows: 17em min-content auto;
 }
 
 .user-profile__header {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 2fr 2fr;
+    grid-template-rows: 2fr 1fr;
 }
 
 .user-profile__header--background {
-    grid-area: 1/1/3/2;
+    grid-area: 1/1/2/2;
     background-color: #009688;
     height: 100%;
 }
 
 .user-profile__avatar--position {
-    grid-area: 2/1/4/2;
     justify-self: center;
+    position: absolute;
+    top: 7em;
 }
 
 .user-profile__avatar {
@@ -31,27 +31,27 @@
 .user-profile__info {
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    place-items: center;
+    grid-template-rows: auto;
 }
 
-.user-profile__info > p.user-profile__info--name {
+.user-profile__info--name {
     margin: 0 1em;
-    font-size: 1.1em;
     text-align: center;
-    max-width: 80%;
+    font-size: 1.4em;
     font-weight: 500;
+    max-width: 85%;
+    text-transform: uppercase;
 }
 
-.user-profile__info--item {
+.user-profile__info--data {
+    font-size: 0.8em;
+    margin: 1em 0 1em 4em;
+}
+
+.user-profile__info--data > span {
+    color: #009688;
     text-transform: uppercase;
     font-weight: 500;
-    font-size: 12px;
-    margin: 0;
-}
-
-.user-profile__info--item > span {
-    color: #009688;
 }
 
 .user-profile__info--divider {
@@ -73,6 +73,7 @@
     grid-template-columns: 100vw;
     grid-template-rows: auto;
     grid-row-gap: 1em;
+    margin-top: 1em;
 }
 
 .user-profile__data {

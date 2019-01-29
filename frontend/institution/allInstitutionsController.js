@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
-        InstitutionService, AuthService, $q, UserService, $state, $window) {
+        InstitutionService, AuthService, $q, UserService) {
         var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");

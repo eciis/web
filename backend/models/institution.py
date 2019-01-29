@@ -95,7 +95,7 @@ class Institution(ndb.Model):
     cover_photo = ndb.StringProperty()
 
     # Necessary to know if the institution has already been seen by the users
-    creation_date = ndb.DateTimeProperty()
+    creation_date = ndb.DateTimeProperty(auto_now_add=True)
 
     def follow(self, user_key):
         """Add one user in collection of followers."""

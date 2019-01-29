@@ -4,9 +4,15 @@
         <img class="user-profile__avatar user-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
     </div>
     <div class="user-profile__info">
-        <p class="user-profile__info--item user-profile__info--name responsive__title">{{configProfileCtrl.user.name}}</p>
-        <p class="user-profile__info--item"><span>e-mail: </span>{{configProfileCtrl.user.email[0]}}</p>
-        <p class="user-profile__info--item"><span>cpf: </span>{{configProfileCtrl.user.cpf}}</p>
+        <p class="user-profile__info--item user-profile__info--name responsive__title">
+            {{ configProfileCtrl.showProperty(configProfileCtrl.user.name) }}
+        </p>
+        <p class="user-profile__info--item"><span>e-mail: </span>
+            {{ configProfileCtrl.showProperty(configProfileCtrl.user.email[0]) }}
+        </p>
+        <p class="user-profile__info--item"><span>cpf: </span>
+            {{ configProfileCtrl.showProperty(configProfileCtrl.user.cpf) }}
+        </p>
         <hr class="user-profile__info--divider"></hr>
     </div>
     <div class="user-profile__content">

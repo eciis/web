@@ -168,6 +168,8 @@
             return !_.isEmpty(configProfileCtrl.user.institutions_admin);
         }
 
+        configProfileCtrl.showProperty = property => Utils.showProperty(property);
+
         configProfileCtrl.deleteAccount = function deleteAccount(event) {
             if (!isAdminOfAnyInstitution()) {
                 var confirm = $mdDialog.confirm();

@@ -49,7 +49,7 @@ var Config = {
 }
 
 
-function generate_config {
+function generate_config_file {
     app_version=$2;
     
     case $1 in
@@ -73,7 +73,11 @@ function generate_config {
         $app_version
     )
 
-    create_config ${config_list[@]}
+    config=$(create_config ${config_list[@]});
+
+    for file in ${@:2} ; do
+        echo "$config" > $file;
+    done
 }
 
-generate_config prod "minha-versao"
+generate_config_file dev "minha-versao" a.txt

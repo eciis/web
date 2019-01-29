@@ -122,6 +122,7 @@ class User(ndb.Model):
     # The user's profiles
     institution_profiles = ndb.StructuredProperty(InstitutionProfile, repeated=True)
 
+    # Necessary to show which institutions are new to the user
     last_seen_institutions = ndb.DateTimeProperty()
 
     @staticmethod

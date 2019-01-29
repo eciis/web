@@ -94,6 +94,7 @@ class Institution(ndb.Model):
 
     cover_photo = ndb.StringProperty()
 
+    # Necessary to know if the institution has already been seen by the users
     creation_date = ndb.DateTimeProperty()
 
     def follow(self, user_key):

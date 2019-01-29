@@ -75,6 +75,10 @@
                 { institutionKey: regInstCtrl.institution.key });
         };
 
+        /**
+         * Check if the last time the user saw the registered institutions
+         * was after the current institution's creation.
+         */
         regInstCtrl.hasSeenInstitution = function hasSeenInstitution() {
             return regInstCtrl.user.last_seen_institutions && regInstCtrl.user.last_seen_institutions > regInstCtrl.institution.creation_date;
         };

@@ -5,13 +5,13 @@
         <md-icon class="icon-button-menu-inst">arrow_back</md-icon>
     </md-button>
     <div id="buttons-navbar-inst-container-end">
-        <md-button ng-if="instHeaderCtrl.inTimilinePage" class="cover-photo-button button-navbar-inst"
+        <md-button ng-if="instHeaderCtrl.isTimeline()" class="cover-photo-button button-navbar-inst"
             id="btn-description">
             <b>DESCRIÇÃO</b>
         </md-button>
-        <div ng-if="instHeaderCtrl.inTimilinePage">
+        <div ng-if="instHeaderCtrl.isTimeline()">
             <md-button class="cover-photo-button button-navbar-inst" ng-if="instHeaderCtrl.isUserFollower"
-            ng-click=" instHeaderCtrl.actionsButtons.unfollow()" id="btn-unfollow">
+                ng-click=" instHeaderCtrl.actionsButtons.unfollow()" id="btn-unfollow">
                     <b>SEGUINDO</b>
             </md-button>
             <md-button class="cover-photo-button button-navbar-inst" ng-if="!instHeaderCtrl.isUserFollower"
@@ -19,7 +19,7 @@
                 id="btn-follow"> <b>SEGUIR</b>
             </md-button>
         </div>
-        <md-menu style="overflow:hidden" ng-if="instHeaderCtrl.showButtonMore()">
+        <md-menu class="no-overflow" ng-if="instHeaderCtrl.showButtonMore()">
             <md-button class="md-icon-button cover-photo-button button-navbar-inst"
                 ng-mouseenter="$mdMenu.open()" id="btn-more">
                 <md-icon class="icon-button-menu-inst">more_vert</md-icon>
@@ -32,7 +32,7 @@
                     </md-button>
                 </md-menu-item>
                 <md-menu-item ng-if="!instHeaderCtrl.isMember">
-                    <md-button style="text-align: left;"
+                    <md-button class="button-request-link"
                         ng-disabled="instHeaderCtrl.user.isInstitutionRequested(instHeaderCtrl.institution.key)"
                         ng-click="instHeaderCtrl.actionsButtons.requestInvitation($event)">
                         <span ng-if="!instHeaderCtrl.user.isInstitutionRequested(instHeaderCtrl.institution.key)">Solicitar vínculo</span>
@@ -41,20 +41,21 @@
                 </md-menu-item>
             </md-menu-content>
         </md-menu>
-        <md-button ng-if="instHeaderCtrl.inRegistrationDate" class="cover-photo-button button-navbar-inst"
+        <md-button ng-if="instHeaderCtrl.isRegistrationData()" class="cover-photo-button button-navbar-inst"
             id="btn-edit">
             <b>EDITAR</b>
         </md-button>
     </div>
 </div>
-<div md-colors="{background: 'teal-500'}" id="image-cover-inst">
-    <img ng-if="instHeaderCtrl.actionsButtons.showImageCover()" ng-src="{{instHeaderCtrl.institution.cover_photo}}" style="width: 100%; background: white;"/>
+<div md-colors="{background: 'teal-500'}" ng-class="instHeaderCtrl.isTimeline() ?'image-cover-inst-timeline' : 'image-cover-inst'">
+    <img ng-if="instHeaderCtrl.actionsButtons.showImageCover()" ng-src="{{instHeaderCtrl.institution.cover_photo}}" class="image-backround-color"/>
     <load-circle style="filter: alpha(opacity=100);" add-layout-fill="true" layout="row" 
         layout-align="center center" ng-if="institutionCtrl.isLoadingCover"></load-circle>
 </div>
 <div  id="inst-name-mobile">
-    <img id="inst-image-mobile"  ng-src="{{ instHeaderCtrl.photo }}"/>
-    <center  class="md-title">
-        <p style="font-size:1.2em">{{ instHeaderCtrl.title }}</p>
-    </center>
+    <img ng-class="instHeaderCtrl.isTimeline() ?'inst-image-mobile-timeline' : 'inst-image-mobile'"
+        ng-src="{{ instHeaderCtrl.photo }}"/>
+    <div  class="md-title">
+        <p ng-class="instHeaderCtrl.isTimeline() ?'title-inst' : 'title-inst-page'">{{ instHeaderCtrl.getTitle() }}</p>
+    </div>
 </div>

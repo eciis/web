@@ -1,0 +1,25 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+    md-colors="{background: 'grey-50'}">
+        <!-- CONTENT -->
+        <div flex="95" layout-align="center top" layout="row">
+            <div flex layout="column">
+                <div flex class="body">
+                    <h3 class="list-users-title">{{ membersCtrl.getAdminLabel() }}</h3>
+                    <md-content>
+                        <div class="list-users-grid list-users-grid-position" ng-click="membersCtrl.showUserProfile(membersCtrl.institution.admin.key, $event)">
+                            <div layout="row" class="list-users-position">
+                                <img title="{{membersCtrl.institution.admin.name}}" ng-src="{{membersCtrl.institution.admin.photo_url}}"
+                                class="md-avatar list-users-img"/>
+                                <div class="list-users-name">
+                                    <p>{{ membersCtrl.limitString(membersCtrl.institution.admin.name, 17) }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </md-content>
+                    <list-users page-label="Membros" current-inst="{{membersCtrl.institution.key}}" users="membersCtrl.members"></list-users>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

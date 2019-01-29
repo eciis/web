@@ -1,0 +1,13 @@
+<div flex="100" layout="row" layout-align="center">
+    <div flex flex-md="95" layout="row" layout-align="space-around"
+    md-colors="{background: 'grey-50'}">
+        <!-- CONTENT -->
+        <div flex="95" layout-align="center top" layout="row">
+            <div flex layout="column">
+                <div flex class="body">
+                    <list-users page-label="Seguidores" current-inst="{{followersCtrl.currentInstitutionKey}}" users="followersCtrl.followers"></list-users>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

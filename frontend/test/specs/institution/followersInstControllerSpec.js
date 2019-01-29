@@ -45,18 +45,41 @@
         };
         state.params.institutionKey = institution.key;
         followersCtrl = createCtrl();
+        followersCtrl.$onInit();
         httpBackend.flush();
     }));
 
-    afterEach(function() {
+    afterEach(() => {
         httpBackend.verifyNoOutstandingExpectation();
         httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('InstitutionController properties', function() {
+    describe('onInit', () => {
 
-        it('should exist followers', function() {
-            expect(followersCtrl.followers).toEqual([user]);
+        it('should call _getFollowers', () => {
+            spyOn(followersCtrl, '_getFollowers');
+            followersCtrl.$onInit();
+            expect(followersCtrl._getFollowers).toHaveBeenCalled();
+        });
+    });
+
+    describe('_getFollowers', () => {
+
+        beforeEach(() => {
+            spyOn(institutionService, 'getFollowers').and.callFake(() => {
+                return {
+                    then: (callback) => {
+                        return callback([user]);
+                    }
+                };
+            });
+        });
+
+        it('should call Utils.groupUsersByInitialLetter if is mobile screen', () => {
+            spyOn(Utils, 'isMobileScreen').and.returnValue(true);
+            spyOn(Utils, 'groupUsersByInitialLetter');
+            followersCtrl._getFollowers();
+            expect(Utils.groupUsersByInitialLetter).toHaveBeenCalledWith([user]);
         });
     });
 }));

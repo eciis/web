@@ -26,6 +26,11 @@
         institutionCtrl.addPost = institutionCtrl.user.current_institution.key === currentInstitutionKey;
         const DEFAULT_INST_PHOTO = '/app/images/institution.png';
 
+        institutionCtrl.$onInit = () => {
+            institutionCtrl.canManageInst();
+            loadInstitution();
+        };
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response);
@@ -35,12 +40,30 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                loadTimelineButtonsHeaderMob();                 
+                loadTimelineButtonsHeaderMob();
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
+
+          /** Create the object that contais all functions necessary in institution header,
+         * when is in timeline page on mobile.
+         */
+        function loadTimelineButtonsHeaderMob(){
+            institutionCtrl.timelineButtonsHeaderMob =  {
+                goBack: institutionCtrl.goBack,
+                showDescribe: null,
+                isAdmin: institutionCtrl.isAdmin,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                cropImage: institutionCtrl.cropImage,
+                showImageCover: institutionCtrl.showImageCover,
+                getLimitedName: institutionCtrl.getLimitedName,
+                requestInvitation: institutionCtrl.requestInvitation
+            }
+        }
+
 
         /**
          * Returns the key of the current institution
@@ -62,7 +85,8 @@
                 unfollow: institutionCtrl.unfollow,
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
-                requestInvitation: institutionCtrl.requestInvitation
+                requestInvitation: institutionCtrl.requestInvitation,
+                getLimitedName: institutionCtrl.getLimitedName
             }
         }
 
@@ -81,8 +105,6 @@
         function setPortifolioURL(url) {
             institutionCtrl.portfolioUrl = url;
         }
-
-        loadInstitution();
 
         institutionCtrl.isAdmin = function isAdmin() {
             var isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
@@ -140,34 +162,16 @@
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
 
-        institutionCtrl.inTimilineMobile = function inTimilineMobile(){
-            const inTimiline = $state.current.name == STATES.INST_TIMELINE;
-            return Utils.isMobileScreen(450) && inTimiline;
-        }
-
-        institutionCtrl.inRegistrationDataMobile = function inRegistrationDataMobile(){
-            const inTimiline = $state.current.name == STATES.INST_REGISTRATION_DATA;
-            return Utils.isMobileScreen(450) && inTimiline;
-        }
-
+        /** Go to previous page.
+         */
         institutionCtrl.goBack = function goBack(){
+            if(institutionCtrl.isTimelineMobile()) Utils.resetToolbarDisplayStyle();
             window.history.back();
         }
 
-        institutionCtrl.goToManageMembers = function goToManageMembers(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_MEMBERS, {institutionKey: currentInstitutionKey});
-        };
-
-        institutionCtrl.goToManageInstitutions = function goToManageInstitutions(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_INVITE_INST, {institutionKey: currentInstitutionKey});
-        };
-
-        institutionCtrl.goToEditInfo = function goToEditInfo(){
-            UtilsService.selectNavOption(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
-        };
-
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_TIMELINE, {institutionKey: institutionKey});
+            const instKey = institutionKey || currentInstitutionKey;
+            $state.go(STATES.INST_TIMELINE, {institutionKey: instKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
@@ -213,7 +217,6 @@
             institutionCtrl.isMember = institutionCtrl.user.isMember(institutionKey);
         };
 
-
         institutionCtrl.portfolioDialog = function(ev) {
             $mdDialog.show({
                 templateUrl: 'app/institution/portfolioDialog.html',
@@ -256,11 +259,6 @@
         institutionCtrl.getInfo = function getInfo(information) {
             return information ? information : "Não informado";
         };
-
-        institutionCtrl.getTitle = function getTitle(){
-            if(institutionCtrl.inTimilineMobile())
-                return institutionCtrl.getLimitedName(110);
-        }
 
         institutionCtrl.requestInvitation = function requestInvitation(event) {
             $mdDialog.show({
@@ -311,6 +309,13 @@
             }
         };
 
+        /** Verify if current state is timeline institution on mobile.
+         */
+        institutionCtrl.isTimelineMobile = function isTimelineMobile(){
+            const inTimeline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimeline;
+        }
+
         function updateCoverImage(data) {
             var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
@@ -330,20 +335,6 @@
             var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
             ctrl.portfolioUrl = trustedUrl;
         }
-
-        institutionCtrl.removeInstitution = function removeInstitution(ev) {
-            institutionCtrl.stateView = "remove_inst";
-            $mdDialog.show({
-                templateUrl: 'app/institution/removeInstDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    institution: institutionCtrl.institution
-                },
-                controller: "RemoveInstController",
-                controllerAs: 'removeInstCtrl'
-            });
-        };
 
         institutionCtrl.getSelectedClass = function (stateName){
             return $state.current.name === STATES[stateName] ? "selected" : "";
@@ -399,7 +390,12 @@
         };
 
         institutionCtrl.canManageInst = function canManageInst() {
-            return institutionCtrl.user.isAdmin(currentInstitutionKey) ? true : $state.go(STATES.HOME);
+            const isOnManageInstPage = [
+                STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MEMBERS, 
+                STATES.MANAGE_INST_INVITE_INST
+            ].includes($state.current.name);
+            const isAdmin = institutionCtrl.user.isAdmin(currentInstitutionKey);
+            if(isOnManageInstPage && !isAdmin) $state.go(STATES.HOME);
         };
 
         institutionCtrl.limitString = function limitString(string, size) {
@@ -414,27 +410,30 @@
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
             MessageService, ProfileService){
 
-        var followersCtrl = this;
-        var currentInstitutionKey = $state.params.institutionKey;
+        const followersCtrl = this;
+
+        followersCtrl.currentInstitutionKey = $state.params.institutionKey;
 
         followersCtrl.followers = [];
         followersCtrl.currentFollower = "";
         followersCtrl.isLoadingFollowers = true;
 
-        function getFollowers() {
-            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
-                followersCtrl.followers = response;
+        followersCtrl._getFollowers = () => {
+            InstitutionService.getFollowers(followersCtrl.currentInstitutionKey).then(function success(response) {
+                followersCtrl.followers = Utils.isMobileScreen(475) ?
+                    Utils.groupUsersByInitialLetter(response) : response;
                 followersCtrl.isLoadingFollowers = false;
             }, function error() {
                 followersCtrl.isLoadingFollowers = true;
             });
-        }
+        };
 
         followersCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev);
         };
 
-        getFollowers();
-
+        followersCtrl.$onInit = () => {
+            followersCtrl._getFollowers();
+        };
     });
 })();

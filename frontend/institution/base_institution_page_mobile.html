@@ -1,7 +1,7 @@
 <md-content layout-align="center" hide-navbar="both">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
-        <div ng-class="institutionCtrl.inTimilineMobile() ? 'cover-inst-mobile': ''">
+        <div ng-class="institutionCtrl.isTimelineMobile() ? 'cover-inst-mobile': ''">
             <institution-header title="{{institutionCtrl.getTitle()}}"
                 user="institutionCtrl.user"
                 institution="institutionCtrl.institution"
@@ -9,11 +9,9 @@
                 is-user-follower="institutionCtrl.isUserFollower"
                 is-member="institutionCtrl.isMember"
                 file-background="institutionCtrl.file"
-                in-timiline-page="institutionCtrl.inTimilineMobile()"
-                in-registration-date="institutionCtrl.inRegistrationDataMobile()"
                 actions-buttons="institutionCtrl.timelineButtonsHeaderMob">
            </institution-header>
-            <div id="inst-name-mobile">
+            <div id="inst-name-mobile" ng-if="institutionCtrl.isTimelineMobile()">
                 <hr id="divider-institution"/>
                 <div id="buttons-institution-page">
                     <md-button md-colors="{background: 'teal-500'}"
@@ -50,9 +48,9 @@
             </div>
         </div>
 
-        <div layout="row" flex="70" style="margin-top: 1.25em;">
+        <div layout="row" flex="70" class="timeline-inst">
             <!-- INSTITUTION TIMELINE -->
-            <div layout="row" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}" style="z-index: 1;"></div>
+            <div layout="row" class="timeline-z-index" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
         </div>
     </div>
 </md-content>

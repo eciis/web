@@ -3,15 +3,13 @@
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
-        InstitutionService, AuthService, $q, UserService, $transitions) {
+        InstitutionService, AuthService, $q, UserService, $state, $window) {
         var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");
         var moreInstitutions = true;
         let currentPage = 0;
-        
-
-        allInstitutionsCtrl.user = AuthService.getCurrentUser();
+    
         allInstitutionsCtrl.isLoadingInstitutions = true;
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
@@ -19,8 +17,6 @@
         allInstitutionsCtrl.currentTab = 'all';
 
         const possibleTabs = ['all', 'following', 'member'];
-
-        let oldUser = _.cloneDeep(allInstitutionsCtrl.user);
         
         /**
          * It sets the currentTab correctly according to the nextTab value
@@ -97,13 +93,13 @@
         allInstitutionsCtrl.$onInit = function () {
             allInstitutionsCtrl.loadMoreInstitutions();
             Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions);
-            
-            $transitions.onSuccess({
-                to: state => {
-                    allInstitutionsCtrl.user.last_seen_institutions = new Date().toISOString().split('.')[0];
-                    const patch = jsonpatch.compare(JSON.parse(angular.toJson(oldUser)), JSON.parse(angular.toJson(allInstitutionsCtrl.user)));
-                    UserService.save(patch);
-                }
+            allInstitutionsCtrl.user = _.cloneDeep(AuthService.getCurrentUser());
+            const auxUser = _.cloneDeep(allInstitutionsCtrl.user);
+
+            auxUser.last_seen_institutions = new Date().toISOString().split('.')[0];
+            const patch = jsonpatch.compare(JSON.parse(angular.toJson(allInstitutionsCtrl.user)), JSON.parse(angular.toJson(auxUser)));
+            UserService.save(patch).then(() => {
+                AuthService.reload();
             });
         };
     }); 

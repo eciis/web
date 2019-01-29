@@ -8,6 +8,7 @@ from models import Address
 from permissions import DEFAULT_ADMIN_PERMISSIONS
 from permissions import DEFAULT_SUPER_USER_PERMISSIONS
 from service_messages import create_message
+from datetime import datetime
 
 __all__ = ['Institution', 'get_health_ministry', 'get_deciis']
 
@@ -93,7 +94,7 @@ class Institution(ndb.Model):
 
     cover_photo = ndb.StringProperty()
 
-    creation_date = ndb.DateTimeProperty(auto_now_add=True)
+    creation_date = ndb.DateTimeProperty()
 
     def follow(self, user_key):
         """Add one user in collection of followers."""
@@ -187,9 +188,10 @@ class Institution(ndb.Model):
         institution.add_member(user)
         institution.set_admin(user.key)
         institution.change_state('active')
+        institution.creation_date = datetime.now()
+        institution.put()
         if (institution.photo_url is None):
             institution.photo_url = "app/images/institution.png"
-            institution.put()
 
         user.add_institution(institution.key)
         user.add_institution_admin(institution.key)

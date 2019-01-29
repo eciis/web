@@ -5,7 +5,7 @@
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
         AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
-        CropImageService, ImageService, UtilsService) {
+        CropImageService, ImageService, UtilsService, SCREEN_SIZES) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -153,7 +153,7 @@
         };
 
         institutionCtrl.showDescription = function showDescription(){
-            return !Utils.isMobileScreen(450);
+            return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         }
 
         institutionCtrl.showFollowButton = function showFollowButton() {

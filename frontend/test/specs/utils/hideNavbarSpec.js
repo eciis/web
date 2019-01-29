@@ -49,11 +49,17 @@
         })
         it("should hide the bottom toolbar", function() {
             state.current.name = STATES_CONST.INST_TIMELINE;
+            scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
+            scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();
+
             scope.initialToolbarDisplayState();
             expect(hideDirective.hideElement).toHaveBeenCalledWith(hideDirective.bottomToolbar);
         })
         it("should not hide the bottom toolbar", function() {
             state.current.name = STATES_CONST.CREATE_EVENT;
+            scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
+            scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();
+            
             scope.initialToolbarDisplayState();
             expect(hideDirective.hideElement).toHaveBeenCalledWith(hideDirective.topTollbar);
         })

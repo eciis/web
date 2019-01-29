@@ -9,6 +9,7 @@ from . import get_health_ministry
 from utils import Utils
 import random
 from permissions import DEFAULT_ADMIN_PERMISSIONS
+from datetime import datetime
 
 __all__ = ['InstitutionProfile', 'User']
 
@@ -120,6 +121,8 @@ class User(ndb.Model):
 
     # The user's profiles
     institution_profiles = ndb.StructuredProperty(InstitutionProfile, repeated=True)
+
+    last_seen_institutions = ndb.DateTimeProperty()
 
     @staticmethod
     def get_by_email(email):
@@ -400,3 +403,17 @@ class User(ndb.Model):
         self.add_permissions(
             DEFAULT_ADMIN_PERMISSIONS, institution.key.urlsafe())
         self.put()
+    
+    def __setattr__(self, attr, value):
+        """
+        Method of set attributes.
+
+        if the attribute is of type date and the value passed is a string,
+        it converts to type datetime.
+        """
+        is_value_datetime = isinstance(value, datetime)
+        is_attr_data = attr == 'last_seen_institutions'
+
+        if is_attr_data and not is_value_datetime:
+            value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
+        super(User, self).__setattr__(attr, value)

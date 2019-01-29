@@ -22,7 +22,8 @@ class InstitutionCollectionHandler(BaseHandler):
     @login_required
     def get(self, user):
         """Get all institutions."""
-        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 'description', 'admin', 'cover_photo', 'institutional_email']
+        INSTITUTION_ATTRIBUTES = ['name', 'key', 'acronym', 'address', 'photo_url', 
+            'description', 'admin', 'cover_photo', 'institutional_email', 'creation_date']
         ACTIVE_STATE = "active"
         
         filter_flag = self.request.get('filter')
@@ -46,7 +47,8 @@ class InstitutionCollectionHandler(BaseHandler):
         if filter_expression:
             queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE and filter_expression).order(Institution.key)
         else :
-            queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE)
+            queryInstitutions = Institution.query(
+                Institution.state == ACTIVE_STATE).order(-Institution.creation_date)
 
         queryInstitutions, more = offset_pagination(
             page,

@@ -75,5 +75,9 @@
             $state.go(STATES.INST_TIMELINE, 
                 { institutionKey: regInstCtrl.institution.key });
         };
+
+        regInstCtrl.hasSeenInstitution = function hasSeenInstitution() {
+            return user.last_seen_institutions && user.last_seen_institutions > regInstCtrl.institution.creation_date;
+        };
     });
 })();

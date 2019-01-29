@@ -93,6 +93,8 @@ class Institution(ndb.Model):
 
     cover_photo = ndb.StringProperty()
 
+    creation_date = ndb.DateTimeProperty(auto_now_add=True)
+
     def follow(self, user_key):
         """Add one user in collection of followers."""
         if user_key not in self.followers:
@@ -314,6 +316,8 @@ class Institution(ndb.Model):
                 }
             if(attribute == 'address' and attr_value):
                 attr_value = dict(self.address)
+            if attribute == 'creation_date' and attr_value:
+                attr_value = attr_value.isoformat()
 
             institution[attribute] = attr_value
         return institution

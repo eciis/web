@@ -45,7 +45,8 @@ class InstitutionCollectionHandler(BaseHandler):
         filter_expression = map_filter_expression.get(filter_flag)
 
         if filter_expression:
-            queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE and filter_expression).order(Institution.key)
+            queryInstitutions = Institution.query(Institution.state == ACTIVE_STATE and filter_expression).order(-Institution.creation_date).order(
+                Institution.key)
         else :
             queryInstitutions = Institution.query(
                 Institution.state == ACTIVE_STATE).order(-Institution.creation_date)

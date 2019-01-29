@@ -153,7 +153,7 @@
 
       /**
        * Starts a new RPC accepting a remote offer, resolves the promise with the answer object.
-       * @param {objet} remote - remote ssion object.
+       * @param {objet} remote - remote session object.
        */
       accept(remote) {
         return this.rpc.setRemoteDescription(remote).then(() => {

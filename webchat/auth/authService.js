@@ -13,6 +13,7 @@
         let resolveTokenPromise;
         let loadTokenPromise;
         let refreshInterval;
+        let isLoadingUser;
         const provider = new firebase.auth.GoogleAuthProvider();
 
         /**
@@ -113,6 +114,7 @@
         };
 
         function login(loginMethodPromisse) {
+          service.isLoadingUser = true;
             return authObj.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
                 return loginMethodPromisse.then(function(response) {
                     return response.user;
@@ -127,7 +129,7 @@
                 } else {
                     throw "Error! Email not verified.";
                 }
-            });
+            }).finally(() => { service.isLoadingUser = false });
         }
 
         service.loginWithGoogle = function loginWithGoogle() {

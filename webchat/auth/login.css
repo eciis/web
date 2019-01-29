@@ -1,0 +1,144 @@
+.smooth-if.ng-enter, .smooth-if.ng-leave {
+  transition: 1s ease-in-out all;
+}
+
+.smooth-if.ng-enter {
+  opacity: 0.1;
+}
+
+.smooth-if.ng-enter-active {
+  opacity: 1;
+}
+
+.smooth-if.ng-leave {
+  opacity: 0;
+  z-index: 10;
+}
+
+.smooth-if.ng-leave.ng-leave-active {
+  opacity: 0;
+  z-index: 10;
+  position: absolute;
+}
+
+md-progress-circular {
+  margin: 15%;
+}
+
+md-progress-circular > svg > path {
+  stroke: #009688;
+}
+
+card-content.login-card-content {
+  padding: 0.6em;
+  margin: 0 1em;
+}
+
+img#login-logo {
+  justify-self: center;
+  width: 70%;
+  margin: 0.8em 0;
+}
+
+login-email-form {
+  width: 90%;
+}
+
+.login-form {
+  display: grid;
+  grid-template-areas: "email" "password" "submit";
+  align-items: center;
+}
+
+.form {
+  margin: 0.2em;
+}
+
+.login-card-input {
+  border-bottom-color: #009688 !important;
+}
+
+login-email-form-submit {
+  justify-self: right;
+}
+
+.push-right {
+  margin-right: 0px;
+}
+
+.login-btn {
+  width: 100%;
+  align-self: center;
+  justify-self: center;
+  text-align: left;
+  color: white;
+}
+
+login-container {
+  width: 90%;
+  display: grid;
+}
+
+md-icon svg {
+  margin-left: 0.6em;
+}
+
+.login-google-icon {
+  margin-right: 1.4em;
+}
+
+.login-divider {
+  margin-top: 0.4em;
+  margin-bottom: -0.4em;
+}
+
+login-card-footer {
+  background-color: #E6E6E6;
+}
+
+button.card-back-button {
+  outline: none;
+  position: absolute;
+  align-self: center;
+  justify-self: center;
+  transform: translateX(-240px);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 2px 1px -1px rgba(0,0,0,.12);
+  border-style: none;
+  background-color: #8BC34A;
+}
+
+button.card-back-button:active {
+  background-color: #558B2F;
+}
+
+button.card-back-button > md-icon {
+  color: white;
+  user-select: none;
+}
+
+@media screen and (max-width: 480px) {
+  button.card-back-button {
+    display: none;
+  }
+
+  img#login-logo {
+    width: 50%;
+  }
+
+  card-content.login-card-content {
+      margin: 0;
+      padding: 0;
+  }
+
+  login-card-footer > .md-button {
+    margin: 2px 8px;
+  }
+
+  login-container > p {
+    margin-bottom: 0.2em;
+  }
+}

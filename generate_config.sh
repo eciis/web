@@ -51,7 +51,8 @@ var Config = {
 
 function generate_config_file {
     app_version=$2;
-    
+    config_list=();
+
     case $1 in
         local)
             config_list=${config_local_list[@]};
@@ -71,13 +72,23 @@ function generate_config_file {
     config_list=(
         ${config_list[@]}
         $app_version
-    )
-
+    );
+    echo "${config_list[@]}"
     config=$(create_config ${config_list[@]});
 
-    for file in ${@:2} ; do
+    for file in ${@:3} ; do
         echo "$config" > $file;
     done
 }
 
-generate_config_file dev "minha-versao" a.txt
+function generate_config_file_with_urls {
+    app_version=$1;
+    config_list=(${@:2:5} $app_version);
+    config=$(create_config ${config_list[@]});
+    files=${@:7};
+
+    echo ${config_list[@]}
+    for file in ${files[@]} ; do
+        echo "$config" > $file;
+    done
+}

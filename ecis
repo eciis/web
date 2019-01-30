@@ -7,6 +7,9 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 # ----------------------------
 
+# import generate_config_file function
+source generate_config.sh
+
 SYS_URL='http://localhost:8080'
 
 APP_YAML=app.yaml
@@ -190,7 +193,7 @@ case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | awk '{print $2}')
         set_cache_suffix_sw $APP_VERSION
-        set_app_version_config $APP_VERSION
+        #set_app_version_config $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -223,11 +226,13 @@ case "$1" in
 
         setup_firebase_config development
 
-        set_backend_url local $BACKEND_LOCAL
-        set_landingpage_url local $LANDINGPAGE_LOCAL
-        set_support_url local $SUPPORT_LOCAL
-        set_frontend_url local $FRONTEND_LOCAL
-        set_feature_url local $FEATURE_LOCAL
+        #set_backend_url local $BACKEND_LOCAL
+        #set_landingpage_url local $LANDINGPAGE_LOCAL
+        #set_support_url local $SUPPORT_LOCAL
+        #set_frontend_url local $FRONTEND_LOCAL
+        #set_feature_url local $FEATURE_LOCAL
+
+        generate_config_file local $APP_VERSION $FRONTEND_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $SUPPORT_CONFIG_FILE $FEATURE_CONFIG_FILE
 
         if [[ -n $2 ]] && [ $2 = "--enable_datastore_emulator" ] ; then
             gcloud beta emulators datastore start --host-port=0.0.0.0:8586 &
@@ -296,11 +301,11 @@ case "$1" in
         if [ "$NEW_APP_VERSION" != "" ]; then
             APP_VERSION=$NEW_APP_VERSION
         fi
-        git checkout tags/"$APP_VERSION"
-        catch_error $? "Git checked out to tag $APP_VERSION"
+        #git checkout tags/"$APP_VERSION"
+        #catch_error $? "Git checked out to tag $APP_VERSION"
 
         set_cache_suffix_sw $APP_VERSION
-        set_app_version_config $APP_VERSION
+        #set_app_version_config $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")
@@ -308,6 +313,7 @@ case "$1" in
         do
             case $opt in
                 "development-cis")
+                    ENV="dev"
                     APP_NAME="development-cis"
                     SUPPORT_DOMAIN="support-dot-$APP_NAME.appspot.com"
                     FRONTEND_DOMAIN="frontend-dot-$APP_NAME.appspot.com"
@@ -315,6 +321,7 @@ case "$1" in
                     break
                     ;;
                 "eciis-splab")
+                    ENV="prod"
                     APP_NAME="eciis-splab"
                     SUPPORT_DOMAIN="support.plataformacis.org"
                     FRONTEND_DOMAIN="frontend.plataformacis.org"
@@ -360,32 +367,42 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            url=$version"."$BACKEND_DOMAIN
-            set_backend_url deploy $url
+            #url=$version"."$BACKEND_DOMAIN
+            #set_backend_url deploy $url
 
-            url=$version"."$DOMAIN
-            set_landingpage_url deploy $url
+            #url=$version"."$DOMAIN
+            #set_landingpage_url deploy $url
 
-            url=$version"."$SUPPORT_DOMAIN
-            set_support_url deploy $url
+            #url=$version"."$SUPPORT_DOMAIN
+            #set_support_url deploy $url
 
-            url=$version"."$FRONTEND_DOMAIN
-            set_frontend_url deploy $url
+            #url=$version"."$FRONTEND_DOMAIN
+            #set_frontend_url deploy $url
 
-            url=$version"."$FEATURE_DOMAIN
-            set_frontend_url deploy $url
+            #url=$version"."$FEATURE_DOMAIN
+            #set_frontend_url deploy $url
 
+            urls=(
+                $version"."$BACKEND_DOMAIN
+                $version"."$DOMAIN
+                $version"."$SUPPORT_DOMAIN
+                $version"."$FRONTEND_DOMAIN
+                $version"."$FEATURE_DOMAIN
+            )
+
+            generate_config_file_with_urls $APP_VERSION ${urls[@]} $FRONTEND_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $SUPPORT_CONFIG_FILE $FEATURE_CONFIG_FILE
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
                 gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML queue.yaml
             fi
         else
-            set_backend_url deploy $BACKEND_DOMAIN
-            set_landingpage_url deploy $DOMAIN
-            set_support_url deploy $SUPPORT_DOMAIN
-            set_frontend_url deploy $FRONTEND_DOMAIN
-            set_frontend_url deploy $FEATURE_DOMAIN
+            #set_backend_url deploy $BACKEND_DOMAIN
+            #set_landingpage_url deploy $DOMAIN
+            #set_support_url deploy $SUPPORT_DOMAIN
+            #set_frontend_url deploy $FRONTEND_DOMAIN
+            #set_frontend_url deploy $FEATURE_DOMAIN
+            generate_config_file $ENV $APP_VERSION $FRONTEND_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $SUPPORT_CONFIG_FILE $FEATURE_CONFIG_FILE
             gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML
         fi
 

@@ -134,7 +134,6 @@
             institutionCtrl.timelineButtonsHeaderMob =  {
                 goBack: institutionCtrl.goBack,
                 showDescribe: null,
-                isAdmin: institutionCtrl.isAdmin,
                 follow: institutionCtrl.follow,
                 unfollow: institutionCtrl.unfollow,
                 cropImage: institutionCtrl.cropImage,

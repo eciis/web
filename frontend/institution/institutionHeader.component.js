@@ -12,10 +12,10 @@
              *  show if in timeline and is admin or member.
              */
             instHeaderCtrl.showButtonMore = function showButtonMore(){
-                const isAdmin = _.get(instHeaderCtrl.actionsButtons, 'isAdmin');
+                const isAdmin = instHeaderCtrl.user.isAdmin(instHeaderCtrl.institution.key);
 
                 return instHeaderCtrl.isTimeline() && 
-                    ( !instHeaderCtrl.isMember || isAdmin());
+                    ( !instHeaderCtrl.isMember || isAdmin);
             }
 
             /** Return if current state is registration data on institution.

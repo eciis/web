@@ -1,9 +1,11 @@
 <md-content class="user-profile__container custom-scrollbar">
     <div class="user-profile__header">
         <div class="user-profile__header--background">
-            <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
-                <md-icon class="user-profile__back__icon">arrow_back</md-icon>
-            </md-button>
+            <div class="user-profile__header--shadow">
+                <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
+                    <md-icon class="user-profile__back__icon">arrow_back</md-icon>
+                </md-button>
+            </div>
         </div>
         <img class="user-profile__avatar user-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
     </div>

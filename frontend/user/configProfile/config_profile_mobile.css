@@ -10,8 +10,11 @@
     grid-template-rows: 2fr 1fr;
 }
 
+.user-profile__header--shadow {
+    background-image: linear-gradient(#02554dd2, #009688);
+}
+
 .user-profile__header--background {
-    grid-area: 1/1/2/2;
     background-color: #009688;
     height: 100%;
 }

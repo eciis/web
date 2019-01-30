@@ -407,10 +407,10 @@ class User(ndb.Model):
     
     def __setattr__(self, attr, value):
         """
-        Method of set attributes.
+        Set attribute method.
 
-        if the attribute is of type date and the value passed is a string,
-        it converts to type datetime.
+        if the attribute's type is date and the value received is a string,
+        this function converts it to datetime.
         """
         is_value_datetime = isinstance(value, datetime)
         is_attr_data = attr == 'last_seen_institutions'

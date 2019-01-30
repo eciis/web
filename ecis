@@ -7,7 +7,7 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 # ----------------------------
 
-# import generate_config_file function
+# import generate_config_file and generate_config_file_with_urls functions
 source generate_config.sh
 
 SYS_URL='http://localhost:8080'
@@ -62,85 +62,6 @@ function setup_app_version {
     catch_error $? "Setup APP VERSION with success"
 }
 
-function set_service_url {
-    case "$1" in
-        local)
-            echo "http://$2";
-        ;;
-        deploy)
-            echo "https://$2"
-        ;;
-        *) echo "inválid option"; exit 1;
-        ;;
-    esac
-}
-
-function set_config_file {
-    line=$1;
-    service=$2;
-    url=$3;
-    service_name=$4;
-
-    sed -i "$line s|.*|    $service: '$url',|" $FRONTEND_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $SUPPORT_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $LANDINGPAGE_CONFIG_FILE
-    sed -i "$line s|.*|    $service: '$url',|" $FEATURE_CONFIG_FILE
-
-    catch_error $? "Frontend will use ${bold}$url${_bold} as $service_name."
-    catch_error $? "Support will use ${bold}$url${_bold} as $service_name."
-}
-
-function set_backend_url {
-    url=$(set_service_url $1 $2);
-    service="BACKEND_URL";
-    line=4;
-    service_name="backend";
-    set_config_file $line $service $url $service_name; 
-}
-
-function set_landingpage_url {
-    url=$(set_service_url $1 $2);
-    service="LANDINGPAGE_URL";
-    line=5;
-    service_name="landing page";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_support_url {
-    url=$(set_service_url $1 $2);
-    service="SUPPORT_URL";
-    line=6;
-    service_name="support";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_frontend_url {
-    url=$(set_service_url $1 $2);
-    service="FRONTEND_URL";
-    line=7;
-    service_name="frontend";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_feature_url {
-    url=$(set_service_url $1 $2);
-    service="FEATURE_URL";
-    line=8;
-    service_name="feature";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_app_version_config {
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE
-    catch_error $? "APP VERSION on Frontend $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE
-    catch_error $? "APP VERSION on Support $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE
-    catch_error $? "APP VERSION on LandingPage $1"
-    sed -i "9s|.*|    APP_VERSION: '$1'|" $FEATURE_CONFIG_FILE
-    catch_error $? "APP VERSION on Feature $1"
-}
-
 function set_cache_suffix_sw {
    sed -i "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
    catch_error $? "CACHE_SUFIX on SW $1"
@@ -193,7 +114,6 @@ case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | awk '{print $2}')
         set_cache_suffix_sw $APP_VERSION
-        #set_app_version_config $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
@@ -225,12 +145,6 @@ case "$1" in
         setup_app_version $APP_VERSION
 
         setup_firebase_config development
-
-        #set_backend_url local $BACKEND_LOCAL
-        #set_landingpage_url local $LANDINGPAGE_LOCAL
-        #set_support_url local $SUPPORT_LOCAL
-        #set_frontend_url local $FRONTEND_LOCAL
-        #set_feature_url local $FEATURE_LOCAL
 
         generate_config_file local $APP_VERSION $FRONTEND_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $SUPPORT_CONFIG_FILE $FEATURE_CONFIG_FILE
 
@@ -301,11 +215,10 @@ case "$1" in
         if [ "$NEW_APP_VERSION" != "" ]; then
             APP_VERSION=$NEW_APP_VERSION
         fi
-        #git checkout tags/"$APP_VERSION"
-        #catch_error $? "Git checked out to tag $APP_VERSION"
+        git checkout tags/"$APP_VERSION"
+        catch_error $? "Git checked out to tag $APP_VERSION"
 
         set_cache_suffix_sw $APP_VERSION
-        #set_app_version_config $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")
@@ -367,21 +280,6 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            #url=$version"."$BACKEND_DOMAIN
-            #set_backend_url deploy $url
-
-            #url=$version"."$DOMAIN
-            #set_landingpage_url deploy $url
-
-            #url=$version"."$SUPPORT_DOMAIN
-            #set_support_url deploy $url
-
-            #url=$version"."$FRONTEND_DOMAIN
-            #set_frontend_url deploy $url
-
-            #url=$version"."$FEATURE_DOMAIN
-            #set_frontend_url deploy $url
-
             urls=(
                 $version"."$BACKEND_DOMAIN
                 $version"."$DOMAIN
@@ -397,11 +295,6 @@ case "$1" in
                 gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML queue.yaml
             fi
         else
-            #set_backend_url deploy $BACKEND_DOMAIN
-            #set_landingpage_url deploy $DOMAIN
-            #set_support_url deploy $SUPPORT_DOMAIN
-            #set_frontend_url deploy $FRONTEND_DOMAIN
-            #set_frontend_url deploy $FEATURE_DOMAIN
             generate_config_file $ENV $APP_VERSION $FRONTEND_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $SUPPORT_CONFIG_FILE $FEATURE_CONFIG_FILE
             gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML
         fi

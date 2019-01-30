@@ -25,7 +25,8 @@
         };
 
         profileCtrl.showProperty = (property, limit) => {
-            return Utils.limitString(property, limit) || 'Não informado';
+            const prop = Utils.showProperty(property);
+            return Utils.limitString(prop, limit);
         };
 
         profileCtrl.goToConfigProfile = function goToConfigProfile() {

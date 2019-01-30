@@ -1158,3 +1158,9 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 .content-main {
     height: 100%;
 }
+
+.responsive__title {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

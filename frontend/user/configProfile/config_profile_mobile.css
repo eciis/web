@@ -16,6 +16,10 @@
     height: 100%;
 }
 
+.user-profile__back__icon {
+    color: white;
+}
+
 .user-profile__avatar--position {
     justify-self: center;
     position: absolute;

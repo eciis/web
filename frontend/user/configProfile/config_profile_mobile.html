@@ -1,8 +1,13 @@
 <md-content class="user-profile__container custom-scrollbar">
     <div class="user-profile__header">
-        <div class="user-profile__header--background"></div>
+        <div class="user-profile__header--background">
+            <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
+                <md-icon class="user-profile__back__icon">arrow_back</md-icon>
+            </md-button>
+        </div>
         <img class="user-profile__avatar user-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
     </div>
+    
     <div class="user-profile__info">
         <p class="user-profile__info--name responsive__title">
             {{ configProfileCtrl.showProperty(configProfileCtrl.user.name) }}
@@ -17,6 +22,7 @@
             <p class="user-profile__info--item">{{ configProfileCtrl.showProperty(configProfileCtrl.user.cpf) }}</p>
         </div>
     </div>
+
     <p class="user-profile__section__title">Vínculos Institucionais</p>
     <div class="user-profile__content">
         <div class="user-profile__data" 

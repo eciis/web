@@ -199,6 +199,10 @@
             window.open(url, '_blank');
         };
 
+        configProfileCtrl.goBack = _ => {
+            window.history.back();
+        };
+
         function deleteUser() {
             var promise = UserService.deleteAccount();
             promise.then(function success() {

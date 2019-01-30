@@ -24,9 +24,10 @@
 }
 
 .title-inst{
-    font-size:1.4em;
+    font-size:1em;
     font-weight: 500;
-    margin-left:0.5em;
+    margin-left: 1.3em;
+    margin-right: 0.3em;
     margin-bottom:0.2em;
 }
 
@@ -63,9 +64,9 @@
 }
 
 .inst-image-mobile-timeline{
-    height: 9em;
-    width: 9em;
-    margin: -7em auto -0.8em auto;
+    height: 8em;
+    width: 8em;
+    margin: -4.5em auto -0.8em auto;
     box-shadow: 0 -1px 5px 0px grey;
     border-radius: 50%;
 }
@@ -95,7 +96,7 @@
     display: grid;
     grid-template-columns: 53px auto;
     align-items: center;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), transparent);
+    background-image: linear-gradient(rgba(68,68,68,0.5),rgba(68,68,68,0.5),rgba(68,68,68,0.5),transparent);
 }
 
 #buttons-navbar-inst-container-end{
@@ -143,16 +144,13 @@
         height: 10em;
     }
     .title-inst{
-        font-size:1.5em;
+        font-size:1.3em;
     }
     .title-inst-page{
         font-size:1.2em;
     }
     .image-cover-inst-timeline {
         height: 14em;
-    }
-    .inst-image-mobile-timeline{
-        margin: -5.5em auto -0.8em auto;
     }
 }
 
@@ -164,7 +162,7 @@
         height: 11em;
     }
     .title-inst{
-        font-size:1.45em;
+        font-size:1.3em;
     }
     .title-inst-page{
         font-size:1.3em;
@@ -173,7 +171,9 @@
         height: 15em;
     }
     .inst-image-mobile-timeline{
-        margin: -6em auto -0.8em auto;
+        height: 9em;
+        width: 9em;
+        margin: -5.6em auto -0.8em auto;
     }
 }
 
@@ -186,7 +186,7 @@
         height: 11em;
     }
     .title-inst{
-        font-size:1.45em;
+        font-size:1.4em;
     }
     .title-inst-page{
         font-size:1.4em;
@@ -195,6 +195,8 @@
         height: 17em;
     }
     .inst-image-mobile-timeline{
+        height: 10em;
+        width: 10em;
         margin: -5.6em auto -0.8em auto;
     }
 }
@@ -208,15 +210,17 @@
         height: 11em;
     }
     .title-inst{
-        font-size:1.6em;
+        font-size:1.4em;
     }
     .title-inst-page{
         font-size:1.5em;
     }
     .image-cover-inst-timeline {
-        height: 20em;
+        height: 19em;
     }
     .inst-image-mobile-timeline{
-        margin: -6em auto -0.8em auto;
+        height: 10em;
+        width: 10em;
+        margin: -5.6em auto -0.8em auto;
     }
 }

@@ -10,7 +10,7 @@
      * <contactsSidenav contacts="{{ctrl.someContactsArray}}"></contactsSidenav>
      */
     angular.module("webchat").component("contactsSidenav", {
-        templateUrl: "app/components/contacts/sidenav/contacts-sidenav.html",
+        templateUrl: "app/components/contacts/contacts-sidenav.html",
         controller: contactsSidenavController,
         controllerAs: "contactsSidenavCtrl",
         bindings: {

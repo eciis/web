@@ -1,0 +1,11 @@
+.toolbar__container {
+    padding: 10px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.toolbar__search-bar {
+    width: 100%;
+}

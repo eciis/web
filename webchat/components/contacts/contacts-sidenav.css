@@ -1,0 +1,19 @@
+.contacts-sidenav {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 56px calc(100% - 56px);
+    grid-template-areas:
+            'sidenav__toolbar'
+            'sidenav__list';
+}
+
+.contacts-sidenav__toolbar {
+    height: 100%;
+    grid-area: sidenav__toolbar;
+}
+
+.contacts-sidenav__list {
+    grid-area: sidenav__list;
+    overflow-y: scroll;
+}

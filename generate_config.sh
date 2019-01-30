@@ -73,7 +73,6 @@ function generate_config_file {
         ${config_list[@]}
         $app_version
     );
-    echo "${config_list[@]}"
     config=$(create_config ${config_list[@]});
 
     for file in ${@:3} ; do

@@ -127,10 +127,10 @@
         };
 
         dialogCtrl.cancelCreation = () => {
-            if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE))
+            if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)){
                 Utils.resetToolbarDisplayStyle();
                 $state.go(STATES.EVENTS);
-
+            }
             $mdDialog.hide();
         };
 

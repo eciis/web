@@ -98,27 +98,6 @@
             loadButtonsMenu();
         }
 
-         /** Create the object that contais all functions necessary in institution header,
-         * when is in timeline page on mobile.
-         */
-        function loadTimelineButtonsHeaderMob(){
-            if(institutionCtrl.isTimelineMobile){
-                institutionCtrl.timelineButtonsHeaderMob =  {
-                    goBack: institutionCtrl.goBack,
-                    showDescribe: null,
-                    isAdmin: institutionCtrl.isAdmin,
-                    follow: institutionCtrl.follow,
-                    unfollow: institutionCtrl.unfollow,
-                    cropImage: institutionCtrl.cropImage,
-                    showImageCover: institutionCtrl.showImageCover,
-                    getLimitedName: institutionCtrl.getLimitedName,
-                    requestInvitation: institutionCtrl.requestInvitation
-                }
-                loadButtonsMenu();
-            }
-        }
-
-
         /**
          * Returns the key of the current institution
          * that the controller is responsible for.

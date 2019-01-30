@@ -405,7 +405,7 @@
         spyOn(Utils, 'isMobileScreen').and.returnValue(false);
         controller.cancelCreation();
         expect(mdDialog.hide).toHaveBeenCalled();
-        //expect(state.go).not.toHaveBeenCalled();
+        expect(state.go).not.toHaveBeenCalled();
       });
     });
 

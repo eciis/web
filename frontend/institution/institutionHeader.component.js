@@ -12,7 +12,8 @@
              *  show if in timeline and is admin or member.
              */
             instHeaderCtrl.showButtonMore = function showButtonMore(){
-                const isAdmin = instHeaderCtrl.user.isAdmin(instHeaderCtrl.institution.key);
+                const institutionKey = instHeaderCtrl.institution && instHeaderCtrl.institution.key;
+                const isAdmin = instHeaderCtrl.user.isAdmin(institutionKey);
 
                 return instHeaderCtrl.isTimeline() && 
                     ( !instHeaderCtrl.isMember || isAdmin);

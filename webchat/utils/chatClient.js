@@ -3,9 +3,14 @@
   const app = angular.module('webchat');
 
   app.factory('ChatClient', ['Chat', 'WEBSOCKET', (Chat, WEBSOCKET) => {
+    /**
+     * Create a new MediaStream with a static picture of the user avatar,
+     * or a standard gravatar icon if the user has no avatar
+     * @param {string} avatarUrl - url of the user avatar
+     */
     const createEmptyStream = (avatarUrl) => {
       return new Promise((resolve, reject) => {
-        if (avatarUrl.indexOf('avatar.png') >= 0) {
+        if (_.isEmpty(avatarUrl) || avatarUrl.indexOf('avatar.png') >= 0) {
           avatarUrl = 'http://www.gravatar.com/avatar'
         }
 

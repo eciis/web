@@ -1,0 +1,14 @@
+<div class="user-profiles__container">
+    <p class="user-profiles__title">Vínculos Institucionais</p>
+    <div class="user-profiles__content">
+        <div class="user-profiles__data" ng-repeat="profile in userProfileCtrl.profiles track by $index">
+            <img class="user-profiles__avatar" ng-src="{{ userProfileCtrl.getImage(profile) }}" 
+                ng-click="userProfileCtrl.edit(profile)"/>
+            <div>
+                <p class="responsive__title">{{profile.institution.name}}</p>
+                <user-profile-info office="profile.office" phone="profile.phone" email="profile.email"></user-profile-info>
+            </div>
+            <md-divider></md-divider>
+        </div>
+    </div>
+</div>

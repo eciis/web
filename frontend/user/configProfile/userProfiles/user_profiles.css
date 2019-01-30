@@ -1,0 +1,46 @@
+.user-profiles__container {
+    display: grid;
+    place-items: center;
+    padding: 0.5em;
+}
+
+.user-profiles__title {
+    text-transform: uppercase;
+    color: #004D41;
+    font-weight: 500;
+}
+
+.user-profiles__content {
+    display: grid;
+    grid-row-gap: 1em;
+    margin-top: 1em;
+}
+
+.user-profiles__data {
+    display: grid;
+    grid-template-columns: 20% auto;
+    grid-template-rows: 1fr 10%;
+}
+
+.user-profiles__data > img {
+    height: 3em;
+    width: 3em;
+    justify-self: center;
+    border-radius: 50%;
+}
+
+.user-profiles__data > div {
+    min-width: 0;
+    max-width: 95%; 
+}
+
+.user-profiles__data > div > p {
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.user-profiles__data > md-divider {
+    grid-column: 1/3; 
+}

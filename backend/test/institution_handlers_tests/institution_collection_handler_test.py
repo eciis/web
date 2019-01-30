@@ -46,4 +46,4 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
                          "The name of institituion should be equal to the first_inst name")
 
         self.assertEqual(all_institutions['institutions'][0]['name'], third_inst.name,
-                         "The name of institution should be equal to the 1hird_inst name")
+                         "The name of institution should be equal to the third_inst name")

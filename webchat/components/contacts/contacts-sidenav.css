@@ -14,6 +14,7 @@
 }
 
 .contacts-sidenav__list {
+    height: 100%;
     grid-area: sidenav__list;
     overflow-y: scroll;
 }

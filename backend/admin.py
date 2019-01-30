@@ -523,8 +523,38 @@ class ResetHandler(BaseHandler):
         jsonList.append({"msg": "database initialized with a few posts"})
 
         self.response.write(json.dumps(jsonList))
+
+class UpdateHandler(BaseHandler):
+    """Temporary handler.
+    
+    It handles with the entities update for some attributes.
+    """
+
+    def get(self):
+        """Retrieve all users and institutions to
+        create their new attributes avoiding an error in production.
+        """
+        from datetime import datetime
+
+        users = User.query().fetch()
+
+        for user in users:
+            user.last_seen_institutions = datetime.now()
+            user.put()
+
+        existing_institutions = Institution.query().fetch()
+        
+        for institution in existing_institutions:
+            institution.creation_date = datetime.now()
+            institution.put()
+    
+        self.response.write("worked")
+        
+
+
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
+    ('/admin/update', UpdateHandler)
 ], debug=True)
 
 

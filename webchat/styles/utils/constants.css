@@ -1,0 +1,7 @@
+:root {
+    --custom-scrollbar-background: #ccc;
+    --custom-scrollbar-color: #009688;
+
+    --responsive-mobile-width: 450px;
+    --responsive-desktop-width: 1280px;
+}

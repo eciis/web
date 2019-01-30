@@ -1,7 +1,7 @@
 .user-profile__container {
     display: grid;
-    grid-template-columns: 100vw;
     grid-template-rows: 17em min-content auto;
+    overflow-x: hidden;
 }
 
 .user-profile__header {
@@ -70,8 +70,6 @@
 
 .user-profile__content {
     display: grid;
-    grid-template-columns: 100vw;
-    grid-template-rows: auto;
     grid-row-gap: 1em;
     margin-top: 1em;
 }

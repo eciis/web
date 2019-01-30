@@ -182,10 +182,6 @@
             return false;
         };
 
-        service.getChatClient = () => {
-          return chatClient;
-        }
-
         /**
         * Execute each function stored to be thriggered when user logout
         * is called.

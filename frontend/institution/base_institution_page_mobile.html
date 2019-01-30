@@ -15,34 +15,10 @@
                 <hr id="divider-institution"/>
                 <div id="buttons-institution-page">
                     <md-button md-colors="{background: 'teal-500'}"
-                        ng-click="institutionCtrl.goToRegistrationData(institutionCtrl.institution.key)">
-                        <md-icon class="icon-button-menu-inst">assignment</md-icon>
-                        CADASTRO
-                    </md-button>
-                    <md-button md-colors="{background: 'teal-500'}"
-                        ng-click="institutionCtrl.goToLinks(institutionCtrl.institution.key)">
-                        <md-icon class="icon-button-menu-inst">account_balance</md-icon>
-                        VÍNCULOS
-                    </md-button>
-                    <md-button md-colors="{background: 'teal-500'}"
-                         ng-click="institutionCtrl.goToMembers(institutionCtrl.institution.key)">
-                        <md-icon class="icon-button-menu-inst">account_circle</md-icon>
-                        MEMBROS
-                    </md-button>
-                    <md-button md-colors="{background: 'teal-500'}"
-                        ng-click="institutionCtrl.portfolioDialog($event)">
-                        <md-icon class="icon-button-menu-inst">description</md-icon>
-                        PORTFOLIO
-                    </md-button>
-                    <md-button md-colors="{background: 'teal-500'}"
-                        ng-click="institutionCtrl.goToFollowers(institutionCtrl.institution.key)">
-                        <md-icon class="icon-button-menu-inst">people</md-icon>
-                        SEGUIDORES
-                    </md-button>
-                    <md-button md-colors="{background: 'teal-500'}"
-                        ng-click="institutionCtrl.goToEvents(institutionCtrl.institution.key)">
-                        <md-icon class="icon-button-menu-inst">date_range</md-icon>
-                        EVENTOS
+                        ng-repeat="button in institutionCtrl.buttonsMenu"
+                        ng-click="button.onClick(button.parameters)">
+                        <md-icon class="icon-button-menu-inst">{{button.icon}}</md-icon>
+                        {{button.label}}
                     </md-button>
                 </div>
             </div>

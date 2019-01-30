@@ -31,6 +31,50 @@
             loadInstitution();
         };
 
+        /** Creating objects with the properties of the institution cover menu buttons.
+         */
+        function loadButtonsMenu(){
+             institutionCtrl.buttonsMenu =  [
+                { 
+                    'label': 'CADASTRO',
+                    'icon': 'assignment',
+                    'onClick': institutionCtrl.goToRegistrationData,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'VÍNCULOS',
+                    'icon': 'account_balance',
+                    'onClick': institutionCtrl.goToLinks,
+                    'parameters': institutionCtrl.institution.key
+
+                },
+                { 
+                    'label': 'MEMBROS',
+                    'icon': 'account_circle',
+                    'onClick': institutionCtrl.goToMembers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'PORTFOLIO',
+                    'icon': 'description',
+                    'onClick': institutionCtrl.portfolioDialog,
+                    'parameters': '$event'
+                },
+                { 
+                    'label': 'SEGUIDORES',
+                    'icon': 'people',
+                    'onClick': institutionCtrl.goToFollowers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'EVENTOS',
+                    'icon': 'date_range',
+                    'onClick': institutionCtrl.goToEvents,
+                    'parameters': institutionCtrl.institution.key
+                }
+            ]
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response);
@@ -40,27 +84,37 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                loadTimelineButtonsHeaderMob();
+                loadPropertiesInstCover();
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
 
-          /** Create the object that contais all functions necessary in institution header,
+        /** Created objects with button properties for the institution cover.
+         */
+        function loadPropertiesInstCover(){
+            loadTimelineButtonsHeaderMob();
+            loadButtonsMenu();
+        }
+
+         /** Create the object that contais all functions necessary in institution header,
          * when is in timeline page on mobile.
          */
         function loadTimelineButtonsHeaderMob(){
-            institutionCtrl.timelineButtonsHeaderMob =  {
-                goBack: institutionCtrl.goBack,
-                showDescribe: null,
-                isAdmin: institutionCtrl.isAdmin,
-                follow: institutionCtrl.follow,
-                unfollow: institutionCtrl.unfollow,
-                cropImage: institutionCtrl.cropImage,
-                showImageCover: institutionCtrl.showImageCover,
-                getLimitedName: institutionCtrl.getLimitedName,
-                requestInvitation: institutionCtrl.requestInvitation
+            if(institutionCtrl.isTimelineMobile){
+                institutionCtrl.timelineButtonsHeaderMob =  {
+                    goBack: institutionCtrl.goBack,
+                    showDescribe: null,
+                    isAdmin: institutionCtrl.isAdmin,
+                    follow: institutionCtrl.follow,
+                    unfollow: institutionCtrl.unfollow,
+                    cropImage: institutionCtrl.cropImage,
+                    showImageCover: institutionCtrl.showImageCover,
+                    getLimitedName: institutionCtrl.getLimitedName,
+                    requestInvitation: institutionCtrl.requestInvitation
+                }
+                loadButtonsMenu();
             }
         }
 
@@ -183,6 +237,7 @@
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
+            console.log(":::");
             UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey});
         };
 

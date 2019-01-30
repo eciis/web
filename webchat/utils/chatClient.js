@@ -156,8 +156,8 @@
 
       /**
        * Handles events sent by the websocket server,
-       * parsing the string content on {e.data} as a javascript regular object.
-       * @param {MessageEvent} e - websocket event
+       * parsing the string content on {event.data} as a javascript regular object.
+       * @param {MessageEvent} event - websocket event
        *
        * @listens websocket#call-request
        * @listens websocket#call-answer
@@ -171,28 +171,17 @@
         console.log('ws event: ', msg.type);
         console.log(msg);
 
-        switch (msg.type) {
-          case 'call-request':
-            this.handleCallRequest(msg);
-            break;
-          case 'call-answer':
-            this.handleCallAnswer(msg);
-            break;
-          case 'rpc-offer':
-            this.handleRpcOffer(msg);
-            break;
-          case 'rpc-answer':
-            this.handleRpcAnswer(msg);
-            break;
-          case 'ice-candidate-received':
-            this.handleCandidateReceived(msg);
-            break;
-          case 'user-list-update':
-            this.handleUserListUpdate(msg);
-            break;
-          default:
-            this.emit('ws-message', msg);
-            break;
+        const handlersMap = {
+          'call-request': this.handleCallRequest.bind(this),
+          'call-answer': this.handleCallAnswer.bind(this),
+          'rpc-offer': this.handleRpcOffer.bind(this),
+          'rpc-answer': this.handleRpcAnswer.bind(this),
+          'ice-candidate-received': this.handleCandidateReceived.bind(this),
+          'user-list-update': this.handleUserListUpdate.bind(this),
+        }
+
+        if (_.has(handlersMap, msg.type)) {
+          handlersMap[msg.type](msg);
         }
       }
 

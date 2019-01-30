@@ -1,4 +1,4 @@
-.home-content {
+.home__content {
     height: 100%;
     display: grid;
     grid-template-columns: max-content auto;
@@ -7,9 +7,13 @@
             'sidenav chat';
 }
 
-.home-sidenav {
+.home__sidenav {
     height: 100%;
     max-height: 100%;
     width: 100%;
     grid-area: sidenav;
+}
+
+.home__chat {
+    grid-area: chat;
 }

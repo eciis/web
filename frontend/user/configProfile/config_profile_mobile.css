@@ -52,20 +52,20 @@
 
 .user-profile__info--data {
     font-size: 0.8em;
-    margin: 1em 0 1em 4em;
+    margin: 1em 0 1em 2.5em;
 }
 
 .user-profile__info--data > span {
     color: #009688;
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .user-profile__info--divider {
     border: none;
     background-color: #84C45E;
     height: 4px;
-    width: 25%;
+    width: 35%;
 }
 
 .user-profile__section__title {

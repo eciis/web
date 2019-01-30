@@ -86,7 +86,6 @@ function generate_config_file_with_urls {
     config=$(create_config ${config_list[@]});
     files=${@:7};
 
-    echo ${config_list[@]}
     for file in ${files[@]} ; do
         echo "$config" > $file;
     done

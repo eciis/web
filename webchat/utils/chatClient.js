@@ -3,6 +3,26 @@
   const app = angular.module('webchat');
 
   app.factory('ChatClient', ['Chat', 'WEBSOCKET', (Chat, WEBSOCKET) => {
+    const createEmptyStream = (avatarUrl) => {
+      return new Promise((resolve, reject) => {
+        if (avatarUrl.indexOf('avatar.png') >= 0) {
+          avatarUrl = 'http://www.gravatar.com/avatar'
+        }
+
+        const canvas = Object.assign(document.createElement('canvas'), { width: 320, height: 320 });
+        const ctx = canvas.getContext('2d');
+        const avatar = new Image();
+        avatar.crossOrigin = 'anonymous';
+
+        avatar.onload = () => {
+          ctx.drawImage(avatar, 0, 0, 320, 320);
+          const stream = canvas.captureStream(1);
+          resolve(stream);
+        }
+        avatar.src = avatarUrl;
+      });
+    }
+
     const ChatClient = class ChatClient {
       /**
        * Create a new ChatClient (WebRTC wrapper),
@@ -10,16 +30,22 @@
        * The ChatClient also mediates connections by Chat objects
        * before a RPC connection is succesfully completed.
        * @param {string} id - firebase id of the user
+       * @param {string} avatarUrl - url of the user avatar
        */
-      constructor(id) {
+      constructor(id, avatarUrl) {
         this.id = id;
         this.ws = {};
         this.retries = 0;
         this.eventHandlers = {};
         this.chats = {};
         this.users = {};
-        this.stream = undefined;
         this.startWebsocket();
+        this._emptyStream;
+        createEmptyStream(avatarUrl).then(s => this._emptyStream = s);
+      }
+
+      get emptyStream() {
+        return this._emptyStream;
       }
 
       /**
@@ -298,9 +324,8 @@
        * @param {string} id - id of the user to request a call
        * @param {MediaStream} stream - MediaStream video/audio object of the caller
        */
-      requestCall(id, stream) {
-        this.stream = this.stream || stream;
-        this.chats[id] = this.createChat(id, this.stream);
+      requestCall(id, stream = this.emptyStream) {
+        this.chats[id] = this.createChat(id, stream);
         this.sendToWebsocket('call-request', id, {});
       }
 
@@ -309,9 +334,8 @@
        * @param {string} id - id of the user who has called.
        * @param {MediaStream} stream - MediaStream video/audio object of the answerer
        */
-      acceptCall(id, stream) {
-        this.stream = this.stream || stream;
-        this.createChat(id, this.stream);
+      acceptCall(id, stream = this.emptyStream) {
+        this.createChat(id, stream);
         this.sendToWebsocket('call-answer', id, {});
       }
 

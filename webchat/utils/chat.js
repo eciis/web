@@ -12,6 +12,7 @@
        */
       constructor(stream, selfId) {
         this.selfId = selfId;
+        this._selfStream = stream;
         this.rpc = new RTCPeerConnection([{
           url: 'stun:stun.l.google.com:19302',
           url: 'stun:stun2.l.google.com:19302',
@@ -28,6 +29,10 @@
         this.rpc.oniceconnectionstatechange = this.handleIceConnectionState.bind(this);
         this.rpc.onsignalingstatechange = this.handleState.bind(this);
         this._currentMessages = [];
+      }
+
+      get selfStream() {
+        return this._selfStream;
       }
 
       /**

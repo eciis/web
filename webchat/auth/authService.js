@@ -206,7 +206,7 @@
             if ($window.localStorage.userInfo) {
                 const parse = JSON.parse($window.localStorage.userInfo);
                 userInfo = new User(parse);
-                chatClient = new ChatClient(userInfo.key);
+                chatClient = new ChatClient(userInfo.key, userInfo.photo_url);
             }
         }
 

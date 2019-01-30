@@ -57,7 +57,7 @@
 
         // Sends a signin message to the websocket as soon as the websocket connects
         this.ws.onopen = () => {
-          this.sendToWebsocket('signin', '', {});
+          this.sendServerMessage('signin');
           this.retries = 0;
         };
 
@@ -120,6 +120,15 @@
       sendToWebsocket(type, to, data) {
         const msg = { type, from: this.id, to, data }
         this.ws.send(JSON.stringify(msg));
+      }
+
+      /**
+       * Sends a message (JSON string) to the server, withou a target user.
+       * @param {string} type - type of message
+       * @param {object} data - contents of the message. defaults to empty object;
+       */
+      sendServerMessage(type, data = {}) {
+        this.sendToWebsocket(type, '', data);
       }
 
       /**
@@ -343,7 +352,7 @@
        * Requests the websocket a list of online users.
        */
       requestUsers() {
-        this.sendToWebsocket('user-list-request', '', {});
+        this.sendServerMessage('user-list-request');
       }
     }
 

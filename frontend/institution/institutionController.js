@@ -237,7 +237,6 @@
         };
 
         institutionCtrl.goToRegistrationData = function goToRegistrationData(institutionKey) {
-            console.log(":::");
             UtilsService.selectNavOption(STATES.INST_REGISTRATION_DATA, {institutionKey: institutionKey});
         };
 

@@ -17,6 +17,12 @@
             error: 'error',
         });
 
+    app.constant('WEBSOCKET', {
+      hostname: window.location.hostname,
+      port: 8090,
+      maxRetries: 5,
+    });
+
     app.config((STATES, $mdIconProvider, $mdThemingProvider, $stateProvider, $urlRouterProvider,
                 $httpProvider, $locationProvider) => {
         $mdIconProvider.fontSet('md', 'material-icons');

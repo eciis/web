@@ -82,7 +82,6 @@
       retryWebSocket() {
         if (this.retries < WEBSOCKET.maxRetries) {
           this.retries += 1;
-          console.log('Retrying connection, retry: ', this.retries);
           setTimeout(function () {
             this.startWebsocket()
           }.bind(this), 5000)
@@ -173,8 +172,6 @@
        */
       handleWebSocket(event) {
         const msg = JSON.parse(event.data);
-        console.log('ws event: ', msg.type);
-        console.log(msg);
 
         const handlersMap = {
           'call-request': this.handleCallRequest.bind(this),
@@ -246,7 +243,6 @@
        */
       handleRpcOffer(msg) {
         const id = msg.id;
-        console.log('offer received, answering ', id);
         const chat = this.chats[id];
         chat.on('ice-candidate-discovered', e => this.handleDiscoveredIceCandidates(id, e));
         chat.accept(msg.data).then(connection => {
@@ -317,7 +313,6 @@
        */
       handleDiscoveredIceCandidates(id, event) {
         if (event.candidate) {
-          console.log('candidate discovered', event.candidate);
           this.sendToWebsocket('ice-candidate', id, event.candidate);
         }
       }

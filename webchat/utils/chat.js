@@ -68,7 +68,6 @@
        * @param {Object} candidate - RTCIceCandidate to be added to this connection
        */
       receiveCandidate(candidate) {
-        console.log('candidate received', candidate);
         const rtcCandidate = new RTCIceCandidate(candidate);
         this.rpc.addIceCandidate(rtcCandidate);
       }
@@ -139,11 +138,7 @@
         return this.rpc.createOffer().then(offer => {
           return this.rpc.setLocalDescription(offer).then(() => {
             return offer;
-          }).catch(e => {
-            console.log('Erro em local description apos offer', e);
-          });
-        }).catch(e => {
-          console.log('Erro em offer', e);
+          })
         });
       }
 
@@ -166,9 +161,7 @@
             return this.rpc.setLocalDescription(answer).then(() => {
               return answer;
             })
-          }).catch(e => {
-            console.log('Erro em answer', e);
-          });
+          })
         })
       }
 

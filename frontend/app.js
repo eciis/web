@@ -568,6 +568,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        //initServiceWorker();
     })();
 })();

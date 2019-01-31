@@ -6,7 +6,8 @@
         const userProfileInfoCtrl = this;
         
         userProfileInfoCtrl.showProperty = (property, limit) => {
-            return Utils.limitString(property, limit) || 'Não informado';
+            const prop = Utils.showProperty(property);
+            return Utils.limitString(prop, limit);
         };
     };
 

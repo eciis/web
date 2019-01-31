@@ -4,6 +4,22 @@
     </md-button>
     <h3 class="edit-registration-top-color">EDITAR DADOS CADASTRAIS</h3>
 </div>
+<div class="row">
+    <div class="avatar" align="center">
+        <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
+            width="100px" height="100px"/>
+    </div>
+    <div class="info" align="center">
+        <div class="title">
+            <md-button ng-click="null"
+                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+                ngf-accept="'image/*'" ngf-max-size="5MB" class="md-raised"
+                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
+                <b>Trocar imagem</b>
+            </md-button>
+        </div>
+    </div>
+</div>
 <div class="edit-registration-data-grid">
     <div class="inst-registration-data-name">
         <md-input-container class="edit-registration-data-name" md-no-float class="md-block">

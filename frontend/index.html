@@ -6,7 +6,7 @@
   <base href="/" />
 
   <title>Plataforma CIS</title>
-  
+
   <!--Favicon-->
   <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
 
@@ -29,7 +29,7 @@
   <meta name="msapplication-TileImage" content="app/images/icons/cis-64x64.png">
   <meta name="msapplication-TileColor" content="#2F3BA2">
   <meta name="theme-color" content="#009688"/>
-  
+
   <!-- ngScrollbar style sheet -->
   <link rel="stylesheet" href="app/libs/jquery.mCustomScrollbar.css"/>
 
@@ -38,6 +38,7 @@
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
   <link rel="stylesheet" type="text/css" href="app/user/config-profile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/edit_profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
@@ -58,17 +59,17 @@
   <link rel="stylesheet" type="text/css" href="app/sideMenu/side_menu.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/institutional_links_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/instLinks/inst_links.css">
-  
+
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
   <div flex class="content-main" layout="column" ui-view="main"></div>
 
-  <script> 
+  <script>
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
-    function $buo_f(){ 
-     var e = document.createElement("script"); 
-     e.src = "//browser-update.org/update.min.js"; 
+    function $buo_f(){
+     var e = document.createElement("script");
+     e.src = "//browser-update.org/update.min.js";
      document.body.appendChild(e);
     };
     try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
@@ -144,7 +145,7 @@
   <script src="app/sideMenu/factories/homeItems.factory.js"></script>
   <script src="app/sideMenu/factories/manageInstItems.factory.js"></script>
   <script src="app/sideMenu/sideMenuItem/sideMenuItem.component.js"></script>
-  
+
   <!--Utils-->
   <script src="app/utils/utils.js"></script>
   <script src="app/utils/messageService.js"></script>

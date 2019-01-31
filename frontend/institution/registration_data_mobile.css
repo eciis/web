@@ -135,6 +135,28 @@
     width: 86%;
 }
 
+.edit-registration-top-color, .edit-registration-back-button {
+    color:#707070
+}
+
+.edit-registration-top-icon {
+    font-size: 2.5em;
+}
+
+.edit-registration-back-button {
+    margin-bottom: 0.9em !important;
+    margin-left: -0.5em !important;
+}
+
+.edit-registration-data-top-bar {
+    height: 3em;
+    width: 100%;
+    align-items: center;
+    /*position: fixed;*/
+    z-index: 3;
+    box-shadow: 0px 3px 6px grey;
+}
+
 @media screen and (max-height: 640px) {
 
     .inst-registration-data-subtitle {

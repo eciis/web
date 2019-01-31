@@ -250,7 +250,8 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/edit_info.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
+                            "app/institution/edit_info_mobile.html", 475)
                     }
                 }
             })

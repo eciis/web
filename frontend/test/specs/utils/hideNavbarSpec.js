@@ -16,22 +16,22 @@
     }));
 
     describe('isTopToolbarAllowed', function(){
-        it("should be true", function() {
+        it("In state NOTIFICATION should show top toolbar", function() {
             state.current.name = STATES_CONST.NOTIFICATION;
             expect(hideDirective.isTopToolbarAllowed()).toBeTruthy();
         })
-        it("should be false", function() {
+        it("In all nested state of INSTITUTION shouldn't show top toolbar", function() {
             state.current.name = STATES_CONST.INST_TIMELINE;
             expect(hideDirective.isTopToolbarAllowed()).toBeFalsy();
         })
     })
 
     describe('isBottomToolbarAllowed', function(){
-        it("should be false", function() {
+        it("In state CREATE_EVENT shouldn't show top toolbar", function() {
             state.current.name = STATES_CONST.CREATE_EVENT;
             expect(hideDirective.isBottomToolbarAllowed()).toBeFalsy();
         })
-        it("should be true", function() {
+        it("In all nested state of INSTITUTION should show top toolbar", function() {
             state.current.name = STATES_CONST.INST_TIMELINE;
             expect(hideDirective.isBottomToolbarAllowed()).toBeTruthy();
         })
@@ -48,22 +48,17 @@
             spyOn(hideDirective, 'hideElement').and.callThrough();
         })
         it("When the current state is any of the states of the institution," +
-        "you should set the lower toolbar element of the property to None.", function() {
+        "you should set the bottom and top toolbar element of the property to None.", function() {
             state.current.name = STATES_CONST.INST_TIMELINE;
             scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
             scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();
+            expect(scope.isStateAllowedTopMobile).toBeFalsy();
+            expect(scope.isStateAllowedBottom).toBeTruthy();
 
             scope.initialToolbarDisplayState();
+
             expect(hideDirective.hideElement).toHaveBeenCalledWith(hideDirective.bottomToolbar);
             expect(hideDirective.bottomToolbar.style).toEqual({display: 'none'});
-        })
-        it("should not hide the bottom toolbar", function() {
-            state.current.name = STATES_CONST.CREATE_EVENT;
-            scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
-            scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();
-            
-            scope.initialToolbarDisplayState();
-            expect(hideDirective.hideElement).toHaveBeenCalledWith(hideDirective.topTollbar);
             expect(hideDirective.topTollbar.style).toEqual({display: 'none'});
         })
     })

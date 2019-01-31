@@ -9,7 +9,7 @@
     .fill-screen {
         min-height: 0;
     }
-} 
+}
 
 .card {
     padding-top: 20px;
@@ -96,10 +96,10 @@
 }
 
 .inst-desc p {
-    text-overflow: ellipsis; 
+    text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100%; 
-    margin: 0; 
+    width: 100%;
+    margin: 0;
     overflow: hidden;
 }
 
@@ -195,7 +195,7 @@
 }
 
 .text {
-    word-wrap: break-word; 
+    word-wrap: break-word;
     text-align: left;
     white-space: pre-line;
   }
@@ -345,7 +345,7 @@ a:active {
     0% {
       opacity: 0;
     }
-  
+
     60% {
       opacity: 1;
     }
@@ -614,13 +614,16 @@ a:active {
 }
 
 .rounded-circle {
-    margin-right: 10px;
     width: 45px;
     height: 45px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
     box-shadow: 0 0 1px 0px grey;
+}
+
+.rounded-circle.event-date {
+  margin-right: 10px;
 }
 
 .grey-circle {
@@ -920,10 +923,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 }
 
 .notifications-menu {
-    overflow-y: hidden; 
-    padding: 1rem 1rem 0 1rem; 
-    max-height: 30rem; 
-    max-width: 25rem; 
+    overflow-y: hidden;
+    padding: 1rem 1rem 0 1rem;
+    max-height: 30rem;
+    max-width: 25rem;
 }
 
 .grey-background {
@@ -961,11 +964,11 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 
 .status-invite-adm {
-    border: solid; 
-    height: 35px; 
+    border: solid;
+    height: 35px;
     width: 148px;
-    text-align: center; 
-    border-color: rgb(0, 150, 136); 
+    text-align: center;
+    border-color: rgb(0, 150, 136);
     border-radius: 3px;
     font-weight: bold;
 }
@@ -1021,17 +1024,17 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 
 .inst-card-cover {
     height: 145px;
-    width: 100%; 
-    background-position: 50% 0%; 
-    background-size:cover; 
+    width: 100%;
+    background-position: 50% 0%;
+    background-size:cover;
     margin-bottom: 20px;
     box-shadow: 0px 0px 20px grey;
 }
 
 .small-text-share-post {
-    text-overflow: ellipsis; 
-    overflow: hidden; 
-    white-space: nowrap; 
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
     width: 100%;
 }
 
@@ -1048,14 +1051,14 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 }
 
 .hollow-button {
-    border: solid; 
-    height: 35px; 
+    border: solid;
+    height: 35px;
     width: 148px;
-    text-align: center; 
-    border-color: rgb(0, 150, 136); 
+    text-align: center;
+    border-color: rgb(0, 150, 136);
     border-radius: 3px;
     font-weight: bold;
-    line-height: 21px; 
+    line-height: 21px;
     padding: 5px;
 }
 

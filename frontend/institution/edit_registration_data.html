@@ -1,0 +1,68 @@
+<md-dialog class="inst-registration-dialog">
+    <md-dialog-content layout="column" class="inst-registration-content">
+        <div class="inst-registration-dialog-title">
+            <h4>Editar dados cadastrais</h4>
+        </div>
+        <div class="edit-registration-data-grid">
+            <div class="inst-registration-data-name">
+                <md-input-container class="edit-registration-data-name" md-no-float class="md-block">
+                    <p class="edit-registration-data-title">Nome</p>
+                    <input type="text" class="edit-registration-data-input" ng-model="editInfoCtrl.institution.name"
+                    required oninvalid="this.setCustomValidity('A instituição precisa ter um nome.')"
+                    oninput="this.setCustomValidity('')"/>
+                </md-input-container>
+            </div>
+            <div class="inst-registration-data-acronym">
+                <md-input-container class="edit-registration-data-name" md-no-float class="md-block">
+                    <p class="edit-registration-data-title">Sigla</p>
+                    <input type="text" class="edit-registration-data-input"
+                    ng-model="editInfoCtrl.institution.acronym"/>
+                </md-input-container>
+            </div>
+            <div class="inst-registration-data-actuation">
+                <p class="edit-registration-select-menu">Áreas de atuação</p>
+                <md-select name="Actuation area" ng-model="editInfoCtrl.institution.actuation_area"
+                    class="edit-registration-data-name edit-registration-actuation-area">
+                    <md-option ng-repeat="(key, value) in editInfoCtrl.actuationAreas"
+                    ng-value="key" class="edit-registration-select-menu-size">
+                        {{ value }}
+                    </md-option>
+                </md-select>
+            </div>
+            <div class="inst-registration-data-admin">
+                <md-input-container class="edit-registration-data-name" md-no-float class="md-block">
+                    <p class="edit-registration-data-title">Responsável</p>
+                    <input type="text" class="edit-registration-data-input"
+                    ng-model="editInfoCtrl.institution.admin.name"/>
+                </md-input-container>
+            </div>
+            <div class="inst-registration-data-legal-nature">
+                <p class="edit-registration-select-menu">Natureza legal</p>
+                <md-select name="Legal nature" ng-model="editInfoCtrl.institution.legal_nature"
+                    class="edit-registration-data-name">
+                    <md-option ng-repeat="(key, value) in editInfoCtrl.legalNatures"
+                    ng-value="key" class="edit-registration-select-menu-size">
+                        {{ value }}
+                    </md-option>
+                </md-select>
+            </div>
+            <div class="inst-registration-data-cnpj">
+                <md-input-container class="edit-registration-data-name" md-no-float class="md-block">
+                    <p class="edit-registration-data-title">CNPJ</p>
+                    <input type="text" class="edit-registration-data-input"
+                    ng-model="editInfoCtrl.institution.cnpj"/>
+                </md-input-container>
+            </div>
+            <div layout="row" class="edit-registration-buttons">
+                <div md-colors="{color: 'default-grey-600'}"
+                    class="edit-registration-data-button" ng-click="editInfoCtrl.closeDialog()">
+                    <span class="edit-registration-data-button-title">CANCELAR</span>
+                </div>
+                <div md-colors="{color: 'default-teal-500'}"
+                    class="edit-registration-data-button" ng-click="editInfoCtrl.save()">
+                    <span class="edit-registration-data-button-title">CONFIRMAR</span>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

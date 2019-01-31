@@ -1,15 +1,38 @@
-.inst-registration-data-grid {
+.inst-registration-dialog {
+    width: 90%;
+    min-width: 90%;
+    height: 75%;
+}
+
+.inst-registration-content {
+    height: 100%;
+}
+
+.inst-registration-dialog-title {
+    margin-left: 1.4em;
+}
+
+.inst-registration-data-grid, .edit-registration-data-grid {
     display: grid;
     grid-template-columns: 30% 70%;
     grid-template-rows: 20% 20% 20% 20% 20%;
-    grid-column-gap: 0.6em;
-    width: 93%;
+    width: 100%;
+}
+
+.edit-registration-data-grid {
+    grid-template-rows: 16.66% 16.66% 16.66% 16.66% 16.66% 16.66%;
+    height: 87%;
 }
 
 .inst-registration-data-name {
     grid-row-start: 1;
     grid-row-end: 2;
+}
 
+.edit-registration-data-name {
+    width: 90%;
+    margin-left: 1.2em;
+    font-size: 0.8em;
 }
 
 .inst-registration-data-acronym {
@@ -17,7 +40,7 @@
     grid-column-end: 2;
 }
 
-.inst-registration-data-actuation {
+.inst-registration-data-actuation, .edit-registration-buttons {
     grid-column-start: 2;
     grid-column-end: 3;
 }
@@ -42,17 +65,48 @@
     grid-row-end: 6;
 }
 
+.edit-registration-buttons {
+    margin-left: auto;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    align-self: end;
+}
+
 .inst-registration-data-name, .inst-registration-data-admin,
     .inst-registration-data-legal-nature, .inst-registration-data-cnpj {
     grid-column-start: 1;
     grid-column-end: 3;
 }
 
-.inst-registration-data-title {
+.inst-registration-data-title, .edit-registration-data-title, .edit-registration-select-menu {
     color: #004D40;
     font-size: 0.8em;
-    margin-left: 1.8em;
     margin-top: -0.1em;
+}
+
+.edit-registration-data-title, .edit-registration-select-menu {
+    color: #009688;
+}
+
+.edit-registration-select-menu {
+    margin: 1.7em 0em -2.35em 1.6em;
+    font-size: 0.7em;
+}
+
+.edit-registration-select-menu-size, .md-select-menu-container {
+    width: 96%;
+}
+
+.edit-registration-data-input {
+    margin-top: -1.2em !important;
+}
+
+.inst-registration-data-title {
+    margin-left: 1.8em;
+}
+
+.edit-registration-data-title {
+    margin-left: 0.17em;
 }
 
 .inst-registration-data-subtitle {
@@ -60,6 +114,25 @@
     color: gray;
     margin-top: -0.7em;
     margin-left: 1.55em;
+}
+
+.edit-registration-data-button {
+    margin-right: 1em;
+    margin-top: -2.4em;
+}
+
+.edit-registration-data-button span {
+    font-size: 0.8em;
+    align-self: start;
+}
+
+.edit-registration-data-button-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.edit-registration-actuation-area {
+    width: 86%;
 }
 
 @media screen and (max-height: 640px) {

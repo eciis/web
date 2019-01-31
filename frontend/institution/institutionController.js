@@ -60,7 +60,8 @@
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
                 getLimitedName: institutionCtrl.getLimitedName,
-                requestInvitation: institutionCtrl.requestInvitation
+                requestInvitation: institutionCtrl.requestInvitation,
+                editRegistrationData: institutionCtrl.editRegistrationData
             }
         }
 
@@ -377,6 +378,20 @@
 
         institutionCtrl.limitString = function limitString(string, size) {
             return Utils.limitString(string, size);
+        };
+
+        institutionCtrl.editRegistrationData = (ev) => {
+            $mdDialog.show({
+                controller: 'EditRegistrationDataController',
+                controllerAs: "editInfoCtrl",
+                templateUrl: 'app/institution/edit_registration_data.html',
+                targetEvent: ev,
+                clickOutsideToClose: true,
+                locals: {
+                    institution: _.clone(institutionCtrl.institution),
+                },
+                bindToController: true
+            });
         };
 
         (function main(){

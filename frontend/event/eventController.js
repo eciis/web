@@ -211,7 +211,38 @@
                 eventCtrl.selectedYear = new Date().getFullYear();
                 eventCtrl._loadYears();
                 eventCtrl.loadMoreEvents();
+                eventCtrl.tst = getMobileToolbarMenuItems();
             });
+        };
+        
+        const items = [];
+        
+        function getMobileToolbarMenuItems() {
+        
+            items.push({
+                options: eventCtrl.months.map(month => month.month_name), 
+                action: month => {eventCtrl.selectedMonth = eventCtrl.months.find(m => m.month_name == month); eventCtrl.loadFilteredEvents();},
+                title: eventCtrl.selectedMonth.month_name
+            });
+
+            items.push({
+                options: eventCtrl.years, 
+                action: year => { eventCtrl.selectedYear = year; eventCtrl.loadFilteredEvents();},
+                title: eventCtrl.selectedYear
+            });
+
+            return items;
+        };
+
+        const simpleItems = {};
+
+        function getMobileToolbarSimpleItems () {
+            simpleItems.options = [
+                {title: 'Atualizar', action: () => {}},
+                {title: 'Filtrar por instituição', action: () => {}}
+            ]
+            
+            return simpleItems;
         };
 
         eventCtrl.$onInit = () => {
@@ -221,6 +252,7 @@
             } else {
                 eventCtrl.loadMoreEvents();
             }
+            eventCtrl.tst2 = getMobileToolbarSimpleItems();
         };
     });
 })();

@@ -40,6 +40,21 @@
             return Utils.isMobileScreen(mobileScreenSize);
         };
 
+        const items = [];
+
+        function getMobileToolbarMenuItems() {
+
+            items.push({
+                options: ['Todas as notificações', 'Notificações Institucionais', 'Notificações não lidas', 'Marcar todas como lidas'],
+                action: option => {},
+                title: 'NOTIFICAÇÕES'
+            });
+
+            return items;
+        };
+
+        notificationCtrl.tst = getMobileToolbarMenuItems();
+
         (function main(){
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
             notificationCtrl.notifications =  NotificationService.getUnreadNotifications();

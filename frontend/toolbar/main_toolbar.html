@@ -1,18 +1,58 @@
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-500'}" layout-align="center" layout="row">
-    <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70">
+<md-toolbar md-colors="{background: 'teal-500'}" 
+    layout-align="center" layout="row" ng-if="mainToolbarCtrl.isMobileScreen()" style="overflow: hidden;">
+    <div id="main-toolbar-mobile">
 
-        <md-button class="md-icon-button hide-gt-sm" aria-label="Menu" ng-click="mainToolbarCtrl.toggle()">
+        <md-button class="md-icon-button" aria-label="Menu" 
+            ng-click="mainToolbarCtrl.toggle()" style="grid-column-start: 1; grid-column-end: 2;">
             <md-icon>menu</md-icon>
         </md-button>
 
-        <span style="margin-left: 1em;">{{mainToolbarCtrl.title}}</span>
+        <span ng-if="mainToolbarCtrl.title" style="grid-column-start: 2; grid-column-end: 3; justify-self: start;">
+            {{mainToolbarCtrl.title}}
+        </span>
 
-        <div class="toolbar-btns" layout="row">
+        <div style="grid-column-start: 2; grid-column-end: 3; width: 100%;" layout="row" ng-if="mainToolbarCtrl.toolbarMenuItems">
+            <md-menu md-offset="0 15" ng-repeat="item in mainToolbarCtrl.toolbarMenuItems" style="width: 50%; margin: 0; padding: 0;">
+                <md-button ng-click="$mdMenu.open(ev)">
+                    <span style="margin-left: -0.3em;">{{item.title}}</span>
+                    <md-icon style="margin-left: -0.25em;">arrow_drop_down</md-icon>
+                </md-button>
+                <md-menu-content style="width: 80%;">
+                    <md-menu-item ng-repeat="option in item.options">
+                        <md-button ng-click="item.action(option); item.title=option">
+                            <div>
+                                {{ option }}
+                            </div>
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+
+        <div id="bla" ng-if="!mainToolbarCtrl.noSearch" layout="row" style="grid-column-start: 3; grid-column-end: 4; width: 50%; grid-row-start: 1; grid-row-end: 2;">
             <div layout="row" md-theme="input" class="toolbar-search">
-                <md-button class="md-icon-button" title="Buscar">
+                <md-button class="md-icon-button" title="Buscar" 
+                    ng-click="mainToolbarCtrl.changeState(mainToolbarCtrl.states.SEARCH, {search_keyword: ''})">
                     <md-icon>search</md-icon>
                 </md-button>
             </div>
         </div>
+
+        <md-menu ng-if="mainToolbarCtrl.toolbarSimpleItems" style="grid-column-start: 3; grid-column-end: 4; width: 50%; grid-row-start: 1; grid-row-end: 2; justify-self: end; margin-right: -2px;">
+            <md-button ng-click="$mdMenu.open(ev)" class="md-icon-button">
+                <md-icon>more_vert</md-icon>
+            </md-button>
+            <md-menu-content>
+                <md-menu-item ng-repeat="option in mainToolbarCtrl.toolbarSimpleItems.options">
+                    <md-button ng-click="option.action()">
+                        <div>
+                            {{ option.title }}
+                        </div>
+                    </md-button>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+        
+
     </div>
 </md-toolbar>

@@ -10,10 +10,10 @@
                 id="btn-description">
                 <b>DESCRIÇÃO</b>
             </md-button>
-            <div ng-if="instHeaderCtrl.isTimeline()">
+            <div ng-if="instHeaderCtrl.isTimeline()" class="btn-follow-unfollow">
                 <md-button class="button-navbar-inst" ng-if="instHeaderCtrl.isUserFollower"
-                    ng-click=" instHeaderCtrl.actionsButtons.unfollow()" id="btn-unfollow">
-                        <b>SEGUINDO</b>
+                    ng-click="instHeaderCtrl.actionsButtons.unfollow()" id="btn-unfollow">
+                        <b>DEIXAR DE SEGUIR</b>
                 </md-button>
                 <md-button class="button-navbar-inst" ng-if="!instHeaderCtrl.isUserFollower"
                     ng-click="instHeaderCtrl.actionsButtons.follow()"

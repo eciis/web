@@ -1,7 +1,7 @@
 #buttons-institution-page{
     display: grid;
     grid-template-columns: auto auto;
-    padding: 0 1.3em;
+    padding: 0 0.5em;
     margin-bottom: 1em;
     margin-top: 1em;
     height: 10em;
@@ -26,7 +26,7 @@
 .title-inst{
     font-size:1em;
     font-weight: 500;
-    margin-left: 1.3em;
+    margin-left: 1em;
     margin-right: 0.3em;
     margin-bottom:0.2em;
 }
@@ -73,10 +73,11 @@
 
 .cover-inst-mobile{
     box-shadow: 0 -1px 5px 0px grey;
-    height: 100vh;
+    height: 90vh;
 }
 
 .button-navbar-inst{
+    font-size: 14px;
     position: relative;
     z-index: 3;
     color: #FFFFFF
@@ -91,6 +92,10 @@
     height: 0px;
 }
 
+.btn-follow-unfollow{
+    margin-right: -20px;
+}
+
 #buttons-navbar-inst-container{
     position: relative;
     display: grid;
@@ -102,7 +107,7 @@
 #buttons-navbar-inst-container-end{
     padding-top: 5px;
     display: grid;
-    grid-template-columns: 107px 100px auto;
+    grid-template-columns: 107px auto auto;
     align-items: center;
     justify-content: end;
     overflow-x:hidden;
@@ -114,14 +119,19 @@
     border-color: #84C45E;
     color: #84C45E;
     grid-column-start: 4;
-    height: 15px;
+    margin-top: -0.5px;
 }
+
 #btn-more{
     width: 48px;
 }
 
 #btn-edit{
     grid-column-start: -1;
+}
+
+#btn-description{
+    margin-top: -0.3px;
 }
 
 .image-cover-inst{
@@ -134,6 +144,18 @@
     margin: 0;
     height: 12em;
     overflow: hidden;
+}
+
+@media screen and (max-width:325px){
+    .btn-follow-unfollow{
+        margin-right: 0px;
+    }
+    .button-navbar-inst{
+        font-size: 12px;
+    }
+    #btn-more{
+        margin-left: -13px;
+    }
 }
 
 @media screen and (min-height: 620px) and (max-height:660px){
@@ -158,9 +180,6 @@
     #image-cover-inst {
         height: 12em;
     }
-    #buttons-institution-page{
-        height: 11em;
-    }
     .title-inst{
         font-size:1.3em;
     }
@@ -180,10 +199,6 @@
 @media screen and (min-height: 700px) and (max-height:800px){
     #image-cover-inst {
         height: 15em;
-    }
-    #buttons-institution-page{
-        margin-top: 2em;
-        height: 11em;
     }
     .title-inst{
         font-size:1.4em;

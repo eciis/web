@@ -202,6 +202,25 @@ case "$1" in
                     TEST_NAME=$4
                 fi
                 python -m unittest discover -v -p $TEST_NAME
+            ;;
+            feature)
+                echo "=========== Starting Feature Toggles Tests Setup ==========="
+                cd feature-toggles/test
+
+                if [ "$3" == "--clean" ]; then
+                    rm -rf node_modules bower_components
+                fi
+                
+                if [ ! -e node_modules ]; then
+                    yarn add package.json
+                    catch_error $? "Node modules installed with success"
+                else
+                    log_message "Node modules already installed"
+                fi
+
+                echo "=========== Starting to run Feature Toggles Tests ==========="
+                karma start --single-run
+            ;;
         esac
     ;;
 

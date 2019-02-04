@@ -17,10 +17,10 @@ pipeline {
             sh './ecis test client --clean'
           },
         )
-        "Feature": {
-          sh './ecis test feature --clean'
-        }
       }
+    }
+    stage('Test Feature') {
+      sh './ecis test feature --clean'
     }
     stage('Finish') {
       steps {

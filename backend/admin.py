@@ -49,12 +49,10 @@ features = [
     }
 ]
 
-def reset_features():
-    features_query = Feature.query().fetch(keys_only=True)
-    ndb.delete_multi(features_query)
-
+def create_features():
     for feature in features:
-        Feature.create(**feature)
+        if not Feature.get_by_id(feature['name']):
+            Feature.create(**feature)
 
 
 def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
@@ -539,20 +537,20 @@ class ResetHandler(BaseHandler):
         splab.posts = []
         splab.put()
 
-        reset_features()
+        create_features()
 
         jsonList.append({"msg": "database initialized with a few posts"})
 
         self.response.write(json.dumps(jsonList))
 
-class ResetFeaturesHandler(BaseHandler):
+class CreateFeaturesHandler(BaseHandler):
     def get(self):
-        reset_features()
+        create_features()
         self.response.write({"msg": "database initialized with a few features"})
 
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
-    ('/admin/reset-features', ResetFeaturesHandler)
+    ('/admin/create-features', CreateFeaturesHandler)
 ], debug=True)
 
 

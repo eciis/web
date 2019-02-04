@@ -7,11 +7,13 @@ describe('registeredInstitutionController test', () => {
 
     const user = new User({
         follows: [],
-        institutions: []
+        institutions: [],
+        last_seen_institutions: new Date()
     });
 
     const institution = new Institution({
-        key: 'sopdkfap-OPAKOPAKFPO'
+        key: 'sopdkfap-OPAKOPAKFPO',
+        creation_date: new Date()
     });
 
     const auxInstitution = new Institution();
@@ -24,11 +26,10 @@ describe('registeredInstitutionController test', () => {
         state = $state;
         authService = AuthService;
 
-        AuthService.login(user);
-
         regInstCtrl = $controller('RegisteredInstitutionController');
+        regInstCtrl.user = user;
         regInstCtrl.institution = institution;
-        user.follow(auxInstitution);
+        regInstCtrl.user.follow(auxInstitution);
     }));
 
     describe('hasCoverPhoto()', () => {
@@ -45,12 +46,12 @@ describe('registeredInstitutionController test', () => {
 
     describe('userIsFollowing()', () => {
         it('should be truthy', () => {
-            user.follow(institution);
+            regInstCtrl.user.follow(institution);
             expect(regInstCtrl.userIsFollowing()).toBeTruthy();
         });
 
         it('should be falsy', () => {
-            user.unfollow(institution);
+            regInstCtrl.user.unfollow(institution);
             expect(regInstCtrl.userIsFollowing()).toBeFalsy();
         });
     });
@@ -105,6 +106,20 @@ describe('registeredInstitutionController test', () => {
             regInstCtrl.goToInst();
 
             expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: institution.key});
+        });
+    });
+
+    describe('hasSeenInstitution', () => {
+        it("should return true when the lastSeen property is > institution's creation_date", () => {
+            regInstCtrl.user.last_seen_institutions = new Date();
+
+            expect(regInstCtrl.hasSeenInstitution()).toEqual(true);
+        });
+
+        it("should return false when the lastSeen property is < institution's creation_date", () => {
+            regInstCtrl.institution.creation_date = new Date();
+
+            expect(regInstCtrl.hasSeenInstitution()).toEqual(false);
         });
     });
 });

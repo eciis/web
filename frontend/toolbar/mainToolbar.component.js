@@ -4,14 +4,16 @@
     const app = angular.module('app');
 
     app.component("mainToolbar", {
-        templateUrl: 'app/toolbar/main_toolbar.html',
+        templateUrl: 'app/toolbar/main_toolbar_mobile.html',
         controller: 'MainToolbarController',
         controllerAs: 'mainToolbarCtrl',
         bindings: {
             title: '=',
             toolbarMenuItems: '=',
             toolbarSimpleItems: '=',
-            noSearch: '='
+            noSearch: '=',
+            sortByAlpha: '=',
+            sortFunc: '='            
         }
     });
 
@@ -33,16 +35,38 @@
             return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         };
 
+        mainToolbarCtrl.handleOptionAction = (item, option) => {
+            item.action(option);
+            if(!mainToolbarCtrl.noSearch) {
+                item.title = option;
+            } else {
+                const menuOption = document.getElementById(option);
+                menuOption.setAttribute('style', "color: #009688;");
+                const previousOption = document.getElementById(mainToolbarCtrl.previousMenuOption);
+                previousOption && previousOption.setAttribute('style', 'color: black');
+                mainToolbarCtrl.previousMenuOption = option;
+            }
+        };
+
+        mainToolbarCtrl.sort = () => {
+            if(!mainToolbarCtrl.sortParam || mainToolbarCtrl.sortParam === '-name') {
+                mainToolbarCtrl.sortParam = 'name';
+            } else {
+                mainToolbarCtrl.sortParam = '-name';
+            }
+            mainToolbarCtrl.sortFunc(mainToolbarCtrl.sortParam);
+        };
+
         $timeout(() => {
-            const searchElement = document.getElementById('bla');
-            if (!mainToolbarCtrl.toolbarSimpleItems) {
-                searchElement.setAttribute('style', "justify-self: end;");
-                console.log(searchElement);
+            const searchElement = document.getElementById('search-toolbar-element');
+            if (!mainToolbarCtrl.toolbarSimpleItems && searchElement) {
+                searchElement.style.justifySelf = 'end';
             }
         }, 0)
 
         mainToolbarCtrl.$onInit = () => {
             console.log(mainToolbarCtrl.toolbarMenuItems);
         };
+        
     });
 })();

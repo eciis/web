@@ -1,4 +1,4 @@
-<main-toolbar title="'INSTITUIÇÕES'"></main-toolbar>
+<main-toolbar title="'INSTITUIÇÕES'" sort-by-alpha="true" sort-func="allInstitutionsCtrl.changeOrderParam"></main-toolbar>
 
 <div style="overflow: auto;" id="content">
     <div class="registered-institutions-mobile-top-bar">
@@ -20,7 +20,7 @@
 
     <div id="content" class="registered-institutions-container">
           <registered-institution institution="institution" 
-            ng-repeat="institution in allInstitutionsCtrl.institutions" style="margin-bottom: 0.5em;">
+            ng-repeat="institution in allInstitutionsCtrl.institutions | orderBy: allInstitutionsCtrl.orderParam" style="margin-bottom: 0.5em;">
           </registered-institution>
     </div>
 </div>

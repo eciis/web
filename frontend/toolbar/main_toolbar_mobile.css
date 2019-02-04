@@ -1,0 +1,77 @@
+.toolbar-btns {
+    margin-left: auto;
+}
+
+.toolbar-search form {
+    margin: 0px;
+}
+
+.toolbar-search md-input-container {
+    margin: 0px;
+    height: 32px;
+}
+
+.menu{
+    display: grid;
+    align-items: center;
+    grid-column: 90% 10%;
+}
+
+#main-toolbar-mobile {
+    display: grid;
+    grid-template-columns: 17% 50% 33%;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    height: 3em;
+}
+
+.main-menu-button {
+    grid-column-start: 1; 
+    grid-column-end: 2;
+}
+
+.main-toolbar-title {
+    grid-column-start: 2; 
+    grid-column-end: 3; 
+    justify-self: start;
+}
+
+.extra-menu-container {
+    grid-column-start: 2; 
+    grid-column-end: 3; 
+    width: 100%;
+}
+
+.extra-menu-container md-menu {
+    width: 50%; 
+    margin: 0; 
+    padding: 0;
+}
+
+.sort-button-container {
+    grid-column-start: 3; 
+    grid-column-end: 4; 
+    grid-row-start: 1; 
+    grid-row-end: 2; 
+    width: 50%; 
+    margin-right: 0.5em;
+}
+
+#search-toolbar-element {
+    grid-column-start: 3; 
+    grid-column-end: 4; 
+    width: 50%; 
+    grid-row-start: 1; 
+    grid-row-end: 2;
+}
+
+.toolbar-general-options {
+    grid-column-start: 3; 
+    grid-column-end: 4; 
+    width: 50%; 
+    grid-row-start: 1; 
+    grid-row-end: 2; 
+    justify-self: end; 
+    margin-right: -2px;
+}

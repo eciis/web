@@ -238,7 +238,7 @@
 
         function getMobileToolbarSimpleItems () {
             simpleItems.options = [
-                {title: 'Atualizar', action: () => {}},
+                { title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; eventCtrl.loadMoreEvents()}},
                 {title: 'Filtrar por instituição', action: () => {}}
             ]
             

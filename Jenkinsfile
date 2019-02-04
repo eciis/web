@@ -19,7 +19,7 @@ pipeline {
         )
       }
     }
-    stage('Test Feature') {
+    stage('Test_Feature') {
       sh './ecis test feature --clean'
     }
     stage('Finish') {

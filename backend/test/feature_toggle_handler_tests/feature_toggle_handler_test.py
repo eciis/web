@@ -25,15 +25,15 @@ class FeatureToggleHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
 
-        cls.feature = Feature.create('feature-test')
-        cls.other_feature = Feature.create('feature-test-other')
+        cls.feature = Feature.create('feature-test', {'pt-br': 'Feature Teste'})
+        cls.other_feature = Feature.create('feature-test-other', {'pt-br': 'Feature Teste'})
     
 
     @patch('util.login_service.verify_token', return_value=USER)
     def test_get_all(self, verify_token):
         """Test get all features."""
 
-        features = self.testapp.get('/api/feature-toggles').json
+        features = self.testapp.get('/api/feature-toggles?lang=pt-br').json
         features_make = [self.feature.make(), self.other_feature.make()]
 
         self.assertEquals(len(features), 2)
@@ -42,14 +42,12 @@ class FeatureToggleHandlerTest(TestBaseHandler):
     @patch('util.login_service.verify_token', return_value=USER)
     def test_get_by_query(self, verify_token):
         """Test get feature with query parameter."""
-
-        feature = self.testapp.get('/api/feature-toggles?name=feature-test').json
+        feature = self.testapp.get('/api/feature-toggles?name=feature-test&lang=pt-br').json
         feature_make = [self.feature.make()]
 
         self.assertListEqual(feature, feature_make)
 
-
-        feature = self.testapp.get('/api/feature-toggles?name=feature-test-other').json
+        feature = self.testapp.get('/api/feature-toggles?name=feature-test-other&lang=pt-br').json
         feature_make = [self.other_feature.make()]
 
         self.assertListEqual(feature, feature_make)
@@ -80,7 +78,8 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         feature['enable_mobile'] = 'DISABLED'
         other_feature['enable_desktop'] = 'DISABLED'
 
-        self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+        self.testapp.put_json('/api/feature-toggles', feature)
+        self.testapp.put_json('/api/feature-toggles', other_feature)
 
         self.feature = self.feature.key.get()
         self.other_feature = self.other_feature.key.get()
@@ -93,7 +92,7 @@ class FeatureToggleHandlerTest(TestBaseHandler):
         verify_token._mock_return_value = {'email': user.email[0]}
 
         with self.assertRaises(Exception) as raises_context:
-            self.testapp.put_json('/api/feature-toggles', [feature, other_feature]).json
+            self.testapp.put_json('/api/feature-toggles', feature)
 
         exception_message = self.get_message_exception(str(raises_context.exception))
         

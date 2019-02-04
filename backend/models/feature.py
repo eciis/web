@@ -1,4 +1,5 @@
 """Feature model."""
+import json
 from google.appengine.ext import ndb
 
 __all__ = ['Feature']
@@ -13,10 +14,11 @@ class Feature(ndb.Model):
         choices=set(["SUPER_USER", "ADMIN", "ALL", "DISABLED"]))
     enable_desktop = ndb.StringProperty(
         choices=set(["SUPER_USER", "ADMIN", "ALL", "DISABLED"]))
+    translation = ndb.JsonProperty(default="{}")
 
     @staticmethod
     @ndb.transactional(xg=True)
-    def create(name, enable_mobile="ALL", enable_desktop="ALL"):
+    def create(name, translation_dict, enable_mobile="ALL", enable_desktop="ALL"):
         """
         Method to create new feature.
 
@@ -27,33 +29,24 @@ class Feature(ndb.Model):
         """
 
         feature = Feature(id=name, name=name, enable_desktop=enable_desktop, enable_mobile=enable_mobile)
+        feature.translation = json.dumps(translation_dict)
         feature.put()
         return feature
     
     @staticmethod
-    def set_visibility(features_list):
+    def set_visibility(feature_dict):
         """
-        Method to enable or disable multiple features.
+        Method to enable or disable feature.
 
         Params:
-        features_list -- list of dictionaries containing the properties of the features model to be modified.
+        features_dict -- dictionary containing the properties of the feature model to be modified.
         """
 
-        features_dict = {
-            feature['name']: {
-                'enable_mobile': feature['enable_mobile'],
-                'enable_desktop': feature['enable_desktop']
-            } for feature in features_list
-        }
-
-        features = Feature.query(Feature.name.IN(features_dict.keys())).fetch()
-        
-        for feature in features:
-            feature.enable_desktop = features_dict[feature.name]['enable_desktop']
-            feature.enable_mobile = features_dict[feature.name]['enable_mobile']
-
-        ndb.put_multi(features)
-        return features
+        feature = Feature.get_feature(feature_dict.get('name'))
+        feature.enable_desktop = feature_dict['enable_desktop']
+        feature.enable_mobile = feature_dict['enable_mobile']
+        feature.put()
+        return feature
 
     @staticmethod
     def get_all_features():
@@ -80,15 +73,15 @@ class Feature(ndb.Model):
         else:
             raise Exception("Feature not found!")
 
-    def make(self):
+    def make(self, language="pt-br"):
         """
         Method to make feature.
         """
-
         make_obj = {
             'name': self.name,
             'enable_mobile': self.enable_mobile,
-            'enable_desktop': self.enable_desktop
+            'enable_desktop': self.enable_desktop,
+            'translation': json.loads(self.translation).get(language)
         }
 
         return make_obj

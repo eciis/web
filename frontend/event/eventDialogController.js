@@ -199,7 +199,6 @@
             var currentStep = _.findIndex(dialogCtrl.steps, function (situation) {
                 return situation;
             });
-            console.log(currentStep, isCurrentStepValid(currentStep));
             if (isCurrentStepValid(currentStep)) {
                 dialogCtrl.steps[currentStep] = false;
                 var nextStep = currentStep + 1;
@@ -233,9 +232,6 @@
             const isValidToMobile = isMobileScreen() && dialogCtrl.isValidAddress();
             const isValidToDesktop = !isMobileScreen() && dialogCtrl.isValidAddress() && 
                             dialogCtrl.isValidDate();
-            console.log(isValidToMobile, isValidToDesktop, isMobileScreen());
-            console.log(!isMobileScreen(), dialogCtrl.isValidAddress(), 
-            dialogCtrl.isValidDate());      
             return isValidToMobile || isValidToDesktop;
         };
 
@@ -274,18 +270,15 @@
             var isValid = true;
             if (!_.isUndefined(necessaryFieldsForStep[currentStep])) {
                 _.forEach(necessaryFieldsForStep[currentStep].fields, function (field) {
-                    if (_.isUndefined(field) || _.isEmpty(field)) {
+                    if (_.isUndefined(field) || field === '') {
                         isValid = false;
                     }
                 });
-
-                console.log("..", isValid);
 
                 var isValidFunction = necessaryFieldsForStep[currentStep].isValid ?
                     necessaryFieldsForStep[currentStep].isValid() : true;
                 isValid = isValid && isValidFunction;
             }
-            console.log("===");
             return isValid;
         }
 

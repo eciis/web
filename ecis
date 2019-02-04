@@ -116,6 +116,7 @@ case "$1" in
         catch_error $? "Removed Pyenv Folder"
 
         rm -rf frontend/test/node_modules frontend/test/bower_components
+        rm -rf feature-toggles/test/node_modules feature-toggles/test/bower_components
         catch_error $? "Removed node_modules and bower_components"
 
         echo "=========== Starting Virtual Environment ==========="

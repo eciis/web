@@ -1,24 +1,25 @@
 'use strict';
 
 (describe('Test AuthService', function() {
-    var authService, userService;
+    let authService, userService, userFactory;
 
-    var userTest = {
+    let userTest = {
         name : 'User',
         accessToken: 'gfdfggfdjdsfkbcbmnweuiyeuiwyhdjskalhdjkhjk',
         emailVerified: true
     };
 
-    var firebaseUser = {
+    let firebaseUser = {
         accessToken: 'ruioewyuirywieuryiuweyr876324875632487yiue',
         getIdToken: async () => firebaseUser.accessToken
     }
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function(AuthService, UserService) {
+    beforeEach(inject(function(AuthService, UserService, UserFactory) {
         authService = AuthService;
         userService = UserService;
+        userFactory = UserFactory;
         
         firebase.auth = () => {
             return {
@@ -38,7 +39,7 @@
 
             authService.setupUser(userTest.accessToken, userTest.emailVerified);
             var user = authService.getCurrentUser();
-            var new_user = new User(userTest);
+            var new_user = new userFactory.user(userTest);
 
             expect(userService.load).toHaveBeenCalled();
             expect(user).toEqual(new_user);
@@ -54,7 +55,7 @@
             spyOn(userService, 'load').and.callThrough();
             authService.setupUser(userTest.accessToken, userTest.emailVerified);
             var user = authService.getCurrentUser();
-            var new_user = new User(userTest);
+            var new_user = new userFactory.user(userTest);
             expect(user).toEqual(new_user);
         });
 

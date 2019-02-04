@@ -16,7 +16,7 @@ pipeline {
           "Frontend": {
             sh './ecis test client --clean'
           },
-        ),
+        )
         "Feature": {
           sh './ecis test feature --clean'
         }

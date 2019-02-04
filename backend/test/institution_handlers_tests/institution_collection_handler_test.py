@@ -42,8 +42,8 @@ class InstitutionCollectionHandlerTest(TestBaseHandler):
         self.assertEqual(len(all_institutions), 2,
                          "The length of all institutions list should be 2")
 
-        self.assertEqual(all_institutions['institutions'][0]['name'], first_inst.name,
+        self.assertEqual(all_institutions['institutions'][1]['name'], first_inst.name,
                          "The name of institituion should be equal to the first_inst name")
 
-        self.assertEqual(all_institutions['institutions'][1]['name'], third_inst.name,
+        self.assertEqual(all_institutions['institutions'][0]['name'], third_inst.name,
                          "The name of institution should be equal to the third_inst name")

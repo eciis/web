@@ -42,7 +42,7 @@
 
     var authService, institutionService, allInstitutionsController, scope;
 
-    beforeEach(inject(function(AuthService, InstitutionService, $controller, $rootScope, $httpBackend) {
+    beforeEach(inject(function(AuthService, InstitutionService, $controller, $rootScope, UserService) {
         authService = AuthService;
         institutionService = InstitutionService;
         scope = $rootScope;
@@ -71,7 +71,20 @@
             institutionService: InstitutionService
         });
 
+        spyOn(UserService, 'save').and.callFake(() => {
+            return {
+                then: callback => {
+                    return callback();
+                }
+            }
+        });
+
+        spyOn(authService, 'reload');
+
         allInstitutionsController.$onInit();
+
+        expect(UserService.save).toHaveBeenCalled();
+        expect(authService.reload).toHaveBeenCalled();
     }));
 
 

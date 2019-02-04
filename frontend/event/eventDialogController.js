@@ -270,7 +270,7 @@
             var isValid = true;
             if (!_.isUndefined(necessaryFieldsForStep[currentStep])) {
                 _.forEach(necessaryFieldsForStep[currentStep].fields, function (field) {
-                    if (_.isUndefined(field) || field === '') {
+                    if (_.isUndefined(field) ) {
                         isValid = false;
                     }
                 });

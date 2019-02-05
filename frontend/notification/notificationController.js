@@ -60,20 +60,20 @@
             return optionsMap[option]();
         };
 
-        const items = [];
+        const toolbarMobileMenuItems = [];
 
         function getMobileToolbarMenuItems() {
 
-            items.push({
+            toolbarMobileMenuItems.push({
                 options: ['Todas as notificações', 'Notificações Institucionais', 'Notificações não lidas', 'Marcar todas como lidas'],
                 action: option => {notificationCtrl.selectNotificationAction(option)},
                 title: 'NOTIFICAÇÕES'
             });
 
-            return items;
+            return toolbarMobileMenuItems;
         };
 
-        notificationCtrl.tst = getMobileToolbarMenuItems();
+        notificationCtrl.toolbarMobileMenuItems = getMobileToolbarMenuItems();
 
         (function main(){
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();

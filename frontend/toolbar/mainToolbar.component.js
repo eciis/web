@@ -10,7 +10,7 @@
         bindings: {
             title: '=',
             toolbarMenuItems: '=',
-            toolbarSimpleItems: '=',
+            toolbarGeneralOptions: '=',
             noSearch: '=',
             sortByAlpha: '=',
             sortFunc: '='            
@@ -59,7 +59,7 @@
 
         $timeout(() => {
             const searchElement = document.getElementById('search-toolbar-element');
-            if (!mainToolbarCtrl.toolbarSimpleItems && searchElement) {
+            if (!mainToolbarCtrl.toolbarGeneralOptions && searchElement) {
                 searchElement.style.justifySelf = 'end';
             }
         }, 0)

@@ -19,7 +19,7 @@
                 </md-button>
                 <md-menu-content style="width: 80%;">
                     <md-menu-item ng-repeat="option in item.options">
-                        <md-button ng-click="mainToolbarCtrl.hand leOptionAction(item, option)">
+                        <md-button ng-click="mainToolbarCtrl.handleOptionAction(item, option)">
                             <div id="{{option}}">
                                 {{ option }}
                             </div>
@@ -47,12 +47,12 @@
             </div>
         </div>
 
-        <md-menu ng-if="mainToolbarCtrl.toolbarSimpleItems" class="toolbar-general-options">
+        <md-menu ng-if="mainToolbarCtrl.toolbarGeneralOptions" class="toolbar-general-options" style="margin-right: -2px;">
             <md-button ng-click="$mdMenu.open(ev)" class="md-icon-button">
                 <md-icon>more_vert</md-icon>
             </md-button>
             <md-menu-content>
-                <md-menu-item ng-repeat="option in mainToolbarCtrl.toolbarSimpleItems.options">
+                <md-menu-item ng-repeat="option in mainToolbarCtrl.toolbarGeneralOptions.options">
                     <md-button ng-click="option.action()">
                         <div>
                             {{ option.title }}

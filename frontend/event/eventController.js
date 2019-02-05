@@ -211,38 +211,41 @@
                 eventCtrl.selectedYear = new Date().getFullYear();
                 eventCtrl._loadYears();
                 eventCtrl.loadMoreEvents();
-                eventCtrl.tst = getMobileToolbarMenuItems();
+                eventCtrl.toolbarItems = getToolbarMobileMenuItems();
             });
         };
         
-        const items = [];
+        const toolbarMobileMenuItems = [];
         
-        function getMobileToolbarMenuItems() {
-        
-            items.push({
-                options: eventCtrl.months.map(month => month.month_name), 
-                action: month => {eventCtrl.selectedMonth = eventCtrl.months.find(m => m.month_name == month); eventCtrl.loadFilteredEvents();},
+        function getToolbarMobileMenuItems() {
+            const monthsMenuItem = {
+                options: eventCtrl.months.map(month => month.month_name),
+                action: month => { eventCtrl.selectedMonth = eventCtrl.months.find(m => m.month_name == month); eventCtrl.loadFilteredEvents(); },
                 title: eventCtrl.selectedMonth.month_name
-            });
-
-            items.push({
-                options: eventCtrl.years, 
-                action: year => { eventCtrl.selectedYear = year; eventCtrl.loadFilteredEvents();},
+            };
+        
+            toolbarMobileMenuItems.push(monthsMenuItem);
+            
+            const yearsMenuItem = {
+                options: eventCtrl.years,
+                action: year => { eventCtrl.selectedYear = year; eventCtrl.loadFilteredEvents(); },
                 title: eventCtrl.selectedYear
-            });
+            };
 
-            return items;
+            toolbarMobileMenuItems.push(yearsMenuItem);
+
+            return toolbarMobileMenuItems;
         };
 
-        const simpleItems = {};
+        const toolbarMenuGeneralOptions = {};
 
-        function getMobileToolbarSimpleItems () {
-            simpleItems.options = [
+        function getToolbarMobileGeneralOptions () {
+            toolbarMenuGeneralOptions.options = [
                 { title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; eventCtrl.loadMoreEvents()}},
                 {title: 'Filtrar por instituição', action: () => {}}
             ]
             
-            return simpleItems;
+            return toolbarMenuGeneralOptions;
         };
 
         eventCtrl.$onInit = () => {
@@ -252,7 +255,7 @@
             } else {
                 eventCtrl.loadMoreEvents();
             }
-            eventCtrl.tst2 = getMobileToolbarSimpleItems();
+            eventCtrl.toolbarGeneralOptions = getToolbarMobileGeneralOptions();
         };
     });
 })();

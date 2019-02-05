@@ -72,6 +72,5 @@
     width: 50%; 
     grid-row-start: 1; 
     grid-row-end: 2; 
-    justify-self: end; 
-    margin-right: -2px;
+    justify-self: end;
 }

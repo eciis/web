@@ -41,7 +41,7 @@
                 item.title = option;
             } else {
                 const menuOption = document.getElementById(option);
-                menuOption.setAttribute('style', "color: #009688;");
+                menuOption && menuOption.setAttribute('style', "color: #009688;");
                 const previousOption = document.getElementById(mainToolbarCtrl.previousMenuOption);
                 previousOption && previousOption.setAttribute('style', 'color: black');
                 mainToolbarCtrl.previousMenuOption = option;
@@ -63,10 +63,6 @@
                 searchElement.style.justifySelf = 'end';
             }
         }, 0)
-
-        mainToolbarCtrl.$onInit = () => {
-            console.log(mainToolbarCtrl.toolbarMenuItems);
-        };
         
     });
 })();

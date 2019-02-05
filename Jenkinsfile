@@ -22,10 +22,8 @@ pipeline {
           "Frontend": {
             sh './ecis test client'
           },
-          {
-            "Feature": {
-              sh './ecis test feature'      
-            }
+          "Feature": {
+            sh './ecis test feature'    
           }
         )
       }

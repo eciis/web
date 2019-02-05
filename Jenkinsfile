@@ -22,12 +22,12 @@ pipeline {
           "Frontend": {
             sh './ecis test client'
           },
+          {
+            "Feature": {
+              sh './ecis test feature'      
+            }
+          }
         )
-      }
-    }
-    stage('Test Feature') {
-      steps{
-        sh './ecis test feature --clean'
       }
     }
     stage('Finish') {

@@ -76,3 +76,12 @@
     padding-left: 10px;
     padding-right: 10px; 
 }
+
+.pdf-item-container {
+    display: grid; 
+    grid-template-columns: min-content auto min-content;
+}
+
+#pdf-remove {
+    line-height: 4em;
+}

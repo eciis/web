@@ -1,5 +1,7 @@
-
 .post-btns-row {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
     padding: 0.2em;
 }
 
@@ -13,7 +15,10 @@
 }
 
 .post-right-btns {
-    margin-left: auto;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-column-start: 2;
+    justify-items: end;
 }
 
 .counter-likes-comments {
@@ -50,9 +55,9 @@
 }
 
 .deleted-post-icon {
-    font-size:  4.27em; 
-    color: white; 
-    width: 1em; 
+    font-size:  4.27em;
+    color: white;
+    width: 1em;
     height: 1em;
 }
 
@@ -73,13 +78,13 @@
     }
 
     .deleted-post-icon {
-        font-size: 3.75em; 
-        color: white; 
+        font-size: 3.75em;
+        color: white;
         margin: 0;
     }
 
-    .delete-post-text {
-        text-align: center;
+    #delete-btn-text {
+        display: none;
     }
 
     #removed-by {

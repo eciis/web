@@ -13,7 +13,7 @@
 
         configProfileCtrl.user = AuthService.getCurrentUser();
         configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
-        configProfileCtrl.loading = false;
+        configProfileCtrl.canEdit = true;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
         configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
         configProfileCtrl.loadingSubmission = false;
@@ -48,6 +48,10 @@
             });
         }
 
+        configProfileCtrl.editProfile = () => {
+            configProfileCtrl.canEdit = true;
+        }
+
         configProfileCtrl.cropImage = function cropImage(imageFile, event) {
             CropImageService.crop(imageFile, event, 'circle').then(function success(croppedImage) {
                 configProfileCtrl.addImage(croppedImage);
@@ -59,12 +63,13 @@
         configProfileCtrl.finish = function finish() {
             configProfileCtrl.loadingSubmission = true;
             if (configProfileCtrl.photo_user) {
-                configProfileCtrl.loading = true;
-                ImageService.saveImage(configProfileCtrl.photo_user).then(function (data) {
+                configProfileCtrl.canEdit = false;
+                ImageService.saveImage(configProfileCtrl.photo_user)
+                .then(function (data) {
                     configProfileCtrl.user.photo_url = data.url;
                     configProfileCtrl.user.uploaded_images.push(data.url);
                     saveUser();
-                    configProfileCtrl.loading = false;
+                    configProfileCtrl.canEdit = true;
                     configProfileCtrl.loadingSubmission = false;
                 });
             } else {
@@ -81,7 +86,6 @@
                     AuthService.save();
                     configProfileCtrl.loadingSubmission = false;
                     MessageService.showToast("Edição concluída com sucesso");
-                    $state.go(STATES.HOME);
                     deffered.resolve();
                 });
             } else {
@@ -99,7 +103,7 @@
         };
 
         configProfileCtrl.showButton = function () {
-            return !configProfileCtrl.loading;
+            return configProfileCtrl.canEdit;
         };
 
         configProfileCtrl.removeInstitution = function removeInstitution(event, institution) {

@@ -86,6 +86,13 @@
 .icon-button-menu-inst{
     color: #FFFFFF;
     font-size: 20px;
+    margin-left: 0.5em;
+}
+
+.institution-button-menu{
+    background: rgb(0, 150, 136);
+    color: rgb(255, 255, 255);
+    text-align: start;
 }
 
 .zero-height{
@@ -152,13 +159,14 @@
 
 @media screen and (max-width:325px){
     .btn-follow-unfollow{
+        margin-left: -10px;
         margin-right: 0px;
     }
     .button-navbar-inst{
         font-size: 12px;
     }
     #btn-more{
-        margin-left: -13px;
+        margin-left: -20px;
     }
 }
 

@@ -117,7 +117,11 @@
                 url: "/config_profile",
                 views: {
                     user_content: {
-                        templateUrl: "app/user/config_profile.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/user/configProfile/config_profile.html",
+                            "app/user/configProfile/config_profile_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }

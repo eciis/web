@@ -259,5 +259,11 @@ var Utils = {
             }
         });
         return filteredUsers;
-    }
+    },
+
+    /**
+     * Returns the input property if it is defined, 
+     * otherwise a default value is returned
+     */
+    showProperty: property => property || 'Não informado'
 };

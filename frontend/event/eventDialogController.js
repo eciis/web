@@ -127,7 +127,7 @@
         };
 
         dialogCtrl.cancelCreation = () => {
-            if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)){
+            if (isMobileScreen()){
                 Utils.resetToolbarDisplayStyle();
                 $state.go(STATES.EVENTS);
             }
@@ -191,7 +191,7 @@
          * according by mobile screen or not
          */
         dialogCtrl._getRequiredFieldsMsg = () => {
-            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.getStep(2))
+            if(isMobileScreen() && dialogCtrl.getStep(2))
                 return "Preencha a data e hora inicial e final.";
             return "Preencha os campos obrigatórios corretamente.";
         };
@@ -230,14 +230,14 @@
         };
 
         dialogCtrl.isValidStepOne = function isValidStepOne() {
-            const isMobileScreen = Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
-            const isValidToMobile = isMobileScreen && dialogCtrl.isValidAddress();
-            const isValidToDesktop = !isMobileScreen && dialogCtrl.isValidAddress() && dialogCtrl.isValidDate();
+            const isValidToMobile = isMobileScreen() && dialogCtrl.isValidAddress();
+            const isValidToDesktop = !isMobileScreen() && dialogCtrl.isValidAddress() && 
+                            dialogCtrl.isValidDate();
             return isValidToMobile || isValidToDesktop;
         };
 
         dialogCtrl.lastStep = () => {
-            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+            if(isMobileScreen()) {
                 return dialogCtrl.getStep(4);
              }
              return dialogCtrl.getStep(3);
@@ -249,16 +249,18 @@
                     fields: [
                         dialogCtrl.event.title,
                         dialogCtrl.event.local,
-                        dialogCtrl.event.address
+                        dialogCtrl.event.address,
+                        !isMobileScreen() && dialogCtrl.event.start_time,
+                        !isMobileScreen() && dialogCtrl.event.end_time
                     ],
                     isValid: dialogCtrl.isValidStepOne
                 },
                 1: {
                     fields: [
-                        dialogCtrl.startHour && String(dialogCtrl.startHour),
-                        dialogCtrl.endHour && String(dialogCtrl.endHour)
+                        isMobileScreen() && dialogCtrl.startHour && String(dialogCtrl.startHour),
+                        isMobileScreen() && dialogCtrl.endHour && String(dialogCtrl.endHour)
                     ],
-                    isValid: dialogCtrl.isValidDate
+                    isValid: isMobileScreen() && dialogCtrl.isValidDate
                 }
             };
             return necessaryFieldsForStep;
@@ -269,7 +271,7 @@
             var isValid = true;
             if (!_.isUndefined(necessaryFieldsForStep[currentStep])) {
                 _.forEach(necessaryFieldsForStep[currentStep].fields, function (field) {
-                    if (_.isUndefined(field) || _.isEmpty(field)) {
+                    if (_.isUndefined(field) ) {
                         isValid = false;
                     }
                 });
@@ -277,9 +279,12 @@
                 var isValidFunction = necessaryFieldsForStep[currentStep].isValid ?
                     necessaryFieldsForStep[currentStep].isValid() : true;
                 isValid = isValid && isValidFunction;
-
             }
             return isValid;
+        }
+
+        function isMobileScreen(){
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         }
 
         dialogCtrl.nextStepOrSave = function nextStepOrSave() {
@@ -322,7 +327,7 @@
          * @private
          */
         dialogCtrl._loadStateParams = () => {
-            if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+            if(isMobileScreen()) {
                 dialogCtrl.event = $state.params.event;
                 dialogCtrl.events = $state.params.events;
                 dialogCtrl.isEditing = $state.params.isEditing;
@@ -418,7 +423,7 @@
             if (event.isValid()) {
                 dialogCtrl.loading = true;
                 EventService.createEvent(event).then(function success(response) {
-                    !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && dialogCtrl.events.push(response);
+                    !isMobileScreen() && dialogCtrl.events.push(response);
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
                     dialogCtrl.cancelCreation();
                     MessageService.showToast('Evento criado com sucesso!');

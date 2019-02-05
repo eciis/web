@@ -257,7 +257,7 @@
 
         it('should call showToast', () => {
             spyOn(messageService, 'showToast');
-            controller.event.address = {};
+            controller.event.address = {country: 'Brasil'};
             controller.nextStep();
             expect(messageService.showToast).toHaveBeenCalled();
         });

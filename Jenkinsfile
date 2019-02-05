@@ -7,14 +7,20 @@ pipeline {
     
   }
   stages {
+    stage('build') {
+      steps {
+        sh './setup_env_test clean'
+        sh './setup_frontend_tests'
+      }
+    }
     stage('Tests') {
       steps {
         parallel(
           "Backend": {
-            sh './ecis test server --clean'
+            sh './ecis test server'
           },
           "Frontend": {
-            sh './ecis test client --clean'
+            sh './ecis test client'
           },
         )
       }

@@ -62,6 +62,8 @@
         };
         notCtrl = createCtrl();
         notCtrl.notifications = [];
+
+        expect(notCtrl.toolbarMobileMenuItems.length).toEqual(1);
     }));
 
     afterEach(function() {
@@ -105,6 +107,42 @@
             notCtrl.showNotifications(mdMenu, event);
             expect(mdMenu.open).toHaveBeenCalled();
             expect(notCtrl.seeAll).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('selectNotificationAction()', () => {
+        beforeEach(() => {
+            notCtrl.allNotifications = [
+                { entity_type: 'ACCEPTED_LINK'}, 
+                { entity_type: 'REJECTED_LINK'}, 
+                { entity_type: 'LIKE_POST'}
+            ];
+            notCtrl.notifications = [
+                { entity_type: 'ACCEPTED_LINK' },
+                { entity_type: 'LIKE_POST' }
+            ]
+        });
+
+        it('should set notificationsToShow as allNotifications', () => {
+            notCtrl.selectNotificationAction('Todas as notificações');
+            expect(notCtrl.notificationsToShow).toEqual(notCtrl.allNotifications)
+        });
+
+        it('should set notificationsToShow as institutionalNotifications', () => {
+            notCtrl.selectNotificationAction('Notificações Institucionais');
+            expect(notCtrl.notificationsToShow).toEqual([{ entity_type: 'ACCEPTED_LINK' },
+                { entity_type: 'REJECTED_LINK' }, ])
+        });
+
+        it('should set notificationsToShow as unreadNotifications', () => {
+            notCtrl.selectNotificationAction('Notificações não lidas');
+            expect(notCtrl.notificationsToShow).toEqual(notCtrl.notifications);
+        });
+
+        it('should call clearAll()', () => {
+            spyOn(notCtrl, 'clearAll');
+            notCtrl.selectNotificationAction('Marcar todas como lidas');
+            expect(notCtrl.clearAll).toHaveBeenCalled();
         });
     });
 }));

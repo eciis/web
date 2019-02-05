@@ -1,20 +1,20 @@
 <div layout="row" class="edit-registration-data-top-bar">
-    <md-button class="md-icon-button edit-registration-back-button" ng-click="createEventCtrl.previousStep()">
+    <md-button class="md-icon-button edit-registration-back-button" ng-click="configInstCtrl.previousPage()">
         <md-icon class="edit-registration-top-icon">keyboard_arrow_left</md-icon>
     </md-button>
     <h3 class="edit-registration-top-color">EDITAR DADOS CADASTRAIS</h3>
 </div>
-<div class="row" style="margin-top: 5em;">
+<div class="edit-registration-img-margin">
     <div class="avatar" align="center">
-        <img style="border-radius: 50%;" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"
-            width="100px" height="100px"/>
+        <img class="edit-registration-img" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
     </div>
     <div class="info" align="center">
         <h3>Dados cadastrais</h3>
     </div>
 </div>
-<div layout="column">
-    <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
+<form name="instForm" prevent-state-change="configInstCtrl.newInstitution"
+    ng-submit="instForm.$valid && configInstCtrl.submit($event)" layout="column">
+    <md-input-container style="color: green;" class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Nome</p>
         <input type="text" class="edit-registration-data-input" ng-model="configInstCtrl.newInstitution.name"
         required oninvalid="this.setCustomValidity('A instituição precisa ter um nome.')"
@@ -87,44 +87,115 @@
     <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Lagradouro</p>
         <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
-        ng-model="configInstCtrl.address.street"/>
+        ng-model="configInstCtrl.address.street" class="edit-registration-data-input"/>
     </md-input-container>
     <div class="edit-registration-half-init-grid">
         <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
             <p class="edit-registration-data-title">Nº</p>
-            <input type="text" name="number"
+            <input type="text" name="number" class="edit-registration-data-input"
             ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex"/>
         </md-input-container>
-        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
+        <md-input-container md-no-float
+        class="edit-registration-data-name edit-registration-input-margin md-block edit-registration-neighbourhood">
             <p class="edit-registration-data-title">Bairro</p>
             <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
-            ng-model="configInstCtrl.address.neighbourhood">
+            ng-model="configInstCtrl.address.neighbourhood" class="edit-registration-data-input">
         </md-input-container>
     </div>
-    <div class="edit-registration-half-init-grid">
-        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
-            <p class="edit-registration-data-title">País</p>
-            <input type="text" name="number"
-            ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex"/>
-        </md-input-container>
-        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
+    <div class="edit-registration-location-grid">
+        <div>
+            <p class="edit-registration-select-menu">País</p>
+            <md-select name="country" ng-model="configInstCtrl.address.country" required
+                ng-change="configInstCtrl.setAnotherCountry()"
+                class="edit-registration-data-name">
+                <md-option ng-repeat="country in configInstCtrl.countries" ng-value="country.nome_pais">
+                    {{country.nome_pais}}
+                </md-option>
+            </md-select>
+        </div>
+        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
+            md-no-float ng-if="configInstCtrl.isAnotherCountry">
             <p class="edit-registration-data-title">Estado</p>
-            <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
-            ng-model="configInstCtrl.address.neighbourhood">
+            <input type="text" name="state" ng-model="configInstCtrl.address.federal_state"
+            class="edit-registration-data-input"/>
         </md-input-container>
-        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
+        <div ng-if="!configInstCtrl.isAnotherCountry">
+            <p class="edit-registration-select-menu">Estado</p>
+            <md-select name="state" ng-model="configInstCtrl.selectedState" required
+                ng-change="configInstCtrl.getCitiesByState()" class="edit-registration-data-name">
+                <md-option ng-repeat="state in configInstCtrl.states" ng-value="state">
+                    {{state.sigla}}
+                </md-option>
+            </md-select>
+            <div ng-messages='instForm.state.$error'>
+                <div ng-message="required">Este campo é obrigatório!</div>
+            </div>
+        </div>
+        <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
+            md-no-float ng-if="configInstCtrl.isAnotherCountry">
             <p class="edit-registration-data-title">Cidade</p>
-            <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
-            ng-model="configInstCtrl.address.neighbourhood">
+            <input type="text" name="city" ng-model="configInstCtrl.address.city"
+            class="edit-registration-data-input"/>
         </md-input-container>
+        <div ng-if="!configInstCtrl.isAnotherCountry">
+            <p class="edit-registration-select-menu">Cidade</p>
+            <md-select name="city" ng-model="configInstCtrl.address.city" required
+                ng-disabled="!configInstCtrl.selectedState" class="edit-registration-data-name">
+                <md-option ng-repeat="city in configInstCtrl.cities" ng-value="city">
+                    {{city}}
+                </md-option>
+            </md-select>
+            <div ng-messages='instForm.city.$error'>
+                <div ng-message="required">Este campo é obrigatório!</div>
+            </div>
+            <div ng-messages>
+                <div ng-show="!configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry"
+                    style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                    Primeiro selecione um estado
+                </div>
+            </div>
+        </div>
     </div>
-    <div layout="row" class="edit-registration-buttons">
+    <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
+        md-no-float>
+        <p class="edit-registration-data-title">CEP</p>
+        <input type="text" name="cep" ng-required="!configInstCtrl.isAnotherCountry"
+        ng-model="configInstCtrl.address.cep" class="edit-registration-data-input"
+        minlength="9" md-maxlength="9" placeholder="00000-000"
+        ng-pattern="configInstCtrl.cepRegex"
+        mask="99999-999"/>
+    </md-input-container>
+    <div class="info" align="center">
+        <h3>Contato</h3>
+    </div>
+    <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
+        md-no-float>
+        <p class="edit-registration-data-title">E-mail instituticional</p>
+        <input type="email" name="institutionalEmail" class="edit-registration-data-input"
+        ng-model="configInstCtrl.newInstitution.institutional_email" required/>
+    </md-input-container>
+    <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
+        md-no-float>
+        <p class="edit-registration-data-title">E-mail do responsável</p>
+        <input type="email" name="EmailResponsavel" disabled
+        ng-model="configInstCtrl.newInstitution.email" class="edit-registration-data-input"/>
+    </md-input-container>
+    <md-input-container class="md-block">
+        <md-button ng-click="null" ng-model="configInstCtrl.file" ngf-pattern="'application/pdf'"
+            ngf-accept="'application/pdf'" ngf-max-size="5MB"
+            ngf-select="configInstCtrl.clearPortfolioUrl()" class="md-raised edit-registration-portfolio">
+            <md-icon class="edit-registration-icon">{{configInstCtrl.getPortfolioButtonIcon()}}</md-icon>
+            {{configInstCtrl.getPortfolioButtonMessage()}}
+        </md-button>
+    </md-input-container>
+    <load-circle ng-show="configInstCtrl.isSubmitting"></load-circle>
+    <div layout="row" class="edit-registration-buttons" ng-hide="configInstCtrl.isSubmitting">
         <md-button type="reset" class="edit-registration-cancel-button" ng-click="editInfoCtrl.closeDialog()">
             CANCELAR
         </md-button>
-        <md-button class="btn-submit" type="submit" class="md-raised" ng-click="editInfoCtrl.save()"
+        <md-button class="btn-submit" type="submit" class="md-raised"
             md-colors="{background: 'default-teal-500'}">
             APLICAR
         </md-button>
     </div>
-</div>
+</form>

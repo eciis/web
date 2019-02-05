@@ -7,12 +7,40 @@
     width: 100%;
 }
 
-.edit-registration-half-init-grid, .edit-registration-half-end-grid {
+.edit-registration-half-init-grid, .edit-registration-half-end-grid, .edit-registration-location-grid {
     display: grid;
     grid-template-columns: 30% 70%;
     grid-template-rows: auto;
     height: 87%;
     width: 100%;
+}
+
+.edit-registration-location-grid {
+    grid-template-columns: 29% 27% 39%;
+}
+
+.edit-registration-neighbourhood {
+    width: 86% !important;
+}
+
+.edit-registration-icon, .edit-registration-portfolio {
+    color: white !important;
+}
+
+.edit-registration-img-margin {
+    margin-top: 5em;
+}
+
+.edit-registration-img {
+    border-radius: 50%;
+    width: 160px;
+    height: 160px;
+}
+
+.edit-registration-portfolio {
+    width: 92%;
+    margin-left: 1.1em;
+    background-color: #84C45E !important;
 }
 
 .edit-registration-half-end-grid {
@@ -58,7 +86,7 @@
 }
 
 .edit-registration-data-title, .edit-registration-select-menu {
-    color: #009688;
+    color: #004D40;
 }
 
 .edit-registration-select-menu {

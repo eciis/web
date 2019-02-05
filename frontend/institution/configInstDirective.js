@@ -362,7 +362,12 @@
                 });       
             }     
             return valid;     
-         };     
+        };
+
+        /**
+         * Back to the previous state
+         */
+        configInstCtrl.previousPage = () => window.history.back();
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;

@@ -19,8 +19,10 @@ pipeline {
         )
       }
     }
-    stage('Test_Feature') {
-      sh './ecis test feature --clean'
+    stage('Test Feature') {
+      steps{
+        sh './ecis test feature --clean'
+      }
     }
     stage('Finish') {
       steps {

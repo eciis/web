@@ -175,7 +175,8 @@
          * In mode mobile maybe changes some properties.
          */
         function resetNavBarDisplayStyle(){
-            document.getElementById('main-toolbar').style.display = 'block';
+            const toolbar = document.getElementById('main-toolbar');
+            toolbar && (() => {toolbar.style.display = 'block'})();
         }
 
         /** Add new observers to listen events that user should be refresh. 

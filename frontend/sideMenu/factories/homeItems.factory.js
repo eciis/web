@@ -39,7 +39,7 @@
                     icon: 'account_box',
                     description: 'Meu Perfil',
                     stateName: 'CONFIG_PROFILE',
-                    onClick: () => $state.go(STATES.CONFIG_PROFILE)
+                    onClick: () => $state.go(STATES.CONFIG_PROFILE, {userKey: user.key})
                 },
                 {
                     icon: 'date_range',

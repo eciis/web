@@ -1,37 +1,61 @@
 'use strict';
 
 (function () {
-    var app = angular.module("app");
+    const app = angular.module("app");
 
-    app.controller("ConfigProfileController", function ConfigProfileController($state, STATES,
+    app.controller("ConfigProfileController", function ConfigProfileController($state, STATES, $stateParams,
         CropImageService, AuthService, UserService, ImageService, $rootScope, $q, MessageService, $mdDialog, ObserverRecorderService) {
 
-        var configProfileCtrl = this;
+        const configProfileCtrl = this;
 
         // Variable used to observe the changes on the user model.
-        var observer;
-
-        configProfileCtrl.user = AuthService.getCurrentUser();
-        configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
-        configProfileCtrl.canEdit = true;
+        let observer;
         configProfileCtrl.cpfRegex = /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/;
-        configProfileCtrl.photo_url = configProfileCtrl.newUser.photo_url;
         configProfileCtrl.loadingSubmission = false;
 
-        var HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
+        const HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
             " exceto por meio de novo convite. Deseja remover?";
 
-        var HAS_MORE_THAN_ONE_INSTITUTION_MSG = "Ao remover o vínculo com esta instituição," +
+        const HAS_MORE_THAN_ONE_INSTITUTION_MSG = "Ao remover o vínculo com esta instituição," +
             " você deixará de ser membro" +
             " e não poderá mais publicar na mesma," +
             " no entanto seus posts existentes serão mantidos. Deseja remover?";
 
-        var DELETE_ACCOUNT_ALERT = "Ao excluir sua conta você não poderá mais acessar o sistema," +
+        const DELETE_ACCOUNT_ALERT = "Ao excluir sua conta você não poderá mais acessar o sistema," +
             "exceto por meio de novo convite. Deseja realmente excluir sua conta?";
 
+        configProfileCtrl.$onInit = () => {
+            setupUser();
+        }
+
+        const setupUser = () => {
+            if(configProfileCtrl.canEdit()) {
+                configProfileCtrl.user = AuthService.getCurrentUser();
+                configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
+                observer = ObserverRecorderService.register(configProfileCtrl.user);
+                checkUserName();
+            } else {
+                UserService.getUser($stateParams.userKey)
+                    .then(user => configProfileCtrl.user = user);
+            }
+        }
+        
+        const checkUserName = () => {
+            if (configProfileCtrl.user.name === 'Unknown') {
+                delete configProfileCtrl.user.name;
+                delete configProfileCtrl.newUser.name;
+            }
+        }
+
+        configProfileCtrl.getPhoto = () => {
+            const user = configProfileCtrl.canEdit() ? configProfileCtrl.newUser : configProfileCtrl.user;
+            return user.photo_url;
+        }
+
+
         configProfileCtrl.addImage = function(image) {
-            var newSize = 800;
+            const newSize = 800;
 
             ImageService.compress(image, newSize).then(function success(data) {
                 configProfileCtrl.photo_user = data;
@@ -42,14 +66,14 @@
             });
         };
 
+        configProfileCtrl.canEdit = () => {
+            return $stateParams.userKey === AuthService.getCurrentUser().key;
+        };
+
         function setImage(image) {
             $rootScope.$apply(function () {
-                configProfileCtrl.photo_url = image.src;
+                configProfileCtrl.newUser.photo_url = image.src;
             });
-        }
-
-        configProfileCtrl.editProfile = () => {
-            configProfileCtrl.canEdit = true;
         }
 
         configProfileCtrl.cropImage = function cropImage(imageFile, event) {
@@ -78,10 +102,10 @@
         };
 
         function saveUser() {
-            var deffered = $q.defer();
+            const deffered = $q.defer();
             if (configProfileCtrl.newUser.isValid()) {
                 updateUser();
-                var patch = ObserverRecorderService.generate(observer);
+                const patch = ObserverRecorderService.generate(observer);
                 UserService.save(patch).then(function success() {
                     AuthService.save();
                     configProfileCtrl.loadingSubmission = false;
@@ -96,7 +120,7 @@
         }
 
         function updateUser() {
-            var attributes = ["name", "cpf"];
+            const attributes = ["name", "cpf"];
             _.forEach(attributes, function(attr){
                 _.set(configProfileCtrl.user, attr, _.get(configProfileCtrl.newUser, attr));
             });
@@ -108,7 +132,7 @@
 
         configProfileCtrl.removeInstitution = function removeInstitution(event, institution) {
             if (!isAdmin(institution.key)) {
-                var confirm = $mdDialog.confirm();
+                const confirm = $mdDialog.confirm();
                 confirm
                     .clickOutsideToClose(false)
                     .title('Remover vínculo com ' + institution.name)
@@ -117,7 +141,7 @@
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
-                var promise = $mdDialog.show(confirm);
+                const promise = $mdDialog.show(confirm);
                 promise.then(function () {
                     deleteInstitution(institution.key);
                 }, function () {
@@ -151,11 +175,13 @@
         }
 
         function deleteInstitution(institution_key) {
-            var promise = UserService.deleteInstitution(institution_key);
-            promise.then(function success() {
-                removeConection(institution_key);
+            return new Promise(resolve => {
+                UserService.deleteInstitution(institution_key)
+                    .then(_ => {
+                        removeConection(institution_key);
+                        resolve();
+                    });
             });
-            return promise;
         }
 
         function removeConection(institution_key) {
@@ -176,7 +202,7 @@
 
         configProfileCtrl.deleteAccount = function deleteAccount(event) {
             if (!isAdminOfAnyInstitution()) {
-                var confirm = $mdDialog.confirm();
+                const confirm = $mdDialog.confirm();
                 confirm
                     .clickOutsideToClose(false)
                     .title('Excluir conta')
@@ -185,7 +211,7 @@
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
-                var promise = $mdDialog.show(confirm);
+                const promise = $mdDialog.show(confirm);
                 promise.then(function () {
                     configProfileCtrl.user.state = 'inactive';
                     deleteUser();
@@ -208,20 +234,11 @@
         };
 
         function deleteUser() {
-            var promise = UserService.deleteAccount();
+            const promise = UserService.deleteAccount();
             promise.then(function success() {
                 AuthService.logout();
             });
             return promise;
         }
-        
-        (function main() {
-            observer = ObserverRecorderService.register(configProfileCtrl.user);
-
-            if (configProfileCtrl.user.name === 'Unknown') {
-                delete configProfileCtrl.user.name;
-                delete configProfileCtrl.newUser.name;
-            }
-        })();
     });
 })();

@@ -7,9 +7,11 @@
                 </md-button>
             </div>
         </div>
-        <img class="config-profile__avatar config-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
+        
+        <img class="config-profile__avatar config-profile__avatar--position" ng-src="{{ configProfileCtrl.getPhoto() }}">
+        
         <md-button id="config-profile__camera__button" class="md-icon-button"
-            ng-show="configProfileCtrl.canEdit"
+            ng-show="configProfileCtrl.canEdit()"
             ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
             ngf-accept="'image/*'" ngf-max-size="5MB"
             ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)">
@@ -34,6 +36,6 @@
 
     <user-profiles 
         profiles="configProfileCtrl.user.institution_profiles" 
-        edit-mode="configProfileCtrl.canEdit">
+        edit-mode="configProfileCtrl.canEdit()">
     </user-profiles>
 </md-content>

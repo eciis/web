@@ -8,6 +8,13 @@
             </div>
         </div>
         <img class="config-profile__avatar config-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
+        <md-button id="config-profile__camera__button" class="md-icon-button"
+            ng-show="configProfileCtrl.showButton()"
+            ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB"
+            ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)">
+            <md-icon id="config-profile__photo__icon">photo_camera</md-icon>
+        </md-button>
     </div>
     
     <div class="config-profile__info">

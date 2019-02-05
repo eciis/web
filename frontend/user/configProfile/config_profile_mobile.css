@@ -67,3 +67,19 @@
     height: 4px;
     width: 35%;
 }
+
+
+#config-profile__camera__button {
+    justify-self: center;
+    margin-top: -5em;
+    width: 9.2em;
+    height: 9em;
+    background-color: teal;
+    opacity: 0.5;
+}
+
+#config-profile__photo__icon {
+    color: #ffffff;
+    font-size: 3em;
+    margin: -0.2em 0 0 0.85em;
+}

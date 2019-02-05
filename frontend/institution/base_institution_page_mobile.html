@@ -1,4 +1,4 @@
-<md-content layout-align="center">
+<md-content layout-align="center" hide-navbar="both" class="hide-scrollbar">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
         <div ng-class="institutionCtrl.isTimelineMobile() ? 'cover-inst-mobile': ''">
@@ -11,6 +11,17 @@
                 file-background="institutionCtrl.file"
                 actions-buttons="institutionCtrl.timelineButtonsHeaderMob">
            </institution-header>
+            <div id="inst-name-mobile" ng-if="institutionCtrl.isTimelineMobile()">
+                <hr id="divider-institution"/>
+                <div id="buttons-institution-page">
+                    <md-button ng-repeat="button in institutionCtrl.buttonsMenu"
+                        ng-click="button.onClick(button.parameters)"
+                        class="institution-button-menu">
+                        <md-icon class="icon-button-menu-inst">{{button.icon}}</md-icon>
+                        {{button.label}}
+                    </md-button>
+                </div>
+            </div>
         </div>
 
         <div layout="row" flex="70" class="timeline-inst">

@@ -70,7 +70,7 @@
 
         mainCtrl.goTo = function (stateName) {
             UtilsService.selectNavOption(STATES[stateName]);
-            resetNavBarDisplayStyle();
+            Utils.resetToolbarDisplayStyle();
         };
 
         mainCtrl.logout = function logout() {
@@ -166,13 +166,6 @@
         mainCtrl.showFooterBar = () => {
             return !mainCtrl._statesWithoutFooter.includes($state.current.name);
         };
-
-        /** Reset properties CSS. 
-         * In mode mobile maybe changes some properties.
-         */
-        function resetNavBarDisplayStyle(){
-            document.getElementById('main-toolbar').style.display = 'block';
-        }
 
         /** Add new observers to listen events that user should be refresh. 
          */ 

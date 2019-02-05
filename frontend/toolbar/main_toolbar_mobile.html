@@ -12,7 +12,7 @@
         </span>
 
         <div class="extra-menu-container" layout="row" ng-if="mainToolbarCtrl.toolbarMenuItems">
-            <md-menu md-offset="0 15" ng-repeat="item in mainToolbarCtrl.toolbarMenuItems">
+            <md-menu ng-repeat="item in mainToolbarCtrl.toolbarMenuItems">
                 <md-button ng-click="$mdMenu.open(ev)">
                     <span style="margin-left: -0.3em;">{{item.title}}</span>
                     <md-icon style="margin-left: -0.25em;">arrow_drop_down</md-icon>

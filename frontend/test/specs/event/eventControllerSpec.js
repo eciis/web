@@ -102,6 +102,8 @@
         eventCtrl.showImage = true;
         eventCtrl.events = [];
         eventCtrl.$onInit();
+
+        expect(eventCtrl.toolbarGeneralOptions).not.toEqual(undefined);
     }));
 
     describe('onInit()', () => {
@@ -250,6 +252,12 @@
             eventCtrl._getMonths();
             expect(eventCtrl.selectedMonth).toEqual({month: currentDate.getMonth()+1});
             expect(eventCtrl.selectedYear).toEqual(currentDate.getFullYear());
+        });
+
+        it('should set toolbarItems', () => {
+            eventCtrl._getMonths();
+            expect(eventCtrl.toolbarItems).not.toEqual(undefined);
+            expect(eventCtrl.toolbarItems.length).toEqual(2);
         });
     });
 
@@ -402,7 +410,6 @@
     });
 
     describe('share()', () => {
-
         it('should call mdDialog.show', () => {
             spyOn(mdDialog, 'show');
             eventCtrl.share("$event", event);

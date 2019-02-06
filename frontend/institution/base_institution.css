@@ -73,7 +73,7 @@
 
 .cover-inst-mobile{
     box-shadow: 0 -1px 5px 0px grey;
-    height: 90vh;
+    height: 90%;
 }
 
 .button-navbar-inst{
@@ -153,7 +153,7 @@
 
 .image-cover-inst-timeline{
     margin: 0;
-    height: 12em;
+    height: 11.5em;
     overflow: hidden;
 }
 
@@ -184,7 +184,7 @@
         font-size:1.2em;
     }
     .image-cover-inst-timeline {
-        height: 14em;
+        height: 13.5em;
     }
 }
 
@@ -199,7 +199,7 @@
         font-size:1.3em;
     }
     .image-cover-inst-timeline {
-        height: 15em;
+        height: 14.5em;
     }
     .inst-image-mobile-timeline{
         height: 9em;
@@ -219,7 +219,7 @@
         font-size:1.4em;
     }
     .image-cover-inst-timeline {
-        height: 17em;
+        height: 16.5em;
     }
     .inst-image-mobile-timeline{
         height: 10em;
@@ -243,7 +243,7 @@
         font-size:1.5em;
     }
     .image-cover-inst-timeline {
-        height: 19em;
+        height: 18.5em;
     }
     .inst-image-mobile-timeline{
         height: 10em;

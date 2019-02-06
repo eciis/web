@@ -1,5 +1,30 @@
-<md-dialog>
-    <md-dialog-content>
-        hehehehee
+<md-dialog class="edit-profile-dialog">
+    <md-dialog-content class="edit-profile-dialog__content">
+        <h3>Editar vínculo</h3>
+        <span>{{editProfileCtrl.profile.institution.name}}</span>
+        
+        <div class="edit-profile__form">
+            <md-input-container>
+                <label>Cargo</label>
+                <input name="cargo" ng-model="editProfileCtrl.profile.office" required>
+            </md-input-container>
+            <md-input-container>
+                <label>Telefone institucional</label>
+                <input ng-model="editProfileCtrl.profile.phone" 
+                    placeholder="99 9999-99999" 
+                    name="telefone" mask="99 9999-99999" 
+                    mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
+            </md-input-container>
+            <md-input-container>
+                <label>Ramal</label>
+                <input name="ramal" placeholder="999"
+                    ng-model="editProfileCtrl.profile.branch_line">
+            </md-input-container>
+            <md-input-container>
+                <label>Email institucional</label>
+                <input name="email" ng-model="editProfileCtrl.profile.email" type="email">
+            </md-input-container>
+        </div>
+
     </md-dialog-content>
 </md-dialog>

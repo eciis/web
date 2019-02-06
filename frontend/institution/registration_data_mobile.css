@@ -1,89 +1,38 @@
-.inst-registration-dialog {
-    width: 90%;
-    min-width: 90%;
-    height: 75%;
-}
-
-.inst-registration-content {
-    height: 100%;
-}
-
-.inst-registration-dialog-title {
-    margin-left: 1.4em;
-}
-
-.inst-registration-data-grid {
+.registration-data-half-init-grid, .registration-data-location-grid {
     display: grid;
     grid-template-columns: 30% 70%;
-    grid-template-rows: 20% 20% 20% 20% 20%;
+    grid-template-rows: auto;
+    height: 87%;
     width: 100%;
 }
 
-.inst-registration-data-name {
-    grid-row-start: 1;
-    grid-row-end: 2;
-}
-
-.inst-registration-data-acronym {
-    grid-column-start: 1;
-    grid-column-end: 2;
-}
-
-.inst-registration-data-actuation {
-    grid-column-start: 2;
-    grid-column-end: 3;
-}
-
-.inst-registration-data-acronym, .inst-registration-data-actuation {
-    grid-row-start: 2;
-    grid-row-end: 3;
-}
-
-.inst-registration-data-admin {
-    grid-row-start: 3;
-    grid-row-end: 4;
-}
-
-.inst-registration-data-legal-nature {
-    grid-row-start: 4;
-    grid-row-end: 5;
-}
-
-.inst-registration-data-cnpj {
-    grid-row-start: 5;
-    grid-row-end: 6;
-}
-
-.inst-registration-data-name, .inst-registration-data-admin,
-    .inst-registration-data-legal-nature, .inst-registration-data-cnpj {
-    grid-column-start: 1;
-    grid-column-end: 3;
+.registration-data-location-grid {
+    grid-template-columns: 30% 30% 33%;
 }
 
 .inst-registration-data-title {
     color: #004D40;
     font-size: 0.8em;
     margin-top: -0.1em;
-}
-
-.inst-registration-data-title {
-    margin-left: 1.8em;
+    margin-left: 1.2em;
 }
 
 .inst-registration-data-subtitle {
     font-size: 0.9em;
     color: gray;
-    margin-top: -0.7em;
-    margin-left: 1.55em;
+    margin: -0.4em 1.1em 0.6em 1.1em;
 }
 
-@media screen and (max-height: 640px) {
+.registration-data-hr {
+    border-width: 1.5px;
+    border-color: #009688;
+    border-style: solid;
+    margin-left: 16px;
+    margin-right: 16px;
+}
 
-    .inst-registration-data-subtitle {
-        margin-top: -0.9em;
-        margin-left: 1.6em;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.inst-registration-data-h2 {
+    font-size: 1.2em !important;
+    font-weight: 500 !important;
+    text-align: center !important;
 }

@@ -439,6 +439,10 @@
             $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
         };
 
+        institutionCtrl.showProperty = (property) => {
+            return property || "Não informado";
+        };
+
         (function main(){
             changeCoverOnScroll();
         })();

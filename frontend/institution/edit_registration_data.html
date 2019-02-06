@@ -67,8 +67,12 @@
             ng-model="configInstCtrl.newInstitution.cnpj"
             ng-pattern=configInstCtrl.cnpjRegex
             minlength="18" md-maxlength="18"
-            placeholder="00.000.000/0000-00"
-            mask="99.999.999/9999-99"/>
+            placeholder="00.000.000/0000-00" required
+            mask="99.999.999/9999-99" oninvalid="this.setCustomValidity('A instituição precisa ter CNPJ.')"
+            oninput="this.setCustomValidity('')"/>
+            <div ng-messages="instForm.cnpj.$error">
+                <div ng-message="pattern">O CNPJ deve ser válido!</div>
+            </div>
         </md-input-container>
         <md-input-container class="edit-registration-data-name edit-registration-input-margin edit-registration-site md-block" md-no-float>
             <p class="edit-registration-data-title">Site institucional</p>
@@ -79,7 +83,9 @@
     <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Nome do dirigente máximo</p>
         <input type="text" class="edit-registration-data-input"
-            required ng-model="configInstCtrl.newInstitution.leader"/>
+            required ng-model="configInstCtrl.newInstitution.leader"
+            oninvalid="this.setCustomValidity('Este campo é obrigatório!')"
+            oninput="this.setCustomValidity('')"/>
     </md-input-container>
     <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Responsável</p>
@@ -88,9 +94,11 @@
     </md-input-container>
     <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Breve descrição da instituição</p>
-        <input type="text" class="edit-registration-data-input"
-        ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
-        md-select-on-focus required/>
+        <textarea ng-model="configInstCtrl.newInstitution.description" maxlength="1100"
+        class="edit-registration-data-input" md-select-on-focus required
+        oninvalid="this.setCustomValidity('A instituição precisa de uma descrição.')"
+        oninput="this.setCustomValidity('')">
+        </textarea>
     </md-input-container>
     <div class="info" align="center">
         <h3>Localização</h3>
@@ -99,18 +107,27 @@
         <p class="edit-registration-data-title">Lagradouro</p>
         <input type="text" name="street" ng-required="!configInstCtrl.isAnotherCountry"
         ng-model="configInstCtrl.address.street" class="edit-registration-data-input"/>
+        <div ng-messages='instForm.street.$error'>
+            <div ng-message="required">Este campo é obrigatório!</div>
+        </div>
     </md-input-container>
     <div class="edit-registration-half-init-grid">
         <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
             <p class="edit-registration-data-title">Nº</p>
             <input type="text" name="number" class="edit-registration-data-input"
             ng-model="configInstCtrl.address.number" ng-pattern="configInstCtrl.numberRegex"/>
+            <div ng-messages='instForm.number.$error'>
+                <div ng-message="pattern" >O número deve ser válido!</div>
+            </div>
         </md-input-container>
         <md-input-container md-no-float
         class="edit-registration-data-name edit-registration-input-margin md-block edit-registration-neighbourhood">
             <p class="edit-registration-data-title">Bairro</p>
             <input type="text" name="neighbourhood" ng-required="!configInstCtrl.isAnotherCountry"
             ng-model="configInstCtrl.address.neighbourhood" class="edit-registration-data-input">
+            <div ng-messages='instForm.neighbourhood.$error'>
+                <div ng-message="required">Este campo é obrigatório!</div>
+            </div>
         </md-input-container>
     </div>
     <div class="edit-registration-location-grid">
@@ -138,9 +155,6 @@
                     {{state.sigla}}
                 </md-option>
             </md-select>
-            <div ng-messages='instForm.state.$error'>
-                <div ng-message="required">Este campo é obrigatório!</div>
-            </div>
         </div>
         <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
             md-no-float ng-if="configInstCtrl.isAnotherCountry">
@@ -157,11 +171,12 @@
                 </md-option>
             </md-select>
             <div ng-messages='instForm.city.$error'>
-                <div ng-message="required">Este campo é obrigatório!</div>
+                <div ng-message="required" ng-show="configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry"
+                class="edit-registration-message">Este campo é obrigatório!</div>
             </div>
             <div ng-messages>
                 <div ng-show="!configInstCtrl.selectedState && !configInstCtrl.isAnotherCountry"
-                    style="opacity: 0.9; margin-top: 2px; font-size: 0.8em;">
+                    class="edit-registration-message">
                     Primeiro selecione um estado
                 </div>
             </div>
@@ -175,6 +190,10 @@
         minlength="9" md-maxlength="9" placeholder="00000-000"
         ng-pattern="configInstCtrl.cepRegex"
         mask="99999-999"/>
+        <div ng-messages="instForm.cep.$error">
+            <div ng-message="required">Este campo é obrigatório!</div>
+            <div ng-message="pattern">O CEP deve ser válido!</div>
+        </div>
     </md-input-container>
     <div class="info" align="center">
         <h3>Contato</h3>
@@ -183,7 +202,9 @@
         md-no-float>
         <p class="edit-registration-data-title">E-mail instituticional</p>
         <input type="email" name="institutionalEmail" class="edit-registration-data-input"
-        ng-model="configInstCtrl.newInstitution.institutional_email" required/>
+        ng-model="configInstCtrl.newInstitution.institutional_email" required
+        oninvalid="this.setCustomValidity('A instituição precisa de um e-mail.')"
+        oninput="this.setCustomValidity('')"/>
     </md-input-container>
     <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block"
         md-no-float>

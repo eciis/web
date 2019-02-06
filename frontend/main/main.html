@@ -1,5 +1,6 @@
 <!-- TOOLBAR -->
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center" layout="row">
+<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center"
+  layout="row" hide-navbar="top">
   <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70">
 
     <md-button class="md-icon-button hide-gt-sm" aria-label="Menu" ng-click="mainCtrl.toggle()">
@@ -69,7 +70,7 @@
   </div>
 </md-toolbar>
 
-<footer ng-if="mainCtrl.showFooterBar()">
+<footer hide-navbar="bottom">
   <md-toolbar layout-align="space-around center" layout="row" id="navbar-bottom">
     <div class="icon-navbar-bottom">
       <md-button class="md-icon-button" aria-label="Início" ng-click="mainCtrl.goTo('HOME')">

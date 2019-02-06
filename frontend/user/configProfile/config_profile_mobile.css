@@ -45,16 +45,16 @@
     color: white;
 }
 
+.config-profile__avatar {
+    border-radius: 50%;
+    height: 9em;
+    width: 9em;
+}
+
 .config-profile__avatar--position {
     justify-self: center;
     position: absolute;
-    top: 7em;
-}
-
-.config-profile__avatar {
-    border-radius: 50%;
-    height: 8em;
-    width: 8em;
+    top: 6.5em;
 }
 
 .config-profile__info {
@@ -93,9 +93,9 @@
 
 #config-profile__camera__button {
     justify-self: center;
-    margin-top: -5em;
-    width: 9.2em;
-    height: 9.2em;
+    margin-top: -5.5em;
+    width: 10.3em;
+    height: 10.3em;
     background-color: teal;
     opacity: 0.5;
 }
@@ -103,7 +103,7 @@
 #config-profile__photo__icon {
     color: #ffffff;
     font-size: 3em;
-    margin: -0.2em 0 0 0.85em;
+    margin: -0.4em 0 0 1em;
 }
 
 .config-profile__container md-input-container {

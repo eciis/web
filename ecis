@@ -213,7 +213,7 @@ case "$1" in
                 fi
                 
                 if [ ! -e node_modules ]; then
-                    yarn add package.json
+                    yarn
                     catch_error $? "Node modules installed with success"
                 else
                     log_message "Node modules already installed"

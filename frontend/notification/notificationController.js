@@ -13,7 +13,13 @@
             'REQUEST_INSTITUTION_CHILDREN', 'REQUEST_INSTITUTION_PARENT', 'REQUEST_INSTITUTION', 
             'ACCEPT_INSTITUTION_LINK', 'ACCEPTED_LINK', 'REJECTED_LINK', 
             'REJECT_INSTITUTION_LINK', 'ACCEPT_INVITE_INSTITUTION', 'REJECT_INVITE_INSTITUTION', 
-            'ACCEPT_INVITE_HIERARCHY']
+            'ACCEPT_INVITE_HIERARCHY'
+        ];
+
+        const ALL_NOTIFICATIONS = 'Todas as notificações';
+        const INSTITUTIONAL_NOTIFICATIONS = 'Notificações Institucionais';
+        const UNREAD_NOTIFICATIONS = 'Notificações não lidas';
+        const ALL_AS_READ = 'Marcar todas como lidas';
 
         notificationCtrl.user = AuthService.getCurrentUser();
 
@@ -65,7 +71,7 @@
         function getMobileToolbarMenuItems() {
 
             toolbarMobileMenuItems.push({
-                options: ['Todas as notificações', 'Notificações Institucionais', 'Notificações não lidas', 'Marcar todas como lidas'],
+                options: [ALL_NOTIFICATIONS, INSTITUTIONAL_NOTIFICATIONS, UNREAD_NOTIFICATIONS, ALL_AS_READ],
                 action: option => {notificationCtrl.selectNotificationAction(option)},
                 title: 'NOTIFICAÇÕES'
             });

@@ -4,7 +4,8 @@
             <md-icon>close</md-icon>
         </md-button>
         <span class="config-profile__toolbar__title">MEU PERFIL</span>
-        <md-button class="config-profile__toolbar--save" ng-click="configProfileCtrl.finish()">
+        <md-button class="config-profile__toolbar--save" ng-click="configProfileCtrl.finish()"
+            ng-disabled="configProfileCtrl.loadingSubmission">
             SALVAR
         </md-button>
     </div>

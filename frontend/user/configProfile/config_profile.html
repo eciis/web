@@ -15,7 +15,7 @@
           <div class="info-user">
             <div style="position: relative; margin: auto;">
                  <img id="user-image" ng-src="{{ configProfileCtrl.getPhoto() }}">
-                  <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                  <md-button ng-show="configProfileCtrl.canEdit()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"
                     ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
                     class="md-icon-button edit-profile-avatar-button" title="Altere a imagem">

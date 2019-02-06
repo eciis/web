@@ -86,37 +86,45 @@
 
         configProfileCtrl.finish = function finish() {
             configProfileCtrl.loadingSubmission = true;
-            if (configProfileCtrl.photo_user) {
-                configProfileCtrl.canEdit = false;
-                ImageService.saveImage(configProfileCtrl.photo_user)
-                .then(function (data) {
-                    configProfileCtrl.user.photo_url = data.url;
-                    configProfileCtrl.user.uploaded_images.push(data.url);
-                    saveUser();
-                    configProfileCtrl.canEdit = true;
-                    configProfileCtrl.loadingSubmission = false;
-                });
-            } else {
-                return saveUser();
-            }
+            saveImage().then(_ => {
+                saveUser()
+                    .finally(_ => {
+                        configProfileCtrl.loadingSubmission = false;
+                    });
+            })
         };
 
-        function saveUser() {
-            const deffered = $q.defer();
-            if (configProfileCtrl.newUser.isValid()) {
-                updateUser();
-                const patch = ObserverRecorderService.generate(observer);
-                UserService.save(patch).then(function success() {
-                    AuthService.save();
-                    configProfileCtrl.loadingSubmission = false;
-                    MessageService.showToast("Edição concluída com sucesso");
-                    deffered.resolve();
-                });
-            } else {
-                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
-                deffered.reject();
-            }
-            return deffered.promise;
+        const saveImage = () => {
+            return new Promise((resolve) => {
+                if(configProfileCtrl.photo_user) {
+                    ImageService.saveImage(configProfileCtrl.photo_user)
+                        .then(function (data) {
+                            configProfileCtrl.user.photo_url = data.url;
+                            configProfileCtrl.user.uploaded_images.push(data.url);
+                            resolve();
+                        })
+                } else {
+                    resolve();
+                }
+            })
+        }
+
+        const saveUser = () => {
+            return new Promise((resolve) => {
+                if (configProfileCtrl.newUser.isValid()) {
+                    updateUser();
+                    const patch = ObserverRecorderService.generate(observer);
+                    UserService.save(patch)
+                        .then(() => {
+                            AuthService.save();
+                            MessageService.showToast("Edição concluída com sucesso");
+                            resolve();
+                        });
+                } else {
+                    MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+                    resolve();
+                }
+            });
         }
 
         function updateUser() {
@@ -124,10 +132,6 @@
             _.forEach(attributes, function(attr){
                 _.set(configProfileCtrl.user, attr, _.get(configProfileCtrl.newUser, attr));
             });
-        };
-
-        configProfileCtrl.showButton = function () {
-            return configProfileCtrl.canEdit;
         };
 
         configProfileCtrl.removeInstitution = function removeInstitution(event, institution) {

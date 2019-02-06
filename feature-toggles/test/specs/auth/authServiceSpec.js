@@ -12,7 +12,7 @@
     let firebaseUser = {
         accessToken: 'ruioewyuirywieuryiuweyr876324875632487yiue',
         getIdToken: async () => firebaseUser.accessToken
-    }
+    };
 
     beforeEach(module('app'));
 
@@ -38,8 +38,8 @@
             spyOn(userService, 'load').and.callThrough();
 
             authService.setupUser(userTest.accessToken, userTest.emailVerified);
-            var user = authService.getCurrentUser();
-            var new_user = new userFactory.user(userTest);
+            const user = authService.getCurrentUser();
+            const new_user = new userFactory.user(userTest);
 
             expect(userService.load).toHaveBeenCalled();
             expect(user).toEqual(new_user);
@@ -54,8 +54,8 @@
         it('should authService.getCurrentUser()', function() {
             spyOn(userService, 'load').and.callThrough();
             authService.setupUser(userTest.accessToken, userTest.emailVerified);
-            var user = authService.getCurrentUser();
-            var new_user = new userFactory.user(userTest);
+            const user = authService.getCurrentUser();
+            const new_user = new userFactory.user(userTest);
             expect(user).toEqual(new_user);
         });
 
@@ -69,7 +69,7 @@
         });
 
         it('should authService.isLoggedIn()', function() {
-            var isLoggedIn = authService.isLoggedIn();
+            const isLoggedIn = authService.isLoggedIn();
             expect(isLoggedIn).toEqual(true);
         });
 
@@ -79,8 +79,8 @@
 
             window.localStorage.userInfo = null;
             authService.save();
-            var userCache = window.localStorage.userInfo;
-            var new_user = JSON.stringify(userTest);
+            const userCache = window.localStorage.userInfo;
+            const new_user = JSON.stringify(userTest);
 
             expect(userCache).toEqual(new_user);
         });

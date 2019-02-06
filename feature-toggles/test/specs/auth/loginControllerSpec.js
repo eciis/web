@@ -2,24 +2,12 @@
 
 (describe('Test LoginController', function() {
 
-    var logginCtrl, httpBackend, scope, createCtrl, state, authService, states;
+    let logginCtrl, httpBackend, scope, createCtrl, state, authService, states;
 
-    var user = {
+    const user = {
         name: 'Tiago',
         state: 'active'
     };
-
-    var institutions = [{
-        name: 'Certbio',
-        key: '123456789'
-    }];
-
-    var posts = [{
-        author: 'Mayza Nunes',
-        author_key: "111111",
-        title: 'Post de Mayza',
-        text: 'Lorem ipsum'
-    }];
 
     beforeEach(module('app'));
 

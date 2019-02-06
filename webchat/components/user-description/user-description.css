@@ -1,25 +1,29 @@
-.user-description-container {
-    display: flex;
-    flex-direction: row;
-    font-size: 0.8em;
+.user-description {
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: max-content max-content;
+    grid-template-areas:
+            'avatar name'
+            'avatar text';
+    grid-gap: 0 0.6rem;
+    padding: 0.6rem 0;
+    align-items: center;
 }
 
-.avatar {
-    padding: 10px;
-    height: 50px;
-    width: 50px;
+.user-description__avatar {
+    grid-area: avatar;
+    height: 3em;
+    width: 3em;
     border-radius: 50%;
 }
 
-.user-text {
-    align-content: center;
-    align-self: center;
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-    margin: 0;
+.user-description__name {
+    grid-area: name;
+    line-height: 1rem;
 }
 
-.user-description {
+.user-description__text {
+    grid-area: text;
     font-size: 0.8em;
+    line-height: 1rem;
 }

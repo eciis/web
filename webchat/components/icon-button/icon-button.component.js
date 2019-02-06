@@ -17,6 +17,7 @@
         bindings: {
             icon: "@",
             iconColor: "@",
+            action: '<',
         },
     });
 

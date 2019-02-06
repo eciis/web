@@ -1,0 +1,18 @@
+.toolbar__container {
+    padding: 10px 0;
+    width: 100%;
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: 100%;
+    grid-template-areas:
+        'close-btn search-bar';
+}
+
+.toolbar__close-btn {
+    grid-area: close-btn;
+}
+
+.toolbar__search-bar {
+    width: 100%;
+    grid-area: search-bar;
+}

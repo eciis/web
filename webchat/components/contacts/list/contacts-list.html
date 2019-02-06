@@ -1,7 +1,16 @@
-<md-list class="no-margin no-padding custom-scrollbar custom-scrollbar contacts-list-container fill-height">
-    <md-list-item aria-label="user-contact" ng-repeat="user in contactsListCtrl.contacts | filter : contactsListCtrl.searchQuery | orderBy : ['name', 'description']" ng-click="contactsListCtrl.openChat(user)">
-        <user-description class="user-contact" name="{{user.name}}" avatar="{{user.photo_url}}" description="{{user.current_institution.name}}"></user-description>
+<md-list
+        class="contacts-list__container">
+    <md-list-item
+            ng-repeat="user in contactsListCtrl.contacts | filter : contactsListCtrl.searchQuery | orderBy : ['name', 'description']"
+            ng-click="contactsListCtrl.openChat(user)"
+            aria-label="contacts-list__contact">
+        <user-description
+                class="contacts-list__contact"
+                avatar="{{user.photo_url}}"
+                name="{{user.name}}"
+                text="{{user.current_institution.name}}">
+        </user-description>
         <md-divider></md-divider>
     </md-list-item>
-    <h2 ng-show="contactsListCtrl.isMessageShown" class="no-contacts-message">Não há contatos online no momento.</h2>
+    <h2 class="contacts-list__no-contacts-msg" ng-show="contactsListCtrl.isMessageShown">Não há contatos online no momento.</h2>
 </md-list>

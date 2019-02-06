@@ -1,24 +1,49 @@
-.search-container {
+.expansive-search__container {
     display: flex;
     flex-direction: row;
-    display: 100%;
 }
 
-.expansive-search-input {
+.expansive-search__input {
     width: 100%;
-    border-radius: 50px;
-    padding: 0 20px;
+    border-radius: 4em;
+    padding: 0 1.2em;
     background-color: #EEEEEE;
     border: none;
     outline: none;
 }
 
-.expansive-search-input.ng-enter {
-    animation-name: simple-fade-in;
-    animation-duration: 0.25s;
+.expansive-search__input.ng-enter {
+    animation-name: width-expansion-in;
+    animation-duration: 0.75s;
 }
 
-.expansive-search-input.ng-leave {
-    animation-name: simple-fade-out;
-    animation-duration: 0.25s;
+.expansive-search__input.ng-leave {
+    animation-name: width-expansion-out;
+    animation-duration: 0.75s;
+}
+
+
+/* Expand element in width direction */
+@keyframes width-expansion-in {
+    0% {
+        width: 0;
+        padding: 0;
+    }
+
+    100% {
+        width: 100%;
+        padding: 0 1.2em;
+    }
+}
+
+@keyframes width-expansion-out {
+    0% {
+        width: 100%;
+        padding: 0 1.2em;
+    }
+
+    100% {
+        width: 0;
+        padding: 0;
+    }
 }

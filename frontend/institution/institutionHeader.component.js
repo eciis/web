@@ -12,10 +12,11 @@
              *  show if in timeline and is admin or member.
              */
             instHeaderCtrl.showButtonMore = function showButtonMore(){
-                const isAdmin = _.get(instHeaderCtrl.actionsButtons, 'isAdmin');
+                const institutionKey = instHeaderCtrl.institution && instHeaderCtrl.institution.key;
+                const isAdmin = instHeaderCtrl.user.isAdmin(institutionKey);
 
                 return instHeaderCtrl.isTimeline() && 
-                    ( !instHeaderCtrl.isMember || isAdmin());
+                    ( !instHeaderCtrl.isMember || isAdmin);
             }
 
             /** Return if current state is registration data on institution.
@@ -35,9 +36,10 @@
             /** Return the title of page according current state.
              */
             instHeaderCtrl.getTitle = function getTitle(){
-                const getLimitedName = _.get(instHeaderCtrl.actionsButtons, 'getLimitedName');
+                const getLimitedName = instHeaderCtrl.actionsButtons && 
+                    instHeaderCtrl.actionsButtons.getLimitedName(110);
                 const tileState = {
-                    [STATES.INST_TIMELINE]: getLimitedName(110),
+                    [STATES.INST_TIMELINE]: getLimitedName,
                     [STATES.INST_REGISTRATION_DATA]: "Dados cadastrais",
                     [STATES.INST_LINKS]: "Vínculos Institucionais",
                     [STATES.INST_MEMBERS]: "Membros",

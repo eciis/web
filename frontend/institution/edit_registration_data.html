@@ -6,7 +6,18 @@
 </div>
 <div class="edit-registration-img-margin">
     <div class="avatar" align="center">
-        <img class="edit-registration-img" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
+        <md-button md-colors="{background: 'default-teal-500'}"
+            ng-click="null" class="md-fab edit-registration-img-button"
+            ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB"
+            ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
+            <img class="edit-registration-img" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
+            <div layout="column" class="edit-registration-img-inside">
+                <md-icon class="edit-registration-img-icon">photo_camera</md-icon>
+                <b class="edit-registration-img-text">TROCAR IMAGEM</b>
+            </div>
+
+        </md-button>
     </div>
     <div class="info" align="center">
         <h3>Dados cadastrais</h3>
@@ -14,7 +25,7 @@
 </div>
 <form name="instForm" prevent-state-change="configInstCtrl.newInstitution"
     ng-submit="instForm.$valid && configInstCtrl.submit($event)" layout="column">
-    <md-input-container style="color: green;" class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
+    <md-input-container class="edit-registration-data-name edit-registration-input-margin md-block" md-no-float>
         <p class="edit-registration-data-title">Nome</p>
         <input type="text" class="edit-registration-data-input" ng-model="configInstCtrl.newInstitution.name"
         required oninvalid="this.setCustomValidity('A instituição precisa ter um nome.')"

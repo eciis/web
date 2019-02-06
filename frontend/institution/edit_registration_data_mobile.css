@@ -31,10 +31,35 @@
     margin-top: 5em;
 }
 
+.edit-registration-img, .edit-registration-img-button {
+    width: 160px !important;
+    height: 160px !important;
+}
+
+.edit-registration-img-button {
+    z-index: 0 !important;
+}
+
 .edit-registration-img {
     border-radius: 50%;
-    width: 160px;
-    height: 160px;
+    margin-left: -0.4em;
+    opacity: 0.5;
+}
+
+.edit-registration-img-inside {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit-registration-img-icon {
+    font-size: 4em;
+    margin-left: 0.6em;
+}
+
+.edit-registration-img-text {
+    margin-top: 0.8em;
 }
 
 .edit-registration-portfolio {
@@ -100,6 +125,7 @@
 
 .edit-registration-data-input {
     margin-top: -1.2em !important;
+    border-color: #009688 !important;
 }
 
 .edit-registration-data-title {
@@ -141,6 +167,10 @@
 .edit-registration-cancel-button {
     background-color: rgb(173, 169, 169);
     color: white;
+}
+
+.md-input-container:not(.md-input-invalid).md-input-focused .md-input {
+    border-color: red
 }
 
 .edit-registration-data-top-bar {

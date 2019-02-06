@@ -9,7 +9,8 @@
         controllerAs: 'userProfileCtrl',
         bindings: {
             profiles: '<',
-            editMode: '<'
+            editMode: '<',
+            onClick: '<'
         }
     })
 
@@ -21,16 +22,8 @@
             return userProfileCtrl.editMode ? editImagePath : profile.institution.photo_url;
         }
 
-        userProfileCtrl.openEditDialog = (profile, event) => {
-            const dialogData = {
-                templateUrl: 'app/user/editProfile/edit_profile.html',
-                controller: 'EditProfileController',
-                controllerAs: "editProfileCtrl",
-                locals: { profile },
-                targetEvent: event,
-                clickOutsideToClose: false
-            };
-            if(userProfileCtrl.editMode) $mdDialog.show(dialogData);
+        userProfileCtrl.edit = (profile, event) => {
+            if(userProfileCtrl.editMode) userProfileCtrl.onClick(profile, event);
         };
     }
 

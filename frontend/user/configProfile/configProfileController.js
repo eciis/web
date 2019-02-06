@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller("ConfigProfileController", function ConfigProfileController($state, STATES, $stateParams,
-        CropImageService, AuthService, UserService, ImageService, $rootScope, $q, MessageService, $mdDialog, ObserverRecorderService) {
+        CropImageService, AuthService, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
 
         const configProfileCtrl = this;
 
@@ -157,8 +157,13 @@
         };
 
         configProfileCtrl.editProfile = function editProfile(profile, event) {
+            const templateUrl = Utils.selectFieldBasedOnScreenSize(
+                'app/user/editProfile/edit_profile.html',
+                'app/user/editProfile/edit_profile_mobile.html',
+                SCREEN_SIZES.SMARTPHONE
+            );
             $mdDialog.show({
-                templateUrl: 'app/user/editProfile/edit_profile.html',
+                templateUrl: templateUrl,
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
                 locals: { profile },

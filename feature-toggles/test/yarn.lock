@@ -2,14 +2,6 @@
 # yarn lockfile v1
 
 
-"@bower_components/moment@moment/moment#^2.18.1":
-  version "2.24.0"
-  resolved "https://codeload.github.com/moment/moment/tar.gz/96d0d6791ab495859d09a868803d31a55c917de1"
-
-"@bower_components/ngMask@candreoliveira/ngMask#^3.1.1":
-  version "3.1.0"
-  resolved "https://codeload.github.com/candreoliveira/ngMask/tar.gz/ec2bb5d05eed979ce18c4034d3cc882668517f21"
-
 "@uirouter/angularjs@^1.0.5":
   version "1.0.22"
   resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.22.tgz#581ab38794a2d7c2790851087072c4066b2b6c46"
@@ -149,18 +141,6 @@ angular-mocks@1.6.4:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/angular-mocks/-/angular-mocks-1.6.4.tgz#47fdf50921cf24fb489f100a8cf2ad99d0538f40"
   integrity sha1-R/31CSHPJPtInxAKjPKtmdBTj0A=
-
-angular-moment@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/angular-moment/-/angular-moment-1.0.1.tgz#509d3326aea23f78221cfddb2b62bfede6841d31"
-  integrity sha1-UJ0zJq6iP3giHP3bK2K/7eaEHTE=
-  dependencies:
-    moment ">=2.8.0 <3.0.0"
-
-angular-sanitize@1.6.4:
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.6.4.tgz#60a37ea96fb0d4a322a3ccb64ee4a5cf3b154f0c"
-  integrity sha1-YKN+qW+w1KMio8y2TuSlzzsVTww=
 
 angular@1.6.4:
   version "1.6.4"
@@ -934,11 +914,6 @@ crypto-browserify@^3.0.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
-
-crypto-js@^3.1.9-1:
-  version "3.1.9-1"
-  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.1.9-1.tgz#fda19e761fc077e01ffbfdc6e9fdfc59e8806cd8"
-  integrity sha1-/aGedh/Ad+Af+/3G6f38WeiAbNg=
 
 custom-event@~1.0.0:
   version "1.0.1"
@@ -2590,12 +2565,7 @@ module-deps@^3.5.0:
     through2 "^1.0.0"
     xtend "^4.0.0"
 
-moment-js@^1.1.15:
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/moment-js/-/moment-js-1.1.15.tgz#28da79be3bf2bc4a3dffd2b8368c28e863caa9d5"
-  integrity sha1-KNp5vjvyvEo9/9K4Nowo6GPKqdU=
-
-moment@2.x.x, "moment@>=2.8.0 <3.0.0", moment@^2.18.1:
+moment@2.x.x:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==

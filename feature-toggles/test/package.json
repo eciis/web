@@ -7,10 +7,7 @@
     "angular-material": "1.1.5",
     "angular-messages": "1.6.4",
     "angular-mocks": "1.6.4",
-    "angular-moment": "1.0.1",
-    "angular-sanitize": "1.6.4",
     "angularfire": "^2.3.0",
-    "crypto-js": "^3.1.9-1",
     "jasmine": "2.99.0",
     "karma": "^1.7.0",
     "karma-chai-plugins": "^0.9.0",
@@ -20,19 +17,12 @@
     "karma-jasmine-html-reporter": "0.2.2",
     "karma-spec-reporter": "0.0.31",
     "lodash": "^4.17.4",
-    "mockfirebase": "^0.12.0",
-    "moment-js": "^1.1.15"
+    "mockfirebase": "^0.12.0"
   },
   "dependencies": {
-    "@bower_components/moment": "moment/moment#^2.18.1",
-    "@bower_components/ngMask": "candreoliveira/ngMask#^3.1.1",
-    "moment": "^2.18.1",
     "package.json": "^2.0.1"
   },
   "engines": {
     "yarn": ">= 1.0.0"
-  },
-  "scripts": {
-    "postinstall": "node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'bower_components', 'junction') } catch (e) { }\""
   }
 }

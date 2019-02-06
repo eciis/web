@@ -4,7 +4,7 @@
     angular
     .module("app")
     .component("userProfiles", {
-        templateUrl: 'app/user/configProfile/userProfiles/user_profiles.html',
+        templateUrl: 'app/user/userProfiles/user_profiles.html',
         controller: userProfileController,
         controllerAs: 'userProfileCtrl',
         bindings: {
@@ -23,7 +23,7 @@
 
         userProfileCtrl.openEditDialog = (profile, event) => {
             const dialogData = {
-                templateUrl: 'app/user/edit_profile.html',
+                templateUrl: 'app/user/editProfile/edit_profile.html',
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
                 locals: { profile },

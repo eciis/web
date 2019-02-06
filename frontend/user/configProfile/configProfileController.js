@@ -53,7 +53,6 @@
             return user.photo_url;
         }
 
-
         configProfileCtrl.addImage = function(image) {
             const newSize = 800;
 
@@ -159,7 +158,7 @@
 
         configProfileCtrl.editProfile = function editProfile(profile, event) {
             $mdDialog.show({
-                templateUrl: 'app/user/edit_profile.html',
+                templateUrl: 'app/user/editProfile/edit_profile.html',
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
                 locals: { profile },

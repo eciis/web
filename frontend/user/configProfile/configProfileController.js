@@ -157,15 +157,13 @@
             }
         };
 
-        configProfileCtrl.editProfile = function editProfile(inst, ev) {
+        configProfileCtrl.editProfile = function editProfile(profile, event) {
             $mdDialog.show({
                 templateUrl: 'app/user/edit_profile.html',
                 controller: 'EditProfileController',
                 controllerAs: "editProfileCtrl",
-                locals: {
-                    institution: inst
-                },
-                targetEvent: ev,
+                locals: { profile },
+                targetEvent: event,
                 clickOutsideToClose: false
             });
         };

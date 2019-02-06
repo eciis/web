@@ -59,23 +59,23 @@
         <md-card-content >
             <md-list class="md-dense">
                 <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
-                <md-list-item class="md-3-line info-user" ng-repeat="institution in configProfileCtrl.user.institutions track by institution.key">
-                  <img id="inst-image" ng-src="{{ institution.photo_url }}"/>
+                <md-list-item class="md-3-line info-user" ng-repeat="profile in configProfileCtrl.user.institution_profiles track by $index">
+                  <img id="inst-image" ng-src="{{ profile.institution.photo_url }}"/>
                   <div id="text" layout="column" class="md-list-item-text">
-                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
-                        {{ institution.acronym }}
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(profile.institution.key)">
+                        {{ profile.institution.acronym }}
                     </a>
-                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
-                        {{ institution.name }}
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(profile.institution.key)">
+                        {{ profile.institution.name }}
                     </a>
                   </div>
                   <div>
                     <md-button class="md-secondary sm-icon-button" title="Editar perfil institucional"
-                    ng-click="configProfileCtrl.editProfile(institution, $event)" md-colors="{background: 'light-green'}">
+                    ng-click="configProfileCtrl.editProfile(profile, $event)" md-colors="{background: 'light-green'}">
                       <md-icon>edit</md-icon>
                     </md-button>
                     <md-button class="md-secondary sm-icon-button" title="Remover vínculo com a instituição"
-                    ng-click="configProfileCtrl.removeInstitution($event, institution)" md-colors="{background: 'light-green'}">
+                    ng-click="configProfileCtrl.removeInstitution($event, profile.institution)" md-colors="{background: 'light-green'}">
                       <md-icon>delete</md-icon>
                     </md-button>
                   </div>

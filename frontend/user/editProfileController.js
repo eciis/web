@@ -3,23 +3,30 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("EditProfileController", function EditProfileController(institution, ProfileService,
+    app.controller("EditProfileController", function EditProfileController(profile, ProfileService,
         AuthService, $mdDialog, MessageService, ObserverRecorderService) {
-        var editProfileCtrl = this;
-        editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
-        editProfileCtrl.user = AuthService.getCurrentUser();
-        editProfileCtrl.institution = institution;
+        const editProfileCtrl = this;
+        
+        editProfileCtrl.phoneRegex = Utils.getRegex("phone");
         let profileObserver = {};
         let oldProfile;
+        
+        editProfileCtrl.$onInit = () => {
+            editProfileCtrl.user = AuthService.getCurrentUser();
+            editProfileCtrl.profile = profile;
+            oldProfile = _.clone(editProfileCtrl.profile);
+            profileObserver = ObserverRecorderService.register(editProfileCtrl.user);
+        };
 
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
                 var patch = ObserverRecorderService.generate(profileObserver);
                 if (!_.isEmpty(patch)) {
-                    ProfileService.editProfile(patch).then(function success() {
-                        MessageService.showToast('Perfil editado com sucesso');
-                        AuthService.save();
-                    });
+                    ProfileService.editProfile(patch)
+                        .then(() => {
+                            MessageService.showToast('Perfil editado com sucesso');
+                            AuthService.save();
+                        });
                 }
                 $mdDialog.hide();
             } else {
@@ -36,13 +43,5 @@
         function isValidProfile() {
             return !_.isEmpty(editProfileCtrl.profile.office);
         }
-
-        (function main() {
-            editProfileCtrl.profile = editProfileCtrl.user.institution_profiles
-                .filter(profile => profile.institution_key === editProfileCtrl.institution.key)
-                .reduce(profile => profile);
-            oldProfile = _.clone(editProfileCtrl.profile);
-            profileObserver = ObserverRecorderService.register(editProfileCtrl.user);
-        })();
     });
 })();

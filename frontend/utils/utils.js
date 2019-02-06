@@ -265,5 +265,12 @@ var Utils = {
      * Returns the input property if it is defined, 
      * otherwise a default value is returned
      */
-    showProperty: property => property || 'Não informado'
+    showProperty: property => property || 'Não informado',
+
+    getRegex: type => {
+        const regexes = {
+            phone: "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}"
+        };
+        return regexes[type];
+    }
 };

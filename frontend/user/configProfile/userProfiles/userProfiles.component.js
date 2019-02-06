@@ -13,22 +13,26 @@
         }
     })
 
-    function userProfileController(AuthService) {
+    function userProfileController($mdDialog) {
         const userProfileCtrl = this;
-
-        // userProfileCtrl.user = AuthService.getCurrentUser();
 
         userProfileCtrl.getImage = profile => {
             const editImagePath = 'app/images/edit.png';
             return userProfileCtrl.editMode ? editImagePath : profile.institution.photo_url;
         }
 
-        userProfileCtrl.edit = profile => {
-            if(userProfileCtrl.editMode) {
-                console.log('edit');
-            }
-            
+        userProfileCtrl.openEditDialog = (profile, event) => {
+            const dialogData = {
+                templateUrl: 'app/user/edit_profile.html',
+                controller: 'EditProfileController',
+                controllerAs: "editProfileCtrl",
+                locals: { profile },
+                targetEvent: event,
+                clickOutsideToClose: false
+            };
+            if(userProfileCtrl.editMode) $mdDialog.show(dialogData);
         };
-
     }
+
+    
 })();

@@ -171,6 +171,7 @@
             return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         };
 
+
         /** Add new observers to listen events that user should be refresh. 
          */ 
         function notificationListener() {

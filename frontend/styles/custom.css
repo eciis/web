@@ -602,6 +602,11 @@ a:active {
     background: #009688
 }
 
+.custom-scrollbar {
+    scrollbar-color: #009688 #ccc;
+    scrollbar-width: thin;
+}
+
 .card-title-light {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;

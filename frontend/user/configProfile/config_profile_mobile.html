@@ -1,7 +1,19 @@
+<md-toolbar id="config-profile__toolbar">
+    <div class="md-toolbar-tools">
+        <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
+            <md-icon>close</md-icon>
+        </md-button>
+        <span class="config-profile__toolbar__title">MEU PERFIL</span>
+        <md-button class="config-profile__toolbar--save" ng-click="configProfileCtrl.finish()">
+            SALVAR
+        </md-button>
+    </div>
+</md-toolbar>
+
 <md-content class="config-profile__container custom-scrollbar">
     <div class="config-profile__header">
         <div class="config-profile__header--background">
-            <div class="config-profile__header--shadow">
+            <div class="config-profile__header--shadow" ng-if="!configProfileCtrl.canEdit()">
                 <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
                     <md-icon class="config-profile__back__icon">arrow_back</md-icon>
                 </md-button>
@@ -19,7 +31,7 @@
         </md-button>
     </div>
     
-    <div class="config-profile__info">
+    <div class="config-profile__info" ng-if="!configProfileCtrl.canEdit()">
         <p class="config-profile__info--name responsive__title">
             {{ configProfileCtrl.showProperty(configProfileCtrl.user.name) }}
         </p>
@@ -32,6 +44,22 @@
             <span>cpf:</span>
             <p class="config-profile__info--item">{{ configProfileCtrl.showProperty(configProfileCtrl.user.cpf) }}</p>
         </div>
+    </div>
+
+    <div class="config-profile__form" ng-if="configProfileCtrl.canEdit()">
+        <md-input-container>
+          <label>NOME</label>
+          <input ng-model="configProfileCtrl.newUser.name" required>
+        </md-input-container>
+        <md-input-container>
+          <label>E-MAIL DE CADASTRO</label>
+          <input ng-model="configProfileCtrl.newUser.email[0]" type="email" disabled>
+        </md-input-container>
+        <md-input-container>
+        <label>CPF</label>
+        <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+          mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
+        </md-input-container>
     </div>
 
     <user-profiles 

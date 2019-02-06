@@ -14,7 +14,7 @@
         <form ng-submit="configProfileCtrl.finish()" prevent-state-change="configProfileCtrl.newUser">
           <div class="info-user">
             <div style="position: relative; margin: auto;">
-                 <img id="user-image" ng-src="{{ configProfileCtrl.photo_url }}">
+                 <img id="user-image" ng-src="{{ configProfileCtrl.getPhoto() }}">
                   <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"
                     ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"

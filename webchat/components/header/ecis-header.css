@@ -18,7 +18,7 @@
 .ecis-header__current-user {
     grid-area: user-description;
     font-size: 1rem;
-    margin: 0 10px;
+    margin: 0 0.6em;
     justify-self: flex-end;
 }
 

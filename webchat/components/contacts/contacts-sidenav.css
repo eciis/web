@@ -2,7 +2,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-rows: 64px calc(100% - 64px);
+    grid-template-rows: 4em calc(100% - 4em);
     grid-template-areas:
             'sidenav__toolbar'
             'sidenav__list';
@@ -10,8 +10,8 @@
 
 .contacts-sidenav__toolbar {
     height: 100%;
-    max-height: 64px;
-    padding: 0 10px;
+    max-height: 4em;
+    padding: 0 0.6em;
     grid-area: sidenav__toolbar;
 }
 

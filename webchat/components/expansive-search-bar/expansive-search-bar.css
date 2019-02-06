@@ -5,8 +5,8 @@
 
 .expansive-search__input {
     width: 100%;
-    border-radius: 50px;
-    padding: 0 20px;
+    border-radius: 4em;
+    padding: 0 1.2em;
     background-color: #EEEEEE;
     border: none;
     outline: none;
@@ -32,14 +32,14 @@
 
     100% {
         width: 100%;
-        padding: 0 20px;
+        padding: 0 1.2em;
     }
 }
 
 @keyframes width-expansion-out {
     0% {
         width: 100%;
-        padding: 0 20px;
+        padding: 0 1.2em;
     }
 
     100% {

@@ -116,6 +116,7 @@ var Utils = {
      */
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
+        if(!content) return;
 
         content.onscroll = function onscroll() {
             var screenPosition = content.scrollTop + content.offsetHeight;
@@ -224,6 +225,14 @@ var Utils = {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
     },
 
+     /** Reset properties CSS of elements toolbar. 
+     * In mode mobile maybe changes some properties.
+     */
+    resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
+        document.getElementById('main-toolbar').style.display = 'block';
+        document.getElementById('navbar-bottom').style.display = 'flex';
+    },
+    
     /**
     * Get the initial letter of the user name
     * @param {Object} user : user object

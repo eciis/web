@@ -140,7 +140,7 @@
                 views: {
                     content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/base_institution_page.html",
-                        "app/institution/base_institution_page_mobile.html"),
+                                                                         "app/institution/base_institution_page_mobile.html"),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }

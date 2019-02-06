@@ -5,7 +5,7 @@
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
         AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
-        CropImageService, ImageService, UtilsService) {
+        CropImageService, ImageService, UtilsService, SCREEN_SIZES) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -31,6 +31,50 @@
             loadInstitution();
         };
 
+        /** Creating objects with the properties of the institution cover menu buttons.
+         */
+        function loadButtonsMenu(){
+             institutionCtrl.buttonsMenu =  [
+                { 
+                    'label': 'CADASTRO',
+                    'icon': 'assignment',
+                    'onClick': institutionCtrl.goToRegistrationData,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'VÍNCULOS',
+                    'icon': 'account_balance',
+                    'onClick': institutionCtrl.goToLinks,
+                    'parameters': institutionCtrl.institution.key
+
+                },
+                { 
+                    'label': 'MEMBROS',
+                    'icon': 'account_circle',
+                    'onClick': institutionCtrl.goToMembers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'PORTFOLIO',
+                    'icon': 'description',
+                    'onClick': institutionCtrl.portfolioDialog,
+                    'parameters': '$event'
+                },
+                { 
+                    'label': 'SEGUIDORES',
+                    'icon': 'people',
+                    'onClick': institutionCtrl.goToFollowers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'EVENTOS',
+                    'icon': 'date_range',
+                    'onClick': institutionCtrl.goToEvents,
+                    'parameters': institutionCtrl.institution.key
+                }
+            ]
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response);
@@ -40,30 +84,19 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
-                loadTimelineButtonsHeaderMob();
+                loadPropertiesInstCover();
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
         }
 
-          /** Create the object that contais all functions necessary in institution header,
-         * when is in timeline page on mobile.
+        /** Created objects with button properties for the institution cover.
          */
-        function loadTimelineButtonsHeaderMob(){
-            institutionCtrl.timelineButtonsHeaderMob =  {
-                goBack: institutionCtrl.goBack,
-                showDescribe: null,
-                isAdmin: institutionCtrl.isAdmin,
-                follow: institutionCtrl.follow,
-                unfollow: institutionCtrl.unfollow,
-                cropImage: institutionCtrl.cropImage,
-                showImageCover: institutionCtrl.showImageCover,
-                getLimitedName: institutionCtrl.getLimitedName,
-                requestInvitation: institutionCtrl.requestInvitation
-            }
+        function loadPropertiesInstCover(){
+            loadTimelineButtonsHeaderMob();
+            loadButtonsMenu();
         }
-
 
         /**
          * Returns the key of the current institution
@@ -72,6 +105,22 @@
         institutionCtrl.getInstKey = () => {
             return currentInstitutionKey;
         };
+
+        /** Create the object that contais all functions necessary in institution header,
+         * when is in timeline page on mobile.
+         */
+        function loadTimelineButtonsHeaderMob(){
+            institutionCtrl.timelineButtonsHeaderMob =  {
+                goBack: institutionCtrl.goBack,
+                showDescribe: null,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                cropImage: institutionCtrl.cropImage,
+                showImageCover: institutionCtrl.showImageCover,
+                requestInvitation: institutionCtrl.requestInvitation,
+                getLimitedName: institutionCtrl.getLimitedName
+            }
+        }
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
@@ -135,6 +184,10 @@
             institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
+        institutionCtrl.showDescription = function showDescription(){
+            return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        }
+
         institutionCtrl.showFollowButton = function showFollowButton() {
            return institutionCtrl.institution && !institutionCtrl.isMember && 
                 institutionCtrl.institution.name !== "Ministério da Saúde" &&
@@ -144,6 +197,7 @@
         /** Go to previous page.
          */
         institutionCtrl.goBack = function goBack(){
+            if(institutionCtrl.isTimelineMobile()) Utils.resetToolbarDisplayStyle();
             window.history.back();
         }
 
@@ -174,6 +228,7 @@
         };
         
         institutionCtrl.goToHome = function goToHome() {
+            Utils.resetToolbarDisplayStyle();
             $state.go(STATES.HOME);
         };
 

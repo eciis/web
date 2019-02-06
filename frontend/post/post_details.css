@@ -83,6 +83,10 @@
         margin: 0;
     }
 
+    .delete-post-text {
+        text-align: center;
+    }
+
     #delete-btn-text {
         display: none;
     }

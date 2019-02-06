@@ -11,7 +11,8 @@
                 scope.bottomToolbar = document.getElementById('navbar-bottom');
                 scope.INSTITUTION_STATES = [
                     STATES.INST_TIMELINE, STATES.INST_FOLLOWERS, STATES.INST_EVENTS,
-                    STATES.INST_MEMBERS, STATES.INST_REGISTRATION_DATA, STATES.INST_LINKS
+                    STATES.INST_MEMBERS, STATES.INST_REGISTRATION_DATA, STATES.INST_LINKS,
+                    STATES.CONFIG_PROFILE
                 ];
                 scope.STATES_WITHOUT_BOTTOM_TOOLBAR = [
                     STATES.CREATE_EVENT

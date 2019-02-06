@@ -229,8 +229,13 @@ var Utils = {
      * In mode mobile maybe changes some properties.
      */
     resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
-        document.getElementById('main-toolbar').style.display = 'block';
-        document.getElementById('navbar-bottom').style.display = 'flex';
+        const toolbar = document.getElementById('main-toolbar')
+        if(toolbar)
+            toolbar.style.display = 'block';
+        
+        const navbar = document.getElementById('navbar-bottom')
+        if(navbar)
+            navbar.style.display = 'flex';
     },
     
     /**

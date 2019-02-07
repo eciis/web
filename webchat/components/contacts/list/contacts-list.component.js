@@ -14,7 +14,8 @@
         controllerAs: "contactsListCtrl",
         bindings: {
             searchQuery: "<",
-            contacts: "<"
+            contacts: "<",
+            openChat: "<",
         },
     });
 

@@ -88,6 +88,11 @@
         }
       }
 
+      closeClient() {
+        this.ws.onclose = () => {};
+        this.ws.close();
+      }
+
       /**
        * Mimics node's on/emit event handlers.
        * Raises an event.

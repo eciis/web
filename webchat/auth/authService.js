@@ -152,6 +152,7 @@
             delete $window.localStorage.userInfo;
             userInfo = undefined;
             clearInterval(refreshInterval);
+            chatClient.closeClient();
 
             executeLogoutListeners();
 

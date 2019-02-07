@@ -40,11 +40,11 @@
 }
 
 .registration-data-hr {
-    border-width: 1.5px;
+    border-width: 0.094em;
     border-color: #009688;
     border-style: solid;
-    margin-left: 16px;
-    margin-right: 16px;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 .inst-registration-data-h2 {

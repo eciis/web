@@ -23,8 +23,8 @@
 }
 
 .edit-registration-img, .edit-registration-img-button {
-    width: 160px !important;
-    height: 160px !important;
+    width: 11em !important;
+    height: 11em !important;
 }
 
 .edit-registration-img-button {
@@ -171,10 +171,6 @@
     color: white;
 }
 
-.md-input-container:not(.md-input-invalid).md-input-focused .md-input {
-    border-color: red
-}
-
 .edit-registration-data-top-bar {
     height: 3em;
     width: 100%;
@@ -182,5 +178,5 @@
     position: fixed;
     background: white;
     z-index: 3;
-    box-shadow: 0px 3px 6px grey;
+    box-shadow: 0em 0.188em 0.375em grey;
 }

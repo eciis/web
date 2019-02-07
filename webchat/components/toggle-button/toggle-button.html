@@ -1,0 +1,15 @@
+<md-button
+        class="md-icon-button"
+        ng-switch="toggleButtonCtrl.active"
+        ng-click="toggleButtonCtrl.toggle()" >
+    <md-icon
+            ng-switch-when="true"
+            style="color: {{ toggleButtonCtrl.iconColorOn }}">
+        {{ toggleButtonCtrl.iconOn }}
+    </md-icon>
+    <md-icon
+            ng-switch-when="false"
+            style="color: {{ toggleButtonCtrl.iconColorOff }}">
+        {{ toggleButtonCtrl.iconOff }}
+    </md-icon>
+</md-button>

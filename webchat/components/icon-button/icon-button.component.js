@@ -18,6 +18,7 @@
             icon: "@",
             iconColor: "@",
             action: '<',
+            disabled: '<',
         },
     });
 
@@ -26,7 +27,9 @@
 
         iconButtonCtrl.$onInit = () => {
             iconButtonCtrl.iconColor = iconButtonCtrl.iconColor || "#EEE";
+            iconButtonCtrl.disabled = iconButtonCtrl.disabled || false;
         };
+
     }
 
 })();

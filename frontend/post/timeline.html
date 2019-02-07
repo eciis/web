@@ -1,10 +1,7 @@
 <!-- TIMELINE -->
 <div flex ng-if="!timelineCtrl.isLoadingPosts">
-  <md-card ng-if="timelineCtrl.posts.size() === 0">
-    <md-content layout-align="center center" layout="column">
-      <h4>Esta instituição ainda não possui publicações.</h4>
-    </md-content>
-  </md-card>
+  <is-empty-card ng-if="timelineCtrl.posts.size() === 0" text="Ainda não há publicações para serem mostradas">
+  </is-empty-card>
   <div layout="row" layout-align="center center" class="ng-if" ng-if="timelineCtrl.showRefreshTimelineButton()">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.refreshTimeline()">
       VOCÊ TEM NOVOS POSTS

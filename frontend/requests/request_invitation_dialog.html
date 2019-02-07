@@ -12,7 +12,7 @@
 				<form name="requestuser" ng-submit="requestInvCtrl.verifyAndSendRequest()">
 					<md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
 			          <label>Nome</label>
-			          <input ng-model="requestInvCtrl.request.name" name="name" required>
+			          <input class="custom-card-input" ng-model="requestInvCtrl.request.name" name="name" required>
 			          <div ng-messages='requestuser.request.name.$error'>
 			    		<div ng-message="required">Este campo é obrigatório!</div>
 					  </div>
@@ -20,7 +20,7 @@
 
 			        <md-input-container class="md-block">
 			          <label>Email institucional</label>
-			          <input ng-model="requestInvCtrl.request.email" type="email" name="email" required>
+			          <input class="custom-card-input" ng-model="requestInvCtrl.request.email" type="email" name="email" required>
 			          <div ng-messages='requestuser.request.email.$error'>
 			    		<div ng-message="required">Este campo é obrigatório!</div>
 					  </div>
@@ -28,10 +28,10 @@
 
 			      	<md-input-container class="md-block">
 			      	<label>Cargo institucional</label>
-						<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
-						<div ng-messages='requestuser.request.office.$error'>
-							<div ng-message="required">Este campo é obrigatório!</div>
-						</div>
+                    <input class="custom-card-input" name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
+                    <div ng-messages='requestuser.request.office.$error'>
+                        <div ng-message="required">Este campo é obrigatório!</div>
+                    </div>
 					</md-input-container>
                     <div layout="row" layout-align="end">
                         <md-button ng-click="requestInvCtrl.cancelDialog()" class="md-button" md-colors="{color: 'default-teal-500'}">

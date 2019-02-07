@@ -10,6 +10,18 @@
     grid-template-columns: 30% 30% 33%;
 }
 
+.registration-data-init-column {
+    grid-column-start: 1
+}
+
+.registration-data-medium-column {
+    grid-column-start: 2
+}
+
+.registration-data-end-column {
+    grid-column-start: 3
+}
+
 .inst-registration-data-title {
     color: #004D40;
     font-size: 0.8em;

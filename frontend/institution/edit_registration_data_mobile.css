@@ -122,9 +122,12 @@
     width: 96%;
 }
 
+.edit-registration-data-input, .md-select-value {
+    border-color: #009688 !important;
+}
+
 .edit-registration-data-input {
     margin-top: -1.2em !important;
-    border-color: #009688 !important;
 }
 
 .edit-registration-data-title {

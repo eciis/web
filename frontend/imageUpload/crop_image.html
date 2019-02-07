@@ -1,26 +1,21 @@
-<md-dialog flex flex-gt-md="50" layout="row">
-  <md-card flex="100">
-    <md-card-header>
-      <md-card-header-text>
-        <span class="md-title">Selecione a área a ser exibida.</span>
-      </md-card-header-text>
-      <md-button class="md-icon-button" ng-click="cropImgCtrl.cancelCrop()">
-        <md-icon>close</md-icon>
-      </md-button>
-    </md-card-header>
-    <md-card-content layout="column">
-      <div class="cropArea">
+<md-dialog flex flex-xs='90' flex-gt-md='50'>
+  <md-dialog-content>
+    <div id='crop-dialog'>
+      <span class="md-title crop-dialog-title">Adicionar ou alterar imagem</span>
+      <div class="crop-dialog-area">
         <img-crop image="cropImgCtrl.image" result-image="cropImgCtrl.croppedImage"
             result-image-size="cropImgCtrl.resultImgSize" result-image-format="cropImgCtrl.resultImgFormat" 
             area-type="{{cropImgCtrl.areaType}}" style="background-color: #FFFFFF;">
         </img-crop>
       </div>
-    </md-card-content>
-    <md-dialog-actions layout="row">
-      <span flex></span>
-      <md-button class="md-icon-button" ng-click="cropImgCtrl.confirmCrop()">
-        <md-icon>send</md-icon>
-      </md-button>
-    </md-dialog-actions>
-  </md-card>
+      <div id='crop-dialog-buttons'>
+        <md-button class='crop-dialog-button' ng-click="cropImgCtrl.cancelCrop()">
+          CANCELAR
+        </md-button>
+        <md-button class='crop-dialog-button' ng-click="cropImgCtrl.confirmCrop()">
+          CONFIRMAR
+        </md-button>
+      </div>
+    </div>
+  </md-dialog-content>
 </md-dialog>

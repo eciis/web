@@ -4,22 +4,20 @@
     </md-button>
     <h3 class="edit-registration-top-color">EDITAR DADOS CADASTRAIS</h3>
 </div>
-<div ng-if="!configInstCtrl.loading">
-    <div class="edit-registration-img-margin">
-        <div class="avatar" align="center">
-            <md-button md-colors="{background: 'default-teal-500'}"
-                ng-click="null" class="md-fab edit-registration-img-button"
-                ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
-                ngf-accept="'image/*'" ngf-max-size="5MB"
-                ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
-                <img class="edit-registration-img" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
-                <div layout="column" class="edit-registration-img-inside">
-                    <md-icon class="edit-registration-img-icon">photo_camera</md-icon>
-                    <b class="edit-registration-img-text">TROCAR IMAGEM</b>
-                </div>
+<div ng-if="!configInstCtrl.loading" class="edit-registration-img-margin">
+    <div class="avatar" align="center">
+        <md-button md-colors="{background: 'default-teal-500'}"
+            ng-click="null" class="md-fab edit-registration-img-button"
+            ng-model="configInstCtrl.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB"
+            ngf-select="configInstCtrl.cropImage(configInstCtrl.file, $event)">
+            <img class="edit-registration-img" ng-src="{{ configInstCtrl.newInstitution.photo_url }}"/>
+            <div layout="column" class="edit-registration-img-inside">
+                <md-icon class="edit-registration-img-icon">photo_camera</md-icon>
+                <b class="edit-registration-img-text">TROCAR IMAGEM</b>
+            </div>
 
-            </md-button>
-        </div>
+        </md-button>
         <div class="info" align="center">
             <h3>Dados cadastrais</h3>
         </div>
@@ -223,7 +221,7 @@
         </md-input-container>
         <load-circle ng-show="configInstCtrl.isSubmitting"></load-circle>
         <div layout="row" class="edit-registration-buttons" ng-hide="configInstCtrl.isSubmitting">
-            <md-button type="reset" class="edit-registration-cancel-button" ng-click="editInfoCtrl.closeDialog()">
+            <md-button class="edit-registration-cancel-button" ng-click="configInstCtrl.previousPage()">
                 CANCELAR
             </md-button>
             <md-button class="btn-submit" type="submit" class="md-raised"

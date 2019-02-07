@@ -1,3 +1,7 @@
+.registration-data-width {
+    width: 100%;
+}
+
 .registration-data-half-init-grid, .registration-data-location-grid {
     display: grid;
     grid-template-columns: 30% 70%;

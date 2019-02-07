@@ -216,6 +216,9 @@
         
         const toolbarMobileMenuItems = [];
         
+        /**
+         * Generate the menuItems that will live in the middle of the toolbar.
+         */
         eventCtrl._getToolbarMobileMenuItems = function getToolbarMobileMenuItems() {
             const monthsMenuItem = {
                 options: eventCtrl.months.map(month => month.month_name),
@@ -238,6 +241,10 @@
 
         const toolbarMenuGeneralOptions = {};
 
+        /**
+         * Generate the options that will be in the last
+         * button of the toolbar as extra options.
+         */
         eventCtrl._getToolbarMobileGeneralOptions = function getToolbarMobileGeneralOptions () {
             toolbarMenuGeneralOptions.options = [
                 {   
@@ -252,6 +259,9 @@
             return toolbarMenuGeneralOptions;
         };
 
+        /**
+         * Just wraps the toolbar's items initialization
+         */
         eventCtrl.setupToolbarFields = () => {
             eventCtrl.toolbarGeneralOptions = eventCtrl._getToolbarMobileGeneralOptions();
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();

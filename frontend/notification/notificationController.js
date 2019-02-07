@@ -53,6 +53,12 @@
             return Utils.isMobileScreen(mobileScreenSize);
         };
 
+        /**
+         * It maps the option selected to the correct function.
+         * Each function has an specific behavior that can be
+         * intuitively understood by reading the option.
+         * @param {string} option
+         */
         notificationCtrl.selectNotificationAction = (option) => {
             const optionsMap = {
                 'Todas as notificações': () => { notificationCtrl.notificationsToShow = notificationCtrl.allNotifications },
@@ -79,12 +85,11 @@
             return toolbarMobileMenuItems;
         };
 
-        notificationCtrl.toolbarMobileMenuItems = getMobileToolbarMenuItems();
-
-        (function main(){
+        notificationCtrl.$onInit = () => {
             notificationCtrl.allNotifications = NotificationService.getAllNotifications();
-            notificationCtrl.notifications =  NotificationService.getUnreadNotifications();
+            notificationCtrl.notifications = NotificationService.getUnreadNotifications();
             notificationCtrl.notificationsToShow = notificationCtrl.allNotifications;
-        })();
+            notificationCtrl.toolbarMobileMenuItems = getMobileToolbarMenuItems();
+        };
     });
 })();

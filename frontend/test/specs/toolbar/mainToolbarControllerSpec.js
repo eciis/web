@@ -18,10 +18,10 @@ describe('MainToolbarController test', () => {
         }
     ]
 
-    beforeEach(inject(function ($controller, $state, $rootScope, SCREEN_SIZES) {
+    beforeEach(inject(function ($componentController, $state, $rootScope, SCREEN_SIZES) {
         state = $state;
         scope = $rootScope.$new();
-        mainToolbarCtrl = $controller('MainToolbarController', {
+        mainToolbarCtrl = $componentController('mainToolbar', null, {
             scope: scope,
             SCREEN_SIZES: SCREEN_SIZES
         });

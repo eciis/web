@@ -3,7 +3,7 @@
     <div id="main-toolbar-mobile">
 
         <md-button class="md-icon-button" aria-label="Menu" 
-            ng-click="mainToolbarCtrl.toggle()" class="main-menu-button">
+            ng-click="mainToolbarCtrl.toggleSidenav()" class="main-menu-button">
             <md-icon>menu</md-icon>
         </md-button>
 
@@ -39,7 +39,7 @@
 
 
         <div id="search-toolbar-element" ng-if="!mainToolbarCtrl.noSearch" layout="row">
-            <div layout="row" md-theme="input" class="toolbar-search">
+            <div md-theme="input" class="toolbar-search">
                 <md-button class="md-icon-button" title="Buscar" 
                     ng-click="mainToolbarCtrl.changeState(mainToolbarCtrl.states.SEARCH, {search_keyword: ''})">
                     <md-icon>search</md-icon>

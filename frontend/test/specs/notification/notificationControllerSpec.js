@@ -61,6 +61,7 @@
             });
         };
         notCtrl = createCtrl();
+        notCtrl.$onInit();
         notCtrl.notifications = [];
 
         expect(notCtrl.toolbarMobileMenuItems.length).toEqual(1);
@@ -77,7 +78,7 @@
             spyOn(notificationService, 'getAllNotifications').and.callThrough();
             spyOn(notificationService, 'getUnreadNotifications').and.callThrough();
 
-            notCtrl = createCtrl();
+            notCtrl.$onInit();
 
             expect(notificationService.getAllNotifications).toHaveBeenCalled();
             expect(notificationService.getUnreadNotifications).toHaveBeenCalled();

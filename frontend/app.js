@@ -187,7 +187,8 @@
                 url: "/institution/:institutionKey/registration_data",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/registration_data.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/registration_data.html",
+                            "app/institution/registration_data_mobile.html", 475),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -249,7 +250,8 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/edit_info.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
+                            "app/institution/edit_info_mobile.html", 475)
                     }
                 }
             })

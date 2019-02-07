@@ -118,7 +118,8 @@
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
                 requestInvitation: institutionCtrl.requestInvitation,
-                getLimitedName: institutionCtrl.getLimitedName
+                getLimitedName: institutionCtrl.getLimitedName,
+                editRegistrationData: institutionCtrl.editRegistrationData
             }
         }
 
@@ -432,6 +433,14 @@
 
         institutionCtrl.limitString = function limitString(string, size) {
             return Utils.limitString(string, size);
+        };
+
+        institutionCtrl.editRegistrationData = () => {
+            $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
+        };
+
+        institutionCtrl.showProperty = (property) => {
+            return property || "Não informado";
         };
 
         (function main(){

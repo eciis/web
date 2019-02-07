@@ -76,3 +76,39 @@
     padding-left: 10px;
     padding-right: 10px; 
 }
+
+.pdf-item-container {
+    display: grid; 
+    grid-template-columns: min-content auto min-content;
+}
+
+#pdf-remove {
+    line-height: 4em;
+}
+
+.pdf-icon {
+    display: grid;
+    align-content: center;
+}
+
+.pdf-text {
+    display: grid;
+    align-content: center;
+    padding: 8px;
+}
+
+@media screen and (min-width: 600px) {
+    .pdf-text > p {
+        word-break: break-all;
+        overflow: hidden;
+        margin: 0;
+    }   
+}
+
+@media screen and (max-width: 599px) {
+    .pdf-text  > p {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }   
+}

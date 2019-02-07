@@ -33,12 +33,14 @@
 							<div ng-message="required">Este campo é obrigatório!</div>
 						</div>
 					</md-input-container>
-					  <div layout="row" layout-align="end">
-						<md-button type="submit"
-								class="md-button md-raised" md-colors="{background: 'default-teal-500'}">
-							Solicitar Cadastro
-						</md-button>
-					</div>
+                    <div layout="row" layout-align="end">
+                        <md-button ng-click="requestInvCtrl.cancelDialog()" class="md-button" md-colors="{color: 'default-teal-500'}">
+                            Cancelar
+                        </md-button>
+                        <md-button type="submit" class="md-button" md-colors="{color: 'default-teal-500'}">
+                            Confirmar
+                        </md-button>
+                    </div>
 				</form>
 			</md-card-content>
 		</md-card>

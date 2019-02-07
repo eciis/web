@@ -8,3 +8,23 @@
     font-weight: 700;
     color: #019587;
 }
+
+img.avatar-icon {
+    padding: 0;
+    display: inline-block;
+    background-repeat: no-repeat no-repeat;
+    pointer-events: none;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    margin-right: 0.6em;
+}
+
+button.color-picker-button {
+    text-overflow: ellipsis;
+}
+
+md-icon#color-picker-icon {
+    font-size: 2em;
+    margin-bottom: 0.4em;
+}

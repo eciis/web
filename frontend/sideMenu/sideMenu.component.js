@@ -16,6 +16,14 @@
         HomeItemsFactory, ManageInstItemsFactory, InstitutionService, SIDE_MENU_TYPES) {
         
         const sideMenuCtrl = this;
+        const colorPickerButton = {
+          text: 'Gerenciar cores',
+          icon: 'color_lens',
+        };
+        const backButton = {
+          text: 'Voltar',
+          icon: 'keyboard_arrow_left',
+        };
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
         
@@ -91,6 +99,18 @@
         sideMenuCtrl.isType = type => {
             return type === sideMenuCtrl.type;
         };
+
+        sideMenuCtrl.isColorPickerActive = false;
+
+        sideMenuCtrl.toggleColorPicker = () => {
+          sideMenuCtrl.isColorPickerActive = !sideMenuCtrl.isColorPickerActive;
+        }
+
+        Object.defineProperty(sideMenuCtrl, 'currentMenuOption', {
+          get: function() {
+            return sideMenuCtrl.isColorPickerActive ? backButton : colorPickerButton;
+          }
+        })
 
         sideMenuCtrl.openColorPicker = () => {
             $mdDialog.show({

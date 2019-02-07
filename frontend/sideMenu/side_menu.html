@@ -18,15 +18,19 @@
                             </md-button>
                             <md-menu-content width="4" class="custom-scrollbar">
                                 <md-menu-item ng-repeat="profile in sideMenuCtrl.user.institution_profiles">
-                                    <md-button class='color-picker-button' ng-click="sideMenuCtrl.changeInstitution(profile)">
+                                    <md-button ng-if='!sideMenuCtrl.isColorPickerActive' class='color-picker-button' ng-click="sideMenuCtrl.changeInstitution(profile)">
                                       <img class='avatar-icon' ng-src="{{ profile.institution.photo_url }}"></img>
                                         {{ profile.institution.name }}
-                                    </md-button> 
+                                    </md-button>
+                                    <md-button ng-if='sideMenuCtrl.isColorPickerActive' class='color-picker-button' ng-click="sideMenuCtrl.openColorPicker(profile)">
+                                      <md-icon class='color-picker-icon' md-colors='{color: profile.color+"-900"}'>brightness_1</md-icon>
+                                        {{ profile.institution.name }}
+                                    </md-button>
                                 </md-menu-item>
                                 <md-menu-item>
-                                    <md-button ng-click="sideMenuCtrl.openColorPicker(profile)">
-                                        <md-icon id='color-picker-icon'>color_lens</md-icon>
-                                        Gerenciar cores
+                                    <md-button ng-click="sideMenuCtrl.toggleColorPicker()" md-prevent-menu-close="md-prevent-menu-close">
+                                        <md-icon class='color-picker-icon'>{{ sideMenuCtrl.currentMenuOption.icon }}</md-icon>
+                                        {{ sideMenuCtrl.currentMenuOption.text }}
                                     </md-button>
                                 </md-menu-item>
                             </md-menu-content>

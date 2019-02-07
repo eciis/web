@@ -214,12 +214,14 @@
             });
         };
         
-        const toolbarMobileMenuItems = [];
+        
         
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */
         eventCtrl._getToolbarMobileMenuItems = function getToolbarMobileMenuItems() {
+            const toolbarMobileMenuItems = [];
+
             const monthsMenuItem = {
                 options: eventCtrl.months.map(month => month.month_name),
                 action: month => { eventCtrl.selectedMonth = eventCtrl.months.find(m => m.month_name == month); eventCtrl.loadFilteredEvents(); },
@@ -239,13 +241,13 @@
             return toolbarMobileMenuItems;
         };
 
-        const toolbarMenuGeneralOptions = {};
-
         /**
          * Generate the options that will be in the last
          * button of the toolbar as extra options.
          */
         eventCtrl._getToolbarMobileGeneralOptions = function getToolbarMobileGeneralOptions () {
+            const toolbarMenuGeneralOptions = {};
+            
             toolbarMenuGeneralOptions.options = [
                 {   
                     title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 

@@ -29,9 +29,9 @@
             </md-menu>
         </div>
 
-        <div ng-if="mainToolbarCtrl.sortByAlpha" ng-click="mainToolbarCtrl.sort()" layout="row" class="sort-button-container">
+        <div ng-if="mainToolbarCtrl.sortByAlpha" layout="row" class="sort-button-container">
             <div>
-                <md-button class="md-icon-button">
+                <md-button class="md-icon-button" ng-click="mainToolbarCtrl.sort()">
                     <md-icon>sort_by_alpha</md-icon>
                 </md-button>
             </div>

@@ -61,20 +61,21 @@
          */
         notificationCtrl.selectNotificationAction = (option) => {
             const optionsMap = {
-                'Todas as notificações': () => { notificationCtrl.notificationsToShow = notificationCtrl.allNotifications },
-                'Notificações Institucionais': () => { 
+                [ALL_NOTIFICATIONS]: () => { notificationCtrl.notificationsToShow = notificationCtrl.allNotifications },
+                [INSTITUTIONAL_NOTIFICATIONS]: () => { 
                     notificationCtrl.notificationsToShow = notificationCtrl.allNotifications.filter(not => _.includes(institutionalNotificationTypes, not.entity_type))
                 },
-                'Notificações não lidas': () => { notificationCtrl.notificationsToShow = notificationCtrl.notifications },
-                'Marcar todas como lidas': () => { notificationCtrl.clearAll() }
+                [UNREAD_NOTIFICATIONS]: () => { notificationCtrl.notificationsToShow = notificationCtrl.notifications },
+                [ALL_AS_READ]: () => { notificationCtrl.clearAll() }
             }
 
             return optionsMap[option]();
         };
 
-        const toolbarMobileMenuItems = [];
+        
 
         function getMobileToolbarMenuItems() {
+            const toolbarMobileMenuItems = [];
 
             toolbarMobileMenuItems.push({
                 options: [ALL_NOTIFICATIONS, INSTITUTIONAL_NOTIFICATIONS, UNREAD_NOTIFICATIONS, ALL_AS_READ],

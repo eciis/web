@@ -1107,6 +1107,11 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     border-bottom-color: #009688 !important;
 }
 
+.custom-title {
+    font-size: 20px;
+    font-weight: 500;
+}
+
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .custom-card {

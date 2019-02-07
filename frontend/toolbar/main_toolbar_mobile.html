@@ -1,5 +1,5 @@
 <md-toolbar md-colors="{background: 'teal-500'}" 
-    layout-align="center" layout="row" ng-if="mainToolbarCtrl.isMobileScreen()" style="overflow: hidden;">
+    layout-align="center" layout="row" ng-if="mainToolbarCtrl.isMobileScreen()" class="mobile-toolbar">
     <div id="main-toolbar-mobile">
 
         <md-button class="md-icon-button" aria-label="Menu" 
@@ -14,8 +14,8 @@
         <div class="extra-menu-container" layout="row" ng-if="mainToolbarCtrl.toolbarMenuItems">
             <md-menu ng-repeat="item in mainToolbarCtrl.toolbarMenuItems">
                 <md-button ng-click="$mdMenu.open(ev)">
-                    <span style="margin-left: -0.3em;">{{item.title}}</span>
-                    <md-icon style="margin-left: -0.25em;">arrow_drop_down</md-icon>
+                    <span>{{item.title}}</span>
+                    <md-icon>arrow_drop_down</md-icon>
                 </md-button>
                 <md-menu-content style="width: 80%;">
                     <md-menu-item ng-repeat="option in item.options">

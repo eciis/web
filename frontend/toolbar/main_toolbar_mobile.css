@@ -49,6 +49,18 @@
     padding: 0;
 }
 
+.extra-menu-container span{
+    margin-left: -0.3em;
+}
+
+.extra-menu-container md-icon{
+    margin-left: -0.25em;
+}
+
+.extra-menu-container md-menu-content {
+    width: 80%;
+}
+
 .sort-button-container {
     grid-column-start: 3; 
     grid-column-end: 4; 
@@ -73,4 +85,8 @@
     grid-row-start: 1; 
     grid-row-end: 2; 
     justify-self: end;
+}
+
+.mobile-toolbar {
+    overflow: hidden;
 }

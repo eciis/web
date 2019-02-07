@@ -1,7 +1,7 @@
 <md-dialog class="request-invitation__dialog">
 	<md-dialog-content class="request-invitation__content" ng-if="requestInvCtrl.request || requestInvCtrl.institution">
         <!-- Request to be member -->
-        <span class="custom-title request-invitation__title">Solicitar vinculo institucional</span>
+        <span class="custom-title request-invitation__title">Solicitar vínculo institucional</span>
         <span class="md-subheader">{{requestInvCtrl.request.institution_name}}</span>
         <form name="requestuser" ng-submit="requestInvCtrl.verifyAndSendRequest()">
             <md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">

@@ -39,5 +39,13 @@
         service.getMonths = function getMonths() {
             return HttpService.get('app/utils/months.json');
         };
+
+        service.addFollower = function (event) {
+            return HttpService.post(`/api/events/${event}/followers`);
+        };
+
+        service.removeFollower = function (event) {
+            return HttpService.delete(`/api/events/${event}/followers`);
+        };
     });
 })();

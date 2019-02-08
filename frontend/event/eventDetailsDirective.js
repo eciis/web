@@ -148,6 +148,26 @@
             return new Date(isoTime).getHours();
         };
 
+        eventCtrl.isFollower = () => {
+            return _.includes(eventCtrl.event.followers, eventCtrl.user.key);
+        };
+
+        eventCtrl.addFollower = () => {
+            EventService.addFollower(eventCtrl.event.key).then(() => {
+                eventCtrl.event.addFollower(eventCtrl.user.key);
+            }).catch((error) => {
+                console.error(error);
+            });
+        };
+
+        eventCtrl.removeFollower = () => {
+            EventService.removeFollower(eventCtrl.event.key).then(() => {
+                eventCtrl.event.removeFollower(eventCtrl.user.key);
+            }).catch((error) => {
+                console.error(error);
+            });
+        };
+
         /**
          * This function receives the event key, makes a 
          * request to the backend, and returns the event 
@@ -157,7 +177,7 @@
          */
         function loadEvent(eventKey) {
             return EventService.getEvent(eventKey).then(function success(response) {
-                eventCtrl.event = response;
+                eventCtrl.event = new Event(response);
             }, function error(response) {
                 MessageService.showToast(response);
                 $state.go(STATES.HOME);

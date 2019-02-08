@@ -4,6 +4,7 @@ from datetime import datetime
 from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from models import Address
+from custom_exceptions import NotAllowedException
 
 __all__ = ['Event']
 
@@ -78,6 +79,8 @@ class Event(ndb.Model):
     # Local of the event
     local = ndb.StringProperty(required=True)
 
+    followers = ndb.KeyProperty(kind="User", repeated=True)
+
     def isValid(self, is_patch=False):
         """Check if is valid event."""
         date_now = datetime.today()
@@ -127,6 +130,7 @@ class Event(ndb.Model):
         event.end_time = datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
         event.address = Address.create(data.get('address'))
+        event.followers.append(author.key)
 
         event.isValid()
 
@@ -161,7 +165,8 @@ class Event(ndb.Model):
             'author_key': event.author_key.urlsafe(),
             'institution_key': event.institution_key.urlsafe(),
             'key': event.key.urlsafe(),
-            'institution_acronym': event.institution_acronym
+            'institution_acronym': event.institution_acronym,
+            'followers': [key.urlsafe() for key in event.followers]
         }
 
     def __setattr__(self, attr, value):
@@ -177,3 +182,28 @@ class Event(ndb.Model):
         if is_attr_data and not is_value_datetime:
             value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         super(Event, self).__setattr__(attr, value)
+    
+    def add_follower(self, user):
+        """Add a subscriber."""
+        is_active = user.state == 'active'
+        is_not_a_follower = not user.key in self.followers 
+
+        if  is_active and is_not_a_follower:
+            self.followers.append(user.key)
+            self.put()
+        else:
+            raise NotAllowedException("%s" %(not is_active and "The user is not active"
+                or not is_not_a_follower and "The user is a follower yet"))
+            
+
+    def remove_follower(self, user):
+        """Remove a subscriber."""
+        is_a_follower = user.key in self.followers
+        is_not_the_author = self.author_key != user.key
+
+        if is_a_follower and is_not_the_author:
+            self.followers.remove(user.key)
+            self.put()
+        else:
+            raise NotAllowedException("%s" %(not is_a_follower and 'The user is not a follower' 
+                or not is_not_the_author and "The user is the author"))

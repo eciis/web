@@ -59,6 +59,14 @@
               </md-menu-item>
             </md-menu-content>
           </md-menu>
+          <md-button ng-click="eventDetailsCtrl.addFollower()" 
+            ng-if="!eventDetailsCtrl.isFollower()" title="Receber atualizações">
+            <md-icon style="color: #ffffff;">visibility</md-icon>
+          </md-button>
+          <md-button ng-click="eventDetailsCtrl.removeFollower()" 
+            ng-if="eventDetailsCtrl.isFollower()" title="Deixar de receber atualizações">
+            <md-icon>visibility_off</md-icon>
+          </md-button>
           <md-button class="md-fab md-primary" title="Compartilhar" hide-xs
           style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
           ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">

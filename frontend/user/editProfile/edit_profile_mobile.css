@@ -6,7 +6,8 @@
 .edit-profile-dialog__content {
     padding: 1em;
     display: grid;
-    grid-row-gap: 1em;
+    grid-template-rows: auto 3em auto;
+    grid-row-gap: 0.7em;
 }
 
 .edit-profile-dialog__content > h3 {
@@ -19,6 +20,7 @@
     text-align: start;
     font-size: 0.9em;
     font-weight: 500;
+    overflow: hidden;
 }
 
 .edit-profile__form {
@@ -28,6 +30,22 @@
     margin-top: 1em;
 }
 
-.edit-profile__form > md-input-container {
+.edit-profile__form md-input-container {
     margin: 0;
+}
+
+
+.edit-profile__form__phone {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+#edit-profile__delete__btn {
+    background: red;
+    color: white;
+}
+
+.edit-profile__btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }

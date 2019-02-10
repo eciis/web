@@ -18,6 +18,10 @@
             profileObserver = ObserverRecorderService.register(editProfileCtrl.user);
         };
 
+        editProfileCtrl.getInstName = () => {
+            return Utils.limitString(editProfileCtrl.profile.institution.name, 67);
+        };
+
         editProfileCtrl.edit = function edit() {
             if (isValidProfile()) {
                 var patch = ObserverRecorderService.generate(profileObserver);

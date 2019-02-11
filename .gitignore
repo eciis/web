@@ -526,10 +526,12 @@ paket-files/
 frontend/config.js
 support/config.js
 landing/config.js
+feature-toggles/config.js
 
 frontend/firebase-config.js
 support/firebase-config.js
 backend/firebase_config.py
+feature-toggles/firebase-config.js
 
 backend/app_version.py
 
@@ -547,3 +549,4 @@ backend/Pipfile
 #Frontend tests
 frontend/test/package-lock.json
 frontend/test/yarn.lock
+feature-toggles/test/yarn.lock

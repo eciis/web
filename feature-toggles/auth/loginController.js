@@ -13,13 +13,11 @@
         var redirectPath = $stateParams.redirect;
 
         loginCtrl.loginWithGoogle = function loginWithGoogle() {
-            var promise = AuthService.loginWithGoogle();
-            promise.then(function success() {
-                redirectTo(redirectPath);
+            return AuthService.loginWithGoogle().then(function success() {
+                loginCtrl._redirectTo(redirectPath);
             }).catch(function(error) {
                 MessageService.showToast(error);
             });
-            return promise;
         };
 
         /**
@@ -32,9 +30,9 @@
 
 
         loginCtrl.loginWithEmailPassword = function loginWithEmailPassword() {
-            AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
+            return AuthService.loginWithEmailAndPassword(loginCtrl.user.email, loginCtrl.user.password).then(
                 function success() {
-                    redirectTo(redirectPath);
+                    loginCtrl._redirectTo(redirectPath);
                 }
             ).catch(function(error) {
                 MessageService.showToast(error);
@@ -42,18 +40,14 @@
         };
 
         loginCtrl.redirect = function success() {
-            redirectTo(redirectPath);
+            loginCtrl._redirectTo(redirectPath);
         };
 
         loginCtrl.goToLandingPage = function goToLandingPage() {
             $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 
-        loginCtrl.requestInvite = function requestInvite() {
-            loginCtrl.isRequestInvite = !loginCtrl.isRequestInvite;
-        };
-
-        function redirectTo(path) {
+        loginCtrl._redirectTo =  function redirectTo(path) {
             if (path) {
                 window.location.pathname = path;
             } else {

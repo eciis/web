@@ -229,7 +229,7 @@ var Utils = {
      * In mode mobile maybe changes some properties.
      */
     resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
-        if(isMobileScreen(450)){
+        if(Utils.isMobileScreen(450)){
             document.getElementById('main-toolbar').style.display = 'block';
             document.getElementById('navbar-bottom').style.display = 'flex';
         }

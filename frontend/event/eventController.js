@@ -251,7 +251,7 @@
             toolbarMenuGeneralOptions.options = [
                 {   
                     title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 
-                        eventCtrl._actualPage = 0; eventCtrl.loadMoreEvents()}
+                        eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
                 },
                 {
                     title: 'Filtrar por instituição', action: () => {}

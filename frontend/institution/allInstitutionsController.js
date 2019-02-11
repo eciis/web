@@ -66,6 +66,10 @@
             }
         };
 
+        allInstitutionsCtrl.changeOrderParam = (param) => {
+            allInstitutionsCtrl.orderParam = param;
+        };
+
         function normalizeString(string) {
             return Utils.normalizeString(string);
         }

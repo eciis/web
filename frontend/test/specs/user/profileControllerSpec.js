@@ -4,6 +4,11 @@
 
     let mdDialog, profileCtrl, scope, createCtrl, state, states;
 
+    const institution = {
+        name: 'test-inst',
+        key: '12345'
+    };
+
     const user = {
         'name': 'name',
         'email': 'email@email.com',
@@ -23,7 +28,8 @@
             return $controller('ProfileController', {
                 scope: scope,
                 user: user.key,
-                currentUserKey: user.key
+                currentUserKey: user.key,
+                institutionKey: institution.key
             });
         };
         profileCtrl = createCtrl();

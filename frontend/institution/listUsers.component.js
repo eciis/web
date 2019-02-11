@@ -9,7 +9,7 @@
 
         listUsersCtrl.getInitialLetterOfName = (user) => Utils.getInitialLetterOfName(user);
 
-        listUsersCtrl.showUserProfile = (userKey, ev) => ProfileService.showProfile(userKey, ev);
+        listUsersCtrl.showUserProfile = (userKey, ev) => ProfileService.showProfile(userKey, ev, listUsersCtrl.currentInst);
 
         listUsersCtrl.limitString = (string, limit) => Utils.limitString(string, limit);
     };
@@ -21,7 +21,7 @@
         controller: ['ProfileService', ListUsersController],
         controllerAs: 'listUsersCtrl',
         bindings: {
-            pageLabel: '@',
+            currentInst: '@',
             users: '<'
         }
     });

@@ -47,10 +47,6 @@
             $window.open(Config.LANDINGPAGE_URL, '_self');
         };
 
-        loginCtrl.requestInvite = function requestInvite() {
-            loginCtrl.isRequestInvite = !loginCtrl.isRequestInvite;
-        };
-
         loginCtrl._redirectTo =  function redirectTo(path) {
             if (path) {
                 window.location.pathname = path;

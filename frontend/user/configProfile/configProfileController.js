@@ -41,7 +41,7 @@
 
         configProfileCtrl.getPhoto = () => {
             const user = configProfileCtrl.canEdit() ? configProfileCtrl.newUser : configProfileCtrl.user;
-            return user.photo_url;
+            return user && user.photo_url;
         }
 
         configProfileCtrl.addImage = function(image) {

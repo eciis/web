@@ -5,6 +5,7 @@ from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from models import Address
 from custom_exceptions import NotAllowedException
+from service_messages import create_message
 
 __all__ = ['Event']
 
@@ -207,3 +208,21 @@ class Event(ndb.Model):
         else:
             raise NotAllowedException("%s" %(not is_a_follower and 'The user is not a follower' 
                 or not is_not_the_author and "The user is the author"))
+    
+    def create_notification_message(self, user_key, current_institution_key, sender_institution_key=None):
+        """ Create message that will be used in notification.
+            user_key -- The user key that made the action.
+            current_institution_key -- The institution that user was in the moment that made the action.
+            sender_institution_key -- The institution by which the post was created,
+                if it hasn't been defined yet, the sender institution should be the current institution. 
+        """
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=sender_institution_key or current_institution_key
+        )
+    
+    def __getitem__(self, key):
+        if key in self.to_dict():
+            return self.to_dict()[key]
+        super(Event, self).__getitem__(attr, value)

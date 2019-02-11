@@ -269,6 +269,7 @@ class PostNotificationHandler(BaseHandler):
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
         field = self.request.get('field')
         entity = ndb.Key(urlsafe=entity_key).get()
+        entity_title = self.request.get('title') or None
 
         notification_message = entity.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
@@ -285,7 +286,8 @@ class PostNotificationHandler(BaseHandler):
                     receiver_key=subscriber,
                     notification_type=entity_type,
                     entity_key=entity_key,
-                    message=notification_message
+                    message=notification_message,
+                    entity={'key': entity_key, 'title': entity_title}
                 )
 
 

@@ -372,8 +372,8 @@ class Post(PolyModel):
         )
     
     def __getitem__(self, key):
-        if key in self.keys():
-            return self[key]
+        if key in self.to_dict():
+            return self.to_dict()[key]
         super(Post, self).__getitem__(attr, value)
 
     @staticmethod

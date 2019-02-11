@@ -47,16 +47,18 @@
             'DELETED_USER': messageCreator('Removeu sua conta na Plataforma Virtual CIS', NO_INST),
             'ADD_ADM_PERMISSIONS': messageCreator('Suas permissões hierárquicas foram atualizadas na instituição ', SINGLE_INST),
             'USER_INVITES_SENT': messageCreator('Todos os convites para novos membros foram enviados', NO_INST),
-            'RE_ADD_ADM_PERMISSIONS': messageCreator('O vínculo foi restabelecido entre ', DOUBLE_INST)
+            'RE_ADD_ADM_PERMISSIONS': messageCreator('O vínculo foi restabelecido entre ', DOUBLE_INST),
+            'DELETED_EVENT': messageCreator('Removeu o evento de título ', NO_INST),
+            'UPDATED_EVENT': messageCreator('Atualizou o evento de título ', NO_INST)
         };
 
 
-        service.assembleMessage = function assembleMessage(entity_type, mainInst, otherInst) {
+        service.assembleMessage = function assembleMessage(entity_type, mainInst, otherInst, title) {
             var assembler = MESSAGE_ASSEMBLERS[entity_type];
-            return assembler(mainInst, otherInst);
+            return assembler(mainInst, otherInst) + title || '';
         };
 
-        function messageCreator(message, notificationType) {
+        function messageCreator(message, notificationType, title) {
             return function (mainInst, otherInst) {
                 switch(notificationType) {
                     case DOUBLE_INST: 

@@ -587,6 +587,11 @@ a:active {
     background: #009688
 }
 
+.custom-scrollbar {
+    scrollbar-color: #009688 #ccc;
+    scrollbar-width: thin;
+}
+
 .card-title-light {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -599,13 +604,16 @@ a:active {
 }
 
 .rounded-circle {
-    margin-right: 10px;
     width: 45px;
     height: 45px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
     box-shadow: 0 0 1px 0px grey;
+}
+
+.rounded-circle.event-date {
+  margin-right: 10px;
 }
 
 .grey-circle {

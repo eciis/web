@@ -141,8 +141,6 @@
 
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
-            $state.reload();
-            $window.location.reload();
         };
 
         /** Return correct class according currently state.

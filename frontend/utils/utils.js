@@ -1,5 +1,7 @@
 "use strict";
 
+const SCREEN_SIZES = function(SCREEN_SIZES){return SCREEN_SIZES};
+
 var Utils = {
 
     /**
@@ -229,8 +231,10 @@ var Utils = {
      * In mode mobile maybe changes some properties.
      */
     resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
-        document.getElementById('main-toolbar').style.display = 'block';
-        document.getElementById('navbar-bottom').style.display = 'flex';
+        if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)){
+            document.getElementById('main-toolbar').style.display = 'block';
+            document.getElementById('navbar-bottom').style.display = 'flex';
+        }
     },
     
     /**

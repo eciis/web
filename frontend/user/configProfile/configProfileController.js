@@ -76,15 +76,15 @@
 
         configProfileCtrl.finish = function finish() {
             configProfileCtrl.loadingSubmission = true;
-            saveImage().then(_ => {
-                saveUser()
+            configProfileCtrl._saveImage().then(_ => {
+                configProfileCtrl._saveUser()
                     .finally(_ => {
                         configProfileCtrl.loadingSubmission = false;
                     });
             })
         };
 
-        const saveImage = () => {
+        configProfileCtrl._saveImage = () => {
             return new Promise((resolve) => {
                 if(configProfileCtrl.photo_user) {
                     ImageService.saveImage(configProfileCtrl.photo_user)
@@ -99,7 +99,7 @@
             })
         }
 
-        const saveUser = () => {
+        configProfileCtrl._saveUser = () => {
             return new Promise((resolve) => {
                 if (configProfileCtrl.newUser.isValid()) {
                     updateUser();

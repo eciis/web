@@ -117,7 +117,11 @@
                 url: "/config_profile",
                 views: {
                     user_content: {
-                        templateUrl: "app/user/config_profile.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/user/configProfile/config_profile.html",
+                            "app/user/configProfile/config_profile_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "ConfigProfileController as configProfileCtrl"
                     }
                 }
@@ -135,7 +139,8 @@
                 abstract: true,
                 views: {
                     content: {
-                        templateUrl: "app/institution/base_institution_page.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/base_institution_page.html",
+                                                                         "app/institution/base_institution_page_mobile.html"),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -182,7 +187,8 @@
                 url: "/institution/:institutionKey/registration_data",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/registration_data.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/registration_data.html",
+                            "app/institution/registration_data_mobile.html", 475),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -244,7 +250,8 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/edit_info.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
+                            "app/institution/edit_info_mobile.html", 475)
                     }
                 }
             })

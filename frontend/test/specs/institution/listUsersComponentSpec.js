@@ -45,7 +45,7 @@
         scope = rootScope.$new();
         authService.login(user);
         listUsersCtrl = componentController("listUsers", scope,
-            {pageLabel: "Users List", users: users});
+            {pageLabel: "Users List", currentInst: institution.key, users: users});
     }));
 
     describe("Tests functions", () => {
@@ -72,7 +72,7 @@
                     };
                 });
                 listUsersCtrl.showUserProfile(user.key, "$event");
-                expect(profileService.showProfile).toHaveBeenCalledWith(user.key, "$event");
+                expect(profileService.showProfile).toHaveBeenCalledWith(user.key, "$event", institution.key);
             });
         });
     });

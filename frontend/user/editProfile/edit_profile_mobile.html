@@ -24,14 +24,14 @@
             </div>
             <md-input-container>
                 <label>Email institucional</label>
-                <input name="email" ng-model="editProfileCtrl.profile.email" type="email">
+                <input name="email" ng-model="editProfileCtrl.profile.email" type="email" disabled="true">
             </md-input-container>
         </div>
 
-        <md-button id="edit-profile__delete__btn">EXCLUIR VÍNCULO</md-button>
+        <md-button id="edit-profile__delete__btn" ng-click="editProfileCtrl.removeProfile()">EXCLUIR VÍNCULO</md-button>
         <div class="edit-profile__btns">
-            <md-button class="edit-profile__cancel__btn">CANCELAR</md-button>
-            <md-button class="edit-profile__confirm__btn">CONFIRMAR</md-button>
+        <md-button class="edit-profile__cancel__btn" ng-click="editProfileCtrl.closeDialog()">CANCELAR</md-button>
+            <md-button class="edit-profile__confirm__btn" ng-click="editProfileCtrl.edit()">CONFIRMAR</md-button>
         </div>
 
     </md-dialog-content>

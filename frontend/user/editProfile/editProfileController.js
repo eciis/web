@@ -38,6 +38,10 @@
             }
         };
 
+        editProfileCtrl.removeProfile = (event) => {
+            ProfileService.removeProfile(event, profile.institution);
+        };
+
         editProfileCtrl.closeDialog = function closeDialog() {
             const indexOfProfile = editProfileCtrl.user.institution_profiles.indexOf(editProfileCtrl.profile);
             editProfileCtrl.user.institution_profiles[indexOfProfile] = oldProfile;

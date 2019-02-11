@@ -208,4 +208,12 @@
             expect(authService.reload).not.toHaveBeenCalled();
         });
     });
+
+    describe('refreshUser', () => {
+        it('should call reload()', () => {
+            spyOn(authService, 'reload');
+            mainCtrl.refreshUser();
+            expect(authService.reload).toHaveBeenCalled();
+        });
+    });
 }));

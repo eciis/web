@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# --- BASH CONSTANTS ---------
+bold=$(tput bold)
+_bold=$(tput sgr0)
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+reset=$(tput sgr0)
+
+# Usage [ --error ] <message_to_log>
+function log_message {
+    if [ "$1" == "--error" ]; then
+        echo "${red}[eCIS ERROR]${reset}    $2"
+    else
+        echo "${green}[eCIS LOG]${reset}    $1"
+    fi
+}
+
+# Receives two arguments, the first must be the last output of a command ($?),
+# and the second, is an optional message to be logged if no errors are found.
+function catch_error {
+    if [ $1 -ne 0 ]; then
+        echo "${red}[eCIS ERROR]${reset} The last command exited with error $1. Fix it then try again!"
+        exit $1;
+    fi
+    if [ ! -z "$2" ]; then
+        # Print the message passed as the second parameters
+        echo "${green}[eCIS LOG]${reset}    $2"
+    else
+        echo "${green}[eCIS LOG]${reset}    done"
+    fi
+}
+
+echo "=========== Starting Feature Toggles Tests Setup ==========="
+cd feature-toggles/test
+rm -rf node_modules bower_components
+
+if [ ! -e node_modules ]; then
+    yarn
+    catch_error $? "Node modules installed with success"
+else
+    log_message "Node modules already installed"
+fi
+
+cd ../../
+
+echo "=========== Starting Fronted Tests Setup ==========="
+cd frontend/test
+rm -rf node_modules bower_components
+
+if [ ! -e node_modules ]; then
+    yarn
+    catch_error $? "Node modules installed with success"
+else
+    log_message "Node modules already installed"
+fi

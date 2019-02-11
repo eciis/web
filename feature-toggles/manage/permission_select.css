@@ -1,0 +1,10 @@
+.select-container {
+    min-width: 140px;
+    width: 100%;
+}
+
+@media screen and (max-width: 599px) {
+    .select-container {
+        margin-bottom: 0;
+    }
+}

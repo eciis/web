@@ -559,6 +559,35 @@
         });
     });
 
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES, MessageService) {
+        
+        $transitions.onBefore({
+            to: function(state) {
+                const stateName = state.name;
+                return MapStateToFeatureService.containsFeature(stateName);
+            }
+        }, function (transition) {
+            const targetStateName = transition.to().name;
+
+            return FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetStateName)).then(function(enabled) {
+                if (enabled) {
+                    return transition;
+                } else {
+                    return transition.router.stateService.target(STATES.ERROR, {
+                        "msg": "Desculpa! Este recurso ainda não está disponível.",
+                        "status": "403"
+                    });
+                }
+            }).catch(function(message) {
+                MessageService.showToast(message);
+                return transition.router.stateService.target(STATES.ERROR, {
+                    "msg": "Desculpa! Este recurso ainda não está disponível.",
+                    "status": "403"
+                });
+            });
+        });
+    });
+
     function initServiceWorker() {
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/sw.js').then(function (registration) {

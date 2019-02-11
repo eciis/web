@@ -73,14 +73,17 @@
             <md-icon>bookmark</md-icon>
             Receber atualizações
           </md-button>
-          <md-button aria-label="Favorite" ng-click="" ng-if="postDetailsCtrl.isSharedEvent() && !postDetailsCtrl.isFollowingEvent()"
-            title="Receber notificações">
+        </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && !postDetailsCtrl.isFollowingEvent()">
+          <md-button aria-label="Favorite" ng-click="postDetailsCtrl.followEvent()" title="Receber notificações">
             <md-icon>visibility</md-icon>
             Receber atualizações do evento
           </md-button>
-          <md-button aria-label="Favorite" ng-click="" ng-if="postDetailsCtrl.isSharedEvent() && postDetailsCtrl.isFollowingEvent()" title="Deixar de receber notificações">
+        </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && postDetailsCtrl.isFollowingEvent()" title="Deixar de receber notificações">
+          <md-button style="text-overflow: ellipsis; overflow: hidden;" aria-label="Favorite" ng-click="postDetailsCtrl.unFollowEvent()">
             <md-icon>visibility_off</md-icon>
-            Deixar de receber atualizações do evento
+            <span>Deixar de receber atualizações do evento</span>
           </md-button>
         </md-menu-item>
         <md-menu-item ng-if="!postDetailsCtrl.isInstInactive() && postDetailsCtrl.showButtonEdit()">

@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
-        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS, STATES) {
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS, STATES, EventService) {
 
         var postDetailsCtrl = this;
 
@@ -281,8 +281,27 @@
 
         postDetailsCtrl.isFollowingEvent = () => {
             const eventFollowers = postDetailsCtrl.post.shared_event.followers;
-            console.log(eventFollowers);
             return _.includes(eventFollowers, postDetailsCtrl.user.key);
+        };
+
+        postDetailsCtrl.followEvent = () => {
+            EventService.addFollower(postDetailsCtrl.post.shared_event.key).then(() => {
+                postDetailsCtrl.post.shared_event.followers.push(postDetailsCtrl.user.key);
+                MessageService.showToast('Você receberá as atualizações desse evento.');
+            }).catch((error) => {
+                console.error(error);
+            });
+        };
+
+        postDetailsCtrl.unFollowEvent = () => {
+            EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
+                _.remove(postDetailsCtrl.post.shared_event.followers, follower => {
+                    return follower.key === postDetailsCtrl.user.key;
+                });
+                MessageService.showToast('Você não receberá as atualizações desse evento.');
+            }).catch((error) => {
+                console.error(error);
+            });
         };
 
         function getOriginalPost(post){

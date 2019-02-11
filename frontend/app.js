@@ -168,9 +168,12 @@
                 url: "/institution/:institutionKey/description",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/description_inst.html",
+                        templateUrl: "app/institution/descriptionInst/description_inst.html",
                         controller: "DescriptionInstController as descriptionCtrl"
                     }
+                },
+                params: {
+                    institution: undefined
                 }
             })
             .state(STATES.INST_EVENTS, {

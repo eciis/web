@@ -209,7 +209,8 @@
 
         institutionCtrl.goToDescription = function goToDescription(institutionKey) {
             const instKey = institutionKey || currentInstitutionKey;
-            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey});
+            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey,
+                institution: institutionCtrl.institution});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
@@ -270,14 +271,13 @@
 
         institutionCtrl.editDescription = function(ev) {
             $mdDialog.show({
-                templateUrl: 'app/institution/editDescription.html',
+                templateUrl: 'app/institution/descriptionInst/edit_description.html',
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
                     institution: institutionCtrl.institution,
-                    save: institutionCtrl.saveChanges
                 },
-                controller: InstitutionController,
+                controller: app.EditDescriptionController,
                 controllerAs: 'ctrl'
             });
         };
@@ -487,31 +487,5 @@
         followersCtrl.$onInit = () => {
             followersCtrl._getFollowers();
         };
-    });
-
-    app.controller("DescriptionInstController", function DescriptionInstController($state, InstitutionService, ObserverRecorderService){
-        const descriptionCtrl = this;
-        let observer;
-
-        descriptionCtrl.isLoading = false;
-        descriptionCtrl.$onInit = () => {
-            descriptionCtrl.currentInstitutionKey = $state.params.institutionKey;
-            descriptionCtrl.isLoading = true;
-            InstitutionService.getInstitution(descriptionCtrl.currentInstitutionKey).then(function(institution){
-                descriptionCtrl.institution = institution;
-                descriptionCtrl.isLoading = false;
-                observer = ObserverRecorderService.register(descriptionCtrl.institution);
-            })
-        };
-
-        function patchIntitution() {
-            var patch = ObserverRecorderService.generate(observer);
-            InstitutionService.update(descriptionCtrl.currentInstitutionKey, patch).then(
-                /*function success() {
-                    if(configInstCtrl.newInstitution)
-                        updateUserInstitutions(configInstCtrl.newInstitution);}*/
-            );
-        }
-
     });
 })();

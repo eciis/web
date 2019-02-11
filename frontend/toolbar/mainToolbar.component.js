@@ -20,7 +20,7 @@
             '$timeout', MainToolbarController],
         controllerAs: 'mainToolbarCtrl',
         bindings: {
-            title: '=',
+            title: '@',
             toolbarMenuItems: '=',
             toolbarGeneralOptions: '=',
             noSearch: '=',

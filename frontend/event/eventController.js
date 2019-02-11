@@ -214,8 +214,6 @@
             });
         };
         
-        
-        
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */

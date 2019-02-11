@@ -4,7 +4,7 @@
 
     let // variables to be associated to the injected parameters
         eventCtrl, scope, httpBackend, rootScope,
-        createCtrl, eventService, messageService, mdDialog, state;
+        createCtrl, eventService, messageService, mdDialog, state, q;
 
     const // variables to create the test scenario
         institution = { name: 'Institution', key: '098745' },
@@ -66,8 +66,9 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog, $state) {
+        $rootScope, EventService, MessageService, $mdDialog, $state, $q) {
         scope = $rootScope.$new();
+        q = $q
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         eventService = EventService;
@@ -107,12 +108,10 @@
     describe('onInit()', () => {
 
         beforeEach(() => {
-            spyOn(eventCtrl, '_getMonths').and.returnValue({
-                then: callback => {
-                    eventCtrl.months = months;
-                    eventCtrl.selectedMonth = months[0];
-                    return callback();
-                }
+            spyOn(eventCtrl, '_getMonths').and.callFake(() => {
+                eventCtrl.months = months;
+                eventCtrl.selectedMonth = months[0];
+                return q.when();
             });
             spyOn(eventCtrl, 'loadMoreEvents');
         });

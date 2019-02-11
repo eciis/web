@@ -1,6 +1,6 @@
 "use strict";
 
-var SCREEN_SIZES = function(SCREEN_SIZES){return SCREEN_SIZES};
+const SCREEN_SIZES = function(SCREEN_SIZES){return SCREEN_SIZES};
 
 var Utils = {
 

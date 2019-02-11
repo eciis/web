@@ -55,7 +55,7 @@
 
         service.assembleMessage = function assembleMessage(entity_type, mainInst, otherInst, title) {
             var assembler = MESSAGE_ASSEMBLERS[entity_type];
-            return assembler(mainInst, otherInst) + title || '';
+            return assembler(mainInst, otherInst) + (title || '');
         };
 
         function messageCreator(message, notificationType, title) {

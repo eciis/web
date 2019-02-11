@@ -275,6 +275,16 @@
             return Utils.isLargerThanTheScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
         };
 
+        postDetailsCtrl.isSharedEvent = () => {
+            return postDetailsCtrl.post.shared_event; 
+        };
+
+        postDetailsCtrl.isFollowingEvent = () => {
+            const eventFollowers = postDetailsCtrl.post.shared_event.followers;
+            console.log(eventFollowers);
+            return _.includes(eventFollowers, postDetailsCtrl.user.key);
+        };
+
         function getOriginalPost(post){
             if(post.shared_post){
                 return post.shared_post;
@@ -449,6 +459,7 @@
         postDetailsCtrl.isPostEmpty = function  isPostEmpty() {
             return !postDetailsCtrl.post || _.isEmpty(postDetailsCtrl.post);
         };
+
 
         function isInstitutionAdmin() {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);

@@ -164,6 +164,15 @@
                     }
                 }
             })
+            .state(STATES.INST_DESCRIPTION, {
+                url: "/institution/:institutionKey/description",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/description_inst.html",
+                        controller: "DescriptionInstController as descriptionCtrl"
+                    }
+                }
+            })
             .state(STATES.INST_EVENTS, {
                 url: "/institution/:institutionKey/institution_events",
                 views: {
@@ -568,6 +577,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        //initServiceWorker();
     })();
 })();

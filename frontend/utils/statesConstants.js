@@ -16,6 +16,7 @@
         NOTIFICATION: "app.user.notifications",
         INSTITUTION: "app.institution",
         INST_TIMELINE: "app.institution.timeline",
+        INST_DESCRIPTION: "app.institution.description",
         INST_FOLLOWERS: "app.institution.followers",
         INST_EVENTS: "app.institution.events",
         INST_MEMBERS: "app.institution.members",

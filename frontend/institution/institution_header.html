@@ -7,7 +7,7 @@
         </md-button>
         <div id="buttons-navbar-inst-container-end">
             <md-button ng-if="instHeaderCtrl.isTimeline()" class="button-navbar-inst"
-                id="btn-description">
+                id="btn-description" ng-click="instHeaderCtrl.actionsButtons.goToDescription()">
                 <b>DESCRIÇÃO</b>
             </md-button>
             <div ng-if="instHeaderCtrl.isTimeline()" class="btn-follow-unfollow">
@@ -42,7 +42,8 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-button ng-if="instHeaderCtrl.isRegistrationData()" class="cover-photo-button button-navbar-inst"
+            <md-button ng-if="instHeaderCtrl.showButtonEdit()" ng-click="instHeaderCtrl.editInfo()"
+                class="cover-photo-button button-navbar-inst"
                 id="btn-edit">
                 <b>EDITAR</b>
             </md-button>

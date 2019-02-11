@@ -112,13 +112,14 @@
         function loadTimelineButtonsHeaderMob(){
             institutionCtrl.timelineButtonsHeaderMob =  {
                 goBack: institutionCtrl.goBack,
-                showDescribe: null,
+                goToDescription: institutionCtrl.goToDescription,
                 follow: institutionCtrl.follow,
                 unfollow: institutionCtrl.unfollow,
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
                 requestInvitation: institutionCtrl.requestInvitation,
-                getLimitedName: institutionCtrl.getLimitedName
+                getLimitedName: institutionCtrl.getLimitedName,
+                editDescription: institutionCtrl.editDescription
             }
         }
 
@@ -206,6 +207,11 @@
             $state.go(STATES.INST_TIMELINE, {institutionKey: instKey});
         };
 
+        institutionCtrl.goToDescription = function goToDescription(institutionKey) {
+            const instKey = institutionKey || currentInstitutionKey;
+            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey});
+        };
+
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
             UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey});
         };
@@ -258,6 +264,20 @@
                     portfolioUrl: institutionCtrl.portfolioUrl
                 },
                 controller: DialogController,
+                controllerAs: 'ctrl'
+            });
+        };
+
+        institutionCtrl.editDescription = function(ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/editDescription.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    institution: institutionCtrl.institution,
+                    save: institutionCtrl.saveChanges
+                },
+                controller: InstitutionController,
                 controllerAs: 'ctrl'
             });
         };
@@ -467,5 +487,31 @@
         followersCtrl.$onInit = () => {
             followersCtrl._getFollowers();
         };
+    });
+
+    app.controller("DescriptionInstController", function DescriptionInstController($state, InstitutionService, ObserverRecorderService){
+        const descriptionCtrl = this;
+        let observer;
+
+        descriptionCtrl.isLoading = false;
+        descriptionCtrl.$onInit = () => {
+            descriptionCtrl.currentInstitutionKey = $state.params.institutionKey;
+            descriptionCtrl.isLoading = true;
+            InstitutionService.getInstitution(descriptionCtrl.currentInstitutionKey).then(function(institution){
+                descriptionCtrl.institution = institution;
+                descriptionCtrl.isLoading = false;
+                observer = ObserverRecorderService.register(descriptionCtrl.institution);
+            })
+        };
+
+        function patchIntitution() {
+            var patch = ObserverRecorderService.generate(observer);
+            InstitutionService.update(descriptionCtrl.currentInstitutionKey, patch).then(
+                /*function success() {
+                    if(configInstCtrl.newInstitution)
+                        updateUserInstitutions(configInstCtrl.newInstitution);}*/
+            );
+        }
+
     });
 })();

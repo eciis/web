@@ -34,12 +34,9 @@
             $mdDialog.cancel();
         };
 
-        profileCtrl.goToUserProfilePage = (userKey) => {
-            /**
-             * TODO: implements this function to go to the user profile page
-             * when the same be implemented
-             * @tiagolimpe - Jan - 23 - 2019
-             */
+        profileCtrl.goToUserProfilePage = () => {
+            $state.go(STATES.CONFIG_PROFILE, {userKey: profileCtrl.user.key});
+            $mdDialog.hide();
         };
 
         profileCtrl.isOwnProfile = function isOwnProfile() {

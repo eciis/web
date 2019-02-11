@@ -1,4 +1,4 @@
-<md-toolbar id="config-profile__toolbar">
+<md-toolbar id="config-profile__toolbar" ng-if="configProfileCtrl.canEdit()">
     <div class="md-toolbar-tools">
         <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
             <md-icon>close</md-icon>

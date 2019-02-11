@@ -33,7 +33,7 @@
       </md-card-content>
       <md-card-content ng-if="eventDetailsCtrl.isEventPage">
         <md-card-actions layout="row">
-          <md-menu style="margin-left: auto;" md-offset="-165 45" ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
+          <md-menu style="margin-left: auto;" md-offset="-165 45">
               <md-button style="margin-top: 25px;" class="md-icon-button" title="Opções"
               ng-click="$mdMenu.open(ev)">
                 <md-icon style="color: white;">more_vert</md-icon>
@@ -46,27 +46,31 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item id="hide-share">
-                <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)"">
+                <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
                   <md-icon>share</md-icon>
                   Compartilhar evento
                 </md-button>
               </md-menu-item>
-              <md-menu-item>
+              <md-menu-item ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
                 <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
                   <md-icon>cancel</md-icon>
                   Cancelar evento
                 </md-button>
               </md-menu-item>
+              <md-menu-item ng-if="!eventDetailsCtrl.isFollower()">
+                <md-button ng-click="eventDetailsCtrl.addFollower()">
+                  <md-icon>visibility</md-icon>
+                  Receber Atualizações
+                </md-button>
+              </md-menu-item>
+              <md-menu-item ng-if="eventDetailsCtrl.isFollower()">
+                <md-button ng-click="eventDetailsCtrl.removeFollower()">
+                  <md-icon>visibility_off</md-icon>
+                  Deixar de receber atualizações
+                </md-button>
+              </md-menu-item>
             </md-menu-content>
           </md-menu>
-          <md-button ng-click="eventDetailsCtrl.addFollower()" 
-            ng-if="!eventDetailsCtrl.isFollower()" title="Receber atualizações">
-            <md-icon style="color: #ffffff;">visibility</md-icon>
-          </md-button>
-          <md-button ng-click="eventDetailsCtrl.removeFollower()" 
-            ng-if="eventDetailsCtrl.isFollower()" title="Deixar de receber atualizações">
-            <md-icon>visibility_off</md-icon>
-          </md-button>
           <md-button class="md-fab md-primary" title="Compartilhar" hide-xs
           style="margin-right: -50px; margin-top: 15px; background-color: #7CB342;"
           ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">

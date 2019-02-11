@@ -155,6 +155,7 @@
         eventCtrl.addFollower = () => {
             EventService.addFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.addFollower(eventCtrl.user.key);
+                MessageService.showToast('Você receberá as atualizações desse evento.');
             }).catch((error) => {
                 console.error(error);
             });
@@ -163,6 +164,7 @@
         eventCtrl.removeFollower = () => {
             EventService.removeFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.removeFollower(eventCtrl.user.key);
+                MessageService.showToast('Você não receberá as atualizações desse evento.');
             }).catch((error) => {
                 console.error(error);
             });

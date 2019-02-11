@@ -32,10 +32,6 @@
             scope = $rootScope.$new();
             service = UserService;
             AuthService.login(user);
-            httpBackend.when('GET', 'main/main.html').respond(200);
-            httpBackend.when('GET', 'home/home.html').respond(200);
-            httpBackend.when('GET', 'error/error.html').respond(200);
-            httpBackend.when('GET', 'auth/login.html').respond(200);
         }));
 
         afterEach(function() {

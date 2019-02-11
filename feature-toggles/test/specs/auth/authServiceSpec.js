@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test AuthService', function() {
-    let authService, userService, userFactory;
+    let authService, userService, userFactory, scope;
 
     let userTest = {
         name : 'User',
@@ -16,17 +16,18 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function(AuthService, UserService, UserFactory) {
+    beforeEach(inject(function(AuthService, UserService, UserFactory, $rootScope) {
         authService = AuthService;
         userService = UserService;
         userFactory = UserFactory;
+        scope = $rootScope.$new();
         
         firebase.auth = () => {
             return {
                 onAuthStateChanged: (callback) => callback(firebaseUser),
                 signOut: function signOut() {}
             };
-        }
+        };
 
         firebase.auth.GoogleAuthProvider = function GoogleAuthProvider() {};
         authService.useOriginalGetUserToken();
@@ -34,7 +35,7 @@
 
     describe('AuthService  setupUser', function() {
 
-        it('should call authService.setupUser()', function() {
+        it('should be config user with firebase token', function() {
             spyOn(userService, 'load').and.callThrough();
 
             authService.setupUser(userTest.accessToken, userTest.emailVerified);
@@ -47,42 +48,61 @@
     });
 
     describe('AuthService user informations', function() {
-        beforeEach(function() {
-            authService.setupUser(userTest.accessToken);
-        });
 
-        it('should authService.getCurrentUser()', function() {
-            spyOn(userService, 'load').and.callThrough();
-            authService.setupUser(userTest.accessToken, userTest.emailVerified);
-            const user = authService.getCurrentUser();
-            const new_user = new userFactory.user(userTest);
-            expect(user).toEqual(new_user);
+        describe('test getCurrentUser', function() {
+            it('should be return user logged', function() {
+                spyOn(userService, 'load').and.callThrough();
+                authService.setupUser(userTest.accessToken, userTest.emailVerified);
+                const user = authService.getCurrentUser();
+                const new_user = new userFactory.user(userTest);
+                expect(user).toEqual(new_user);
+            });
         });
+        
+        describe('test getUserToken', function() {
+            it('should be return actualized user token', function(done) {
+                spyOn(authService, 'save');
+                const user = {
+                    accessToken: firebaseUser.accessToken,
+                    getIdToken: async () => user.accessToken
+                };
 
-        it('should authService.getUserToken()', function(done) {
-            spyOn(authService, 'save');
-            authService.getUserToken().then(userToken => {
-                expect(userToken).toEqual(firebaseUser.accessToken);
-                expect(authService.save).toHaveBeenCalled();
-                done();
+                authService._getIdToken(user);
+                authService.getUserToken().then(userToken => {
+                    expect(userToken).toEqual(firebaseUser.accessToken);
+                    expect(authService.save).toHaveBeenCalled();
+                    done();
+                });
+
+                scope.$apply();
             });
         });
 
-        it('should authService.isLoggedIn()', function() {
-            const isLoggedIn = authService.isLoggedIn();
-            expect(isLoggedIn).toEqual(true);
+        describe('test isLoggedIn', function() {
+            it('should br return true', function() {
+                const isLoggedIn = authService.isLoggedIn();
+                expect(isLoggedIn).toEqual(true);
+            });
+
+            it('should br return false', function() {
+                authService.logout();
+                const isLoggedIn = authService.isLoggedIn();
+                expect(isLoggedIn).toEqual(false);
+            });
         });
 
-        it('should authService.save()', function() {
-            spyOn(userService, 'load').and.callThrough();
-            authService.setupUser(userTest.accessToken, userTest.emailVerified);
-
-            window.localStorage.userInfo = null;
-            authService.save();
-            const userCache = window.localStorage.userInfo;
-            const new_user = JSON.stringify(userTest);
-
-            expect(userCache).toEqual(new_user);
+        describe('test save', function() {
+            it('should be saev user in localStorage', function() {
+                spyOn(userService, 'load').and.callThrough();
+                authService.setupUser(userTest.accessToken, userTest.emailVerified);
+    
+                window.localStorage.userInfo = null;
+                authService.save();
+                const userCache = window.localStorage.userInfo;
+                const new_user = JSON.stringify(userTest);
+    
+                expect(userCache).toEqual(new_user);
+            });
         });
     });
 

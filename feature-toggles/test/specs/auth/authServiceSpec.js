@@ -79,12 +79,12 @@
         });
 
         describe('test isLoggedIn', function() {
-            it('should br return true', function() {
+            it('should be return true', function() {
                 const isLoggedIn = authService.isLoggedIn();
                 expect(isLoggedIn).toEqual(true);
             });
 
-            it('should br return false', function() {
+            it('should be return false', function() {
                 authService.logout();
                 const isLoggedIn = authService.isLoggedIn();
                 expect(isLoggedIn).toEqual(false);
@@ -92,7 +92,7 @@
         });
 
         describe('test save', function() {
-            it('should be saev user in localStorage', function() {
+            it('should be save user in localStorage', function() {
                 spyOn(userService, 'load').and.callThrough();
                 authService.setupUser(userTest.accessToken, userTest.emailVerified);
     

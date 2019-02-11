@@ -200,13 +200,6 @@
     white-space: pre-line;
   }
 
-.pdf-text {
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .post-deleted {
     background-color:#F5F5F5;
 }
@@ -458,14 +451,6 @@ a:active {
     filter:alpha(opacity=100);
     opacity:1;
     color: black;
-}
-
-.cropArea {
-    background: #E4E4E4;
-    padding auto auto auto auto;
-    overflow: hidden;
-    max-width:100%;
-    height: 50vh;
 }
 
 .break {

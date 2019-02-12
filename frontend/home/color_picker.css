@@ -1,3 +1,16 @@
+#color-dialog {
+  display: grid;
+  padding: 1em;
+  grid-template-rows: 10% 1fr auto;
+}
+
+#color-dialog-buttons {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+  justify-content: end;
+}
+
 .color-picker-area {
   display: grid;
   grid-template-columns: repeat(4, min-content);
@@ -7,4 +20,15 @@
 .color-picker-circle {
   width: 3em !important;
   height: 3em !important;
+}
+
+.color-picker-title {
+  color: #009688;
+  font-size: 1em;
+  justify-self: center;
+  align-self: center;
+}
+
+button.color-dialog-button {
+  font-size: 0.7em;
 }

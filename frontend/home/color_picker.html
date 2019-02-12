@@ -1,26 +1,30 @@
-<md-dialog flex-lg="25" flex-md="25" flex-gt-lg="20" flex layout="row">
-    <div flex>
-        <md-content layout-padding>
-            <h3>Selecione uma cor:</h3>
-            <md-grid-list md-cols="5" md-row-height="1:1" md-gutter="4px">
-              <md-grid-tile ng-repeat="color in colorPickerCtrl.colors">
-                    <md-fab-trigger>
-                            <md-button aria-label="menu" class="md-fab md-primary" ng-model="colorPickerCtrl.newProfile.color" ng-click="colorPickerCtrl.newProfile.color = color.value" 
-                             md-colors="{background: 'default-'+'{{color.value}}'+'-500'}">
-                                <md-icon ng-show="colorPickerCtrl.newProfile.color === color.value">check_circle</md-icon>
-                            </md-button>
-                        </md-fab-trigger>
-              </md-grid-tile>
-            </md-grid-list>
-
-            <div style="text-align: right; margin-right: 20px; margin-bottom: 20px;" >
-                    <md-button md-colors="{color: 'default-teal-500'}" ng-click="colorPickerCtrl.cancelDialog()">
-                      Cancelar
-                    </md-button>
-                    <md-button class="md-raised" md-colors="{background: 'default-teal-500'}" ng-click="colorPickerCtrl.saveColor()" title="Aplicar">
-                      Aplicar
-                    </md-button>
-                </div>
-        </md-content>
+<md-dialog flex flex-xs='90' flex-gt-xs='40' flex-gt-md='25'>
+  <md-dialog-content>
+    <div id='color-dialog'>
+      <span class="md-title color-picker-title">Selecione uma cor</span>
+      <div class="color-picker-area">
+        <div ng-repeat="color in colorPickerCtrl.colors">
+          <md-button aria-label="menu" class="md-primary md-fab color-picker-circle"
+                                       ng-model="colorPickerCtrl.institution.color"
+                                       ng-click="colorPickerCtrl.institution.color = color.value"
+                                       md-colors="{background: 'default-'+'{{color.value}}'+'-500'}">
+            <md-icon ng-show="colorPickerCtrl.institution.color === color.value">check_circle</md-icon>
+          </md-button>
+        </div>
+      </div>
+      <div id='color-dialog-buttons'>
+        <md-button class='color-dialog-button md-raised'
+                    md-colors="{background: 'default-grey-600'}" ng-click="colorPickerCtrl.cancelDialog()">
+          CANCELAR
+        </md-button>
+        <md-button class='color-dialog-button md-raised'
+                   md-colors="colorPickerCtrl.institution.color !== colorPickerCtrl.oldColorValue ?
+                              {background: 'default-teal-500'} : {}"
+                   ng-disabled="colorPickerCtrl.institution.color === colorPickerCtrl.oldColorValue"
+                   ng-click="colorPickerCtrl.saveColor()">
+          ALTERAR
+        </md-button>
+      </div>
     </div>
+  </md-dialog-content>
 </md-dialog>

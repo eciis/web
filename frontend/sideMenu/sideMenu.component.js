@@ -120,7 +120,7 @@
                parent: angular.element(document.body),
                clickOutsideToClose: true,
                locals: {
-                   user : sideMenuCtrl.user
+                   user : sideMenuCtrl.user,
                    institution,
                 },
                 bindToController: true

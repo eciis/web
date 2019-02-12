@@ -35,7 +35,8 @@
             ng-click="eventCtrl.goToEvent(event)">
                 <md-card>
                   <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
-                    <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
+                    <img ng-class="event.photo_url ? 'event-preview-image' : 'event-preview-without-image'"
+                    md-colors="{background: eventCtrl.getProfileColor(event)+'-500'}" class="md-card-image" ng-src="{{event.photo_url}}">
                     <div class="highlight">
                         <div class="event-title">
                           <b>{{ event.title | uppercase}}</b>
@@ -56,13 +57,13 @@
       </div>
     </md-content>
   </div>
+  <md-fab-speed-dial ng-if="!eventCtrl.institutionKey"
+    id="fab-new-event" class="md-fab-bottom-right event-button-margin" hide-gt-sm>
+    <md-fab-trigger>
+      <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
+      class="md-fab md-primary create-event-button">
+        <md-icon>add</md-icon>
+      </md-button>
+    </md-fab-trigger>
+  </md-fab-speed-dial>
 </div>
-<md-fab-speed-dial ng-if="!eventCtrl.institutionKey"
-  id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
-  <md-fab-trigger>
-    <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
-    class="md-fab md-primary create-event-button">
-      <md-icon>add</md-icon>
-    </md-button>
-  </md-fab-trigger>
-</md-fab-speed-dial>

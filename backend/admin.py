@@ -579,7 +579,7 @@ class UpdateHandler(BaseHandler):
 
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
-    ('/admin/create-features', CreateFeaturesHandler)
+    ('/admin/create-features', CreateFeaturesHandler),
     ('/admin/update', UpdateHandler)
 ], debug=True)
 

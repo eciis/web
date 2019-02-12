@@ -133,5 +133,25 @@
                 httpBackend.flush();
                 expect($http.patch).toHaveBeenCalledWith(EVENT_URI + '/' + event.key, patch);
             });
+
+            describe('addFollower', () => {
+                it('should call post', () => {
+                    spyOn($http, 'post');
+
+                    service.addFollower();
+
+                    expect($http.post).toHaveBeenCalled();
+                });
+            });
+
+            describe('removeFollower', () => {
+                it('should call delete', () => {
+                    spyOn($http, 'delete');
+
+                    service.removeFollower();
+
+                    expect($http.delete).toHaveBeenCalled();
+                });
+            });
         });
 }));

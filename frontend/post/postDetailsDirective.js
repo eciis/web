@@ -280,7 +280,7 @@
         };
 
         postDetailsCtrl.isFollowingEvent = () => {
-            const eventFollowers = postDetailsCtrl.post.shared_event.followers;
+            const eventFollowers = (postDetailsCtrl.post.shared_event && postDetailsCtrl.post.shared_event.followers) || [];
             return _.includes(eventFollowers, postDetailsCtrl.user.key);
         };
 

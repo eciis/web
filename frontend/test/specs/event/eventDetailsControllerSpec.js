@@ -2,7 +2,7 @@
 
 (describe('Test EventDetailsController', function () {
 
-    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state;
+    let eventCtrl, scope, q, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state;
 
     const
         splab = { name: 'Splab', key: '098745' },
@@ -47,6 +47,7 @@
         messageService = MessageService;
         mdDialog = $mdDialog;
         state = $state;
+        q = $q;
         AuthService.login(user);
 
         eventCtrl = $controller('EventDetailsController', {
@@ -248,6 +249,60 @@
 
             returnedHours = eventCtrl.getTimeHours(date.toISOString());
             expect(returnedHours).toEqual(hours);
+        });
+    });
+
+    describe('isFollower()', () => {
+        beforeEach(() => {
+            eventCtrl.event = new Event({
+                followers: []
+            });
+        });
+
+        it('should return true when the user is following the event', () => {
+            eventCtrl.event.addFollower(user.key);
+            expect(eventCtrl.isFollower()).toEqual(true);
+        });
+
+        it('should return false when the user is not following the event', () => {
+            expect(eventCtrl.isFollower()).toEqual(false);
+        });
+    });
+
+    describe('addFollower()', () => {
+        it('should call addFollower', () => {
+            spyOn(eventService, 'addFollower').and.callFake(() => {
+                return q.when();
+            });
+            spyOn(messageService, 'showToast');
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'addFollower').and.callThrough();
+            
+            eventCtrl.addFollower();
+            scope.$apply();
+
+            expect(eventService.addFollower).toHaveBeenCalled();
+            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventCtrl.event.addFollower).toHaveBeenCalled();
+            expect(eventCtrl.event.followers).toEqual([user.key]);
+        });
+    });
+
+    describe('removeFollower()', () => {
+        it('should call removeFollower', () => {
+            spyOn(eventService, 'removeFollower').and.callFake(() => {
+                return q.when();
+            });
+            spyOn(messageService, 'showToast');
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'removeFollower').and.callThrough();
+
+            eventCtrl.removeFollower();
+            scope.$apply();
+
+            expect(eventService.removeFollower).toHaveBeenCalled();
+            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
         });
     });
 }));

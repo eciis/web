@@ -18,5 +18,7 @@
         }
 
         errorCtrl.isMobileScreen = () => Utils.isMobileScreen();
+
+        errorCtrl.getMobileMsg = () => "Erro " + errorCtrl.status + ": " + errorCtrl.msg;
     });
 })();

@@ -39,6 +39,6 @@
     <div ng-if="errorCtrl.isMobileScreen()">
         <main-toolbar></main-toolbar>
         <side-menu type="HOME"></side-menu>
-        <is-empty-card text="{{ errorCtrl.msg }}"></is-empty-card>
+        <is-empty-card text="{{ errorCtrl.getMobileMsg() }}"></is-empty-card>
     </div>
 </md-content>

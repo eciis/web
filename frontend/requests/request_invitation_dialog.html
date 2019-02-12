@@ -1,40 +1,46 @@
-<md-dialog class="request-invitation__dialog">
-	<md-dialog-content class="request-invitation__content" ng-if="requestInvCtrl.request || requestInvCtrl.institution">
-        <!-- Request to be member -->
-        <span class="custom-title request-invitation__title">Solicitar vínculo institucional</span>
-        <span class="md-subheader">{{requestInvCtrl.request.institution_name}}</span>
-        <form name="requestuser" ng-submit="requestInvCtrl.verifyAndSendRequest()">
-            <md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
-                <label>Nome</label>
-                <input class="custom-card-input" ng-model="requestInvCtrl.request.name" name="name" required>
-                <div ng-messages='requestuser.request.name.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
+<md-dialog flex-gt-lg="50" flex-lg="50">
+	<div layout="row">
+		<!-- Request to be member -->
+		<md-card flex ng-if="requestInvCtrl.request || requestInvCtrl.institution">
+			<md-card-header layout="row" layout-align="center center">
+				<md-card-header-text>
+					<span class="md-title">Solicitar Cadastro</span>
+					<span class="md-subheader">{{requestInvCtrl.request.institution_name}}</span>
+				</md-card-header-text>
+			</md-card-header>
+			<md-card-content>
+				<form name="requestuser" ng-submit="requestInvCtrl.verifyAndSendRequest()">
+					<md-input-container class="md-block" ng-if="requestInvCtrl.showNameInput()">
+			          <label>Nome</label>
+			          <input ng-model="requestInvCtrl.request.name" name="name" required>
+			          <div ng-messages='requestuser.request.name.$error'>
+			    		<div ng-message="required">Este campo é obrigatório!</div>
+					  </div>
+			        </md-input-container>
 
-            <md-input-container class="md-block">
-                <label>Email institucional</label>
-                <input class="custom-card-input" ng-model="requestInvCtrl.request.email" type="email" name="email" required>
-                <div ng-messages='requestuser.request.email.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
+			        <md-input-container class="md-block">
+			          <label>Email institucional</label>
+			          <input ng-model="requestInvCtrl.request.email" type="email" name="email" required>
+			          <div ng-messages='requestuser.request.email.$error'>
+			    		<div ng-message="required">Este campo é obrigatório!</div>
+					  </div>
+			        </md-input-container>
 
-            <md-input-container class="md-block">
-                <label>Cargo institucional</label>
-                <input class="custom-card-input" name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
-                <div ng-messages='requestuser.request.office.$error'>
-                    <div ng-message="required">Este campo é obrigatório!</div>
-                </div>
-            </md-input-container>
-            <div layout="row" layout-align="end">
-                <md-button ng-click="requestInvCtrl.cancelDialog()" class="md-button" md-colors="{color: 'default-teal-500'}">
-                    Cancelar
-                </md-button>
-                <md-button type="submit" class="md-button" md-colors="{color: 'default-teal-500'}">
-                    Confirmar
-                </md-button>
-            </div>
-        </form>
-    </md-dialog-content>
+			      	<md-input-container class="md-block">
+			      	<label>Cargo institucional</label>
+						<input name="cargo" ng-model="requestInvCtrl.request.office" name="office" required>
+						<div ng-messages='requestuser.request.office.$error'>
+							<div ng-message="required">Este campo é obrigatório!</div>
+						</div>
+					</md-input-container>
+					  <div layout="row" layout-align="end">
+						<md-button type="submit"
+								class="md-button md-raised" md-colors="{background: 'default-teal-500'}">
+							Solicitar Cadastro
+						</md-button>
+					</div>
+				</form>
+			</md-card-content>
+		</md-card>
+	</div>
 </md-dialog>

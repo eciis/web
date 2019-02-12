@@ -17,6 +17,7 @@ from models import Post
 from models import Comment
 from models import Invite
 from models import Event
+from models import Feature
 from utils import NotAuthorizedException
 from google.appengine.ext import ndb
 from google.appengine.api import search
@@ -36,6 +37,22 @@ TEXT = 'At vero eos et accusamus et iusto odio dignissimos \
         et molestiae non recusandae. Itaque earum rerum hic tenetur sapiente \
         delectus, ut aut reiciendis voluptatibus maiores alias consequatur \
         aut perferendis doloribus asperiores repellat.'
+
+features = [
+    {
+        "name": 'manage-inst-edit',
+        "enable_mobile": "DISABLED",
+        "enable_desktop": "ALL",
+        "translation_dict": {
+            "pt-br": "Editar informações da instituição"
+        }
+    }
+]
+
+def create_features():
+    for feature in features:
+        if not Feature.get_by_id(feature['name']):
+            Feature.create(**feature)
 
 
 def add_comments_to_post(user, user_reply, post, institution, comments_qnt=3):
@@ -520,11 +537,50 @@ class ResetHandler(BaseHandler):
         splab.posts = []
         splab.put()
 
+        create_features()
+
         jsonList.append({"msg": "database initialized with a few posts"})
 
         self.response.write(json.dumps(jsonList))
+
+class CreateFeaturesHandler(BaseHandler):
+    def get(self):
+        create_features()
+        self.response.write({"msg": "database initialized with a few features"})
+
+
+class UpdateHandler(BaseHandler):
+    """Temporary handler.
+
+    It handles with the entities update for some attributes.
+    """
+
+    def get(self):
+        """Retrieve all users and institutions to
+        create their new attributes avoiding an error in production.
+        """
+        from datetime import datetime
+
+        users = User.query().fetch()
+
+        for user in users:
+            user.last_seen_institutions = datetime.now()
+            user.put()
+
+        existing_institutions = Institution.query().fetch()
+
+        for institution in existing_institutions:
+            institution.creation_date = datetime.now()
+            institution.put()
+
+        self.response.write("worked")
+
+
+
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
+    ('/admin/create-features', CreateFeaturesHandler),
+    ('/admin/update', UpdateHandler)
 ], debug=True)
 
 

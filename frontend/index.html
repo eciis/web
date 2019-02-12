@@ -6,7 +6,7 @@
   <base href="/" />
 
   <title>Plataforma CIS</title>
-
+  
   <!--Favicon-->
   <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
 
@@ -29,7 +29,7 @@
   <meta name="msapplication-TileImage" content="app/images/icons/cis-64x64.png">
   <meta name="msapplication-TileColor" content="#2F3BA2">
   <meta name="theme-color" content="#009688"/>
-
+  
   <!-- ngScrollbar style sheet -->
   <link rel="stylesheet" href="app/libs/jquery.mCustomScrollbar.css"/>
 
@@ -37,8 +37,8 @@
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
-  <link rel="stylesheet" type="text/css" href="app/user/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/edit_profile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/configProfile/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
@@ -52,24 +52,31 @@
   <link rel="stylesheet" type="text/css" href="app/auth/login.css">
   <link rel="stylesheet" type="text/css" href="app/search/search.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_list_mobile.css">
-  <link rel="stylesheet" type="text/css" href="app/institution/registered_institutions_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/registered_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/registered_institutions_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/list_users.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/base_institution.css">
   <link rel="stylesheet" type="text/css" href="app/invites/new_invite.css">
   <link rel="stylesheet" type="text/css" href="app/sideMenu/side_menu.css">
+  <link rel="stylesheet" type="text/css" href="app/user/user_profile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/user_profile_info.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/institutional_links_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/instLinks/inst_links.css">
-
+  <link rel="stylesheet" type="text/css" href="app/institution/registration_data_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/edit_registration_data_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/configProfile/config_profile_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
   <div flex class="content-main" layout="column" ui-view="main"></div>
 
-  <script>
+  <script> 
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
-    function $buo_f(){
-     var e = document.createElement("script");
-     e.src = "//browser-update.org/update.min.js";
+    function $buo_f(){ 
+     var e = document.createElement("script"); 
+     e.src = "//browser-update.org/update.min.js"; 
      document.body.appendChild(e);
     };
     try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
@@ -137,7 +144,6 @@
   <script src="app/config.js"></script>
   <script src="app/app.js"></script>
   <script src="app/main/mainController.js"></script>
-  <script src="app/main/hideTopNavbar.js"></script>
 
   <!-- SideMenu -->
   <script src="app/sideMenu/sideMenu.component.js"></script>
@@ -145,7 +151,7 @@
   <script src="app/sideMenu/factories/homeItems.factory.js"></script>
   <script src="app/sideMenu/factories/manageInstItems.factory.js"></script>
   <script src="app/sideMenu/sideMenuItem/sideMenuItem.component.js"></script>
-
+  
   <!--Utils-->
   <script src="app/utils/utils.js"></script>
   <script src="app/utils/messageService.js"></script>
@@ -155,6 +161,10 @@
   <script src="app/utils/statesConstants.js"></script>
   <script src="app/utils/screenSizesConstants.js"></script>
   <script src="app/utils/utilsService.js"></script>
+  <script src="app/utils/featureToggleService.js"></script>
+  <script src="app/utils/mapStateToFeatureService.js"></script>
+  <script src="app/utils/hideNavbar.js"></script>
+
 
   <!-- Auth/Login Library -->
   <script src="app/auth/signupDirective.js"></script>
@@ -170,8 +180,9 @@
   <script src="app/user/searchInstitution/searchInstitution.component.js"></script>
   <script src="app/user/profileService.js"></script>
   <script src="app/user/profileController.js"></script>
-  <script src="app/user/configProfileController.js"></script>
+  <script src="app/user/configProfile/configProfileController.js"></script>
   <script src="app/user/editProfileController.js"></script>
+  <script src="app/user/userProfileInfo.component.js"></script>
 
   <!-- Error Library -->
   <script src="app/error/errorController.js"></script>
@@ -219,6 +230,7 @@
   <script src="app/institution/transferAdminController.js"></script>
   <script src="app/institution/hierarchicalInstitutionDialogController.js"></script>
   <script src="app/institution/registeredInstitution.component.js"></script>
+  <script src="app/institution/institutionHeader.component.js"></script>
   <script src="app/institution/federal_state_acronym.js"></script>
   <script src="app/institution/listUsers.component.js"></script>
 
@@ -269,5 +281,8 @@
 
   <!-- Jsonpatch observer register Library -->
   <script src="app/utils/observerRecorderService.js"></script>
+
+  <!-- Toolbar library -->
+  <script src="app/toolbar/mainToolbar.component.js"></script>
 </body>
 </html>

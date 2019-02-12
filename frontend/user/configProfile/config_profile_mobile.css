@@ -1,0 +1,110 @@
+.user-profile__container {
+    display: grid;
+    grid-template-rows: 17em min-content auto;
+    overflow-x: hidden;
+}
+
+.user-profile__header {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 1fr;
+}
+
+.user-profile__header--shadow {
+    background-image: linear-gradient(#02554dd2, #009688);
+}
+
+.user-profile__header--background {
+    background-color: #009688;
+    height: 100%;
+}
+
+.user-profile__back__icon {
+    color: white;
+}
+
+.user-profile__avatar--position {
+    justify-self: center;
+    position: absolute;
+    top: 7em;
+}
+
+.user-profile__avatar {
+    border-radius: 50%;
+    height: 8em;
+    width: 8em;
+}
+
+.user-profile__info {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+}
+
+.user-profile__info--name {
+    margin: 0 1em;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: 500;
+    max-width: 85%;
+    text-transform: uppercase;
+}
+
+.user-profile__info--data {
+    font-size: 0.8em;
+    margin: 1em 0 1em 2.5em;
+}
+
+.user-profile__info--data > span {
+    color: #009688;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.user-profile__info--divider {
+    border: none;
+    background-color: #84C45E;
+    height: 4px;
+    width: 35%;
+}
+
+.user-profile__section__title {
+    margin: 0.5em auto;
+    text-transform: uppercase;
+    color: #004D41;
+    font-weight: 500;
+}
+
+.user-profile__content {
+    display: grid;
+    grid-row-gap: 1em;
+    margin-top: 1em;
+}
+
+.user-profile__data {
+    display: grid;
+    grid-template-columns: 20% auto;
+    grid-template-rows: 1fr 10%;
+}
+
+.user-profile__data > img {
+    height: 3em;
+    width: 3em;
+    justify-self: center
+}
+
+.user-profile__data > div {
+    min-width: 0;
+    max-width: 95%; 
+}
+
+.user-profile__data > div > p {
+    margin: 0;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.user-profile__data > md-divider {
+    grid-column: 1/3; 
+}

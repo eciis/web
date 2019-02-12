@@ -3,7 +3,8 @@
 (function () {
     const app = angular.module("app");
 
-    app.controller("ProfileController", function ProfileController(user, currentUserKey, UserService, $state, $mdDialog, STATES) {
+    app.controller("ProfileController", ['user', 'currentUserKey', 'institutionKey', 'UserService', '$state', '$mdDialog', 'STATES', 
+        function ProfileController(user, currentUserKey, institutionKey, UserService, $state, $mdDialog, STATES) {
         var profileCtrl = this;
 
         profileCtrl.loading = true;
@@ -11,6 +12,9 @@
         UserService.getUser(user).then(function success(response) {
             profileCtrl.user = response;
             profileCtrl.loading = false;
+            profileCtrl.currentProfile = _.find(profileCtrl.user.institution_profiles, (profile) => {
+                return profile.institution_key === institutionKey;
+            });
         });
 
         profileCtrl.isToShow = function () {
@@ -20,8 +24,9 @@
             return false;
         };
 
-        profileCtrl.showProperty = function getProperty(property) {
-            return Utils.limitString(property, 35) || 'Não informado';
+        profileCtrl.showProperty = (property, limit) => {
+            const prop = Utils.showProperty(property);
+            return Utils.limitString(prop, limit);
         };
 
         profileCtrl.goToConfigProfile = function goToConfigProfile() {
@@ -29,8 +34,20 @@
             $mdDialog.cancel();
         };
 
+        profileCtrl.goToUserProfilePage = (userKey) => {
+            /**
+             * TODO: implements this function to go to the user profile page
+             * when the same be implemented
+             * @tiagolimpe - Jan - 23 - 2019
+             */
+        };
+
         profileCtrl.isOwnProfile = function isOwnProfile() {
             return user === currentUserKey;
         };
-    });
+
+        profileCtrl.closeDialog = () => {
+            $mdDialog.cancel();
+        };
+    }]);
 })();

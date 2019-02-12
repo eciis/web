@@ -1,5 +1,7 @@
 "use strict";
 
+const SCREEN_SIZES = function(SCREEN_SIZES){return SCREEN_SIZES};
+
 var Utils = {
 
     /**
@@ -116,6 +118,7 @@ var Utils = {
      */
     setScrollListener: function setScrollListener(content, callback) {
         var alreadyRequested = false;
+        if(!content) return;
 
         content.onscroll = function onscroll() {
             var screenPosition = content.scrollTop + content.offsetHeight;
@@ -224,6 +227,21 @@ var Utils = {
         return Utils.isMobileScreen(mobileScreenSize) ? mobileField : notMobileField;
     },
 
+     /** Reset properties CSS of elements toolbar. 
+     * In mode mobile maybe changes some properties.
+     */
+    resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
+        if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+            const toolbar = document.getElementById('main-toolbar')
+            if(toolbar)
+                toolbar.style.display = 'block';
+            
+            const navbar = document.getElementById('navbar-bottom')
+            if(navbar)
+                navbar.style.display = 'flex';
+        }
+    },
+    
     /**
     * Get the initial letter of the user name
     * @param {Object} user : user object
@@ -250,5 +268,11 @@ var Utils = {
             }
         });
         return filteredUsers;
-    }
+    },
+
+    /**
+     * Returns the input property if it is defined, 
+     * otherwise a default value is returned
+     */
+    showProperty: property => property || 'Não informado'
 };

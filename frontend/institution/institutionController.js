@@ -5,7 +5,7 @@
 
     app.controller("InstitutionController", function InstitutionController($state, InstitutionService, STATES, 
         AuthService, MessageService, $sce, $mdDialog, PdfService, $rootScope, $window,
-        CropImageService, ImageService, UtilsService) {
+        CropImageService, ImageService, UtilsService, SCREEN_SIZES) {
         var institutionCtrl = this;
 
         institutionCtrl.content = document.getElementById("instPage");
@@ -31,6 +31,50 @@
             loadInstitution();
         };
 
+        /** Creating objects with the properties of the institution cover menu buttons.
+         */
+        function loadButtonsMenu(){
+             institutionCtrl.buttonsMenu =  [
+                { 
+                    'label': 'CADASTRO',
+                    'icon': 'assignment',
+                    'onClick': institutionCtrl.goToRegistrationData,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'VÍNCULOS',
+                    'icon': 'account_balance',
+                    'onClick': institutionCtrl.goToLinks,
+                    'parameters': institutionCtrl.institution.key
+
+                },
+                { 
+                    'label': 'MEMBROS',
+                    'icon': 'account_circle',
+                    'onClick': institutionCtrl.goToMembers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'PORTFOLIO',
+                    'icon': 'description',
+                    'onClick': institutionCtrl.portfolioDialog,
+                    'parameters': '$event'
+                },
+                { 
+                    'label': 'SEGUIDORES',
+                    'icon': 'people',
+                    'onClick': institutionCtrl.goToFollowers,
+                    'parameters': institutionCtrl.institution.key
+                },
+                { 
+                    'label': 'EVENTOS',
+                    'icon': 'date_range',
+                    'onClick': institutionCtrl.goToEvents,
+                    'parameters': institutionCtrl.institution.key
+                }
+            ]
+        }
+
         function loadInstitution() {
             InstitutionService.getInstitution(currentInstitutionKey).then(function success(response) {
                 institutionCtrl.institution = new Institution(response);
@@ -40,10 +84,18 @@
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
+                loadPropertiesInstCover();
             }, function error() {
                 $state.go(STATES.HOME);
                 institutionCtrl.isLoadingData = true; 
             });
+        }
+
+        /** Created objects with button properties for the institution cover.
+         */
+        function loadPropertiesInstCover(){
+            loadTimelineButtonsHeaderMob();
+            loadButtonsMenu();
         }
 
         /**
@@ -53,6 +105,23 @@
         institutionCtrl.getInstKey = () => {
             return currentInstitutionKey;
         };
+
+        /** Create the object that contais all functions necessary in institution header,
+         * when is in timeline page on mobile.
+         */
+        function loadTimelineButtonsHeaderMob(){
+            institutionCtrl.timelineButtonsHeaderMob =  {
+                goBack: institutionCtrl.goBack,
+                showDescribe: null,
+                follow: institutionCtrl.follow,
+                unfollow: institutionCtrl.unfollow,
+                cropImage: institutionCtrl.cropImage,
+                showImageCover: institutionCtrl.showImageCover,
+                requestInvitation: institutionCtrl.requestInvitation,
+                getLimitedName: institutionCtrl.getLimitedName,
+                editRegistrationData: institutionCtrl.editRegistrationData
+            }
+        }
 
         function getPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
@@ -116,11 +185,22 @@
             institutionCtrl.showFullData = !institutionCtrl.showFullData;
         };
 
+        institutionCtrl.showDescription = function showDescription(){
+            return !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        }
+
         institutionCtrl.showFollowButton = function showFollowButton() {
            return institutionCtrl.institution && !institutionCtrl.isMember && 
                 institutionCtrl.institution.name !== "Ministério da Saúde" &&
                 institutionCtrl.institution.name !== "Departamento do Complexo Industrial e Inovação em Saúde";
         };
+
+        /** Go to previous page.
+         */
+        institutionCtrl.goBack = function goBack(){
+            if(institutionCtrl.isTimelineMobile()) Utils.resetToolbarDisplayStyle();
+            window.history.back();
+        }
 
         institutionCtrl.goToInstitution = function goToInstitution(institutionKey) {
             const instKey = institutionKey || currentInstitutionKey;
@@ -149,6 +229,7 @@
         };
         
         institutionCtrl.goToHome = function goToHome() {
+            Utils.resetToolbarDisplayStyle();
             $state.go(STATES.HOME);
         };
 
@@ -261,6 +342,13 @@
             }
         };
 
+        /** Verify if current state is timeline institution on mobile.
+         */
+        institutionCtrl.isTimelineMobile = function isTimelineMobile(){
+            const inTimeline = $state.current.name == STATES.INST_TIMELINE;
+            return Utils.isMobileScreen(450) && inTimeline;
+        }
+
         function updateCoverImage(data) {
             var patch = [{ op: "replace", path: "/cover_photo", value: data.url }];
             InstitutionService.update(institutionCtrl.institution.key, patch).then(function success(response) {
@@ -347,6 +435,14 @@
             return Utils.limitString(string, size);
         };
 
+        institutionCtrl.editRegistrationData = () => {
+            $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
+        };
+
+        institutionCtrl.showProperty = (property) => {
+            return property || "Não informado";
+        };
+
         (function main(){
             changeCoverOnScroll();
         })();
@@ -355,15 +451,16 @@
     app.controller("FollowersInstController", function InstitutionController($state, InstitutionService,
             MessageService, ProfileService){
 
-        var followersCtrl = this;
-        var currentInstitutionKey = $state.params.institutionKey;
+        const followersCtrl = this;
+
+        followersCtrl.currentInstitutionKey = $state.params.institutionKey;
 
         followersCtrl.followers = [];
         followersCtrl.currentFollower = "";
         followersCtrl.isLoadingFollowers = true;
 
         followersCtrl._getFollowers = () => {
-            InstitutionService.getFollowers(currentInstitutionKey).then(function success(response) {
+            InstitutionService.getFollowers(followersCtrl.currentInstitutionKey).then(function success(response) {
                 followersCtrl.followers = Utils.isMobileScreen(475) ?
                     Utils.groupUsersByInitialLetter(response) : response;
                 followersCtrl.isLoadingFollowers = false;

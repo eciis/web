@@ -37,6 +37,7 @@
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
+  <link rel="stylesheet" type="text/css" href="app/user/edit_profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
@@ -64,8 +65,10 @@
   <link rel="stylesheet" type="text/css" href="app/institution/registration_data_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/edit_registration_data_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config_profile_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
   <link rel="stylesheet" type="text/css" href="app/utils/is-empty-card/is-empty-card.css">
+  <link rel="stylesheet" type="text/css" href="app/requests/request_invitation_dialog.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
@@ -160,6 +163,8 @@
   <script src="app/utils/statesConstants.js"></script>
   <script src="app/utils/screenSizesConstants.js"></script>
   <script src="app/utils/utilsService.js"></script>
+  <script src="app/utils/featureToggleService.js"></script>
+  <script src="app/utils/mapStateToFeatureService.js"></script>
   <script src="app/utils/hideNavbar.js"></script>
 
 
@@ -281,5 +286,8 @@
 
   <!-- is-empty-card component -->
   <script src="app/utils/is-empty-card/is-empty-card.component.js"></script>
+
+  <!-- Toolbar library -->
+  <script src="app/toolbar/mainToolbar.component.js"></script>
 </body>
 </html>

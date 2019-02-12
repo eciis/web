@@ -1,4 +1,6 @@
-<div class="container-resp box">
+<main-toolbar toolbar-menu-items="eventCtrl.toolbarItems" toolbar-general-options="eventCtrl.toolbarGeneralOptions"></main-toolbar>
+
+<div style="overflow: scroll">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">

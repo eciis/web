@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService, UtilsService,
-        UserService, RequestInvitationService, $window, NotificationListenerService, STATES) {
+        UserService, RequestInvitationService, $window, NotificationListenerService, STATES, SCREEN_SIZES) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -141,8 +141,6 @@
 
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
-            $state.reload();
-            $window.location.reload();
         };
 
         /** Return correct class according currently state.
@@ -166,6 +164,11 @@
         mainCtrl.showFooterBar = () => {
             return !mainCtrl._statesWithoutFooter.includes($state.current.name);
         };
+
+        mainCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        };
+
 
         /** Add new observers to listen events that user should be refresh. 
          */ 

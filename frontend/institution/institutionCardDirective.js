@@ -70,7 +70,7 @@
             $mdDialog.show({
                 controller: "RequestInvitationController",
                 controllerAs: "requestInvCtrl",
-                templateUrl: 'app/requests/request_invitation_dialog.html',
+                templateUrl: InstitutionService.getRequestInvitationTemplate(),
                 parent: angular.element(document.body),
                 targetEvent: event,
                 locals: {

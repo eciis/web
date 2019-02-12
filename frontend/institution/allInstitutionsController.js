@@ -3,14 +3,13 @@
     var app = angular.module('app');
 
     app.controller("AllInstitutionsController", function AllInstitutionsController(
-        InstitutionService, AuthService, $q) {
+        InstitutionService, AuthService, $q, UserService) {
         var allInstitutionsCtrl = this;
 
         var content = document.getElementById("content");
         var moreInstitutions = true;
         let currentPage = 0;
-
-        allInstitutionsCtrl.user = AuthService.getCurrentUser();
+    
         allInstitutionsCtrl.isLoadingInstitutions = true;
         allInstitutionsCtrl.institutions = [];
         allInstitutionsCtrl.filterKeyword = "";
@@ -67,6 +66,10 @@
             }
         };
 
+        allInstitutionsCtrl.changeOrderParam = (param) => {
+            allInstitutionsCtrl.orderParam = param;
+        };
+
         function normalizeString(string) {
             return Utils.normalizeString(string);
         }
@@ -88,12 +91,25 @@
         
         /**
          * Start function.
-         * Sets the scrollListener and retrieve the first 10
+         * Sets the scrollListener, retrieve the first 10
+         * institutions and update the last time the user saw the
          * institutions.
          */
         allInstitutionsCtrl.$onInit = function () {
             allInstitutionsCtrl.loadMoreInstitutions();
             Utils.setScrollListener(content, allInstitutionsCtrl.loadMoreInstitutions);
+            allInstitutionsCtrl.user = _.cloneDeep(AuthService.getCurrentUser());
+
+            const patch = [
+                {
+                    op: "replace",
+                    path: "/last_seen_institutions",
+                    value: new Date().toISOString().split('.')[0]
+                }
+            ];
+            UserService.save(patch).then(() => {
+                AuthService.reload();
+            });
         };
     }); 
 })();

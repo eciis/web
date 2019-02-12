@@ -1,0 +1,58 @@
+.registration-data-width {
+    width: 100%;
+}
+
+.registration-data-half-init-grid, .registration-data-location-grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: auto;
+    height: 87%;
+    width: 100%;
+}
+
+.registration-data-location-grid {
+    grid-template-columns: 30% 30% 33%;
+}
+
+.registration-data-init-column {
+    grid-column-start: 1
+}
+
+.registration-data-medium-column {
+    grid-column-start: 2
+}
+
+.registration-data-end-column {
+    grid-column-start: 3
+}
+
+.inst-registration-data-title {
+    color: #004D40;
+    font-size: 0.8em;
+    margin-top: -0.1em;
+    margin-left: 1.2em;
+}
+
+.inst-registration-data-subtitle {
+    font-size: 0.9em;
+    color: gray;
+    margin: -0.4em 1.1em 0.6em 1.1em;
+}
+
+.registration-data-subtitle-bold {
+    font-weight: bold;
+}
+
+.registration-data-hr {
+    border-width: 0.094em;
+    border-color: #009688;
+    border-style: solid;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.inst-registration-data-h2 {
+    font-size: 1.2em !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+}

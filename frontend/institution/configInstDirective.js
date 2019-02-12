@@ -362,7 +362,12 @@
                 });       
             }     
             return valid;     
-         };     
+        };
+
+        /**
+         * Back to the previous state
+         */
+        configInstCtrl.previousPage = () => window.history.back();
 
         function isCurrentStepValid(currentStep) {
             var isValid = true;
@@ -474,7 +479,8 @@
     app.directive("configInstitution", function() {
         return {
             restrict: 'E',
-            templateUrl: "app/institution/submit_form.html",
+            templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/submit_form.html",
+                "app/institution/edit_registration_data.html", 475),
             controller: "ConfigInstController",
             controllerAs: "configInstCtrl",
             scope: {},

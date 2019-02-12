@@ -168,6 +168,8 @@
             return !_.isEmpty(configProfileCtrl.user.institutions_admin);
         }
 
+        configProfileCtrl.showProperty = property => Utils.showProperty(property);
+
         configProfileCtrl.deleteAccount = function deleteAccount(event) {
             if (!isAdminOfAnyInstitution()) {
                 var confirm = $mdDialog.confirm();
@@ -195,6 +197,10 @@
         configProfileCtrl.goToInstitution = function goToInstitution(institutionKey) {
             const url = $state.href(STATES.INST_TIMELINE, {institutionKey: institutionKey});
             window.open(url, '_blank');
+        };
+
+        configProfileCtrl.goBack = _ => {
+            window.history.back();
         };
 
         function deleteUser() {

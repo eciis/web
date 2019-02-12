@@ -3,9 +3,10 @@
 (function () {
     angular
     .module('app')
-    .factory('HomeItemsFactory', function ($state, STATES, AuthService, $mdDialog) {
+    .factory('HomeItemsFactory', function ($state, STATES, AuthService, $mdDialog, $window) {
         const factory = {};
-        
+        const url_report = Config.SUPPORT_URL + "/report";
+
         const isSuperUser = user => user.hasPermission('analyze_request_inst');
 
         const takeTour = event => {
@@ -88,6 +89,12 @@
                     icon: 'card_travel',
                     description: 'Iniciar Tutorial',
                     onClick: event => takeTour(event)
+                },
+                {
+                    icon: 'warning',
+                    description: 'Reportar problemas',
+                    showIf: () => !isNotMobileScreen,
+                    onClick: () => $window.open(url_report),
                 },
                 {
                     icon: 'exit_to_app',

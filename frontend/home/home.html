@@ -1,14 +1,16 @@
+<main-toolbar title="INÍCIO" hide-navbar="top" id="main-toolbar"></main-toolbar>
+
 <div flex="100" layout="row" layout-align="center">
   <div flex flex-md="95" layout="row" layout-align="space-around"
       md-colors="{background: 'grey-50'}">
 
     <!-- CONTENT -->
-    <div flex flex-gt-md="70" layout-align="center top" layout="row">
+    <div flex flex-gt-md="65" layout-align="center top" layout="row">
       <div flex layout="column">
         <div>
           <save-post is-dialog="false" hide show-gt-sm></save-post>
         </div>
-        <md-content flex id="content" class="body custom-scrollbar" hide-top-navbar>
+        <md-content flex id="content" class="body custom-scrollbar" hide-navbar="top">
             <div flex layout="row">
                 <post-timeline flex layout="column" institution="false"
                   user="homeCtrl.user"></post-timeline>
@@ -19,7 +21,7 @@
     </div>
 
     <!-- RIGHT SIDE PANEL -->
-    <md-content class="hide-scrollbar" flex-gt-md="25" hide show-gt-md>
+    <md-content class="hide-scrollbar" flex-gt-md="30" hide show-gt-md>
         <div layout="column">
           <md-card style="margin-bottom: 50px;">
             <md-toolbar md-colors="{background: 'teal-600'}" layout="row">
@@ -70,7 +72,7 @@
               </div>
             </md-toolbar>
             <md-card-content layout-padding>
-              <md-grid-list md-cols="4" md-row-height="1:1" md-gutter="4px">
+              <md-grid-list md-cols="4" md-row-height="1:1">
                 <md-grid-tile
                   ng-repeat="inst in homeCtrl.followingInstitutions | limitTo: 8"
                   md-colspan="1" md-rowspan="1" class="clickable-no-hover">

@@ -257,7 +257,7 @@
 
         it('should call showToast', () => {
             spyOn(messageService, 'showToast');
-            controller.event.address = {};
+            controller.event.address = {country: 'Brasil'};
             controller.nextStep();
             expect(messageService.showToast).toHaveBeenCalled();
         });
@@ -392,6 +392,7 @@
       beforeEach(() => {
         spyOn(state, 'go');
         spyOn(mdDialog, 'hide');
+        spyOn(Utils, 'resetToolbarDisplayStyle').and.callFake(() => {});
       });
 
       it('should call state.go if is mobile screen', () => {

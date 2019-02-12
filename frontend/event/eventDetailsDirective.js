@@ -149,7 +149,7 @@
         };
 
         eventCtrl.isFollower = () => {
-            return _.includes(eventCtrl.event.followers, eventCtrl.user.key);
+            return eventCtrl.event && _.includes(eventCtrl.event.followers, eventCtrl.user.key);
         };
 
         eventCtrl.addFollower = () => {

@@ -11,7 +11,7 @@
     });
 
     function isEmptyCardController() {
-        const isEmptyCardCtrl = this;
+
     }
 
 })();

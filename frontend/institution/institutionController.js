@@ -209,8 +209,7 @@
 
         institutionCtrl.goToDescription = function goToDescription(institutionKey) {
             const instKey = institutionKey || currentInstitutionKey;
-            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey,
-                institution: institutionCtrl.institution});
+            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey});
         };
 
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
@@ -276,9 +275,10 @@
                 clickOutsideToClose:true,
                 locals: {
                     institution: institutionCtrl.institution,
+                    institutionKey: currentInstitutionKey
                 },
-                controller: app.EditDescriptionController,
-                controllerAs: 'ctrl'
+                controller: 'EditDescriptionController',
+                controllerAs: 'descriptionCtrl'
             });
         };
 

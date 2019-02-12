@@ -1,11 +1,10 @@
-<div style="padding: 2em; display: grid;">
-    <md-input-container class="md-block" >
-        <label style="font-weight: bold; font-size: 25px; color:black; margin-bottom: 10px">Editar descrição</label>
-        <textarea ng-model="controller.event.programation" rows="5" md-select-on-focus
-            placeholder="Insira a descrição da instituição"
-            style="border-style: solid; border-width: 1px; border-color: black; border-radius: 5px;"></textarea>
+<div class="dialog-edit-description">
+    <md-input-container class="md-block" style="margin-bottom: 0px">
+        <label id="label-edit-description">Editar descrição</label>
+        <textarea ng-model="descriptionCtrl.institution.description" rows="5"
+            placeholder="Insira a descrição da instituição" id="textarea-edit-description"></textarea>
     </md-input-container>
-    <md-button type="submit" md-colors="{color: 'default-teal-500'}" style="justify-self: end;">
+    <md-button type="submit" ng-click="descriptionCtrl.save()" md-colors="{color: 'default-teal-500'}" class="button-confirm-describe">
         CONFIRMAR
     </md-button>
 </div>

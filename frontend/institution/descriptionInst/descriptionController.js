@@ -1,36 +1,46 @@
 (function(){
     var app = angular.module('app');
 
-    app.controller("EditDescriptionController", function EditDescriptionController($state, InstitutionService, ObserverRecorderService){
+    app.controller("EditDescriptionController", function EditDescriptionController(institution, institutionKey, InstitutionService,
+        ObserverRecorderService, $rootScope, $mdDialog){
         const descriptionCtrl = this;
         let observer;
     
-        descriptionCtrl.isLoading = false;
         descriptionCtrl.$onInit = () => {
-            descriptionCtrl.currentInstitutionKey = $state.params.institutionKey;
-            descriptionCtrl.isLoading = true;
-            InstitutionService.getInstitution(descriptionCtrl.currentInstitutionKey).then(function(institution){
-                descriptionCtrl.institution = institution;
-                descriptionCtrl.isLoading = false;
-                observer = ObserverRecorderService.register(descriptionCtrl.institution);
-            })
+            descriptionCtrl.institution = institution;
+            descriptionCtrl.currentInstitutionKey = institutionKey;
+            observer = ObserverRecorderService.register(descriptionCtrl.institution);
         };
     
-        function patchIntitution() {
+        descriptionCtrl.save = () => {
             var patch = ObserverRecorderService.generate(observer);
             InstitutionService.update(descriptionCtrl.currentInstitutionKey, patch).then(
-                /*function success() {
-                    if(configInstCtrl.newInstitution)
-                        updateUserInstitutions(configInstCtrl.newInstitution);}*/
+                function success() {
+                   $rootScope.$emit('EDIT_DESCRIPTION_INST');
+                   $mdDialog.hide();
+                }
             );
-        }
-    
+        }    
     });
     
-    app.controller("DescriptionInstController", function DescriptionInstController($state){
+    app.controller("DescriptionInstController", function DescriptionInstController($state, InstitutionService, $rootScope){
         const descriptionCtrl = this;
         descriptionCtrl.isLoading = false;
-        descriptionCtrl.institution = $state.params.institution;
-        console.log($state.params);
+        descriptionCtrl.$onInit = () => {
+            descriptionCtrl.isLoading = true;        
+            InstitutionService.getInstitution($state.params.institutionKey).then(function(institution){
+                descriptionCtrl.institution = institution;
+                descriptionCtrl.isLoading = false;
+
+            })
+        };
+
+        $rootScope.$on('EDIT_DESCRIPTION_INST', () => {
+            descriptionCtrl.isLoading = true;
+            InstitutionService.getInstitution($state.params.institutionKey).then(function(institution){
+                descriptionCtrl.institution = institution;
+                descriptionCtrl.isLoading = false;
+            })
+        });
     });
 })();

@@ -189,7 +189,7 @@ class Event(ndb.Model):
         is_active = user.state == 'active'
         is_not_a_follower = not user.key in self.followers 
 
-        if  is_active and is_not_a_follower:
+        if is_active and is_not_a_follower:
             self.followers.append(user.key)
             self.put()
         else:

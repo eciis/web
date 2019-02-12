@@ -1,6 +1,6 @@
 <!-- TIMELINE -->
 <div flex ng-if="!timelineCtrl.isLoadingPosts">
-  <is-empty-card ng-if="timelineCtrl.posts.size() === 0" text="Ainda não há publicações para serem mostradas">
+  <is-empty-card ng-if="timelineCtrl.posts.size() === 0" text="Esta instituição ainda não possui publicações">
   </is-empty-card>
   <div layout="row" layout-align="center center" class="ng-if" ng-if="timelineCtrl.showRefreshTimelineButton()">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.refreshTimeline()">

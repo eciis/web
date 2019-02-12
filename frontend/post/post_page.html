@@ -3,7 +3,7 @@
 
         <side-menu type="HOME"></side-menu>
 
-        <div flex layout="row" layout-align="center">
+        <div id="post-content" flex layout="row" layout-align="center">
             <div class="custom-scrollbar" flex="95">
                 <div layout="row" ng-if="postCtrl.post && !postCtrl.isHiden()">
                     <post-details id="post" post="postCtrl.post" is-post-page=true></post-details>  

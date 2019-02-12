@@ -112,7 +112,7 @@
           }
         })
 
-        sideMenuCtrl.openColorPicker = () => {
+        sideMenuCtrl.openColorPicker = (institution) => {
             $mdDialog.show({
                controller: "ColorPickerController",
                controllerAs: "colorPickerCtrl",
@@ -121,6 +121,7 @@
                clickOutsideToClose: true,
                locals: {
                    user : sideMenuCtrl.user
+                   institution,
                 },
                 bindToController: true
            });

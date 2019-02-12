@@ -6,6 +6,7 @@
     app.controller("ColorPickerController", function ColorPickerController(user, ProfileService, MessageService, $mdDialog, AuthService, $http) {
         var colorPickerCtrl = this;
         colorPickerCtrl.user = user;
+        colorPickerCtrl.institution = institution;
 
         colorPickerCtrl.saveColor = function saveColor() {
             var diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
@@ -26,9 +27,7 @@
         function loadProfile() {
             colorPickerCtrl.newUser = _.cloneDeep(colorPickerCtrl.user);
 
-            colorPickerCtrl.newProfile = _.find(colorPickerCtrl.newUser.institution_profiles, function (profile) {
-                return profile.institution_key === colorPickerCtrl.newUser.current_institution.key;
-            });
+            colorPickerCtrl.newProfile = _.cloneDeep(colorPickerCtrl.institution);
         }
 
         function loadColors() {

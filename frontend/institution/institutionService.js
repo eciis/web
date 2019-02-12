@@ -76,5 +76,8 @@
             const path = (isParent) ? 'institution_children' : 'institution_parent';
             return HttpService.delete(INSTITUTIONS_URI + "/" + institutionKey + "/hierarchy/" + institutionLink + '/' + path);
         };
+
+        service.getRequestInvitationTemplate = () => Utils.isMobileScreen() ?
+            "app/requests/request_invitation_dialog_mobile.html" : "app/requests/request_invitation_dialog.html";
     });
 })();

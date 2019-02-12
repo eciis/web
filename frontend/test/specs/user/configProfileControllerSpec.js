@@ -1,41 +1,44 @@
 'use strict';
 
-(fdescribe('Test ConfigProfileController', function() {
+(describe('Test ConfigProfileController', function() {
     let configCtrl, httpBackend, scope, userService, createCrtl, state, deferred,
-    authService, imageService, mdDialog, cropImageService, states, messageService;
+    authService, imageService, mdDialog, cropImageService, states, messageService,
+    stateParams, observerRecorderService;
 
-    const institution = {
-        name: 'institution',
-        key: '987654321'
-    };
+    let institution, other_institution, user, newUser, authUser;
 
-    const other_institution = {
-        name: 'other_institution',
-        key: '3279847298'
-    };
-
-    const user = {
-        name: 'User',
-        cpf: '121.445.044-07',
-        email: 'teste@gmail.com',
-        institutions: [institution],
-        uploaded_images: [],
-        institutions_admin: [],
-        state: 'active'
-    };
-
-    const newUser = {
-        name: 'newUser',
-        cpf: '121.115.044-07',
-        email: 'teste@gmail.com',
-        institutions: [institution],
-        institutions_admin: []
+    const setUpModels = () => {
+        institution = {
+            name: 'institution',
+            key: '987654321'
+        };
+    
+        other_institution = {
+            name: 'other_institution',
+            key: '3279847298'
+        };
+    
+        user = new User({
+            name: 'User',
+            cpf: '121.445.044-07',
+            email: 'teste@gmail.com',
+            current_institution: institution,
+            institutions: [institution],
+            uploaded_images: [],
+            institutions_admin: [],
+            state: 'active'
+        });
+    
+        newUser = new User({
+            ...user,
+            name: 'newUser'
+        });
     };
 
     const fakeCallback = response => {
         return () => {
             return {
-                then: function(callback) {
+                then: (callback) => {
                     return callback(response);
                 }
             };
@@ -45,7 +48,8 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, STATES,
-        $mdDialog, UserService, AuthService, ImageService, CropImageService, MessageService) {
+        $mdDialog, UserService, AuthService, ImageService, CropImageService, MessageService,
+        $stateParams, ObserverRecorderService) {
 
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
@@ -58,80 +62,97 @@
         cropImageService = CropImageService;
         messageService = MessageService;
         authService = AuthService;
-
-        authService.login(user);
-
+        stateParams = $stateParams;
+        observerRecorderService = ObserverRecorderService;
+        
+        
         createCrtl = function() {
             return $controller('ConfigProfileController', {
-                    scope: scope,
-                    authService: authService,
-                    userService: userService,
-                    imageService: imageService,
-                    cropImageService : cropImageService,
-                    messageService: messageService
-                });
+                scope: scope,
+                authService: authService,
+                userService: userService,
+                imageService: imageService,
+                cropImageService : cropImageService,
+                messageService: messageService
+            });
         };
+        
+        setUpModels();
+        authService.login(user);
         configCtrl = createCrtl();
         configCtrl.$onInit();
     }));
 
-    afterEach(function() {
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
+    describe('onInit()', () => {
+        it('should call _setupUser', () => {
+            spyOn(configCtrl, '_setupUser');
+            configCtrl.$onInit();
+            expect(configCtrl._setupUser).toHaveBeenCalled();
+        }); 
     });
 
-    xdescribe('main()', function() {
+    describe('_setupUser()', function() {
 
-        it("should delete name from user if that is Unknown", function() {
-            const unknownUser = {
-              name: 'Unknown'
-            };
+        it("should set user object and observer when the user can edit", function() {
+            spyOn(configCtrl, 'canEdit').and.returnValue(true);
+            spyOn(observerRecorderService, 'register');
+            spyOn(configCtrl, '_checkUserName');
+            authUser = authService.getCurrentUser();
 
-            expect(unknownUser.name).not.toBeUndefined();
+            configCtrl._setupUser();
+            
+            expect(configCtrl.user).toEqual(authUser);
+            expect(configCtrl.newUser).toEqual(configCtrl.user);
+            expect(observerRecorderService.register).toHaveBeenCalledWith(authUser);
+            expect(configCtrl._checkUserName).toHaveBeenCalled();
+        });
 
-            authService.getCurrentUser = function() {
-                return new User(unknownUser);
-            };
+        it("should get the user via when the user can not edit", function() {
+            spyOn(configCtrl, 'canEdit').and.returnValue(false);
+            spyOn(userService, 'getUser').and.callFake(fakeCallback(user));
+            stateParams.userKey = "user-key";
 
-            // configCtrl = createCrtl();
+            configCtrl._setupUser();
+            
+            expect(userService.getUser).toHaveBeenCalledWith(stateParams.userKey);
+            expect(configCtrl.user).toEqual(user);
+        });
+    });
 
+    describe('_checkUserName()', () => {
+
+        it("should not delete user and newUser name prop when it is not 'UnKnown'", () => {
+            configCtrl.user = user;
+            configCtrl.newUser = newUser;
+            configCtrl._checkUserName();
+            expect(configCtrl.user.name).toBe(user.name);
+            expect(configCtrl.newUser.name).toBe(newUser.name);
+        });
+
+        it("should delete user and newUser name prop when it is 'UnKnown'", () => {
+            configCtrl.user = {...user, name:'Unknown'};
+            configCtrl.newUser = {...configCtrl.user};
+            configCtrl._checkUserName();
+            expect(configCtrl.user.name).toBeUndefined();
             expect(configCtrl.newUser.name).toBeUndefined();
         });
     });
 
-    describe('finish()', function(){
-
-        it("Should show a message when the user is invalid", function(){
-            spyOn(messageService, 'showToast');
-            spyOn(configCtrl, '_saveImage').and.returnValue(Promise.resolve());
-            spyOn(configCtrl.newUser, 'isValid').and.returnValue(false);
-            configCtrl._saveUser().should.be.resolved;
-            expect(messageService.showToast).toHaveBeenCalledWith("Campos obrigatórios não preenchidos corretamente.");
+    describe('canEdit', () => {
+        it(`should be true when the loggend user is accessing
+            its on profile page`, () => {
+            user.key = "user-key";
+            authService.getCurrentUser = () => user;
+            stateParams.userKey = user.key;
+            expect(configCtrl.canEdit()).toBe(true);
         });
 
-        xit('Should change informations of user from system', function(done) {
-            spyOn(state, 'go');
-            spyOn(userService, 'save').and.callThrough();
-
-            spyOn(authService, 'save');
-
-
-            expect(configCtrl.newUser.name).toEqual(user.name);
-            expect(configCtrl.newUser.email).toEqual(user.email);
-            expect(configCtrl.newUser.cpf).toEqual(user.cpf);
-
-            httpBackend.expect('PATCH', '/api/user').respond(newUser);
-
-            const promise = configCtrl.finish();
-
-            promise.should.be.fulfilled.then(function() {
-                expect(state.go).toHaveBeenCalledWith(states.HOME);
-                expect(userService.save).toHaveBeenCalled();
-                expect(authService.save).toHaveBeenCalled();
-            }).should.notify(done);
-
-            httpBackend.flush();
-            scope.$apply();
+        it(`should be false when the loggend user is accessing
+            the profile page of another user`, () => {
+            user.key = "user-key";
+            authService.getCurrentUser = () => user;
+            stateParams.userKey = "other-user-key";
+            expect(configCtrl.canEdit()).toBe(false);
         });
     });
 
@@ -171,78 +192,76 @@
         });
     });
 
-    xdescribe('removeInstitution()', function() {
+    describe('finish()', function(){
 
-        let promise;
+        it('Should call _saveImage and _saveUser', function() {
+            spyOn(configCtrl, '_saveImage').and.returnValue(deferred.promise);
+            spyOn(configCtrl, '_saveUser').and.returnValue(deferred.promise);
+            configCtrl.loadingSubmission = true;
+            deferred.resolve();
+            
+            configCtrl.finish();
+            scope.$apply();
+            
+            expect(configCtrl._saveImage).toHaveBeenCalled();
+            expect(configCtrl._saveUser).toHaveBeenCalled();
+            expect(configCtrl.loadingSubmission).toBe(false);
+        });
+    });
 
-        beforeEach(function() {
-            spyOn(configCtrl.newUser, 'isAdmin');
+    describe('_saveImage', () => {
+        
+        it('should save the image if there is a new one', () => {
+            const userImage = createImage(50);
+            const data = {url: 'img-url'};
+            configCtrl.photo_user = userImage;
+            expect(configCtrl.user.photo_url).toBeUndefined();
+            spyOn(imageService, 'saveImage').and.returnValue(deferred.promise);
+            spyOn(configCtrl.user.uploaded_images, 'push');
+            deferred.resolve(data);
 
-            spyOn(mdDialog, 'show').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
+            configCtrl._saveImage();
+            scope.$apply();
 
-            spyOn(userService, 'deleteInstitution').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
-
-            spyOn(authService, 'logout').and.callFake(function() {
-                return {
-                    then: function(callback) {
-                        return callback();
-                    }
-                };
-            });
-
-            spyOn(authService, 'save').and.callThrough();
-            promise = configCtrl.removeInstitution('$event', institution);
+            expect(imageService.saveImage).toHaveBeenCalledWith(configCtrl.photo_user);
+            expect(configCtrl.user.photo_url).toBe(data.url);
+            expect(configCtrl.user.uploaded_images.push).toHaveBeenCalledWith(data.url);
         });
 
-        it('Should call user.isAdmin()', function(done) {
-            promise.then(function() {
-                expect(configCtrl.newUser.isAdmin).toHaveBeenCalled();
-                done();
-            });
+        it('should do nothing when there is no image to save', () => {
+            configCtrl.photo_user = undefined;
+            spyOn(imageService, 'saveImage');
+            configCtrl._saveImage();
+            expect(imageService.saveImage).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('_saveUser()', () => {
+
+        it('should save the user and show a message', () => {
+            const patch = {name: 'newName'};
+            spyOn(configCtrl.newUser, 'isValid').and.returnValue(true);
+            spyOn(observerRecorderService, 'generate').and.returnValue(patch);
+            spyOn(userService, 'save').and.returnValue(deferred.promise);
+            spyOn(authService, 'save');
+            spyOn(messageService, 'showToast');
+            deferred.resolve();
+
+            configCtrl._saveUser();
+            scope.$apply();
+            
+            expect(observerRecorderService.generate).toHaveBeenCalled();
+            expect(userService.save).toHaveBeenCalledWith(patch);
+            expect(authService.save).toHaveBeenCalledWith();
+            expect(messageService.showToast).toHaveBeenCalledWith("Edição concluída com sucesso");
         });
 
-        it('Should call mdDialog.show()', function(done) {
-            promise.then(function() {
-                expect(mdDialog.show).toHaveBeenCalled();
-                done();
-            });
-        });
-
-        it('Should call userService.deleteInstitution()', function(done) {
-            promise.then(function() {
-                expect(userService.deleteInstitution).toHaveBeenCalledWith(institution.key);
-                done();
-            });
-        });
-
-        it('Should call authService.logout()', function(done) {
-            promise.then(function() {
-                expect(authService.logout).toHaveBeenCalled();
-                done();
-            });
-        });
-
-        it('Should call authService.save()', function(done) {
-            user.institutions.push(other_institution);
-            promise = configCtrl.removeInstitution('$event', institution);
-
-            promise.then(function() {
-                expect(user.institutions).toEqual([other_institution]);
-                expect(authService.save).toHaveBeenCalled();
-                done();
-            });
+        it("Should show a message when the user is invalid", function(){
+            spyOn(messageService, 'showToast');
+            spyOn(configCtrl, '_saveImage').and.returnValue(Promise.resolve());
+            spyOn(configCtrl.newUser, 'isValid').and.returnValue(false);
+            configCtrl._saveUser().should.be.resolved;
+            expect(messageService.showToast).toHaveBeenCalledWith("Campos obrigatórios não preenchidos corretamente.");
         });
     });
 
@@ -284,6 +303,14 @@
             spyOn(mdDialog, 'show');
             configCtrl.editProfile(institution, '$event');
             expect(mdDialog.show).toHaveBeenCalled();
+        });
+    });
+
+    describe('goBack()', () => {
+        it('should call the window back function', () => {
+            spyOn(window.history, 'back');
+            configCtrl.goBack();
+            expect(window.history.back).toHaveBeenCalled();
         });
     });
 }));

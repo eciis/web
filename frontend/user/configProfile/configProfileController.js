@@ -17,22 +17,22 @@
             "exceto por meio de novo convite. Deseja realmente excluir sua conta?";
 
         configProfileCtrl.$onInit = () => {
-            setupUser();
+            configProfileCtrl._setupUser();
         }
 
-        const setupUser = () => {
+        configProfileCtrl._setupUser = () => {
             if(configProfileCtrl.canEdit()) {
                 configProfileCtrl.user = AuthService.getCurrentUser();
                 configProfileCtrl.newUser = _.cloneDeep(configProfileCtrl.user);
                 observer = ObserverRecorderService.register(configProfileCtrl.user);
-                checkUserName();
+                configProfileCtrl._checkUserName();
             } else {
                 UserService.getUser($stateParams.userKey)
                     .then(user => configProfileCtrl.user = user);
             }
         }
         
-        const checkUserName = () => {
+        configProfileCtrl._checkUserName = () => {
             if (configProfileCtrl.user.name === 'Unknown') {
                 delete configProfileCtrl.user.name;
                 delete configProfileCtrl.newUser.name;

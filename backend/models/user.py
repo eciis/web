@@ -38,7 +38,8 @@ class InstitutionProfile(ndb.Model):
         profile['institution'] = {
             'name': institution.name,
             'photo_url': institution.photo_url,
-            'acronym': institution.acronym
+            'acronym': institution.acronym,
+            'key': institution.key.urlsafe()
         }
 
         profile['color'] = self.color or 'teal'

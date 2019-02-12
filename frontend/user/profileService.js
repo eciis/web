@@ -1,9 +1,9 @@
 'use strict';
 
 (function() {
-    var app = angular.module("app");
+    const app = angular.module("app");
 
-    var USER_URI = '/api/user';
+    const USER_URI = '/api/user';
 
     app.service("ProfileService", function ProfileService($mdDialog, HttpService, AuthService, MessageService, UserService) {
         const service = this;
@@ -65,20 +65,20 @@
 
         const isAdmin = institution => user.isAdmin(institution.key);
 
-        const deleteInstitution = (institution_key) => {
+        const deleteInstitution = (institutionKey) => {
             return new Promise(resolve => {
-                UserService.deleteInstitution(institution_key)
+                UserService.deleteInstitution(institutionKey)
                     .then(_ => {
-                        removeConection(institution_key);
+                        removeConection(institutionKey);
                         resolve();
                     });
             });
         };
 
-        const removeConection = (institution_key) => {
+        const removeConection = (institutionKey) => {
             if (_.size(user.institutions) > 1) {
-                user.removeInstitution(institution_key);
-                user.removeProfile(institution_key);
+                user.removeInstitution(institutionKey);
+                user.removeProfile(institutionKey);
                 AuthService.save();
             } else {
                 AuthService.logout();

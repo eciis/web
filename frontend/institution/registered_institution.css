@@ -15,6 +15,7 @@
 #card-cover-picture {
     height: 5.5em;
     width: 100%; 
+    display:grid;
 }
 
 .registered-institution-cover div img {
@@ -108,3 +109,40 @@
 }
 
 
+.new-institution-tag {
+    width: 47%;
+    height: 0.7em;
+    margin-left: 0.3em;
+    border-radius: 5%;
+    display: grid;
+    margin-top: -5em;
+}
+
+ .new-institution-tag-with-cover {
+    width: 47%;
+    height: 0.7em;
+    margin-left: 0.3em;
+    border-radius: 5%;
+    display: grid;
+    margin-top: 0.5em;
+}
+
+ .new-institution-tag-with-cover span {
+    font-size: 50%;
+    color: #FFFFFF;
+    align-self: center;
+    justify-self: center;
+}
+
+ .new-institution-tag span {
+    font-size: 50%;
+    color: #FFFFFF;
+    align-self: center;
+    justify-self: center;
+}
+
+#default-reg-inst-cover {
+    display: grid; 
+    height: 5.5em; 
+    width: 100%;
+}

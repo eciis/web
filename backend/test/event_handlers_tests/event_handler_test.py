@@ -48,14 +48,29 @@ class EventHandlerTest(TestBaseHandler):
         # Events
         cls.event = mocks.create_event(cls.user, cls.institution)
 
+    @patch('handlers.event_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_by_author(self, verify_token):
+    def test_delete_by_author(self, verify_token, mock_method):
         """Test the event_handler's delete method when user is author."""
         self.user.add_permissions(
             ['edit_post', 'remove_post'], self.event.key.urlsafe())
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
                             self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
+        
+        not_params = {
+            'receiver_key': self.event.author_key.urlsafe(),
+            'sender_key': self.user.key.urlsafe(),
+            'entity_key': self.event.key.urlsafe(),
+            'entity_type': 'DELETED_EVENT',
+            'current_institution': self.institution.key.urlsafe(),
+            'sender_institution_key': self.institution.key.urlsafe(),
+            'field': 'followers',
+            'title': self.event.title
+        }
+
+        mock_method.assert_called_with('multiple-notification', not_params)
+
         # Refresh event
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
@@ -157,8 +172,9 @@ class EventHandlerTest(TestBaseHandler):
                                       "value": "New Local"}],
                                     headers={'institution-authorization': self.institution.key.urlsafe()})
 
+    @patch('handlers.event_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_pacth_datetime(self, verify_token):
+    def test_pacth_datetime(self, verify_token, mock_method):
         """Test pacth datetimes in event handler."""
         json_edit = json.dumps([
             {"op": "replace", "path": "/start_time",
@@ -180,6 +196,19 @@ class EventHandlerTest(TestBaseHandler):
                          '2018-07-14T12:30:15')
         self.assertEqual(self.event.end_time.isoformat(),
                          '2018-07-25T12:30:15')
+                        
+        not_params = {
+            'receiver_key': self.event.author_key.urlsafe(),
+            'sender_key': self.user.key.urlsafe(),
+            'entity_key': self.event.key.urlsafe(),
+            'entity_type': 'UPDATED_EVENT',
+            'current_institution': self.institution.key.urlsafe(),
+            'sender_institution_key': self.institution.key.urlsafe(),
+            'field': 'followers',
+            'title': self.event.title
+        }
+
+        mock_method.assert_called_with('multiple-notification', not_params)
 
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_on_event_outdated(self, verify_token):

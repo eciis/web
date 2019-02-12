@@ -42,8 +42,8 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-button ng-if="instHeaderCtrl.isRegistrationData()" class="cover-photo-button button-navbar-inst"
-                id="btn-edit">
+            <md-button ng-if="instHeaderCtrl.isRegistrationData() && instHeaderCtrl.user.isAdmin(instHeaderCtrl.institution.key)" class="cover-photo-button button-navbar-inst"
+                id="btn-edit" ng-click="instHeaderCtrl.actionsButtons.editRegistrationData($event)">
                 <b>EDITAR</b>
             </md-button>
         </div>

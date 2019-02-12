@@ -1,0 +1,102 @@
+<div layout="column" class="registration-data-width">
+    <p class="inst-registration-data-title">Nome</p>
+    <p class="inst-registration-data-subtitle registration-data-subtitle-bold">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.name)}}
+    </p>
+
+    <div class="registration-data-half-init-grid">
+        <div class="registration-data-init-column">
+            <p class="inst-registration-data-title">Sigla</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.acronym)}}
+            </p>
+        </div>
+        <div class="registration-data-medium-column">
+            <p class="inst-registration-data-title">Área de atuação</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.instActuationArea)}}
+            </p>
+        </div>
+    </div>
+
+    <p class="inst-registration-data-title">Responsável</p>
+    <p class="inst-registration-data-subtitle">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.admin.name)}}
+    </p>
+
+    <p class="inst-registration-data-title">Natureza legal</p>
+    <p class="inst-registration-data-subtitle">
+        {{institutionCtrl.showProperty(institutionCtrl.instLegalNature)}}
+    </p>
+
+    <p class="inst-registration-data-title">CNPJ</p>
+    <p class="inst-registration-data-subtitle">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.cnpj)}}
+    </p>
+
+    <hr class="registration-data-hr"/>
+
+    <h2 class="inst-registration-data-h2">Localização</h2>
+
+    <p class="inst-registration-data-title">Logradouro</p>
+    <p class="inst-registration-data-subtitle registration-data-subtitle-bold">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.address.street)}}
+    </p>
+
+    <div class="registration-data-half-init-grid">
+        <div class="registration-data-init-column">
+            <p class="inst-registration-data-title">Nº</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.address.number)}}
+            </p>
+        </div>
+        <div class="registration-data-medium-column">
+            <p class="inst-registration-data-title">Bairro</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.address.neighbourhood)}}
+            </p>
+        </div>
+    </div>
+
+    <div class="registration-data-location-grid">
+        <div class="registration-data-init-column">
+            <p class="inst-registration-data-title">Cidade</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.address.city)}}
+            </p>
+        </div>
+        <div class="registration-data-medium-column">
+            <p class="inst-registration-data-title">Estado</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.address.federal_state)}}
+            </p>
+        </div>
+        <div class="registration-data-end-column">
+            <p class="inst-registration-data-title">País</p>
+            <p class="inst-registration-data-subtitle">
+                {{institutionCtrl.showProperty(institutionCtrl.institution.address.country)}}
+            </p>
+        </div>
+    </div>
+
+    <p class="inst-registration-data-title">CEP</p>
+    <p class="inst-registration-data-subtitle">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.address.cep)}}
+    </p>
+
+    <hr class="registration-data-hr"/>
+
+    <h2 class="inst-registration-data-h2">Contato</h2>
+
+    <p class="inst-registration-data-title">E-mail institucional</p>
+    <p class="inst-registration-data-subtitle registration-data-subtitle-bold">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.institutional_email)}}
+    </p>
+
+    <p class="inst-registration-data-title">E-mail do responsável</p>
+    <p class="inst-registration-data-subtitle registration-data-subtitle-bold">
+        {{institutionCtrl.showProperty(institutionCtrl.institution.email)}}
+    </p>
+
+    <hr/>
+</div>

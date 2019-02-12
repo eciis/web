@@ -37,6 +37,7 @@
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
+  <link rel="stylesheet" type="text/css" href="app/user/edit_profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
@@ -61,7 +62,10 @@
   <link rel="stylesheet" type="text/css" href="app/user/user_profile_info.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/institutional_links_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/institutionalLinks/instLinks/inst_links.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/registration_data_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/edit_registration_data_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config_profile_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
@@ -157,6 +161,8 @@
   <script src="app/utils/statesConstants.js"></script>
   <script src="app/utils/screenSizesConstants.js"></script>
   <script src="app/utils/utilsService.js"></script>
+  <script src="app/utils/featureToggleService.js"></script>
+  <script src="app/utils/mapStateToFeatureService.js"></script>
   <script src="app/utils/hideNavbar.js"></script>
 
 
@@ -275,5 +281,8 @@
 
   <!-- Jsonpatch observer register Library -->
   <script src="app/utils/observerRecorderService.js"></script>
+
+  <!-- Toolbar library -->
+  <script src="app/toolbar/mainToolbar.component.js"></script>
 </body>
 </html>

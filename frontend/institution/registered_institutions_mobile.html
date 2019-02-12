@@ -1,3 +1,5 @@
+<main-toolbar title="INSTITUIÇÕES" sort-by-alpha="true" sort-func="allInstitutionsCtrl.changeOrderParam"></main-toolbar>
+
 <div style="overflow: auto;" id="content">
     <div class="registered-institutions-mobile-top-bar">
         <div ng-click="allInstitutionsCtrl.changeTab('all')">
@@ -17,8 +19,8 @@
     </div>
 
     <div id="content" class="registered-institutions-container">
-          <registered-institution institution="institution" 
-            ng-repeat="institution in allInstitutionsCtrl.institutions" style="margin-bottom: 0.5em;">
+          <registered-institution institution="institution" user="allInstitutionsCtrl.user"
+            ng-repeat="institution in allInstitutionsCtrl.institutions | orderBy: allInstitutionsCtrl.orderParam" style="margin-bottom: 0.5em;">
           </registered-institution>
     </div>
 </div>

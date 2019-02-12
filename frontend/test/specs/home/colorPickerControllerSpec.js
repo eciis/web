@@ -31,7 +31,8 @@
         profileService = ProfileService;
 
         colorPickerCtrl = $controller('ColorPickerController', {
-                user: user
+                user,
+                institution,
             });
 
         AuthService.login(user);

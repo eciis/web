@@ -64,7 +64,6 @@ handlers = [
     invite_hierarchy_collection_handler, invite_user_collection_handler,
     invite_institution_handler, invite_user_handler, institution_parent_handler,
     institution_children_handler, event_followers_handler, feature_toggle_handler
-]]
 ]
 
 __all__ = [prop for handler in handlers for prop in handler.__all__]

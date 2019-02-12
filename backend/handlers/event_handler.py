@@ -68,7 +68,7 @@ class EventHandler(BaseHandler):
                 'title': event.title
             }
 
-        enqueue_task('post-notification', params)
+        enqueue_task('multiple-notification', params)
 
     @json_response
     @login_required
@@ -111,4 +111,4 @@ class EventHandler(BaseHandler):
                 'title': event.title
             }
 
-        enqueue_task('post-notification', params)
+        enqueue_task('multiple-notification', params)

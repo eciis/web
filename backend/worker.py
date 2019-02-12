@@ -256,7 +256,7 @@ class RemoveInstitutionHandler(BaseHandler):
         apply_remove_operation(remove_hierarchy, institution, user)
 
 
-class PostNotificationHandler(BaseHandler):
+class MultipleNotificationHandler(BaseHandler):
     """Handler that sends post's notifications to another queue."""
 
     def post(self):
@@ -508,7 +508,7 @@ app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
     ('/api/queue/remove-inst', RemoveInstitutionHandler),
-    ('/api/queue/post-notification', PostNotificationHandler),
+    ('/api/queue/multiple-notification', MultipleNotificationHandler),
     ('/api/queue/email-members', EmailMembersHandler),
     ('/api/queue/notify-followers', NotifyFollowersHandler),
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),

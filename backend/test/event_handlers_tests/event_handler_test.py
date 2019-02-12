@@ -55,7 +55,7 @@ class EventHandlerTest(TestBaseHandler):
             ['edit_post', 'remove_post'], self.event.key.urlsafe())
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
-                            self.event.key.urlsafe())
+                            self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
         # Refresh event
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
@@ -71,7 +71,7 @@ class EventHandlerTest(TestBaseHandler):
         # Call the patch method and assert that  it raises an exception
         with self.assertRaises(Exception):
             self.testapp.delete("/api/events/%s" %
-                                self.event.key.urlsafe())
+                                self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
 
     @patch('util.login_service.verify_token', return_value={'email': 'usersd@gmail.com'})
     def test_delete_by_admin(self, verify_token):
@@ -80,7 +80,7 @@ class EventHandlerTest(TestBaseHandler):
         # because the user doesn't have the permission yet.
         with self.assertRaises(Exception) as raises_context:
             self.testapp.delete("/api/events/%s" %
-                                self.event.key.urlsafe())
+                                self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
         message = self.get_message_exception(str(raises_context.exception))
         self.assertEquals(message, "Error! The user can not remove this event")
         
@@ -89,7 +89,7 @@ class EventHandlerTest(TestBaseHandler):
 
         # Call the delete method
         self.testapp.delete("/api/events/%s" %
-                            self.event.key.urlsafe())
+                            self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
         # Refresh event
         self.event = self.event.key.get()
         # Verify if after delete the state of event is deleted
@@ -117,7 +117,7 @@ class EventHandlerTest(TestBaseHandler):
         self.user.add_permission('edit_post', self.event.key.urlsafe())
         self.testapp.patch("/api/events/" +
                            self.event.key.urlsafe(),
-                           json_edit)
+                           json_edit, headers={'institution-authorization': self.institution.key.urlsafe()})
 
         self.event = self.event.key.get()
         self.assertEqual(self.event.title, "Edit Event")
@@ -134,7 +134,7 @@ class EventHandlerTest(TestBaseHandler):
                                     self.event.key.urlsafe(),
                                     [{"op": "replace", "path": "/start_time",
                                       "value": '2018-07-27T12:30:15'}
-                                     ]
+                                     ], headers={'institution-authorization': self.institution.key.urlsafe()}
                                     )
 
         # test the case when the end_time is before start_time
@@ -143,7 +143,7 @@ class EventHandlerTest(TestBaseHandler):
                                     self.event.key.urlsafe(),
                                     [{"op": "replace", "path": "/end_time",
                                       "value": '2018-07-07T12:30:15'}
-                                     ]
+                                     ], headers={'institution-authorization': self.institution.key.urlsafe()}
                                     )
 
         # Pretend a new authentication
@@ -154,8 +154,8 @@ class EventHandlerTest(TestBaseHandler):
             self.testapp.patch_json("/api/events/%s"
                                     % self.event.key.urlsafe(),
                                     [{"op": "replace", "path": "/local",
-                                      "value": "New Local"}]
-                                    )
+                                      "value": "New Local"}],
+                                    headers={'institution-authorization': self.institution.key.urlsafe()})
 
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_pacth_datetime(self, verify_token):
@@ -169,8 +169,8 @@ class EventHandlerTest(TestBaseHandler):
         self.user.add_permission('edit_post', self.event.key.urlsafe())
 
         self.testapp.patch("/api/events/" +
-                           self.event.key.urlsafe(),
-                           json_edit)
+            self.event.key.urlsafe(), json_edit, 
+            headers={'institution-authorization': self.institution.key.urlsafe()})
 
         self.event = self.event.key.get()
 
@@ -209,7 +209,7 @@ class EventHandlerTest(TestBaseHandler):
             patch = [{"op": "replace", "path": "/"+prop, "value": value}]
             self.testapp.patch("/api/events/" +
                             self.event.key.urlsafe(),
-                            json.dumps(patch))
+                            json.dumps(patch), headers={'institution-authorization': self.institution.key.urlsafe()})
 
             self.event = self.event.key.get()
             self.assertEquals(
@@ -222,7 +222,7 @@ class EventHandlerTest(TestBaseHandler):
         self.event.put()
 
         with self.assertRaises(Exception) as ex:
-            self.testapp.get('/api/events/%s' %self.event.key.urlsafe())
+            self.testapp.get('/api/events/%s' %self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message == 'Error! The event has been deleted.')
@@ -235,7 +235,8 @@ class EventHandlerTest(TestBaseHandler):
 
         with self.assertRaises(Exception) as ex:
             patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
-            self.testapp.patch('/api/events/%s' % self.event.key.urlsafe(), json.dumps(patch))
+            self.testapp.patch('/api/events/%s' % self.event.key.urlsafe(), json.dumps(patch), 
+                headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message ==
@@ -256,7 +257,7 @@ class EventHandlerTest(TestBaseHandler):
         self.assertTrue(self.event.state != 'deleted')
 
         self.user.add_permissions(['edit_post', 'remove_post'], self.event.key.urlsafe())
-        self.testapp.delete("/api/events/%s" %self.event.key.urlsafe())
+        self.testapp.delete("/api/events/%s" %self.event.key.urlsafe(), headers={'institution-authorization': self.institution.key.urlsafe()})
         
         self.event = self.event.key.get()
         self.assertTrue(self.event.state == 'deleted')
@@ -266,7 +267,7 @@ class EventHandlerTest(TestBaseHandler):
         with self.assertRaises(Exception) as ex:
             patch = [{"op": "replace", "path": "/title", "value": 'other_value'}]
             self.testapp.patch('/api/events/%s' %
-                               self.event.key.urlsafe(), json.dumps(patch))
+                               self.event.key.urlsafe(), json.dumps(patch), headers={'institution-authorization': self.institution.key.urlsafe()})
 
         exception_message = self.get_message_exception(ex.exception.message)
         self.assertTrue(exception_message ==

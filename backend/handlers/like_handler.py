@@ -84,7 +84,7 @@ class LikeHandler(BaseHandler):
                     'field': 'subscribers'
                 }
 
-            enqueue_task('post-notification', params)
+            enqueue_task('multiple-notification', params)
 
             is_first_like = post.get_number_of_likes() == 1
             if is_first_like:

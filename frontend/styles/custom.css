@@ -1162,3 +1162,20 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
+#post {
+    width: 100%;
+}
+
+#post-page-container {
+    height: 100%;
+}
+
+#post-content {
+    max-height: 100%;
+}
+
+#post-content > div {
+    max-height: 100%;
+    overflow-y: auto;
+}

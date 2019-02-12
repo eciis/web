@@ -1,5 +1,5 @@
 <md-content flex class="body hide-scrollbar">
-    <div layout="row">
+    <div layout="row" ng-if="!errorCtrl.isMobileScreen()">
         <div flex layout="column" md-colors="{background: 'grey-50'}">
             <div layout="column" >
                 <div class="container">
@@ -36,4 +36,5 @@
             </md-card>
         </div>
     </div>
+    <is-empty-card text="{{ errorCtrl.msg }}" ng-if="errorCtrl.isMobileScreen()"></is-empty-card>
 </md-content>

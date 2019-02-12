@@ -16,5 +16,7 @@
         errorCtrl.goToReport = function goToReport() {
             $window.open("http://support.plataformacis.org/report");
         }
+
+        errorCtrl.isMobileScreen = () => Utils.isMobileScreen();
     });
 })();

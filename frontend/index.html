@@ -6,7 +6,7 @@
   <base href="/" />
 
   <title>Plataforma CIS</title>
-
+  
   <!--Favicon-->
   <link rel="shortcut icon" type="image/icon" href="app/favicon.ico" />
 
@@ -29,7 +29,7 @@
   <meta name="msapplication-TileImage" content="app/images/icons/cis-64x64.png">
   <meta name="msapplication-TileColor" content="#2F3BA2">
   <meta name="theme-color" content="#009688"/>
-
+  
   <!-- ngScrollbar style sheet -->
   <link rel="stylesheet" href="app/libs/jquery.mCustomScrollbar.css"/>
 
@@ -68,17 +68,16 @@
   <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
   <link rel="stylesheet" type="text/css" href="app/requests/request_invitation_dialog.css">
-  <link rel="stylesheet" type="text/css" href="app/home/color_picker.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
   <div flex class="content-main" layout="column" ui-view="main"></div>
 
-  <script>
+  <script> 
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
-    function $buo_f(){
-     var e = document.createElement("script");
-     e.src = "//browser-update.org/update.min.js";
+    function $buo_f(){ 
+     var e = document.createElement("script"); 
+     e.src = "//browser-update.org/update.min.js"; 
      document.body.appendChild(e);
     };
     try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
@@ -153,7 +152,7 @@
   <script src="app/sideMenu/factories/homeItems.factory.js"></script>
   <script src="app/sideMenu/factories/manageInstItems.factory.js"></script>
   <script src="app/sideMenu/sideMenuItem/sideMenuItem.component.js"></script>
-
+  
   <!--Utils-->
   <script src="app/utils/utils.js"></script>
   <script src="app/utils/messageService.js"></script>

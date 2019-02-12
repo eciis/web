@@ -548,9 +548,39 @@ class CreateFeaturesHandler(BaseHandler):
         create_features()
         self.response.write({"msg": "database initialized with a few features"})
 
+
+class UpdateHandler(BaseHandler):
+    """Temporary handler.
+
+    It handles with the entities update for some attributes.
+    """
+
+    def get(self):
+        """Retrieve all users and institutions to
+        create their new attributes avoiding an error in production.
+        """
+        from datetime import datetime
+
+        users = User.query().fetch()
+
+        for user in users:
+            user.last_seen_institutions = datetime.now()
+            user.put()
+
+        existing_institutions = Institution.query().fetch()
+
+        for institution in existing_institutions:
+            institution.creation_date = datetime.now()
+            institution.put()
+
+        self.response.write("worked")
+
+
+
 app = webapp2.WSGIApplication([
     ('/admin/reset', ResetHandler),
-    ('/admin/create-features', CreateFeaturesHandler)
+    ('/admin/create-features', CreateFeaturesHandler),
+    ('/admin/update', UpdateHandler)
 ], debug=True)
 
 

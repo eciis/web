@@ -40,8 +40,10 @@
             return HttpService.patch(USER_URI, data);
         };
 
+        service._isAdmin = institution => user.isAdmin(institution.key);
+
         service.removeProfile = (event, institution) => {
-            if (!user.isAdmin(institution.key)) {
+            if (!service._isAdmin(institution)) {
                 const textContent = service._hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG;
                 const confirm = $mdDialog.confirm();
                 confirm
@@ -68,14 +70,14 @@
             return new Promise(resolve => {
                 UserService.deleteInstitution(institutionKey)
                     .then(_ => {
-                        service._removeConection(institutionKey);
+                        service._removeConnection(institutionKey);
                         resolve();
                     });
             });
         };
 
-        service._removeConection = (institutionKey) => {
-            if (_.size(user.institutions) > 1) {
+        service._removeConnection = (institutionKey) => {
+            if (service._hasMoreThanOneInstitution()) {
                 user.removeInstitution(institutionKey);
                 user.removeProfile(institutionKey);
                 AuthService.save();

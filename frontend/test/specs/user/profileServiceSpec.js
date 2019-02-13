@@ -1,10 +1,10 @@
 'use strict';
 
-(fdescribe('Test ProfileService', function() {
+(describe('Test ProfileService', function() {
 
     const USER_URI = '/api/user';
     let mdDialog, profileService, httpService, scope, 
-        authService, deferred, messageService;
+        authService, deferred, messageService, userService;
     
     let user, institution;
 
@@ -21,7 +21,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($mdDialog, ProfileService, HttpService, 
-        AuthService, $q, MessageService, $rootScope) {
+        AuthService, $q, MessageService, $rootScope, UserService) {
         mdDialog = $mdDialog;
         profileService = ProfileService;
         httpService = HttpService;
@@ -29,6 +29,7 @@
         messageService = MessageService;
         scope = $rootScope.$new();
         deferred = $q.defer();
+        userService = UserService;
 
         setupModels();
         authService.login(user);
@@ -65,17 +66,63 @@
         });
         
         it(`should show a confirm dialog and remove 
-        the conection between user and institution `, () => {
-            spyOn(user, 'isAdmin').and.returnValue(false);
+        the connection between user and institution `, () => {
+            spyOn(profileService, '_isAdmin').and.returnValue(false);
             
             deferred.resolve();
             profileService.removeProfile({}, institution);
             scope.$apply();
 
+            expect(profileService._isAdmin).toHaveBeenCalledWith(institution);
             expect(profileService._hasMoreThanOneInstitution).toHaveBeenCalled();
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
             expect(profileService._deleteInstitution).toHaveBeenCalledWith(institution.key);
         });
+
+        it(`should show a confirm dialog and remove 
+        the connection between user and institution `, () => {
+            spyOn(profileService, '_isAdmin').and.returnValue(true);
+            
+            profileService.removeProfile({}, institution);
+
+            expect(mdDialog.confirm).not.toHaveBeenCalled();
+            expect(mdDialog.show).not.toHaveBeenCalled();
+            const msg = 'Desvínculo não permitido. Você é administrador dessa instituição.';
+            expect(messageService.showToast).toHaveBeenCalledWith(msg);
+        });
+    });
+
+    describe('_deleteInstitution', () => {
+        it(`should call deleteInstitution and _removeConnection`, () => {
+            spyOn(userService, 'deleteInstitution').and.returnValue(deferred.promise);
+            spyOn(profileService, '_removeConnection');
+            deferred.resolve();
+            profileService._deleteInstitution(institution.key);
+            scope.$apply();
+
+            expect(userService.deleteInstitution).toHaveBeenCalledWith(institution.key);
+            expect(profileService._removeConnection).toHaveBeenCalledWith(institution.key);
+        });
+    });
+
+    describe('_removeConnection', () => {
+        it("should save the user modifications if it has more than one institution", () => {
+            spyOn(profileService, '_hasMoreThanOneInstitution').and.returnValue(true);
+            spyOn(authService, 'save');
+
+            profileService._removeConnection(institution.key);
+
+            expect(authService.save).toHaveBeenCalled();
+        })
+
+        it("should logout the user if it does not have more than one institution", () => {
+            spyOn(profileService, '_hasMoreThanOneInstitution').and.returnValue(false);
+            spyOn(authService, 'logout');
+
+            profileService._removeConnection(institution.key);
+
+            expect(authService.logout).toHaveBeenCalled();
+        })
     });
 }));

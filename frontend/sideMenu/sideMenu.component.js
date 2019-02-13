@@ -149,7 +149,8 @@
                    user : sideMenuCtrl.user,
                    institution,
                 },
-                bindToController: true
+               bindToController: true,
+               onComplete: function() { sideMenuCtrl._isColorPickerActive = false },
            });
        };
     }

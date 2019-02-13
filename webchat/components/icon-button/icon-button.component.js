@@ -26,8 +26,11 @@
         const iconButtonCtrl = this;
 
         iconButtonCtrl.$onInit = () => {
-            iconButtonCtrl.iconColor = iconButtonCtrl.iconColor || "#EEE";
-            iconButtonCtrl.disabled = iconButtonCtrl.disabled || false;
+            _.defaults(iconButtonCtrl, {
+                iconColor: "#EEE",
+                action: () => {},
+                disabled: false,
+            });
         };
 
     }

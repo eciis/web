@@ -1,6 +1,24 @@
 (function () {
     'use strict';
 
+    /**
+     * Button that calls an action and changes its icon on click.
+     * It receives as a binding an icon to shown when on and an
+     * icon to show when off. Also it receives an action to be
+     * called on click and the icons color when on and off. If
+     * the icon color is not passed, its color will be a default
+     * one (#EEE).
+     * @class toggleButton
+     * @example
+     * <toggle-button
+     *     icon-on="anIcon"
+     *     icon-off="anotherIcon"
+     *     icon-color-on="aColor"
+     *     icon-color-off="anotherColor"
+     *     action="anAction">
+     *</toggle-button>
+     *
+     */
     angular.module("webchat").component("toggleButton", {
         templateUrl: "app/components/toggle-button/toggle-button.html",
         controller: toggleButtonController,

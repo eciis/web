@@ -141,7 +141,8 @@
             $mdDialog.show({
                controller: "ColorPickerController",
                controllerAs: "colorPickerCtrl",
-               templateUrl: 'app/home/color_picker.html',
+               templateUrl: Utils.selectFieldBasedOnScreenSize('app/home/color_picker.html',
+                'app/home/color_picker_mobile.html'),
                parent: angular.element(document.body),
                clickOutsideToClose: true,
                locals: {

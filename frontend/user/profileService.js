@@ -41,19 +41,20 @@
         };
 
         service.removeProfile = (event, institution) => {
-            if (!isAdmin(institution)) {
+            if (!user.isAdmin(institution.key)) {
+                const textContent = service._hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG;
                 const confirm = $mdDialog.confirm();
                 confirm
                     .clickOutsideToClose(false)
                     .title('Remover vínculo com ' + institution.name)
-                    .textContent(hasMoreThanOneInstitution() ? HAS_MORE_THAN_ONE_INSTITUTION_MSG : HAS_ONLY_ONE_INSTITUTION_MSG)
+                    .textContent(textContent)
                     .ariaLabel('Remover instituicao')
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
                 const promise = $mdDialog.show(confirm);
                 promise.then(function () {
-                    deleteInstitution(institution.key);
+                    service._deleteInstitution(institution.key);
                 }, function () {
                     MessageService.showToast('Cancelado');
                 });
@@ -63,19 +64,17 @@
             }
         };
 
-        const isAdmin = institution => user.isAdmin(institution.key);
-
-        const deleteInstitution = (institutionKey) => {
+        service._deleteInstitution = (institutionKey) => {
             return new Promise(resolve => {
                 UserService.deleteInstitution(institutionKey)
                     .then(_ => {
-                        removeConection(institutionKey);
+                        service._removeConection(institutionKey);
                         resolve();
                     });
             });
         };
 
-        const removeConection = (institutionKey) => {
+        service._removeConection = (institutionKey) => {
             if (_.size(user.institutions) > 1) {
                 user.removeInstitution(institutionKey);
                 user.removeProfile(institutionKey);
@@ -85,7 +84,7 @@
             }
         }
 
-        const hasMoreThanOneInstitution = () => {
+        service._hasMoreThanOneInstitution = () => {
             return user.institutions.length > 1;
         };
 

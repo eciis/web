@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module('app');
 
-    app.directive('hideNavbar', ['STATES','$state', function(STATES, $state) {
+    app.directive('hideNavbar', ['$rootScope', 'STATES','$state', function($rootScope, STATES, $state) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -22,7 +22,7 @@
                  */
                 scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
                     const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
-                        scope.INSTITUTION_STATES.includes($state.current.name);
+                        STATES.INST_TIMELINE === $state.current.name;
                     if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
                     if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar);
                 }
@@ -77,6 +77,12 @@
                     }
     
                 }
+
+                /** Observer to state change and definy how initial state of toolbar.                 * 
+                 */
+                $rootScope.$on('$stateChangeStart', function(){ 
+                    scope.initialToolbarDisplayState();
+                })
 
                 scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
                 scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();

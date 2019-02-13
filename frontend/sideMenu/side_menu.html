@@ -18,17 +18,18 @@
                             </md-button>
                             <md-menu-content width="4" class="custom-scrollbar">
                                 <md-menu-item ng-repeat="profile in sideMenuCtrl.user.institution_profiles">
-                                    <md-button ng-if='!sideMenuCtrl.isColorPickerActive' class='color-picker-button' ng-click="sideMenuCtrl.changeInstitution(profile)">
-                                      <img class='avatar-icon' ng-src="{{ profile.institution.photo_url }}"></img>
-                                        {{ profile.institution.name }}
-                                    </md-button>
-                                    <md-button ng-if='sideMenuCtrl.isColorPickerActive' class='color-picker-button' ng-click="sideMenuCtrl.openColorPicker(profile)">
-                                      <md-icon class='color-picker-icon' md-colors='{color: profile.color}'>brightness_1</md-icon>
+                                    <md-button class='color-picker-button' ng-click="sideMenuCtrl.institutionButtonAction(profile)">
+                                      <img ng-if='!sideMenuCtrl.isColorPickerActive' class='avatar-icon' ng-src="{{ profile.institution.photo_url }}"></img>
+                                      <md-icon ng-if='sideMenuCtrl.isColorPickerActive' class='color-picker-icon' md-colors='{color: profile.color}'>brightness_1</md-icon>
                                         {{ profile.institution.name }}
                                     </md-button>
                                 </md-menu-item>
                                 <md-menu-item>
-                                    <md-button ng-click="sideMenuCtrl.toggleColorPicker()" md-prevent-menu-close="md-prevent-menu-close">
+                                    <md-button ng-if='!sideMenuCtrl.isMobileScreen' ng-click="sideMenuCtrl.openColorPicker()">
+                                        <md-icon class='color-picker-icon'>color_lens</md-icon>
+                                        GERENCIAR CORES
+                                    </md-button>
+                                    <md-button ng-if='sideMenuCtrl.isMobileScreen' ng-click="sideMenuCtrl.toggleColorPicker()" md-prevent-menu-close="md-prevent-menu-close">
                                         <md-icon class='color-picker-icon'>{{ sideMenuCtrl.currentMenuOption.icon }}</md-icon>
                                         {{ sideMenuCtrl.currentMenuOption.text }}
                                     </md-button>

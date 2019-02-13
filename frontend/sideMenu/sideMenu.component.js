@@ -100,10 +100,22 @@
             return type === sideMenuCtrl.type;
         };
 
-        sideMenuCtrl.isColorPickerActive = false;
+        sideMenuCtrl._isColorPickerActive = false;
 
         sideMenuCtrl.toggleColorPicker = () => {
-          sideMenuCtrl.isColorPickerActive = !sideMenuCtrl.isColorPickerActive;
+          sideMenuCtrl._isColorPickerActive = !sideMenuCtrl._isColorPickerActive;
+        }
+
+        sideMenuCtrl.getCurrentInstitutionProfile = () => {
+          return _.find(sideMenuCtrl.user.institution_profiles, ['institution_key', sideMenuCtrl.user.current_institution.key]);
+        }
+
+        sideMenuCtrl.institutionButtonAction = (profile) => {
+          // Color picker should only open by clicking on institution
+          // when it's mobile and the color picker is active
+          sideMenuCtrl.isMobileScreen && sideMenuCtrl.isColorPickerActive ?
+            sideMenuCtrl.openColorPicker(profile) :
+            sideMenuCtrl.changeInstitution(profile);
         }
 
         Object.defineProperty(sideMenuCtrl, 'currentMenuOption', {
@@ -112,7 +124,20 @@
           }
         })
 
-        sideMenuCtrl.openColorPicker = (institution) => {
+        Object.defineProperty(sideMenuCtrl, 'isColorPickerActive', {
+          get: function() {
+            // Color icons (instead of institution avatar) should aways be active in desktop
+            return sideMenuCtrl.isMobileScreen ? sideMenuCtrl._isColorPickerActive : true;
+          }
+        });
+
+        Object.defineProperty(sideMenuCtrl, 'isMobileScreen', {
+          get: function() {
+            return Utils.isMobileScreen();
+          },
+        });
+
+        sideMenuCtrl.openColorPicker = (institution = sideMenuCtrl.getCurrentInstitutionProfile()) => {
             $mdDialog.show({
                controller: "ColorPickerController",
                controllerAs: "colorPickerCtrl",

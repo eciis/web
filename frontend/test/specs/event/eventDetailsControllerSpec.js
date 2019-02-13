@@ -287,6 +287,23 @@
             expect(eventCtrl.event.addFollower).toHaveBeenCalled();
             expect(eventCtrl.event.followers).toEqual([user.key]);
         });
+
+        it('should not add the user as follower when the service crashes', () => {
+            spyOn(eventService, 'addFollower').and.callFake(() => {
+                return q.reject();
+            });
+
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'addFollower').and.callThrough();
+
+            const promise = eventCtrl.addFollower();
+        
+            promise.catch(() => {
+                expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+                expect(eventCtrl.event.addFollower).not.toHaveBeenCalled();
+                expect(eventCtrl.event.followers).toEqual([]);
+            });
+        });
     });
 
     describe('removeFollower()', () => {
@@ -304,6 +321,22 @@
             expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
             expect(messageService.showToast).toHaveBeenCalled();
             expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
+        });
+
+        it('should not add the user as follower when the service crashes', () => {
+            spyOn(eventService, 'removeFollower').and.callFake(() => {
+                return q.reject();
+            });
+
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'removeFollower').and.callThrough();
+
+            const promise = eventCtrl.removeFollower();
+
+            promise.catch(() => {
+                expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+                expect(eventCtrl.event.removeFollower).not.toHaveBeenCalled();
+            });
         });
     });
 }));

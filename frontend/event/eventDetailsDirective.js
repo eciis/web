@@ -51,6 +51,9 @@
             }
         };
 
+        /**
+         * Checks if the user has permission to change the event.
+         */
         eventCtrl.canChange = function canChange() {
             if (eventCtrl.event) {
                 const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', eventCtrl.event.institution_key);
@@ -148,25 +151,30 @@
             return new Date(isoTime).getHours();
         };
 
+        /**
+         * Checks if the user is following the event.
+         */
         eventCtrl.isFollower = () => {
             return eventCtrl.event && eventCtrl.event.followers.includes(eventCtrl.user.key);
         };
 
+        /**
+         * Add the user as a event's follower
+         */
         eventCtrl.addFollower = () => {
-            EventService.addFollower(eventCtrl.event.key).then(() => {
+            return EventService.addFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.addFollower(eventCtrl.user.key);
                 MessageService.showToast('Você receberá as atualizações desse evento.');
-            }).catch((error) => {
-                console.error(error);
             });
         };
 
+        /**
+         * Remove the user from the event's followers list
+         */
         eventCtrl.removeFollower = () => {
-            EventService.removeFollower(eventCtrl.event.key).then(() => {
+            return EventService.removeFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.removeFollower(eventCtrl.user.key);
                 MessageService.showToast('Você não receberá as atualizações desse evento.');
-            }).catch((error) => {
-                console.error(error);
             });
         };
 

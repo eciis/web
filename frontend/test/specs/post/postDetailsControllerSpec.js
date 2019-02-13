@@ -637,14 +637,14 @@
             });
             spyOn(messageService, 'showToast');
             postDetailsCtrl.post = new Post({
-                shared_event: new Event({followers: []})
+                shared_event: new Event({followers: [], key: 'akaspo'})
             });
 
             postDetailsCtrl.followEvent();
             scope.$apply();
 
-            expect(eventService.addFollower).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventService.addFollower).toHaveBeenCalledWith('akaspo');
+            expect(messageService.showToast).toHaveBeenCalledWith('Você receberá as atualizações desse evento.');
             expect(postDetailsCtrl.post.shared_event.followers).toEqual([user.key]);
         });
     });
@@ -656,14 +656,14 @@
             });
             spyOn(messageService, 'showToast');
             postDetailsCtrl.post = new Post({
-                shared_event: new Event({ followers: [postDetailsCtrl.user.key] })
+                shared_event: new Event({ followers: [postDetailsCtrl.user.key], key:'aposkd' })
             });
 
             postDetailsCtrl.unFollowEvent();
             scope.$apply();
 
-            expect(eventService.removeFollower).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventService.removeFollower).toHaveBeenCalledWith('aposkd');
+            expect(messageService.showToast).toHaveBeenCalledWith('Você não receberá as atualizações desse evento.');
         });
     });
 

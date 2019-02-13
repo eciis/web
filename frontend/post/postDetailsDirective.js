@@ -275,6 +275,9 @@
             return Utils.isLargerThanTheScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
         };
 
+        /**
+         * Checks if the post is actually an event that has been shared.
+         */
         postDetailsCtrl.isSharedEvent = () => {
             return postDetailsCtrl.post.shared_event; 
         };
@@ -288,8 +291,6 @@
             EventService.addFollower(postDetailsCtrl.post.shared_event.key).then(() => {
                 postDetailsCtrl.post.shared_event.followers.push(postDetailsCtrl.user.key);
                 MessageService.showToast('Você receberá as atualizações desse evento.');
-            }).catch((error) => {
-                console.error(error);
             });
         };
 
@@ -297,8 +298,6 @@
             EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
                 postDetailsCtrl.post.shared_event.followers = postDetailsCtrl.post.shared_event.followers.filter(follower => follower !== postDetailsCtrl.user.key);
                 MessageService.showToast('Você não receberá as atualizações desse evento.');
-            }).catch((error) => {
-                console.error(error);
             });
         };
 

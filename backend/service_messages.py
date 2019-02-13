@@ -61,7 +61,7 @@ def create_system_message(receiver_institution_key=None):
 def create_entity(entity_key):
     """Create a short entity with only key."""    
     entity = {
-        "key": entity_key,
+        "key": entity_key
     }
     return entity
 

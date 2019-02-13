@@ -138,9 +138,9 @@
                 it('should call post', () => {
                     spyOn($http, 'post');
 
-                    service.addFollower();
+                    service.addFollower('aposkpdoskpodkapd');
 
-                    expect($http.post).toHaveBeenCalled();
+                    expect($http.post).toHaveBeenCalledWith('/api/events/aposkpdoskpodkapd/followers');
                 });
             });
 
@@ -148,9 +148,9 @@
                 it('should call delete', () => {
                     spyOn($http, 'delete');
 
-                    service.removeFollower();
+                    service.removeFollower('aposkpdoskpodkapd');
 
-                    expect($http.delete).toHaveBeenCalled();
+                    expect($http.delete).toHaveBeenCalledWith('/api/events/aposkpdoskpodkapd/followers');
                 });
             });
         });

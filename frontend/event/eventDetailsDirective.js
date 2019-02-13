@@ -148,6 +148,14 @@
             return new Date(isoTime).getHours();
         };
 
+        eventCtrl.generateToolbarMenuOptions = () => {
+            return [
+                { title: 'Obter link', icon: 'link', action: () => { } },
+                { title: 'Compartilhar', icon: 'share', action: () => { } },
+                { title: 'Receber atualizações', icon: 'bookmark', action: () => { } }
+            ]
+        };
+
         /**
          * This function receives the event key, makes a 
          * request to the backend, and returns the event 

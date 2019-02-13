@@ -5,12 +5,14 @@
 
   app.component("defaultToolbar", {
     templateUrl: 'app/toolbar/default_toolbar_mobile.html',
-    controller: ['SCREEN_SIZES', DefaultToolbarController],
+    controller: ['SCREEN_SIZES', '$window', DefaultToolbarController],
     controllerAs: 'defaultToolbarCtrl',
-    bindings: {}
+    bindings: {
+      menuOptions: '='
+    }
   });
 
-  function DefaultToolbarController(SCREEN_SIZES) {
+  function DefaultToolbarController(SCREEN_SIZES, $window) {
     const defaultToolbarCtrl = this;
 
     /**
@@ -18,6 +20,14 @@
      */
     defaultToolbarCtrl.isMobileScreen = () => {
       return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+    };
+    
+    defaultToolbarCtrl.goBack = () => {
+      $window.history.back();
+    };
+
+    defaultToolbarCtrl.$onInit = () => {
+      console.log(defaultToolbarCtrl.menuOptions);
     };
   }
 })();

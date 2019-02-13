@@ -1,12 +1,16 @@
 'use strict';
 
 (function() {
-    const app = angular.module("app");
-
-    const USER_URI = '/api/user';
-
-    app.service("ProfileService", function ProfileService($mdDialog, HttpService, AuthService, MessageService, UserService) {
+    angular
+    .module("app")
+    .service("ProfileService", [
+        '$mdDialog', 'HttpService', 'AuthService', 'MessageService', 'UserService',
+        ProfileService
+    ]);
+    
+    function ProfileService($mdDialog, HttpService, AuthService, MessageService, UserService) {
         const service = this;
+        const USER_URI = '/api/user';
 
         const HAS_ONLY_ONE_INSTITUTION_MSG = "Esta é a única instituição ao qual você é vinculado." +
             " Ao remover o vínculo você não poderá mais acessar o sistema," +
@@ -90,5 +94,5 @@
             return user.institutions.length > 1;
         };
 
-    });
+    };
 })();

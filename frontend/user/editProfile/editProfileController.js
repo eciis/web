@@ -1,10 +1,14 @@
 'use strict';
 
 (function () {
-    const app = angular.module("app");
-
-    app.controller("EditProfileController", function EditProfileController(profile, ProfileService,
-        AuthService, $mdDialog, MessageService, ObserverRecorderService) {
+    angular
+    .module("app")
+    .controller("EditProfileController", [
+        'profile', 'ProfileService', 'AuthService', '$mdDialog', 'MessageService', 'ObserverRecorderService',
+        EditProfileController
+    ]);
+    
+    function EditProfileController(profile, ProfileService, AuthService, $mdDialog, MessageService, ObserverRecorderService) {
         const editProfileCtrl = this;
         
         editProfileCtrl.phoneRegex = "[0-9]{2}[\\s][0-9]{4,5}[-][0-9]{4,5}";
@@ -51,5 +55,5 @@
         function isValidProfile() {
             return !_.isEmpty(editProfileCtrl.profile.office);
         }
-    });
+    };
 })();

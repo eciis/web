@@ -5,7 +5,7 @@
     .module("app")
     .component("userProfiles", {
         templateUrl: 'app/user/userProfiles/user_profiles.html',
-        controller: userProfileController,
+        controller: [userProfileController],
         controllerAs: 'userProfileCtrl',
         bindings: {
             profiles: '<',
@@ -14,7 +14,7 @@
         }
     })
 
-    function userProfileController($mdDialog) {
+    function userProfileController() {
         const userProfileCtrl = this;
 
         userProfileCtrl.getImage = profile => {

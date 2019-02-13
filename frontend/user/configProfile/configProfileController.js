@@ -1,10 +1,16 @@
 'use strict';
 
 (function () {
-    const app = angular.module("app");
-
-    app.controller("ConfigProfileController", function ConfigProfileController($state, STATES, $stateParams, ProfileService,
-        CropImageService, AuthService, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
+    angular
+    .module("app")
+    .controller("ConfigProfileController", [
+        '$state', 'STATES', '$stateParams', 'ProfileService', 'CropImageService', 'AuthService', 
+        'UserService', 'ImageService', '$rootScope', 'SCREEN_SIZES', 'MessageService', '$mdDialog', 'ObserverRecorderService',
+        ConfigProfileController
+    ]);
+    
+    function ConfigProfileController($state, STATES, $stateParams, ProfileService, CropImageService, AuthService, 
+        UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
 
         const configProfileCtrl = this;
 
@@ -190,5 +196,5 @@
             });
             return promise;
         }
-    });
+    };
 })();

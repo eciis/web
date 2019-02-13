@@ -193,8 +193,9 @@
             eventCtrl.user.permissions = {};
             eventCtrl.user.permissions['remove_post'] = {};
             eventCtrl.user.permissions['remove_post'][event.key] = true;
-
-            let returnedValue = eventCtrl.canChange(event);
+            eventCtrl.event = event;
+            
+            let returnedValue = eventCtrl.canChange();
             expect(returnedValue).toBeTruthy();
 
             eventCtrl.user.permissions = {};
@@ -281,7 +282,7 @@
             eventCtrl.addFollower();
             scope.$apply();
 
-            expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event);
+            expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
             expect(messageService.showToast).toHaveBeenCalled();
             expect(eventCtrl.event.addFollower).toHaveBeenCalled();
             expect(eventCtrl.event.followers).toEqual([user.key]);
@@ -300,7 +301,7 @@
             eventCtrl.removeFollower();
             scope.$apply();
 
-            expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event);
+            expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
             expect(messageService.showToast).toHaveBeenCalled();
             expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
         });

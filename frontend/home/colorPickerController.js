@@ -28,7 +28,7 @@
         function loadProfile() {
             colorPickerCtrl.newUser = _.cloneDeep(colorPickerCtrl.user);
 
-            colorPickerCtrl.institution = _.find(colorPickerCtrl.newUser.institution_profiles, i => _.isEqual(i, institution));
+            colorPickerCtrl.institution = _.find(colorPickerCtrl.newUser.institution_profiles, ['institution_key', institution.institution_key]);
         }
 
         function loadColors() {

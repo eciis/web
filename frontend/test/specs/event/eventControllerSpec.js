@@ -4,7 +4,7 @@
 
     let // variables to be associated to the injected parameters
         eventCtrl, scope, httpBackend, rootScope,
-        createCtrl, eventService, messageService, mdDialog, state;
+        createCtrl, eventService, messageService, mdDialog, state, q;
 
     const // variables to create the test scenario
         institution = { name: 'Institution', key: '098745' },
@@ -66,8 +66,9 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog, $state) {
+        $rootScope, EventService, MessageService, $mdDialog, $state, $q) {
         scope = $rootScope.$new();
+        q = $q
         httpBackend = $httpBackend;
         rootScope = $rootScope;
         eventService = EventService;
@@ -107,7 +108,11 @@
     describe('onInit()', () => {
 
         beforeEach(() => {
-            spyOn(eventCtrl, '_getMonths');
+            spyOn(eventCtrl, '_getMonths').and.callFake(() => {
+                eventCtrl.months = months;
+                eventCtrl.selectedMonth = months[0];
+                return q.when();
+            });
             spyOn(eventCtrl, 'loadMoreEvents');
         });
 
@@ -402,11 +407,89 @@
     });
 
     describe('share()', () => {
-
         it('should call mdDialog.show', () => {
             spyOn(mdDialog, 'show');
             eventCtrl.share("$event", event);
             expect(mdDialog.show).toHaveBeenCalled();
+        });
+    });
+
+    describe('getToolbarMobileGeneralOptions()', () => {
+        it('tests the first object', () => {
+            spyOn(eventCtrl, 'loadMoreEvents');
+            const result = eventCtrl._getToolbarMobileGeneralOptions();
+
+            const firstObject = result.options[0];
+
+            expect(result.options.length).toEqual(2);
+            expect(firstObject.title).toEqual('Atualizar');
+
+            firstObject.action();
+
+            expect(eventCtrl._moreEvents).toEqual(true);
+            expect(eventCtrl._actualPage).toEqual(0);
+            expect(eventCtrl.loadMoreEvents).toHaveBeenCalled();
+        });
+
+        it('tests the second object', () => {
+            const result = eventCtrl._getToolbarMobileGeneralOptions();
+
+            const secondObject = result.options[1];
+
+            expect(result.options.length).toEqual(2);
+            expect(secondObject.title).toEqual('Filtrar por instituição');
+        });
+    });
+
+    describe('getToolbarMobileMenuItems()', () => {
+        beforeEach(() => {
+            months[0].month_name = 'Janeiro';
+            months[1].month_name = 'Fevereiro';
+            eventCtrl.months = months;
+            eventCtrl.selectedMonth = months[0];
+            eventCtrl.selectedYear = 2019;
+    
+
+            spyOn(eventCtrl, 'loadFilteredEvents');
+        });
+
+        it('tests the first item', () => {
+            const result = eventCtrl._getToolbarMobileMenuItems();
+
+            const firstItem = result[0];
+            expect(result.length).toEqual(2);
+            expect(firstItem.options.length).toEqual(12);
+            expect(firstItem.title).toEqual(months[0].month_name);
+
+            firstItem.action('Fevereiro');
+            
+            expect(eventCtrl.selectedMonth).toEqual(months[1]);
+            expect(eventCtrl.loadFilteredEvents).toHaveBeenCalled();
+        });
+        
+        it('tests the second item', () => {
+            const result = eventCtrl._getToolbarMobileMenuItems();
+
+            const secondItem = result[1];
+            expect(result.length).toEqual(2);
+            expect(secondItem.title).toEqual(2019);
+
+            secondItem.action(2018);
+
+            expect(eventCtrl.selectedYear).toEqual(2018);
+            expect(eventCtrl.loadFilteredEvents).toHaveBeenCalled();
+        });
+    });
+
+    describe('setupToolbarFields', () => {
+        it('should call _getToolbarMobileMenuItems and getToolbarMobileGeneralOptions', () => {
+            spyOn(eventCtrl, '_getToolbarMobileGeneralOptions');
+            spyOn(eventCtrl, '_getToolbarMobileMenuItems');
+
+            eventCtrl.setupToolbarFields();
+
+            expect(eventCtrl._getToolbarMobileGeneralOptions).toHaveBeenCalled();
+            expect(eventCtrl._getToolbarMobileMenuItems).toHaveBeenCalled();
         });
     });
 }));

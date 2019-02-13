@@ -45,7 +45,8 @@
                  * @param(element HTMLElement) Element that should be hide.
                  */
                 scope.hideElement = function hideElement(element){
-                    element.style.display = 'none';
+                    if(element)
+                        element.style.display = 'none';
                 }
 
                 /** Add listenner on element to hide bottom and/or top toolbar according scroll position on mobile. 

@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService, UtilsService,
-        UserService, RequestInvitationService, $window, NotificationListenerService, STATES) {
+        UserService, RequestInvitationService, $window, NotificationListenerService, STATES, SCREEN_SIZES) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -70,7 +70,7 @@
 
         mainCtrl.goTo = function (stateName) {
             UtilsService.selectNavOption(STATES[stateName]);
-            resetNavBarDisplayStyle();
+            Utils.resetToolbarDisplayStyle();
         };
 
         mainCtrl.logout = function logout() {
@@ -141,8 +141,6 @@
 
         mainCtrl.refreshUser = function refreshUser() {
             AuthService.reload();
-            $state.reload();
-            $window.location.reload();
         };
 
         /** Return correct class according currently state.
@@ -167,12 +165,10 @@
             return !mainCtrl._statesWithoutFooter.includes($state.current.name);
         };
 
-        /** Reset properties CSS. 
-         * In mode mobile maybe changes some properties.
-         */
-        function resetNavBarDisplayStyle(){
-            document.getElementById('main-toolbar').style.display = 'block';
-        }
+        mainCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        };
+
 
         /** Add new observers to listen events that user should be refresh. 
          */ 

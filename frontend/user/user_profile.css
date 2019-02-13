@@ -1,0 +1,117 @@
+#user-profile-size {
+    width: 100%;
+    height: 100%;
+}
+
+.user-profile-dialog {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 33% 56% auto;
+    grid-template-columns: auto;
+    width: 100%;
+}
+
+.user-profile-cover {
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+
+.user-profile-cover-background, .user-profile-cover div img{
+    height: 7em;
+    width: 100%;
+}
+
+#user-profile-img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 7em;
+    height: 7em;
+    z-index: 2;
+    margin-top: -3.5em;
+}
+
+#user-profile-img img {
+    border-radius: 50%;
+}
+
+#user-profile-content-grid {
+    grid-row-start: 2;
+    grid-row-end: 3;
+    display: grid;
+    grid-template-columns: 85%;
+    grid-row-gap: 0.6em;
+    justify-content: center;
+    margin-top: 0.6em;
+}
+
+#user-profile-content-name {
+    font-size: 1.45em;
+    font-weight: 1000;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    align-self: end;
+    word-break: break-word;
+    text-align: center;
+    margin-top: 0.5em
+}
+
+.user-profile-content-hl {
+    width: 4.5em;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    height: 0.18em;
+}
+
+.user-profile-info-position {
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.user-profile-center {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.user-profile-action {
+    grid-row-start: 4;
+    text-align: center;
+    align-self: center;
+    justify-self: end;
+    margin-left: 0.8em;
+    margin-top: 0.3em;
+    height: 2.7em;
+}
+
+.user-profile-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.user-profile-subtitle {
+    font-size: 1.4em;
+}
+
+.user-profile-default-color {
+    color: #009688;
+}
+
+#user-profile-show-div {
+    margin-right: 1em;
+}
+
+#user-profile-show-div span {
+    font-size: 0.8em;
+    align-self: start;
+}
+
+@media screen and (min-height: 650px) {
+    .user-profile-dialog {
+        grid-template-rows: 24% 66% auto;
+    }
+}
+
+@media screen and (min-height: 730px) {
+    .user-profile-dialog {
+        grid-template-rows: 18% 66% auto;
+    }
+}

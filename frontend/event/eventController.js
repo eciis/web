@@ -205,7 +205,7 @@
          * @private
          */
         eventCtrl._getMonths = () => {
-            EventService.getMonths().then(function success(response) {
+            return EventService.getMonths().then(function success(response) {
                 eventCtrl.months = response;
                 eventCtrl.selectedMonth = eventCtrl.months[new Date().getMonth()];
                 eventCtrl.selectedYear = new Date().getFullYear();
@@ -213,11 +213,66 @@
                 eventCtrl.loadMoreEvents();
             });
         };
+        
+        /**
+         * Generate the menuItems that will live in the middle of the toolbar.
+         */
+        eventCtrl._getToolbarMobileMenuItems = function getToolbarMobileMenuItems() {
+            const toolbarMobileMenuItems = [];
+
+            const monthsMenuItem = {
+                options: eventCtrl.months.map(month => month.month_name),
+                action: month => { eventCtrl.selectedMonth = eventCtrl.months.find(m => m.month_name == month); eventCtrl.loadFilteredEvents(); },
+                title: eventCtrl.selectedMonth.month_name
+            };
+        
+            toolbarMobileMenuItems.push(monthsMenuItem);
+            
+            const yearsMenuItem = {
+                options: eventCtrl.years,
+                action: year => { eventCtrl.selectedYear = year; eventCtrl.loadFilteredEvents(); },
+                title: eventCtrl.selectedYear
+            };
+
+            toolbarMobileMenuItems.push(yearsMenuItem);
+
+            return toolbarMobileMenuItems;
+        };
+
+        /**
+         * Generate the options that will be in the last
+         * button of the toolbar as extra options.
+         */
+        eventCtrl._getToolbarMobileGeneralOptions = function getToolbarMobileGeneralOptions () {
+            const toolbarMenuGeneralOptions = {};
+            
+            toolbarMenuGeneralOptions.options = [
+                {   
+                    title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 
+                        eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
+                },
+                {
+                    title: 'Filtrar por instituição', action: () => {}
+                }
+            ]
+            
+            return toolbarMenuGeneralOptions;
+        };
+
+        /**
+         * Just wraps the toolbar's items initialization
+         */
+        eventCtrl.setupToolbarFields = () => {
+            eventCtrl.toolbarGeneralOptions = eventCtrl._getToolbarMobileGeneralOptions();
+            eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
+        };
 
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
-                eventCtrl._getMonths();
+                eventCtrl._getMonths().then(() => {
+                    eventCtrl.setupToolbarFields();
+                });
             } else {
                 eventCtrl.loadMoreEvents();
             }

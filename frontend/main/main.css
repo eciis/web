@@ -81,3 +81,9 @@
         display: none;
     }
 }
+
+@media screen and (min-width: 1280px) {
+  .feedback-btn {
+    right: 0;
+  }
+}

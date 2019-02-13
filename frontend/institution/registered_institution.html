@@ -2,9 +2,15 @@
     <div class="registered-institution-cover">
         <div ng-if="regInstCtrl.hasCoverPhoto()"
             style="background-image: url({{regInstCtrl.institution.cover_photo}});" id="card-cover-picture">
+            <div class="new-institution-tag-with-cover" md-colors="{background: 'teal-500'}" ng-if="!regInstCtrl.hasSeenInstitution();">
+                <span><b>NOVO CADASTRO</b></span>
+            </div>
         </div>
-        <div ng-if="!regInstCtrl.hasCoverPhoto()" md-colors="{background: 'light-green'}">
+        <div ng-if="!regInstCtrl.hasCoverPhoto()" md-colors="{background: 'light-green'}" id="default-reg-inst-cover">
             <img ng-src="{{'app/images/institution.png'}}">
+            <div class="new-institution-tag" md-colors="{background: 'teal-500'}" ng-if="!regInstCtrl.hasSeenInstitution();">
+                <span><b>NOVO CADASTRO</b></span>
+            </div>
         </div>
         <div id="registered-institution-img">
             <img ng-src="{{regInstCtrl.institution.photo_url}}" />

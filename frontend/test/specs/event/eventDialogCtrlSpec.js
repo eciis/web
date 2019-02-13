@@ -257,7 +257,7 @@
 
         it('should call showToast', () => {
             spyOn(messageService, 'showToast');
-            controller.event.address = {};
+            controller.event.address = {country: 'Brasil'};
             controller.nextStep();
             expect(messageService.showToast).toHaveBeenCalled();
         });
@@ -392,6 +392,7 @@
       beforeEach(() => {
         spyOn(state, 'go');
         spyOn(mdDialog, 'hide');
+        spyOn(Utils, 'resetToolbarDisplayStyle').and.callFake(() => {});
       });
 
       it('should call state.go if is mobile screen', () => {
@@ -467,8 +468,8 @@
     describe('addStartHour()', () => {
       it('should set the hours of start time', () => {
         controller.event.start_time = new Date(2018, 12, 12);
-        controller.createInitDate();
         controller.startHour = undefined;
+        controller.createInitDate();
         expect(controller.event.start_time.getHours()).not.toEqual(9);
         expect(controller.event.start_time.getMinutes()).not.toEqual(55);
         controller.startHour = new Date(2018,12,12, 9, 55);

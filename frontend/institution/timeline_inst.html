@@ -4,7 +4,7 @@
         <!-- CONTENT -->
         <div flex="95" layout-align="center top" layout="row">
             <div flex layout="column">
-                <div>
+                <div ng-if="institutionCtrl.showDescription()">
                     <md-card>
                         <md-toolbar md-colors="{background: 'teal-500'}" layout="row" class="clickable-no-hover"
                         ng-click="institutionCtrl.showHideDescription()">

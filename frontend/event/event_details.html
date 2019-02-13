@@ -51,7 +51,7 @@
                   Compartilhar evento
                 </md-button>
               </md-menu-item>
-              <md-menu-item ng-if="eventDetailsCtrl.canChange(eventDetailsCtrl.event)">
+              <md-menu-item ng-if="eventDetailsCtrl.canChange()">
                 <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
                   <md-icon>cancel</md-icon>
                   Cancelar evento

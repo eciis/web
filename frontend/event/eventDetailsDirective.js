@@ -51,10 +51,10 @@
             }
         };
 
-        eventCtrl.canChange = function canChange(event) {
-            if(event) {
-                const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', event.institution_key);
-                const hasEventPermission = eventCtrl.user.hasPermission('remove_post', event.key);
+        eventCtrl.canChange = function canChange() {
+            if (eventCtrl.event) {
+                const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', eventCtrl.event.institution_key);
+                const hasEventPermission = eventCtrl.user.hasPermission('remove_post', eventCtrl.event.key);
                 return hasInstitutionPermission || hasEventPermission;
             }
         };
@@ -149,7 +149,7 @@
         };
 
         eventCtrl.isFollower = () => {
-            return eventCtrl.event && _.includes(eventCtrl.event.followers, eventCtrl.user.key);
+            return eventCtrl.event && eventCtrl.event.followers.includes(eventCtrl.user.key);
         };
 
         eventCtrl.addFollower = () => {

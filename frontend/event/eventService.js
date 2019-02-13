@@ -40,12 +40,12 @@
             return HttpService.get('app/utils/months.json');
         };
 
-        service.addFollower = function (event) {
-            return HttpService.post(`/api/events/${event}/followers`);
+        service.addFollower = function (eventKey) {
+            return HttpService.post(`/api/events/${eventKey}/followers`);
         };
 
-        service.removeFollower = function (event) {
-            return HttpService.delete(`/api/events/${event}/followers`);
+        service.removeFollower = function (eventKey) {
+            return HttpService.delete(`/api/events/${eventKey}/followers`);
         };
     });
 })();

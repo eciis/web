@@ -281,7 +281,7 @@
             eventCtrl.addFollower();
             scope.$apply();
 
-            expect(eventService.addFollower).toHaveBeenCalled();
+            expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event);
             expect(messageService.showToast).toHaveBeenCalled();
             expect(eventCtrl.event.addFollower).toHaveBeenCalled();
             expect(eventCtrl.event.followers).toEqual([user.key]);
@@ -300,7 +300,7 @@
             eventCtrl.removeFollower();
             scope.$apply();
 
-            expect(eventService.removeFollower).toHaveBeenCalled();
+            expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event);
             expect(messageService.showToast).toHaveBeenCalled();
             expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
         });

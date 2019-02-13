@@ -30,8 +30,6 @@ Event.prototype.addFollower = function (userKey) {
 };
 
 Event.prototype.removeFollower = function (userKey) {
-    _.remove(this.followers, followerKey => {
-        return followerKey === userKey;
-    });
+    this.followers = this.followers.filter(currentFollower => {currentFollower !== userKey});
 };
 

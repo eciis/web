@@ -281,7 +281,7 @@
 
         postDetailsCtrl.isFollowingEvent = () => {
             const eventFollowers = (postDetailsCtrl.post.shared_event && postDetailsCtrl.post.shared_event.followers) || [];
-            return _.includes(eventFollowers, postDetailsCtrl.user.key);
+            return eventFollowers.includes(postDetailsCtrl.user.key);
         };
 
         postDetailsCtrl.followEvent = () => {
@@ -295,9 +295,7 @@
 
         postDetailsCtrl.unFollowEvent = () => {
             EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
-                _.remove(postDetailsCtrl.post.shared_event.followers, follower => {
-                    return follower.key === postDetailsCtrl.user.key;
-                });
+                postDetailsCtrl.post.shared_event.followers = postDetailsCtrl.post.shared_event.followers.filter(follower => follower !== postDetailsCtrl.user.key);
                 MessageService.showToast('Você não receberá as atualizações desse evento.');
             }).catch((error) => {
                 console.error(error);

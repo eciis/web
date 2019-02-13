@@ -50,7 +50,7 @@ class EventHandlerTest(TestBaseHandler):
 
     @patch('handlers.event_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_by_author(self, verify_token, mock_method):
+    def test_delete_by_author(self, verify_token, enqueue_task):
         """Test the event_handler's delete method when user is author."""
         self.user.add_permissions(
             ['edit_post', 'remove_post'], self.event.key.urlsafe())
@@ -69,7 +69,7 @@ class EventHandlerTest(TestBaseHandler):
             'title': self.event.title
         }
 
-        mock_method.assert_called_with('multiple-notification', not_params)
+        enqueue_task.assert_called_with('multiple-notification', not_params)
 
         # Refresh event
         self.event = self.event.key.get()
@@ -174,7 +174,7 @@ class EventHandlerTest(TestBaseHandler):
 
     @patch('handlers.event_handler.enqueue_task')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_pacth_datetime(self, verify_token, mock_method):
+    def test_pacth_datetime(self, verify_token, enqueue_task):
         """Test pacth datetimes in event handler."""
         json_edit = json.dumps([
             {"op": "replace", "path": "/start_time",
@@ -208,7 +208,7 @@ class EventHandlerTest(TestBaseHandler):
             'title': self.event.title
         }
 
-        mock_method.assert_called_with('multiple-notification', not_params)
+        enqueue_task.assert_called_with('multiple-notification', not_params)
 
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_on_event_outdated(self, verify_token):

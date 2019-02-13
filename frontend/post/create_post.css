@@ -274,12 +274,8 @@
         overflow: auto;
     }
 
-    .create-post-container-resp {
-        width: 91%;
-    }
-
     .dialog-transparent-without-shadow {
-        width: 50%;
+        width: 60%;
     }
 }
 

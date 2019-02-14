@@ -25,3 +25,11 @@ Event.prototype.convertDate = function(){
     }
 };
 
+Event.prototype.addFollower = function (userKey) {
+    this.followers.push(userKey);
+};
+
+Event.prototype.removeFollower = function (userKey) {
+    this.followers = this.followers.filter(currentFollower => {currentFollower !== userKey});
+};
+

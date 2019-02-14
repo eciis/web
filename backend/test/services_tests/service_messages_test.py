@@ -55,7 +55,7 @@ class ServiceMessageTest(TestBaseHandler):
 
         self.assertEquals(
             entity,
-            json.dumps(expected_entity),
+            expected_entity,
             "The created entity should be equal to the expected one"
         )
 
@@ -71,12 +71,12 @@ class ServiceMessageTest(TestBaseHandler):
 
         self.assertEquals(
             entity,
-            json.dumps(expected_entity),
+            expected_entity,
             "The created entity should be equal to the expected one"
         )
 
 
-    @mock.patch('service_messages.create_entity')
+    @mock.patch('service_messages.create_entity', return_value={"key": 'opaskdop-OAPKSDPOAK'})
     @mock.patch('service_messages.taskqueue.add')
     def test_send_message_notification(self, taskqueue_add, create_entity):
         """Test send_message_notification method."""

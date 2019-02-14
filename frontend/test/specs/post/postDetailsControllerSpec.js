@@ -4,7 +4,7 @@
     beforeEach(module('app'));
 
     let postDetailsCtrl, scope, httpBackend, rootScope, mdDialog, postService, mdToast, http,
-    commentService, state, posts, rootscope, states;
+    commentService, state, posts, rootscope, states, q, eventService, messageService;
     var user = {
         name: 'name',
         key: 'asd234jk2l',
@@ -46,7 +46,8 @@
 
 
     beforeEach(inject(function($controller, $httpBackend, HttpService, $mdDialog, STATES,
-            PostService, AuthService, $mdToast, $rootScope, CommentService, $state) {
+            PostService, AuthService, $mdToast, $rootScope, CommentService, $state, $q, 
+            EventService, MessageService) {
         scope = $rootScope.$new();
         rootscope = $rootScope;
         httpBackend = $httpBackend;
@@ -58,6 +59,9 @@
         state = $state;
         states = STATES;
         commentService = CommentService;
+        q = $q;
+        eventService = EventService;
+        messageService = MessageService;
         commentService.user = user;
         postService.user = user;
         var mainPost = new Post({
@@ -611,6 +615,73 @@
             postDetailsCtrl.user.permissions = {};
             returnedValue = postDetailsCtrl.showButtonEdit();
             expect(returnedValue).toBeFalsy();
+        });
+    });
+
+    describe('isSharedEvent()', () => {
+        it('should be truthy when the post is a shared_event', () => {
+            postDetailsCtrl.post = new Post({shared_event : {}});
+            expect(postDetailsCtrl.isSharedEvent()).toBeTruthy();
+        });
+
+        it('should be falsy when the post is not a shared_event', () => {
+            postDetailsCtrl.post = new Post({ });
+            expect(postDetailsCtrl.isSharedEvent()).toBeFalsy();
+        });
+    });
+
+    describe('followEvent()', () => {
+        it('should call addFollower', () => {
+            spyOn(eventService, 'addFollower').and.callFake(() => {
+                return q.when();
+            });
+            spyOn(messageService, 'showToast');
+            postDetailsCtrl.post = new Post({
+                shared_event: new Event({followers: [], key: 'akaspo'})
+            });
+
+            postDetailsCtrl.followEvent();
+            scope.$apply();
+
+            expect(eventService.addFollower).toHaveBeenCalledWith('akaspo');
+            expect(messageService.showToast).toHaveBeenCalledWith('Você receberá as atualizações desse evento.');
+            expect(postDetailsCtrl.post.shared_event.followers).toEqual([user.key]);
+        });
+    });
+
+    describe('unfollowEvent()', () => {
+        it('should call removeFollower', () => {
+            spyOn(eventService, 'removeFollower').and.callFake(() => {
+                return q.when();
+            });
+            spyOn(messageService, 'showToast');
+            postDetailsCtrl.post = new Post({
+                shared_event: new Event({ followers: [postDetailsCtrl.user.key], key:'aposkd' })
+            });
+
+            postDetailsCtrl.unFollowEvent();
+            scope.$apply();
+
+            expect(eventService.removeFollower).toHaveBeenCalledWith('aposkd');
+            expect(messageService.showToast).toHaveBeenCalledWith('Você não receberá as atualizações desse evento.');
+        });
+    });
+
+    describe('isFollowingEvent()', () => {
+        it('should return true', () => {
+            postDetailsCtrl.post = new Post({
+                shared_event: new Event({ followers: [postDetailsCtrl.user.key] })
+            });
+
+            expect(postDetailsCtrl.isFollowingEvent()).toEqual(true);
+        });
+
+        it('should return false', () => {
+            postDetailsCtrl.post = new Post({
+                shared_event: new Event({ followers: [] })
+            });
+
+            expect(postDetailsCtrl.isFollowingEvent()).toEqual(false);
         });
     });
 }));

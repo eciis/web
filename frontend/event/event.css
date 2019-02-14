@@ -314,6 +314,10 @@
         width: 6em;
     }
 
+    .select-container {
+        justify-content: center;
+    }
+
     .create-event-mobile-top-bar {
         height: 3em;
         width: 100%;

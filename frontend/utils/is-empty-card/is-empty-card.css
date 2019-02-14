@@ -1,0 +1,25 @@
+.is-empty-card__container {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        'image'
+        'text';
+    width: 100%;
+    height: 100%;
+}
+
+.is-empty-card__image {
+    grid-area: image;
+    width: 100%;
+}
+
+.is-empty-card__text {
+    grid-area: text;
+    display: flex;
+    font-size: 1.5em;
+    margin: 1em 0;
+    padding: 0 0.5em;
+    font-weight: bold;
+    color: #009688;
+    text-align: center;
+}

@@ -4,9 +4,9 @@
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
-      <md-content ng-if="eventCtrl.eventsByDay.length === 0">
-        <h4>Nenhum evento a ser exibido.</h4>
-      </md-content>
+      <is-empty-card ng-if="eventCtrl.eventsByDay.length === 0"
+                     text="Nenhum evento a ser exibido">
+      </is-empty-card>
     </div>
     <md-content id="content" class="custom-scrollbar box">
       <div ng-repeat="events in eventCtrl.eventsByDay"

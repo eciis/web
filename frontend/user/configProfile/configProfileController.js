@@ -40,8 +40,8 @@
         
         configProfileCtrl._checkUserName = () => {
             if (configProfileCtrl.user.name === 'Unknown') {
-                delete configProfileCtrl.user.name;
-                delete configProfileCtrl.newUser.name;
+                configProfileCtrl.user.name = "";
+                configProfileCtrl.newUser.name = "";
             }
         }
 

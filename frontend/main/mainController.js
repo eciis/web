@@ -179,7 +179,7 @@
 
         (function main() {
             if (mainCtrl.user.name === 'Unknown') {
-                $state.go(STATES.CONFIG_PROFILE);
+                $state.go(STATES.CONFIG_PROFILE, {userKey: mainCtrl.user.key});
             }
             notificationListener();
             mainCtrl.getPendingTasks();

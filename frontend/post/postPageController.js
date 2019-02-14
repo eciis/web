@@ -9,8 +9,6 @@
 
         postCtrl.post = null;
 
-        postCtrl.defaultToolbarOptions = generateToolbarOptions();
-
         postCtrl.user = AuthService.getCurrentUser();
 
         postCtrl.isHiden = function isHiden() {
@@ -32,8 +30,8 @@
         };
 
         /**
-         * Refreshes the post.
-         * If 
+         * Refreshes the post by retrieving it from
+         * the server once again.
          */
         postCtrl.reloadPost = function reloadPost() {
             var type_survey = postCtrl.post.type_survey;
@@ -121,8 +119,8 @@
         /**
          * Constructs a list with the menu options.
          */
-        function generateToolbarOptions() {
-            return [
+        postCtrl.generateToolbarOptions = function generateToolbarOptions() {
+            postCtrl.defaultToolbarOptions = [
                 { title: 'Obter link', icon: 'link', action: () => { postCtrl.copyLink() } },
                 { title: 'Atualizar post', icon: 'refresh', action: () => { postCtrl.reloadPost() } },
                 { title: 'Compartilhar', icon: 'share', action: () => { postCtrl.share('$event') } },
@@ -130,8 +128,8 @@
                 { title: 'Não receber atualizações', icon: 'bookmark', 
                     action: () => { postCtrl.removeSubscriber() }, hide: () => !postCtrl.isSubscriber() }
             ];
-        }
-        
+        };
+
         function loadPost(postKey) {
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {
@@ -143,6 +141,9 @@
             return promise;
         }
 
-        loadPost($state.params.key);
+        postCtrl.$onInit = () => {
+            loadPost($state.params.key);
+            postCtrl.generateToolbarOptions();
+        }; 
     });
 })();

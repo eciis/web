@@ -4,6 +4,7 @@ from datetime import datetime
 from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from models import Address
+from search_module import SearchEvent
 
 __all__ = ['Event']
 
@@ -163,6 +164,11 @@ class Event(ndb.Model):
             'key': event.key.urlsafe(),
             'institution_acronym': event.institution_acronym
         }
+
+    def _post_put_hook(self, future):
+        """This method is called after each Institution.put()."""
+        search_event = SearchEvent()
+        search_event.createDocument(future.get_result().get())
 
     def __setattr__(self, attr, value):
         """

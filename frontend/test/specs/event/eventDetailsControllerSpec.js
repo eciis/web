@@ -2,7 +2,7 @@
 
 (describe('Test EventDetailsController', function () {
 
-    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state;
+    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state, clipboard;
 
     const
         splab = { name: 'Splab', key: '098745' },
@@ -38,7 +38,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $http, $q, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog, $state) {
+        $rootScope, EventService, MessageService, $mdDialog, $state, ngClipboard) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -47,6 +47,7 @@
         messageService = MessageService;
         mdDialog = $mdDialog;
         state = $state;
+        clipboard = ngClipboard;
         AuthService.login(user);
 
         eventCtrl = $controller('EventDetailsController', {
@@ -248,6 +249,30 @@
 
             returnedHours = eventCtrl.getTimeHours(date.toISOString());
             expect(returnedHours).toEqual(hours);
+        });
+    });
+
+    describe('copyLink()', () => {
+        it('should call toClipboard', () => {
+            spyOn(clipboard, 'toClipboard');
+            spyOn(messageService, 'showToast');
+            
+            eventCtrl.event = new Event({key: 'aposdkspoakdposa'});
+            eventCtrl.copyLink();
+
+            expect(clipboard.toClipboard).toHaveBeenCalled();
+            expect(messageService.showToast).toHaveBeenCalled();
+        });
+    });
+
+    describe('generateToolbarMenuOptions()', () => {
+        it('should set defaultToolbarOptions', () => {
+            expect(eventCtrl.defaultToolbarOptions).toBeFalsy();
+
+            eventCtrl.generateToolbarMenuOptions();
+
+            expect(eventCtrl.defaultToolbarOptions).toBeTruthy();
+            expect(eventCtrl.defaultToolbarOptions.length).toEqual(3);
         });
     });
 }));

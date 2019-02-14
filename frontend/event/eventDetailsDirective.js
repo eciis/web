@@ -10,7 +10,7 @@
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
         eventCtrl.showImage = true;
-        eventCtrl.defaultToolbarOptions = generateToolbarMenuOptions();
+        
         
         eventCtrl.share = function share(ev) {
             $mdDialog.show({
@@ -136,7 +136,7 @@
 
         eventCtrl.isDeleted = () => {
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
-        }
+        };
 
         /**
          * This function receives a date in iso format, 
@@ -149,14 +149,20 @@
             return new Date(isoTime).getHours();
         };
 
+        /**
+         * Copies the event's link to the clipboard.
+         */
         eventCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink(`/event/${eventCtrl.event.key}/details`);
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };
 
-        function generateToolbarMenuOptions() {
-            return [
+        /**
+         * Constructs a list with the menu options.
+         */
+        eventCtrl.generateToolbarMenuOptions = function generateToolbarMenuOptions() {
+            eventCtrl.defaultToolbarOptions = [
                 { title: 'Obter link', icon: 'link', action: () => { eventCtrl.copyLink() } },
                 { title: 'Compartilhar', icon: 'share', action: () => { eventCtrl.share('$event') } },
                 { title: 'Receber atualizações', icon: 'bookmark', action: () => { } }
@@ -180,8 +186,10 @@
         }
         
         eventCtrl.$onInit = function() {
-            if ($state.params.eventKey)
+            if ($state.params.eventKey) {
+                eventCtrl.generateToolbarMenuOptions();
                 return loadEvent($state.params.eventKey);
+            }
         };
     });
 

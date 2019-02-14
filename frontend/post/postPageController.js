@@ -22,17 +22,24 @@
             return postCtrl.post.state === 'deleted' && hasNoActivity;
         };
 
+        /**
+         * It copies the post's url to the clipboard
+         */
         postCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink('/post/' + postCtrl.post.key);
             ngClipboard.toClipboard(url);
             MessageService.showToast("O link foi copiado");
         };
 
+        /**
+         * Refreshes the post.
+         * If 
+         */
         postCtrl.reloadPost = function reloadPost() {
             var type_survey = postCtrl.post.type_survey;
             postCtrl.post.type_survey = '';
-            var promise = PostService.getPost(postCtrl.post.key);
-            promise.then(function success(response) {
+            return PostService.getPost(postCtrl.post.key)
+            .then(function success(response) {
                 response.data_comments = Object.values(response.data_comments);
                 postCtrl.post = response;
                 postCtrl.isLoadingComments = false;
@@ -40,11 +47,14 @@
                 postCtrl.post.type_survey = type_survey;
                 postCtrl.isLoadingComments = true;
             });
-            return promise;
         };
 
+        /**
+         * Open up a dialog that allows the user to share
+         * the post.
+         */
         postCtrl.share = function share(event) {
-            const post = getOriginalPost(postCtrl.post);
+            const post = getOriginalPost();
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -60,6 +70,11 @@
             });
         };
 
+        /**
+         * Add the user to the post's subscribers list
+         * what makes him to receive the notifications realated
+         * to the post.
+         */
         postCtrl.addSubscriber = function addSubscriber() {
             PostService.addSubscriber(postCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi marcado como de seu interesse.');
@@ -67,6 +82,10 @@
             });
         };
 
+        /**
+         * Removes the user from the post's subscribers list
+         * peventing him of receive notifications related to the post.
+         */
         postCtrl.removeSubscriber = function removeSubscriber() {
             PostService.removeSubscriber(postCtrl.post.key).then(function success() {
                 MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
@@ -78,19 +97,30 @@
             });
         };
 
+        /**
+         * Checks if the user is in the post's subscribers list
+         */
         postCtrl.isSubscriber = function isSubscriber() {
-            return postCtrl.post && _.includes(postCtrl.post.subscribers, postCtrl.user.key);
+            return postCtrl.post && postCtrl.post.subscribers.includes(postCtrl.user.key);
         };
 
-        function getOriginalPost(post) {
-            if (post.shared_post) {
-                return post.shared_post;
-            } else if (post.shared_event) {
-                return post.shared_event;
+        /**
+         * If the post comes from another
+         * it returns the shared one, otherwise
+         * the post is returned.
+         */
+        function getOriginalPost() {
+            if (postCtrl.post.shared_post) {
+                return postCtrl.post.shared_post;
+            } else if (postCtrl.post.shared_event) {
+                return postCtrl.post.shared_event;
             }
-            return post;
+            return postCtrl.post;
         }
 
+        /**
+         * Constructs a list with the menu options.
+         */
         function generateToolbarOptions() {
             return [
                 { title: 'Obter link', icon: 'link', action: () => { postCtrl.copyLink() } },
@@ -101,7 +131,7 @@
                     action: () => { postCtrl.removeSubscriber() }, hide: () => !postCtrl.isSubscriber() }
             ];
         }
-
+        
         function loadPost(postKey) {
             var promise = PostService.getPost(postKey);
             promise.then(function success(response) {

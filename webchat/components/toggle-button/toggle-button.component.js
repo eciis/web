@@ -50,6 +50,18 @@
             toggleButtonCtrl.active = !toggleButtonCtrl.active;
             toggleButtonCtrl.action();
         };
+
+        Object.defineProperty(toggleButtonCtrl, 'activeIcon', {
+            get: () => {
+                return toggleButtonCtrl.active ? toggleButtonCtrl.iconOn : toggleButtonCtrl.iconOff;
+            },
+        });
+
+        Object.defineProperty(toggleButtonCtrl, 'activeIconColor', {
+            get: () => {
+                return toggleButtonCtrl.active ? toggleButtonCtrl.iconColorOn : toggleButtonCtrl.iconColorOff;
+            },
+        });
     }
 
 })();

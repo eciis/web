@@ -2,8 +2,8 @@
 
 (describe('Test EditProfileController', function() {
 
-    let scope, mdDialog, authService, profileService, messageService,
-        editProfileCtrl, observerRecorderService, userToEdit, deferred;
+    let scope, mdDialog, authService, profileService, messageService, q,
+        editProfileCtrl, observerRecorderService, userToEdit;
 
     let institution, user, profile;
 
@@ -41,7 +41,7 @@
         profileService = ProfileService;
         scope = $rootScope.$new();
         mdDialog = $mdDialog;
-        deferred = $q.defer();
+        q = $q;
         authService = AuthService;
         observerRecorderService = ObserverRecorderService;
         messageService = MessageService;
@@ -88,11 +88,10 @@
         it('should call editProfile() and save()', function() {
             const patch = {...profile, office: 'developer'};
             spyOn(observerRecorderService, 'generate').and.returnValue(patch);
-            spyOn(profileService, 'editProfile').and.returnValue(deferred.promise);
+            spyOn(profileService, 'editProfile').and.returnValue(q.when());
             spyOn(authService, 'save');
             spyOn(messageService, 'showToast');
             spyOn(mdDialog, 'hide');
-            deferred.resolve();
 
             editProfileCtrl.edit();
             scope.$apply();

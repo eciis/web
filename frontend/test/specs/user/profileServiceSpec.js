@@ -4,7 +4,7 @@
 
     const USER_URI = '/api/user';
     let mdDialog, profileService, httpService, scope, 
-        authService, deferred, messageService, userService;
+        authService, q, messageService, userService;
     
     let user, institution;
 
@@ -28,7 +28,7 @@
         authService = AuthService;
         messageService = MessageService;
         scope = $rootScope.$new();
-        deferred = $q.defer();
+        q = $q;
         userService = UserService;
 
         setupModels();
@@ -59,7 +59,7 @@
         beforeEach(() => {
             spyOn(authService, 'getCurrentUser').and.returnValue(user);
             spyOn(profileService, '_hasMoreThanOneInstitution').and.returnValue(true);
-            spyOn(mdDialog, 'show').and.returnValue(deferred.promise);
+            spyOn(mdDialog, 'show').and.returnValue(q.when());
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(profileService, '_deleteInstitution');
             spyOn(messageService, 'showToast');
@@ -69,7 +69,6 @@
         the connection between user and institution `, () => {
             spyOn(profileService, '_isAdmin').and.returnValue(false);
             
-            deferred.resolve();
             profileService.removeProfile({}, institution);
             scope.$apply();
 
@@ -95,9 +94,8 @@
 
     describe('_deleteInstitution', () => {
         it(`should call deleteInstitution and _removeConnection`, () => {
-            spyOn(userService, 'deleteInstitution').and.returnValue(deferred.promise);
+            spyOn(userService, 'deleteInstitution').and.returnValue(q.when());
             spyOn(profileService, '_removeConnection');
-            deferred.resolve();
             profileService._deleteInstitution(institution.key);
             scope.$apply();
 

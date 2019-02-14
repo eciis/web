@@ -1,8 +1,8 @@
 'use strict';
 
 (describe('Test ConfigProfileController', function() {
-    let configCtrl, httpBackend, scope, userService, createCrtl, state, deferred,
-    authService, imageService, mdDialog, cropImageService, states, messageService,
+    let configCtrl, q, scope, userService, createCrtl,
+    authService, imageService, mdDialog, cropImageService, messageService,
     stateParams, observerRecorderService;
 
     let institution, other_institution, user, newUser, authUser;
@@ -47,17 +47,13 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $httpBackend, $rootScope, $q, $state, STATES,
-        $mdDialog, UserService, AuthService, ImageService, CropImageService, MessageService,
-        $stateParams, ObserverRecorderService) {
+    beforeEach(inject(function($controller, $q, $rootScope, $mdDialog, UserService, 
+        AuthService, ImageService, CropImageService, MessageService, $stateParams, ObserverRecorderService) {
 
-        httpBackend = $httpBackend;
+        q = $q;
         scope = $rootScope.$new();
-        state = $state;
-        states = STATES;
         imageService = ImageService;
         mdDialog = $mdDialog;
-        deferred = $q.defer();
         userService = UserService;
         cropImageService = CropImageService;
         messageService = MessageService;
@@ -129,12 +125,12 @@
             expect(configCtrl.newUser.name).toBe(newUser.name);
         });
 
-        it("should delete user and newUser name prop when it is 'UnKnown'", () => {
+        it("should set the user and newUser name to an empty string when it is 'UnKnown'", () => {
             configCtrl.user = {...user, name:'Unknown'};
             configCtrl.newUser = {...configCtrl.user};
             configCtrl._checkUserName();
-            expect(configCtrl.user.name).toBeUndefined();
-            expect(configCtrl.newUser.name).toBeUndefined();
+            expect(configCtrl.user.name).toBe("");
+            expect(configCtrl.newUser.name).toBe("");
         });
     });
 
@@ -161,9 +157,8 @@
         it('Should set a new image to the user', function() {
             const imageInput = createImage(100);
             const imageOutput = createImage(800);
-            spyOn(imageService, 'compress').and.returnValue(deferred.promise);
+            spyOn(imageService, 'compress').and.returnValue(q.when(imageOutput));
             spyOn(imageService, 'readFile');
-            deferred.resolve(imageOutput);
             configCtrl.addImage(imageInput);
             scope.$apply();
             expect(imageService.compress).toHaveBeenCalledWith(imageInput, 800);
@@ -195,10 +190,9 @@
     describe('finish()', function(){
 
         it('Should call _saveImage and _saveUser', function() {
-            spyOn(configCtrl, '_saveImage').and.returnValue(deferred.promise);
-            spyOn(configCtrl, '_saveUser').and.returnValue(deferred.promise);
+            spyOn(configCtrl, '_saveImage').and.returnValue(q.when());
+            spyOn(configCtrl, '_saveUser').and.returnValue(q.when());
             configCtrl.loadingSubmission = true;
-            deferred.resolve();
             
             configCtrl.finish();
             scope.$apply();
@@ -216,9 +210,8 @@
             const data = {url: 'img-url'};
             configCtrl.photo_user = userImage;
             expect(configCtrl.user.photo_url).toBeUndefined();
-            spyOn(imageService, 'saveImage').and.returnValue(deferred.promise);
+            spyOn(imageService, 'saveImage').and.returnValue(q.when(data));
             spyOn(configCtrl.user.uploaded_images, 'push');
-            deferred.resolve(data);
 
             configCtrl._saveImage();
             scope.$apply();
@@ -242,10 +235,9 @@
             const patch = {name: 'newName'};
             spyOn(configCtrl.newUser, 'isValid').and.returnValue(true);
             spyOn(observerRecorderService, 'generate').and.returnValue(patch);
-            spyOn(userService, 'save').and.returnValue(deferred.promise);
+            spyOn(userService, 'save').and.returnValue(q.when());
             spyOn(authService, 'save');
             spyOn(messageService, 'showToast');
-            deferred.resolve();
 
             configCtrl._saveUser();
             scope.$apply();

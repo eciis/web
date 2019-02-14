@@ -894,19 +894,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     box-shadow:0 0 12px #9E9E9E;
 }
 
-.dialog-transparent-without-shadow {
-    background-color: rgba(0, 0, 0, 0);
-    box-shadow: 0 0 0;
-}
-
-@media screen and (max-width: 960px) {
-    .dialog-transparent-without-shadow {
-        max-width: 100%;
-        max-height: 100%;
-        border-radius: 0;
-    }
-}
-
 .share-post{
     max-height: 250px;
     overflow: auto;
@@ -1115,6 +1102,11 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     border-bottom-color: #009688 !important;
 }
 
+.custom-title {
+    font-size: 20px;
+    font-weight: 500;
+}
+
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .custom-card {
@@ -1156,4 +1148,21 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+#post {
+    width: 100%;
+}
+
+#post-page-container {
+    height: 100%;
+}
+
+#post-content {
+    max-height: 100%;
+}
+
+#post-content > div {
+    max-height: 100%;
+    overflow-y: auto;
 }

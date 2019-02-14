@@ -16,6 +16,14 @@
         HomeItemsFactory, ManageInstItemsFactory, InstitutionService, SIDE_MENU_TYPES) {
         
         const sideMenuCtrl = this;
+        const colorPickerButton = {
+          text: 'Gerenciar cores',
+          icon: 'color_lens',
+        };
+        const backButton = {
+          text: 'Voltar',
+          icon: 'keyboard_arrow_left',
+        };
 
         sideMenuCtrl.user = AuthService.getCurrentUser();
         
@@ -92,17 +100,94 @@
             return type === sideMenuCtrl.type;
         };
 
-        sideMenuCtrl.openColorPicker = () => {
+        /**
+         * Store (internally) colorPicker's active state,
+         * allowing a single dynamic view for both mobile and desktop.
+         * When it's on: avatar is replaced with that institution's color;
+         * clicking on a institution changes that to current;
+         * last button on menu shows "Voltar" and toggles this variable;
+         * When it's off: institution's avatar is shown;
+         * clicking on a institution shows a dialog to pick a new color for that;
+         * last button on menu shows "Gerenciar cores".
+         */
+        sideMenuCtrl._isColorPickerActive = false;
+
+        /**
+         * Toggle colorPicker's active state.
+         */
+        sideMenuCtrl.toggleColorPicker = () => {
+          sideMenuCtrl._isColorPickerActive = !sideMenuCtrl._isColorPickerActive;
+        }
+
+        /**
+         * Gets user's current_institution profile.
+         * Needed to provide a default profile to #openColorPicker (desktop behavior).
+         */
+        sideMenuCtrl.getCurrentInstitutionProfile = () => {
+          return _.find(sideMenuCtrl.user.institution_profiles, ['institution_key', sideMenuCtrl.user.current_institution.key]);
+        }
+
+        /**
+         * Calls the correct function based on if it's a mobile screen,
+         * and current colorPicker's active state.
+         * The color picker dialog should only open here when on mobile
+         * AND the color picker is active.
+         * Otherwise, that should be made the current institution on the user.
+         *
+         * @param {Object} profile - institution profile to be made current or have its color changed
+         */
+        sideMenuCtrl.institutionButtonAction = (profile) => {
+          sideMenuCtrl.isMobileScreen && sideMenuCtrl.isColorPickerActive ?
+            sideMenuCtrl.openColorPicker(profile) :
+            sideMenuCtrl.changeInstitution(profile);
+        }
+
+        /**
+         * Defines a property .currentMenuOption,
+         * returning the current button based on colorPicker's active state.
+         */
+        Object.defineProperty(sideMenuCtrl, 'currentMenuOption', {
+          get: function() {
+            return sideMenuCtrl.isColorPickerActive ? backButton : colorPickerButton;
+          }
+        })
+
+        /**
+         * Defines a property .isColorPickerActive,
+         * that always return true on desktop.
+         * On mobile, maps to internal _isColorPickerActive variable.
+         */
+        Object.defineProperty(sideMenuCtrl, 'isColorPickerActive', {
+          get: function() {
+            return sideMenuCtrl.isMobileScreen ? sideMenuCtrl._isColorPickerActive : true;
+          }
+        });
+
+        /**
+         * Defines a property .isMobileScreen,
+         * shorthand for Utils.isMobileScreen().
+         * Needed by the view to provide adequate buttons on desktop and mobile.
+         */
+        Object.defineProperty(sideMenuCtrl, 'isMobileScreen', {
+          get: function() {
+            return Utils.isMobileScreen();
+          },
+        });
+
+        sideMenuCtrl.openColorPicker = (institution = sideMenuCtrl.getCurrentInstitutionProfile()) => {
             $mdDialog.show({
                controller: "ColorPickerController",
                controllerAs: "colorPickerCtrl",
-               templateUrl: 'app/home/color_picker.html',
+               templateUrl: Utils.selectFieldBasedOnScreenSize('app/home/color_picker.html',
+                'app/home/color_picker_mobile.html'),
                parent: angular.element(document.body),
                clickOutsideToClose: true,
                locals: {
-                   user : sideMenuCtrl.user
+                   user : sideMenuCtrl.user,
+                   institution,
                 },
-                bindToController: true
+               bindToController: true,
+               onComplete: function() { sideMenuCtrl._isColorPickerActive = false },
            });
        };
     }

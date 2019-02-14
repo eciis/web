@@ -5,9 +5,9 @@
             <md-grid-list md-cols="5" md-row-height="1:1" md-gutter="4px">
               <md-grid-tile ng-repeat="color in colorPickerCtrl.colors">
                     <md-fab-trigger>
-                            <md-button aria-label="menu" class="md-fab md-primary" ng-model="colorPickerCtrl.newProfile.color" ng-click="colorPickerCtrl.newProfile.color = color.value" 
+                            <md-button aria-label="menu" class="md-fab md-primary" ng-model="colorPickerCtrl.institution.color" ng-click="colorPickerCtrl.institution.color = color.value"
                              md-colors="{background: 'default-'+'{{color.value}}'+'-500'}">
-                                <md-icon ng-show="colorPickerCtrl.newProfile.color === color.value">check_circle</md-icon>
+                                <md-icon ng-show="colorPickerCtrl.institution.color === color.value">check_circle</md-icon>
                             </md-button>
                         </md-fab-trigger>
               </md-grid-tile>

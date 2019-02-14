@@ -4,7 +4,7 @@
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
-      <md-content ng-if="eventCtrl.eventsByDay.length === 0">
+      <md-content ng-if="eventCtrl.events.length === 0">
         <h4>Nenhum evento a ser exibido.</h4>
       </md-content>
     </div>

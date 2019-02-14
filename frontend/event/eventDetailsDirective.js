@@ -159,7 +159,7 @@
         };
 
         /**
-         * Add the user as a event's follower
+         * Add the user as an event's follower
          */
         eventCtrl.addFollower = () => {
             return EventService.addFollower(eventCtrl.event.key).then(() => {

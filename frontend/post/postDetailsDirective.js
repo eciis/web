@@ -282,21 +282,33 @@
             return postDetailsCtrl.post.shared_event; 
         };
 
+        /**
+         * Checks if the user is following the event, if so
+         * the user will receive notifications related to the event.
+         */
         postDetailsCtrl.isFollowingEvent = () => {
             const eventFollowers = (postDetailsCtrl.post.shared_event && postDetailsCtrl.post.shared_event.followers) || [];
             return eventFollowers.includes(postDetailsCtrl.user.key);
         };
 
+        /**
+         * Add the user as an event's follower.
+         * Thus, the user will receive notifications related to the event.
+         */
         postDetailsCtrl.followEvent = () => {
             EventService.addFollower(postDetailsCtrl.post.shared_event.key).then(() => {
-                postDetailsCtrl.post.shared_event.followers.push(postDetailsCtrl.user.key);
+                postDetailsCtrl.post.shared_event.addFollower(postDetailsCtrl.user.key);
                 MessageService.showToast('Você receberá as atualizações desse evento.');
             });
         };
 
+        /**
+         * Remove the user from the event's followers list.
+         * Thus, the user won't receive any notification related to the event.
+         */
         postDetailsCtrl.unFollowEvent = () => {
             EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
-                postDetailsCtrl.post.shared_event.followers = postDetailsCtrl.post.shared_event.followers.filter(follower => follower !== postDetailsCtrl.user.key);
+                postDetailsCtrl.post.shared_event.removeFollower(postDetailsCtrl.user.key);
                 MessageService.showToast('Você não receberá as atualizações desse evento.');
             });
         };
@@ -542,6 +554,12 @@
             return (!postDetailsCtrl.isPostPage && text) ?
                 Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
         }
+
+        postDetailsCtrl.$onInit = () => {
+            if (postDetailsCtrl.isSharedEvent()) {
+                postDetailsCtrl.post.shared_event = new Event(postDetailsCtrl.post.shared_event);
+            }
+        };
 
         postDetailsCtrl.$postLink = function() {
             if($state.params.focus){

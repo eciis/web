@@ -10,12 +10,14 @@
           <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
             <md-icon style="font-size: 2.5em;">more_vert</md-icon>
           </md-button>
-          <md-menu-content>
-            <md-menu-item ng-repeat="option in defaultToolbarCtrl.menuOptions" ng-click="option.action()">
-              <md-icon>
-                {{option.icon}}
-              </md-icon>
-              {{option.title}}
+          <md-menu-content style="width: 100%;">
+            <md-menu-item ng-repeat="option in defaultToolbarCtrl.menuOptions" ng-click="option.action()" ng-if="!option.hide()">
+              <div>
+                <md-icon>
+                  {{option.icon}}
+                </md-icon>
+                <span style="margin-left: 0.5em;">{{option.title}}</span>
+              </div>
             </md-menu-item>
           </md-menu-content>
         </md-menu>

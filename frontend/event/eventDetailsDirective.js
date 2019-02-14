@@ -3,15 +3,16 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService, STATES, SCREEN_SIZES) {
+        $state, $mdDialog, AuthService, STATES, SCREEN_SIZES, ngClipboard) {
 
         var eventCtrl = this;
 
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
         eventCtrl.showImage = true;
+        eventCtrl.defaultToolbarOptions = generateToolbarMenuOptions();
         
-        eventCtrl.share = function share(ev, event) {
+        eventCtrl.share = function share(ev) {
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -21,7 +22,7 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    post: event,
+                    post: eventCtrl.event,
                     addPost: false
                 }
             });
@@ -148,10 +149,16 @@
             return new Date(isoTime).getHours();
         };
 
-        eventCtrl.generateToolbarMenuOptions = () => {
+        eventCtrl.copyLink = function copyLink() {
+            var url = Utils.generateLink(`/event/${eventCtrl.event.key}/details`);
+            ngClipboard.toClipboard(url);
+            MessageService.showToast("O link foi copiado");
+        };
+
+        function generateToolbarMenuOptions() {
             return [
-                { title: 'Obter link', icon: 'link', action: () => { } },
-                { title: 'Compartilhar', icon: 'share', action: () => { } },
+                { title: 'Obter link', icon: 'link', action: () => { eventCtrl.copyLink() } },
+                { title: 'Compartilhar', icon: 'share', action: () => { eventCtrl.share('$event') } },
                 { title: 'Receber atualizações', icon: 'bookmark', action: () => { } }
             ]
         };
@@ -171,7 +178,7 @@
                 $state.go(STATES.HOME);
             });
         }
-
+        
         eventCtrl.$onInit = function() {
             if ($state.params.eventKey)
                 return loadEvent($state.params.eventKey);

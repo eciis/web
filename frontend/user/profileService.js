@@ -58,26 +58,23 @@
                     .targetEvent(event)
                     .ok('Sim')
                     .cancel('Não');
-                const promise = $mdDialog.show(confirm);
-                promise.then(function () {
-                    service._deleteInstitution(institution.key);
-                }, function () {
-                    MessageService.showToast('Cancelado');
-                });
-                return promise;
+                    
+                return $mdDialog.show(confirm)
+                    .then(function () {
+                        service._deleteInstitution(institution.key);
+                    }, function () {
+                        MessageService.showToast('Cancelado');
+                    });
             } else {
                 MessageService.showToast('Desvínculo não permitido. Você é administrador dessa instituição.');
             }
         };
 
         service._deleteInstitution = (institutionKey) => {
-            return new Promise(resolve => {
-                UserService.deleteInstitution(institutionKey)
-                    .then(_ => {
-                        service._removeConnection(institutionKey);
-                        resolve();
-                    });
-            });
+            return UserService.deleteInstitution(institutionKey)
+                .then(_ => {
+                    service._removeConnection(institutionKey);
+                });
         };
 
         service._removeConnection = (institutionKey) => {

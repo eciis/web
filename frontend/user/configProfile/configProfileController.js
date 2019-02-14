@@ -4,13 +4,13 @@
     angular
     .module("app")
     .controller("ConfigProfileController", [
-        '$state', 'STATES', '$stateParams', 'ProfileService', 'CropImageService', 'AuthService', 
+        '$state', 'STATES', '$stateParams', 'ProfileService', 'CropImageService', 'AuthService', '$q',
         'UserService', 'ImageService', '$rootScope', 'SCREEN_SIZES', 'MessageService', '$mdDialog', 'ObserverRecorderService',
         ConfigProfileController
     ]);
     
     function ConfigProfileController($state, STATES, $stateParams, ProfileService, CropImageService, AuthService, 
-        UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
+        $q, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
 
         const configProfileCtrl = this;
 
@@ -91,36 +91,28 @@
         };
 
         configProfileCtrl._saveImage = () => {
-            return new Promise((resolve) => {
-                if(configProfileCtrl.photo_user) {
-                    ImageService.saveImage(configProfileCtrl.photo_user)
-                        .then(function (data) {
-                            configProfileCtrl.user.photo_url = data.url;
-                            configProfileCtrl.user.uploaded_images.push(data.url);
-                            resolve();
-                        })
-                } else {
-                    resolve();
-                }
-            })
+            if(configProfileCtrl.photo_user) {
+                return ImageService.saveImage(configProfileCtrl.photo_user)
+                    .then(function (data) {
+                        configProfileCtrl.user.photo_url = data.url;
+                        configProfileCtrl.user.uploaded_images.push(data.url);
+                    })
+            }
+            return $q.when();
         }
 
         configProfileCtrl._saveUser = () => {
-            return new Promise((resolve) => {
-                if (configProfileCtrl.newUser.isValid()) {
-                    updateUser();
-                    const patch = ObserverRecorderService.generate(observer);
-                    UserService.save(patch)
-                        .then(() => {
-                            AuthService.save();
-                            MessageService.showToast("Edição concluída com sucesso");
-                            resolve();
-                        });
-                } else {
-                    MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
-                    resolve();
-                }
-            });
+            if (configProfileCtrl.newUser.isValid()) {
+                updateUser();
+                const patch = ObserverRecorderService.generate(observer);
+                return UserService.save(patch)
+                    .then(() => {
+                        AuthService.save();
+                        MessageService.showToast("Edição concluída com sucesso");
+                    });
+            } 
+            MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            return $q.when();
         }
 
         function updateUser() {

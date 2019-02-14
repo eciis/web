@@ -12,7 +12,6 @@
     app.constant('STATES', {
             abstract: 'webchat',
             home: `${rootName}.home`,
-            chat: `${rootName}.chat`,
             login: 'login',
             error: 'error',
         });
@@ -50,15 +49,6 @@
                        templateUrl: "app/home/home.html",
                        controller: "HomeController",
                        controllerAs: "homeCtrl",
-                   },
-               },
-           })
-           .state(STATES.chat, {
-               url: "/chat",
-               views: {
-                   content: {
-                       templateUrl: "app/chat/chat.html",
-                       controller: "ChatController as controller",
                    },
                },
            })

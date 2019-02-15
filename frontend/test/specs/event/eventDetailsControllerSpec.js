@@ -275,11 +275,35 @@
 
             expect(eventCtrl.defaultToolbarOptions).toBeTruthy();
             expect(eventCtrl.defaultToolbarOptions.length).toEqual(3);
+        });
+    });
+
+    describe('isFollower()', () => {
+        beforeEach(() => {
+            eventCtrl.event = new Event({
+                followers: []
+            });
+        });
+
+        it('should return true when the user is following the event', () => {
+            eventCtrl.event.addFollower(user.key);
+            expect(eventCtrl.isFollower()).toEqual(true);
+        });
+
+        it('should return false when the user is not following the event', () => {
+            expect(eventCtrl.isFollower()).toEqual(false);
+        });
+    });
+
+    describe('addFollower()', () => {
+        it('should call addFollower', () => {
+            spyOn(eventService, 'addFollower').and.callFake(() => {
+                return q.when();
             });
             spyOn(messageService, 'showToast');
             eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
             spyOn(eventCtrl.event, 'addFollower').and.callThrough();
-            
+
             eventCtrl.addFollower();
             scope.$apply();
 
@@ -298,7 +322,7 @@
             spyOn(eventCtrl.event, 'addFollower').and.callThrough();
 
             const promise = eventCtrl.addFollower();
-        
+
             promise.catch(() => {
                 expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
                 expect(eventCtrl.event.addFollower).not.toHaveBeenCalled();

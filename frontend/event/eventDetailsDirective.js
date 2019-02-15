@@ -169,11 +169,14 @@
             eventCtrl.defaultToolbarOptions = [
                 { title: 'Obter link', icon: 'link', action: () => { eventCtrl.copyLink() } },
                 { title: 'Compartilhar', icon: 'share', action: () => { eventCtrl.share('$event') } },
-                { title: 'Receber atualizações', icon: 'bookmark', action: () => { } }
+                { title: 'Receber atualizações', icon: 'visibility', action: () => { eventCtrl.addFollower() }, hide: () => eventCtrl.isFollower() },
+                { title: 'Não receber atualizações', icon: 'visibility_off', action: () => { eventCtrl.removeFollower() }, hide: () => !eventCtrl.isFollower() },
             ]
         };
 
         /**
+         * Checks if the user is following the event.
+         */
         eventCtrl.isFollower = () => {
             return eventCtrl.event && eventCtrl.event.followers.includes(eventCtrl.user.key);
         };

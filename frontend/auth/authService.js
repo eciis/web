@@ -3,8 +3,8 @@
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, PushNotificationService, STATES) {
+    app.service("AuthService", ['$q', '$state', '$window', 'UserService', 'MessageService', 'STATES',
+        function AuthService($q, $state, $window, UserService, MessageService, STATES) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -257,5 +257,5 @@
         }
 
         init();
-    });
+    }]);
 })();

@@ -3,8 +3,10 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(AuthService, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES, PushNotificationService) {
+    app.controller("HomeController", ['AuthService', '$mdDialog', '$state', 'EventService', 'ProfileService', '$rootScope',
+        'PushNotificationService', 'POST_EVENTS', 'STATES',
+        function HomeController(AuthService, $mdDialog, $state, EventService, ProfileService, $rootScope,
+                                PushNotificationService, POST_EVENTS, STATES) {
         var homeCtrl = this;
 
         var LIMITE_EVENTS = 5;
@@ -127,5 +129,5 @@
             registerPostEvents();
             return PushNotificationService.requestNotificationPermission(homeCtrl.user);
         };
-    });
+    }]);
 })();

@@ -2,7 +2,7 @@
 
 (describe('Test EventDetailsController', function () {
 
-    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state, clipboard;
+    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state, clipboard, q;
 
     const
         splab = { name: 'Splab', key: '098745' },
@@ -48,6 +48,7 @@
         mdDialog = $mdDialog;
         state = $state;
         clipboard = ngClipboard;
+        q = $q;
         AuthService.login(user);
 
         eventCtrl = $controller('EventDetailsController', {
@@ -193,8 +194,9 @@
             eventCtrl.user.permissions = {};
             eventCtrl.user.permissions['remove_post'] = {};
             eventCtrl.user.permissions['remove_post'][event.key] = true;
-
-            let returnedValue = eventCtrl.canChange(event);
+            eventCtrl.event = event;
+            
+            let returnedValue = eventCtrl.canChange();
             expect(returnedValue).toBeTruthy();
 
             eventCtrl.user.permissions = {};
@@ -262,7 +264,7 @@
 
             expect(clipboard.toClipboard).toHaveBeenCalled();
             expect(messageService.showToast).toHaveBeenCalled();
-        });
+       });
     });
 
     describe('generateToolbarMenuOptions()', () => {
@@ -273,6 +275,69 @@
 
             expect(eventCtrl.defaultToolbarOptions).toBeTruthy();
             expect(eventCtrl.defaultToolbarOptions.length).toEqual(3);
+            });
+            spyOn(messageService, 'showToast');
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'addFollower').and.callThrough();
+            
+            eventCtrl.addFollower();
+            scope.$apply();
+
+            expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventCtrl.event.addFollower).toHaveBeenCalled();
+            expect(eventCtrl.event.followers).toEqual([user.key]);
+        });
+
+        it('should not add the user as follower when the service crashes', () => {
+            spyOn(eventService, 'addFollower').and.callFake(() => {
+                return q.reject();
+            });
+
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'addFollower').and.callThrough();
+
+            const promise = eventCtrl.addFollower();
+        
+            promise.catch(() => {
+                expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+                expect(eventCtrl.event.addFollower).not.toHaveBeenCalled();
+                expect(eventCtrl.event.followers).toEqual([]);
+            });
+        });
+    });
+
+    describe('removeFollower()', () => {
+        it('should call removeFollower', () => {
+            spyOn(eventService, 'removeFollower').and.callFake(() => {
+                return q.when();
+            });
+            spyOn(messageService, 'showToast');
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'removeFollower').and.callThrough();
+
+            eventCtrl.removeFollower();
+            scope.$apply();
+
+            expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+            expect(messageService.showToast).toHaveBeenCalled();
+            expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
+        });
+
+        it('should not add the user as follower when the service crashes', () => {
+            spyOn(eventService, 'removeFollower').and.callFake(() => {
+                return q.reject();
+            });
+
+            eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
+            spyOn(eventCtrl.event, 'removeFollower').and.callThrough();
+
+            const promise = eventCtrl.removeFollower();
+
+            promise.catch(() => {
+                expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
+                expect(eventCtrl.event.removeFollower).not.toHaveBeenCalled();
+            });
         });
     });
 }));

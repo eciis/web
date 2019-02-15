@@ -56,6 +56,8 @@
             return timelineCtrl.posts.loadMorePosts();
         };
 
+        timelineCtrl.isMobileScreen = () => Utils.isMobileScreen();
+
         /**
          * Set the properties necessary to make the default Timeline work
          * with the expected values to this context.

@@ -24,6 +24,7 @@ class InstitutionProfileTest(TestBase):
         institution = mocks.create_institution()
         institution.name = 'institution_name'
         institution.photo_url = 'photo_url.com'
+        institution.acronym = 'inst'
         institution.put()
         self.data_profile['institution_key'] = institution.key.urlsafe()
         profile = InstitutionProfile.create(self.data_profile)
@@ -37,7 +38,9 @@ class InstitutionProfileTest(TestBase):
             'branch_line': '888',
             'institution': {
                 'name': 'institution_name'.decode('utf8'),
-                'photo_url': 'photo_url.com'.decode('utf8')
+                'photo_url': 'photo_url.com'.decode('utf8'),
+                'acronym': 'inst',
+                'key': institution.key.urlsafe()
             }
         }
 

@@ -1,9 +1,11 @@
 <!-- TIMELINE -->
 <div flex ng-if="!timelineCtrl.isLoadingPosts">
-  <md-card ng-if="timelineCtrl.posts.size() === 0">
-    <md-content layout-align="center center" layout="column">
-      <h4>Esta instituição ainda não possui publicações.</h4>
-    </md-content>
+  <is-empty-card ng-if="timelineCtrl.posts.size() === 0 && timelineCtrl.isMobileScreen()" text="Esta instituição ainda não possui publicações">
+  </is-empty-card>
+  <md-card ng-if="timelineCtrl.posts.size() === 0 && !timelineCtrl.isMobileScreen()">
+      <md-content layout-align="center center" layout="column">
+          <h4>Esta instituição ainda não possui publicações.</h4>
+      </md-content>
   </md-card>
   <div layout="row" layout-align="center center" class="ng-if" ng-if="timelineCtrl.showRefreshTimelineButton()">
     <md-button flex md-colors="{background: 'teal-700'}" ng-click="timelineCtrl.refreshTimeline()">

@@ -22,6 +22,18 @@
                         Cancelar evento
                         </md-button>
                     </md-menu-item>
+                    <md-menu-item ng-if="!eventDetailsCtrl.isFollower()">
+                        <md-button ng-click="eventDetailsCtrl.addFollower()">
+                            <md-icon>visibility</md-icon>
+                            Receber Atualizações
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item ng-if="eventDetailsCtrl.isFollower()">
+                        <md-button ng-click="eventDetailsCtrl.removeFollower()">
+                            <md-icon>visibility_off</md-icon>
+                            Deixar de receber atualizações
+                        </md-button>
+                    </md-menu-item>
                     </md-menu-content>
                 </md-menu>
         </div>

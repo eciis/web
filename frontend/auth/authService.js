@@ -130,9 +130,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            return PushNotificationService.requestNotificationPermission(service.getCurrentUser()).finally(() => {
-                                return userInfo;
-                            });
+                            return userInfo;
                         });
                     });
                 } else {

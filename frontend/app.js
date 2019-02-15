@@ -114,7 +114,7 @@
                 }
             })
             .state(STATES.CONFIG_PROFILE, {
-                url: "/config_profile",
+                url: "/config_profile/:userKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(

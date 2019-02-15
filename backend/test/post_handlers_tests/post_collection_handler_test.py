@@ -194,7 +194,7 @@ class PostCollectionHandlerTest(TestBaseHandler):
                 }
             ),
             call(
-                'post-notification',
+                'multiple-notification',
                 {
                     'receiver_key': self.post.author.urlsafe(),
                     'sender_key': self.user.key.urlsafe(),

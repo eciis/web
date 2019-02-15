@@ -14,8 +14,8 @@
         <form ng-submit="configProfileCtrl.finish()" prevent-state-change="configProfileCtrl.newUser">
           <div class="info-user">
             <div style="position: relative; margin: auto;">
-                 <img id="user-image" ng-src="{{ configProfileCtrl.photo_url }}">
-                  <md-button ng-show="configProfileCtrl.showButton()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+                 <img id="user-image" ng-src="{{ configProfileCtrl.getPhoto() }}">
+                  <md-button ng-show="configProfileCtrl.canEdit()" ng-click="null" ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
                     ngf-accept="'image/*'" ngf-max-size="5MB"
                     ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)"
                     class="md-icon-button edit-profile-avatar-button" title="Altere a imagem">
@@ -59,23 +59,23 @@
         <md-card-content >
             <md-list class="md-dense">
                 <md-subheader class="md-no-sticky">Seus vínculos institucionais:</md-subheader>
-                <md-list-item class="md-3-line info-user" ng-repeat="institution in configProfileCtrl.user.institutions track by institution.key">
-                  <img id="inst-image" ng-src="{{ institution.photo_url }}"/>
+                <md-list-item class="md-3-line info-user" ng-repeat="profile in configProfileCtrl.user.institution_profiles track by $index">
+                  <img id="inst-image" ng-src="{{ profile.institution.photo_url }}"/>
                   <div id="text" layout="column" class="md-list-item-text">
-                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
-                        {{ institution.acronym }}
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(profile.institution.key)">
+                        {{ profile.institution.acronym }}
                     </a>
-                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(institution.key)">
-                        {{ institution.name }}
+                    <a href class="hyperlink" target="_blank" ng-click="configProfileCtrl.goToInstitution(profile.institution.key)">
+                        {{ profile.institution.name }}
                     </a>
                   </div>
                   <div>
                     <md-button class="md-secondary sm-icon-button" title="Editar perfil institucional"
-                    ng-click="configProfileCtrl.editProfile(institution, $event)" md-colors="{background: 'light-green'}">
+                    ng-click="configProfileCtrl.editProfile(profile, $event)" md-colors="{background: 'light-green'}">
                       <md-icon>edit</md-icon>
                     </md-button>
                     <md-button class="md-secondary sm-icon-button" title="Remover vínculo com a instituição"
-                    ng-click="configProfileCtrl.removeInstitution($event, institution)" md-colors="{background: 'light-green'}">
+                    ng-click="configProfileCtrl.removeProfile($event, profile.institution)" md-colors="{background: 'light-green'}">
                       <md-icon>delete</md-icon>
                     </md-button>
                   </div>

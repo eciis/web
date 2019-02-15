@@ -96,7 +96,7 @@ class PostCommentHandlerTest(TestBaseHandler):
         }
 
         calls = [
-            call('post-notification', post_not_params),
+            call('multiple-notification', post_not_params),
             call('send-push-notification', push_not_params)
         ]
 

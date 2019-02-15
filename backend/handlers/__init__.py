@@ -42,6 +42,7 @@ from .invite_institution_handler import *
 from .invite_user_handler import *
 from .institution_parent_handler import *
 from .institution_children_handler import *
+from .event_followers_handler import *
 from .feature_toggle_handler import *
 
 handlers = [
@@ -62,7 +63,7 @@ handlers = [
     user_request_collection_handler, user_timeline_handler, vote_handler,
     invite_hierarchy_collection_handler, invite_user_collection_handler,
     invite_institution_handler, invite_user_handler, institution_parent_handler,
-    institution_children_handler, feature_toggle_handler
+    institution_children_handler, event_followers_handler, feature_toggle_handler
 ]
 
 __all__ = [prop for handler in handlers for prop in handler.__all__]

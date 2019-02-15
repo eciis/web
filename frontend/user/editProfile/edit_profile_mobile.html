@@ -1,0 +1,38 @@
+<md-dialog class="edit-profile-dialog">
+    <md-dialog-content class="edit-profile-dialog__content">
+        <h3>Editar vínculo</h3>
+        <span>{{editProfileCtrl.getInstName()}}</span>
+        
+        <div class="edit-profile__form">
+            <md-input-container>
+                <label>Cargo</label>
+                <input name="cargo" ng-model="editProfileCtrl.profile.office" required>
+            </md-input-container>
+            <div class="edit-profile__form__phone">
+                <md-input-container>
+                    <label>Telefone institucional</label>
+                    <input ng-model="editProfileCtrl.profile.phone" 
+                        placeholder="99 9999-99999" 
+                        name="telefone" mask="99 9999-99999" 
+                        mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
+                </md-input-container>
+                <md-input-container>
+                    <label>Ramal</label>
+                    <input name="ramal" placeholder="999"
+                        ng-model="editProfileCtrl.profile.branch_line">
+                </md-input-container>
+            </div>
+            <md-input-container>
+                <label>Email institucional</label>
+                <input name="email" ng-model="editProfileCtrl.profile.email" type="email" disabled="true">
+            </md-input-container>
+        </div>
+
+        <md-button id="edit-profile__delete__btn" ng-click="editProfileCtrl.removeProfile()">EXCLUIR VÍNCULO</md-button>
+        <div class="edit-profile__btns">
+        <md-button class="edit-profile__cancel__btn" ng-click="editProfileCtrl.closeDialog()">CANCELAR</md-button>
+            <md-button class="edit-profile__confirm__btn" ng-click="editProfileCtrl.edit()">CONFIRMAR</md-button>
+        </div>
+
+    </md-dialog-content>
+</md-dialog>

@@ -31,7 +31,7 @@ describe('MainToolbarController test', () => {
         it('should call state.go', () => {
             spyOn(state, 'go');
 
-            mainToolbarCtrl.changeState('app.user.timeline', {});
+            mainToolbarCtrl.changeState();
 
             expect(state.go).toHaveBeenCalled();
         });

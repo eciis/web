@@ -7,6 +7,7 @@
         APP: "app",
         USER: "app.user",
         SEARCH: "app.user.search",
+        SEARCH_EVENT: "app.user.search_event",
         HOME: "app.user.home",
         USER_INSTITUTIONS: "app.user.institutions",
         EVENTS: "app.user.events",

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Search Institution."""
+"""Search Event."""
 
 from google.appengine.api import search
 from . import SearchDocument
@@ -23,7 +23,7 @@ def event_has_changes(fields, entity):
         return False
 
 class SearchEvent(SearchDocument):
-    """Search institution's model."""
+    """Search event's model."""
 
     def __init__(self):
         """Init method."""
@@ -46,7 +46,7 @@ class SearchEvent(SearchDocument):
                 'institution_name': event.institution_name,
                 'institution_acronym': event.institution_acronym,
                 'country': event.address and event.address.country,
-                'federal_state': institution.address and institution.address.federal_state,
+                'federal_state': event.address and event.address.federal_state,
                 'city': event.address and event.address.city
             }
             # Make the structure of the document by setting the fields and its id.
@@ -125,10 +125,10 @@ class SearchEvent(SearchDocument):
         fields_values_string = " OR ".join(fields_values) if fields_values else ""
         return text_normalize(fields_values_string)
     
-    def updateDocument(self, entity, has_changes=institution_has_changes):
+    def updateDocument(self, entity, has_changes=event_has_changes):
         """Update a Document.
 
         When an entity changes its fields, this function
         updates the previous document.
         """
-        super(SearchInstitution, self).updateDocument(entity, has_changes)
+        super(SearchEvent, self).updateDocument(entity, has_changes)

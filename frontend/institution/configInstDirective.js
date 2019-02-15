@@ -470,10 +470,87 @@
             }
         };
 
-        (function main(){
+        configInstCtrl.stepColor = (step) => {
+          return configInstCtrl.getStep(step) ? 'light-green-500' : 'grey-500';
+        };
+
+        configInstCtrl.previousStep = () => {
+          const currentStep = configInstCtrl.currentStep;
+          configInstCtrl.steps[currentStep] = false;
+          configInstCtrl.steps[currentStep - 1] = true;
+        }
+
+        configInstCtrl.backButton = () => {
+          configInstCtrl.currentStep === 0 ? configInstCtrl.previousPage() : configInstCtrl.previousStep();
+        }
+
+        configInstCtrl.mobileSubmit = (event) => {
+            const newInstitution = new Institution(configInstCtrl.newInstitution);
+            let promise;
+            if (isCurrentStepValid(3) && newInstitution.isValid()) {
+                const parent = angular.element('#create-inst-content');
+                const confirm = $mdDialog.confirm(event)
+                    .parent(parent)
+                    .clickOutsideToClose(true)
+                    .title('FINALIZAR')
+                    .textContent('Você deseja finalizar e salvar os dados da instituição?')
+                    .ariaLabel('Finalizar')
+                    .targetEvent(event)
+                    .ok('Sim')
+                    .cancel('Não');
+                promise = $mdDialog.show(confirm);
+                promise.then(() => {
+                    configInstCtrl.loadingSaveInstitution = true;
+                    updateInstitution();
+                    $state.go(STATES.HOME).then(() => {
+                        const alert = $mdDialog.alert({
+                            title: 'INSTITUIÇÃO CRIADA',
+                            textContent: 'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.',
+                            ok: 'Fechar'
+                        });
+                        $mdDialog.show(alert);
+
+                    });
+
+                }).catch(e => {
+                    MessageService.showToast('Cancelado');
+                })
+            } else {
+                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            }
+            return promise;
+        }
+
+        Object.defineProperty(configInstCtrl, 'currentStep', {
+          get: function() {
+            return _.findIndex(configInstCtrl.steps, s => s);
+          }
+        });
+
+
+        Object.defineProperty(configInstCtrl, 'currentStepLabel', {
+          get: function() {
+            switch (configInstCtrl.currentStep) {
+              case 0:
+                return "Dados Cadastrais";
+                break;
+              case 1:
+                return "Dados da Instituiçao";
+                break;
+              case 2:
+                return "Finalizar Cadastro";
+                break;
+              default:
+                return "";
+                break;
+            }
+          }
+        });
+
+        configInstCtrl.$onInit = () => {
             configInstCtrl.institutionKey = institutionKey;
             configInstCtrl.initController();
-        })();
+        }
     });
 
     app.directive("configInstitution", function() {

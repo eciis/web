@@ -1,0 +1,72 @@
+img.mobile-invite-logo {
+  width: 70%;
+}
+
+.mobile-invite-btns {
+  display: grid;
+  width: 100%;
+  grid-auto-flow: column;
+  justify-content: end;
+}
+
+#accept-invite-grid {
+  display: grid;
+}
+
+.divisor-text {
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-left: 1.6em;
+}
+
+.invite-inst-name {
+  overflow: hidden;
+  line-height: 1.2em;
+  max-height: 3.6em;
+  font-size: 1em;
+  font-weight: normal;
+  padding: 0.1em;
+  text-align: left;
+  text-overflow: ellipsis;
+  justify-items: start;
+}
+
+.ec-list-item {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 3fr;
+  background: #ddd;
+  margin-bottom: 1em;
+  align-content: center;
+  align-items: center;
+  justify-items: center;
+  padding: 0.8em;
+}
+
+.ec-list-description {
+  width: 100%;
+  display: grid;
+  justify-content: left;
+  grid-auto-flow: row;
+}
+
+.ec-list-description p {
+  margin: 0.2em;
+}
+
+.ec-list-fade-text {
+  color: #888;
+}
+
+.ec-list-avatar {
+  width: 2.8em;
+  height: 2.8em;
+  border-radius: 50%;
+  margin: -0.6em 0 0 -0.6em;
+}
+
+#invite-back-button {
+  justify-self: center;
+  margin-bottom: -2.5em;
+  /* margin-top: 2em; */
+}

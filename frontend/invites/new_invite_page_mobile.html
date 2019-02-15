@@ -1,0 +1,87 @@
+<!-- <div id='create-institution-page' md-colors='{background: 'teal-500'}'> -->
+<!--   <div id='create-institution-card' class='ec-card'> -->
+<!--     <card-content class='create-institution-card-content'> -->
+<!--       <img id='create-institution-logo' src='/app/images/logowithname.png'/> -->
+<!--       <md-progress-circular class='smooth-if' md-mode='indeterminate' ng-if='newInviteCtrl.loading()' -->
+<!--                             md-diameter='96'> -->
+<!--       </md-progress-circular> -->
+<!--     </card-content> -->
+<!--   </div> -->
+<!-- </div> -->
+
+<md-content id="content-new-invite" md-colors="{background: 'teal-500'}">
+  <md-progress-circular md-mode='indeterminate' ng-if='newInviteCtrl.loading'
+                        md-diameter='96'>
+  </md-progress-circular>
+  <div ng-if="!newInviteCtrl.isAlreadyProcessed && !newInviteCtrl.loading" class="ec-card">
+    <img src="app/images/logowithname.png" aria-label="e-CIS Logo" class='mobile-invite-logo'>
+      <div id='accept-invite-grid'>
+        <p class="divisor-text md-title">VOCÊ RECEBEU UM CONVITE DE:</p>
+        <div class="ec-list-item">
+          <div>
+            <img ng-src="{{ newInviteCtrl.institution.photo_url }}" class="ec-list-avatar" alt="{{newInviteCtrl.institution.name}}" />
+          </div>
+          <div class="ec-list-description">
+            <p class='invite-inst-name'>{{ newInviteCtrl.institution.name }}</p>
+            <p class='ec-list-fade-text' ng-if="newInviteCtrl.institution.institutional_email">{{ newInviteCtrl.institution.institutional_email }}</p>
+          </div>
+        </div>
+        <div layout="column" layout-align="center">
+          <p class="divisor-text increase-distance">
+            PREENCHA O FORMULÁRIO PARA CADASTRAR A INSTITUIÇÃO:
+          </p>
+
+          <!-- INVITED INSTITUTION -->
+          <div ng-if="!newInviteCtrl.isInviteUser()">
+            <div class='ec-list-item'>
+              <div>
+                <md-button md-colors="{background: 'light-green'}" class="md-icon-button" style="margin: 0 10px 0 0;">
+                  <md-icon style="color: white;">account_balance</md-icon>
+                </md-button>
+              </div>
+              <div class="ec-list-description">
+                <p class='invite-inst-name'>{{ newInviteCtrl.invite.suggestion_institution_name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class='mobile-invite-btns'>
+        <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)"
+                                                         md-colors="{background: 'teal-500'}">
+          Rejeitar
+        </md-button>
+        <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click='newInviteCtrl.acceptInvite($event)'
+                   type="submit" md-colors="{background: 'teal-500'}">
+          Próximo
+        </md-button>
+        <div ng-if="newInviteCtrl.acceptedInvite" flex="100" layout="row" layout-align="center center">
+          <md-progress-circular  class="md-hue-2" md-diameter="30px"></md-progress-circular>
+        </div>
+      </div>
+    <!-- VOLTAR -->
+    <md-button class='md-fab' id='invite-back-button'
+               md-colors='{background: "light-green-500"}'
+               ng-click='newInviteCtrl.answerLater()'>
+      <md-icon>keyboard_arrow_left</md-icon>
+    </md-button>
+    </md-card>
+
+    <!-- CONVITE JA PROCESSADO -->
+    <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" class="no-margin">
+      <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center center">
+        <div align="center">
+          <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
+        </div>
+        <div>
+          <p>Este convite já foi processado!</p>
+        </div>
+      </md-card-content>
+      <md-card-actions layout="row" layout-align="end center">
+        <md-button ng-click="newInviteCtrl.goToHome()"  md-colors="{background: 'teal-500'}">
+          VOLTAR
+        </md-button>
+      </md-card-actions>
+    </md-card>
+
+</md-content>

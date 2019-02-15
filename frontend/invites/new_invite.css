@@ -1,5 +1,5 @@
 #content-new-invite{
-    height: 100%; 
+    height: 100%;
     display: grid;
     justify-items: center;
     align-items: center;
@@ -45,7 +45,7 @@
 
 @media screen and (max-width: 400px) {
     .new-invite-page-card {
-        max-width: 20em;
+        /* max-width: 20em; */
     }
 
     #invite-by-text{

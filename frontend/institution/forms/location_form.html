@@ -1,0 +1,66 @@
+<form name='location' id='location-data'>
+  <md-input-container id="logradouro">
+    <label>Logradouro</label>
+    <input name='street' ng-model="ctrl.configInstCtrl.address.street" ng-required='!ctrl.configInstCtrl.isAnotherCountry'>
+  </md-input-container>
+  <md-input-container id="no">
+    <label>No</label>
+    <input name='number' ng-model="ctrl.configInstCtrl.address.number" ng-pattern='ctrl.configInstCtrl.numberRegex'>
+  </md-input-container>
+  <md-input-container id="bairro">
+    <label>Bairro</label>
+    <input name='neighbourhood' ng-model="ctrl.configInstCtrl.address.neighbourhood" ng-required'!ctrl.configInstCtrl.isAnotherCountry'>
+  </md-input-container>
+  <md-input-container id="pais">
+    <label>Pais</label>
+    <md-select name='country' ng-model="ctrl.configInstCtrl.address.country" required
+               ng-change='ctrl.configInstCtrl.setAnotherCountry()'
+               class='limit-md-select'>
+      <md-option ng-repeat='country in ctrl.configInstCtrl.countries' ng-value='country.nome_pais'>
+        {{ country.nome_pais }}
+      </md-option>
+    </md-select>
+  </md-input-container>
+  <md-input-container id="estado" ng-if='ctrl.configInstCtrl.isAnotherCountry'>
+    <label>Estado</label>
+    <input name='federalState' type='text' ng-model="ctrl.configInstCtrl.address.federal_state">
+  </md-input-container>
+  <md-input-container id="estado" ng-if='!ctrl.configInstCtrl.isAnotherCountry'>
+    <label>Estado</label>
+    <md-select name='state' ng-model='ctrl.configInstCtrl.selectedState' required
+               ng-change='ctrl.configInstCtrl.getCitiesByState()'
+               class='limit-md-select'>
+      <md-option ng-repeat='state in ctrl.configInstCtrl.states' ng-value='state'>
+        {{ state.sigla }}
+      </md-option>
+    </md-select>
+  </md-input-container>
+  <md-input-container id="cidade" ng-if='ctrl.configInstCtrl.isAnotherCountry'>
+    <label>Cidade</label>
+    <input name='city' type='text' ng-model="ctrl.configInstCtrl.address.city">
+    </md-select>
+  </md-input-container>
+  <md-input-container id="cidade" ng-if='!ctrl.configInstCtrl.isAnotherCountry'>
+    <label>Cidade</label>
+    <md-select name='city' ng-model='ctrl.configInstCtrl.address.city' required
+               class='limit-md-select'>
+      <md-option ng-repeat='city in ctrl.configInstCtrl.cities' ng-value='city'>
+        {{ city }}
+      </md-option>
+    </md-select>
+    <div ng-messages>
+      <div ng-show="location.state.$pristine && !ctrl.configInstCtrl.isAnotherCountry && !ctrl.configInstCtrl.address.city"
+          class='state-required'>
+        Primeiro selecione um estado
+      </div>
+    </div>
+  </md-input-container>
+  <md-input-container id="cep">
+    <label>CEP</label>
+    <input name='cep' ng-model="ctrl.configInstCtrl.address.cep"
+           ng-required='!ctrl.configInstCtrl.isAnotherCountry'
+           placeholder='00000-000'
+           ng-pattern='ctrl.configInstCtrl.cepRegex'
+           mask='99999-999'>
+  </md-input-container>
+</form>

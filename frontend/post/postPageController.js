@@ -11,6 +11,8 @@
 
         postCtrl.user = AuthService.getCurrentUser();
 
+        const EDIT_POST_PERMISSION = 'edit_post';
+
         postCtrl.isHiden = function isHiden() {
             var isDeleted = postCtrl.post.state == 'deleted';
             var hasNoComments = postCtrl.post.number_of_comments === 0;
@@ -40,10 +42,8 @@
             .then(function success(response) {
                 response.data_comments = Object.values(response.data_comments);
                 postCtrl.post = response;
-                postCtrl.isLoadingComments = false;
             }, function error(response) {
                 postCtrl.post.type_survey = type_survey;
-                postCtrl.isLoadingComments = true;
             });
         };
 
@@ -116,6 +116,47 @@
             return postCtrl.post;
         }
 
+        postCtrl.edit = function edit(event) {
+            $mdDialog.show({
+                controller: function DialogController() { },
+                controllerAs: "controller",
+                templateUrl: 'app/home/post_dialog.html',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose: true,
+                locals: {
+                    originalPost: postCtrl.post,
+                    isEditing: true
+                },
+                bindToController: true
+            }).then(function success(editedPost) {
+                postCtrl.post.title = editedPost.title;
+                postCtrl.post.text = editedPost.text;
+                postCtrl.post.photo_url = editedPost.photo_url;
+                postCtrl.post.pdf_files = editedPost.pdf_files;
+                postCtrl.post.video_url = editedPost.video_url;
+            }, function error() { });
+        };
+
+        postCtrl.canEdit = function canEdit() {
+            const hasPermission = postCtrl.post && postCtrl.user.hasPermission(EDIT_POST_PERMISSION, postCtrl.post.key);
+            var isActiveInst = postCtrl.post && postCtrl.post.institution_state == "active";
+            return hasPermission && postCtrl.post.state !== 'deleted' && isActiveInst &&
+                !postCtrl.postHasActivity() && !postCtrl.isShared() && !postCtrl.post.type_survey;
+        };
+
+        postCtrl.postHasActivity = function postHasActivity() {
+            var hasNoComments = postCtrl.post.number_of_comments === 0;
+            var hasNoLikes = postCtrl.post.number_of_likes === 0;
+
+            return !hasNoComments || !hasNoLikes;
+        };
+
+        postCtrl.isShared = function isShared() {
+            return postCtrl.post.shared_post ||
+                postCtrl.post.shared_event;
+        };
+
         /**
          * Constructs a list with the menu options.
          */
@@ -126,8 +167,13 @@
                 { title: 'Compartilhar', icon: 'share', action: () => { postCtrl.share('$event') } },
                 { title: 'Receber atualizações', icon: 'bookmark', action: () => { postCtrl.addSubscriber() }, hide: () => postCtrl.isSubscriber() },
                 { title: 'Não receber atualizações', icon: 'bookmark', 
-                    action: () => { postCtrl.removeSubscriber() }, hide: () => !postCtrl.isSubscriber() }
+                    action: () => { postCtrl.removeSubscriber() }, hide: () => !postCtrl.isSubscriber() || postCtrl.isPostAuthor() },
+                { title: 'Editar postagem', icon: 'edit', action: () => { postCtrl.edit() }, hide: () => !postCtrl.canEdit() }
             ];
+        };
+
+        postCtrl.isPostAuthor = function isPostAuthor() {
+            return postCtrl.post.author_key === postCtrl.user.key;
         };
 
         function loadPost(postKey) {

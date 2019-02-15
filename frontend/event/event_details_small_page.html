@@ -4,38 +4,6 @@
     <div style="background-color: white;" class="box">
         <div class="title-container">
             <span>{{ eventDetailsCtrl.event.title | uppercase}}</span>
-            <md-menu id="menu-button" md-offset="-165 45">
-                    <button class="event-menu-button" title="Opções"
-                    ng-click="$mdMenu.open(ev)">
-                        <md-icon style="color: black;">more_vert</md-icon>
-                    </button>
-                    <md-menu-content>
-                    <md-menu-item id="hide-share">
-                        <md-button ng-click="eventDetailsCtrl.share($event, eventDetailsCtrl.event)">
-                        <md-icon>share</md-icon>
-                        Compartilhar evento
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item>
-                        <md-button ng-click="eventDetailsCtrl.confirmDeleteEvent($event, eventDetailsCtrl.event)">
-                        <md-icon>cancel</md-icon>
-                        Cancelar evento
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-if="!eventDetailsCtrl.isFollower()">
-                        <md-button ng-click="eventDetailsCtrl.addFollower()">
-                            <md-icon>visibility</md-icon>
-                            Receber Atualizações
-                        </md-button>
-                    </md-menu-item>
-                    <md-menu-item ng-if="eventDetailsCtrl.isFollower()">
-                        <md-button ng-click="eventDetailsCtrl.removeFollower()">
-                            <md-icon>visibility_off</md-icon>
-                            Deixar de receber atualizações
-                        </md-button>
-                    </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
         </div>
         <div ng-if="eventDetailsCtrl.event.photo_url">
             <img style="background-color: white; width: 100%" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>

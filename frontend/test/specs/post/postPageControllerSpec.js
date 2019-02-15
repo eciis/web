@@ -171,4 +171,14 @@
             expect(postCtrl.defaultToolbarOptions.length).toEqual(5);
         });
     });
+
+    describe('reloadPost()', () => {
+        it('should call getPost', () => {
+            spyOn(Object, 'values');
+            postCtrl.reloadPost();
+
+            expect(postService.getPost).toHaveBeenCalled();
+            expect(Object.values).toHaveBeenCalled();
+        });
+    });
 }));

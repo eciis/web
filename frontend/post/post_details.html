@@ -41,7 +41,7 @@
         </span>
       </md-card-title-text>
     </md-card-title>
-    <md-menu md-offset="-200 45">
+    <md-menu md-offset="-200 45" ng-if="!postDetailsCtrl.isPostPage">
       <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
         <md-icon>more_vert</md-icon>
       </md-button>

@@ -274,7 +274,7 @@
             eventCtrl.generateToolbarMenuOptions();
 
             expect(eventCtrl.defaultToolbarOptions).toBeTruthy();
-            expect(eventCtrl.defaultToolbarOptions.length).toEqual(3);
+            expect(eventCtrl.defaultToolbarOptions.length).toEqual(4);
         });
     });
 

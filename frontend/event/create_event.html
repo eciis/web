@@ -1,9 +1,6 @@
+<default-toolbar></default-toolbar>
+
 <div ng-class="createEventCtrl.getStep(1) ? 'create-event-grid-inst' : 'create-event-grid'" hide-navbar="both">
-    <div class="create-event-mobile-top-bar">
-        <md-button class="md-icon-button" ng-click="createEventCtrl.previousStep()">
-            <md-icon class="back-to-button">keyboard_arrow_left</md-icon>
-        </md-button>
-    </div>
     <div class="event-select-inst" ng-if="createEventCtrl.getStep(1)">
         <div class="event-select-ball">
             <md-icon class="event-select-ball-margin"

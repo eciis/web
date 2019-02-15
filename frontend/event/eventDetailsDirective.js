@@ -28,17 +28,17 @@
             });
         };
 
-        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev, event) {
+        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev) {
             var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
             dialog.then(function () {
-                deleteEvent(event);
+                deleteEvent(eventCtrl.event);
             }, function () {
                 MessageService.showToast('Cancelado');
             });
         };
 
-        function deleteEvent(event) {
-            let promise = EventService.deleteEvent(event);
+        function deleteEvent() {
+            let promise = EventService.deleteEvent(eventCtrl.event);
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
                 eventCtrl.event.state = "deleted";
@@ -100,8 +100,8 @@
             return !(emptyPhoto || nullPhoto);
         }
 
-        eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return event && (event.author_key === eventCtrl.user.key);
+        eventCtrl.isEventAuthor = function isEventAuthor() {
+            return eventCtrl.event && (eventCtrl.event.author_key === eventCtrl.user.key);
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
@@ -170,7 +170,9 @@
                 { title: 'Obter link', icon: 'link', action: () => { eventCtrl.copyLink() } },
                 { title: 'Compartilhar', icon: 'share', action: () => { eventCtrl.share('$event') } },
                 { title: 'Receber atualizações', icon: 'visibility', action: () => { eventCtrl.addFollower() }, hide: () => eventCtrl.isFollower() },
-                { title: 'Não receber atualizações', icon: 'visibility_off', action: () => { eventCtrl.removeFollower() }, hide: () => !eventCtrl.isFollower() },
+                { title: 'Não receber atualizações', icon: 'visibility_off', action: () => { eventCtrl.removeFollower() }, 
+                    hide: () => !eventCtrl.isFollower() || eventCtrl.isEventAuthor() },
+                { title: 'Cancelar evento', icon: 'cancel', action: () => { eventDetailsCtrl.confirmDeleteEvent('$event') }, hide: () =>  !eventCtrl.canChange() }
             ]
         };
 
@@ -211,6 +213,8 @@
         function loadEvent(eventKey) {
             return EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = new Event(response);
+                console.log(response);
+                console.log(eventCtrl.user.key);
             }, function error(response) {
                 MessageService.showToast(response);
                 $state.go(STATES.HOME);

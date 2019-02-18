@@ -1,0 +1,31 @@
+.dialog__container {
+    display: grid;
+    grid-template-areas:
+        "title"
+        "subtitle"
+        "content"
+        "buttons";
+    padding: 2.5em 2em;
+}
+
+.dialog__title {
+    grid-area: title;
+    display: flex;
+    text-align: center;
+    margin: 1em 0;
+}
+
+.dialog__subtitle {
+    grid-area: subtitle;
+}
+
+.dialog__content {
+    grid-area: content;
+}
+
+.dialog__buttons {
+    grid-area: buttons;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}

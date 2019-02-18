@@ -3,5 +3,15 @@
             title="Download de PDF"
             subtitle="Você deseja baixar esse PDF?"
             confirm-action="ctrl.downloadPdf">
+        <div class="pdf-item-container">
+            <div class="pdf-icon" md-colors="{background: 'default-light-green'}">
+                <md-icon class="lg-icon lg-width-height" layout-padding>
+                    picture_as_pdf
+                </md-icon>
+            </div>
+            <div class="pdf-text" md-colors="{background: 'default-teal'}">
+                <p>{{ctrl.pdf.name}}</p>
+            </div>
+        </div>
     </gen-dialog>
 </md-dialog>

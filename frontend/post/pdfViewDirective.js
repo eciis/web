@@ -54,6 +54,7 @@
             var ctrl = this;
             ctrl.pdfUrl = "";
             ctrl.isLoadingPdf = true;
+            ctrl.pdf = pdf;
 
             function readPdf() {
                 var readablePdf = {};
@@ -65,7 +66,7 @@
             }
 
             ctrl.downloadPdf = () => {
-                PdfService.download(pdf.url);
+                PdfService.download(ctrl.pdf.url);
             };
 
             (function main() {

@@ -116,6 +116,9 @@
             return postCtrl.post;
         }
 
+        /**
+         * Open up a dialog that allows the user to edit the post.
+         */
         postCtrl.edit = function edit(event) {
             $mdDialog.show({
                 controller: function DialogController() { },
@@ -138,6 +141,10 @@
             }, function error() { });
         };
 
+        /**
+         * Checks if the user can edit the post. For that, the user needs to have the
+         * permissions. Besides, the post and the institution can not be unavailable
+         */
         postCtrl.canEdit = function canEdit() {
             const hasPermission = postCtrl.post && postCtrl.user.hasPermission(EDIT_POST_PERMISSION, postCtrl.post.key);
             var isActiveInst = postCtrl.post && postCtrl.post.institution_state == "active";
@@ -145,6 +152,9 @@
                 !postCtrl.postHasActivity() && !postCtrl.isShared() && !postCtrl.post.type_survey;
         };
 
+        /**
+         * Checks if the post has any activity. It can be comments or likes.
+         */
         postCtrl.postHasActivity = function postHasActivity() {
             var hasNoComments = postCtrl.post.number_of_comments === 0;
             var hasNoLikes = postCtrl.post.number_of_likes === 0;
@@ -152,6 +162,9 @@
             return !hasNoComments || !hasNoLikes;
         };
 
+        /**
+         * Checks if the post came from another post or event by sharing.
+         */
         postCtrl.isShared = function isShared() {
             return postCtrl.post.shared_post ||
                 postCtrl.post.shared_event;
@@ -172,6 +185,9 @@
             ];
         };
 
+        /**
+         * Checks if the current user is the post's author.
+         */
         postCtrl.isPostAuthor = function isPostAuthor() {
             return postCtrl.post.author_key === postCtrl.user.key;
         };

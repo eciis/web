@@ -6,7 +6,7 @@
   </div>
 </div>
 <md-card ng-class="postDetailsCtrl.getCSSClassPost()"
-  ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">
+  ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()" id="post-container">
   <!-- HEADER -->
   <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>

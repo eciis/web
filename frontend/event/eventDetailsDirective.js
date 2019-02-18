@@ -172,7 +172,7 @@
                 { title: 'Receber atualizações', icon: 'visibility', action: () => { eventCtrl.addFollower() }, hide: () => eventCtrl.isFollower() },
                 { title: 'Não receber atualizações', icon: 'visibility_off', action: () => { eventCtrl.removeFollower() }, 
                     hide: () => !eventCtrl.isFollower() || eventCtrl.isEventAuthor() },
-                { title: 'Cancelar evento', icon: 'cancel', action: () => { eventDetailsCtrl.confirmDeleteEvent('$event') }, hide: () =>  !eventCtrl.canChange() }
+                { title: 'Cancelar evento', icon: 'cancel', action: () => { eventCtrl.confirmDeleteEvent('$event') }, hide: () =>  !eventCtrl.canChange() }
             ]
         };
 
@@ -213,8 +213,6 @@
         function loadEvent(eventKey) {
             return EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = new Event(response);
-                console.log(response);
-                console.log(eventCtrl.user.key);
             }, function error(response) {
                 MessageService.showToast(response);
                 $state.go(STATES.HOME);

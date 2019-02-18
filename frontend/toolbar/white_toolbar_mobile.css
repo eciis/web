@@ -1,0 +1,11 @@
+.white-toolbar-mobile {
+  background-color: white;
+  box-shadow: 0px 3px 6px grey;
+  height: 60px;
+  width: 100%;
+  font-size: 20px;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 30% 50% auto;
+}

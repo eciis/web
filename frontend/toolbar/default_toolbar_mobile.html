@@ -5,7 +5,7 @@
         style="justify-self: start; grid-column-start: 1; grid-column-end: 2;" ng-click="defaultToolbarCtrl.goBack()">
         <md-icon style="font-size: 2.5em;">keyboard_arrow_left</md-icon>
       </md-button>
-      <div style="justify-self: end; grid-column-start: 2; grid-column-end: 3;">
+      <div style="justify-self: end; grid-column-start: 2; grid-column-end: 3;" ng-if="!defaultToolbarCtrl.noOptions">
         <md-menu>
           <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
             <md-icon style="font-size: 2.5em;">more_vert</md-icon>

@@ -13,7 +13,8 @@
     controller: ['SCREEN_SIZES', '$window', DefaultToolbarController],
     controllerAs: 'defaultToolbarCtrl',
     bindings: {
-      menuOptions: '='
+      menuOptions: '=',
+      noOptions: '@'
     }
   });
 

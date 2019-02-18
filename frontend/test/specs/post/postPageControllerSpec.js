@@ -168,7 +168,7 @@
 
             postCtrl.generateToolbarOptions();
 
-            expect(postCtrl.defaultToolbarOptions.length).toEqual(5);
+            expect(postCtrl.defaultToolbarOptions.length).toEqual(6);
         });
     });
 

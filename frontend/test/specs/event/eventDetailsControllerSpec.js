@@ -169,7 +169,7 @@
 
             var startTime = new Date('2018-01-13');
             var endTime = new Date('2018-02-13');
-            event.start_time = startTime;
+            event.sta9rt_time = startTime;
             event.end_time = endTime;
             eventCtrl.event = event;
             var result = eventCtrl.endInTheSameDay();
@@ -274,7 +274,7 @@
             eventCtrl.generateToolbarMenuOptions();
 
             expect(eventCtrl.defaultToolbarOptions).toBeTruthy();
-            expect(eventCtrl.defaultToolbarOptions.length).toEqual(4);
+            expect(eventCtrl.defaultToolbarOptions.length).toEqual(5);
         });
     });
 

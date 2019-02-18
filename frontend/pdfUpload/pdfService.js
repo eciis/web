@@ -79,6 +79,12 @@
             return deferred.promise;
         };
 
+        service.download = function download (url) {
+            var link = document.createElement('a');
+            link.href = url;
+            link.click();
+        };
+
         function isValidPdf(file) {
             if(file) {
                 var correctType = file.type === PDF_TYPE;

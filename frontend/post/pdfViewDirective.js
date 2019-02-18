@@ -14,7 +14,10 @@
         pdfCtrl.pdfDialog = function(ev, pdf) {
             if(!pdfCtrl.isEditing) {
                 $mdDialog.show({
-                    templateUrl: 'app/post/pdfDialog.html',
+                    templateUrl: Utils.selectFieldBasedOnScreenSize(
+                        'app/post/pdfDialog.html',
+                        'app/post/pdfDialogMobile.html',
+                    ),
                     targetEvent: ev,
                     clickOutsideToClose:true,
                     locals: {
@@ -61,8 +64,12 @@
                 });
             }
 
+            ctrl.downloadPdf = () => {
+                PdfService.download(pdf.url);
+            };
+
             (function main() {
-                readPdf();
+                if (!Utils.isMobileScreen()) readPdf();
             })();
         }
     });

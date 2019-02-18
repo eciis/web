@@ -23,10 +23,8 @@
                 scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
                     const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
                         STATES.INST_TIMELINE === $state.current.name;
-                    console.log(shouldHideBottomToolbar, STATES.INST_TIMELINE === $state.current.name, STATES.INST_TIMELINE, $state.current.name);
                     if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
-                    else scope.topTollbar.display = 'block';
-                    if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar);
+                    if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar)
                     else scope.bottomToolbar.style.display = 'flex';
                 }
 
@@ -84,11 +82,11 @@
     
                 }
 
-                /** Observer to state change and definy how initial state of toolbars
+                /** Observer to state change and definy how initial state of toolbar.                 * 
                  */
                 $transitions.onSuccess({
-                    to: () => {return true;}
-                }, () => { scope.initialToolbarDisplayState()});
+                    to: (state) => {return true;}
+                }, () => {scope.initialToolbarDisplayState()});
 
                 scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();
                 scope.isStateAllowedBottom  = scope.isBottomToolbarAllowed();

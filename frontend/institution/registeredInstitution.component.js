@@ -8,15 +8,14 @@
         controller: "RegisteredInstitutionController",
         controllerAs: "regInstCtrl",
         bindings: {
-            institution: '='
+            institution: '=',
+            user: '='
         }
     });
 
     app.controller("RegisteredInstitutionController", function regInstCtrl(AuthService, 
         InstitutionService, MessageService, FEDERAL_STATE_ACRONYM, $state, STATES) {
         const regInstCtrl = this;
-
-        const user = AuthService.getCurrentUser();
         
         /**
          * Basically checks if the institution has a coverPhoto.
@@ -29,7 +28,7 @@
          * Checks if the user is following the institution tied to the controller
          */
         regInstCtrl.userIsFollowing = function userIsFollowing() {
-            return user.follows.find(inst => { return inst.key === regInstCtrl.institution.key});
+            return regInstCtrl.user.follows.find(inst => { return inst.key === regInstCtrl.institution.key});
         };
 
         /**
@@ -38,7 +37,7 @@
         regInstCtrl.follow = function follow() {
             return InstitutionService.follow(regInstCtrl.institution.key)
             .then(function success() {
-                user.follow(regInstCtrl.institution);
+                regInstCtrl.user.follow(regInstCtrl.institution);
                 AuthService.save();
                 MessageService.showToast("Seguindo " + regInstCtrl.institution.name);
             });
@@ -74,6 +73,14 @@
         regInstCtrl.goToInst = () => {
             $state.go(STATES.INST_TIMELINE, 
                 { institutionKey: regInstCtrl.institution.key });
+        };
+
+        /**
+         * Check if the last time the user saw the registered institutions
+         * was after the current institution's creation.
+         */
+        regInstCtrl.hasSeenInstitution = function hasSeenInstitution() {
+            return regInstCtrl.user.last_seen_institutions && regInstCtrl.user.last_seen_institutions > regInstCtrl.institution.creation_date;
         };
     });
 })();

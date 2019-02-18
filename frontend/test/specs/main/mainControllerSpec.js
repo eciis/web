@@ -110,7 +110,8 @@
               invites: [],
               institutions: [otherInstitution],
               permissions: {},
-              state: 'active'
+              state: 'active',
+              key: 'user-key'
             };
 
             authService.getCurrentUser = function() {
@@ -121,7 +122,7 @@
 
             mainCtrl = createCtrl();
 
-            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE);
+            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE, {userKey: unknownUser.key});
         });
 
         it("should create observer", function() {
@@ -206,6 +207,14 @@
             spyOn(authService, 'reload').and.callThrough();
             scope.$emit("EVENT", {});
             expect(authService.reload).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('refreshUser', () => {
+        it('should call reload()', () => {
+            spyOn(authService, 'reload');
+            mainCtrl.refreshUser();
+            expect(authService.reload).toHaveBeenCalled();
         });
     });
 }));

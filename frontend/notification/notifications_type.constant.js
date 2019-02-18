@@ -150,6 +150,12 @@
         },
         RE_ADD_ADM_PERMISSIONS: {
             "icon": "check_circle_outline"
+        },
+        DELETED_EVENT: {
+            "icon": "delete"
+        },
+        UPDATED_EVENT: {
+            "icon": "autorenew"
         }
     })
 })()

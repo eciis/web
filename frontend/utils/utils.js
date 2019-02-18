@@ -1,5 +1,7 @@
 "use strict";
 
+const SCREEN_SIZES = function(SCREEN_SIZES){return SCREEN_SIZES};
+
 var Utils = {
 
     /**
@@ -229,8 +231,15 @@ var Utils = {
      * In mode mobile maybe changes some properties.
      */
     resetToolbarDisplayStyle: function resetToolbarDisplayStyle(){
-        document.getElementById('main-toolbar').style.display = 'block';
-        document.getElementById('navbar-bottom').style.display = 'flex';
+        if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
+            const toolbar = document.getElementById('main-toolbar')
+            if(toolbar)
+                toolbar.style.display = 'block';
+            
+            const navbar = document.getElementById('navbar-bottom')
+            if(navbar)
+                navbar.style.display = 'flex';
+        }
     },
     
     /**
@@ -265,5 +274,6 @@ var Utils = {
      * Returns the input property if it is defined, 
      * otherwise a default value is returned
      */
-    showProperty: property => property || 'Não informado'
+    showProperty: property => property || 'Não informado',
+
 };

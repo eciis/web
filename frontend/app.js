@@ -114,7 +114,7 @@
                 }
             })
             .state(STATES.CONFIG_PROFILE, {
-                url: "/config_profile",
+                url: "/config_profile/:userKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
@@ -199,7 +199,8 @@
                 url: "/institution/:institutionKey/registration_data",
                 views: {
                     institution_content: {
-                        templateUrl: "app/institution/registration_data.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/registration_data.html",
+                            "app/institution/registration_data_mobile.html", 475),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -261,7 +262,8 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/edit_info.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
+                            "app/institution/edit_info_mobile.html", 475)
                     }
                 }
             })
@@ -566,6 +568,35 @@
             to: () => true
         }, function () {
             ObserverRecorderService.unobserveAll();
+        });
+    });
+
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES, MessageService) {
+        
+        $transitions.onBefore({
+            to: function(state) {
+                const stateName = state.name;
+                return MapStateToFeatureService.containsFeature(stateName);
+            }
+        }, function (transition) {
+            const targetStateName = transition.to().name;
+
+            return FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetStateName)).then(function(enabled) {
+                if (enabled) {
+                    return transition;
+                } else {
+                    return transition.router.stateService.target(STATES.ERROR, {
+                        "msg": "Desculpa! Este recurso ainda não está disponível.",
+                        "status": "403"
+                    });
+                }
+            }).catch(function(message) {
+                MessageService.showToast(message);
+                return transition.router.stateService.target(STATES.ERROR, {
+                    "msg": "Desculpa! Este recurso ainda não está disponível.",
+                    "status": "403"
+                });
+            });
         });
     });
 

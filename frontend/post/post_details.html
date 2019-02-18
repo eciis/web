@@ -31,7 +31,7 @@
           </p>
           <p style="margin: 0">
             {{ postDetailsCtrl.post.publication_date | amUtc | amLocal | amCalendar:referenceTime:formats }}
-            <md-button ng-if="postDetailsCtrl.showButtonEdit()"  
+            <md-button ng-if="postDetailsCtrl.showButtonEdit()"
               class="sm-icon-button xs-icon-button xs-edit-icon-justify"
               ng-click="postDetailsCtrl.editPost()" md-colors="{background: 'light-green'}"
               style="margin-top: 4px; margin-left: 4px;">
@@ -74,6 +74,18 @@
             Receber atualizações
           </md-button>
         </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && !postDetailsCtrl.isFollowingEvent()">
+          <md-button aria-label="Favorite" ng-click="postDetailsCtrl.followEvent()" title="Receber notificações">
+            <md-icon>visibility</md-icon>
+            Receber atualizações do evento
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && postDetailsCtrl.isFollowingEvent()" title="Deixar de receber notificações">
+          <md-button style="text-overflow: ellipsis; overflow: hidden;" aria-label="Favorite" ng-click="postDetailsCtrl.unFollowEvent()">
+            <md-icon>visibility_off</md-icon>
+            <span>Deixar de receber atualizações do evento</span>
+          </md-button>
+        </md-menu-item>
         <md-menu-item ng-if="!postDetailsCtrl.isInstInactive() && postDetailsCtrl.showButtonEdit()">
           <md-button aria-label="editar" ng-click="postDetailsCtrl.editPost()"
             title="Editar o post">
@@ -86,8 +98,8 @@
   </md-card-header>
 
   <!-- SURVEY -->
-  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post" 
-    user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage" 
+  <survey-details ng-if="postDetailsCtrl.showSurvey()" post="postDetailsCtrl.post"
+    user="postDetailsCtrl.user" isdialog="false" is-post-page="postDetailsCtrl.isPostPage"
     reload-post="postDetailsCtrl.reloadPost">
   </survey-details>
 
@@ -118,7 +130,7 @@
         <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
       </div>
       <p></p>
-      <a ng-if="!postDetailsCtrl.isSharedSurvey()" href class="md-title hyperlink" 
+      <a ng-if="!postDetailsCtrl.isSharedSurvey()" href class="md-title hyperlink"
         ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
         <span class="md-headline">{{ postDetailsCtrl.post.shared_post.title }}</span>
       </a>
@@ -126,14 +138,14 @@
         ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
       <div layout="row" layout-align="end-center"
         ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
-        <a href class="md-text hyperlink" 
+        <a href class="md-text hyperlink"
           ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
           <md-icon>more_horiz</md-icon>
         </a>
       </div>
-      <pdf-view ng-if="postDetailsCtrl.showSharedPostText()" 
+      <pdf-view ng-if="postDetailsCtrl.showSharedPostText()"
         pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
-      <survey-details ng-if="postDetailsCtrl.isSharedSurvey()" 
+      <survey-details ng-if="postDetailsCtrl.isSharedSurvey()"
         post="postDetailsCtrl.post.shared_post"
         user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
     </md-card-content>
@@ -172,7 +184,7 @@
   <md-divider ng-if="!postDetailsCtrl.showSurvey() || postDetailsCtrl.showButtonDelete() && !postDetailsCtrl.isInstInactive()"></md-divider>
 
   <!-- BUTTONS -->
-  <md-card-actions layout="row" class="post-btns-row">
+  <md-card-actions class="post-btns-row">
     <!-- delete -->
     <button class="flat-btn" ng-click="postDetailsCtrl.deletePost($event, postDetailsCtrl.post)"
       ng-if="postDetailsCtrl.showButtonDelete()">
@@ -219,7 +231,7 @@
   </div>
 
   <md-divider ng-if="postDetailsCtrl.showComments || postDetailsCtrl.isPostPage"></md-divider>
-  
+
   <!-- COMMENTS -->
   <a href="#" id="comment-input"></a>
   <md-list-item class="md-2-line" ng-if="postDetailsCtrl.showCommentInput()">

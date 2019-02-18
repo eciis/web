@@ -57,11 +57,13 @@
             }
 
             instHeaderCtrl.showButtonEdit = function showButtonEdit(){
-                return instHeaderCtrl.isRegistrationData() || instHeaderCtrl.isDescription();
+                return (instHeaderCtrl.isRegistrationData() || instHeaderCtrl.isDescription()) &&
+                    instHeaderCtrl.institution && instHeaderCtrl.user.isAdmin(instHeaderCtrl.institution.key);
             }
             
-            instHeaderCtrl.editInfo = function editInfo(){
+            instHeaderCtrl.editInfo = function editInfo($event){
                 if(instHeaderCtrl.isDescription())instHeaderCtrl.actionsButtons.editDescription();
+                if(instHeaderCtrl.isRegistrationData())instHeaderCtrl.actionsButtons.editRegistrationData($event);
             }
         }],
         controllerAs: "instHeaderCtrl",

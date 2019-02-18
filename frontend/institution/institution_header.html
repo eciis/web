@@ -42,9 +42,8 @@
                     </md-menu-item>
                 </md-menu-content>
             </md-menu>
-            <md-button ng-if="instHeaderCtrl.showButtonEdit()" ng-click="instHeaderCtrl.editInfo()"
-                class="cover-photo-button button-navbar-inst"
-                id="btn-edit">
+            <md-button ng-if="instHeaderCtrl.showButtonEdit()" ng-click="instHeaderCtrl.editInfo($event)"
+                    class="cover-photo-button button-navbar-inst" id="btn-edit">
                 <b>EDITAR</b>
             </md-button>
         </div>

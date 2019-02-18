@@ -1,0 +1,14 @@
+.request-invitation__dialog {
+    max-width: 90%;
+    border-radius: 0;
+}
+
+.request-invitation__content {
+    padding: 2.5em 2em;
+}
+
+.request-invitation__title {
+    display: flex;
+    text-align: center;
+    margin: 0 0 1.5em;
+}

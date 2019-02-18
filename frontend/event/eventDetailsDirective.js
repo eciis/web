@@ -51,10 +51,13 @@
             }
         };
 
-        eventCtrl.canChange = function canChange(event) {
-            if(event) {
-                const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', event.institution_key);
-                const hasEventPermission = eventCtrl.user.hasPermission('remove_post', event.key);
+        /**
+         * Checks if the user has permission to change the event.
+         */
+        eventCtrl.canChange = function canChange() {
+            if (eventCtrl.event) {
+                const hasInstitutionPermission = eventCtrl.user.hasPermission('remove_posts', eventCtrl.event.institution_key);
+                const hasEventPermission = eventCtrl.user.hasPermission('remove_post', eventCtrl.event.key);
                 return hasInstitutionPermission || hasEventPermission;
             }
         };
@@ -149,6 +152,33 @@
         };
 
         /**
+         * Checks if the user is following the event.
+         */
+        eventCtrl.isFollower = () => {
+            return eventCtrl.event && eventCtrl.event.followers.includes(eventCtrl.user.key);
+        };
+
+        /**
+         * Add the user as an event's follower
+         */
+        eventCtrl.addFollower = () => {
+            return EventService.addFollower(eventCtrl.event.key).then(() => {
+                eventCtrl.event.addFollower(eventCtrl.user.key);
+                MessageService.showToast('Você receberá as atualizações desse evento.');
+            });
+        };
+
+        /**
+         * Remove the user from the event's followers list
+         */
+        eventCtrl.removeFollower = () => {
+            return EventService.removeFollower(eventCtrl.event.key).then(() => {
+                eventCtrl.event.removeFollower(eventCtrl.user.key);
+                MessageService.showToast('Você não receberá as atualizações desse evento.');
+            });
+        };
+
+        /**
          * This function receives the event key, makes a 
          * request to the backend, and returns the event 
          * returned as a backend response.
@@ -157,7 +187,7 @@
          */
         function loadEvent(eventKey) {
             return EventService.getEvent(eventKey).then(function success(response) {
-                eventCtrl.event = response;
+                eventCtrl.event = new Event(response);
             }, function error(response) {
                 MessageService.showToast(response);
                 $state.go(STATES.HOME);

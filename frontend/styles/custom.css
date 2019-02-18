@@ -200,13 +200,6 @@
     white-space: pre-line;
   }
 
-.pdf-text {
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
 .post-deleted {
     background-color:#F5F5F5;
 }
@@ -460,14 +453,6 @@ a:active {
     color: black;
 }
 
-.cropArea {
-    background: #E4E4E4;
-    padding auto auto auto auto;
-    overflow: hidden;
-    max-width:100%;
-    height: 50vh;
-}
-
 .break {
     word-break: break-all;
 }
@@ -602,6 +587,11 @@ a:active {
     background: #009688
 }
 
+.custom-scrollbar {
+    scrollbar-color: #009688 #ccc;
+    scrollbar-width: thin;
+}
+
 .card-title-light {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
@@ -614,13 +604,16 @@ a:active {
 }
 
 .rounded-circle {
-    margin-right: 10px;
     width: 45px;
     height: 45px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
     box-shadow: 0 0 1px 0px grey;
+}
+
+.rounded-circle.event-date {
+  margin-right: 10px;
 }
 
 .grey-circle {
@@ -901,19 +894,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     box-shadow:0 0 12px #9E9E9E;
 }
 
-.dialog-transparent-without-shadow {
-    background-color: rgba(0, 0, 0, 0);
-    box-shadow: 0 0 0;
-}
-
-@media screen and (max-width: 960px) {
-    .dialog-transparent-without-shadow {
-        max-width: 100%;
-        max-height: 100%;
-        border-radius: 0;
-    }
-}
-
 .share-post{
     max-height: 250px;
     overflow: auto;
@@ -1122,6 +1102,11 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     border-bottom-color: #009688 !important;
 }
 
+.custom-title {
+    font-size: 20px;
+    font-weight: 500;
+}
+
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .custom-card {
@@ -1163,4 +1148,21 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+}
+
+#post {
+    width: 100%;
+}
+
+#post-page-container {
+    height: 100%;
+}
+
+#post-content {
+    max-height: 100%;
+}
+
+#post-content > div {
+    max-height: 100%;
+    overflow-y: auto;
 }

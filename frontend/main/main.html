@@ -1,5 +1,5 @@
 <!-- TOOLBAR -->
-<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center"
+<md-toolbar id="main-toolbar" md-colors="{background: 'teal-900'}" layout-align="center" layout="row" ng-if="!mainCtrl.isMobileScreen()"
   layout="row" hide-navbar="top">
   <div class="md-toolbar-tools" flex-lg="90" flex-gt-lg="70">
 
@@ -15,7 +15,7 @@
     </a>
 
     <div class="toolbar-btns" layout="row">
-      
+
       <a ui-sref="{{mainCtrl.getState('HOME')}}" class="navbar-top">
         <md-button class="md-icon-button" title="Home">
           <md-icon>home</md-icon>
@@ -80,7 +80,7 @@
     </div> 
     <div class="icon-navbar-bottom">
       <md-button class="md-icon-button" aria-label="Eventos" ng-click="mainCtrl.goTo('EVENTS')">
-        <md-icon ng-class="mainCtrl.getSelectedClass('EVENTS')">event</md-icon>
+        <md-icon ng-class="mainCtrl.getSelectedClass('EVENTS')">date_range</md-icon>
       </md-button>
       <p ng-class="mainCtrl.getSelectedClass('EVENTS')" id="label-icon-navbottom">Eventos</p>
     </div>

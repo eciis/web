@@ -119,7 +119,8 @@
                 showImageCover: institutionCtrl.showImageCover,
                 requestInvitation: institutionCtrl.requestInvitation,
                 getLimitedName: institutionCtrl.getLimitedName,
-                editDescription: institutionCtrl.editDescription
+                editDescription: institutionCtrl.editDescription,
+                editRegistrationData: institutionCtrl.editRegistrationData
             }
         }
 
@@ -316,7 +317,7 @@
             $mdDialog.show({
                 controller: "RequestInvitationController",
                 controllerAs: "requestInvCtrl",
-                templateUrl: 'app/requests/request_invitation_dialog.html',
+                templateUrl: InstitutionService.getRequestInvitationTemplate(),
                 parent: angular.element(document.body),
                 targetEvent: event,
                 locals: {
@@ -452,6 +453,14 @@
 
         institutionCtrl.limitString = function limitString(string, size) {
             return Utils.limitString(string, size);
+        };
+
+        institutionCtrl.editRegistrationData = () => {
+            $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: currentInstitutionKey});
+        };
+
+        institutionCtrl.showProperty = (property) => {
+            return property || "Não informado";
         };
 
         (function main(){

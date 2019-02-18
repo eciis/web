@@ -890,6 +890,10 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     #post-container {
         margin: 8px 0;
     }
+
+    .hide-scrollbar-mobile::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 450px) {

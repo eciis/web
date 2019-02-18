@@ -696,12 +696,6 @@ a:active {
    border-radius: 50%;
 }
 
-.survey-card{
-    margin-top: -1px;
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
 .sm-label {
     font-size: 0.9em;
     opacity: 0.75;
@@ -865,6 +859,14 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 @media only screen and (max-width: 600px) {
     .small-text {
         font-size: 15px;
+    }
+
+    .hyperlink {
+        color: #009688;
+    }
+
+    .option {
+        margin: 0 12px;
     }
 }
 

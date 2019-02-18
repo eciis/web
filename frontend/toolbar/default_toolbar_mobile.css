@@ -4,3 +4,19 @@
   grid-template-rows: 100%;
   width: 100%;
 }
+
+.toolbar-back-button {
+  justify-self: start; 
+  grid-column-start: 1; 
+  grid-column-end: 2;
+}
+
+.toolbar-back-button md-icon {
+  font-size: 2.5em;
+}
+
+.default-toolbar-menu-container {
+  justify-self: end; 
+  grid-column-start: 2; 
+  grid-column-end: 3;
+}

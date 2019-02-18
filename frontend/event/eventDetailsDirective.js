@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("EventDetailsController", function EventDetailsController(MessageService, EventService,
-        $state, $mdDialog, AuthService, STATES, SCREEN_SIZES) {
+        $state, $mdDialog, AuthService, STATES, SCREEN_SIZES, ngClipboard) {
 
         var eventCtrl = this;
 
@@ -11,7 +11,8 @@
         eventCtrl.isLoadingEvents = true;
         eventCtrl.showImage = true;
         
-        eventCtrl.share = function share(ev, event) {
+        
+        eventCtrl.share = function share(ev) {
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
@@ -21,23 +22,23 @@
                 clickOutsideToClose: true,
                 locals: {
                     user: eventCtrl.user,
-                    post: event,
+                    post: eventCtrl.event,
                     addPost: false
                 }
             });
         };
 
-        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev, event) {
+        eventCtrl.confirmDeleteEvent = function confirmDeleteEvent(ev) {
             var dialog = MessageService.showConfirmationDialog(ev, 'Excluir Evento', 'Este evento será removido.');
             dialog.then(function () {
-                deleteEvent(event);
+                deleteEvent(eventCtrl.event);
             }, function () {
                 MessageService.showToast('Cancelado');
             });
         };
 
-        function deleteEvent(event) {
-            let promise = EventService.deleteEvent(event);
+        function deleteEvent() {
+            let promise = EventService.deleteEvent(eventCtrl.event);
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
                 eventCtrl.event.state = "deleted";
@@ -99,8 +100,8 @@
             return !(emptyPhoto || nullPhoto);
         }
 
-        eventCtrl.isEventAuthor = function isEventAuthor(event) {
-            return event && (event.author_key === eventCtrl.user.key);
+        eventCtrl.isEventAuthor = function isEventAuthor() {
+            return eventCtrl.event && (eventCtrl.event.author_key === eventCtrl.user.key);
         };
 
         eventCtrl.goToEvent = function goToEvent(event) {
@@ -138,7 +139,7 @@
 
         eventCtrl.isDeleted = () => {
             return eventCtrl.event ? eventCtrl.event.state === 'deleted' : true;
-        }
+        };
 
         /**
          * This function receives a date in iso format, 
@@ -149,6 +150,30 @@
          */
         eventCtrl.getTimeHours = function getTimeHours(isoTime) {
             return new Date(isoTime).getHours();
+        };
+
+        /**
+         * Copies the event's link to the clipboard.
+         * Checks if the user is following the event.
+         */
+        eventCtrl.copyLink = function copyLink() {
+            var url = Utils.generateLink(`/event/${eventCtrl.event.key}/details`);
+            ngClipboard.toClipboard(url);
+            MessageService.showToast("O link foi copiado");
+        };
+
+        /**
+         * Constructs a list with the menu options.
+         */
+        eventCtrl.generateToolbarMenuOptions = function generateToolbarMenuOptions() {
+            eventCtrl.defaultToolbarOptions = [
+                { title: 'Obter link', icon: 'link', action: () => { eventCtrl.copyLink() } },
+                { title: 'Compartilhar', icon: 'share', action: () => { eventCtrl.share('$event') } },
+                { title: 'Receber atualizações', icon: 'visibility', action: () => { eventCtrl.addFollower() }, hide: () => eventCtrl.isFollower() },
+                { title: 'Não receber atualizações', icon: 'visibility_off', action: () => { eventCtrl.removeFollower() }, 
+                    hide: () => !eventCtrl.isFollower() || eventCtrl.isEventAuthor() },
+                { title: 'Cancelar evento', icon: 'cancel', action: () => { eventCtrl.confirmDeleteEvent('$event') }, hide: () =>  !eventCtrl.canChange() }
+            ]
         };
 
         /**
@@ -193,10 +218,12 @@
                 $state.go(STATES.HOME);
             });
         }
-
+        
         eventCtrl.$onInit = function() {
-            if ($state.params.eventKey)
+            if ($state.params.eventKey) {
+                eventCtrl.generateToolbarMenuOptions();
                 return loadEvent($state.params.eventKey);
+            }
         };
     });
 

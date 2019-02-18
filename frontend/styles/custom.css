@@ -1178,6 +1178,7 @@ md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
 
 #post-page-container {
     height: 100%;
+    overflow: hidden;
 }
 
 #post-content {

@@ -11,7 +11,7 @@
       <md-icon md-colors="{color: 'grey-100'}">refresh</md-icon>
     </md-button>
   </div>
-  <div ng-repeat="post in timelineCtrl.posts.data | orderBy:'last_modified_date':true" ng-if="timelineCtrl.posts.size() > 0">
+  <div class="post-details-container" ng-repeat="post in timelineCtrl.posts.data | orderBy:'last_modified_date':true" ng-if="timelineCtrl.posts.size() > 0">
     <post-details post="post" is-post-page=false remove-post="true">
     </post-details>
   </div>

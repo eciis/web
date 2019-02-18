@@ -716,10 +716,10 @@ a:active {
     margin-right: -16px;
     text-align: center;
     width: 78px;
-    height: 20px;
+    height: 17px;
     color: #616161;
     padding-top: 16px;
-    padding-bottom: 16px;
+    padding-bottom: 15px;
 }
 
 .percentage-selected{
@@ -856,6 +856,12 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     border: 2px solid;
 }
 
+.expired-survey {
+    background-color: rgba(190, 186, 186, 0.966);
+    text-align: center;
+    font-size: 15px;
+}
+
 @media only screen and (max-width: 600px) {
     .small-text {
         font-size: 15px;
@@ -867,6 +873,17 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 
     .option {
         margin: 0 12px;
+    }
+
+    .post-details-container {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .expired-survey {
+        font-size: 13px;
+        padding: 4px 0;
     }
 }
 
@@ -929,12 +946,6 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
 md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
     border-color:#009688;
     border-width: 0 0 2px;
-}
-
-.expired-survey {
-    background-color: rgba(190, 186, 186, 0.966);
-    text-align: center;
-    font-size: 15px;
 }
 
 .shared-survey{

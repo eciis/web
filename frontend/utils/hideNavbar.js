@@ -14,8 +14,19 @@
                     STATES.INST_MEMBERS, STATES.INST_REGISTRATION_DATA, STATES.INST_LINKS,
                     STATES.INST_DESCRIPTION, STATES.CONFIG_PROFILE
                 ];
+
+                scope.STATES_WITHOUT_TOP_TOOLBAR = scope.INSTITUTION_STATES;
+
                 scope.STATES_WITHOUT_BOTTOM_TOOLBAR = [
                     STATES.CREATE_EVENT
+                ];
+
+                scope.STATES_DINAMICALLY_BOTTOM = [
+                    STATES.INST_TIMELINE
+                ];
+
+                scope.STATES_DINAMICALLY_TOP = [
+                    STATES.HOME
                 ];
                 
                 /** Definy initial style of toolbars according the current state.
@@ -35,15 +46,13 @@
                 /** Verify if current states is allowed to show top toolbar.
                  */
                 scope.isTopToolbarAllowed = function isTopToolbarAllowed() {
-                    let statesNotAllowed = [STATES.CREATE_EVENT];
-                    statesNotAllowed = statesNotAllowed.concat(scope.INSTITUTION_STATES);
-                    return !statesNotAllowed.includes($state.current.name);
+                    return !inStateArray(scope.STATES_WITHOUT_TOP_TOOLBAR);
                 }
 
                 /** Verify if current states is allowed to show bottom toolbar.
                  */
                 scope.isBottomToolbarAllowed = function isBottomToolbarAllowed() {
-                    return !scope.STATES_WITHOUT_BOTTOM_TOOLBAR.includes($state.current.name);
+                    return !inStateArray(scope.STATES_WITHOUT_BOTTOM_TOOLBAR);
                 }
                 
                 /** Set property CSS to hide element.
@@ -65,8 +74,8 @@
                         const content = element[0];
                         const limitScrol =  30;
     
-                        const hideTopDynamically = hideTop && scope.isStateAllowedTopMobile;
-                        const hideBottomDynamically = hideBottom && scope.isStateAllowedBottom;
+                        const hideTopDynamically = hideTop && inStateArray(scope.STATES_DINAMICALLY_TOP);
+                        const hideBottomDynamically = hideBottom && inStateArray(scope.STATES_DINAMICALLY_BOTTOM);
     
                         content.addEventListener('scroll', function() {
                             const screenPosition = content.scrollTop;
@@ -86,7 +95,13 @@
     
                 }
 
-                /** Observer to state change and definy how initial state of toolbar.                 * 
+                /** Verify array includes current state. 
+                 */
+                function inStateArray(array){
+                    return array.includes($state.current.name)
+                }
+
+                /** Observer to state change and definy how initial state of toolbar.                  
                  */
                 $transitions.onSuccess({
                     to: () => {return true;}

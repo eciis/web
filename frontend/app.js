@@ -527,7 +527,8 @@
      */
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
-            STATES.CREATE_EVENT
+            STATES.CREATE_EVENT,
+            STATES.INST_DESCRIPTION
         ];
 
         $transitions.onStart({
@@ -611,6 +612,6 @@
     }
 
     (function main() {
-        //initServiceWorker();
+        initServiceWorker();
     })();
 })();

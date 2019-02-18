@@ -275,8 +275,7 @@
                 targetEvent: ev,
                 clickOutsideToClose:true,
                 locals: {
-                    institution: institutionCtrl.institution,
-                    institutionKey: currentInstitutionKey
+                    institution: institutionCtrl.institution
                 },
                 controller: 'EditDescriptionController',
                 controllerAs: 'descriptionCtrl'

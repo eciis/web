@@ -59,6 +59,9 @@
         <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
           mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
         </md-input-container>
+        <md-switch md-invert ng-model="configProfileCtrl.pushNotification" ng-change="configProfileCtrl.pushChange()" style="margin-left: 0;">
+            <p class="">NOTIFICAÇÕES NO CELULAR </p>
+        </md-switch>
     </div>
 
     <user-profiles 

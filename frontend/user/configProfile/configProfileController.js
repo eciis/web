@@ -6,11 +6,12 @@
     .controller("ConfigProfileController", [
         '$state', 'STATES', '$stateParams', 'ProfileService', 'CropImageService', 'AuthService', '$q',
         'UserService', 'ImageService', '$rootScope', 'SCREEN_SIZES', 'MessageService', '$mdDialog', 'ObserverRecorderService',
+        'PushNotificationService',
         ConfigProfileController
     ]);
     
     function ConfigProfileController($state, STATES, $stateParams, ProfileService, CropImageService, AuthService, 
-        $q, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
+        $q, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService, PushNotificationService) {
 
         const configProfileCtrl = this;
 
@@ -24,6 +25,7 @@
 
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
+            setPushNotificationModel();
         }
 
         configProfileCtrl._setupUser = () => {
@@ -187,6 +189,44 @@
                 AuthService.logout();
             });
             return promise;
+        }
+
+        configProfileCtrl.pushChange = () => {
+            configProfileCtrl.pushNotification && subscribeUser();
+
+            !configProfileCtrl.pushNotification && unsubscribeUser();
+        };
+
+        function setPushNotificationModel() {
+            configProfileCtrl.pushNotification = angular.copy(PushNotificationService.hasNotificationPermission());
+        }
+
+        function isPossiblePushNotification() {
+            const { permission } = Notification;
+            return permission !== "denied";
+        }
+
+        function unsubscribeUser() {
+            return PushNotificationService.unsubscribeUserNotification();
+        }
+
+        function subscribeUser() {
+            return isPossiblePushNotification() &&
+            openDialog().then(() => PushNotificationService.requestNotificationPermission(configProfileCtrl.user));
+        }
+
+        function openDialog(event) {
+            const DIALOG_TEXT = "";
+            const confirm = $mdDialog.confirm();
+            confirm
+                .clickOutsideToClose(false)
+                .title('Permitir Notificação no dispositivo')
+                .textContent(DIALOG_TEXT)
+                .ariaLabel('Permitir Notificação no dispositivo')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+            return $mdDialog.show(confirm);
         }
     };
 })();

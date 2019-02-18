@@ -65,7 +65,7 @@
         service.requestNotificationPermission = function requestNotificationPermission(user) {
             service.currentUser = user;
             const isOnMobile = service._isMobile.any();
-            if (messaging && !service._hasNotificationPermission() && isOnMobile) {
+            if (messaging && !service.hasNotificationPermission() && isOnMobile) {
                 return messaging.requestPermission().then(() => {
                     return messaging.getToken().then(token => {
                         service._saveToken(token);
@@ -76,6 +76,13 @@
             }
 
             return $q.when();
+        };
+
+        /**
+         *
+         */
+        service.unsubscribeUserNotification = () => {
+            service._saveToken('');
         };
 
         /**
@@ -126,9 +133,8 @@
         /**
          * Check if the user has already conceded the permission
          * using Notification object.
-         * @private
          */
-        service._hasNotificationPermission = function hasNotificationPermission() {
+        service.hasNotificationPermission = function hasNotificationPermission() {
             const { permission } = Notification;
             return permission === "granted";
         };

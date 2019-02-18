@@ -21,11 +21,15 @@
                 /** Definy initial style of toolbars according the current state.
                  */
                 scope.initialToolbarDisplayState = function initialToolbarDisplayState(){
-                    const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
-                        STATES.INST_TIMELINE === $state.current.name;
-                    if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
-                    if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar)
-                    else scope.bottomToolbar.style.display = 'flex';
+                    if(Utils.isMobileScreen(450)){
+                        const shouldHideBottomToolbar = !scope.isBottomToolbarAllowed() || 
+                            STATES.INST_TIMELINE === $state.current.name;
+                        if (!scope.isStateAllowedTopMobile) scope.hideElement(scope.topTollbar);
+                        if (shouldHideBottomToolbar) scope.hideElement(scope.bottomToolbar)
+                        else{
+                            if(scope.bottomToolbar)scope.bottomToolbar.style.display = 'flex';
+                        }
+                    }
                 }
 
                 /** Verify if current states is allowed to show top toolbar.
@@ -85,7 +89,7 @@
                 /** Observer to state change and definy how initial state of toolbar.                 * 
                  */
                 $transitions.onSuccess({
-                    to: (state) => {return true;}
+                    to: () => {return true;}
                 }, () => {scope.initialToolbarDisplayState()});
 
                 scope.isStateAllowedTopMobile = scope.isTopToolbarAllowed();

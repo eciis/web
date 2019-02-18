@@ -79,6 +79,10 @@
             });
         };
 
+        homeCtrl.isMobileScreen = function isMobileScreen() {
+            return Utils.isMobileScreen(600);
+        };
+
         function getFollowingInstitutions() {
             homeCtrl.followingInstitutions = homeCtrl.user.follows;
         }

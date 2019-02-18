@@ -884,6 +884,7 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     .expired-survey {
         font-size: 13px;
         padding: 4px 0;
+        background-color: rgb(0, 150, 136)
     }
 }
 

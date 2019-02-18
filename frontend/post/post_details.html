@@ -8,7 +8,7 @@
 <md-card ng-class="postDetailsCtrl.getCSSClassPost()"
   ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()" style="margin: 8px 0;">
   <!-- HEADER -->
-  <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)" class="expired-survey" md-colors="{background: 'default-teal-500'}">
+  <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
   </div>
   <div class="post-inst-inactive" ng-if="postDetailsCtrl.isInstInactive()">INSTITUIÇÃO DESATIVADA</div>

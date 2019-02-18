@@ -5,18 +5,17 @@
         "subtitle"
         "content"
         "buttons";
-    padding: 2.5em 2em;
+    padding: 1.5em 2em 0;
 }
 
 .dialog__title {
     grid-area: title;
-    display: flex;
-    text-align: center;
-    margin: 1em 0;
+    margin: 0;
 }
 
 .dialog__subtitle {
     grid-area: subtitle;
+    padding: 0.5em 0;
 }
 
 .dialog__content {
@@ -28,4 +27,8 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+}
+
+.dialog__button {
+    margin: 1em 0;
 }

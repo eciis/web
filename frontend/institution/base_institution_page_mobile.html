@@ -16,7 +16,8 @@
                 <div id="buttons-institution-page">
                     <md-button ng-repeat="button in institutionCtrl.buttonsMenu"
                         ng-click="button.onClick(button.parameters)"
-                        class="institution-button-menu">
+                        class="institution-button-menu"
+                        ng-disabled="button.isDisabled">
                         <md-icon class="icon-button-menu-inst">{{button.icon}}</md-icon>
                         {{button.label}}
                     </md-button>

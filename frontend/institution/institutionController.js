@@ -58,7 +58,8 @@
                     'label': 'PORTFOLIO',
                     'icon': 'description',
                     'onClick': institutionCtrl.portfolioDialog,
-                    'parameters': '$event'
+                    'parameters': '$event',
+                    'isDisabled': _.isNil(institutionCtrl.portfolioUrl)
                 },
                 { 
                     'label': 'SEGUIDORES',
@@ -239,12 +240,7 @@
         };
 
         institutionCtrl.portfolioDialog = function(ev) {
-            const portfolio = getPortfolioPdfObj();
-            if (_.isNil(portfolio.url)) {
-                $state.go(STATES.ERROR);
-            } else {
-                PdfService.showPdfDialog(ev, portfolio);
-            }
+            PdfService.showPdfDialog(ev, getPortfolioPdfObj());
         };
 
         function getPortfolioPdfObj() {

@@ -25,7 +25,7 @@
              * DATE: 10/05/2018
              */
             var otherInst = (notification.to && notification.to.institution_name) || notification.from.institution_name;
-            var message = NotificationMessageCreatorService.assembleMessage(entity_type, mainInst, otherInst);
+            var message = NotificationMessageCreatorService.assembleMessage(entity_type, mainInst, otherInst, notification.entity.title);
             return message;
         };
 

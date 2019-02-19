@@ -65,7 +65,7 @@ class PostCommentHandler(BaseHandler):
             'current_institution': user.current_institution.urlsafe(),
             'sender_institution_key': post.institution.urlsafe()
         }
-        enqueue_task('post-notification', params)
+        enqueue_task('multiple-notification', params)
 
         is_first_comment = post.get_number_of_comment() == 1
         if is_first_comment:

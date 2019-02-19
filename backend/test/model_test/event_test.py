@@ -29,6 +29,12 @@ class RequestUserTest(TestBase):
         """Init the models."""
         # new User user
         cls.user = mocks.create_user("test@example.com")
+        cls.user.state = 'active'
+        cls.user.put()
+
+        cls.another_user = mocks.create_user("another@gmail.com")
+        cls.another_user.state = 'active'
+        cls.another_user.put()
         # new Institution
         cls.institution = mocks.create_institution()
         cls.institution.members = [cls.user.key]
@@ -129,3 +135,66 @@ class RequestUserTest(TestBase):
                     "The event basic data can not be changed after it has ended",
                     "The exception message is not equal to the expected one"
                 )
+    
+    def test_add_follower(self):
+        """Test regular add follower"""
+        self.assertEqual(len(self.event.followers), 1)
+
+        self.event.add_follower(self.another_user)
+
+        self.assertEqual(len(self.event.followers), 2)
+    
+    def test_add_follower_with_an_inactive_user(self):
+        """Test add an inactive user as a follower"""
+        self.another_user.state = 'pending'
+        self.another_user.put()
+
+        self.assertEqual(len(self.event.followers), 1)
+
+        with self.assertRaises(Exception) as ex:
+            self.event.add_follower(self.another_user)
+
+        self.assertEqual(str(ex.__dict__['exception']), "The user is not active")
+        self.assertEqual(len(self.event.followers), 1)
+    
+    def test_add_an_user_who_is_a_follower_yet(self):
+        """Test add a user who is a follower"""
+        self.assertEqual(len(self.event.followers), 1)
+        
+        with self.assertRaises(Exception) as ex:
+            self.event.add_follower(self.user)
+
+        self.assertEqual(str(ex.__dict__['exception']), "The user is a follower yet")
+        self.assertEqual(len(self.event.followers), 1)
+
+    def test_remove_follower(self):
+        """Test regular remove follower"""
+        self.assertEqual(len(self.event.followers), 1)
+
+        self.event.add_follower(self.another_user)
+
+        self.assertEqual(len(self.event.followers), 2)
+
+        self.event.remove_follower(self.another_user)
+
+        self.assertEqual(len(self.event.followers), 1)
+    
+    def test_remove_a_user_who_is_not_a_follower(self):
+        """Test remove a user who is not a follower"""
+        self.assertEqual(len(self.event.followers), 1)
+
+        with self.assertRaises(Exception) as ex:
+            self.event.remove_follower(self.another_user)
+        
+        self.assertEqual(str(ex.__dict__['exception']), "The user is not a follower")
+        self.assertEqual(len(self.event.followers), 1)
+    
+    def test_remove_a_user_who_is_the_author(self):
+        """Test remove a user who is the author"""
+        self.assertEqual(len(self.event.followers), 1)
+
+        with self.assertRaises(Exception) as ex:
+            self.event.remove_follower(self.user)
+        
+        self.assertEqual(str(ex.__dict__['exception']), "The user is the author")
+        self.assertEqual(len(self.event.followers), 1)

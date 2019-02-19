@@ -37,7 +37,6 @@
   <link rel="stylesheet" type="text/css" href="app/styles/custom.css"/>
   <link rel="stylesheet" type="text/css" href="app/notification/notifications_list.css">
   <link rel="stylesheet" type="text/css" href="app/notification/notification_button.css">
-  <link rel="stylesheet" type="text/css" href="app/user/edit_profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config-profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
@@ -65,10 +64,16 @@
   <link rel="stylesheet" type="text/css" href="app/institution/registration_data_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/edit_registration_data_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/user/configProfile/config_profile_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/userProfiles/user_profiles.css">
+  <link rel="stylesheet" type="text/css" href="app/user/editProfile/edit_profile.css">
+  <link rel="stylesheet" type="text/css" href="app/user/editProfile/edit_profile_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
+  <link rel="stylesheet" type="text/css" href="app/utils/is-empty-card/is-empty-card.css">
   <link rel="stylesheet" type="text/css" href="app/requests/request_invitation_dialog.css">
+  <link rel="stylesheet" type="text/css" href="app/toolbar/default_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/home/color_picker.css">
+  <link rel="stylesheet" type="text/css" href="app/utils/generic-dialog/gen-dialog.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
@@ -183,8 +188,9 @@
   <script src="app/user/profileService.js"></script>
   <script src="app/user/profileController.js"></script>
   <script src="app/user/configProfile/configProfileController.js"></script>
-  <script src="app/user/editProfileController.js"></script>
+  <script src="app/user/editProfile/editProfileController.js"></script>
   <script src="app/user/userProfileInfo.component.js"></script>
+  <script src="app/user/userProfiles/userProfiles.component.js"></script>
 
   <!-- Error Library -->
   <script src="app/error/errorController.js"></script>
@@ -284,7 +290,14 @@
   <!-- Jsonpatch observer register Library -->
   <script src="app/utils/observerRecorderService.js"></script>
 
+  <!-- is-empty-card component -->
+  <script src="app/utils/is-empty-card/is-empty-card.component.js"></script>
+
   <!-- Toolbar library -->
   <script src="app/toolbar/mainToolbar.component.js"></script>
+  <script src="app/toolbar/defaultToolbar.component.js"></script>
+
+  <!-- Dialog component -->
+  <script src="app/utils/generic-dialog/gen-dialog.component.js"></script>
 </body>
 </html>

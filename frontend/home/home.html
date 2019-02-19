@@ -10,7 +10,7 @@
         <div>
           <save-post is-dialog="false" hide show-gt-sm></save-post>
         </div>
-        <md-content flex id="content" class="body custom-scrollbar" hide-navbar="top">
+        <md-content flex id="content" class="body custom-scrollbar hide-scrollbar-mobile" hide-navbar="top">
             <div flex layout="row">
                 <post-timeline flex layout="column" institution="false"
                   user="homeCtrl.user"></post-timeline>
@@ -97,7 +97,7 @@
 <md-fab-speed-dial id="fab-new-post" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
     <md-button aria-label="menu" class="md-fab md-primary" ng-click="homeCtrl.newPost()"
-        md-colors="{background: 'teal-900'}">
+        md-colors="{background: 'light-green-600'}">
       <md-icon>add</md-icon>
     </md-button>
   </md-fab-trigger>

@@ -63,7 +63,7 @@ def create_entity(entity_key):
     entity = {
         "key": entity_key
     }
-    return json.dumps(entity)
+    return entity
 
 
 def send_message_notification(receiver_key, notification_type, entity_key, message, entity=None):
@@ -86,7 +86,7 @@ def send_message_notification(receiver_key, notification_type, entity_key, messa
             'receiver_key': receiver_key,
             'message': message,
             'notification_type': notification_type,
-            'entity': entity
+            'entity': json.dumps(entity)
         }
     )
     

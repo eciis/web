@@ -80,10 +80,11 @@ class LikeHandler(BaseHandler):
                     'entity_key': post.key.urlsafe(),
                     'entity_type': entity_type,
                     'current_institution': user.current_institution.urlsafe(),
-                    'sender_institution_key': post.institution.urlsafe()
+                    'sender_institution_key': post.institution.urlsafe(),
+                    'field': 'subscribers'
                 }
 
-            enqueue_task('post-notification', params)
+            enqueue_task('multiple-notification', params)
 
             is_first_like = post.get_number_of_likes() == 1
             if is_first_like:

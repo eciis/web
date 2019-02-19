@@ -4,6 +4,8 @@ from datetime import datetime
 from google.appengine.ext import ndb
 from custom_exceptions import FieldException
 from models import Address
+from custom_exceptions import NotAllowedException
+from service_messages import create_message
 
 __all__ = ['Event']
 
@@ -78,6 +80,8 @@ class Event(ndb.Model):
     # Local of the event
     local = ndb.StringProperty(required=True)
 
+    followers = ndb.KeyProperty(kind="User", repeated=True)
+
     def isValid(self, is_patch=False):
         """Check if is valid event."""
         date_now = datetime.today()
@@ -127,6 +131,7 @@ class Event(ndb.Model):
         event.end_time = datetime.strptime(
             data.get('end_time'), "%Y-%m-%dT%H:%M:%S")
         event.address = Address.create(data.get('address'))
+        event.followers.append(author.key)
 
         event.isValid()
 
@@ -161,7 +166,8 @@ class Event(ndb.Model):
             'author_key': event.author_key.urlsafe(),
             'institution_key': event.institution_key.urlsafe(),
             'key': event.key.urlsafe(),
-            'institution_acronym': event.institution_acronym
+            'institution_acronym': event.institution_acronym,
+            'followers': [key.urlsafe() for key in event.followers]
         }
 
     def __setattr__(self, attr, value):
@@ -177,3 +183,46 @@ class Event(ndb.Model):
         if is_attr_data and not is_value_datetime:
             value = datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
         super(Event, self).__setattr__(attr, value)
+    
+    def add_follower(self, user):
+        """Add a subscriber."""
+        is_active = user.state == 'active'
+        is_not_a_follower = not user.key in self.followers 
+
+        if is_active and is_not_a_follower:
+            self.followers.append(user.key)
+            self.put()
+        else:
+            raise NotAllowedException("%s" %(not is_active and "The user is not active"
+                or not is_not_a_follower and "The user is a follower yet"))
+            
+
+    def remove_follower(self, user):
+        """Remove a subscriber."""
+        is_a_follower = user.key in self.followers
+        is_not_the_author = self.author_key != user.key
+
+        if is_a_follower and is_not_the_author:
+            self.followers.remove(user.key)
+            self.put()
+        else:
+            raise NotAllowedException("%s" %(not is_a_follower and 'The user is not a follower' 
+                or not is_not_the_author and "The user is the author"))
+    
+    def create_notification_message(self, user_key, current_institution_key, sender_institution_key=None):
+        """ Create message that will be used in notification.
+            user_key -- The user key that made the action.
+            current_institution_key -- The institution that user was in the moment that made the action.
+            sender_institution_key -- The institution by which the post was created,
+                if it hasn't been defined yet, the sender institution should be the current institution. 
+        """
+        return create_message(
+            sender_key= user_key,
+            current_institution_key=current_institution_key,
+            sender_institution_key=sender_institution_key or current_institution_key
+        )
+    
+    def __getitem__(self, key):
+        if key in self.to_dict():
+            return self.to_dict()[key]
+        super(Event, self).__getitem__(attr, value)

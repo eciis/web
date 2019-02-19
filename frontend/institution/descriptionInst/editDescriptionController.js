@@ -1,27 +1,29 @@
 (function(){
     const app = angular.module('app');
 
-    app.controller("EditDescriptionController", function EditDescriptionController(institution, InstitutionService,
-        ObserverRecorderService, $rootScope, $mdDialog){
+    app.controller("EditDescriptionController",['institution', 'InstitutionService',
+        '$rootScope', '$mdDialog', function EditDescriptionController(institution, InstitutionService,
+        $rootScope, $mdDialog){
         const descriptionCtrl = this;
-        let observer;
     
         descriptionCtrl.$onInit = () => {
             descriptionCtrl.institution = institution;
-            observer = ObserverRecorderService.register(descriptionCtrl.institution);
+            descriptionCtrl.institutionClone = _.cloneDeep(institution);
         };
 
         /** Save changes of institution and emit event. 
          */
         descriptionCtrl.save = () => {
-            const patch = ObserverRecorderService.generate(observer);
+            let clone = JSON.parse(angular.toJson(descriptionCtrl.institutionClone));
+            let modified = JSON.parse(angular.toJson(descriptionCtrl.institution));
+            const patch = jsonpatch.compare(clone, modified);
+            
             InstitutionService.update(descriptionCtrl.institution.key, patch).then(
                 function success() {
-                    console.log("-------------------------")
                     $rootScope.$emit('EDIT_DESCRIPTION_INST');
                     $mdDialog.hide();
                 }
             );
         }    
-    });
+    }]);
 })();

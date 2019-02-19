@@ -13,7 +13,7 @@
             })
         };
 
-        /** Listenner edit description inst event, and should refrash institution.
+        /** Listenner edit description inst event, and should refresh institution.
          */
         $rootScope.$on('EDIT_DESCRIPTION_INST', () => {
             descriptionCtrl.isLoading = true;

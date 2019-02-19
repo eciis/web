@@ -3,7 +3,7 @@
 (function () {
     const app = angular.module('app');
 
-    app.directive('hideNavbar', ['$transitions', 'STATES','$state', function($transitions, STATES, $state) {
+    app.directive('hideNavbar', ['$transitions', 'STATES','$state', 'SCREEN_SIZES', function($transitions, STATES, $state, SCREEN_SIZES) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs) {
@@ -70,7 +70,7 @@
                     const hideTop = attrs.hideNavbar === "top" || hideBoth;
                     const hideBottom = attrs.hideNavbar === "bottom" || hideBoth;
 
-                    if(Utils.isMobileScreen(450)){
+                    if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)){
                         const content = element[0];
                         const limitScrol =  30;
     

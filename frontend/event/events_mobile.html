@@ -22,8 +22,15 @@
             ng-click="eventCtrl.goToEvent(event)">
                 <md-card>
                   <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
-                    <img ng-class="event.photo_url ? 'event-preview-image' : 'event-preview-without-image'"
+                    <img ng-if="event.state !== 'deleted'" ng-class="event.photo_url ? 'event-preview-image' : 'event-preview-without-image'"
                     md-colors="{background: eventCtrl.getProfileColor(event)+'-500'}" class="md-card-image" ng-src="{{event.photo_url}}">
+                    <div ng-if="event.state === 'deleted'" class="event-preview-image md-card-image"
+                    md-colors="{background: eventCtrl.getProfileColor(event)+'-700'}">
+                       <span layout="row">
+                        <md-icon class="event-canceled-icon">highlight_off</md-icon>
+                        <h5 class="event-canceled-tag">ESTE EVENTO FOI CANCELADO</h5>
+                      </span> 
+                    </div>
                     <div class="highlight">
                         <div class="event-title">
                           <b>{{ event.title | uppercase}}</b>

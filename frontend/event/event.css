@@ -523,6 +523,16 @@
         color:#009688;
     }
 
+    .event-canceled-tag, .event-canceled-icon {
+        color: white;
+
+    }
+
+    .event-canceled-tag {
+        margin-right: 2em;
+        margin-left: -1em;
+    }
+
     @media screen and (min-height: 600px) {
         .event-links-fields {
             max-height: 13em;

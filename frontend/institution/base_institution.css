@@ -87,6 +87,9 @@
     color: #FFFFFF;
     font-size: 20px;
     margin: 0;
+}
+
+.vert-button-navbar-inst {
     display: inherit !important;
 }
 

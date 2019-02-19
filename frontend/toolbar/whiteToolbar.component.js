@@ -5,22 +5,29 @@
 
     app.component('whiteToolbar', {
         templateUrl: 'app/toolbar/white_toolbar_mobile.html',
-        controller: ['$window', WhiteToolbarController],
+        controller: ['$window', 'SCREEN_SIZES', WhiteToolbarController],
         controllerAs: 'whiteToolbarCtrl',
         bindings: {
             title: '@',
             rightButton: '=',
-            primaryButtonIcon: '@'
+            primaryButtonIcon: '@',
+            titleClass: '@'
         }
     });
 
-    function WhiteToolbarController($window) {
+    function WhiteToolbarController($window, SCREEN_SIZES) {
         const whiteToolbarCtrl = this;
 
         whiteToolbarCtrl.goBack = () => {
             return $window.history.back();
         };
 
-        console.log(whiteToolbarCtrl.rightButton);
+        whiteToolbarCtrl.$onInit = () => {
+            console.log(whiteToolbarCtrl.rightButton);
+        };
+
+        whiteToolbarCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        };
     }
 })();   

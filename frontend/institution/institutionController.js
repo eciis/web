@@ -113,13 +113,14 @@
         function loadTimelineButtonsHeaderMob(){
             institutionCtrl.timelineButtonsHeaderMob =  {
                 goBack: institutionCtrl.goBack,
-                showDescribe: null,
+                goToDescription: institutionCtrl.goToDescription,
                 follow: institutionCtrl.follow,
                 unfollow: institutionCtrl.unfollow,
                 cropImage: institutionCtrl.cropImage,
                 showImageCover: institutionCtrl.showImageCover,
                 requestInvitation: institutionCtrl.requestInvitation,
                 getLimitedName: institutionCtrl.getLimitedName,
+                editDescription: institutionCtrl.editDescription,
                 editRegistrationData: institutionCtrl.editRegistrationData
             }
         }
@@ -196,6 +197,11 @@
             $state.go(STATES.INST_TIMELINE, {institutionKey: instKey});
         };
 
+        institutionCtrl.goToDescription = function goToDescription(institutionKey) {
+            const instKey = institutionKey || currentInstitutionKey;
+            $state.go(STATES.INST_DESCRIPTION, {institutionKey: instKey});
+        };
+
         institutionCtrl.goToMembers = function goToMembers(institutionKey) {
             UtilsService.selectNavOption(STATES.INST_MEMBERS, {institutionKey: institutionKey});
         };
@@ -243,6 +249,18 @@
             PdfService.showPdfDialog(ev, getPortfolioPdfObj());
         };
 
+        institutionCtrl.editDescription = function(ev) {
+            $mdDialog.show({
+                templateUrl: 'app/institution/descriptionInst/edit_description.html',
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    institution: institutionCtrl.institution
+                },
+                controller: 'EditDescriptionController',
+                controllerAs: 'descriptionCtrl'
+            });
+        };
         function getPortfolioPdfObj() {
             return {
                 name: institutionCtrl.institution.name,

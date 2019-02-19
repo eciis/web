@@ -164,6 +164,18 @@
                     }
                 }
             })
+            .state(STATES.INST_DESCRIPTION, {
+                url: "/institution/:institutionKey/description",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/descriptionInst/description_inst.html",
+                        controller: "DescriptionInstController as descriptionCtrl"
+                    }
+                },
+                params: {
+                    institution: undefined
+                }
+            })
             .state(STATES.INST_EVENTS, {
                 url: "/institution/:institutionKey/institution_events",
                 views: {
@@ -515,7 +527,8 @@
      */
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
-            STATES.CREATE_EVENT
+            STATES.CREATE_EVENT,
+            STATES.INST_DESCRIPTION
         ];
 
         $transitions.onStart({

@@ -19,6 +19,12 @@
     padding: 5px;
 }
 
+.base-content-inst{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
 .timeline-z-index{
     z-index: 1;
 }

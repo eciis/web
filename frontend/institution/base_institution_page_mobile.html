@@ -1,4 +1,4 @@
-<md-content layout-align="center" hide-navbar="both" class="hide-scrollbar">
+<md-content layout-align="center" hide-navbar="both" class="hide-scrollbar base-content-inst">
     <div flex layout="column" md-colors="{background: 'grey-50'}">
         <!-- COVER -->
         <div ng-class="institutionCtrl.isTimelineMobile() ? 'cover-inst-mobile': ''">
@@ -27,7 +27,8 @@
 
         <div layout="row" class="timeline-inst">
             <!-- INSTITUTION TIMELINE -->
-            <div layout="row" class="timeline-z-index" flex ui-view="institution_content" layout="column" md-colors="{background: 'grey-50'}"></div>
+            <div layout="row" class="timeline-z-index" flex ui-view="institution_content" layout="column"
+                 md-colors="{background: 'grey-50'}"></div>
         </div>
     </div>
 </md-content>

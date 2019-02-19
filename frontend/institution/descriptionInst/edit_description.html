@@ -1,0 +1,12 @@
+<md-dialog class="height-dialog">
+    <div class="dialog-edit-description">
+        <label id="label-edit-description">Editar descrição</label>    
+        <md-input-container class="md-block margin-zero input-edit-desciption">
+            <textarea ng-model="descriptionCtrl.institution.description"
+                id="textarea-edit-description"></textarea>
+        </md-input-container>
+        <md-button type="submit" ng-click="descriptionCtrl.save()" md-colors="{color: 'default-teal-500'}" class="button-confirm-describe">
+            CONFIRMAR
+        </md-button>
+    </div>
+</md-dialog>

@@ -262,8 +262,10 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
-                            "app/institution/edit_info_mobile.html", 475)
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/manage_institution_page.html",
+                            "app/institution/manageInstitution/menu/manage_institution_menu.html", 475),
+                        controller: "ManageInstMenuController as manageInstMenuCtrl"
                     }
                 }
             })

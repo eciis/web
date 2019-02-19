@@ -248,14 +248,10 @@
         };
 
         function getPortfolioPdfObj() {
-            const pdfObj = {
+            return {
                 name: institutionCtrl.institution.name,
                 url: institutionCtrl.institution.portfolio_url
             };
-
-            console.log(pdfObj);
-
-            return pdfObj;
         }
 
         institutionCtrl.openWebsite = function openWebsite() {

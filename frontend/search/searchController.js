@@ -28,6 +28,7 @@
                 promise.then(function success(response) {
                     searchCtrl.events = response;
                     searchCtrl.loading = true;
+                    console.log(response);
                 });
             } else {
                 promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
@@ -189,7 +190,6 @@
 
         searchCtrl.getCitiesByState = () => {
             searchCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(searchCtrl.selectedFederalState.sigla);
-            //searchCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
         };
 
         function loadBrazilianFederalStates() {

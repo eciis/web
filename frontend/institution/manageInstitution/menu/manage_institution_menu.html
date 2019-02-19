@@ -10,8 +10,7 @@
     <hr class="manage-inst-menu__divider">
 
     <md-button ng-repeat="option in manageInstMenuCtrl.options"
-        class="manage-inst-menu__option"
-        ng-click="option.onClick()">
+        class="manage-inst-menu__option" ng-click="option.onClick()">
         <md-icon>{{option.icon}}</md-icon>
         <b>{{option.description}}</b>
     </md-button>

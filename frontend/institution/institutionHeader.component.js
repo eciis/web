@@ -48,7 +48,7 @@
                 
                 switch($state.current.name) {
                     case STATES.INST_TIMELINE: 
-                    case STATES.MANAGE_INST_EDIT: return limitedInstName;
+                    case STATES.MANAGE_INST_MENU: return limitedInstName;
                     case STATES.INST_REGISTRATION_DATA: return "Dados cadastrais";
                     case STATES.INST_LINKS: return "Vínculos Institucionais";
                     case STATES.INST_MEMBERS: return "Membros";

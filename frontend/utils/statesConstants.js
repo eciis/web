@@ -24,6 +24,7 @@
         INST_LINKS: "app.institution.institutional_links",
         POST: "app.post",
         MANAGE_INST: "app.manage_institution",
+        MANAGE_INST_MENU: "app.manage_institution.menu",
         MANAGE_INST_MEMBERS: "app.manage_institution.members",
         MANAGE_INST_EDIT: "app.manage_institution.edit_info",
         MANAGE_INST_INVITE_INST: "app.manage_institution.invite_inst",

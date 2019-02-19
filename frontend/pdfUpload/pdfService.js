@@ -103,7 +103,13 @@
                 locals: {
                     pdf: pdf
                 },
-                controller: PdfDialogController,
+                controller: [
+                    "$mdDialog",
+                    "PdfService",
+                    "$sce",
+                    "pdf",
+                    PdfDialogController,
+                ],
                 controllerAs: 'ctrl'
             });
         };

@@ -29,6 +29,7 @@
 
         manageInstMenuCtrl.getActionButtons = {
             goBack: () => window.history.back(),
+            showImageCover: () => true
         };
     }
 })();

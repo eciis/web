@@ -3,7 +3,7 @@
 
     var app = angular.module('app');
 
-    app.controller('PdfController', function PdfController($mdDialog) {
+    app.controller('PdfController', function PdfController(PdfService) {
         var pdfCtrl = this;     
 
         pdfCtrl.showFiles = function() {
@@ -13,19 +13,7 @@
 
         pdfCtrl.pdfDialog = function(ev, pdf) {
             if(!pdfCtrl.isEditing) {
-                $mdDialog.show({
-                    templateUrl: Utils.selectFieldBasedOnScreenSize(
-                        'app/post/pdfDialog.html',
-                        'app/post/pdfDialogMobile.html',
-                    ),
-                    targetEvent: ev,
-                    clickOutsideToClose:true,
-                    locals: {
-                        pdf: pdf
-                    },
-                    controller: DialogController,
-                    controllerAs: 'ctrl'
-                });
+                PdfService.showPdfDialog(ev, pdf);
             }
         };
 
@@ -48,30 +36,6 @@
 
         function setPdfURL(url, pdf) {
             pdf.url = url;
-        }
-
-        function DialogController($mdDialog, PdfService, $sce, pdf) {
-            var ctrl = this;
-            ctrl.pdfUrl = "";
-            ctrl.isLoadingPdf = true;
-            ctrl.pdf = pdf;
-
-            function readPdf() {
-                var readablePdf = {};
-                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(function success() {
-                    var trustedUrl = $sce.trustAsResourceUrl(readablePdf.url);
-                    ctrl.pdfUrl = trustedUrl;
-                    ctrl.isLoadingPdf = false;
-                });
-            }
-
-            ctrl.downloadPdf = () => {
-                PdfService.download(ctrl.pdf.url);
-            };
-
-            (function main() {
-                if (!Utils.isMobileScreen()) readPdf();
-            })();
         }
     });
 

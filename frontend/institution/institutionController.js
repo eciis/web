@@ -251,17 +251,19 @@
         };
 
         institutionCtrl.portfolioDialog = function(ev) {
-            $mdDialog.show({
-                templateUrl: 'app/institution/portfolioDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    portfolioUrl: institutionCtrl.portfolioUrl
-                },
-                controller: DialogController,
-                controllerAs: 'ctrl'
-            });
+            PdfService.showPdfDialog(ev, getPortfolioPdfObj());
         };
+
+        function getPortfolioPdfObj() {
+            const pdfObj = {
+                name: institutionCtrl.institution.name,
+                url: institutionCtrl.institution.portfolio_url
+            };
+
+            console.log(pdfObj);
+
+            return pdfObj;
+        }
 
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.institution.website_url;

@@ -80,7 +80,7 @@
                 institutionCtrl.institution = new Institution(response);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
-                getPortfolioUrl();
+                setPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
@@ -123,20 +123,8 @@
             }
         }
 
-        function getPortfolioUrl() {
+        function setPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
-            if(institutionCtrl.portfolioUrl) {
-                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL)
-                    .then(function success() {
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-
-                });
-            }
-        }
-
-        function setPortifolioURL(url) {
-            institutionCtrl.portfolioUrl = url;
         }
 
         institutionCtrl.isAdmin = function isAdmin() {
@@ -368,12 +356,6 @@
             $rootScope.$apply(function () {
                 institutionCtrl.cover_photo = image.src;
             });
-        }
-
-        function DialogController($mdDialog, portfolioUrl) {
-            var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
-            ctrl.portfolioUrl = trustedUrl;
         }
 
         institutionCtrl.getSelectedClass = function (stateName){

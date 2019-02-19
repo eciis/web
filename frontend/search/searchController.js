@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window, STATES) {
+        brCidadesEstados, HttpService, $mdDialog, $window, STATES, $http, EventService) {
 
         var searchCtrl = this;
 
@@ -12,6 +12,7 @@
         // This field allows the controller know when it has to go to the server to make the search.
         searchCtrl.previous_keyword = searchCtrl.search_keyword;
         searchCtrl.institutions = [];
+        searchCtrl.events = [];
         searchCtrl.actuationAreas = [];
         searchCtrl.legalNature = [];
         var actuationAreas;
@@ -20,12 +21,21 @@
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
-            var valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
-            var promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
-            promise.then(function success(response) {
-                searchCtrl.institutions = response;
-                searchCtrl.loading = true;
-            });
+            const valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
+            let promise;
+            if (type === 'event') {
+                promise = EventService.searchEvents(valueOrKeyword, "published", type);
+                promise.then(function success(response) {
+                    searchCtrl.events = response;
+                    searchCtrl.loading = true;
+                });
+            } else {
+                promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
+                promise.then(function success(response) {
+                    searchCtrl.institutions = response;
+                    searchCtrl.loading = true;
+                });
+            }
             return promise;
         };
 
@@ -46,9 +56,9 @@
          * @param {Event} ev : The event that is useful to deal with the mdDialog.
          * When the user isn't in a mobile its value is undefined. 
          */
-        searchCtrl.search = function search(ev) {
+        searchCtrl.search = function search(ev, type) {
             if (searchCtrl.search_keyword) {
-                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, type || 'institution');
 
                 promise.then(() => {
                     if (Utils.isMobileScreen()) {
@@ -171,6 +181,17 @@
             }
         }
 
+        function loadCountries() {
+            $http.get('app/institution/countries.json').then(function success(response) {
+                searchCtrl.countries = response.data;
+            });
+        }
+
+        searchCtrl.getCitiesByState = () => {
+            searchCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(searchCtrl.selectedFederalState.sigla);
+            //searchCtrl.event.address.federal_state = dialogCtrl.selectedFederalState.nome;
+        };
+
         function loadBrazilianFederalStates() {
             searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
         }
@@ -192,6 +213,7 @@
             getLegalNatures();
             loadSearch();
             loadBrazilianFederalStates();
+            loadCountries();
         })();
     });
 })();

@@ -39,5 +39,9 @@
         service.getMonths = function getMonths() {
             return HttpService.get('app/utils/months.json');
         };
+
+        service.searchEvents = function searchEvents(value, state, type) {
+            return HttpService.get(`/api/search/event?value=${value}&state=${state}&type=${type}`);
+        };
     });
 })();

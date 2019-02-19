@@ -6,14 +6,14 @@ from utils import json_response
 import json
 
 from . import BaseHandler
-from search_module import SearchUser
-from search_module import SearchInstitution
+from search_module import SearchUser, SearchInstitution, SearchEvent
 
 __all__ = ['SearchHandler']
 
 SEARCH_TYPES = {
     'institution': SearchInstitution,
-    'user': SearchUser
+    'user': SearchUser,
+    'event': SearchEvent
 }
 
 

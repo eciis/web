@@ -7,58 +7,55 @@
     </div>
     <div layout="column" layout-align="center" class="search-mobile-content">
         <h2 class="search-event-title-margin">Pesquisa avançada</h2>
-        <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
+        <form ng-submit="searchCtrl.search()" layout="column" layout-align="center center">
             <md-input-container class="search-event-input-name search-event-input-margin md-block" md-no-float>
                 <p class="search-event-title">INSTITUIÇÃO</p>
-                <input type="text" class="search-event-input" ng-model="searchCtrl.search_keyword"/>
+                <input type="text" class="search-event-input" ng-model="searchCtrl.search_keyword"
+                placeholder="Digite o nome ou sigla da instituição"/>
             </md-input-container>
+            <md-input-container class="search-event-input-name search-event-input-margin md-block" md-no-float>
+                <p class="search-event-title">DATA DO EVENTO</p>
+                <input mdc-datetime-picker="" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
+                ng-model="searchCtrl.dateOfEvent" class="md-input search-event-input" today-text="Hoje" min-date="null"
+                max-date="null" cancel-text="Cancelar"/>
+            </md-input-container>
+            <div class="search-event-md-select">
+                <p class="search-event-select-menu">PAÍS</p>
+                <md-select ng-model="searchCtrl.country"
+                    class="search-event-input-name">
+                    <md-option class="search-event-select-menu-size"
+                    ng-repeat="country in searchCtrl.countries"
+                    ng-value="country.nome_pais">
+                    {{country.nome_pais}}
+                    </md-option>
+                </md-select>
+            </div>
+            <div class="search-event-md-select">
+                <p class="search-event-select-menu">ESTADO</p>
+                <md-select ng-model="searchCtrl.selectedFederalState"
+                    ng-change="searchCtrl.getCitiesByState()"
+                    class="search-event-input-name">
+                    <md-option ng-repeat="federal_state in searchCtrl.brazilianFederalStates"
+                    ng-value="federal_state" class="search-event-select-menu-size">
+                        {{ federal_state.nome }}
+                    </md-option>
+                </md-select>
+            </div>
+            <div class="search-event-md-select">
+                <p class="search-event-select-menu">MUNICÍPIO</p>
+                <md-select ng-model="searchCtrl.city" class="search-event-input-name"
+                ng-disabled="!searchCtrl.selectedFederalState"/>
+                <md-option ng-repeat="city in searchCtrl.cities" ng-value="city"
+                class="search-event-select-menu-size">{{city}}</md-option>
+                </md-select>
+            </div>
         </form>
-        <div>
-            <p class="search-event-select-menu">DATA DO EVENTO</p>
-            <md-select name="Legal nature" ng-model=""
-                class="search-event-input-name">
-                <md-option ng-repeat=""
-                ng-value="key" class="search-event-select-menu-size">
-                    {{ value }}
-                </md-option>
-            </md-select>
-        </div>
-        <div>
-            <p class="search-event-select-menu">PAÍS</p>
-            <md-select name="Legal nature" ng-model=""
-                class="search-event-input-name">
-                <md-option ng-repeat=""
-                ng-value="key" class="search-event-select-menu-size">
-                    {{ value }}
-                </md-option>
-            </md-select>
-        </div>
-        <div>
-            <p class="search-event-select-menu">ESTADO</p>
-            <md-select name="Legal nature" ng-model=""
-                class="search-event-input-name">
-                <md-option ng-repeat=""
-                ng-value="key" class="search-event-select-menu-size">
-                    {{ value }}
-                </md-option>
-            </md-select>
-        </div>
-        <div>
-            <p class="search-event-select-menu">MUNICÍPIO</p>
-            <md-select name="Legal nature" ng-model=""
-                class="search-event-input-name">
-                <md-option ng-repeat=""
-                ng-value="key" class="search-event-select-menu-size">
-                    {{ value }}
-                </md-option>
-            </md-select>
-        </div>
     </div>
     <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
         <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
             CANCELAR
         </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event)">
+        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event, 'event')">
             PESQUISAR
         </md-button>
     </div>

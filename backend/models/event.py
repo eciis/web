@@ -166,7 +166,7 @@ class Event(ndb.Model):
         }
 
     def _post_put_hook(self, future):
-        """This method is called after each Institution.put()."""
+        """This method is called after each Event.put()."""
         search_event = SearchEvent()
         search_event.createDocument(future.get_result().get())
 

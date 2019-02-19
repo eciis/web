@@ -43,6 +43,7 @@ class SearchEvent(SearchDocument):
 
             content = {
                 'id': event.key.urlsafe(),
+                'state': event.state,
                 'institution_name': event.institution_name,
                 'institution_acronym': event.institution_acronym,
                 'country': event.address and event.address.country,
@@ -55,6 +56,7 @@ class SearchEvent(SearchDocument):
                 # what makes the search easier.
                 doc_id=content['id'],
                 fields=[
+                    search.TextField(name='state', value=content['state']),
                     search.TextField(name='institution_name', value=content['institution_name']),
                     search.TextField(name='institution_acronym', value=content['institution_acronym']),
                     search.TextField(name='country', value=content['country']),

@@ -124,6 +124,10 @@
   width: 96%;
 }
 
+.search-event-md-select {
+  width: 100%;
+}
+
 .search-event-title-margin {
   margin-bottom: 2em;
   margin-left: 0.8em;

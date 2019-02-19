@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service("PdfService", function PdfService($q, $firebaseStorage, $http, $mdDialog) {
+    app.service("PdfService", function PdfService($q, $firebaseStorage, $http, $mdDialog, $window) {
         var service = this;
         var fileFolder = "files/";
         var INDEX_FILE_NAME = 0;
@@ -80,9 +80,7 @@
         };
 
         service.download = function download (url) {
-            var link = document.createElement('a');
-            link.href = url;
-            link.click();
+            $window.open(url);
         };
 
         function isValidPdf(file) {
@@ -127,6 +125,7 @@
 
             ctrl.downloadPdf = () => {
                 PdfService.download(ctrl.pdf.url);
+                $mdDialog.cancel();
             };
 
             (function main() {

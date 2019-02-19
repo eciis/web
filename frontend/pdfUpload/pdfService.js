@@ -131,7 +131,7 @@
 
             ctrl.downloadPdf = () => {
                 PdfService.download(ctrl.pdf.url);
-                $mdDialog.cancel();
+                $mdDialog.hide();
             };
 
             (function main() {

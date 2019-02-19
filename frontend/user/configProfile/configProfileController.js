@@ -24,6 +24,7 @@
 
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
+            configProfileCtrl.toolbarItems();
         }
 
         configProfileCtrl._setupUser = () => {
@@ -196,9 +197,5 @@
             });
             return promise;
         }
-
-        configProfileCtrl.$onInit = () => {
-            configProfileCtrl.toolbarItems();
-        };
     };
 })();

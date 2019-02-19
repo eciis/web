@@ -42,6 +42,7 @@
             promise.then(function success() {
                 MessageService.showToast('Evento removido com sucesso!');
                 eventCtrl.event.state = "deleted";
+                $state.go(STATES.EVENTS);
             });
             return promise;
         }

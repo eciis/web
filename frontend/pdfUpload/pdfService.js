@@ -97,8 +97,8 @@
         service.showPdfDialog = function showPdfDialog (ev, pdf) {
             $mdDialog.show({
                 templateUrl: Utils.selectFieldBasedOnScreenSize(
-                    'app/post/pdfDialog.html',
-                    'app/post/pdfDialogMobile.html'
+                    'app/pdfUpload/pdfDialog.html',
+                    'app/pdfUpload/pdfDialogMobile.html'
                 ),
                 targetEvent: ev,
                 clickOutsideToClose:true,

@@ -22,11 +22,8 @@
             return $window.history.back();
         };
 
-        whiteToolbarCtrl.$onInit = () => {
-            console.log(whiteToolbarCtrl.rightButton);
-        };
-
         whiteToolbarCtrl.isMobileScreen = () => {
+            console.log(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE));
             return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         };
     }

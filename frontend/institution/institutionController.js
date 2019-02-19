@@ -251,7 +251,12 @@
         };
 
         institutionCtrl.portfolioDialog = function(ev) {
-            PdfService.showPdfDialog(ev, getPortfolioPdfObj());
+            const portfolio = getPortfolioPdfObj();
+            if (_.isNil(portfolio.url)) {
+                $state.go(STATES.ERROR);
+            } else {
+                PdfService.showPdfDialog(ev, portfolio);
+            }
         };
 
         function getPortfolioPdfObj() {

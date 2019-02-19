@@ -57,3 +57,9 @@
         height: 18em;
     }
 }
+
+@media screen and (min-height:700px){
+    .input-edit-desciption{
+        height: 26em;
+    }
+}

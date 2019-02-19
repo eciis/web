@@ -58,7 +58,8 @@
                     'label': 'PORTFOLIO',
                     'icon': 'description',
                     'onClick': institutionCtrl.portfolioDialog,
-                    'parameters': '$event'
+                    'parameters': '$event',
+                    'isDisabled': _.isNil(institutionCtrl.portfolioUrl)
                 },
                 { 
                     'label': 'SEGUIDORES',
@@ -80,7 +81,7 @@
                 institutionCtrl.institution = new Institution(response);
                 checkIfUserIsFollower();
                 institutionCtrl.checkIfUserIsMember();
-                getPortfolioUrl();
+                setPortfolioUrl();
                 getActuationArea();
                 getLegalNature();
                 institutionCtrl.isLoadingData = false;
@@ -124,20 +125,8 @@
             }
         }
 
-        function getPortfolioUrl() {
+        function setPortfolioUrl() {
             institutionCtrl.portfolioUrl = institutionCtrl.institution.portfolio_url;
-            if(institutionCtrl.portfolioUrl) {
-                PdfService.getReadableURL(institutionCtrl.portfolioUrl, setPortifolioURL)
-                    .then(function success() {
-                }, function error(response) {
-                    MessageService.showToast(response.data.msg);
-
-                });
-            }
-        }
-
-        function setPortifolioURL(url) {
-            institutionCtrl.portfolioUrl = url;
         }
 
         institutionCtrl.isAdmin = function isAdmin() {
@@ -257,16 +246,7 @@
         };
 
         institutionCtrl.portfolioDialog = function(ev) {
-            $mdDialog.show({
-                templateUrl: 'app/institution/portfolioDialog.html',
-                targetEvent: ev,
-                clickOutsideToClose:true,
-                locals: {
-                    portfolioUrl: institutionCtrl.portfolioUrl
-                },
-                controller: DialogController,
-                controllerAs: 'ctrl'
-            });
+            PdfService.showPdfDialog(ev, getPortfolioPdfObj());
         };
 
         institutionCtrl.editDescription = function(ev) {
@@ -281,6 +261,12 @@
                 controllerAs: 'descriptionCtrl'
             });
         };
+        function getPortfolioPdfObj() {
+            return {
+                name: institutionCtrl.institution.name,
+                url: institutionCtrl.institution.portfolio_url
+            };
+        }
 
         institutionCtrl.openWebsite = function openWebsite() {
             var website = institutionCtrl.institution.website_url;
@@ -380,12 +366,6 @@
             $rootScope.$apply(function () {
                 institutionCtrl.cover_photo = image.src;
             });
-        }
-
-        function DialogController($mdDialog, portfolioUrl) {
-            var ctrl = this;
-            var trustedUrl = $sce.trustAsResourceUrl(portfolioUrl);
-            ctrl.portfolioUrl = trustedUrl;
         }
 
         institutionCtrl.getSelectedClass = function (stateName){

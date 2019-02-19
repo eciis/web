@@ -4,7 +4,8 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
-        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS, STATES, EventService) {
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, 
+        POST_EVENTS, STATES, EventService, SCREEN_SIZES) {
 
         var postDetailsCtrl = this;
 
@@ -548,6 +549,13 @@
             var isNotDeletedOrHasComments = !postDetailsCtrl.isDeleted() || hasComments;
             var color = condition && isNotDeletedOrHasComments ? 'light-green' : 'grey';
             return {background: color};
+        };
+
+        /**
+         * Checks if the application is being used by a mobile device.
+         */
+        postDetailsCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
         };
 
         function adjustText(text){

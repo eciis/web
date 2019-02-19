@@ -118,7 +118,7 @@
 
             function readPdf() {
                 var readablePdf = {};
-                service.getReadableURL(pdf.url, setPdfURL, readablePdf).then(function success() {
+                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(function success() {
                     var trustedUrl = $sce.trustAsResourceUrl(readablePdf.url);
                     ctrl.pdfUrl = trustedUrl;
                     ctrl.isLoadingPdf = false;

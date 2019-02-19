@@ -87,6 +87,7 @@
     color: #FFFFFF;
     font-size: 20px;
     margin: 0;
+    display: inherit !important;
 }
 
 .institution-button-menu{
@@ -110,7 +111,7 @@
 #buttons-navbar-inst-container-end{
     padding-top: 5px;
     display: grid;
-    grid-template-columns: 107px auto auto;
+    grid-template-columns: min-content auto min-content;
     align-items: center;
     justify-content: end;
     overflow-x:hidden;
@@ -132,7 +133,6 @@
 #btn-more{
     margin: 0;
     padding: 0;
-    width: 48px;
 }
 
 #btn-edit{

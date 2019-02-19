@@ -14,8 +14,8 @@
         /** Save changes of institution and emit event. 
          */
         descriptionCtrl.save = () => {
-            let clone = JSON.parse(angular.toJson(descriptionCtrl.institutionClone));
-            let modified = JSON.parse(angular.toJson(descriptionCtrl.institution));
+            const clone = JSON.parse(angular.toJson(descriptionCtrl.institutionClone));
+            const modified = JSON.parse(angular.toJson(descriptionCtrl.institution));
             const patch = jsonpatch.compare(clone, modified);
             
             InstitutionService.update(descriptionCtrl.institution.key, patch).then(

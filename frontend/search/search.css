@@ -6,10 +6,11 @@
   width: 100%;
   font-size: 20px;
   z-index: 2;
+  overflow: hidden;
 }
 
 .search-mobile-content {
-  margin-top: 85px;
+  overflow: hidden;
 }
 
 .search-mobile-content form {

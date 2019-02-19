@@ -181,6 +181,14 @@
             window.history.back();
         };
 
+        configProfileCtrl.toolbarItems = () => {
+            configProfileCtrl.saveButton = {
+                class: 'config-profile__toolbar--save',
+                action: configProfileCtrl.finish,
+                name: 'SALVAR'
+            };
+        };        
+
         function deleteUser() {
             const promise = UserService.deleteAccount();
             promise.then(function success() {
@@ -188,5 +196,9 @@
             });
             return promise;
         }
+
+        configProfileCtrl.$onInit = () => {
+            configProfileCtrl.toolbarItems();
+        };
     };
 })();

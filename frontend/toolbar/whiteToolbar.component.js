@@ -8,7 +8,9 @@
         controller: ['$window', WhiteToolbarController],
         controllerAs: 'whiteToolbarCtrl',
         bindings: {
-            title: '@'
+            title: '@',
+            rightButton: '=',
+            primaryButtonIcon: '@'
         }
     });
 
@@ -18,5 +20,7 @@
         whiteToolbarCtrl.goBack = () => {
             return $window.history.back();
         };
+
+        console.log(whiteToolbarCtrl.rightButton);
     }
 })();   

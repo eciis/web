@@ -1,9 +1,15 @@
-<div class="white-toolbar-mobile" layout="row" layout-align="start center">
-    <md-button class="md-icon-button" ng-click="whiteToolbarCtrl.goBack()" 
-        style="grid-row-start: 1; grid-row-start: 2; align-self: center;">
-        <md-icon style="font-size: 2.5em;">keyboard_arrow_left</md-icon>
+<div class="white-toolbar-mobile">
+    <md-button class="md-icon-button" ng-click="whiteToolbarCtrl.goBack()">
+        <md-icon class="tst">{{whiteToolbarCtrl.primaryButtonIcon}}</md-icon>
     </md-button>
-    <div style="grid-row-start: 2; grid-row-end: 3;">
+    <div style="grid-column-start: 2; grid-column-end: 3;">
         <b>{{whiteToolbarCtrl.title}}</b>
     </div>
+    <md-button aria-label="rightButton" ng-if="whiteToolbarCtrl.rightButton" ng-click="whiteToolbarCtrl.rightButton['action']()" 
+        ng-class="whiteToolbarCtrl.rightButton['class']">
+        <span ng-if="whiteToolbarCtrl.rightButton['name']"></span>
+        <md-icon ng-if="whiteToolbarCtrl.rightButton['icon']">
+            {{whiteToolbarCtrl.rightButton[icon]}}
+        </md-icon>
+    </md-button>
 </div>

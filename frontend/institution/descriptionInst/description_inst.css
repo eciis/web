@@ -1,17 +1,21 @@
 #textarea-edit-description{
-    height: 20em !important;
+    height: 100% !important;
     border-style: solid;
     border-width: 1px;
     border-color: black;
     border-radius: 5px;
     padding: 0.5em;
-    margin-top: 0.7em;
+    overflow-y: scroll;
 }
 
 #label-edit-description{
     font-weight: bold;
     font-size: 25px;
     color:black;
+}
+
+.height-dialog{
+    max-height: 90%;
 }
 
 .description-inst{
@@ -28,27 +32,28 @@
 .dialog-edit-description{
     padding: 2em 1em 1em 1em;
     display: grid;
-    grid-template-rows: 2.5em 22em 3.5em;
+    grid-template-rows: 2.5em 1fr 3.5em;
     width: 16em;
+    height: 100%;
 }
 
 .margin-zero{
     margin: 0px;
 }
 
-@media screen and (max-height: 580px) and (max-width: 325px){
-    .dialog-edit-description{
-        grid-template-rows: 1.5em 20em 3em;
-        width: 13em;
-    }
-    #textarea-edit-description{
-        height: 18.5em !important;
-    }
+.input-edit-desciption .md-resize-wrapper{
+    height: 100%;
 }
 
-@media screen and (min-height: 580px) and (max-height:680px) and (max-width: 365px){
+.input-edit-desciption{
+    height: 22em;
+}
+
+@media screen and (max-height:570px){
     .dialog-edit-description{
-        grid-template-rows: 2em 21em 3em;
-        width: 15em;
-    }   
+        width: 14em;
+    }
+    .input-edit-desciption{
+        height: 18em;
+    }
 }

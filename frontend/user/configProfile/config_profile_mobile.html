@@ -1,17 +1,7 @@
-<md-toolbar id="config-profile__toolbar" ng-if="configProfileCtrl.canEdit()">
-    <div class="md-toolbar-tools">
-        <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
-            <md-icon>close</md-icon>
-        </md-button>
-        <span class="config-profile__toolbar__title">MEU PERFIL</span>
-        <md-button class="config-profile__toolbar--save" ng-click="configProfileCtrl.finish()"
-            ng-disabled="configProfileCtrl.loadingSubmission">
-            SALVAR
-        </md-button>
-    </div>
-</md-toolbar>
+<white-toolbar title="MEU PERFIL" primary-button-icon="keyboard_arrow_left" 
+    right-button="configProfileCtrl.saveButton"></white-toolbar>
 
-<md-content class="config-profile__container custom-scrollbar">
+<md-content class="config-profile__container hide-scrollbar-mobile">
     <div class="config-profile__header">
         <div class="config-profile__header--background">
             <div class="config-profile__header--shadow" ng-if="!configProfileCtrl.canEdit()">

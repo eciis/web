@@ -1,0 +1,34 @@
+<div class="white-toolbar-mobile" ng-if="whiteToolbarCtrl.isMobileScreen()">
+    <md-button class="md-icon-button" ng-click="whiteToolbarCtrl.goBack()">
+        <md-icon class="toolbar-icon-alignment">{{whiteToolbarCtrl.primaryButtonIcon}}</md-icon>
+    </md-button>
+    <div class="white-toolbar-title-container"
+        ng-class="whiteToolbarCtrl.titleClass">
+        <b>{{whiteToolbarCtrl.title}}</b>
+    </div>
+    <md-button aria-label="rightButton" ng-if="whiteToolbarCtrl.rightButton" 
+        ng-click="whiteToolbarCtrl.rightButton['action']()" 
+        ng-class="whiteToolbarCtrl.rightButton['class']" ng-disabled="!whiteToolbarCtrl.rightButton['isAvailable']()">
+        <span ng-if="whiteToolbarCtrl.rightButton['name']">{{whiteToolbarCtrl.rightButton.name}}</span>
+        <md-icon ng-if="whiteToolbarCtrl.rightButton['icon']">
+            {{whiteToolbarCtrl.rightButton.icon}}
+        </md-icon>
+    </md-button>
+    <div ng-if="whiteToolbarCtrl.menuOptions" class="white-toolbar-menu-button">
+        <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                <md-icon class="toolbar-icon-alignment">more_vert</md-icon>
+            </md-button>
+            <md-menu-content>
+                <md-menu-item ng-repeat="option in whiteToolbarCtrl.menuOptions" ng-click="option.action()">
+                    <div>
+                        <md-icon>
+                            {{option.icon}}
+                        </md-icon>
+                        <span class="white-toolbar-menu-option-title">{{option.title}}</span>
+                    </div>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
+</div>

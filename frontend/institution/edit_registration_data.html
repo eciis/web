@@ -1,9 +1,6 @@
-<div layout="row" class="edit-registration-data-top-bar">
-    <md-button class="md-icon-button edit-registration-back-button" ng-click="configInstCtrl.previousPage()">
-        <md-icon class="edit-registration-top-icon">keyboard_arrow_left</md-icon>
-    </md-button>
-    <h3 class="edit-registration-top-color">EDITAR DADOS CADASTRAIS</h3>
-</div>
+<white-toolbar title="EDITAR DADOS CADASTRAIS" primary-button-icon="keyboard_arrow_left" 
+    title-class="edit-inst-toolbar-title" class="edit-registration-data-top-bar"></white-toolbar>
+
 <div ng-if="!configInstCtrl.loading" class="edit-registration-img-margin">
     <div class="avatar" align="center">
         <md-button md-colors="{background: 'default-teal-500'}"

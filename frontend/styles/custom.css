@@ -952,7 +952,8 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
     font-size: 10px;
   }
 
-md-input-container:not(.md-input-invalid).md-input-has-value .inputEmail {
+md-input-container:not(.md-input-invalid).md-input-focused .green-input,
+    md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused .green-input {
     border-color:#009688;
     border-width: 0 0 2px;
 }

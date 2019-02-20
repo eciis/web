@@ -1,8 +1,8 @@
 <white-toolbar title="EDITAR DADOS CADASTRAIS" primary-button-icon="keyboard_arrow_left" 
-    title-class="edit-inst-toolbar-title"></white-toolbar>
+    title-class="edit-inst-toolbar-title" class="edit-registration-data-top-bar"></white-toolbar>
 
-<div ng-if="!configInstCtrl.loading" class="edit-registration-img-margin custom-scrollbar" style="overflow: scroll; height: 100%;">
-    <div class="avatar" align="center"  style="overflow: scroll;">
+<div ng-if="!configInstCtrl.loading" class="edit-registration-img-margin">
+    <div class="avatar" align="center">
         <md-button md-colors="{background: 'default-teal-500'}"
             ng-click="null" class="md-fab edit-registration-img-button"
             ng-model="configInstCtrl.file" ngf-pattern="'image/*'"

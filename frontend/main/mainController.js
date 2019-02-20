@@ -143,8 +143,10 @@
             AuthService.reload();
         };
 
+        /** Should update version, refresh user and reload the page.
+         */
         mainCtrl.updateVersion = function updateVersion() {
-            AuthService.reload();
+            mainCtrl.refreshUser();
             $window.location.reload();
         };
 

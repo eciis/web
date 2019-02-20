@@ -88,7 +88,10 @@
                             "app/event/events_mobile.html", 475),
                         controller: "EventController as eventCtrl",
                     }
-                }
+                },
+                params: {
+                    institution: {},
+                },
             })
             .state(STATES.CREATE_EVENT, {
                 url: "/create_event/:eventKey",

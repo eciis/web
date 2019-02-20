@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES, InstitutionService) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -269,6 +269,10 @@
 
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
+            eventCtrl.institution = $state.params.institution;
+
+            ensureInstitution();
+
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths().then(() => {
                     eventCtrl.setupToolbarFields();
@@ -277,5 +281,13 @@
                 eventCtrl.loadMoreEvents();
             }
         };
+
+        function ensureInstitution() {
+            if (_.isEmpty(eventCtrl.institution) && !_.isNil(eventCtrl.institutionKey)) {
+                InstitutionService.getInstitution(eventCtrl.institutionKey).then((institution) => {
+                    eventCtrl.institution = institution;
+                });
+            }
+        }
     });
 })();

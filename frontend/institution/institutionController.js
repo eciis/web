@@ -213,7 +213,7 @@
         };
 
         function goToEventsMobile(institutionKey) {
-            UtilsService.selectNavOption(STATES.EVENTS,{institutionKey: institutionKey});
+            UtilsService.selectNavOption(STATES.EVENTS,{institutionKey: institutionKey, institution: institutionCtrl.institution});
         }
 
         function goToEventsDesktop(institutionKey) {

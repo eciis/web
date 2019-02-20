@@ -282,8 +282,8 @@
 
         function getCurrentInstitution() {
             if (!_.isNil(eventCtrl.institutionKey)) {
-                InstitutionService.getInstitution(eventCtrl.institutionKey).then((institution) => {
-                    eventCtrl.institution = institution;
+                InstitutionService.getInstitution(eventCtrl.institutionKey).then((institutionData) => {
+                    eventCtrl.institution = new Institution(institutionData);
                 });
             }
         }

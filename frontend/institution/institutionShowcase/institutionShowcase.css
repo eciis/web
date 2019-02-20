@@ -1,0 +1,29 @@
+.institution-showcase {
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: max-content max-content;
+    grid-template-areas:
+            'avatar name'
+            'avatar text';
+    grid-gap: 0 0.6rem;
+    padding: 0.6rem;
+    align-items: center;
+}
+
+.institution-showcase__avatar {
+    grid-area: avatar;
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+}
+
+.institution-showcase__name {
+    grid-area: name;
+    line-height: 1rem;
+}
+
+.institution-showcase__text {
+    grid-area: text;
+    font-size: 0.8em;
+    line-height: 1rem;
+}

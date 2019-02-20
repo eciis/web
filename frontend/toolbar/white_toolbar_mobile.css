@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-.tst {
+.toolbar-icon-alignment {
     font-size: 2.5em;
     line-height: inherit !important;
 }
@@ -20,4 +20,11 @@
   font-size: 0.8em;
   word-break: normal;
   grid-column-end: 4 !important;
+}
+
+.white-toolbar-menu-button {
+  grid-column-start: 3; 
+  grid-column-end: 4; 
+  justify-self: end; 
+  align-self: center;
 }

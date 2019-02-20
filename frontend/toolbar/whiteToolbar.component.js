@@ -12,7 +12,8 @@
             title: '@',
             rightButton: '=',
             primaryButtonIcon: '@',
-            titleClass: '@'
+            titleClass: '@',
+            menuOptions: '='
         }
     });
 

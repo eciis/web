@@ -1,6 +1,6 @@
 <div class="white-toolbar-mobile" ng-if="whiteToolbarCtrl.isMobileScreen()">
     <md-button class="md-icon-button" ng-click="whiteToolbarCtrl.goBack()">
-        <md-icon class="tst">{{whiteToolbarCtrl.primaryButtonIcon}}</md-icon>
+        <md-icon class="toolbar-icon-alignment">{{whiteToolbarCtrl.primaryButtonIcon}}</md-icon>
     </md-button>
     <div style="grid-column-start: 2; grid-column-end: 3;" 
         ng-class="whiteToolbarCtrl.titleClass">
@@ -13,4 +13,21 @@
             {{whiteToolbarCtrl.rightButton.icon}}
         </md-icon>
     </md-button>
+    <div ng-if="whiteToolbarCtrl.menuOptions" class="white-toolbar-menu-button">
+        <md-menu>
+            <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
+                <md-icon class="toolbar-icon-alignment">more_vert</md-icon>
+            </md-button>
+            <md-menu-content style="width: 100%;">
+                <md-menu-item ng-repeat="option in whiteToolbarCtrl.menuOptions" ng-click="option.action()">
+                    <div>
+                        <md-icon>
+                            {{option.icon}}
+                        </md-icon>
+                        <span style="margin-left: 0.5em;">{{option.title}}</span>
+                    </div>
+                </md-menu-item>
+            </md-menu-content>
+        </md-menu>
+    </div>
 </div>

@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
+    let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar, $window;
     let authService, requestInvitationService, notificationListenerService, utilsService;
     
     const user = {
@@ -78,7 +78,6 @@
         spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
         spyOn(NotificationListenerService, 'multipleEventsListener').and.callFake(eventsListenerFake);
-
 
         authService.login(user);
 
@@ -211,6 +210,17 @@
     });
 
     describe('refreshUser', () => {
+        it('should call reload()', () => {
+            spyOn(authService, 'reload');
+            mainCtrl.refreshUser();
+            expect(authService.reload).toHaveBeenCalled();
+        });
+    });
+
+    describe('updateVersion', () => {
+        beforeAll(() => {
+            $window = jasmine.createSpy('$window');
+        });
         it('should call reload()', () => {
             spyOn(authService, 'reload');
             mainCtrl.refreshUser();

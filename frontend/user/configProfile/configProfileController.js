@@ -25,7 +25,7 @@
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
             configProfileCtrl.setSaveButton();
-        }
+        };
 
         configProfileCtrl._setupUser = () => {
             if(configProfileCtrl.canEdit()) {

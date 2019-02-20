@@ -1,0 +1,10 @@
+.manage-members {
+    display: grid;
+    grid-template-rows: 6em auto 1em;
+}
+
+.manage-members__cards {
+    grid-row-start: 2;
+    display: grid;
+    grid-row-gap: 1em;
+}

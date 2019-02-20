@@ -8,7 +8,7 @@
     <div layout="row" layout-align="center" class="search-mobile-content">
         <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
             <md-input-container class="search-mobile-input" md-no-float>
-                <input placeholder="Pesquisar" ng-model="searchCtrl.search_keyword">
+                <input placeholder="Pesquisar" ng-model="searchCtrl.search_keyword" ng-change="searchCtrl.setHasChanges()">
                 <label class="md-no-float">
                     <md-icon>search</md-icon>
                 </label>
@@ -47,7 +47,8 @@
         <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
             CANCELAR
         </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event)">
+        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search()"
+            ng-disabled="!searchCtrl.hasChanges">
             PESQUISAR
         </md-button>
     </div>

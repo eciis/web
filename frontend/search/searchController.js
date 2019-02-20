@@ -17,6 +17,7 @@
         var actuationAreas;
         var legalNatures;
         searchCtrl.loading = false;
+        searchCtrl.hasChanges = false;
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
@@ -25,8 +26,17 @@
             promise.then(function success(response) {
                 searchCtrl.institutions = response;
                 searchCtrl.loading = true;
+                searchCtrl.hasChanges = true;
             });
             return promise;
+        };
+
+        searchCtrl.setHasChanges = () => {
+            if(searchCtrl.search_keyword)
+                searchCtrl.hasChanges = true;
+            else {
+                searchCtrl.hasChanges = false;
+            }  
         };
 
         searchCtrl.clearFilters = function clearFilters() {
@@ -58,6 +68,8 @@
                 refreshPreviousKeyword();
 
                 return promise;
+            } else {
+                searchCtrl.showSearchFromMobile('$event');
             }
         };
 

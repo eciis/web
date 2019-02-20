@@ -479,8 +479,9 @@
     app.directive("configInstitution", function() {
         return {
             restrict: 'E',
-            templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/submit_form.html",
-                "app/institution/edit_registration_data.html", 475),
+            templateUrl: Utils.selectFieldBasedOnScreenSize(
+                "app/institution/manageInstitution/configInstitution/submit_form.html",
+                "app/institution/manageInstitution/configInstitution/edit_registration_data.html", 475),
             controller: "ConfigInstController",
             controllerAs: "configInstCtrl",
             scope: {},

@@ -253,7 +253,7 @@
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/management_members.html",
+                        templateUrl: "app/institution/manageInstitution/manageMembers/management_members.html",
                         controller: "ManagementMembersController as manageMemberCtrl"
                     }
                 }
@@ -272,8 +272,8 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
-                            "app/institution/edit_info.html",
-                            "app/institution/edit_info_mobile.html", 
+                            "app/institution/manageInstitution/editInfo/edit_info.html",
+                            "app/institution/manageInstitution/editInfo/edit_info_mobile.html", 
                             SCREEN_SIZES.SMARTPHONE
                         )
                     }

@@ -603,6 +603,6 @@
     }
 
     (function main() {
-        // initServiceWorker();
+        initServiceWorker();
     })();
 })();

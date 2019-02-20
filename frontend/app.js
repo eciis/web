@@ -89,9 +89,6 @@
                         controller: "EventController as eventCtrl",
                     }
                 },
-                params: {
-                    institution: {},
-                },
             })
             .state(STATES.CREATE_EVENT, {
                 url: "/create_event/:eventKey",

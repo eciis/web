@@ -269,9 +269,7 @@
 
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
-            eventCtrl.institution = $state.params.institution;
-
-            ensureInstitution();
+            getCurrentInstitution();
 
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths().then(() => {
@@ -282,8 +280,8 @@
             }
         };
 
-        function ensureInstitution() {
-            if (_.isEmpty(eventCtrl.institution) && !_.isNil(eventCtrl.institutionKey)) {
+        function getCurrentInstitution() {
+            if (!_.isNil(eventCtrl.institutionKey)) {
                 InstitutionService.getInstitution(eventCtrl.institutionKey).then((institution) => {
                     eventCtrl.institution = institution;
                 });

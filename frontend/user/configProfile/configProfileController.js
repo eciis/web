@@ -189,7 +189,8 @@
             configProfileCtrl.saveButton = {
                 class: 'config-profile__toolbar--save',
                 action: configProfileCtrl.finish,
-                name: 'SALVAR'
+                name: 'SALVAR',
+                isAvailable: () => !configProfileCtrl.loadingSubmission
             };
         };        
 

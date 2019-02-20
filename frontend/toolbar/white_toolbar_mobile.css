@@ -20,6 +20,7 @@
   font-size: 0.8em;
   word-break: normal;
   grid-column-end: 4 !important;
+  text-transform: uppercase;
 }
 
 .white-toolbar-menu-button {
@@ -27,4 +28,17 @@
   grid-column-end: 4; 
   justify-self: end; 
   align-self: center;
+}
+
+.white-toolbar-title-container {
+  grid-column-start: 2; 
+  grid-column-end: 3;
+}
+
+.white-toolbar-menu-option-title {
+  margin-left: 0.5em;
+}
+
+.white-toolbar-menu-content {
+  width: 100%;
 }

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.service("PdfService", function PdfService($q, $firebaseStorage, $http) {
+    app.service("PdfService", function PdfService($q, $firebaseStorage, $http, $mdDialog, $window) {
         var service = this;
         var fileFolder = "files/";
         var INDEX_FILE_NAME = 0;
@@ -79,6 +79,10 @@
             return deferred.promise;
         };
 
+        service.download = function download (url) {
+            $window.open(url);
+        };
+
         function isValidPdf(file) {
             if(file) {
                 var correctType = file.type === PDF_TYPE;
@@ -87,5 +91,57 @@
             }
             return false;
         }
+
+        service.showPdfDialog = function showPdfDialog (ev, pdf) {
+            $mdDialog.show({
+                templateUrl: Utils.selectFieldBasedOnScreenSize(
+                    'app/pdfUpload/pdfDialog.html',
+                    'app/pdfUpload/pdfDialogMobile.html'
+                ),
+                targetEvent: ev,
+                clickOutsideToClose:true,
+                locals: {
+                    pdf: pdf
+                },
+                controller: [
+                    "$mdDialog",
+                    "PdfService",
+                    "$sce",
+                    "pdf",
+                    PdfDialogController,
+                ],
+                controllerAs: 'ctrl'
+            });
+        };
+
+        function PdfDialogController($mdDialog, PdfService, $sce, pdf) {
+            var ctrl = this;
+            ctrl.pdfUrl = "";
+            ctrl.isLoadingPdf = true;
+            ctrl.pdf = pdf;
+
+            function readPdf() {
+                var readablePdf = {};
+                PdfService.getReadableURL(pdf.url, setPdfURL, readablePdf).then(function success() {
+                    var trustedUrl = $sce.trustAsResourceUrl(readablePdf.url);
+                    ctrl.pdfUrl = trustedUrl;
+                    ctrl.isLoadingPdf = false;
+                });
+            }
+
+            ctrl.downloadPdf = () => {
+                PdfService.download(ctrl.pdf.url);
+                $mdDialog.hide();
+            };
+
+            (function main() {
+                if (!Utils.isMobileScreen()) readPdf();
+            })();
+        }
+
+        function setPdfURL(url, pdf) {
+            pdf.url = url;
+        }
+
     });
 })();

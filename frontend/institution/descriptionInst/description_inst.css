@@ -1,0 +1,65 @@
+#textarea-edit-description{
+    height: 100% !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 5px;
+    padding: 0.5em;
+    overflow-y: scroll;
+}
+
+#label-edit-description{
+    font-weight: bold;
+    font-size: 25px;
+    color:black;
+}
+
+.height-dialog{
+    max-height: 90%;
+}
+
+.description-inst{
+    padding: 0px 1.5em;
+    margin-right: auto;
+    word-break: break-all;
+}
+
+.button-confirm-describe{
+    justify-self: end;
+    margin: 0em;
+}
+
+.dialog-edit-description{
+    padding: 2em 1em 1em 1em;
+    display: grid;
+    grid-template-rows: 2.5em 1fr 3.5em;
+    width: 16em;
+    height: 100%;
+}
+
+.margin-zero{
+    margin: 0px;
+}
+
+.input-edit-desciption .md-resize-wrapper{
+    height: 100%;
+}
+
+.input-edit-desciption{
+    height: 22em;
+}
+
+@media screen and (max-height:570px){
+    .dialog-edit-description{
+        width: 14em;
+    }
+    .input-edit-desciption{
+        height: 18em;
+    }
+}
+
+@media screen and (min-height:700px){
+    .input-edit-desciption{
+        height: 26em;
+    }
+}

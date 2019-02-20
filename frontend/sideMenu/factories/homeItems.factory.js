@@ -58,13 +58,13 @@
                 {
                     icon: 'account_balance',
                     description: 'Gerenciar instituição',
-                    stateName: 'MANAGE_INST',
+                    stateName: 'MANAGE_INST_EDIT',
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,
                     onClick: () => {
                         const state = Utils.selectFieldBasedOnScreenSize(
-                            STATES.MANAGE_INST, STATES.MANAGE_INST_MENU, SCREEN_SIZES.SMARTPHONE
+                            STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MENU, SCREEN_SIZES.SMARTPHONE
                         );
                         $state.go(state, {institutionKey: getInstitutionKey()});
                     },

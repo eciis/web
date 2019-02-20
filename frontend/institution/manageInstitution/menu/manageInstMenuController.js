@@ -18,7 +18,6 @@
                 .then(institution => {
                     manageInstMenuCtrl.institution = institution;
                     manageInstMenuCtrl._loadMenuOptions(institution);
-                    console.log(institution);
                 });
         };
 

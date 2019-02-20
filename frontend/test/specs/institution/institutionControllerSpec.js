@@ -258,13 +258,13 @@
         describe('goToEvents', function() {
             it('should call state.go with the right params', function(){
                 spyOn(utilsService, 'selectNavOption');
-                institutionCtrl.posts = posts;
+                institutionCtrl.institution = first_institution;
                 institutionCtrl.goToEvents(first_institution.key);
                 expect(utilsService.selectNavOption).toHaveBeenCalledWith(
-                    states.INST_EVENTS, 
+                    states.EVENTS,
                     {
                         institutionKey: first_institution.key,
-                        posts: posts
+                        institution: first_institution
                     }
                 );
             });

@@ -300,7 +300,7 @@
                     main: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/create_inst_form.html",
                           "app/institution/create_inst_form_mobile.html"),
-                        controller: "ConfigInstController as configInstCtrl"
+                        controller: Utils.selectFieldBasedOnScreenSize("ConfigInstController as configInstCtrl", "CreateInvitedInstitutionController as ctrl"),
                     }
                 },
                 params: {

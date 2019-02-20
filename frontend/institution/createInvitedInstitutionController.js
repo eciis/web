@@ -13,7 +13,7 @@
           };
 
           ctrl.backButton = () => {
-            configInstCtrl.currentStep === 0 ? window.history.back() : ctrl.previousStep();
+            ctrl.currentStep === 0 ? window.history.back() : ctrl.previousStep();
           }
 
           // loadInstitution
@@ -85,6 +85,17 @@
             if (ctrl.currentStep === 0) return;
             ctrl.currentStep -= 1;
           }
+
+          Object.defineProperty(ctrl, 'currentStepLabel', {
+            get: function() {
+              const labels = {
+                0: 'Dados Cadastrais',
+                1: 'Dados da Instituiçao',
+                2: 'Finalizar Cadastro',
+              }
+              return labels[ctrl.currentStep];
+            }
+          })
 
           // main()
           // initController()

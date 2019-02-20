@@ -2,48 +2,48 @@
   <div id="create-inst-content">
     <!-- CONTADOR -->
     <div id='create-inst-form-steps'>
-      <span md-colors='{background: "{{configInstCtrl.stepColor(1)}}"}'><p>{{ 1 }}</p></span>
+      <span md-colors='{background: "{{ctrl.stepColor(0)}}"}'><p>{{ 1 }}</p></span>
       <hr>
-      <span md-colors='{background: "{{configInstCtrl.stepColor(2)}}"}'><p>{{ 2 }}</p></span>
+      <span md-colors='{background: "{{ctrl.stepColor(1)}}"}'><p>{{ 2 }}</p></span>
       <hr>
-      <span md-colors='{background: "{{configInstCtrl.stepColor(3)}}"}'><p>{{ 3 }}</p></span>
+      <span md-colors='{background: "{{ctrl.stepColor(2)}}"}'><p>{{ 3 }}</p></span>
     </div>
     <!-- CARD -->
     <div id='create-inst-card' class='ec-card'>
       <div id='create-inst-card-content'>
-        <h1> {{ configInstCtrl.currentStepLabel }} </h1>
+        <h1> {{ ctrl.currentStepLabel }} </h1>
         <!-- FORMS -->
-        <div id='form-switch' ng-switch='configInstCtrl.currentStep'>
+        <div id='form-switch' ng-switch='ctrl.currentStep'>
           <!-- DADOS CADASTRAIS -->
           <location-form ng-switch-when='0'
-                         parent-ctrl='configInstCtrl'>
+                         parent-ctrl='ctrl'>
           </location-form>
           <!-- DADOS DA INSTITUICAO -->
           <institution-form ng-switch-when='1'
-                         parent-ctrl='configInstCtrl'>
+                         parent-ctrl='ctrl'>
           </institution-form>
           <!-- FINALIZAR CADASTRO -->
           <final-form ng-switch-when='2'
-                         parent-ctrl='configInstCtrl'>
+                         parent-ctrl='ctrl'>
           </final-form>
         </div>
         <!-- PROXIMO / FINALIZAR -->
         <md-button class='md-raised' id='forward-button'
-                   ng-if='configInstCtrl.currentStep !== 2'
+                   ng-if='ctrl.currentStep !== 2'
                    md-colors='{background: "teal-500"}'
-                   ng-click='configInstCtrl.nextStep()'>
+                   ng-click='ctrl.nextStep()'>
           Próximo
         </md-button>
         <md-button class='md-raised' id='forward-button'
-                   ng-if='configInstCtrl.currentStep === 2'
+                   ng-if='ctrl.currentStep === 2'
                    md-colors='{background: "teal-500"}'
-                   ng-click='configInstCtrl.mobileSubmit($event)'>
+                   ng-click='ctrl.mobileSubmit($event)'>
           Finalizar
         </md-button>
         <!-- VOLTAR -->
         <md-button class='md-fab' id='back-button'
                    md-colors='{background: "light-green-500"}'
-                   ng-click='configInstCtrl.backButton()'>
+                   ng-click='ctrl.backButton()'>
           <md-icon>keyboard_arrow_left</md-icon>
         </md-button>
       </div>

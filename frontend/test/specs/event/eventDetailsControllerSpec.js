@@ -2,7 +2,8 @@
 
 (describe('Test EventDetailsController', function () {
 
-    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService, messageService, mdDialog, state, clipboard, q;
+    let eventCtrl, scope, httpBackend, rootScope, deffered, eventService,
+        messageService, mdDialog, state, clipboard, q, states;
 
     const
         splab = { name: 'Splab', key: '098745' },
@@ -38,7 +39,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function ($controller, $httpBackend, $http, $q, AuthService,
-        $rootScope, EventService, MessageService, $mdDialog, $state, ngClipboard) {
+        $rootScope, EventService, MessageService, $mdDialog, $state, ngClipboard, STATES) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         rootScope = $rootScope;
@@ -49,6 +50,7 @@
         state = $state;
         clipboard = ngClipboard;
         q = $q;
+        states = STATES;
         AuthService.login(user);
 
         eventCtrl = $controller('EventDetailsController', {
@@ -74,6 +76,7 @@
     describe('confirmDeleteEvent()', function () {
         beforeEach(function () {
             spyOn(mdDialog, 'confirm').and.callThrough();
+            spyOn(state, 'go').and.callThrough();
             spyOn(mdDialog, 'show').and.callFake(function () {
                 return {
                     then: function (callback) {
@@ -93,6 +96,7 @@
             expect(eventService.deleteEvent).toHaveBeenCalledWith(other_event);
             expect(mdDialog.confirm).toHaveBeenCalled();
             expect(mdDialog.show).toHaveBeenCalled();
+            expect(state.go).toHaveBeenCalledWith(states.EVENTS);
         });
     });
 

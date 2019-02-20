@@ -1,9 +1,10 @@
 'use strict';
 
 (describe('Test MainController', function() {
-    let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar, $window;
+    let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
     let authService, requestInvitationService, notificationListenerService, utilsService;
     
+    const window = {'location': {'reload': function(){}}};
     const user = {
         name: 'user',
         key: 'user-key',
@@ -86,10 +87,12 @@
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+
         createCtrl = function() {
             return $controller('MainController', {
                 scope: scope,
-                AuthService: authService
+                AuthService: authService,
+                $window: window
             });
         };
         mainCtrl = createCtrl();
@@ -218,12 +221,9 @@
     });
 
     describe('updateVersion', () => {
-        beforeAll(() => {
-            $window = jasmine.createSpy('$window');
-        });
         it('should call reload()', () => {
             spyOn(authService, 'reload');
-            mainCtrl.refreshUser();
+            mainCtrl.updateVersion();
             expect(authService.reload).toHaveBeenCalled();
         });
     });

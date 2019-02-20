@@ -24,7 +24,7 @@
 
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
-            configProfileCtrl.toolbarItems();
+            configProfileCtrl.setSaveButton();
         }
 
         configProfileCtrl._setupUser = () => {
@@ -182,7 +182,10 @@
             window.history.back();
         };
 
-        configProfileCtrl.toolbarItems = () => {
+        /**
+         * Sets save button's properties.
+         */
+        configProfileCtrl.setSaveButton = () => {
             configProfileCtrl.saveButton = {
                 class: 'config-profile__toolbar--save',
                 action: configProfileCtrl.finish,

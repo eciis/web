@@ -32,11 +32,7 @@
         };
 
         searchCtrl.setHasChanges = () => {
-            if(searchCtrl.search_keyword)
-                searchCtrl.hasChanges = true;
-            else {
-                searchCtrl.hasChanges = false;
-            }  
+            searchCtrl.hasChanges = Boolean(searchCtrl.search_keyword);
         };
 
         searchCtrl.clearFilters = function clearFilters() {

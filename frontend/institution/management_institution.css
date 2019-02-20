@@ -57,6 +57,10 @@
     margin-top: 5px;
 }
 
+.padding-div-info-admin{
+    padding-left: 15px;
+}
+
 @media screen and (min-width: 601px) {
     .edit-inst-name, .edit-inst-street {
         width: 59%;

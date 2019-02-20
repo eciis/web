@@ -1,12 +1,12 @@
 <div class="clickable-card">
     <md-toolbar  ng-click="clickableCardCtrl.onClick()" class="clickable-card__toolbar">
-        <div class="md-toolbar-tools">
-          <md-icon id="clickable-card__icon--start">{{clickableCardCtrl.icon}}</md-icon>
-          <span class="clickable-card__title"> {{ clickableCardCtrl.title}} </span>
-          <md-icon id="clickable-card__icon--end">{{ clickableCardCtrl.isOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</md-icon>
-        </div>
-      </md-toolbar>
-      <div ng-show="clickableCardCtrl.isOpen" class="clickable-card__content">
-        <ng-transclude></ng-transclude>
+      <div class="md-toolbar-tools">
+        <md-icon id="clickable-card__icon--start">{{clickableCardCtrl.icon}}</md-icon>
+        <span class="clickable-card__title"> {{ clickableCardCtrl.title}} </span>
+        <md-icon id="clickable-card__icon--end">{{ clickableCardCtrl.isOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</md-icon>
       </div>
+    </md-toolbar>
+    <div ng-show="clickableCardCtrl.isOpen" class="clickable-card__content">
+      <ng-transclude></ng-transclude>
+    </div>
 </div>

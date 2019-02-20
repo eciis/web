@@ -1,17 +1,40 @@
 <md-content class="manage-members">
     <div class="manage-members__cards">
         <clickable-card icon="send" title="enviar convites">
-            <h3>membros</h3>
+            <div class="manage-members__send__invites">
+                <h3>Convidar Membros</h3>
+                <p class="description">
+                    Coloque abaixo os endereços de e-mail das pessoas que você deseja convidar 
+                    para fazer parte da sua instituição na Plataforma CIS.
+                </p>
+                <p class="subtitle">Endereço de e-mail</p>
+                <form ng-submit="manageMemberCtrl.sendUserInvite()">
+                    <md-input-container md-no-float class="md-block md-icon-right md-icon-float"
+                        ng-repeat="currentEmail in manageMemberCtrl.emails">
+                        <input class="green-input" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" 
+                            md-maxlength="120" type="email" name="email" placeholder="+ Adicionar e-mail">
+                    </md-input-container>
+                </form>
+                <md-button class="manage-members__send__invites--btn" type="submit" 
+                    ng-if="!manageMemberCtrl.isLoadingInvite">
+                    Enviar
+                </md-button>
+                <load-circle ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
+            </div>
         </clickable-card>
+
         <clickable-card icon="account_circle" title="administrador">
             <h3>membros</h3>
         </clickable-card>
+
         <clickable-card icon="account_circle" title="gerenciar membros">
             <h3>membros</h3>
         </clickable-card>
+
         <clickable-card icon="email" title="convites enviados">
             <h3>membros</h3>
         </clickable-card>
+
         <clickable-card icon="feedback" title="convites requisitados">
             <h3>membros</h3>
         </clickable-card>

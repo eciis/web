@@ -223,8 +223,7 @@
         }
 
         function goToEventsDesktop(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_EVENTS,
-                {institutionKey: institutionKey, posts: institutionCtrl.posts});
+            UtilsService.selectNavOption(STATES.INST_EVENTS, {institutionKey: institutionKey});
         }
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {

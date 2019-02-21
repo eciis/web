@@ -589,17 +589,12 @@
     });
 
     function initServiceWorker() {
-        console.log("init service worker");
         if ('serviceWorker' in navigator) {
-            console.log("service worker in navigator");
             navigator.serviceWorker.register('/sw.js').then(function (registration) {
-                console.log("registering");
-                console.log(registration);
                 const messaging = firebase.messaging();
                 messaging.useServiceWorker(registration);
                 messaging.usePublicVapidKey(KEY_PAIR);
-                console.log("last");
-            }).catch((erro) => console.log("chegou no erro",  erro));
+            });
         }
     }
 

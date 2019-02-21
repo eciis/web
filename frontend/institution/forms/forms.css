@@ -1,0 +1,49 @@
+address-form #address-form {
+  display: grid;
+  grid-template-areas:
+  "street street street"
+  "number neighbourhood neighbourhood"
+  "country state city"
+  "cep cep cep";
+  grid-template-columns: repeat(3, calc(100%/3));
+  grid-template-rows: repeat(4, 1fr);
+}
+
+#address-form #street {
+  grid-area: street;
+}
+
+#address-form #number {
+  grid-area: number;
+}
+
+#address-form #neighbourhood {
+  grid-area: neighbourhood;
+}
+
+#address-form #city {
+  grid-area: city;
+}
+
+#address-form #state {
+  grid-area: state;
+}
+
+#address-form #country {
+  grid-area: country;
+}
+
+#address-form #cep {
+  grid-area: cep;
+}
+
+.state-required {
+  font-size: 0.6em;
+  line-height: 1em;
+  overflow: visible;
+}
+
+.limit-md-select {
+  justify-self: center;
+  display: grid;
+}

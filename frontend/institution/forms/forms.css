@@ -50,7 +50,7 @@ address-form #address-form {
 
 institution-form #institution-form {
   display: grid;
-  grid-template-rows: auto repeat(7, 1fr);
   height: 100%;
   width: 100%;
+  grid-template-rows: auto repeat(7, 1fr);
 }

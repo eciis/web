@@ -3,8 +3,10 @@
 (function() {
     var app = angular.module("app");
 
-    app.controller("HomeController", function HomeController(AuthService, $mdDialog, 
-        $state, EventService, ProfileService, $rootScope, POST_EVENTS, STATES) {
+    app.controller("HomeController", ['AuthService', '$mdDialog', '$state', 'EventService', 'ProfileService', '$rootScope',
+        'PushNotificationService', 'POST_EVENTS', 'STATES',
+        function HomeController(AuthService, $mdDialog, $state, EventService, ProfileService, $rootScope,
+                                PushNotificationService, POST_EVENTS, STATES) {
         var homeCtrl = this;
 
         var LIMITE_EVENTS = 5;
@@ -13,8 +15,6 @@
         homeCtrl.followingInstitutions = [];
         homeCtrl.isLoadingPosts = true;
         homeCtrl.showMessageOfEmptyEvents = true;
-        
-        homeCtrl.user = AuthService.getCurrentUser();
 
         homeCtrl.eventInProgress = function eventInProgress(event) {
             var end_time = event.end_time;
@@ -122,10 +122,12 @@
             $rootScope.$broadcast(eventType, post);
         }
 
-        (function main() {
+        homeCtrl.$onInit = () => {
+            homeCtrl.user = AuthService.getCurrentUser();
             loadEvents();
             getFollowingInstitutions();
             registerPostEvents();
-        })();
-    });
+            return PushNotificationService.requestNotificationPermission(homeCtrl.user);
+        };
+    }]);
 })();

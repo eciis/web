@@ -138,8 +138,10 @@
                         }
                     };
                 });
+                expect(searchCtrl.hasChanges).toEqual(false);
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution').then(function() {
                     expect(instService.searchInstitutions).toHaveBeenCalledWith('splab', 'active', 'institution');
+                    expect(searchCtrl.hasChanges).toEqual(true);
                     done();
                 });
             });
@@ -202,6 +204,21 @@
                 spyOn(Utils, 'isMobileScreen');
                 searchCtrl.isMobileScreen();
                 expect(Utils.isMobileScreen).toHaveBeenCalled();
+            });
+        });
+
+        describe('setHasChanges', () => {
+            it('should set to true when seach_keyword is defined', () => {
+                searchCtrl.search_keyword = 'tst';
+                expect(searchCtrl.hasChanges).toEqual(false);
+                searchCtrl.setHasChanges();
+                expect(searchCtrl.hasChanges).toEqual(true);
+            });
+
+            it('should set to false when seach_keyword is not defined', () => {
+                searchCtrl.hasChanges = true;
+                searchCtrl.setHasChanges();
+                expect(searchCtrl.hasChanges).toEqual(false);
             });
         });
     });

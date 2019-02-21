@@ -47,7 +47,7 @@
             const INST_STATE = 'active';
             InstitutionService.searchInstitutions(searchInstCtrl.keyword, INST_STATE, 'institution')
                 .then(institutions => {
-					searchInstCtrl.institutions = institutions;
+                    searchInstCtrl.institutions = institutions;
                     searchInstCtrl.instNotFound = institutions.length === 0;
                     searchInstCtrl.onSearch(institutions);
                 });

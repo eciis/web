@@ -24,7 +24,8 @@
 
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
-        }
+            configProfileCtrl.setSaveButton();
+        };
 
         configProfileCtrl._setupUser = () => {
             if(configProfileCtrl.canEdit()) {
@@ -180,6 +181,18 @@
         configProfileCtrl.goBack = _ => {
             window.history.back();
         };
+
+        /**
+         * Sets save button's properties.
+         */
+        configProfileCtrl.setSaveButton = () => {
+            configProfileCtrl.saveButton = {
+                class: 'config-profile__toolbar--save',
+                action: configProfileCtrl.finish,
+                name: 'SALVAR',
+                isAvailable: () => !configProfileCtrl.loadingSubmission
+            };
+        };        
 
         function deleteUser() {
             const promise = UserService.deleteAccount();

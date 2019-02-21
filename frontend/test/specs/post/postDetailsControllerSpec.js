@@ -684,4 +684,14 @@
             expect(postDetailsCtrl.isFollowingEvent()).toEqual(false);
         });
     });
+
+    describe('isMobileScreen()', () => {
+        it('should call Utils.isMobileScreen', () => {
+            spyOn(Utils, 'isMobileScreen');
+
+            postDetailsCtrl.isMobileScreen();
+
+            expect(Utils.isMobileScreen).toHaveBeenCalled();
+        });
+    });
 }));

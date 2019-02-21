@@ -8,7 +8,15 @@
     var institution = {
         'email' : 'institution@gmail.com',
         'key': '123456',
-        'institution_key' : '123456'
+        'institution_key' : '123456',
+        'color' : 'teal',
+    };
+
+    const secondInstitution = {
+        'email' : 'institution2@gmail.com',
+        'key': '1234567',
+        'institution_key' : '1234567',
+        'color' : 'teal',
     };
 
     var colors = [{'value' : 'red'}, {'value':'purple'}, {'value':'blue'}];
@@ -17,10 +25,10 @@
         'name' : 'user',
         'key': '12345',
         'state' : 'active',
-        'institution_profiles': [institution],
-        'current_institution' : institution
+        'institution_profiles': [institution, secondInstitution],
+        'current_institution' : institution,
     };
-   
+
     beforeEach(inject(function ($controller, $httpBackend, HttpService, $mdDialog,
             AuthService, $rootScope, ProfileService) {
         scope = $rootScope.$new();
@@ -31,7 +39,8 @@
         profileService = ProfileService;
 
         colorPickerCtrl = $controller('ColorPickerController', {
-                user: user
+                user,
+                institution,
             });
 
         AuthService.login(user);
@@ -54,25 +63,49 @@
     describe('saveColor()', function() {
         beforeEach(function() {
             spyOn(profileService, 'editProfile').and.callThrough();
-        
         });
 
-        it('Should return true', function(done) {
-            var change = {
+        it('should change first institutions color', function(done) {
+            const change = {
                 'color' : 'blue',
                 'email' : 'institution@gmail.com',
                 'key': '123456',
                 'institution_key' : '123456'
             };
-            colorPickerCtrl.newProfile = change;
-            colorPickerCtrl.newUser.institution_profiles = [change];
+            colorPickerCtrl.newUser.institution_profiles = [change, secondInstitution];
+            const diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
 
             httpBackend.expect('PATCH', '/api/user').respond(200);
-            var promise = colorPickerCtrl.saveColor();
+            const promise = colorPickerCtrl.saveColor();
             promise.should.be.fulfilled.then(function() {
-                expect(colorPickerCtrl.user.getProfileColor()).toBe('blue');
-                expect(colorPickerCtrl.user.institution_profiles).toHaveBeenCalled(change);
-            }).should.notify(done);
+                expect(colorPickerCtrl.user).toEqual(colorPickerCtrl.newUser);
+                expect(colorPickerCtrl.user.institution_profiles[0]).toEqual(change);
+                expect(profileService.editProfile).toHaveBeenCalledWith(diff);
+                done();
+            });
+            httpBackend.flush();
+            scope.$apply();
+        });
+
+        it('should change second institutions color', (done) => {
+            const change = {
+                'color': 'red',
+                'email' : 'institution2@gmail.com',
+                'key': '1234567',
+                'institution_key' : '1234567'
+            }
+
+            colorPickerCtrl.newUser.institution_profiles = [institution, change];
+            const diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
+
+            httpBackend.expect('PATCH', '/api/user').respond(200);
+            const promise = colorPickerCtrl.saveColor();
+            promise.should.be.fulfilled.then(function() {
+                expect(colorPickerCtrl.user).toEqual(colorPickerCtrl.newUser);
+                expect(colorPickerCtrl.user.institution_profiles[1]).toEqual(change);
+                expect(profileService.editProfile).toHaveBeenCalledWith(diff);
+                done();
+            });
             httpBackend.flush();
             scope.$apply();
         });

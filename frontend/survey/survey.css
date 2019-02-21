@@ -38,6 +38,8 @@
 
 .survey-card{
     margin-top: -1px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .survey-title-placeholder {
@@ -63,6 +65,10 @@
 #buttons-survey{
     display: grid;
     grid-template-columns: auto 65px;
+}
+
+.vote-btn {
+    display: grid;
 }
 
 @media screen and (max-width: 959px) {
@@ -192,6 +198,10 @@
 @media screen and (max-width: 600px) {
     .survey-title-placeholder, .survey-options {
         font-size: 0.75em !important;
+    }
+
+    .survey-card {
+        margin: 0;
     }
 }
 

@@ -99,6 +99,10 @@
             }
           })
 
+          ctrl.onNewPhoto = (photoSrc) => {
+            ctrl.photoSrc = photoSrc;
+          }
+
           // main()
           // initController()
           // setDefaultPhotoUrl
@@ -106,6 +110,7 @@
             ctrl.institutionKey = $state.params.institutionKey;
             if (ctrl.institutionKey) {
               ctrl.loadInstitution(ctrl.institutionKey)
+            // handle if its not a institution invite
             } else {
               $state.go(STATES.HOME);
             }

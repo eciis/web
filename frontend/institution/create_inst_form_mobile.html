@@ -20,7 +20,8 @@
           </address-form>
           <!-- DADOS DA INSTITUICAO -->
           <institution-form ng-switch-when='1'
-                         parent-ctrl='ctrl'>
+                         institution='ctrl.newInstitution'
+                         on-new-photo='ctrl.onNewPhoto(photoSrc)'>
           </institution-form>
           <!-- FINALIZAR CADASTRO -->
           <final-form ng-switch-when='2'

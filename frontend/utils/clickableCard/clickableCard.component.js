@@ -1,6 +1,6 @@
 "use strict";
 
-(()=> {
+(function () {
     angular
     .module('app')
     .component("clickableCard", {
@@ -16,8 +16,12 @@
 
     function ClickableCardController() {
         const clickableCardCtrl = this;
-        
-        clickableCardCtrl.isOpen = false;
+
+        clickableCardCtrl.$onInit = () => {
+            Object.assign(clickableCardCtrl, {
+                isOpen: true
+            });
+        };
 
         clickableCardCtrl.onClick = () => {
             clickableCardCtrl.isOpen = !clickableCardCtrl.isOpen;

@@ -7,7 +7,7 @@
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.
-    const CACHE_SUFIX = 'modify-request-notification-permission-flow';
+    const CACHE_SUFIX = 'push-notification-permission';
 
     let messaging;
 
@@ -99,23 +99,23 @@
         ],
         })
     );
-
-    workbox.routing.registerRoute(
-        /\.(?:js|css|html)$/,
-        workbox.strategies.staleWhileRevalidate({
-            cacheName: precacheCacheName,
-        })
-    );
-
-    workbox.routing.registerRoute(
-        new RegExp(Config.BACKEND_URL),
-        workbox.strategies.networkFirst({
-            cacheName: runtimeCacheName
-        })
-    );
+    //
+    // workbox.routing.registerRoute(
+    //     /\.(?:js|css|html)$/,
+    //     workbox.strategies.staleWhileRevalidate({
+    //         cacheName: precacheCacheName,
+    //     })
+    // );
+    //
+    // workbox.routing.registerRoute(
+    //     new RegExp(Config.BACKEND_URL),
+    //     workbox.strategies.networkFirst({
+    //         cacheName: runtimeCacheName
+    //     })
+    // );
 
     (function initSw() {
-        self.skipWaiting();
+        // self.skipWaiting();
         setupFirebase();
         addToCache(['/']);
     })();

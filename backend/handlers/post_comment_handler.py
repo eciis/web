@@ -63,12 +63,13 @@ class PostCommentHandler(BaseHandler):
             'entity_key': post.key.urlsafe(),
             'entity_type': entity_type,
             'current_institution': user.current_institution.urlsafe(),
-            'sender_institution_key': post.institution.urlsafe()
+            'sender_institution_key': post.institution.urlsafe(),
+            'field': 'subscribers'
         }
         enqueue_task('multiple-notification', params)
 
         is_first_comment = post.get_number_of_comment() == 1
-        if is_first_comment:
+        if True:
             enqueue_task('send-push-notification', {
                 'type': entity_type,
                 'receivers': [subscriber.urlsafe() for subscriber in post.subscribers],

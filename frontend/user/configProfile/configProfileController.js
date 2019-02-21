@@ -191,42 +191,67 @@
             return promise;
         }
 
+        /**
+         *
+         */
         configProfileCtrl.pushChange = () => {
             configProfileCtrl.pushNotification && subscribeUser();
-
             !configProfileCtrl.pushNotification && unsubscribeUser();
         };
 
+        /**
+         *
+         */
         function setPushNotificationModel() {
-            configProfileCtrl.pushNotification = angular.copy(PushNotificationService.hasNotificationPermission());
+            PushNotificationService.isPushNotificationActive().then((result) => {
+                configProfileCtrl.pushNotification = result;
+            });
         }
 
-        function isPossiblePushNotification() {
-            const { permission } = Notification;
-            return permission !== "denied";
-        }
-
+        /**
+         *
+         * @returns {Promise<T | never>}
+         */
         function unsubscribeUser() {
-            return PushNotificationService.unsubscribeUserNotification();
+            return configProfileCtrl._openDialog().then(() => {
+                return PushNotificationService.unsubscribeUserNotification();
+            }).catch(() => {
+                configProfileCtrl.pushNotification = true;
+            });
         }
 
+        /**
+         *
+         * @returns {Promise<T | never>}
+         */
         function subscribeUser() {
-            return isPossiblePushNotification() &&
-            openDialog().then(() => PushNotificationService.requestNotificationPermission(configProfileCtrl.user));
+            return configProfileCtrl._openDialog().then(() => {
+                return PushNotificationService.subscribeUserNotification();
+            }).catch(() => {
+                configProfileCtrl.pushNotification = false;
+            });
         }
 
-        function openDialog(event) {
-            const DIALOG_TEXT = "";
+        /**
+         *
+         * @param event
+         * @returns {*|Promise<PaymentResponse>|void}
+         * @private
+         */
+        configProfileCtrl._openDialog = (event) => {
+            const DIALOG_TEXT_SUBSCRIBE = "Deseja permitir notificação no dispositivo?";
+            const DIALOG_TEXT_UNSUBSCRIBE = "Tem certeza que deseja não de receber notificação no dispositivo?";
+            const DIALOG_TEXT = configProfileCtrl.pushNotification? DIALOG_TEXT_SUBSCRIBE : DIALOG_TEXT_UNSUBSCRIBE;
             const confirm = $mdDialog.confirm();
             confirm
                 .clickOutsideToClose(false)
-                .title('Permitir Notificação no dispositivo')
+                .title('Notificação no dispositivo')
                 .textContent(DIALOG_TEXT)
-                .ariaLabel('Permitir Notificação no dispositivo')
+                .ariaLabel('Notificação no dispositivo')
                 .targetEvent(event)
                 .ok('Sim')
                 .cancel('Não');
             return $mdDialog.show(confirm);
-        }
-    };
+        };
+    }
 })();

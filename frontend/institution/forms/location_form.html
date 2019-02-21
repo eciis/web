@@ -1,55 +1,54 @@
 <form name='location' id='location-data'>
   <md-input-container id="logradouro">
     <label>Logradouro</label>
-    <input name='street' ng-model="ctrl.configInstCtrl.address.street" ng-required='!ctrl.configInstCtrl.isAnotherCountry'>
+    <input name='street' ng-model="ctrl.address.street" ng-required='!ctrl.isAnotherCountry'>
   </md-input-container>
   <md-input-container id="no">
     <label>No</label>
-    <input name='number' ng-model="ctrl.configInstCtrl.address.number" ng-pattern='ctrl.configInstCtrl.numberRegex'>
+    <input name='number' ng-model="ctrl.address.number" ng-pattern='ctrl.numberRegex'>
   </md-input-container>
   <md-input-container id="bairro">
     <label>Bairro</label>
-    <input name='neighbourhood' ng-model="ctrl.configInstCtrl.address.neighbourhood" ng-required'!ctrl.configInstCtrl.isAnotherCountry'>
+    <input name='neighbourhood' ng-model="ctrl.address.neighbourhood" ng-required='!ctrl.isAnotherCountry'>
   </md-input-container>
   <md-input-container id="pais">
     <label>Pais</label>
-    <md-select name='country' ng-model="ctrl.configInstCtrl.address.country" required
-               ng-change='ctrl.configInstCtrl.setAnotherCountry()'
+    <md-select name='country' ng-model="ctrl.address.country" required
+               ng-change='ctrl.resetState()'
                class='limit-md-select'>
-      <md-option ng-repeat='country in ctrl.configInstCtrl.countries' ng-value='country.nome_pais'>
+      <md-option ng-repeat='country in ctrl.countries' ng-value='country.nome_pais'>
         {{ country.nome_pais }}
       </md-option>
     </md-select>
   </md-input-container>
-  <md-input-container id="estado" ng-if='ctrl.configInstCtrl.isAnotherCountry'>
+  <md-input-container id="estado" ng-if='ctrl.isAnotherCountry'>
     <label>Estado</label>
-    <input name='federalState' type='text' ng-model="ctrl.configInstCtrl.address.federal_state">
+    <input name='federalState' type='text' ng-model="ctrl.address.federal_state">
   </md-input-container>
-  <md-input-container id="estado" ng-if='!ctrl.configInstCtrl.isAnotherCountry'>
+  <md-input-container id="estado" ng-if='!ctrl.isAnotherCountry'>
     <label>Estado</label>
-    <md-select name='state' ng-model='ctrl.configInstCtrl.selectedState' required
-               ng-change='ctrl.configInstCtrl.getCitiesByState()'
+    <md-select name='state' ng-model='ctrl.address.federal_state' required
                class='limit-md-select'>
-      <md-option ng-repeat='state in ctrl.configInstCtrl.states' ng-value='state'>
+      <md-option ng-repeat='state in ctrl.states' ng-value='state.nome'>
         {{ state.sigla }}
       </md-option>
     </md-select>
   </md-input-container>
-  <md-input-container id="cidade" ng-if='ctrl.configInstCtrl.isAnotherCountry'>
+  <md-input-container id="cidade" ng-if='ctrl.isAnotherCountry'>
     <label>Cidade</label>
-    <input name='city' type='text' ng-model="ctrl.configInstCtrl.address.city">
+    <input name='city' type='text' ng-model="ctrl.address.city">
     </md-select>
   </md-input-container>
-  <md-input-container id="cidade" ng-if='!ctrl.configInstCtrl.isAnotherCountry'>
+  <md-input-container id="cidade" ng-if='!ctrl.isAnotherCountry'>
     <label>Cidade</label>
-    <md-select name='city' ng-model='ctrl.configInstCtrl.address.city' required
+    <md-select name='city' ng-model='ctrl.address.city' required
                class='limit-md-select'>
-      <md-option ng-repeat='city in ctrl.configInstCtrl.cities' ng-value='city'>
+      <md-option ng-repeat='city in ctrl.cities' ng-value='city'>
         {{ city }}
       </md-option>
     </md-select>
     <div ng-messages>
-      <div ng-show="location.state.$pristine && !ctrl.configInstCtrl.isAnotherCountry && !ctrl.configInstCtrl.address.city"
+      <div ng-show="location.state.$pristine && !ctrl.isAnotherCountry && !ctrl.address.city"
           class='state-required'>
         Primeiro selecione um estado
       </div>
@@ -57,10 +56,10 @@
   </md-input-container>
   <md-input-container id="cep">
     <label>CEP</label>
-    <input name='cep' ng-model="ctrl.configInstCtrl.address.cep"
-           ng-required='!ctrl.configInstCtrl.isAnotherCountry'
+    <input name='cep' ng-model="ctrl.address.cep"
+           ng-required='!ctrl.isAnotherCountry'
            placeholder='00000-000'
-           ng-pattern='ctrl.configInstCtrl.cepRegex'
+           ng-pattern='ctrl.cepRegex'
            mask='99999-999'>
   </md-input-container>
 </form>

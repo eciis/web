@@ -37,10 +37,10 @@
   }
 
   const app = angular.module('app');
-  app.component('locationForm', {
+  app.component('addressForm', {
     controller: controller,
     controllerAs: 'ctrl',
-    templateUrl: 'app/institution/forms/location_form.html',
+    templateUrl: 'app/institution/forms/address_form.html',
     bindings: {
       address: '=',
     }

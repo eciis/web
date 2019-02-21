@@ -1,39 +1,39 @@
-#create-inst-card-content #location-data {
+address-form #address-form {
   display: grid;
   grid-template-areas:
-  "logradouro logradouro logradouro"
-  "no bairro bairro"
-  "pais estado cidade"
+  "street street street"
+  "number neighbourhood neighbourhood"
+  "country state city"
   "cep cep cep";
   grid-template-columns: repeat(3, calc(100%/3));
   grid-template-rows: repeat(4, 1fr);
 }
 
-#create-inst-card-content #location-data #logradouro {
-  grid-area: logradouro;
+#address-form #street {
+  grid-area: street;
 }
 
-#create-inst-card-content #location-data #no {
-  grid-area: no;
+#address-form #number {
+  grid-area: number;
 }
 
-#create-inst-card-content #location-data #bairro {
-  grid-area: bairro;
+#address-form #neighbourhood {
+  grid-area: neighbourhood;
 }
 
-#create-inst-card-content #location-data #cidade {
-  grid-area: cidade;
+#address-form #city {
+  grid-area: city;
 }
 
-#create-inst-card-content #location-data #estado {
-  grid-area: estado;
+#address-form #state {
+  grid-area: state;
 }
 
-#create-inst-card-content #location-data #pais {
-  grid-area: pais;
+#address-form #country {
+  grid-area: country;
 }
 
-#create-inst-card-content #location-data #cep {
+#address-form #cep {
   grid-area: cep;
 }
 
@@ -48,70 +48,66 @@
   display: grid;
 }
 
-#create-inst-card-content md-select-value {
-  overflow: hidden;
-}
+/* #create-inst-card-content #institution-data { */
+/*   display: grid; */
+/*   grid-template-rows: 1.2fr repeat(7, 1fr); */
+/*   height: 100%; */
+/*   width: 100%; */
+/* } */
 
-#create-inst-card-content #institution-data {
-  display: grid;
-  grid-template-rows: 1.2fr repeat(7, 1fr);
-  height: 100%;
-  width: 100%;
-}
+/* #create-inst-card-content #inst-picture-picker { */
+/*   display: grid; */
+/*   grid-auto-flow: column; */
+/*   grid-template-columns: 1fr 3fr; */
+/*   background: #ddd; */
+/*   margin-bottom: 1em; */
+/* } */
 
-#create-inst-card-content #inst-picture-picker {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: 1fr 3fr;
-  background: #ddd;
-  margin-bottom: 1em;
-}
+/* #inst-picture-picker .picture-picker { */
+/*   width: 3.6em; */
+/*   height: 3.6em; */
+/*   align-self: center; */
+/*   justify-self: center; */
+/* } */
 
-#inst-picture-picker .picture-picker {
-  width: 3.6em;
-  height: 3.6em;
-  align-self: center;
-  justify-self: center;
-}
-
-#inst-picture-picker img.inst-picture {
-  width: 3.6em;
-  height: 3.6em;
-  border-radius: 50%;
-  margin: -0.6em 0 0 -0.6em;
-}
+/* #inst-picture-picker img.inst-picture { */
+/*   width: 3.6em; */
+/*   height: 3.6em; */
+/*   border-radius: 50%; */
+/*   margin: -0.6em 0 0 -0.6em; */
+/* } */
 
 
-#inst-picture-picker md-icon {
-  color: white;
-}
+/* #inst-picture-picker md-icon { */
+/*   color: white; */
+/* } */
 
-.inst-suggested-name {
-  align-self: center;
-  overflow: hidden;
-  line-height: 1.2em;
-  height: 3.6em;
-  font-size: 0.8em;
-  padding: 0.1em;
-}
+/* .inst-suggested-name { */
+/*   align-self: center; */
+/*   overflow: hidden; */
+/*   line-height: 1.2em; */
+/*   height: 3.6em; */
+/*   font-size: 0.8em; */
+/*   padding: 0.1em; */
+/* } */
 
-#last-info {
-  display: grid;
-  grid-template-rows: 2fr 1fr 1fr;
-}
+/* #last-info { */
+/*   display: grid; */
+/*   grid-template-rows: 2fr 1fr 1fr; */
+/* } */
 
-#last-info md-input-container#description {
-  align-items: center;
-  border: 1px solid;
-  border-color: #ccc;
-  border-radius: 0.4em;
-}
+/* #last-info md-input-container#description { */
+/*   align-items: center; */
+/*   border: 1px solid; */
+/*   border-color: #ccc; */
+/*   border-radius: 0.4em; */
+/* } */
 
-#last-info #description textarea {
-  height: 100% !important;
-  border: 0 !important;
-}
+/* #last-info #description textarea { */
+/*   height: 100% !important; */
+/*   border: 0 !important; */
+/* } */
 
-#create-inst-content button.md-primary {
-  color: #009688 !important;
-}
+/* #create-inst-content button.md-primary { */
+/*   color: #009688 !important; */
+/* } */

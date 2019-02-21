@@ -16,7 +16,7 @@
         <div id='form-switch' ng-switch='ctrl.currentStep'>
           <!-- DADOS CADASTRAIS -->
           <location-form ng-switch-when='0'
-                         parent-ctrl='ctrl'>
+                         address='ctrl.newInstitution.address'>
           </location-form>
           <!-- DADOS DA INSTITUICAO -->
           <institution-form ng-switch-when='1'

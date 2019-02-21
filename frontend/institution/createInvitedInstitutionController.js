@@ -7,6 +7,7 @@
           const ctrl = this;
           ctrl.loading = true;
           ctrl.currentStep = 0;
+          ctrl.newInstitution = {};
 
           ctrl.stepColor = (step) => {
             return ctrl.currentStep === step ? 'light-green-500' : 'grey-500';
@@ -53,7 +54,8 @@
               const address = institution.address;
               if (address && !_.isEmpty(address.country)) {
                 if (address.country === 'Brasil') {
-                  testValids(address, 'street', 'federal_state', 'neighbourhood');
+                  return testValids(address, 'street', 'federal_state', 'neighbourhood',
+                  'city', 'cep');
                 } else {
                   return true;
                 }

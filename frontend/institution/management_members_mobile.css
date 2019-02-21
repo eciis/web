@@ -9,7 +9,7 @@
     grid-row-gap: 1em;
 }
 
-/* Send events section */
+/* Send invites section */
 .manage-members__send__invites {
     display: grid;
     grid-row-gap: 1em;

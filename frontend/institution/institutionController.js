@@ -215,9 +215,16 @@
         };
 
         institutionCtrl.goToEvents = function goToEvents(institutionKey) {
-            UtilsService.selectNavOption(STATES.INST_EVENTS, 
-                {institutionKey: institutionKey, posts: institutionCtrl.posts});
+            Utils.isMobileScreen() ? goToEventsMobile(institutionKey) : goToEventsDesktop(institutionKey);
         };
+
+        function goToEventsMobile(institutionKey) {
+            UtilsService.selectNavOption(STATES.EVENTS,{institutionKey: institutionKey});
+        }
+
+        function goToEventsDesktop(institutionKey) {
+            UtilsService.selectNavOption(STATES.INST_EVENTS, {institutionKey: institutionKey});
+        }
 
         institutionCtrl.goToLinks = function goToLinks(institutionKey) {
             UtilsService.selectNavOption(STATES.INST_LINKS, {institutionKey: institutionKey});

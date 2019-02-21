@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function AddressFormController(brCidadesEstados, $http) {
+  function AddressFormController(brCidadesEstados, HttpService) {
     const ctrl = this;
     ctrl.states = {};
     ctrl.countries = {};
@@ -30,8 +30,8 @@
 
     ctrl.$onInit = () => {
       ctrl.states = brCidadesEstados.estados;
-      $http.get('app/institution/countries.json').then(res => {
-        ctrl.countries = res.data;
+      HttpService.get('app/institution/countries.json').then(res => {
+        ctrl.countries = res;
       });
     }
   }

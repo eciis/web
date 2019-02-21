@@ -7,10 +7,10 @@
 
     <div class="dialog__buttons">
         <md-button ng-click="dialogCtrl.cancelDialog()" class="md-button dialog__button" md-colors="{color: 'default-teal-500'}">
-            Cancelar
+            {{ dialogCtrl.cancelText }}
         </md-button>
-        <md-button ng-click="dialogCtrl.confirmAction()" class="md-button dialog__button" md-colors="{color: 'default-teal-500'}">
-            Confirmar
+        <md-button ng-click="dialogCtrl.confirmDialog()" class="md-button dialog__button" md-colors="{color: 'default-teal-500'}">
+            {{ dialogCtrl.confirmText }}
         </md-button>
     </div>
 </md-dialog-content>

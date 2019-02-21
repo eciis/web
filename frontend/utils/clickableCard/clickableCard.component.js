@@ -19,7 +19,7 @@
 
         clickableCardCtrl.$onInit = () => {
             Object.assign(clickableCardCtrl, {
-                isOpen: true
+                isOpen: false
             });
         };
 

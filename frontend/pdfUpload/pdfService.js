@@ -104,7 +104,6 @@
                     pdf: pdf
                 },
                 controller: [
-                    "$mdDialog",
                     "PdfService",
                     "$sce",
                     "pdf",
@@ -114,7 +113,7 @@
             });
         };
 
-        function PdfDialogController($mdDialog, PdfService, $sce, pdf) {
+        function PdfDialogController(PdfService, $sce, pdf) {
             var ctrl = this;
             ctrl.pdfUrl = "";
             ctrl.isLoadingPdf = true;
@@ -129,10 +128,7 @@
                 });
             }
 
-            ctrl.downloadPdf = () => {
-                PdfService.download(ctrl.pdf.url);
-                $mdDialog.hide();
-            };
+            ctrl.downloadPdf = () => PdfService.download(ctrl.pdf.url);
 
             (function main() {
                 if (!Utils.isMobileScreen()) readPdf();

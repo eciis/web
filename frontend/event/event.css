@@ -237,6 +237,7 @@
     .events-day-position {
         grid-column-start: 1;
         grid-column-end: 2;
+        justify-self: center;
     }
 
     .event-position {

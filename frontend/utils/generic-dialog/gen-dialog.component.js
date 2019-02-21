@@ -44,6 +44,10 @@
         };
 
         dialogCtrl.cancelDialog = $mdDialog.cancel;
+        dialogCtrl.confirmDialog = () => {
+            dialogCtrl.confirmAction();
+            $mdDialog.hide();
+        };
     }
 
 })();

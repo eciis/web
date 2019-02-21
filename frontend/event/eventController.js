@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES, InstitutionService) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES, InstitutionService, $filter) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -21,7 +21,7 @@
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
 
             if (eventCtrl._moreEvents) {
-                const getEventsFunction = eventCtrl.institutionKey ? EventService.getInstEvents : EventService.getEvents;
+                const getEventsFunction = EventService.getEvents;
                 return eventCtrl._loadEvents(getEventsFunction,
                     _.get(eventCtrl.selectedMonth, 'month'),
                     eventCtrl.selectedYear);
@@ -40,8 +40,8 @@
          * @private
          */
         eventCtrl._loadEvents = (getEvents, month, year) => {
-            return getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
-                month: month, year: year}).then(function success(response) {
+            return getEvents({ page: eventCtrl._actualPage, month: month, year: year})
+                .then(function success(response) {
                 eventCtrl._actualPage += 1;
                 eventCtrl._moreEvents = response.next;
 
@@ -54,6 +54,7 @@
                     });
                 }
 
+                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {

@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  function controller(brCidadesEstados, $http) {
+  function AddressFormController(brCidadesEstados, $http) {
     const ctrl = this;
     ctrl.states = {};
     ctrl.countries = {};
@@ -38,7 +38,7 @@
 
   const app = angular.module('app');
   app.component('addressForm', {
-    controller: controller,
+    controller: AddressFormController,
     controllerAs: 'ctrl',
     templateUrl: 'app/institution/forms/address_form.html',
     bindings: {

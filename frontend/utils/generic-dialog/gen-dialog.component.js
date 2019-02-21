@@ -26,6 +26,8 @@
             title: "@",
             subtitle: "@",
             confirmAction: "<",
+            cancelText: "@",
+            confirmText: "@",
         },
         transclude: true,
     });
@@ -36,6 +38,8 @@
         dialogCtrl.$onInit = () => {
             _.defaults(dialogCtrl, {
                 confirmAction: () => {},
+                cancelText: "Cancelar",
+                confirmText: "Confirmar",
             });
         };
 

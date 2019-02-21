@@ -4,8 +4,13 @@
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
-      <institution-showcase class="fill-width" ng-if="eventCtrl.institutionKey" institution="eventCtrl.institution">
-      </institution-showcase>
+      <entity-showcase
+              class="fill-width"
+              ng-if="eventCtrl.institutionKey"
+              avatar="eventCtrl.institution.photo_url"
+              title="eventCtrl.institution.name"
+              subtitle="eventCtrl.institution.address.city">
+      </entity-showcase>
       <is-empty-card ng-if="eventCtrl.eventsByDay.length === 0"
                      text="Nenhum evento a ser exibido">
       </is-empty-card>

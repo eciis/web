@@ -1,30 +1,30 @@
-.institution-showcase {
+.entity-showcase {
     display: grid;
     grid-template-columns: max-content auto;
     grid-template-rows: max-content max-content;
     grid-template-areas:
-            'avatar name'
-            'avatar text';
+            'avatar title'
+            'avatar subtitle';
     grid-gap: 0 0.6rem;
     padding: 0.6rem;
     align-items: center;
     background-color: #E0E0E0;
 }
 
-.institution-showcase__avatar {
+.entity-showcase__avatar {
     grid-area: avatar;
     height: 3em;
     width: 3em;
     border-radius: 50%;
 }
 
-.institution-showcase__name {
-    grid-area: name;
+.entity-showcase__title {
+    grid-area: title;
     line-height: 1rem;
 }
 
-.institution-showcase__text {
-    grid-area: text;
+.entity-showcase__subtitle {
+    grid-area: subtitle;
     font-size: 0.8em;
     line-height: 1rem;
 }

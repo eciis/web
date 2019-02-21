@@ -39,7 +39,7 @@
 
   const app = angular.module('app');
   app.component('institutionForm', {
-    controller: InstitutionFormController,
+    controller: ['CropImageService', 'ImageService', 'MessageService', '$scope', 'InstitutionService', InstitutionFormController],
     controllerAs: 'ctrl',
     templateUrl: 'app/institution/forms/institution_form.html',
     bindings: {

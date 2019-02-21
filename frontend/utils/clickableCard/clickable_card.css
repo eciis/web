@@ -4,7 +4,9 @@
 }
 
 .clickable-card__toolbar {
+    height: 2em;
     padding: 0.8em 1em;
+    background-color: #ffff;
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 15% auto 10%;

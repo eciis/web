@@ -3,6 +3,12 @@
     grid-template-rows: 6em auto 1em;
 }
 
+.manage-members__toolbar__title {
+    color: #737474;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
 .manage-members__cards {
     grid-row-start: 2;
     display: grid;

@@ -9,7 +9,8 @@
         controllerAs: 'clickableCardCtrl',
         bindings: {
             icon: '@',
-            title: '@'
+            title: '@',
+            isOpen: '<'
         },
         transclude: true
     });
@@ -19,7 +20,8 @@
 
         clickableCardCtrl.$onInit = () => {
             Object.assign(clickableCardCtrl, {
-                isOpen: false
+                isOpen: false,
+                ...clickableCardCtrl
             });
         };
 

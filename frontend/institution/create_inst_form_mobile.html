@@ -16,17 +16,17 @@
         <div id='form-switch' ng-switch='ctrl.currentStep'>
           <!-- DADOS CADASTRAIS -->
           <address-form ng-switch-when='0'
-                         address='ctrl.newInstitution.address'>
+                        address='ctrl.newInstitution.address'>
           </address-form>
           <!-- DADOS DA INSTITUICAO -->
           <institution-form ng-switch-when='1'
-                         institution='ctrl.newInstitution'
-                         on-new-photo='ctrl.onNewPhoto(photoSrc)'>
+                            institution='ctrl.newInstitution'
+                            on-new-photo='ctrl.onNewPhoto(photoSrc)'>
           </institution-form>
           <!-- FINALIZAR CADASTRO -->
-          <final-form ng-switch-when='2'
-                         parent-ctrl='ctrl'>
-          </final-form>
+          <last-info-form ng-switch-when='2'
+                             institution='ctrl.newInstitution'>
+          </last-info-form>
         </div>
         <!-- PROXIMO / FINALIZAR -->
         <md-button class='md-raised' id='forward-button'

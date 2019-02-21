@@ -10,10 +10,10 @@
   }
 
   const app = angular.module('app');
-  app.component('finalForm', {
+  app.component('lastInfoForm', {
     controller: controller,
     controllerAs: 'ctrl',
-    templateUrl: 'app/institution/forms/final_form.html',
+    templateUrl: 'app/institution/forms/last_info_form.html',
     bindings: {
       parentCtrl: '=',
     }

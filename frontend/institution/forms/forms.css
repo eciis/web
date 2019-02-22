@@ -47,3 +47,29 @@ address-form #address-form {
   justify-self: center;
   display: grid;
 }
+
+institution-form #institution-form {
+  display: grid;
+  grid-template-rows: auto repeat(7, 1fr);
+  height: 100%;
+  width: 100%;
+}
+
+last-info-form #last-info-form {
+  display: grid;
+  grid-template-rows: 8em 1fr 1fr;
+}
+
+#last-info-form md-input-container#description {
+  max-height: 80%;
+  height: 100%;
+  align-items: center;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 0.4em;
+}
+
+#last-info-form #description textarea {
+  height: 100% !important;
+  border: 0 !important;
+}

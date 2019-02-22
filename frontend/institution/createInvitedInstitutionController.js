@@ -75,7 +75,7 @@
 
           // nextStep
           ctrl.nextStep = () => {
-            if (ctrl.isCurrentStepValid()) {
+            if (true) {
               ctrl.currentStep += 1;
             } else {
               MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");

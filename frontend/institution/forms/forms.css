@@ -55,44 +55,21 @@ institution-form #institution-form {
   width: 100%;
 }
 
-/* #inst-picture-picker img.inst-picture { */
-/*   width: 3.6em; */
-/*   height: 3.6em; */
-/*   border-radius: 50%; */
-/*   margin: -0.6em 0 0 -0.6em; */
-/* } */
+last-info-form #last-info-form {
+  display: grid;
+  grid-template-rows: 8em 1fr 1fr;
+}
 
+#last-info-form md-input-container#description {
+  max-height: 80%;
+  height: 100%;
+  align-items: center;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 0.4em;
+}
 
-/* #inst-picture-picker md-icon { */
-/*   color: white; */
-/* } */
-
-/* .inst-suggested-name { */
-/*   align-self: center; */
-/*   overflow: hidden; */
-/*   line-height: 1.2em; */
-/*   height: 3.6em; */
-/*   font-size: 0.8em; */
-/*   padding: 0.1em; */
-/* } */
-
-/* #last-info { */
-/*   display: grid; */
-/*   grid-template-rows: 2fr 1fr 1fr; */
-/* } */
-
-/* #last-info md-input-container#description { */
-/*   align-items: center; */
-/*   border: 1px solid; */
-/*   border-color: #ccc; */
-/*   border-radius: 0.4em; */
-/* } */
-
-/* #last-info #description textarea { */
-/*   height: 100% !important; */
-/*   border: 0 !important; */
-/* } */
-
-/* #create-inst-content button.md-primary { */
-/*   color: #009688 !important; */
-/* } */
+#last-info-form #description textarea {
+  height: 100% !important;
+  border: 0 !important;
+}

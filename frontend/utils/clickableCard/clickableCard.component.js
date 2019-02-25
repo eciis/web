@@ -19,9 +19,8 @@
         const clickableCardCtrl = this;
 
         clickableCardCtrl.$onInit = () => {
-            Object.assign(clickableCardCtrl, {
-                isOpen: false,
-                ...clickableCardCtrl
+            _.defaults(clickableCardCtrl, {
+                isOpen: false
             });
         };
 

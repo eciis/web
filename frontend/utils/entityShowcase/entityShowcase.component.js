@@ -7,13 +7,17 @@
         controllerAs: "entityShowcaseCtrl",
         bindings: {
             avatar: "<",
+            icon: "@",
             title: "<",
             subtitle: "<",
+            leftAction: "<",
         },
     });
 
     function entityShowcaseController() {
         const entityShowcaseCtrl = this;
+
+        entityShowcaseCtrl.showIcon = () => !_.isNil(entityShowcaseCtrl.icon);
     }
 
 })();

@@ -18,6 +18,18 @@
     border-radius: 50%;
 }
 
+.entity-showcase__icon {
+    grid-area: avatar;
+    background-color: #8BC34A;
+    color: white;
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .entity-showcase__title {
     grid-area: title;
     line-height: 1rem;

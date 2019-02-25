@@ -192,15 +192,18 @@
         }
 
         /**
-         *
+         * Subscribe or Unsubscribe user for push notification
+         * according to configProfileCtrl.pushNotification model value.
          */
         configProfileCtrl.pushChange = () => {
-            configProfileCtrl.pushNotification && subscribeUser();
-            !configProfileCtrl.pushNotification && unsubscribeUser();
+            configProfileCtrl.pushNotification && configProfileCtrl._subscribeUser();
+            !configProfileCtrl.pushNotification && configProfileCtrl._unsubscribeUser();
         };
 
         /**
-         *
+         * Set configProfileCtrl.pushNotification according to the user's
+         * push notification subscription.
+         * True if push notification is active, false otherwise.
          */
         function setPushNotificationModel() {
             PushNotificationService.isPushNotificationActive().then((result) => {
@@ -209,31 +212,33 @@
         }
 
         /**
-         *
+         * Stop device from receive push notification
          * @returns {Promise<T | never>}
+         * @private
          */
-        function unsubscribeUser() {
+        configProfileCtrl._unsubscribeUser = () => {
             return configProfileCtrl._openDialog().then(() => {
                 return PushNotificationService.unsubscribeUserNotification();
             }).catch(() => {
                 configProfileCtrl.pushNotification = true;
             });
-        }
+        };
 
         /**
-         *
+         * Allow device to receive push notification
          * @returns {Promise<T | never>}
+         * @private
          */
-        function subscribeUser() {
+        configProfileCtrl._subscribeUser = () => {
             return configProfileCtrl._openDialog().then(() => {
                 return PushNotificationService.subscribeUserNotification();
             }).catch(() => {
                 configProfileCtrl.pushNotification = false;
             });
-        }
+        };
 
         /**
-         *
+         * Dialog to double check user's choice about push notification permission.
          * @param event
          * @returns {*|Promise<PaymentResponse>|void}
          * @private

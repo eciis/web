@@ -27,7 +27,8 @@
         service.firebaseArrayNotifications;
 
         /**
-         *
+         * Setup necessary properties as:
+         *   Initilize firebase array with user's device tokens.
          */
         service.setupPushNotificationPermission = () => {
             service._initFirebaseArray();
@@ -35,6 +36,7 @@
 
         /**
          * Check if the user has blocked push notification in the browser for this application.
+         * @returns {boolean} True if is blocked, false otherwise
          */
         service.isPushNotificationBlockedOnBrowser = function isPushNotificationBlockedOnBrowser() {
             const { permission } = Notification;
@@ -42,7 +44,8 @@
         };
 
         /**
-         *
+         * Check if the user has already allowed push Notification in this application
+         * @returns {Promise<Boolean>} True if notification is active, false otherwise
          */
         service.isPushNotificationActive = function () {
             return service._getTokenObjectInFirebaseArray().then((tokenObject) => {
@@ -51,15 +54,17 @@
         };
 
         /**
-         *
+         * Unsubscribe User for push notification in current device.
+         * @return {Promise}
          */
         service.unsubscribeUserNotification = () => {
             return service._removeTokenFromFirebaseArray();
         };
 
         /**
-         *
-         * @returns {*}
+         * Remove the current device token from firebase array, blocking the device from
+         * receive push notifications.
+         * @returns {Promise}
          * @private
          */
         service._removeTokenFromFirebaseArray = () => {
@@ -69,7 +74,8 @@
         };
 
         /**
-         *
+         * Subscribe User for push notification in current device.
+         * * @return {Promise}
          */
         service.subscribeUserNotification = () => {
             return service._requestNotificationPermission();
@@ -141,8 +147,8 @@
         };
 
         /**
-         *
-         * @returns {null|*}
+         * Look for firebase object, in firebase array, corresponding to the current device token.
+         * @returns {Promise<FirebaseObject|undefined>}
          * @private
          */
         service._getTokenObjectInFirebaseArray = () => {

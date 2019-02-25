@@ -3,7 +3,7 @@
 (describe('Test ConfigProfileController', function() {
     let configCtrl, q, scope, userService, createCrtl,
     authService, imageService, mdDialog, cropImageService, messageService,
-    stateParams, observerRecorderService;
+    stateParams, observerRecorderService, pushNotificationService;
 
     let institution, other_institution, user, newUser, authUser;
 
@@ -48,7 +48,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $q, $rootScope, $mdDialog, UserService, 
-        AuthService, ImageService, CropImageService, MessageService, $stateParams, ObserverRecorderService) {
+        AuthService, ImageService, CropImageService, MessageService, $stateParams, ObserverRecorderService, PushNotificationService) {
 
         q = $q;
         scope = $rootScope.$new();
@@ -60,7 +60,7 @@
         authService = AuthService;
         stateParams = $stateParams;
         observerRecorderService = ObserverRecorderService;
-        
+        pushNotificationService = PushNotificationService;
         
         createCrtl = function() {
             return $controller('ConfigProfileController', {
@@ -84,7 +84,21 @@
             spyOn(configCtrl, '_setupUser');
             configCtrl.$onInit();
             expect(configCtrl._setupUser).toHaveBeenCalled();
-        }); 
+        });
+
+        it('should set configProfileCtrl.pushNotification according to PushNotificationService.isPushNotificationActive', () => {
+            spyOn(pushNotificationService, 'isPushNotificationActive').and.callFake(()=> q.when(true));
+            configCtrl.$onInit();
+            scope.$apply();
+            expect(configCtrl.pushNotification).toBe(true);
+            expect(pushNotificationService.isPushNotificationActive).toHaveBeenCalled();
+
+            pushNotificationService.isPushNotificationActive.and.callFake(()=> q.when(false));
+            configCtrl.$onInit();
+            scope.$apply();
+            expect(configCtrl.pushNotification).toBe(false);
+            expect(pushNotificationService.isPushNotificationActive).toHaveBeenCalled();
+        });
     });
 
     describe('_setupUser()', function() {
@@ -304,5 +318,76 @@
             configCtrl.goBack();
             expect(window.history.back).toHaveBeenCalled();
         });
+    });
+
+    describe('pushChange', () => {
+        beforeEach( function () {
+            spyOn(configCtrl,'_subscribeUser');
+            spyOn(configCtrl,'_unsubscribeUser');
+        });
+
+        it('should call subscribeUser user if configProfileCtrl.pushNotification is true', () => {
+            configCtrl.pushNotification = true;
+            configCtrl.pushChange();
+            expect(configCtrl._subscribeUser).toHaveBeenCalled();
+            expect(configCtrl._unsubscribeUser).not.toHaveBeenCalled();
+        });
+
+        it('should call unsubscribeUser user if configProfileCtrl.pushNotification is false', () => {
+            configCtrl.pushNotification = false;
+            configCtrl.pushChange();
+            expect(configCtrl._subscribeUser).not.toHaveBeenCalled();
+            expect(configCtrl._unsubscribeUser).toHaveBeenCalled()
+        })
+    });
+
+    describe('_unsubscribeUser', () => {
+        beforeEach( function () {
+            spyOn(configCtrl,'_openDialog').and.callFake(() => q.when());
+            spyOn(pushNotificationService, 'unsubscribeUserNotification');
+            configCtrl.pushNotification = false;
+        });
+
+        it('should call PushNotificationService.unsubscribeUserNotification() if user confirm dialog', () => {
+            configCtrl._unsubscribeUser();
+            scope.$apply();
+            expect(configCtrl._openDialog).toHaveBeenCalled();
+            expect(pushNotificationService.unsubscribeUserNotification).toHaveBeenCalled();
+            expect(configCtrl.pushNotification).toBe(false);
+        });
+
+        it('should set configProfileCtrl.pushNotification to true if user cancel dialog', () => {
+            configCtrl._openDialog.and.callFake(() => q.reject());
+            configCtrl._unsubscribeUser();
+            scope.$apply();
+            expect(configCtrl._openDialog).toHaveBeenCalled();
+            expect(pushNotificationService.unsubscribeUserNotification).not.toHaveBeenCalled();
+            expect(configCtrl.pushNotification).toBe(true);
+        })
+    });
+
+    describe('_subscribeUser', () => {
+        beforeEach( function () {
+            spyOn(configCtrl,'_openDialog').and.callFake(() => q.when());
+            spyOn(pushNotificationService, 'subscribeUserNotification');
+            configCtrl.pushNotification = true;
+        });
+
+        it('should call PushNotificationService.subscribeUserNotification() if user confirm dialog', () => {
+            configCtrl._subscribeUser();
+            scope.$apply();
+            expect(configCtrl._openDialog).toHaveBeenCalled();
+            expect(pushNotificationService.subscribeUserNotification).toHaveBeenCalled();
+            expect(configCtrl.pushNotification).toBe(true);
+        });
+
+        it('should set configProfileCtrl.pushNotification to false if user cancel dialog', () => {
+            configCtrl._openDialog.and.callFake(() => q.reject());
+            configCtrl._subscribeUser();
+            scope.$apply();
+            expect(configCtrl._openDialog).toHaveBeenCalled();
+            expect(pushNotificationService.subscribeUserNotification).not.toHaveBeenCalled();
+            expect(configCtrl.pushNotification).toBe(false);
+        })
     });
 }));

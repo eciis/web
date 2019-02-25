@@ -179,9 +179,10 @@
         }
 
         manageMemberCtrl._getMembers = () => {
-            InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
+            InstitutionService.getMembers(currentInstitutionKey)
+            .then(function success(response) {
                 manageMemberCtrl.members = response;
-                getAdmin(response);
+                manageMemberCtrl._getAdmin(response);
                 manageMemberCtrl.isLoadingMembers = false;
             }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
@@ -195,7 +196,7 @@
             });
         }
 
-        function getAdmin(members) {
+        manageMemberCtrl._getAdmin = (members) => {
             manageMemberCtrl.institution.admin = _.find(members, 
                 function(member){
                     return member.key === manageMemberCtrl.institution.admin.key;

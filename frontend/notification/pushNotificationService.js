@@ -120,7 +120,7 @@
          * @private
          */
         service._initFirebaseArray = function initFirebaseArray() {
-            const endPoint = PUSH_NOTIFICATIONS_URL + AuthService.getCurrentUser().key;
+            const endPoint =  `${PUSH_NOTIFICATIONS_URL}${AuthService.getCurrentUser().key}`;
             const notificationsRef = ref.child(endPoint);
 
             if (!service.firebaseArrayNotifications) {

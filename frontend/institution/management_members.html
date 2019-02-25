@@ -91,7 +91,7 @@
               </p>
             </div>
           </md-list-item>
-          <md-list-item class="md-2-line" md-colors="{background: 'grey-300'}" ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
+          <md-list-item class="md-2-line margin-input-info" md-colors="{background: 'grey-300'}" ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
             ng-click="manageMemberCtrl.showUserProfile(invite.invitee_key, $event)" flex-xs ng-if="invite.status !== 'accepted'">
             <div layout="row" flex>
               <div style="width: 5px; margin-left: -15px;" md-colors="{background: 'teal-500'}"></div>

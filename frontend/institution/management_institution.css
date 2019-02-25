@@ -42,6 +42,10 @@
     width: 16%;
 }
 
+.margin-input-info{
+    margin-top: 9px;
+}
+
 .manage-member-content {
     overflow: auto;
     max-height: 220px;

@@ -1,5 +1,16 @@
 <div class="entity-showcase">
-    <img class="entity-showcase__avatar" ng-src="{{entityShowcaseCtrl.avatar}}"/>
+    <img class="entity-showcase__avatar" ng-src="{{entityShowcaseCtrl.avatar}}" ng-click="entityShowcaseCtrl.leftAction()"/>
+    <md-icon class="entity-showcase__icon" ng-if="entityShowcaseCtrl.showIcon()" ng-click="entityShowcaseCtrl.leftAction()">
+        {{ entityShowcaseCtrl.icon }}
+    </md-icon>
     <span class="entity-showcase__title responsive__title">{{entityShowcaseCtrl.title }}</span>
     <span class="entity-showcase__subtitle responsive__title">{{entityShowcaseCtrl.subtitle }}</span>
+    <div class="entity-showcase__right-icon-buttons">
+        <icon-button
+                ng-repeat="rightIconBtn in entityShowcaseCtrl.rightIconBtns"
+                icon="{{ rightIconBtn.icon }}"
+                icon-color="{{ rightIconBtn.iconColor }}"
+                action="rightIconBtn.action">
+        </icon-button>
+    </div>
 </div>

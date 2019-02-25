@@ -81,7 +81,7 @@
                 }
             })
             .state(STATES.EVENTS, {
-                url: "/events",
+                url: "/events?institutionKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/events.html",

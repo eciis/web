@@ -5,6 +5,11 @@
     height: 100vh;
 }
 
+.fill-width {
+    width: 100%;
+    min-width: 100%;
+}
+
 @media screen and (max-width: 1366px) {
     .fill-screen {
         min-height: 0;

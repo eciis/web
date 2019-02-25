@@ -314,7 +314,7 @@
             expect(eventCtrl._loadEvents).toHaveBeenCalled();
         });
 
-        it('Should call _loadEvents with eventService.getEvents', () => {
+        it('Should call _loadEvents with eventService.getEvents when key is null', () => {
             spyOn(eventCtrl, '_loadEvents');
             eventCtrl.institutionKey = null;
             eventCtrl.loadMoreEvents();
@@ -322,12 +322,12 @@
                 .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
         });
 
-        it('Should call _loadEvents with eventService.getInstEvents', () => {
+        it("Should call _loadEvents with eventService.getEvents when key isn't null", () => {
             spyOn(eventCtrl, '_loadEvents');
             eventCtrl.institutionKey = institution.key;
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents)
-                .toHaveBeenCalledWith(eventService.getInstEvents, december, testYear);
+                .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
         });
     });
 

@@ -1,10 +1,10 @@
 .entity-showcase {
     display: grid;
-    grid-template-columns: max-content auto;
+    grid-template-columns: max-content auto auto;
     grid-template-rows: max-content max-content;
     grid-template-areas:
-            'avatar title'
-            'avatar subtitle';
+            'avatar title right-icon-buttons'
+            'avatar subtitle right-icon-buttons';
     grid-gap: 0 0.6rem;
     padding: 0.6rem;
     align-items: center;
@@ -39,4 +39,8 @@
     grid-area: subtitle;
     font-size: 0.8em;
     line-height: 1rem;
+}
+
+.entity-showcase__right-icon-buttons {
+    grid-area: right-icon-buttons;
 }

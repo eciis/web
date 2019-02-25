@@ -5,4 +5,12 @@
     </md-icon>
     <span class="entity-showcase__title responsive__title">{{entityShowcaseCtrl.title }}</span>
     <span class="entity-showcase__subtitle responsive__title">{{entityShowcaseCtrl.subtitle }}</span>
+    <div class="entity-showcase__right-icon-buttons">
+        <icon-button
+                ng-repeat="rightIconBtn in entityShowcaseCtrl.rightIconBtns"
+                icon="{{ rightIconBtn.icon }}"
+                icon-color="{{ rightIconBtn.iconColor }}"
+                action="rightIconBtn.action">
+        </icon-button>
+    </div>
 </div>

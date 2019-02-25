@@ -180,8 +180,7 @@
 
         manageMemberCtrl._getMembers = () => {
             InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.members = Utils.isMobileScreen(475) ?
-                    Utils.groupUsersByInitialLetter(response) : response;
+                manageMemberCtrl.members = response;
                 getAdmin(response);
                 manageMemberCtrl.isLoadingMembers = false;
             }, function error() {

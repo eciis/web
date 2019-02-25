@@ -157,12 +157,14 @@
                   <md-input-container class="md-block">
                     <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Descrição</label>
                     <textarea ng-model="controller.event.text" rows="5" md-select-on-focus
+                      ng-disabled="controller.isEventOutdated()"
                       placeholder="Insira aqui uma breve descrição sobre o evento"
                       style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
                   </md-input-container>
                   <md-input-container class="md-block">
                     <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Programação</label>
                     <textarea ng-model="controller.event.programation" rows="5" md-select-on-focus
+                      ng-disabled="controller.isEventOutdated()"
                       placeholder="Insira a programação completa do evento"
                       style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
                   </md-input-container>

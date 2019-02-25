@@ -135,12 +135,16 @@
                     Dia inteiro
                 </md-checkbox>
                 <div class="event-textarea fields-event-padding custom-scrollbar">
-                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
+                    <textarea
+                        ng-disabled="createEventCtrl.isEventOutdated()"
+                        md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
                         placeholder="Descrição"
                         class="event-textarea-size"></textarea>
                 </div>
                 <div class="event-textarea fields-event-padding custom-scrollbar">
-                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
+                    <textarea 
+                        ng-disabled="createEventCtrl.isEventOutdated()"
+                        md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
                         placeholder="Programação"
                         class="event-textarea-size"></textarea>
                 </div>

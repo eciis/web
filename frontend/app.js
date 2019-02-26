@@ -253,7 +253,7 @@
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/manageInstitution/manageMembers/management_members.html",
+                        templateUrl: "app/institution/manageMembers/management_members.html",
                         controller: "ManagementMembersController as manageMemberCtrl"
                     }
                 }

@@ -272,8 +272,8 @@
                 views: {
                     content_manage_institution: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
-                            "app/institution/manageInstitution/editInfo/edit_info.html",
-                            "app/institution/manageInstitution/editInfo/edit_info_mobile.html", 
+                            "app/institution/editInfo/edit_info.html",
+                            "app/institution/editInfo/edit_info_mobile.html", 
                             SCREEN_SIZES.SMARTPHONE
                         )
                     }

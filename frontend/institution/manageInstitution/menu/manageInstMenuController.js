@@ -9,7 +9,12 @@
         const manageInstMenuCtrl = this;
 
         manageInstMenuCtrl.$onInit = () => {
-            manageInstMenuCtrl.user = AuthService.getCurrentUser();
+            _.defaults(manageInstMenuCtrl, {
+                user: AuthService.getCurrentUser(),
+                
+            });
+
+            console.log(manageInstMenuCtrl.user);
             manageInstMenuCtrl._loadInstitution();
         };
 
@@ -30,5 +35,17 @@
             goBack: () => window.history.back(),
             showImageCover: () => true
         };
+
+        manageInstMenuCtrl._loadSwitchInstOptions = () => {
+            return manageInstMenuCtrl.user && manageInstMenuCtrl.user
+                .institution_profiles
+                .map(prof => {
+                    return {
+                        icon: 'bookmark',
+                        title: prof.institution.name
+                    };
+                });
+        }
+        
     }
 })();

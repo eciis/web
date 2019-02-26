@@ -1,7 +1,23 @@
+.manage-inst-menu__toolbar {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+}
+
+.manage-inst-menu__toolbar--title {
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
 .manage-inst-menu {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 2em auto;
+}
+
+.manage-inst-menu #buttons-navbar-inst-container {
+    display: none;
 }
 
 .manage-inst-menu__divider {

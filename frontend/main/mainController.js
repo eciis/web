@@ -143,6 +143,13 @@
             AuthService.reload();
         };
 
+        /** Should update version, refresh user and reload the page.
+         */
+        mainCtrl.updateVersion = function updateVersion() {
+            mainCtrl.refreshUser();
+            $window.location.reload();
+        };
+
         /** Return correct class according currently state.
          */
         mainCtrl.getSelectedClass = function (stateName){

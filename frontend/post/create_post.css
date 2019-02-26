@@ -1,6 +1,5 @@
 .save-post-dialog {
     display: grid;
-    height: 100%;
     padding: 8px;
     overflow: scroll;
 }
@@ -162,8 +161,6 @@
     }
 
     .create-post-actions {
-        position: absolute;
-        bottom: 50px;
         width: 85%;
     }
 
@@ -241,6 +238,19 @@
     }
 }
 
+.dialog-transparent-without-shadow {
+    background-color: rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0;
+}
+
+@media screen and (max-width: 960px) {
+    .dialog-transparent-without-shadow {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 0;
+    }
+}
+
 @media screen and (max-width: 600px) {
     .create-post-title-placeholder {
         font-size: 12px !important;
@@ -248,6 +258,24 @@
 
     .create-post-text {
         font-size: 12px !important;
+    }
+
+    .save-post-dialog {
+        height: 100%;
+    }
+
+    .dialog-transparent-without-shadow {
+        height: 100%;
+    }
+}
+
+@media screen and (min-width: 601px) {
+    .save-post-dialog {
+        overflow: auto;
+    }
+
+    .dialog-transparent-without-shadow {
+        width: 60%;
     }
 }
 

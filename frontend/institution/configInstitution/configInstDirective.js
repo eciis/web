@@ -480,8 +480,8 @@
         return {
             restrict: 'E',
             templateUrl: Utils.selectFieldBasedOnScreenSize(
-                "app/institution/manageInstitution/configInstitution/submit_form.html",
-                "app/institution/manageInstitution/configInstitution/edit_registration_data.html", 475),
+                "app/institution/configInstitution/submit_form.html",
+                "app/institution/configInstitution/edit_registration_data.html", 475),
             controller: "ConfigInstController",
             controllerAs: "configInstCtrl",
             scope: {},

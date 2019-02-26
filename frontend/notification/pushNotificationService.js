@@ -160,7 +160,7 @@
                             tokenObject = objectToken;
                         }
                     });
-                    return tokenObject;
+                    return updatedArray.find((obj) => obj.token === deviceToken);
                 });
             });
         };

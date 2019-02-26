@@ -245,7 +245,7 @@
          */
         configProfileCtrl._openDialog = (event) => {
             const DIALOG_TEXT_SUBSCRIBE = "Deseja permitir notificação no dispositivo?";
-            const DIALOG_TEXT_UNSUBSCRIBE = "Tem certeza que deseja não de receber notificação no dispositivo?";
+            const DIALOG_TEXT_UNSUBSCRIBE = "Tem certeza que não deseja receber notificação no dispositivo?";
             const DIALOG_TEXT = configProfileCtrl.pushNotification? DIALOG_TEXT_SUBSCRIBE : DIALOG_TEXT_UNSUBSCRIBE;
             const confirm = $mdDialog.confirm();
             confirm

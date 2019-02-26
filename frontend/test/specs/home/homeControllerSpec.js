@@ -2,7 +2,7 @@
 
 (describe('Test HomeController', function() {
 
-    let homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, states, http, postService, pushNotService;
+    let homeCtrl, httpBackend, scope, createCtrl, mdDialog, state, states, http, postService;
 
     var institutions = [{
         acronym: 'Certbio',
@@ -35,7 +35,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope,
-            PostService, $mdDialog, $state, AuthService, PushNotificationService, $http, STATES) {
+            PostService, $mdDialog, $state, AuthService, $http, STATES) {
         httpBackend = $httpBackend;
         http = $http;
         scope = $rootScope.$new();
@@ -43,7 +43,6 @@
         state = $state;
         postService = PostService;
         states = STATES;
-        pushNotService = PushNotificationService;
 
         httpBackend.when('GET', "/api/events?page=0&limit=15").respond([event]);
         httpBackend.when('GET', 'main/main.html').respond(200);
@@ -62,14 +61,12 @@
         };
 
         spyOn($rootScope, '$on').and.callThrough();
-        spyOn(pushNotService, 'requestNotificationPermission');
 
         homeCtrl = createCtrl();
         homeCtrl.$onInit();
         httpBackend.flush();
 
         expect($rootScope.$on).toHaveBeenCalled();
-        expect(pushNotService.requestNotificationPermission).toHaveBeenCalledWith(new User(user));
     }));
 
     afterEach(function() {

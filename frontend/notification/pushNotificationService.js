@@ -4,7 +4,7 @@
     const app = angular.module('app');
 
     app.service('PushNotificationService', function PushNotificationService($firebaseArray, 
-        $firebaseObject, $q) {
+        $firebaseObject, $q, AuthService ) {
         /**
          * Service responsible for send request permission
          * to enable notifications to the user and for deal
@@ -23,38 +23,63 @@
         const ref = firebase.database().ref();
         
         const PUSH_NOTIFICATIONS_URL = "pushNotifications/";
-        
-        /**
-         * @private
-         */
-        service._isMobile = {
-            Android: () => {
-                return navigator.userAgent.match(/Android/i);
-            },
-            BlackBerry: () => {
-                return navigator.userAgent.match(/BlackBerry/i);
-            },
-            iOS: () => {
-                return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-            },
-            Opera: () => {
-                return navigator.userAgent.match(/Opera Mini/i);
-            },
-            Windows: () => {
-                return navigator.userAgent.match(/IEMobile/i);
-            },
-            any: () => {
-                return (
-                    service._isMobile.Android() || 
-                    service._isMobile.BlackBerry() || 
-                    service._isMobile.iOS() || 
-                    service._isMobile.Opera() || 
-                    service._isMobile.Windows()
-                );
-            }
-        };
 
         service.firebaseArrayNotifications;
+
+        /**
+         * Setup necessary properties as:
+         *   Initilize firebase array with user's device tokens.
+         */
+        service.setupPushNotificationPermission = () => {
+            service._initFirebaseArray();
+        };
+
+        /**
+         * Check if the user has blocked push notification in the browser for this application.
+         * @returns {boolean} True if is blocked, false otherwise
+         */
+        service.isPushNotificationBlockedOnBrowser = function isPushNotificationBlockedOnBrowser() {
+            const { permission } = Notification;
+            return permission === "denied";
+        };
+
+        /**
+         * Check if the user has already allowed push Notification in this application
+         * @returns {Promise<Boolean>} True if notification is active, false otherwise
+         */
+        service.isPushNotificationActive = function () {
+            return service._getTokenObjectInFirebaseArray().then((tokenObject) => {
+                return !!tokenObject;
+            });
+        };
+
+        /**
+         * Unsubscribe User for push notification in current device.
+         * @return {Promise}
+         */
+        service.unsubscribeUserNotification = () => {
+            return service._removeTokenFromFirebaseArray();
+        };
+
+        /**
+         * Remove the current device token from firebase array, blocking the device from
+         * receive push notifications.
+         * @returns {Promise}
+         * @private
+         */
+        service._removeTokenFromFirebaseArray = () => {
+            return service._getTokenObjectInFirebaseArray().then((tokenObject) => {
+                tokenObject && service.firebaseArrayNotifications.$remove(tokenObject);
+            });
+        };
+
+        /**
+         * Subscribe User for push notification in current device.
+         * * @return {Promise}
+         */
+        service.subscribeUserNotification = () => {
+            return service._requestNotificationPermission();
+        };
 
         /**
          * Ask permission to the user to send push notifications
@@ -62,10 +87,8 @@
          * is retrieved and saveToken is called passing the token
          * as parameter.
          */
-        service.requestNotificationPermission = function requestNotificationPermission(user) {
-            service.currentUser = user;
-            const isOnMobile = service._isMobile.any();
-            if (messaging && !service._hasNotificationPermission() && isOnMobile) {
+        service._requestNotificationPermission = function requestNotificationPermission() {
+            if (messaging && !service.isPushNotificationBlockedOnBrowser()) {
                 return messaging.requestPermission().then(() => {
                     return messaging.getToken().then(token => {
                         service._saveToken(token);
@@ -97,7 +120,7 @@
          * @private
          */
         service._initFirebaseArray = function initFirebaseArray() {
-            const endPoint = `${PUSH_NOTIFICATIONS_URL}${service.currentUser.key}`;
+            const endPoint =  `${PUSH_NOTIFICATIONS_URL}${AuthService.getCurrentUser().key}`;
             const notificationsRef = ref.child(endPoint);
 
             if (!service.firebaseArrayNotifications) {
@@ -124,13 +147,22 @@
         };
 
         /**
-         * Check if the user has already conceded the permission
-         * using Notification object.
+         * Look for firebase object, in firebase array, corresponding to the current device token.
+         * @returns {Promise<FirebaseObject|undefined>}
          * @private
          */
-        service._hasNotificationPermission = function hasNotificationPermission() {
-            const { permission } = Notification;
-            return permission === "granted";
+        service._getTokenObjectInFirebaseArray = () => {
+             return messaging && messaging.getToken().then((deviceToken) => {
+                return service.firebaseArrayNotifications.$loaded().then((updatedArray) => {
+                    let tokenObject;
+                    updatedArray.map((objectToken) => {
+                        if (objectToken.token === deviceToken){
+                            tokenObject = objectToken;
+                        }
+                    });
+                    return updatedArray.find((obj) => obj.token === deviceToken);
+                });
+            });
         };
     });
 })();

@@ -244,7 +244,7 @@
                 url: "/menu",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/manageInstitution/menu/manage_institution_menu.html",
+                        templateUrl: "app/institution/manageInstMenu/manage_institution_menu.html",
                         controller: "ManageInstMenuController as manageInstMenuCtrl"
                     }
                 }

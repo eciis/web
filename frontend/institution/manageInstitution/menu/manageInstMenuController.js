@@ -5,21 +5,20 @@
     .module("app")
     .controller("ManageInstMenuController", ManageInstMenuController);
 
-    function ManageInstMenuController($state, AuthService, InstitutionService, ManageInstItemsFactory) {
+    function ManageInstMenuController(AuthService, InstitutionService, ManageInstItemsFactory) {
         const manageInstMenuCtrl = this;
 
         manageInstMenuCtrl.$onInit = () => {
             _.defaults(manageInstMenuCtrl, {
                 user: AuthService.getCurrentUser(),
-                
             });
-
-            console.log(manageInstMenuCtrl.user);
+            
+            manageInstMenuCtrl._loadSwitchInstOptions();
             manageInstMenuCtrl._loadInstitution();
         };
 
         manageInstMenuCtrl._loadInstitution = () => {
-            InstitutionService.getInstitution($state.params.institutionKey)
+            InstitutionService.getInstitution(manageInstMenuCtrl.user.current_institution.key)
                 .then(institution => {
                     manageInstMenuCtrl.institution = institution;
                     manageInstMenuCtrl._loadMenuOptions(institution);
@@ -37,15 +36,25 @@
         };
 
         manageInstMenuCtrl._loadSwitchInstOptions = () => {
-            return manageInstMenuCtrl.user && manageInstMenuCtrl.user
-                .institution_profiles
+            const getIcon = (instKey) => {
+                const isInstSelected = manageInstMenuCtrl.user.current_institution.key === instKey;
+                return isInstSelected ? "radio_button_checked" : "radio_button_unchecked";
+            };
+            
+            manageInstMenuCtrl.switchInstOptions = manageInstMenuCtrl.user.institution_profiles
+                .filter(prof => manageInstMenuCtrl.user.isAdmin(prof.institution_key))
                 .map(prof => {
                     return {
-                        icon: 'bookmark',
-                        title: prof.institution.name
+                        getIcon: () => getIcon(prof.institution_key),
+                        title: prof.institution.name,
+                        action: () => switchInstitution(prof.institution)
                     };
                 });
-        }
-        
+        };
+
+        const switchInstitution = institution => {
+            manageInstMenuCtrl.user.changeInstitution(institution);
+            manageInstMenuCtrl._loadInstitution();
+        };
     }
 })();

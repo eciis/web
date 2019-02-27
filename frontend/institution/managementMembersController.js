@@ -97,6 +97,23 @@
             ProfileService.showProfile(userKey, ev, manageMemberCtrl.institution.key);
         };
 
+        manageMemberCtrl.getMembersDeleteBtn = (event, member) => {
+            return {
+                icon: 'delete',
+                iconColor: '#9E9E9E',
+                showIf: () => !manageMemberCtrl.isAdmin(member),
+                action: () => manageMemberCtrl.openRemoveMemberDialog(event, member)
+            };
+        };
+
+        manageMemberCtrl.getMembersProfileBtn = (event, member) => {
+            return {
+                icon: 'info',
+                iconColor: '#9E9E9E',
+                action: () => manageMemberCtrl.showUserProfile(member.key, event)
+            };
+        };
+
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;

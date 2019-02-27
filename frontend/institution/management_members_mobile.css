@@ -56,3 +56,8 @@
     color: white;
     margin-right: 0;
 }
+
+.manage-members__list {
+    display: grid;
+    grid-row-gap: 0.5em;
+}

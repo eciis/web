@@ -7,10 +7,11 @@
     <span class="entity-showcase__subtitle responsive__title">{{entityShowcaseCtrl.subtitle }}</span>
     <div class="entity-showcase__right-icon-buttons">
         <icon-button
-                ng-repeat="rightIconBtn in entityShowcaseCtrl.rightIconBtns"
-                icon="{{ rightIconBtn.icon }}"
-                icon-color="{{ rightIconBtn.iconColor }}"
-                action="rightIconBtn.action">
+            ng-repeat="rightIconBtn in entityShowcaseCtrl.rightIconBtns"
+            ng-if="entityShowcaseCtrl.showIconBtn(rightIconBtn)"
+            icon="{{ rightIconBtn.icon }}"
+            icon-color="{{ rightIconBtn.iconColor }}"
+            action="rightIconBtn.action">
         </icon-button>
     </div>
 </div>

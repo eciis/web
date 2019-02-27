@@ -14,6 +14,7 @@
      *          icon: aIcon,
      *          iconColor: aIconColor,
      *          action: aAction,
+     *          showIf: function
      *      },
      * ]
      * @class entityShowcase
@@ -45,6 +46,10 @@
         const entityShowcaseCtrl = this;
 
         entityShowcaseCtrl.showIcon = () => !_.isNil(entityShowcaseCtrl.icon);
+
+        entityShowcaseCtrl.showIconBtn = iconBtn => {
+            return iconBtn.showIf ? iconBtn.showIf() : true;
+        }
     }
 
 })();

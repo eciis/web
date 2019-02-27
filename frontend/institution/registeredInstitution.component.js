@@ -80,7 +80,15 @@
          * was after the current institution's creation.
          */
         regInstCtrl.hasSeenInstitution = function hasSeenInstitution() {
+            console.log(regInstCtrl.institution);
             return regInstCtrl.user.last_seen_institutions && regInstCtrl.user.last_seen_institutions > regInstCtrl.institution.creation_date;
+        };
+
+        regInstCtrl.$onInit = () => {
+            const address = regInstCtrl.institution.address;
+            if (_.isString(address)) {
+                regInstCtrl.institution.address = JSON.parse(address);
+            }
         };
     });
 })();

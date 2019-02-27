@@ -95,15 +95,13 @@
                         }
                     };
                 });
-                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
-                spyOn(mdDialog, 'show');
+                spyOn(searchCtrl, 'setupResultsInMobile').and.callThrough();
 
                 searchCtrl.search_keyword = 'splab';
                 searchCtrl.search();
 
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
-                expect(searchCtrl.showSearchFromMobile).toHaveBeenCalled();
-                expect(mdDialog.show).toHaveBeenCalled();
+                expect(searchCtrl.setupResultsInMobile).toHaveBeenCalled();
             });
 
             it('should call makeSearch(); not mobile screen', () => {
@@ -114,17 +112,13 @@
                         }
                     };
                 });
-                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
-                spyOn(mdDialog, 'show');
                 spyOn(Utils, 'isMobileScreen').and.returnValue(false);
 
                 searchCtrl.search_keyword = 'splab';
                 searchCtrl.search();
 
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
-                expect(searchCtrl.showSearchFromMobile).not.toHaveBeenCalled();
-                expect(mdDialog.show).not.toHaveBeenCalled();
-            })
+            });
         });
 
         describe('makeSearch()', function() {
@@ -180,14 +174,6 @@
             it('Should be true if search_keyword is not empty', function() {
                 searchCtrl.search_keyword = "splab";
                 expect(searchCtrl.isLoading()).toBeTruthy();
-            });
-        });
-
-        describe('showSearchFromMobile', () => {
-            it('should call mdDialog.show', () => {
-                spyOn(mdDialog, 'show');
-                searchCtrl.showSearchFromMobile();
-                expect(mdDialog.show).toHaveBeenCalled();
             });
         });
 

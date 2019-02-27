@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""User Request Handler."""
+"""Current state link request email handler."""
 
 import json
 
@@ -12,7 +12,7 @@ __all__ = ['CurrentStateEmailRequestHandler']
 
 
 class CurrentStateEmailRequestHandler(BaseHandler):
-    """Email request handler."""
+    """Current state email request handler."""
 
     @login_required
     @json_response

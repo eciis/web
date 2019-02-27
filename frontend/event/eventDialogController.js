@@ -37,6 +37,7 @@
         };
 
         dialogCtrl.changeUrlLink = function (urlLink, urlList) {
+            console.log(dialogCtrl.videoUrls);
             urlLink.url ? dialogCtrl.addUrl(urlList) : urlList.length > 1 &&
                 dialogCtrl.removeUrl(urlLink, urlList);
         };
@@ -504,8 +505,9 @@
             const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
-            initUrlFields();
             dialogCtrl._loadStateParams();
+            initUrlFields();
+
             if (dialogCtrl.event) {
                 dialogCtrl._loadStatesToEdit();
             } else if(!dialogCtrl.event && $state.params.eventKey) {

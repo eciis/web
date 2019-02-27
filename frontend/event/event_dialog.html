@@ -181,7 +181,7 @@
                         <md-input-container class="md-block" style="height: 25px;">
                           <label>Link do Youtube</label>
                           <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
-                            ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
+                            ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" validate-youtube-link-directive
                             name="video"/>
                             <div ng-messages="createEvent.video.$error">
                                 <div ng-message="pattern">Link do Youtube inválido.</div>

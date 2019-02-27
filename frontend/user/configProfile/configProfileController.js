@@ -6,11 +6,12 @@
     .controller("ConfigProfileController", [
         '$state', 'STATES', '$stateParams', 'ProfileService', 'CropImageService', 'AuthService', '$q',
         'UserService', 'ImageService', '$rootScope', 'SCREEN_SIZES', 'MessageService', '$mdDialog', 'ObserverRecorderService',
+        'PushNotificationService',
         ConfigProfileController
     ]);
     
     function ConfigProfileController($state, STATES, $stateParams, ProfileService, CropImageService, AuthService, 
-        $q, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService) {
+        $q, UserService, ImageService, $rootScope, SCREEN_SIZES, MessageService, $mdDialog, ObserverRecorderService, PushNotificationService) {
 
         const configProfileCtrl = this;
 
@@ -25,6 +26,7 @@
         configProfileCtrl.$onInit = () => {
             configProfileCtrl._setupUser();
             configProfileCtrl.setSaveButton();
+            setPushNotificationModel();
         };
 
         configProfileCtrl._setupUser = () => {
@@ -192,7 +194,7 @@
                 name: 'SALVAR',
                 isAvailable: () => !configProfileCtrl.loadingSubmission
             };
-        };        
+        };
 
         function deleteUser() {
             const promise = UserService.deleteAccount();
@@ -201,5 +203,73 @@
             });
             return promise;
         }
-    };
+
+        /**
+         * Subscribe or Unsubscribe user for push notification
+         * according to configProfileCtrl.pushNotification model value.
+         */
+        configProfileCtrl.pushChange = () => {
+            configProfileCtrl.pushNotification && configProfileCtrl._subscribeUser();
+            !configProfileCtrl.pushNotification && configProfileCtrl._unsubscribeUser();
+        };
+
+        /**
+         * Set configProfileCtrl.pushNotification according to the user's
+         * push notification subscription.
+         * True if push notification is active, false otherwise.
+         */
+        function setPushNotificationModel() {
+            PushNotificationService.isPushNotificationActive().then((result) => {
+                configProfileCtrl.pushNotification = result;
+            });
+        }
+
+        /**
+         * Stop device from receive push notification
+         * @returns {Promise<T | never>}
+         * @private
+         */
+        configProfileCtrl._unsubscribeUser = () => {
+            return configProfileCtrl._openDialog().then(() => {
+                return PushNotificationService.unsubscribeUserNotification();
+            }).catch(() => {
+                configProfileCtrl.pushNotification = true;
+            });
+        };
+
+        /**
+         * Allow device to receive push notification
+         * @returns {Promise<T | never>}
+         * @private
+         */
+        configProfileCtrl._subscribeUser = () => {
+            return configProfileCtrl._openDialog().then(() => {
+                return PushNotificationService.subscribeUserNotification();
+            }).catch(() => {
+                configProfileCtrl.pushNotification = false;
+            });
+        };
+
+        /**
+         * Dialog to double check user's choice about push notification permission.
+         * @param event
+         * @returns {*|Promise<PaymentResponse>|void}
+         * @private
+         */
+        configProfileCtrl._openDialog = (event) => {
+            const DIALOG_TEXT_SUBSCRIBE = "Deseja permitir notificação no dispositivo?";
+            const DIALOG_TEXT_UNSUBSCRIBE = "Tem certeza que não deseja receber notificação no dispositivo?";
+            const DIALOG_TEXT = configProfileCtrl.pushNotification? DIALOG_TEXT_SUBSCRIBE : DIALOG_TEXT_UNSUBSCRIBE;
+            const confirm = $mdDialog.confirm();
+            confirm
+                .clickOutsideToClose(false)
+                .title('Notificação no dispositivo')
+                .textContent(DIALOG_TEXT)
+                .ariaLabel('Notificação no dispositivo')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+            return $mdDialog.show(confirm);
+        };
+    }
 })();

@@ -8,7 +8,7 @@
 <md-content class="manage-members">
     <div class="manage-members__cards">
         <clickable-card icon="send" title="enviar convites">
-            <div class="manage-members__send__invites">
+            <div class="manage-members__card__content manage-members__send__invites">
                 <h3>Convidar Membros</h3>
                 <p class="description">
                     Coloque abaixo os endereços de e-mail das pessoas que você deseja convidar 
@@ -22,7 +22,7 @@
                             md-maxlength="120" type="email" name="email" placeholder="+ Adicionar e-mail">
                     </md-input-container>
                 </form>
-                <md-button class="manage-members__send__invites--btn" type="submit" 
+                <md-button class="manage-members__btn" type="submit" 
                     ng-if="!manageMemberCtrl.isLoadingInvite">
                     Enviar
                 </md-button>
@@ -31,6 +31,19 @@
         </clickable-card>
 
         <clickable-card icon="account_circle" title="administrador">
+            <div class="manage-members__card__content">
+                <entity-showcase
+                    avatar="manageMemberCtrl.institution.admin.photo_url"
+                    title="manageMemberCtrl.institution.admin.name"
+                    subtitle="manageMemberCtrl.institution.admin.email[0]"
+                    ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)">
+                </entity-showcase>
+                <md-button class="manage-members__btn" 
+                    ng-click="manageMemberCtrl.openTransferAdminDialog($event)"
+                    ng-disabled="manageMemberCtrl.disableTransferAdminButton()">
+                    Transferir
+                </md-button>
+            </div>
         </clickable-card>
 
         <clickable-card icon="account_circle" title="gerenciar membros">

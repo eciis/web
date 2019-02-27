@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""User Request Handler."""
+"""Request state email sender."""
 
 from . import EmailSender
 

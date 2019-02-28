@@ -49,8 +49,8 @@
         /* This method add ids in each option and remove the options that are empty.*/
         function modifyOptions(){
             surveyCtrl.options = surveyCtrl.options
-                .map((option, index) => {option.id = index; return option;})
-                .filter(option => option.text);
+                .filter(option => option.text)
+                .map((option, index) => {option.id = index; return option;});
         }
 
         function formateDate(){

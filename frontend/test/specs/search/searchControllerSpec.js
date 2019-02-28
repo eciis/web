@@ -207,5 +207,25 @@
                 expect(searchCtrl.hasChanges).toEqual(false);
             });
         });
+
+        describe('setupResultsInMobile()', () => {
+            it('should unset hasNotSearched when is a mobile screen', () => {
+                window.screen = {width: 200};
+                expect(searchCtrl.hasNotSearched).toEqual(true);
+
+                searchCtrl.setupResultsInMobile();
+
+                expect(searchCtrl.hasNotSearched).toEqual(false);
+            });
+
+            it('should not unset hasNotSearched when is not a mobile screen', () => {
+                window.screen = { width: 1000 };
+                expect(searchCtrl.hasNotSearched).toEqual(true);
+
+                searchCtrl.setupResultsInMobile();
+
+                expect(searchCtrl.hasNotSearched).toEqual(true);
+            });
+        });
     });
 }));

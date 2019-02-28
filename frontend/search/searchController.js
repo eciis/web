@@ -81,6 +81,10 @@
             }
         };
 
+        /**
+         * Change the title position and the flag that decides
+         * if the results gotta be shown or not.
+         */
         searchCtrl.setupResultsInMobile = () => {
             if (searchCtrl.isMobileScreen()) {
                 const title = document.getElementById('search-title');

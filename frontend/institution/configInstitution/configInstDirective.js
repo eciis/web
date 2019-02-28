@@ -476,12 +476,12 @@
         })();
     });
 
-    app.directive("configInstitution", function() {
+    app.directive("configInstitution", function(SCREEN_SIZES) {
         return {
             restrict: 'E',
             templateUrl: Utils.selectFieldBasedOnScreenSize(
                 "app/institution/configInstitution/submit_form.html",
-                "app/institution/configInstitution/edit_registration_data.html", 475),
+                "app/institution/configInstitution/edit_registration_data.html", SCREEN_SIZES.SMARTPHONE),
             controller: "ConfigInstController",
             controllerAs: "configInstCtrl",
             scope: {},

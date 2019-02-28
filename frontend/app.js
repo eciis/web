@@ -540,7 +540,8 @@
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT,
-            STATES.INST_DESCRIPTION
+            STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_MENU
         ];
 
         $transitions.onStart({

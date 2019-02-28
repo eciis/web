@@ -37,7 +37,6 @@
         };
 
         dialogCtrl.changeUrlLink = function (urlLink, urlList) {
-            console.log(dialogCtrl.videoUrls);
             urlLink.url ? dialogCtrl.addUrl(urlList) : urlList.length > 1 &&
                 dialogCtrl.removeUrl(urlLink, urlList);
         };

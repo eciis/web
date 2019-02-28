@@ -1,0 +1,64 @@
+.manage-institution {
+    display: grid;
+    padding: 1em 0;
+    margin-top: 25%;
+}
+
+.manage-institution__toolbar {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+}
+
+.manage-institution__toolbar__title {
+    color: #737474;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.manage-institution__cards {
+    grid-row-start: 2;
+    display: grid;
+    grid-row-gap: 1em;
+}
+
+.manage-institution__card__content {
+    display: grid;
+    grid-row-gap: 1em;
+}
+
+/* Send invites section */
+.manage-institution__send__invites > h3,
+.manage-institution__send__invites > p {
+    margin: 0;
+}
+
+.manage-institution__send__invites > .description {
+    font-size: 0.9em;
+    color: grey;
+}
+
+.manage-institution__send__invites > .subtitle {
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.manage-institution__send__invites md-input-container {
+    padding-right: 0;
+    margin: 0;
+    color: #9E9E9E;
+}
+
+.manage-institution__btn {
+    width: min-content;
+    justify-self: end;
+    background-color: #009688;
+    color: white;
+    margin-right: 0;
+}
+
+.manage-institution__list {
+    display: grid;
+    grid-row-gap: 0.5em;
+    max-height: 18em;
+}

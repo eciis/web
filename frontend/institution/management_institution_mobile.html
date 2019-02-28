@@ -1,0 +1,54 @@
+<white-toolbar 
+    primary-button-icon="keyboard_arrow_left"
+    title="Vínculos Institucionais"
+    title-class="manage-institution__toolbar__title"
+    class="manage-institution__toolbar">
+</white-toolbar>
+
+<md-content class="manage-institution hide-scrollbar-mobile">
+    <div class="manage-institution__cards">
+        <clickable-card icon="send" title="Convidar Instituição">
+            <div class="manage-institution__card__content manage-institution__send__invites">
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="account_balance" title="Hierarquia Superior">
+            <div class="manage-institution__card__content">
+                <!-- <entity-showcase
+                    avatar=""
+                    title="inviteInstHierCtrl.institution.parent_institution.name"
+                    subtitle=""
+                    ng-click="inviteInstHierCtrl.showUserProfile(inviteInstHierCtrl.institution.admin.key, $event)">
+                </entity-showcase> -->
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="account_balance" title="Hierarquia Subordinada">
+            <div class="manage-institution__card__content">
+                <search-field keyword="searchSubordinate"></search-field>
+                <md-content class="manage-institution__list custom-scrollbar">
+                    <!-- <entity-showcase ng-repeat="subInst in inviteInstHierCtrl.members | filter: searchSubordinate" 
+                        avatar="subInst.photo_url"
+                        title="subInst.name"
+                        subtitle="subInst.email[0]"
+                        right-icon-btns="[]">
+                    </entity-showcase> -->
+                </md-content>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="feedback" title="Vínculos Pendentes">
+            <div class="manage-institution__card__content">
+                <search-field keyword="searchInstRequest"></search-field>
+                <md-content class="manage-institution__list custom-scrollbar">
+                    <!-- <entity-showcase ng-repeat="instRequest in inviteInstHierCtrl.requests | filter: searchInstRequest" 
+                        avatar="inviteInstHierCtrl.getDefaultAvatar()"
+                        title="instRequest.sender_name"
+                        subtitle="instRequest.institutional_email"
+                        right-icon-btns="[]">
+                    </entity-showcase> -->
+                </md-content>
+            </div>
+        </clickable-card>
+    </div>
+</md-content>

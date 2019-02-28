@@ -253,6 +253,15 @@
                     }
                 }
             })
+            .state(STATES.MANAGE_INST_LINKS, {
+                url: "/links",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/management_institution_mobile.html",
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
+                    }
+                }
+            })
             .state(STATES.EVENT_DETAILS, {
                 url: "/event/:eventKey/details",
                 views: {
@@ -532,7 +541,8 @@
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT,
-            STATES.INST_DESCRIPTION
+            STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_LINKS
         ];
 
         $transitions.onStart({

@@ -24,10 +24,7 @@
          * than it loads the menu options
          */
         manageInstMenuCtrl._loadInstitution = () => {
-            const currentProfile = manageInstMenuCtrl._getProfilesAdmin()
-                .find(prof => prof.institution_key === manageInstMenuCtrl.user.current_institution.key);
-                
-            manageInstMenuCtrl.institution = currentProfile.institution;
+            manageInstMenuCtrl.institution = manageInstMenuCtrl.user.current_institution;
             manageInstMenuCtrl._loadMenuOptions();
         };
 

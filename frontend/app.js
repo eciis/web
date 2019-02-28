@@ -240,7 +240,7 @@
                     }
                 }
             })
-            .state(STATES.MANAGE_INST_MENU, {
+            .state(STATES.MANAGE_INST_MENU_MOB, {
                 url: "/menu",
                 views: {
                     content_manage_institution: {
@@ -541,7 +541,7 @@
         const permitted_routes = [
             STATES.CREATE_EVENT,
             STATES.INST_DESCRIPTION,
-            STATES.MANAGE_INST_MENU
+            STATES.MANAGE_INST_MENU_MOB
         ];
 
         $transitions.onStart({

@@ -64,7 +64,7 @@
                     topDivider: true,
                     onClick: () => {
                         const state = Utils.selectFieldBasedOnScreenSize(
-                            STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MENU, SCREEN_SIZES.SMARTPHONE
+                            STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MENU_MOB, SCREEN_SIZES.SMARTPHONE
                         );
                         $state.go(state, {institutionKey: getInstitutionKey()});
                     },

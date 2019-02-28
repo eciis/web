@@ -3,11 +3,8 @@ app.directive('validateYoutubeLinkDirective', function() {
   return {
     require: 'ngModel',
     link: function(scope, element, attr, mCtrl) {
-
       function validateLink(value) {
-        var regexp = /(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+/;
-        console.log(":::::::::::::::::::::::::::::::::::::::::")
-        console.log(regexp.test(value));
+        var regexp =/http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
         if (regexp.test(value)) {
           mCtrl.$setValidity('pattern', true);
         } else {

@@ -114,6 +114,16 @@
             };
         };
 
+        manageMemberCtrl.getDefaultAvatar = () => "app/images/avatar.png";
+
+        manageMemberCtrl.getInvitesBtn = (event, invite) => {
+            return {
+                icon: 'send', 
+                iconColor: '#9E9E9E',
+                action: () => manageMemberCtrl.resendInvite(invite.key, event)
+            };
+        }
+
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
             manageMemberCtrl.invite.admin_key = manageMemberCtrl.user.key;

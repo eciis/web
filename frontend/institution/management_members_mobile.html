@@ -64,7 +64,17 @@
         </clickable-card>
 
         <clickable-card icon="email" title="convites enviados">
-            <search-field keyword="manageMemberCtrl.searchInvite"></search-field>
+            <div class="manage-members__card__content">
+                <search-field keyword="searchInvite"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="invite in manageMemberCtrl.sent_invitations | filter: searchInvite" 
+                        avatar="manageMemberCtrl.getDefaultAvatar()"
+                        title="invite.invitee"
+                        subtitle="invite.sender_name"
+                        right-icon-btns="[manageMemberCtrl.getInvitesBtn($event, invite)]">
+                    </entity-showcase>
+                </md-content>
+            </div>
         </clickable-card>
 
         <clickable-card icon="feedback" title="convites requisitados">

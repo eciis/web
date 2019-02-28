@@ -221,7 +221,7 @@
                   hide-gt-xs ng-if="(controller.getStep(2) || controller.getStep(3)) && !controller.loading">
                     <span style="color: white;">voltar</span>
                 </md-button>
-                <md-button ng-if="!controller.loading" class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+                <md-button ng-disabled="createEvent.$invalid" ng-if="!controller.loading" class="md-raised"  type="submit" md-colors="{background: controller.colorButtonSubmit(createEvent.$valid)}">
                     <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
                 </md-button>
                 <load-circle flex ng-if="controller.loading"></load-circle>

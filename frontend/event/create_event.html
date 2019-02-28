@@ -158,8 +158,8 @@
                             <md-input-container class="md-block event-link-height">
                                 <label class="event-links-color">Link do Youtube</label>
                                 <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
-                                ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
-                                name="video"/>
+                                ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" 
+                                name="video" validate-youtube-link-directive/>
                                 <div ng-messages="createEvent.video.$error">
                                     <div ng-message="pattern">Link do Youtube inválido.</div>
                                 </div>
@@ -215,7 +215,7 @@
                 <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
                     Cancelar
                 </md-button>
-                <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
+                <md-button ng-disabled="createEvent.$invalid" class="btn-submit" type="submit" md-colors="{background: createEventCtrl.colorButtonSubmit(createEvent.$valid)}" title="Enviar">
                     <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
                 </md-button>
             </div>

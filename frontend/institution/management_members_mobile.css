@@ -60,4 +60,5 @@
 .manage-members__list {
     display: grid;
     grid-row-gap: 0.5em;
+    max-height: 18em;
 }

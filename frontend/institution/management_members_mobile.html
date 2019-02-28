@@ -48,9 +48,9 @@
 
         <clickable-card icon="account_circle" title="gerenciar membros">
             <div class="manage-members__card__content">
-                <search-field keyword="manageMemberCtrl.searchMember"></search-field>
-                <md-content class="manage-members__list">
-                    <entity-showcase ng-repeat="member in manageMemberCtrl.members | filter: manageMemberCtrl.currentMember" 
+                <search-field keyword="searchMember"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="member in manageMemberCtrl.members | filter: searchMember" 
                         avatar="member.photo_url"
                         title="member.name"
                         subtitle="member.email[0]"

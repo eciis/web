@@ -116,11 +116,21 @@
 
         manageMemberCtrl.getDefaultAvatar = () => "app/images/avatar.png";
 
+        manageMemberCtrl.getInviteSubtitle = (invite) => `Convidado por: ${invite.sender_name}`;
+
         manageMemberCtrl.getInvitesBtn = (event, invite) => {
             return {
                 icon: 'send', 
                 iconColor: '#9E9E9E',
                 action: () => manageMemberCtrl.resendInvite(invite.key, event)
+            };
+        }
+
+        manageMemberCtrl.getRequestBtn = (event, request) => {
+            return {
+                icon: 'error', 
+                iconColor: '#009688',
+                action: () => manageMemberCtrl.openAcceptRequestDialog(request, event)
             };
         }
 

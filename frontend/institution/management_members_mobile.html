@@ -70,7 +70,7 @@
                     <entity-showcase ng-repeat="invite in manageMemberCtrl.sent_invitations | filter: searchInvite" 
                         avatar="manageMemberCtrl.getDefaultAvatar()"
                         title="invite.invitee"
-                        subtitle="invite.sender_name"
+                        subtitle="manageMemberCtrl.getInviteSubtitle(invite)"
                         right-icon-btns="[manageMemberCtrl.getInvitesBtn($event, invite)]">
                     </entity-showcase>
                 </md-content>
@@ -78,7 +78,17 @@
         </clickable-card>
 
         <clickable-card icon="feedback" title="convites requisitados">
-            <search-field keyword="manageMemberCtrl.searchRequest"></search-field>
+            <div class="manage-members__card__content">
+                <search-field keyword="searchRequest"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="request in manageMemberCtrl.requests | filter: searchRequest" 
+                        avatar="manageMemberCtrl.getDefaultAvatar()"
+                        title="request.sender_name"
+                        subtitle="request.institutional_email"
+                        right-icon-btns="[manageMemberCtrl.getRequestBtn(event, request)]">
+                    </entity-showcase>
+                </md-content>
+            </div>
         </clickable-card>
     </div>
 </md-content>

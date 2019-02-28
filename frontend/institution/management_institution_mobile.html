@@ -14,12 +14,16 @@
 
         <clickable-card icon="account_balance" title="Hierarquia Superior">
             <div class="manage-institution__card__content">
-                <!-- <entity-showcase
-                    avatar=""
+                <entity-showcase
+                    ng-if="inviteInstHierCtrl.hasParent"
+                    icon="account_balance"
                     title="inviteInstHierCtrl.institution.parent_institution.name"
-                    subtitle=""
-                    ng-click="inviteInstHierCtrl.showUserProfile(inviteInstHierCtrl.institution.admin.key, $event)">
-                </entity-showcase> -->
+                    subtitle="inviteInstHierCtrl.getStatusMsg(inviteInstHierCtrl.linkParentStatus())"
+                    right-icon-btns="[
+                        inviteInstHierCtrl.createIconBtn('more_vert', 
+                            inviteInstHierCtrl.removeLink, [inviteInstHierCtrl.institution.parent_institution, true, $event])
+                    ]">
+                </entity-showcase>
             </div>
         </clickable-card>
 

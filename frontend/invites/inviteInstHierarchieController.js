@@ -30,6 +30,10 @@
         inviteInstHierCtrl.requested_invites = [];
         inviteInstHierCtrl.isLoadingSubmission = false;
 
+        inviteInstHierCtrl.$onInit = () => {
+            loadInstitution();
+        }
+
         inviteInstHierCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
         };
@@ -202,7 +206,7 @@
         };
 
         inviteInstHierCtrl.isActive = function isActive(institution) {
-            return institution.state === ACTIVE;
+            return institution && institution.state === ACTIVE;
         };
 
         function loadInstitution() {
@@ -354,6 +358,14 @@
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
+        inviteInstHierCtrl.getStatusMsg = status => {
+            if(inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)) {
+                return `Status do vínculo: ${status}`;
+            } else {
+                return "Instituição ainda não cadastrada na plataforma"
+            }
+        };
+
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
             RequestDialogService
                 .showHierarchyDialog(request, event)
@@ -405,6 +417,12 @@
           return Utils.limitString(string, size);
         };
 
-        loadInstitution();
+        inviteInstHierCtrl.createIconBtn = (icon, action, params) => {
+            return {
+                icon: icon,
+                iconColor: '#009688',
+                action: () => action(...params)
+            }
+        };
     });
 })();

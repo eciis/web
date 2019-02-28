@@ -1,6 +1,6 @@
 .entity-showcase {
     display: grid;
-    grid-template-columns: max-content auto auto;
+    grid-template-columns: max-content auto max-content;
     grid-template-rows: max-content max-content;
     grid-template-areas:
             'avatar title right-icon-buttons'

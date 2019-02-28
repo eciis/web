@@ -86,7 +86,8 @@ class PostCommentHandlerTest(TestBaseHandler):
             'entity_key': self.user_post.key.urlsafe(),
             'entity_type': 'COMMENT',
             'current_institution': self.institution.key.urlsafe(),
-            'sender_institution_key': self.user_post.institution.urlsafe()
+            'sender_institution_key': self.user_post.institution.urlsafe(),
+            'field': 'subscribers'
         }
 
         push_not_params = {

@@ -123,3 +123,6 @@
     margin: 0 2em;
 }
 
+.config-profile__form > md-input-container > md-switch .md-container {
+    margin: auto 0 auto auto;
+}

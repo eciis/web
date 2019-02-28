@@ -18,7 +18,7 @@
                     ng-if="inviteInstHierCtrl.hasParent"
                     icon="account_balance"
                     title="inviteInstHierCtrl.institution.parent_institution.name"
-                    subtitle="inviteInstHierCtrl.getStatusMsg(inviteInstHierCtrl.linkParentStatus())"
+                    subtitle="inviteInstHierCtrl.getStatusMsg(inviteInstHierCtrl.institution.parent_institution, true)"
                     right-icon-btns="[
                         inviteInstHierCtrl.createIconBtn('more_vert', 
                             inviteInstHierCtrl.removeLink, [inviteInstHierCtrl.institution.parent_institution, true, $event])
@@ -31,12 +31,16 @@
             <div class="manage-institution__card__content">
                 <search-field keyword="searchSubordinate"></search-field>
                 <md-content class="manage-institution__list custom-scrollbar">
-                    <!-- <entity-showcase ng-repeat="subInst in inviteInstHierCtrl.members | filter: searchSubordinate" 
-                        avatar="subInst.photo_url"
+                    <entity-showcase 
+                        ng-repeat="subInst in inviteInstHierCtrl.institution.children_institutions | filter: searchSubordinate" 
+                        icon="account_balance"
                         title="subInst.name"
-                        subtitle="subInst.email[0]"
-                        right-icon-btns="[]">
-                    </entity-showcase> -->
+                        subtitle="inviteInstHierCtrl.getStatusMsg(subInst, false)"
+                        right-icon-btns="[
+                            inviteInstHierCtrl.createIconBtn('link', inviteInstHierCtrl.removeLink, [subInst, false, $event]),
+                            inviteInstHierCtrl.createIconBtn('delete', inviteInstHierCtrl.removeChild, [subInst], inviteInstHierCtrl.canRemoveInst(subInst))
+                        ]">
+                    </entity-showcase>
                 </md-content>
             </div>
         </clickable-card>

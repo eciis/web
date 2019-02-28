@@ -344,8 +344,7 @@
         inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
             var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
             var removeInstPermission = inviteInstHierCtrl.user.permissions.remove_inst;
-            return removeInstPermission
-                && removeInstPermission[institution.key] && hasChildrenLink;
+            return removeInstPermission && removeInstPermission[institution.key] && hasChildrenLink ? true : false;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
@@ -358,8 +357,9 @@
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
-        inviteInstHierCtrl.getStatusMsg = status => {
-            if(inviteInstHierCtrl.isActive(inviteInstHierCtrl.institution.parent_institution)) {
+        inviteInstHierCtrl.getStatusMsg = (institution, isParent) => {
+            const status = isParent ? inviteInstHierCtrl.linkParentStatus() : inviteInstHierCtrl.linkChildrenStatus(institution);
+            if(inviteInstHierCtrl.isActive(institution)) {
                 return `Status do vínculo: ${status}`;
             } else {
                 return "Instituição ainda não cadastrada na plataforma"
@@ -417,12 +417,13 @@
           return Utils.limitString(string, size);
         };
 
-        inviteInstHierCtrl.createIconBtn = (icon, action, params) => {
+        inviteInstHierCtrl.createIconBtn = (icon, action, params, hideBtn) => {
             return {
                 icon: icon,
                 iconColor: '#009688',
-                action: () => action(...params)
-            }
+                action: () => action(...params),
+                showIf: () => hideBtn === undefined ? true : hideBtn
+            };
         };
     });
 })();

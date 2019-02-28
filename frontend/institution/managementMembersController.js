@@ -108,7 +108,7 @@
 
         manageMemberCtrl.getMembersProfileBtn = (event, member) => {
             return {
-                icon: 'info',
+                icon: 'more_vert',
                 iconColor: '#9E9E9E',
                 action: () => manageMemberCtrl.showUserProfile(member.key, event)
             };

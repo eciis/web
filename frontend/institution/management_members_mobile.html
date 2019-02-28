@@ -15,14 +15,14 @@
                     para fazer parte da sua instituição na Plataforma CIS.
                 </p>
                 <p class="subtitle">Endereço de e-mail</p>
-                <form ng-submit="manageMemberCtrl.sendUserInvite()">
+                <form>
                     <md-input-container md-no-float class="md-block md-icon-right md-icon-float"
                         ng-repeat="currentEmail in manageMemberCtrl.emails">
                         <input class="green-input" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" 
                             md-maxlength="120" type="email" name="email" placeholder="+ Adicionar e-mail">
                     </md-input-container>
                 </form>
-                <md-button class="manage-members__btn" type="submit" 
+                <md-button class="manage-members__btn" ng-click="manageMemberCtrl.sendUserInvite()" 
                     ng-if="!manageMemberCtrl.isLoadingInvite">
                     Enviar
                 </md-button>

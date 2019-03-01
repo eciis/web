@@ -49,19 +49,19 @@
         </div>
     </div>
     <div ng-if="!searchCtrl.hasNotSearched">
-        <div class="registered-institutions-container" ng-if="searchCtrl.institutions.length > 1" style="margin-top: -1px; margin-bottom: 5px;">
+        <div class="registered-insts-as-search-result-container" ng-if="searchCtrl.institutions.length > 1">
             <registered-institution ng-repeat="institution in institutions = (searchCtrl.institutions 
                         | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)" 
-                institution="institution" user="searchCtrl.user" style="margin-top: 10px;">
+                institution="institution" user="searchCtrl.user" class="registered-insts-as-search-result">
             </registered-institution>
         </div>
-        <div ng-if="searchCtrl.institutions.length === 1">
+        <div ng-if="searchCtrl.institutions.length === 1" class="single-inst-as-search-result-container">
             <registered-institution institution="searchCtrl.institutions[0]" 
-                user="searchCtrl.user" style="border-style: solid; border-width: 0.5px 0px 0px 0.5px; border-color: white;">
+                user="searchCtrl.user" class="single-inst-as-search-result">
             </registered-institution>
         </div>
-        <div ng-if="searchCtrl.institutions.length === 0" style="margin-top: 1em; margin-left: auto; margin-right: auto;">
-            <b>&bull; Nenhuma instituição encontrada</b>
+        <div ng-if="searchCtrl.institutions.length === 0" class="empty-card-as-search-result">
+            <is-empty-card text="Nenhuma instituição encontrada"></is-empty-card>
         </div>
     </div>
 </div>

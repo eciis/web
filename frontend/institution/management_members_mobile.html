@@ -31,19 +31,32 @@
         </clickable-card>
 
         <clickable-card icon="account_circle" title="administrador">
-            <div class="manage-members__card__content">
+            <md-content class="manage-members__list custom-scrollbar">
                 <entity-showcase
                     avatar="manageMemberCtrl.institution.admin.photo_url"
                     title="manageMemberCtrl.institution.admin.name"
                     subtitle="manageMemberCtrl.institution.admin.email[0]"
-                    ng-click="manageMemberCtrl.showUserProfile(manageMemberCtrl.institution.admin.key, $event)">
+                    right-icon-btns="[
+                        manageMemberCtrl.getEntityShowcaseBtn('more_vert', '#9E9E9E', manageMemberCtrl.showUserProfile, [manageMemberCtrl.institution.admin.key, $event])
+                    ]">
+                </entity-showcase>
+                <entity-showcase
+                    ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
+                    ng-if="invite.status !== 'accepted'"
+                    avatar="manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)"
+                    title="manageMemberCtrl.getMemberName(invite.invitee_key)"
+                    subtitle="invite.invitee"
+                    right-icon-btns="[
+                        manageMemberCtrl.getEntityShowcaseBtn('error', '#9E9E9E', manageMemberCtrl.showUserProfile, [invite.invitee_key, $event])
+                    ]">
                 </entity-showcase>
                 <md-button class="manage-members__btn" 
+                    md-colors="{background: manageMemberCtrl.transferButtonColor}"
                     ng-click="manageMemberCtrl.openTransferAdminDialog($event)"
                     ng-disabled="manageMemberCtrl.disableTransferAdminButton()">
                     Transferir
                 </md-button>
-            </div>
+            </md-content>
         </clickable-card>
 
         <clickable-card icon="account_circle" title="gerenciar membros">

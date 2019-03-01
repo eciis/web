@@ -117,7 +117,7 @@
                 icon: icon,
                 iconColor: color,
                 action: () => action(...params)
-            }
+            };
         };
 
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {

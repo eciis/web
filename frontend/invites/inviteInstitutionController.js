@@ -4,7 +4,7 @@
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
-        STATES, $mdDialog, MessageService) {
+        STATES, $mdDialog, MessageService, StateLinkRequestService, STATE_LINKS) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -188,6 +188,12 @@
                 return request.status === status && request.type_of_invite === type_of_invite;
             }
         }
+
+        inviteInstCtrl.$onInit = () => {
+            if (Utils.isMobileScreen()) {
+                  StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.INVITE_INSTITUTION, STATES.HOME);
+            }
+        };
 
         (function main() {
             loadSentInvitations();

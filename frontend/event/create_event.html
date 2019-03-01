@@ -135,12 +135,16 @@
                     Dia inteiro
                 </md-checkbox>
                 <div class="event-textarea fields-event-padding custom-scrollbar">
-                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
+                    <textarea
+                        ng-disabled="createEventCtrl.isEventOutdated()"
+                        md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.text" rows="5" md-select-on-focus
                         placeholder="Descrição"
                         class="event-textarea-size"></textarea>
                 </div>
                 <div class="event-textarea fields-event-padding custom-scrollbar">
-                    <textarea md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
+                    <textarea 
+                        ng-disabled="createEventCtrl.isEventOutdated()"
+                        md-colors="{background: 'grey-50'}" ng-model="createEventCtrl.event.programation" rows="5" md-select-on-focus
                         placeholder="Programação"
                         class="event-textarea-size"></textarea>
                 </div>
@@ -154,8 +158,8 @@
                             <md-input-container class="md-block event-link-height">
                                 <label class="event-links-color">Link do Youtube</label>
                                 <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
-                                ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
-                                name="video"/>
+                                ng-change="createEventCtrl.changeUrlLink(videoUrl, createEventCtrl.videoUrls)" 
+                                name="video" validate-youtube-link-directive/>
                                 <div ng-messages="createEvent.video.$error">
                                     <div ng-message="pattern">Link do Youtube inválido.</div>
                                 </div>
@@ -174,7 +178,7 @@
                             <md-input-container class="md-block event-link-height">
                                 <label class="event-links-color">Link</label>
                                 <input class="md-input" ng-model="usefulLink.url" placeholder="+ Adicionar um link..."
-                                ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)" type="url"/>
+                                ng-change="createEventCtrl.changeUrlLink(usefulLink, createEventCtrl.usefulLinks)"  type="url"/>
                             </md-input-container>
                             <md-input-container class="md-block event-link-height">
                                 <label class="event-links-color">Descrição</label>
@@ -211,7 +215,7 @@
                 <md-button type="reset" class="create-event-cancel-button" ng-click="createEventCtrl.cancelCreation()">
                     Cancelar
                 </md-button>
-                <md-button class="btn-submit md-raised" type="submit" md-colors="{background: 'default-teal-500'}" title="Enviar">
+                <md-button ng-disabled="createEvent.$invalid" class="btn-submit" type="submit" md-colors="{background: createEventCtrl.colorButtonSubmit(createEvent.$valid)}" title="Enviar">
                     <span class="event-buttons-color">{{createEventCtrl.lastStep() ? "publicar" : "avançar"}}</span>
                 </md-button>
             </div>

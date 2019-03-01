@@ -30,6 +30,10 @@
             var saveImgPromise = saveImage(callback);
         };
 
+        dialogCtrl.colorButtonSubmit = function colorButtonSubmit(formValid) {
+            return formValid ?'default-teal-500':'default-grey-400';
+        };
+
         dialogCtrl.removeUrl = function (url, urlList) {
             _.remove(urlList, function (element) {
                 return element === url;
@@ -504,8 +508,9 @@
             const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
-            initUrlFields();
             dialogCtrl._loadStateParams();
+            initUrlFields();
+
             if (dialogCtrl.event) {
                 dialogCtrl._loadStatesToEdit();
             } else if(!dialogCtrl.event && $state.params.eventKey) {

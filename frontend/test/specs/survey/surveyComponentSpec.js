@@ -3,7 +3,7 @@
 (describe('Test SurveyComponent', function() {
     beforeEach(module('app'));
 
-    var surveyCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService, createCtrl;
+    var surveyCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
     var user = {
         name: 'name',
         current_institution: {key: "institutuion_key"},

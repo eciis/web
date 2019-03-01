@@ -7,7 +7,7 @@
         templateUrl: "/app/institution/institution_header.html",
         controller: ['$state', 'STATES', function($state, STATES){
             const instHeaderCtrl = this;
-            
+
             /** Return if should show or hide button more,
              *  show if in timeline and is admin or member.
              */
@@ -42,18 +42,18 @@
 
             /** Return the title of page according current state.
              */
-            instHeaderCtrl.getTitle = function getTitle(){
-                const getLimitedName = instHeaderCtrl.actionsButtons && 
-                    instHeaderCtrl.actionsButtons.getLimitedName(110);
-                const tileState = {
-                    [STATES.INST_TIMELINE]: getLimitedName,
-                    [STATES.INST_REGISTRATION_DATA]: "Dados cadastrais",
-                    [STATES.INST_LINKS]: "Vínculos Institucionais",
-                    [STATES.INST_DESCRIPTION]: "Descrição",
-                    [STATES.INST_MEMBERS]: "Membros",
-                    [STATES.INST_FOLLOWERS]: "Seguidores"
+            instHeaderCtrl.getTitle = function getTitle(){                
+                const instName = instHeaderCtrl.institution ? instHeaderCtrl.institution.name : "";
+                const limitedInstName = Utils.limitString(instName, 110);
+                
+                switch($state.current.name) {
+                    case STATES.INST_TIMELINE: 
+                    case STATES.MANAGE_INST_MENU_MOB: return limitedInstName;
+                    case STATES.INST_REGISTRATION_DATA: return "Dados cadastrais";
+                    case STATES.INST_LINKS: return "Vínculos Institucionais";
+                    case STATES.INST_MEMBERS: return "Membros";
+                    case STATES.INST_FOLLOWERS: return "Seguidores";
                 };
-                return tileState[$state.current.name];   
             };
 
             instHeaderCtrl.showButtonEdit = function showButtonEdit(){

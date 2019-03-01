@@ -1,0 +1,16 @@
+<div class="chat__container"clear>
+    <chat-header
+            class="chat__header"
+            user="ecisChatCtrl.user"
+            call-func="ecisChatCtrl.call">
+    </chat-header>
+    <chat-body
+            class="chat__body"
+            messages="ecisChatCtrl.chat.currentMessages">
+    </chat-body>
+    <chat-input
+            class="chat__input"
+            send-message-func="ecisChatCtrl.sendMessage"
+            state="ecisChatCtrl.state">
+    </chat-input>
+</div>

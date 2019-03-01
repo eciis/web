@@ -1,0 +1,25 @@
+.chat__container {
+    height: 100%;
+    background: #EEEEEE;
+    display: grid;
+    grid-template-rows: 64px calc(100% - 64px - 48px) 48px;
+    grid-template-areas:
+        'header'
+        'body'
+        'input';
+}
+
+.chat__header {
+    grid-area: header;
+    background: #009688;
+}
+
+.chat__body {
+    grid-area: body;
+    background: #E5DDD3;
+}
+
+.chat__input {
+    grid-area: input;
+    background: #009688;
+}

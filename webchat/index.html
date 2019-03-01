@@ -44,7 +44,7 @@
   <link rel="stylesheet" type="text/css" href="app/auth/login.css">
   <link rel="stylesheet" type="text/css" href="app/error/error.css">
   <link rel="stylesheet" type="text/css" href="app/home/home.css">
-  <link rel="stylesheet" type="text/css" href="app/webchat/webchat.css">
+  <link rel="stylesheet" type="text/css" href="app/main/main.css">
 
   <!-- Components CSS -->
   <!-- General Components -->
@@ -62,7 +62,7 @@
 </head>
 <body ng-app="webchat" ng-cloak layout="column">
 
-  <div id="webchat" flex layout="column" ui-view="main"></div>
+  <div id="main" flex layout="column" ui-view="main"></div>
 
   <script>
     var $buoop = {notify:{i:14,f:-4,o:-4,s:-2,c:-4},insecure:true,api:5,noclose:true,l:"pt-br"};
@@ -112,7 +112,7 @@
 
   <script src="app/auth/loginController.js"></script>
   <script src="app/home/homeController.js"></script>
-  <script src="app/webchat/webchatController.js"></script>
+  <script src="app/main/mainController.js"></script>
 
   <script src="app/components/header/ecis-header.component.js"></script>
   <script src="app/components/logo/logo.component.js"></script>

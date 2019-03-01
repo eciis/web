@@ -55,8 +55,8 @@
                         title="member.name"
                         subtitle="member.email[0]"
                         right-icon-btns="[
-                            manageMemberCtrl.getMembersDeleteBtn($event, member), 
-                            manageMemberCtrl.getMembersProfileBtn($event, member)
+                            manageMemberCtrl.getEntityShowcaseBtn('delete', '#9E9E9E', manageMemberCtrl.openRemoveMemberDialog, [$event, member]),
+                            manageMemberCtrl.getEntityShowcaseBtn('more_vert', '#9E9E9E', manageMemberCtrl.showUserProfile, [member.key, $event])
                         ]">
                     </entity-showcase>
                 </md-content>
@@ -71,7 +71,9 @@
                         avatar="manageMemberCtrl.getDefaultAvatar()"
                         title="invite.invitee"
                         subtitle="manageMemberCtrl.getInviteSubtitle(invite)"
-                        right-icon-btns="[manageMemberCtrl.getInvitesBtn($event, invite)]">
+                        right-icon-btns="[
+                            manageMemberCtrl.getEntityShowcaseBtn('send', '#9E9E9E', manageMemberCtrl.resendInvite, [invite.key, $event])
+                        ]">
                     </entity-showcase>
                 </md-content>
             </div>
@@ -85,7 +87,9 @@
                         avatar="manageMemberCtrl.getDefaultAvatar()"
                         title="request.sender_name"
                         subtitle="request.institutional_email"
-                        right-icon-btns="[manageMemberCtrl.getRequestBtn(event, request)]">
+                        right-icon-btns="[
+                            manageMemberCtrl.getEntityShowcaseBtn('error', '#009688', manageMemberCtrl.openAcceptRequestDialog, [request, $event])
+                        ]">
                     </entity-showcase>
                 </md-content>
             </div>

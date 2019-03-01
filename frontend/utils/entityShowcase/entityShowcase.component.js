@@ -47,6 +47,11 @@
 
         entityShowcaseCtrl.showIcon = () => !_.isNil(entityShowcaseCtrl.icon);
 
+        /**
+         * Checks if the button has the function showIf
+         * that will evaluate whether it should be showed or not,
+         * if don't the button is showed
+         */
         entityShowcaseCtrl.showIconBtn = iconBtn => {
             return iconBtn.showIf ? iconBtn.showIf() : true;
         }

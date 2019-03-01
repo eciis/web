@@ -96,43 +96,29 @@
         manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev, manageMemberCtrl.institution.key);
         };
-
-        manageMemberCtrl.getMembersDeleteBtn = (event, member) => {
-            return {
-                icon: 'delete',
-                iconColor: '#9E9E9E',
-                showIf: () => !manageMemberCtrl.isAdmin(member),
-                action: () => manageMemberCtrl.openRemoveMemberDialog(event, member)
-            };
-        };
-
-        manageMemberCtrl.getMembersProfileBtn = (event, member) => {
-            return {
-                icon: 'more_vert',
-                iconColor: '#9E9E9E',
-                action: () => manageMemberCtrl.showUserProfile(member.key, event)
-            };
-        };
-
+        
+        /**
+         * Returns the default image for an user avatar
+         */
         manageMemberCtrl.getDefaultAvatar = () => "app/images/avatar.png";
-
+        
+        /**
+         * Returns a message that indicates the name 
+         * of the user who sent the given invite
+         */
         manageMemberCtrl.getInviteSubtitle = (invite) => `Convidado por: ${invite.sender_name}`;
 
-        manageMemberCtrl.getInvitesBtn = (event, invite) => {
+        /**
+         * Constructs the object that will be used to create a button
+         * in the entity-showcase component
+         */
+        manageMemberCtrl.getEntityShowcaseBtn = (icon, color, action, params) => {
             return {
-                icon: 'send', 
-                iconColor: '#9E9E9E',
-                action: () => manageMemberCtrl.resendInvite(invite.key, event)
-            };
-        }
-
-        manageMemberCtrl.getRequestBtn = (event, request) => {
-            return {
-                icon: 'error', 
-                iconColor: '#009688',
-                action: () => manageMemberCtrl.openAcceptRequestDialog(request, event)
-            };
-        }
+                icon: icon,
+                iconColor: color,
+                action: () => action(...params)
+            }
+        };
 
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;

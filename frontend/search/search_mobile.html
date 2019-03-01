@@ -11,8 +11,12 @@
             </md-input-container>
         </form>
     </div>
-    <div class="search-mobile-options-title" id="search-title">
+    <div class="search-mobile-options-title" id="search-title" layout="row" layout-align="space-between">
         <b>Pesquisa avançada</b>
+        <md-icon md-colors="{color: 'light-green-500'}" 
+            ng-if="!searchCtrl.hasNotSearched" ng-click="searchCtrl.hasNotSearched = true">
+            arrow_drop_down
+        </md-icon>
     </div>
     <div ng-if="searchCtrl.hasNotSearched">
         <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">

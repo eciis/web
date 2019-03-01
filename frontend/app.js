@@ -255,7 +255,7 @@
                     content_manage_institution: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
                             "app/institution/manageMembers/management_members.html",
-                            "app/institution/management_members_mobile.html",
+                            "app/institution/manageMembers/management_members_mobile.html",
                             SCREEN_SIZES.SMARTPHONE
                         ),
                         controller: "ManagementMembersController as manageMemberCtrl"

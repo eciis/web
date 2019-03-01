@@ -3,7 +3,7 @@
 (describe('Test SurveyComponent', function() {
     beforeEach(module('app'));
 
-    var surveyCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
+    var surveyCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService, createCtrl;
     var user = {
         name: 'name',
         current_institution: {key: "institutuion_key"},
@@ -14,6 +14,17 @@
                         'number_votes': 0,
                         'voters': []
                         };
+
+    const unprocessed_options =
+        [{
+            'text': 'Option number 1',
+            'number_votes': 0,
+            'voters': [] },
+        {
+            'text': 'Option number 2',
+            'number_votes': 0,
+            'voters': []
+        }];
 
     var options = [{'id' : 0,
                     'text': 'Option number 1',
@@ -110,6 +121,15 @@
             surveyCtrl.post = new Post(post, {});
             surveyCtrl.resetSurvey();
             expect(surveyCtrl.post).toEqual({});
+        });
+    });
+
+    describe('_processOptions', function() {
+        it('should remove empty options and add "id" property in other options', () => {
+            unprocessed_options.push(option_empty);
+            surveyCtrl.options = unprocessed_options;
+            surveyCtrl._processOptions();
+            expect(surveyCtrl.options).toEqual(options);
         });
     });
 }));

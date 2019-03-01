@@ -46,12 +46,15 @@
             return screen.width < 600;
         };
 
-        /* This method add ids in each option and remove the options that are empty.*/
-        function modifyOptions(){
+        /**
+         * Remove empty objects in the options array and add 'id' property in all objects.
+         * @private
+         */
+        surveyCtrl._processOptions = () => {
             surveyCtrl.options = surveyCtrl.options
                 .filter(option => option.text)
                 .map((option, index) => {option.id = index; return option;});
-        }
+        };
 
         function formateDate(){
             var date = surveyCtrl.post.deadline.toISOString();
@@ -63,7 +66,7 @@
         }
 
         function createSurvey(){
-            modifyOptions();
+            surveyCtrl._processOptions();
             getTypeSurvey();
             surveyCtrl.post.deadline && formateDate();
             surveyCtrl.post.options = surveyCtrl.options;

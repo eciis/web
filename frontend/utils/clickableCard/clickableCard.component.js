@@ -24,6 +24,10 @@
             });
         };
 
+        /**
+         * It opens or closes the card content depending
+         * on the previous value of the isOpen flag
+         */
         clickableCardCtrl.onClick = () => {
             clickableCardCtrl.isOpen = !clickableCardCtrl.isOpen;
         }

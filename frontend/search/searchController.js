@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window, STATES) {
+        brCidadesEstados, HttpService, $mdDialog, $window, STATES, AuthService) {
 
         var searchCtrl = this;
 
@@ -18,6 +18,8 @@
         var legalNatures;
         searchCtrl.loading = false;
         searchCtrl.hasChanges = false;
+        searchCtrl.hasNotSearched = true;
+        searchCtrl.user = AuthService.getCurrentUser();
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
@@ -55,17 +57,14 @@
         searchCtrl.search = function search(ev) {
             if (searchCtrl.search_keyword) {
                 let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
-
                 promise.then(() => {
-                    if (Utils.isMobileScreen()) {
-                        searchCtrl.showSearchFromMobile(ev);
-                    }
+                    searchCtrl.setupResultsInMobile();
                 });
                 refreshPreviousKeyword();
 
                 return promise;
             } else {
-                searchCtrl.showSearchFromMobile('$event');
+                searchCtrl.setupResultsInMobile();
             }
         };
 
@@ -83,18 +82,18 @@
         };
 
         /**
-         * Open up a mdDialog to show the search result in a mobile fone
-         * @param {Event} ev 
+         * Change the title position and the flag that decides
+         * if the results gotta be shown or not.
          */
-        searchCtrl.showSearchFromMobile = (ev) => {
-            $mdDialog.show({
-                controller: SearchDialogController,
-                controllerAs: "searchCtrl",
-                templateUrl: '/app/search/search_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-            });
+        searchCtrl.setupResultsInMobile = () => {
+            if (searchCtrl.isMobileScreen()) {
+                const title = document.getElementById('search-title');
+                if (title) {
+                    title.style.marginTop = '1em';
+                }
+
+                searchCtrl.hasNotSearched = false;
+            }
         };
         
         /**

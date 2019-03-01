@@ -93,6 +93,7 @@ describe('Test ConfigInstDirective', function() {
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
+        httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
         scope = $rootScope.$new();
         state = $state;
         deferred = $q.defer();

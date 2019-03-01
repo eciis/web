@@ -3,7 +3,7 @@
     var app = angular.module("app");
     app.controller("ConfigInstController", function ConfigInstController(AuthService, InstitutionService, CropImageService,$state,
             $mdDialog, $http, STATES, ImageService, $rootScope, MessageService, PdfService, $q, $window,
-            RequestInvitationService, brCidadesEstados, ObserverRecorderService) {
+            RequestInvitationService, brCidadesEstados, ObserverRecorderService, StateLinkRequestService, STATE_LINKS) {
 
         var configInstCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -468,7 +468,14 @@
             } else {
                 $state.go(STATES.SIGNIN);
             }
+            if (Utils.isMobileScreen()) {
+                StateLinkRequestService.showLinkRequestDialog(getInstEditLink(), STATES.MANAGE_INST);
+            }
         };
+
+        function getInstEditLink () {
+            return STATE_LINKS.MANAGE_INSTITUTION.replace("INSTITUTION_KEY", configInstCtrl.institutionKey);
+        }
 
         (function main(){
             configInstCtrl.institutionKey = institutionKey;

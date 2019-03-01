@@ -1,3 +1,11 @@
 <div class="home__content">
-    <contacts-sidenav class="home__sidenav" contacts="homeCtrl.contacts"></contacts-sidenav>
+    <contacts-sidenav class="home__sidenav" contacts="homeCtrl.contacts" open-chat="homeCtrl.openChat"></contacts-sidenav>
+    <ecis-chat
+            class="home__chat"
+            ng-if="homeCtrl.currentUser"
+            chat="homeCtrl.currentChat"
+            user="homeCtrl.currentUser"
+            call-func="homeCtrl.call"
+            state="homeCtrl.state">
+    </ecis-chat>
 </div>

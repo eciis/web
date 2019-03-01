@@ -36,14 +36,12 @@
         const toggleButtonCtrl = this;
 
         toggleButtonCtrl.$onInit = () => {
-            console.log(toggleButtonCtrl);
             _.defaults(toggleButtonCtrl, {
                 active: true,
                 iconColorOn: "#EEE",
                 iconColorOff: "#EEE",
                 action: () => {}
             });
-            console.log(toggleButtonCtrl);
         };
 
         toggleButtonCtrl.toggle = () => {

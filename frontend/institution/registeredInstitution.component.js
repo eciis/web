@@ -72,7 +72,7 @@
          */
         regInstCtrl.goToInst = () => {
             $state.go(STATES.INST_TIMELINE, 
-                { institutionKey: regInstCtrl.institution.key });
+                { institutionKey: regInstCtrl.institution.key || regInstCtrl.institution.id });
         };
 
         /**

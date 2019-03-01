@@ -1,9 +1,4 @@
-html, body {
-  height: 100%;
-  max-height: 100%;
-}
-
-#webchat {
+html, body, #main {
   height: 100%;
   max-height: 100%;
 }

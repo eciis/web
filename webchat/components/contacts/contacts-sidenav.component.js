@@ -15,6 +15,7 @@
         controllerAs: "contactsSidenavCtrl",
         bindings: {
             contacts: "<",
+            openChat: "<",
         },
     });
 

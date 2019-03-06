@@ -235,7 +235,7 @@
                 url: "/institution/:institutionKey",
                 views: {
                     content: {
-                        templateUrl: "app/institution/management_institution_page.html",
+                        templateUrl: "app/institution/manageInstitution/management_institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -266,7 +266,7 @@
                 url: "/links",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/management_institution_mobile.html",
+                        templateUrl: "app/institution/manageInstitution/management_institution_mobile.html",
                         controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
@@ -639,6 +639,6 @@
     }
 
     (function main() {
-        initServiceWorker();
+        // initServiceWorker();
     })();
 })();

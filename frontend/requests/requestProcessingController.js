@@ -79,16 +79,13 @@
         };
 
         requestController.getChildrenInstName = function getChildrenInstName(size) {
-            const returnValue = requestController.children ? 
-              Utils.limitString(requestController.children.name ||
-              requestController.children.sender_name, size) : "";
-            return returnValue;
+            return requestController.children ? 
+              (requestController.children.name || requestController.children.sender_name) : "";
         };
 
         requestController.getChildrenInstEmail = function getChildrenInstEmail(size) {
-            const returnValue = requestController.children ? 
-              Utils.limitString(requestController.children.institutional_email, size) : "";
-            return returnValue;
+            return requestController.children ? 
+                (requestController.children.institutional_email) : "";
         };	
 
         requestController.isAnotherCountry = function isAnotherCountry() {

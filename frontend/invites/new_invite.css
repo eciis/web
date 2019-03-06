@@ -10,10 +10,6 @@
     margin-left: -4.3em;
 }
 
-.no-margin{
-    margin: 0px;
-}
-
 @media screen and (min-width: 600px) and (max-width:800px) {
     .new-invite-page-card {
         max-width: 30em;

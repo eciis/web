@@ -1,5 +1,5 @@
-<md-dialog flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
- <md-dialog-content layout="row" layout-align="center center">
+<md-dialog style="max-height: 90%" flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
+ <md-dialog-content layout="row" layout-align="center start">
     <div layout="column" flex="90">
         <h3>Transferir administração</h3>
         <p>Cada institutição precisa ter um administrador na plataforma CIS.
@@ -7,7 +7,7 @@
         </p>
         <search-field keyword="transferAdminCtrl.member"></search-field>
         <md-list ng-if="transferAdminCtrl.member != null">
-            <entity-showcase class="small-avatar"
+            <entity-showcase ng-class="transferAdminCtrl.getClass(member)"
                 ng-repeat="member in transferAdminCtrl.institution_members | filter: transferAdminCtrl.member" 
                 avatar="member.photo_url"
                 title="member.name"
@@ -22,10 +22,10 @@
     </div>
  </md-dialog-content>
  <md-dialog-actions>
-     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.cancel()">
+     <md-button md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.cancel()">
         CANCELAR
      </md-button>
-     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
+     <md-button md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
         CONFIRMAR
     </md-button>
  </md-dialog-actions>

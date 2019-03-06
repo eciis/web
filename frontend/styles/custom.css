@@ -1131,6 +1131,10 @@ md-input-container:not(.md-input-invalid).md-input-focused .green-input,
     font-weight: 500;
 }
 
+.zero-margin{
+    margin: 0px;
+}
+
 /* Smartphones */
 @media screen and (max-width: 420px) {
     .custom-card {

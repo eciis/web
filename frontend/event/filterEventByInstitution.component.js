@@ -5,6 +5,10 @@
 
     app.controller('FilterEventsByInstitutionController', function() {
         const filterCtrl = this;
+
+        filterCtrl.$onInit = function() {
+            console.log(filterCtrl.filterList);
+        };
     })
     
     app.component("filterEventsByInstitution", {

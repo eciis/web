@@ -38,7 +38,9 @@ class InstitutionProfile(ndb.Model):
         profile['branch_line'] = self.branch_line
         profile['institution'] = {
             'name': institution.name,
-            'photo_url': institution.photo_url
+            'photo_url': institution.photo_url,
+            'acronym': institution.acronym,
+            'key': institution.key.urlsafe()
         }
 
         profile['color'] = self.color or 'teal'

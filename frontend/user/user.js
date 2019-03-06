@@ -49,7 +49,7 @@ User.prototype.isFollower = function isFollower(institution) {
 };
 
 User.prototype.isAdmin = function isAdmin(keyInstitution) {
-		return _.find(this.institutions_admin, institution => getKey(institution) == keyInstitution);
+    return _.find(this.institutions_admin, institution => getKey(institution) == keyInstitution);
 };
 
 User.prototype.isAdminOfCurrentInst = function isAdminOfCurrentInst() {

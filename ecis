@@ -59,7 +59,8 @@ function setup_app_version {
 }
 
 function set_cache_suffix_sw {
-   sed -i "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE
+   tmpfile=$(mktemp)
+   sed "10s|.*|    const CACHE_SUFIX = '$1';|" $SW_FILE > "$tmpfile" && mv "$tmpfile" $SW_FILE
    catch_error $? "CACHE_SUFIX on SW $1"
 }
 

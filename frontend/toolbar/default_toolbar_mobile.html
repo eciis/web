@@ -1,0 +1,25 @@
+<md-toolbar md-colors="{background: 'teal-500'}" 
+    layout-align="center" layout="row" ng-if="defaultToolbarCtrl.isMobileScreen()">
+    <div class="default-toolbar-mobile">
+      <md-button class="md-icon-button toolbar-back-button" ng-click="defaultToolbarCtrl.goBack()">
+        <md-icon>keyboard_arrow_left</md-icon>
+      </md-button>
+      <div class="default-toolbar-menu-container" ng-if="!defaultToolbarCtrl.noOptions">
+        <md-menu>
+          <md-button class="md-icon-button" ng-click="$mdMenu.open(ev)">
+            <md-icon style="font-size: 2.5em;">more_vert</md-icon>
+          </md-button>
+          <md-menu-content style="width: 100%;">
+            <md-menu-item ng-repeat="option in defaultToolbarCtrl.menuOptions" ng-click="option.action()" ng-if="!option.hide()">
+              <div>
+                <md-icon>
+                  {{option.icon}}
+                </md-icon>
+                <span style="margin-left: 0.5em;">{{option.title}}</span>
+              </div>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
+    </div>
+</md-toolbar>

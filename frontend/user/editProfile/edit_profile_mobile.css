@@ -1,0 +1,51 @@
+.edit-profile-dialog {
+    height: min-content;
+    width: 75%;
+}
+
+.edit-profile-dialog__content {
+    padding: 1em;
+    display: grid;
+    grid-template-rows: auto 3em auto;
+    grid-row-gap: 0.7em;
+}
+
+.edit-profile-dialog__content > h3 {
+    margin: 0;
+}
+
+.edit-profile-dialog__content > span {
+    text-transform: uppercase;
+    color: #004D41;
+    text-align: start;
+    font-size: 0.9em;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.edit-profile__form {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-row-gap: 0.5em;
+    margin-top: 1em;
+}
+
+.edit-profile__form md-input-container {
+    margin: 0;
+}
+
+
+.edit-profile__form__phone {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+#edit-profile__delete__btn {
+    background: red;
+    color: white;
+}
+
+.edit-profile__btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}

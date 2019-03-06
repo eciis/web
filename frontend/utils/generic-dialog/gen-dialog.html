@@ -1,0 +1,16 @@
+<md-dialog-content class="dialog__container">
+    <!-- Request to be member -->
+    <span class="dialog__title custom-title">{{ dialogCtrl.title }}</span>
+    <span class="dialog__subtitle">{{ dialogCtrl.subtitle }}</span>
+
+    <ng-transclude class="dialog__content"></ng-transclude>
+
+    <div class="dialog__buttons">
+        <md-button ng-click="dialogCtrl.cancelDialog()" class="md-button dialog__button" md-colors="{color: 'default-teal-500'}">
+            {{ dialogCtrl.cancelText }}
+        </md-button>
+        <md-button ng-click="dialogCtrl.confirmDialog()" class="md-button dialog__button" md-colors="{color: 'default-teal-500'}">
+            {{ dialogCtrl.confirmText }}
+        </md-button>
+    </div>
+</md-dialog-content>

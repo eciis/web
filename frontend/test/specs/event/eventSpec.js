@@ -13,7 +13,8 @@
             title: 'event test',
             local: 'test',
             start_time,
-            end_time
+            end_time,
+            followers: []
         };
     });
 
@@ -52,6 +53,35 @@
 
             expect(event.start_time).toEqual(start_time_conv);
             expect(event.end_time).toEqual(end_time_conv);
+        });
+    });
+
+    describe('addFollower()', () => {
+        it('should add the user in followers array', () => {
+            const event = new Event(eventData, institution_key);
+
+            expect(event.followers).toEqual([]);
+
+            const mockedKey = 'aopkdopkasop-AKPDFKOSPAF';
+            event.addFollower(mockedKey);
+
+            expect(event.followers).toEqual([mockedKey]);
+        });
+    });
+
+    describe('removeFollower()', () => {
+        it('should remove a follower', () => {
+            const event = new Event(eventData, institution_key);
+
+            expect(event.followers).toEqual([]);
+
+            const mockedKey = 'aopkdopkasop-AKPDFKOSPAF';
+            event.addFollower(mockedKey);
+
+            expect(event.followers).toEqual([mockedKey]);
+
+            event.removeFollower(mockedKey);
+            expect(event.followers).toEqual([]);
         });
     });
 }));

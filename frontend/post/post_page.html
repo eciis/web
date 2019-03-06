@@ -1,10 +1,12 @@
+<default-toolbar menu-options="postCtrl.defaultToolbarOptions"></default-toolbar>
+
 <div id="post-page-container" layout="row" md-colors="{background: 'grey-200'}" layout-align="center">
-    <div flex flex-lg="90" flex-gt-lg="70" layout="row" layout-align="space-between" >
+    <div flex flex-lg="90" flex-gt-lg="70" layout="row" layout-align="space-between">
 
         <side-menu type="HOME"></side-menu>
 
         <div id="post-content" flex layout="row" layout-align="center">
-            <div class="custom-scrollbar" flex="95">
+            <div class="hide-scrollbar" flex="95">
                 <div layout="row" ng-if="postCtrl.post && !postCtrl.isHiden()">
                     <post-details id="post" post="postCtrl.post" is-post-page=true></post-details>  
                 </div>

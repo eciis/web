@@ -13,12 +13,6 @@
   margin-top: 1%;
 }
 
-#mobile-notification-empty {
-  display: grid;
-  grid-template-columns: auto;
-  text-align: center;
-}
-
 #mobile-notification-content {
     display: grid;
     grid-template-columns: auto;

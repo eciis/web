@@ -28,7 +28,8 @@
     </md-card>
 </div>
 
-<div ng-if="notificationCtrl.isMobileScreen(600)" style="overflow: scroll">
+<div ng-if="notificationCtrl.isMobileScreen(600)" style="overflow-y: scroll" class="hide-scrollbar-mobile">
     <notification-list notifications="notificationCtrl.notificationsToShow" 
         mark-as-read="notificationCtrl.markAsRead" keyword="notificationCtrl.keyword">
+    </notification-list>
 </div>

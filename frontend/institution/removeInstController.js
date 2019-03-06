@@ -42,6 +42,9 @@
             removeInstCtrl.closeDialog();
         };
         
+        /**
+         * Select the title according to how many institutions the user is member.
+         */
         removeInstCtrl.getTitle = () => {
             return removeInstCtrl.hasOneInstitution() ? 
                 "Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?" : "Deseja remover esta instituição permanentemente ?";

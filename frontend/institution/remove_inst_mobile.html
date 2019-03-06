@@ -2,13 +2,14 @@
   <gen-dialog title="{{removeInstCtrl.getTitle()}}" confirm-action="removeInstCtrl.removeInst">
       <entity-showcase title="removeInstCtrl.institution.name" subtitle="removeInstCtrl.institution.institutional_email" 
           avatar="removeInstCtrl.institution.photo_url" class="small-avatar"></entity-showcase>
+          <span style="margin-bottom: 0.5em; margin-top: 0.5em;">Quanto a toda a hierarquia abaixo dessa institutição, desejo:</span>
           <div ng-if="!removeInstCtrl.thereIsNoChild()" style="margin-top: 0.5em;">
             <md-radio-group ng-model="removeInstCtrl.removeHierarchy" required>
                 <md-radio-button ng-value="true" class="md-primary">
-                    Desejo remover toda a hierarquia abaixo dessa instituição
+                    Remover
                 </md-radio-button>
                 <md-radio-button ng-value="false" class="md-primary">
-                    Desejo manter toda a hierarquia abaixo dessa instituição
+                    Manter
                 </md-radio-button>
             </md-radio-group>
         </div>

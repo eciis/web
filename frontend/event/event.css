@@ -143,6 +143,10 @@
     margin: 0;
 }
 
+.centralized-event-content {
+    text-align: center;
+}
+
 #menu-button {
     margin-left: auto; 
     width: 0.8em;

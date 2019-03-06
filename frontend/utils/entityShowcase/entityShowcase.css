@@ -1,0 +1,46 @@
+.entity-showcase {
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    grid-template-rows: max-content max-content;
+    grid-template-areas:
+            'avatar title right-icon-buttons'
+            'avatar subtitle right-icon-buttons';
+    grid-gap: 0 0.6rem;
+    padding: 0.6rem;
+    align-items: center;
+    background-color: #E0E0E0;
+}
+
+.entity-showcase__avatar {
+    grid-area: avatar;
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+}
+
+.entity-showcase__icon {
+    grid-area: avatar;
+    background-color: #8BC34A;
+    color: white;
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.entity-showcase__title {
+    grid-area: title;
+    line-height: 1rem;
+}
+
+.entity-showcase__subtitle {
+    grid-area: subtitle;
+    font-size: 0.8em;
+    line-height: 1rem;
+}
+
+.entity-showcase__right-icon-buttons {
+    grid-area: right-icon-buttons;
+}

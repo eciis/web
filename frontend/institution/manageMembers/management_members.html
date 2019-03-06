@@ -23,9 +23,9 @@
         <p style="font-size: 10px; margin-bottom: 0; margin-top:30px;" md-colors="{color: 'grey-700'}">Endereço de e-mail</p>
         <form name="sendInviteForm" ng-submit="manageMemberCtrl.sendUserInvite()">
           <md-content style="max-height: 250px" class="custom-scrollbar">
-            <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="inputEmail"
+            <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="green-input"
               ng-repeat="currentEmail in manageMemberCtrl.emails" style="height:20px;"  md-colors="{color: 'grey-500'}">
-              <input class="inputEmail" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
+              <input class="green-input" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
                 type="email" name="email" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
             </md-input-container>
           </md-content>
@@ -91,19 +91,19 @@
               </p>
             </div>
           </md-list-item>
-          <md-list-item class="list-item-dense" md-colors="{background: 'grey-300'}" ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
+          <md-list-item class="md-2-line margin-input-info" md-colors="{background: 'grey-300'}" ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
             ng-click="manageMemberCtrl.showUserProfile(invite.invitee_key, $event)" flex-xs ng-if="invite.status !== 'accepted'">
             <div layout="row" flex>
               <div style="width: 5px; margin-left: -15px;" md-colors="{background: 'teal-500'}"></div>
               <div style="width: 5px; background-color: white;"></div>
-              <div layout="row" layout-align="start center"  flex>
+              <div layout="row" layout-align="start center" flex class="padding-div-info-admin">
                 <img title="{{manageMemberCtrl.institution.admin.name}}" ng-src="{{manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)}}" 
                   class="md-avatar manage-members-img"/>
                 <div id="manage-username-text" class="md-list-item-text manage-inst-box">
                   <h3 >{{ manageMemberCtrl.getMemberName(invite.invitee_key) }}</h3>
                   <p id="manage-user-email-text">{{ invite.invitee }}</p>
                 </div>
-                <div layout="row" layout-align="end center" flex hide show-gt-xs>
+                <div layout="row" layout-align="end center" hide show-gt-xs>
                   <p class="status-invite-adm" style="margin-right: -6px; line-height: 21px; padding: 5px;"
                     ng-if="invite.status === 'sent'" md-colors="{color: 'teal-500'}">PENDENTE</p>
                   <div style="margin-right: -6px;" class="status-invite-adm"

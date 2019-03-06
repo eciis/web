@@ -1,14 +1,10 @@
-<md-content>
-    <div class="search-mobile-top-bar" layout="row" layout-align="start center">
-        <md-button class="md-icon-button" ng-click="searchCtrl.leaveMobileSearchPage()">
-            <md-icon>clear</md-icon>
-        </md-button>
-        <b>PESQUISAR</b>
-    </div>
+<white-toolbar title="PESQUISAR" primary-button-icon="keyboard_arrow_left"></white-toolbar>
+
+<div style="overflow: scroll;">
     <div layout="row" layout-align="center" class="search-mobile-content">
         <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
             <md-input-container class="search-mobile-input" md-no-float>
-                <input placeholder="Pesquisar" ng-model="searchCtrl.search_keyword">
+                <input placeholder="Pesquisar" ng-model="searchCtrl.search_keyword" ng-change="searchCtrl.setHasChanges()">
                 <label class="md-no-float">
                     <md-icon>search</md-icon>
                 </label>
@@ -18,7 +14,7 @@
     <div class="search-mobile-options-title">
         <b>Pesquisa avançada</b>
     </div>
-    <div layout="column" layout-align="center center" class="search-mobile-options">
+    <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
         <md-input-container>
             <md-select ng-model="searchCtrl.searchActuation" placeholder="AREA DE ATUAÇÃO" class="search-by-mobile">
                 <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" ng-value="actuation_area.value"
@@ -47,8 +43,9 @@
         <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
             CANCELAR
         </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event)">
+        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search()"
+            ng-disabled="!searchCtrl.hasChanges">
             PESQUISAR
         </md-button>
     </div>
-</md-content>
+</div>

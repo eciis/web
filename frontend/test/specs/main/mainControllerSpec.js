@@ -2,8 +2,9 @@
 
 (describe('Test MainController', function() {
     let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
-    let authService, requestInvitationService, notificationListenerService, utilsService;
+    let authService, requestInvitationService, notificationListenerService, utilsService, pushNotificationService;
     
+    const window = {'location': {'reload': function(){}}};
     const user = {
         name: 'user',
         key: 'user-key',
@@ -45,7 +46,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                RequestInvitationService, NotificationListenerService, STATES, UtilsService) {
+                RequestInvitationService, NotificationListenerService, STATES, UtilsService, PushNotificationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -54,6 +55,7 @@
         requestInvitationService = RequestInvitationService;
         notificationListenerService = NotificationListenerService;
         utilsService = UtilsService;
+        pushNotificationService = PushNotificationService;
 
         mainToolbar = document.createElement('div');
         mainToolbar.setAttribute("id", "main-toolbar");
@@ -78,7 +80,7 @@
         spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
         spyOn(NotificationListenerService, 'multipleEventsListener').and.callFake(eventsListenerFake);
-
+        spyOn(pushNotificationService, 'setupPushNotificationPermission').and.callFake(callFake);
 
         authService.login(user);
 
@@ -87,10 +89,12 @@
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+
         createCtrl = function() {
             return $controller('MainController', {
                 scope: scope,
-                AuthService: authService
+                AuthService: authService,
+                $window: window
             });
         };
         mainCtrl = createCtrl();
@@ -214,6 +218,14 @@
         it('should call reload()', () => {
             spyOn(authService, 'reload');
             mainCtrl.refreshUser();
+            expect(authService.reload).toHaveBeenCalled();
+        });
+    });
+
+    describe('updateVersion', () => {
+        it('should call reload()', () => {
+            spyOn(authService, 'reload');
+            mainCtrl.updateVersion();
             expect(authService.reload).toHaveBeenCalled();
         });
     });

@@ -9,7 +9,7 @@ md-content.grid-fill-screen {
   justify-items: center;
 }
 
-#create-inst-form-steps {
+#form-steps {
   position: fixed;
   top: 0;
   width: 100%;
@@ -24,7 +24,7 @@ md-content.grid-fill-screen {
   box-shadow: 0px 2px 4px #00000022;
 }
 
-#create-inst-form-steps > span {
+#form-steps > span {
   display: grid;
   align-content: center;
   width: 2em;
@@ -32,13 +32,13 @@ md-content.grid-fill-screen {
   border-radius: 50%;
 }
 
-#create-inst-form-steps > span > p {
+#form-steps > span > p {
   color: white;
   position: relative;
   text-align: center;
 }
 
-#create-inst-form-steps > hr {
+#form-steps > hr {
   align-self: center;
   margin-left: -1em;
   margin-right: -1em;
@@ -57,7 +57,6 @@ md-content.grid-fill-screen {
   padding: 0.5em;
   margin-bottom: 2em;
   margin-top: 1em;
-  /* height: 100%; */
 }
 
 #create-inst-card {
@@ -89,33 +88,11 @@ md-content.grid-fill-screen {
 }
 
 #create-inst-card-content > #back-button {
-  /* position: relative; */
   margin-bottom: -4.5em;
 }
 
-#create-inst-card-content > #form-switch {
-  width:  100%;
-}
-
-#form-switch md-input-container {
-  margin: 0.2em 0 0.2em 0;
-}
-
-#form-switch md-input-container.md-input-focused input {
-  border-color: #009688;
-}
-
-#form-switch .md-select-icon {
-  color: #8cbf4d;
-}
-
-#form-switch md-input-container .md-errors-spacer {
-  height: 0.2em;
-}
-
-#form-switch md-input-container label {
-  color: #1f6357;
-  font-weight: 500;
+#form-switch {
+  width: 100%;
 }
 
 #create-inst-content button.md-primary {

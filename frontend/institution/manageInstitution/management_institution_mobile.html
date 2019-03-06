@@ -49,12 +49,14 @@
             <div class="manage-institution__card__content">
                 <search-field keyword="searchInstRequest"></search-field>
                 <md-content class="manage-institution__list custom-scrollbar">
-                    <!-- <entity-showcase ng-repeat="instRequest in inviteInstHierCtrl.requests | filter: searchInstRequest" 
-                        avatar="inviteInstHierCtrl.getDefaultAvatar()"
-                        title="instRequest.sender_name"
-                        subtitle="instRequest.institutional_email"
+                    <entity-showcase 
+                        ng-repeat="instRequest in inviteInstHierCtrl.requested_invites | filter: searchInstRequest"
+                        ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(instRequest)"
+                        icon="account_balance"
+                        title="inviteInstHierCtrl.getReqInstName(instRequest)"
+                        subtitle="inviteInstHierCtrl.showMessage(instRequest)"
                         right-icon-btns="[]">
-                    </entity-showcase> -->
+                    </entity-showcase>
                 </md-content>
             </div>
         </clickable-card>

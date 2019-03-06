@@ -8,9 +8,9 @@
         'firebase',
     ]);
 
-    const rootName = 'webchat';
+    const rootName = 'main';
     app.constant('STATES', {
-            abstract: 'webchat',
+            abstract: rootName,
             home: `${rootName}.home`,
             login: 'login',
             error: 'error',
@@ -36,9 +36,9 @@
                abstract: true,
                views: {
                     main: {
-                        templateUrl: "app/webchat/webchat.html",
-                        controller: "WebchatController",
-                        controllerAs: "webchatCtrl",
+                        templateUrl: "app/main/main.html",
+                        controller: "mainController",
+                        controllerAs: "mainCtrl",
                     },
                },
            })

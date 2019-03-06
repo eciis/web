@@ -157,12 +157,14 @@
                   <md-input-container class="md-block">
                     <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Descrição</label>
                     <textarea ng-model="controller.event.text" rows="5" md-select-on-focus
+                      ng-disabled="controller.isEventOutdated()"
                       placeholder="Insira aqui uma breve descrição sobre o evento"
                       style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
                   </md-input-container>
                   <md-input-container class="md-block">
                     <label style="font-weight: bold; font-size: 25px;" md-colors="{color: 'default-teal-700'}">Programação</label>
                     <textarea ng-model="controller.event.programation" rows="5" md-select-on-focus
+                      ng-disabled="controller.isEventOutdated()"
                       placeholder="Insira a programação completa do evento"
                       style="border-style: solid; border-width: 1px; border-color: #009688; border-radius: 5px;"></textarea>
                   </md-input-container>
@@ -179,7 +181,7 @@
                         <md-input-container class="md-block" style="height: 25px;">
                           <label>Link do Youtube</label>
                           <input class="md-input" ng-model="videoUrl.url" placeholder="+ Adicionar um vídeo do Youtube..."
-                            ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" ng-pattern="'(?:http(s)?:\/\/)?(www\.)?youtube\.com\/watch\\?v=.+'"
+                            ng-change="controller.changeUrlLink(videoUrl, controller.videoUrls)" validate-youtube-link-directive
                             name="video"/>
                             <div ng-messages="createEvent.video.$error">
                                 <div ng-message="pattern">Link do Youtube inválido.</div>
@@ -219,7 +221,7 @@
                   hide-gt-xs ng-if="(controller.getStep(2) || controller.getStep(3)) && !controller.loading">
                     <span style="color: white;">voltar</span>
                 </md-button>
-                <md-button ng-if="!controller.loading" class="md-raised" type="submit" md-colors="{background: 'default-teal-500'}">
+                <md-button ng-disabled="createEvent.$invalid" ng-if="!controller.loading" class="md-raised"  type="submit" md-colors="{background: controller.colorButtonSubmit(createEvent.$valid)}">
                     <span style="color: white;">{{controller.getStep(3) ? "publicar" : "avançar"}}</span>
                 </md-button>
                 <load-circle flex ng-if="controller.loading"></load-circle>

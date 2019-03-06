@@ -42,3 +42,8 @@
 .white-toolbar-menu-content {
   width: 100%;
 }
+
+.white-toolbar__menu__item {
+  display: grid;
+  grid-template-columns: 10% auto;
+}

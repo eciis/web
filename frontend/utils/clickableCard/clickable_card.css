@@ -1,0 +1,35 @@
+.clickable-card {
+    display: grid;
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.3);
+}
+
+.clickable-card__toolbar {
+    height: 2em;
+    padding: 0.8em 1em;
+    background-color: #ffff;
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 15% auto 10%;
+    align-items: center;
+}
+
+#clickable-card__icon--start {
+    color: #707070;
+    margin: 0 1em 0 0;
+}
+
+#clickable-card__icon--end {
+    color: #84C45E;
+}
+
+.clickable-card__title {
+    color: #004D41;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.clickable-card__content {
+    background-color: #FFFFFF;
+    padding: 1em;
+}

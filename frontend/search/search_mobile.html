@@ -1,7 +1,7 @@
 <white-toolbar title="PESQUISAR" primary-button-icon="keyboard_arrow_left"></white-toolbar>
 
 <div style="overflow: scroll;">
-    <div layout="row" layout-align="center" class="search-mobile-content">
+    <div layout="row" layout-align="center" class="search-mobile-content" ng-if="searchCtrl.hasNotSearched">
         <form ng-submit="searchCtrl.search()" layout="row" layout-align="center center">
             <md-input-container class="search-mobile-input" md-no-float>
                 <input placeholder="Pesquisar" ng-model="searchCtrl.search_keyword" ng-change="searchCtrl.setHasChanges()">
@@ -11,41 +11,61 @@
             </md-input-container>
         </form>
     </div>
-    <div class="search-mobile-options-title">
+    <div class="search-mobile-options-title" id="search-title" layout="row" layout-align="space-between">
         <b>Pesquisa avançada</b>
+        <md-icon md-colors="{color: 'light-green-500'}" ng-if="!searchCtrl.hasNotSearched" 
+            ng-click="searchCtrl.hasNotSearched = true; searchCtrl.clearFilters(); searchCtrl.refreshPreviousKeyword(); searchCtrl.search_keyword = ''">
+            arrow_drop_down
+        </md-icon>
     </div>
-    <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchActuation" placeholder="AREA DE ATUAÇÃO" class="search-by-mobile">
-                <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" ng-value="actuation_area.value"
-                    ng-click="searchCtrl.searchBy(actuaction_area.value)">
-                    {{actuation_area.name}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchNature" placeholder="NATUREZA LEGAL" class="search-by-mobile">
-                <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" ng-value="nature.value"
-                    ng-click="searchCtrl.searchBy(nature.value)">
-                    {{nature.name}}
-                </md-option>
-            </md-select>
-        </md-input-container>
-        <md-input-container>
-            <md-select ng-model="searchCtrl.searchState" placeholder="LOCALIZAÇÃO" class="search-by-mobile">
-                <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome)">
-                    {{state.nome}}
-                </md-option>
-            </md-select>
-        </md-input-container>
+    <div ng-if="searchCtrl.hasNotSearched">
+        <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
+            <md-input-container>
+                <md-select ng-model="searchCtrl.searchActuation" placeholder="ÁREA DE ATUAÇÃO" class="search-by-mobile">
+                    <md-option ng-repeat="actuation_area in searchCtrl.actuationAreas | orderBy: 'name'" ng-value="actuation_area.value"
+                        ng-click="searchCtrl.searchBy(actuation_area.value)">
+                        {{actuation_area.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <md-select ng-model="searchCtrl.searchNature" placeholder="NATUREZA LEGAL" class="search-by-mobile">
+                    <md-option ng-repeat="nature in searchCtrl.legalNature | orderBy: 'name'" ng-value="nature.value" ng-click="searchCtrl.searchBy(nature.value)">
+                        {{nature.name}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <md-select ng-model="searchCtrl.searchState" placeholder="LOCALIZAÇÃO" class="search-by-mobile">
+                    <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome)">
+                        {{state.nome}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
+            <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
+                CANCELAR
+            </md-button>
+            <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search()" ng-disabled="!searchCtrl.hasChanges">
+                PESQUISAR
+            </md-button>
+        </div>
     </div>
-    <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
-        <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
-            CANCELAR
-        </md-button>
-        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search()"
-            ng-disabled="!searchCtrl.hasChanges">
-            PESQUISAR
-        </md-button>
+    <div ng-if="!searchCtrl.hasNotSearched">
+        <div class="registered-insts-as-search-result-container" ng-if="searchCtrl.institutions.length > 1">
+            <registered-institution ng-repeat="institution in institutions = (searchCtrl.institutions 
+                        | filter: searchCtrl.searchActuation | filter: searchCtrl.searchNature | filter: searchCtrl.searchState)" 
+                institution="institution" user="searchCtrl.user" class="registered-insts-as-search-result">
+            </registered-institution>
+        </div>
+        <div ng-if="searchCtrl.institutions.length === 1" class="single-inst-as-search-result-container">
+            <registered-institution institution="searchCtrl.institutions[0]" 
+                user="searchCtrl.user" class="single-inst-as-search-result">
+            </registered-institution>
+        </div>
+        <div ng-if="searchCtrl.institutions.length === 0" class="empty-card-as-search-result">
+            <is-empty-card text="Nenhuma instituição encontrada"></is-empty-card>
+        </div>
     </div>
 </div>

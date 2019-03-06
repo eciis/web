@@ -337,10 +337,9 @@
             });
 
             it('should call Utils.groupUsersByInitialLetter if is mobile screen', () => {
-                spyOn(Utils, 'isMobileScreen').and.returnValue(true);
-                spyOn(Utils, 'groupUsersByInitialLetter');
+                spyOn(manageMemberCtrl,'_getAdmin');
                 manageMemberCtrl._getMembers();
-                expect(Utils.groupUsersByInitialLetter).toHaveBeenCalledWith([member, user]);
+                expect(manageMemberCtrl._getAdmin).toHaveBeenCalledWith([member, user]);
             });
         });
     });

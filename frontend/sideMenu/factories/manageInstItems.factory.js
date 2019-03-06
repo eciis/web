@@ -7,14 +7,15 @@
         const factory = {};
 
         const removeInstitution = (event, institution) => {
-            $mdDialog.show({
-                templateUrl: 'app/institution/removeInstDialog.html',
-                targetEvent: event,
-                clickOutsideToClose:true,
-                locals: { institution },
-                controller: "RemoveInstController",
-                controllerAs: 'removeInstCtrl'
-            });
+          $mdDialog.show({
+              templateUrl: Utils.selectFieldBasedOnScreenSize(
+                  'app/institution/removeInstDialog.html', 'app/institution/remove_inst_mobile.html', SCREEN_SIZES.SMARTPHONE),
+              targetEvent: event,
+              clickOutsideToClose:true,
+              locals: { institution },
+              controller: "RemoveInstController",
+              controllerAs: 'removeInstCtrl'
+          });
         };
         
         factory.getItems = institution => {

@@ -41,5 +41,10 @@
             $state.go('app.institution.timeline', { institutionKey: removeInstCtrl.institution.key});
             removeInstCtrl.closeDialog();
         };
+
+        removeInstCtrl.getTitle = () => {
+            return removeInstCtrl.hasOneInstitution() ? 
+                "Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?" : "Deseja remover esta instituição permanentemente ?";
+        };
     });
 })();

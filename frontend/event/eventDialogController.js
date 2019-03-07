@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService, StateLinkRequestService, STATE_LINKS) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -517,6 +517,9 @@
                 dialogCtrl._loadEvent($state.params.eventKey);
             } else {
                 dialogCtrl.event = { address: address };
+            }
+            if (Utils.isMobileScreen()) {
+                StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.CREATE_EVENT, STATES.EVENTS);
             }
         };
     });

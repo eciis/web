@@ -12,6 +12,7 @@ from models import Post
 from models import SurveyPost
 from models import Like
 from service_messages import send_message_notification
+from service_entities import enqueue_task
 
 from . import BaseHandler
 
@@ -69,6 +70,12 @@ class PostHandler(BaseHandler):
                 message=notification_message, 
                 entity=json.dumps(post.make(self.request.host))
             )
+
+            enqueue_task('send-push-notification', {
+                'type': 'DELETE_POST',
+                'entity': post.key.urlsafe(),
+                'receivers': [post.author.urlsafe()]
+            })
 
     @json_response
     @login_required

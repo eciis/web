@@ -28,6 +28,10 @@ class NotificationType(Enum):
     invite_user = 'USER'
     invite_user_adm = 'USER_ADM'
     link = 'LINK'
+    delete_member = 'DELETE_MEMBER'
+    remove_institution_link = 'REMOVE_INSTITUTION_LINK'
+    create_post = 'CREATE_POST',
+    delete_post = 'DELETE_POST'
 
 class NotificationProperties(object):
     """This class has several private
@@ -53,7 +57,11 @@ class NotificationProperties(object):
             NotificationType.comment: self.__get_comment_props,
             NotificationType.invite_user: self.__get_invite_user_props,
             NotificationType.invite_user_adm: self.__get_invite_user_adm_props,
-            NotificationType.link: self.__get_link_props
+            NotificationType.link: self.__get_link_props,
+            NotificationType.delete_member: self.__get_delete_member_props,
+            NotificationType.remove_institution_link: self.__get_remove_inst_link_props,
+            NotificationType.create_post: self.__get_create_post_props,
+            NotificationType.delete_post: self.__get_delete_post_props
         }
         self.entity = entity
         self.notification_method = types[_type] 
@@ -132,5 +140,46 @@ class NotificationProperties(object):
         return {
             'title': 'Solicitação de vínculo',
             'body': 'Uma instituição que você administra recebeu uma nova solicitação de vínculo',
+            'click_action': url
+        }
+    
+    def __get_delete_member_props(self):
+        """."""
+        url = '/institution/%s/home' %self.entity.key.urlsafe()
+
+        return {
+            'title': 'Remoção de vínculo',
+            'body': 'Você foi removido da instituição %s' %self.entity.name,
+            'click_action': url
+        }
+    
+    def __get_remove_inst_link_props(self):
+        """."""
+        url = '/institution/%s/inviteInstitution' %self.entity.key.urlsafe()
+
+        return {
+            'title': 'Remoção de vínculo',
+            'body': 'A instituição %s teve um de seus vínculos removidos' %self.entity.name,
+            'click_action': url
+        }
+
+    def __get_create_post_props(self):
+        """."""
+        url = '/posts/%s' %self.entity.key.urlsafe()
+
+        return {
+            'title': 'Novo post criado',
+            'body': '%s criou um novo post' %self.entity.author.urlsafe(),
+            'click_action': url
+        }
+    
+    def __get_delete_post_props(self):
+        """."""
+        url = '/'
+        admin_name = self.entity.institution.get().admin.get().name
+
+        return {
+            'title': 'Post deletado',
+            'body': '%s deletou seu post' %admin_name,
             'click_action': url
         }

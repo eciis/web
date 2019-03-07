@@ -111,17 +111,6 @@
         };
 
         /**
-         * Get the color of institutional profile of the user
-         * @param {object} event - The current event
-         */
-        eventCtrl.getProfileColor = (event) => {
-            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
-                return prof.institution_key === event.institution_key;
-            });
-            return _.get(_.first(profile), 'color', 'teal');
-        };
-
-        /**
          * Loads the events when the filters of month and/or year is changed
          */
         eventCtrl.loadFilteredEvents = () => {
@@ -214,15 +203,7 @@
                 eventCtrl.loadMoreEvents();
             });
         };
-
-        /**
-         * Get the first name of who modified the event by last
-         * @param {object} event
-         */
-        eventCtrl.getNameOfLastModified = (event) => {
-            return _.first(event.last_modified_by.split(" "));
-        };
-        
+ 
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */

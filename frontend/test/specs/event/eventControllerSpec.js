@@ -269,19 +269,6 @@
         });
     });
 
-    describe('getProfileColor()', () => {
-
-        it('Should return the color if user is member of institution of event', () => {
-            eventCtrl.user = user;
-            expect(eventCtrl.getProfileColor(event)).toEqual(_.first(user.institution_profiles).color);
-        });
-
-        it('Should return a default color "teal" if user is not a member of institution of event', () => {
-            eventCtrl.user = {institution_profiles: []};
-            expect(eventCtrl.getProfileColor(event)).toEqual('teal');
-        });
-    });
-
     describe('loadFilteredEvents()', () => {
 
         it('Should reset moreEvents, actualPage and isAnotherMonth', () => {
@@ -412,13 +399,6 @@
             spyOn(mdDialog, 'show');
             eventCtrl.share("$event", event);
             expect(mdDialog.show).toHaveBeenCalled();
-        });
-    });
-
-    describe('getNameOfLastModified()', () => {
-        it('Should return the first name of who modified the event by last', () => {
-            expect(event.last_modified_by).toEqual('User Test');
-            expect(eventCtrl.getNameOfLastModified(event)).toEqual('User');
         });
     });
 

@@ -1,3 +1,4 @@
+
 <main-toolbar toolbar-menu-items="eventCtrl.toolbarItems" toolbar-general-options="eventCtrl.toolbarGeneralOptions"></main-toolbar>
 
 <div style="overflow: scroll;" class="custom-scrollbar hide-scrollbar-mobile" ng-if="!eventCtrl.isFiltering">
@@ -12,7 +13,7 @@
               subtitle="eventCtrl.institution.address.city">
       </entity-showcase>
       <is-empty-card ng-if="eventCtrl.eventsByDay.length === 0"
-                     text="Nenhum evento a ser exibido">
+                    text="Nenhum evento a ser exibido">
       </is-empty-card>
     </div>
     <md-content id="content" class="box">
@@ -51,6 +52,7 @@
     </md-content>
   </div>
 </div>
+
 <md-fab-speed-dial ng-if="!eventCtrl.institutionKey && !eventCtrl.isFiltering"
   id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
@@ -61,4 +63,7 @@
   </md-fab-trigger>
 </md-fab-speed-dial>
 
-<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' cancel-action="eventCtrl.cancelFilter" confirm-action="eventCtrl.confirmFilter" style="height: 100%;"></filter-events-by-institution>
+<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' 
+  cancel-action="eventCtrl.cancelFilter" confirm-action="eventCtrl.confirmFilter" 
+  style="max-height: 100%; height: 100%; overflow: scroll;">
+</filter-events-by-institution>

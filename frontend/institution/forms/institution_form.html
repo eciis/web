@@ -1,0 +1,87 @@
+<form name='inst' id='institution-form'>
+  <div>
+    <md-button class='md-icon-button picture-picker'
+               ng-model="ctrl.pictureFile"
+               ngf-pattern="'image/*'"
+               ngf-accept="'image/*'"
+               ngf-max-size="5MB"
+               ngf-select="ctrl.cropThenSetImage($event)"
+               md-colors='{background: "light-green-500"}'>
+      <img class='round-circle' ng-src="{{ ctrl.institution.photo_url }}"/>
+    </md-button>
+    <span> {{ ctrl.institution.name }} </span>
+  </div>
+  <md-input-container>
+    <label>Nome Completo da Instituiçao</label>
+    <input type='text' name='fullName'
+           ng-model="ctrl.institution.name"
+           required
+           md-maxlength='90'
+           maxlength=90>
+    <div ng-messages='inst.fullName.$error'>
+      <div ng-message="required">Este campo é obrigatório!</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>E-mail institucional</label>
+    <input type='email' name='email'
+           ng-model="ctrl.institution.institutional_email"
+           required>
+    <div ng-messages="inst.email.$error">
+      <div ng-message="required" >Este campo é obrigatório!</div>
+      <div ng-message="email">O email deve ser válido!</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Sigla</label>
+    <input type='text' name='acronym' ng-model="ctrl.institution.acronym">
+  </md-input-container>
+  <md-input-container>
+    <label>Área de Atuaçao</label>
+    <md-select name='actuationArea'
+               ng-model="ctrl.institution.actuation_area" required
+               class='limit-md-select'>
+      <md-option ng-repeat="(key, value) in ctrl.actuationAreas"
+                 ng-value="key">{{ value }}
+      </md-option>
+    </md-select>
+    <div ng-messages="inst.actuationArea.$error">
+      <div ng-message="required" >Este campo é obrigatório!</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Natureza Jurídica</label>
+    <md-select name='legalNature'
+               ng-model="ctrl.institution.legal_nature" required
+               class='limit-md-select'>
+      <md-option ng-repeat="(key, value) in ctrl.legalNatures"
+                 ng-value="key">{{ value }}
+      </md-option>
+    </md-select>
+    <div ng-messages="inst.legalNature.$error">
+      <div ng-message="required" >Este campo é obrigatório!</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Telefone</label>
+    <input type="text" name="phone"
+                       ng-model="ctrl.institution.phone_number"
+                       ng-pattern='ctrl.phoneRegex'
+                       minlength="12" md-maxlength="13"
+                                      placeholder="99 9999-99999"
+                                      mask="99 9999-99999"
+                                      mask-validate='false'>
+    <div ng-messages="inst.phone.$error">
+      <div ng-message="pattern">O número de telefone deve ser válido!</div>
+    </div>
+  </md-input-container>
+  <md-input-container>
+    <label>Ramal</label>
+    <input type="text" name="branchLine" ng-pattern='ctrl.numberRegex'
+                       ng-model="ctrl.institution.branch_line"
+                       placeholder="999">
+    <div ng-messages="inst.branchLine.$error">
+      <div ng-message="pattern">O ramal deve ser válido!</div>
+    </div>
+  </md-input-container>
+</form>

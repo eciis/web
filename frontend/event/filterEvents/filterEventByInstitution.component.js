@@ -31,7 +31,7 @@
     });
     
     app.component("filterEventsByInstitution", {
-        templateUrl: 'app/event/filter_events_by_institution.html',
+        templateUrl: 'app/event/filterEvents/filter_events_by_institution.html',
         controller: 'FilterEventsByInstitutionController',
         controllerAs: 'filterCtrl',
         bindings: {

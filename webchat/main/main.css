@@ -1,4 +1,4 @@
-.webchat__container {
+.main__container {
     height: 100%;
     display: grid;
     grid-template-columns: 100%;
@@ -10,10 +10,10 @@
     animation-duration: 0.5s;
 }
 
-.webchat__header {
+.main__header {
     grid-area: header;
 }
 
-.webchat__content {
+.main__content {
     grid-area: content;
 }

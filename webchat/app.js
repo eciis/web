@@ -8,11 +8,10 @@
         'firebase',
     ]);
 
-    const rootName = 'webchat';
+    const rootName = 'main';
     app.constant('STATES', {
-            abstract: 'webchat',
+            abstract: rootName,
             home: `${rootName}.home`,
-            chat: `${rootName}.chat`,
             login: 'login',
             error: 'error',
         });
@@ -37,9 +36,9 @@
                abstract: true,
                views: {
                     main: {
-                        templateUrl: "app/webchat/webchat.html",
-                        controller: "WebchatController",
-                        controllerAs: "webchatCtrl",
+                        templateUrl: "app/main/main.html",
+                        controller: "mainController",
+                        controllerAs: "mainCtrl",
                     },
                },
            })
@@ -50,15 +49,6 @@
                        templateUrl: "app/home/home.html",
                        controller: "HomeController",
                        controllerAs: "homeCtrl",
-                   },
-               },
-           })
-           .state(STATES.chat, {
-               url: "/chat",
-               views: {
-                   content: {
-                       templateUrl: "app/chat/chat.html",
-                       controller: "ChatController as controller",
                    },
                },
            })

@@ -1,13 +1,15 @@
 <div class="filter-container">
     <div class="filter-items-container custom-scrollbar hide-scrollbar-mobile">
         <h3><b>Filtrar por institutição</b></h3>
-        <div class="filter-item" ng-repeat="institution in filterCtrl.filterList">
-            <md-checkbox ng-model="institution.enable" ng-change="filterCtrl.checkChange()" aria-label="{{institution.name}}"></md-checkbox>
-            <span>{{institution.name}}</span>
-        </div>
-        <div class="filter-item">
-            <md-checkbox ng-model="filterCtrl.enableAll" ng-change="filterCtrl.enableOrDisableAll()" aria-label="Todos os eventos"></md-checkbox>
-            <span>Todos os eventos</span>
+        <div>
+            <div class="filter-item" ng-repeat="institution in filterCtrl.filterList">
+                <md-checkbox ng-model="institution.enable" ng-change="filterCtrl.checkChange()" aria-label="{{institution.name}}"></md-checkbox>
+                <span>{{institution.name}}</span>
+            </div>
+            <div class="filter-item">
+                <md-checkbox ng-model="filterCtrl.enableAll" ng-change="filterCtrl.enableOrDisableAll()" aria-label="Todos os eventos"></md-checkbox>
+                <span>Todos os eventos</span>
+            </div>
         </div>
     </div>
 

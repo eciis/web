@@ -14,12 +14,18 @@
     text-align: center;
 }
 
+.filter-items-container > div {
+    display: grid;
+    grid-auto-rows: 1fr;
+}
+
 .filter-item {
     display: grid;
     grid-template-columns: 20px auto;
     grid-column-gap: 10px;
     padding: 0 16px;
     margin: 8px 0;
+    align-items: center;
 }
 
 .filter-item > md-checkbox {

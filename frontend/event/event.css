@@ -141,6 +141,9 @@
 
 .centralized-event-content, .event-day-properties {
     margin: 0;
+}
+
+.centralized-event-content {
     display: flex;
     justify-content: center;
 }

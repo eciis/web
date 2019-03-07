@@ -1,16 +1,17 @@
 <form name='inst' id='institution-form' class='ec-form'>
-  <div>
-    <md-button class='md-icon-button picture-picker'
-               ng-model="ctrl.pictureFile"
-               ngf-pattern="'image/*'"
-               ngf-accept="'image/*'"
-               ngf-max-size="5MB"
-               ngf-select="ctrl.cropThenSetImage($event)"
-               md-colors='{background: "light-green-500"}'>
-      <img class='round-circle' ng-src="{{ ctrl.institution.photo_url }}"/>
-    </md-button>
-    <span> {{ ctrl.institution.name }} </span>
-  </div>
+  <!-- FIXME: Currently the entire showcase is clickable to trigger the upload form
+    instead of just the avatar button -->
+  <entity-showcase
+    avatar="ctrl.institution.photo_url"
+    title="ctrl.institution.name"
+    left-action="openFileDialog()"
+    ng-model="ctrl.pictureFile"
+    ngf-pattern="'image/*'"
+    ngf-accept="'image/*'"
+    ngf-max-size="5MB"
+    ngf-select="ctrl.cropThenSetImage($event)"
+    style='margin-bottom: 1em'>
+  </entity-showcase>
   <md-input-container>
     <label>Nome Completo da Instituiçao</label>
     <input type='text' name='fullName'

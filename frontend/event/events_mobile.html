@@ -61,4 +61,4 @@
   </md-fab-trigger>
 </md-fab-speed-dial>
 
-<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' action-button="eventCtrl.closeFilter" style="height: 100%;"></filter-events-by-institution>
+<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' cancel-action="eventCtrl.cancelFilter" confirm-action="eventCtrl.confirmFilter" style="height: 100%;"></filter-events-by-institution>

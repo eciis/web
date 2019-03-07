@@ -274,12 +274,17 @@
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
         };
 
-        eventCtrl.closeFilter = function closeFilter() {
+        eventCtrl.confirmFilter = function confirmFilter() {
+            eventCtrl.events = [];
             eventCtrl.isFiltering = false;
             eventCtrl._actualPage = 0;
             eventCtrl._moreEvents = true;
             eventCtrl.isLoadingEvents = true;
             return eventCtrl.loadMoreEvents();
+        };
+
+        eventCtrl.cancelFilter = function cancelFilter() {
+            eventCtrl.isFiltering = false;
         };
 
         eventCtrl.$onInit = () => {

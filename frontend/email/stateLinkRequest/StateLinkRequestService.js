@@ -4,6 +4,14 @@
     angular.module("app").service('StateLinkRequestService', ['$mdDialog', function StateLinkRequestService($mdDialog) {
         const StateLinkRequestService = this;
 
+        /**
+         * It shows a dialog that will ask the user if it wants to receive the link of the state
+         * by email. It is used in pages that has big forms to be filled.
+         *
+         * @param stateLink the state link that will be sent by email.
+         * @param previousState the state that the user will comeback if it accepts to receive
+         * the email.
+         */
         StateLinkRequestService.showLinkRequestDialog = (stateLink, previousState) => {
             $mdDialog.show({
                 templateUrl: "app/email/stateLinkRequest/stateLinkRequestDialog.html",

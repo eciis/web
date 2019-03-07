@@ -30,7 +30,7 @@ class NotificationType(Enum):
     link = 'LINK'
     delete_member = 'DELETE_MEMBER'
     remove_institution_link = 'REMOVE_INSTITUTION_LINK'
-    create_post = 'CREATE_POST',
+    create_post = 'CREATE_POST'
     delete_post = 'DELETE_POST'
 
 class NotificationProperties(object):

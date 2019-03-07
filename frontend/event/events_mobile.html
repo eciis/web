@@ -1,6 +1,6 @@
 <main-toolbar toolbar-menu-items="eventCtrl.toolbarItems" toolbar-general-options="eventCtrl.toolbarGeneralOptions"></main-toolbar>
 
-<div style="overflow: scroll;" class="custom-scrollbar hide-scrollbar-mobile" ng-if="false">
+<div style="overflow: scroll;" class="custom-scrollbar hide-scrollbar-mobile" ng-if="!eventCtrl.isFiltering">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
     <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
@@ -51,7 +51,7 @@
     </md-content>
   </div>
 </div>
-<md-fab-speed-dial ng-if="!eventCtrl.institutionKey" ng-if="false"
+<md-fab-speed-dial ng-if="!eventCtrl.institutionKey && !eventCtrl.isFiltering"
   id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
     <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
@@ -61,4 +61,4 @@
   </md-fab-trigger>
 </md-fab-speed-dial>
 
-<filter-events-by-institution filter-list='[]' style="height: 100%;"></filter-events-by-institution>
+<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' action-button="eventCtrl.closeFilter" style="height: 100%;"></filter-events-by-institution>

@@ -16,7 +16,8 @@
         controller: 'FilterEventsByInstitutionController',
         controllerAs: 'filterCtrl',
         bindings: {
-            filterList: '<'
+            filterList: '<',
+            actionButton: '<'
         }
     });
 })();

@@ -1,14 +1,19 @@
 <div style="display: grid; grid-template-rows: min-content 1fr min-content; height: 100%;">
     <h3 style="text-align: center;"><b>Filtrar por institutição</b></h3>
     <div>
-        <div style="display: grid; grid-template-columns: 20px auto; grid-column-gap: 10px; padding: 0 16px;">
-            <md-checkbox ng-model="filterCtrl.filter" style="margin: 0; text-align: center;"></md-checkbox>
-            <span>Laboratório de Avaliação e Desenvolvimento de Biomateriais do Nordeste</span>
+        <div style="display: grid; grid-template-columns: 20px auto; grid-column-gap: 10px; padding: 0 16px; margin: 8px 0;"
+            ng-repeat="institution in filterCtrl.filterList">
+            <md-checkbox ng-model="institution.enable" style="margin: 0; text-align: center;"></md-checkbox>
+            <span>{{institution.name}}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: 20px auto; grid-column-gap: 10px; padding: 0 16px; margin: 8px 0;">
+            <md-checkbox ng-model="filterCtrl.enableAll" style="margin: 0; text-align: center;"></md-checkbox>
+            <span>Todos os eventos</span>
         </div>
     </div>
 
     <div style="display: grid; grid-template-columns: auto auto; justify-content: end; margin-bottom: 10px;">
         <md-button style="color: white; background-color: #7F7F7F;">CANCELAR</md-button>
-        <md-button md-colors="{background: 'teal-500'}">FILTRAR</md-button>
+        <md-button md-colors="{background: 'teal-500'}" ng-click="filterCtrl.actionButton()">FILTRAR</md-button>
     </div>
 </div>

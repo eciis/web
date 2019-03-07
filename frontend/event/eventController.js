@@ -17,6 +17,8 @@
         eventCtrl.selectedYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
+        eventCtrl.isFiltering = false;
+        eventCtrl.institutionsFilter = [];
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
 
@@ -54,7 +56,11 @@
                     });
                 }
 
-                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
+                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey)
+                                .filter(event => {
+                    const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
+                    return institution && institution.enable;
+                });
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {
@@ -172,8 +178,8 @@
          * @private
          */
         eventCtrl._getEventsByDay = () => {
+            eventCtrl.eventsByDay = [];
             if(eventCtrl.events.length > 0 && eventCtrl.selectedMonth) {
-                eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
                 _.forEach(eventCtrl.events, function(event) {
                     eventCtrl._distributeEvents(event, eventsByDay);
@@ -253,9 +259,9 @@
                         eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
                 },
                 {
-                    title: 'Filtrar por instituição', action: () => {}
+                    title: 'Filtrar por instituição', action: () => {eventCtrl.isFiltering = true;}
                 }
-            ]
+            ];
             
             return toolbarMenuGeneralOptions;
         };
@@ -268,6 +274,14 @@
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
         };
 
+        eventCtrl.closeFilter = function closeFilter() {
+            eventCtrl.isFiltering = false;
+            eventCtrl._actualPage = 0;
+            eventCtrl._moreEvents = true;
+            eventCtrl.isLoadingEvents = true;
+            return eventCtrl.loadMoreEvents();
+        };
+
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
             getCurrentInstitution();
@@ -275,6 +289,13 @@
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths().then(() => {
                     eventCtrl.setupToolbarFields();
+                });
+
+                eventCtrl.institutionsFilter = eventCtrl.user.follows.map(institution => {
+                    return {
+                        name: institution.name,
+                        enable: true
+                    };
                 });
             } else {
                 eventCtrl.loadMoreEvents();

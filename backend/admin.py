@@ -330,7 +330,7 @@ class ResetHandler(BaseHandler):
             'address': address_key,
             'actuation_area': 'GOVERNMENT_AGENCIES',
             'description': 'Ministério da Saúde',
-            'photo_url': 'https://i1.wp.com/notta.news/wp-content/uploads/2017/08/tbg_20170713080909_62787.jpg?w=1024',
+            'photo_url': 'https://firebasestorage.googleapis.com/v0/b/development-cis.appspot.com/o/images%2Fministerio_da_saude_logo-1551970633722?alt=media&token=a658e366-a3b6-4699-aa98-95dc79eff3b5',
             'email': 'deciis@saude.gov.br',
             'phone_number': '61 3315-2425',
             'state': 'active',

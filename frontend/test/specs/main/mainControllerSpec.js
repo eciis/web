@@ -2,7 +2,7 @@
 
 (describe('Test MainController', function() {
     let mainCtrl, httpBackend, scope, createCtrl, state, states, mainToolbar;
-    let authService, requestInvitationService, notificationListenerService, utilsService;
+    let authService, requestInvitationService, notificationListenerService, utilsService, pushNotificationService;
     
     const window = {'location': {'reload': function(){}}};
     const user = {
@@ -46,7 +46,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, AuthService,
-                RequestInvitationService, NotificationListenerService, STATES, UtilsService) {
+                RequestInvitationService, NotificationListenerService, STATES, UtilsService, PushNotificationService) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -55,6 +55,7 @@
         requestInvitationService = RequestInvitationService;
         notificationListenerService = NotificationListenerService;
         utilsService = UtilsService;
+        pushNotificationService = PushNotificationService;
 
         mainToolbar = document.createElement('div');
         mainToolbar.setAttribute("id", "main-toolbar");
@@ -79,6 +80,7 @@
         spyOn(requestInvitationService, 'getParentRequests').and.callFake(callFake);
         spyOn(requestInvitationService, 'getChildrenRequests').and.callFake(callFake);
         spyOn(NotificationListenerService, 'multipleEventsListener').and.callFake(eventsListenerFake);
+        spyOn(pushNotificationService, 'setupPushNotificationPermission').and.callFake(callFake);
 
         authService.login(user);
 

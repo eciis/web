@@ -26,6 +26,8 @@
             title: "@",
             subtitle: "@",
             confirmAction: "<",
+            cancelText: "@",
+            confirmText: "@",
         },
         transclude: true,
     });
@@ -36,10 +38,16 @@
         dialogCtrl.$onInit = () => {
             _.defaults(dialogCtrl, {
                 confirmAction: () => {},
+                cancelText: "Cancelar",
+                confirmText: "Confirmar",
             });
         };
 
         dialogCtrl.cancelDialog = $mdDialog.cancel;
+        dialogCtrl.confirmDialog = () => {
+            dialogCtrl.confirmAction();
+            $mdDialog.hide();
+        };
     }
 
 })();

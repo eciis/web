@@ -3,7 +3,7 @@
     var app = angular.module('app');
 
     app.controller("MainController", function MainController($mdSidenav, $state, AuthService, UtilsService,
-        UserService, RequestInvitationService, $window, NotificationListenerService, STATES, SCREEN_SIZES) {
+        UserService, RequestInvitationService, $window, NotificationListenerService, STATES, SCREEN_SIZES, PushNotificationService) {
         var mainCtrl = this;
         var url_report = Config.SUPPORT_URL + "/report";
         
@@ -190,6 +190,7 @@
             }
             notificationListener();
             mainCtrl.getPendingTasks();
+            PushNotificationService.setupPushNotificationPermission();
         })();
     });
 })();

@@ -24,5 +24,6 @@
         "jsonpatch",
         "CryptoJS",
         "firebase"
-    ]
+    ],
+    "esversion": 6
 }

@@ -30,6 +30,10 @@
             var saveImgPromise = saveImage(callback);
         };
 
+        dialogCtrl.colorButtonSubmit = function colorButtonSubmit(formValid) {
+            return formValid ?'default-teal-500':'default-grey-400';
+        };
+
         dialogCtrl.removeUrl = function (url, urlList) {
             _.remove(urlList, function (element) {
                 return element === url;
@@ -361,7 +365,8 @@
             dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.startHour.setHours(8, 0, 0);
             dialogCtrl.addStartHour();
-            dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = _.isNil(dialogCtrl.event.end_time) ?
+                new Date(dialogCtrl.event.start_time) : dialogCtrl.event.end_time;
             dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.endHour.setHours(18, 0, 0);
             dialogCtrl.addEndHour();
@@ -504,8 +509,9 @@
             const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
-            initUrlFields();
             dialogCtrl._loadStateParams();
+            initUrlFields();
+
             if (dialogCtrl.event) {
                 dialogCtrl._loadStatesToEdit();
             } else if(!dialogCtrl.event && $state.params.eventKey) {

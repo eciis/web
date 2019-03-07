@@ -21,11 +21,11 @@
             </md-button>
             <md-menu-content>
                 <md-menu-item ng-repeat="option in whiteToolbarCtrl.menuOptions" ng-click="option.action()">
-                    <div>
+                    <div class="white-toolbar__menu__item">
                         <md-icon>
-                            {{option.icon}}
+                            {{option.getIcon()}}
                         </md-icon>
-                        <span class="white-toolbar-menu-option-title">{{option.title}}</span>
+                        <span class="white-toolbar-menu-option-title responsive__title">{{option.title}}</span>
                     </div>
                 </md-menu-item>
             </md-menu-content>

@@ -529,13 +529,21 @@
 
     .event-canceled-tag, .event-canceled-icon {
         color: white;
+    }
 
+    .event-canceled-icon {
+        width: 1.5em;
+        height: 2em;
+        font-size: 2.5em;
+        margin-top: 0.4em;
+        margin-left: 0.3em;
     }
 
     .event-canceled-tag {
         margin-right: 2em;
         margin-left: -1em;
-        font-size: 0.95em;
+        margin-top: 1.4em;
+        font-size: 0.9em;
     }
 
     .event-canceled-subtitle {
@@ -546,18 +554,30 @@
 
     @media screen and (max-width: 400px) {
         .event-canceled-tag {
-            font-size: 0.85em;
+            font-size: 0.8em;
         }
     }
 
-    @media screen and (max-width: 350px) {
+    @media screen and (max-width: 360px) {
+        .event-canceled-tag {
+            margin-top: 1.7em;
+            font-size: 0.75em;
+        }
+    }
+
+    @media screen and (max-width: 330px) {
         .event-canceled-tag {
             margin-right: 1em;
-            font-size: 0.75em;
+            margin-top: 2.1em;
+            font-size: 0.69em;
         }
 
         .event-canceled-subtitle {
             font-size: 0.55em;
+        }
+
+        .event-canceled-icon {
+            margin-left: 0.2em;
         }
     }
 

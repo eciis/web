@@ -39,6 +39,7 @@
             'start_time': startDate,
             'end_time': endDate,
             'institution_key': institution.key,
+            'last_modified_by': 'User Test',
             'key': '12345'
         },
         other_event = {
@@ -411,6 +412,13 @@
             spyOn(mdDialog, 'show');
             eventCtrl.share("$event", event);
             expect(mdDialog.show).toHaveBeenCalled();
+        });
+    });
+
+    describe('getNameOfLastModified()', () => {
+        it('Should return the first name of who modified the event by last', () => {
+            expect(event.last_modified_by).toEqual('User Test');
+            expect(eventCtrl.getNameOfLastModified(event)).toEqual('User');
         });
     });
 

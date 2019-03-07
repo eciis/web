@@ -141,6 +141,8 @@
 
 .centralized-event-content, .event-day-properties {
     margin: 0;
+    display: flex;
+    justify-content: center;
 }
 
 #menu-button {

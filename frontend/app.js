@@ -296,9 +296,8 @@
                 url: "/:key/new_invite",
                 views: {
                     main: {
-                      templateUrl: Utils.selectFieldBasedOnScreenSize("app/invites/new_invite_page.html",
-                        "app/invites/new_invite_page_mobile.html"),
-                        controller: "NewInviteController as newInviteCtrl"
+                      templateUrl: "app/invites/new_invite_page.html",
+                      controller: "NewInviteController as newInviteCtrl"
                     }
                 }
             })

@@ -365,7 +365,8 @@
             dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.startHour.setHours(8, 0, 0);
             dialogCtrl.addStartHour();
-            dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = _.isNil(dialogCtrl.event.end_time) ?
+                new Date(dialogCtrl.event.start_time) : dialogCtrl.event.end_time;
             dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.endHour.setHours(18, 0, 0);
             dialogCtrl.addEndHour();

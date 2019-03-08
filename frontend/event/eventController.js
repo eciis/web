@@ -58,10 +58,13 @@
 
                 eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
                 
-                eventCtrl.events = !eventCtrl.institutionKey && eventCtrl.events.filter(event => {
-                    const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
-                    return institution && institution.enable;
-                });
+                if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && !eventCtrl.institutionKey) {
+                    eventCtrl.events = eventCtrl.events.filter(event => {
+                        const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
+                        return institution && institution.enable;
+                    });
+                }
+
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {

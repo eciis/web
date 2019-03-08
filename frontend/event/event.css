@@ -267,11 +267,6 @@
         border-left: 0.55em solid;
     }
 
-    .event-button-margin {
-        position: fixed !important;
-        margin-bottom: 3.5em;
-    }
-
     .highlight {
         background:rgba(0,0,0,0.65);
         position: absolute;

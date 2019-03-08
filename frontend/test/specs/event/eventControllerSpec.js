@@ -39,6 +39,7 @@
             'start_time': startDate,
             'end_time': endDate,
             'institution_key': institution.key,
+            'last_modified_by': 'User Test',
             'key': '12345'
         },
         other_event = {
@@ -265,19 +266,6 @@
             eventCtrl.selectedYear = new Date(startDate).getFullYear();
             expect(eventCtrl._getDaysRange(new Date(startDate), new Date(endDate)))
                 .toEqual([22, 26]);
-        });
-    });
-
-    describe('getProfileColor()', () => {
-
-        it('Should return the color if user is member of institution of event', () => {
-            eventCtrl.user = user;
-            expect(eventCtrl.getProfileColor(event)).toEqual(_.first(user.institution_profiles).color);
-        });
-
-        it('Should return a default color "teal" if user is not a member of institution of event', () => {
-            eventCtrl.user = {institution_profiles: []};
-            expect(eventCtrl.getProfileColor(event)).toEqual('teal');
         });
     });
 

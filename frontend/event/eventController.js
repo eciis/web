@@ -107,18 +107,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
-        };
-
-        /**
-         * Get the color of institutional profile of the user
-         * @param {object} event - The current event
-         */
-        eventCtrl.getProfileColor = (event) => {
-            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
-                return prof.institution_key === event.institution_key;
-            });
-            return _.get(_.first(profile), 'color', 'teal');
+            event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
         };
 
         /**
@@ -214,7 +203,7 @@
                 eventCtrl.loadMoreEvents();
             });
         };
-        
+ 
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */

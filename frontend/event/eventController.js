@@ -262,10 +262,13 @@
                     title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 
                         eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
                 },
-                {
-                    title: 'Filtrar por instituição', action: () => {eventCtrl.isFiltering = true;}
-                }
             ];
+
+            if (!eventCtrl.institutionKey) {
+                toolbarMenuGeneralOptions.options.push({
+                    title: 'Filtrar por instituição', action: () => {eventCtrl.isFiltering = true;}
+                });
+            }
             
             return toolbarMenuGeneralOptions;
         };

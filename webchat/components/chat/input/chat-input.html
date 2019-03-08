@@ -4,7 +4,8 @@
             class="chat-input__connection-state">⬤</p>
     <input
             class="chat-input__text custom-input"
-            ng-model="chatInputCtrl.msg"/>
+            ng-model="chatInputCtrl.msg"
+            ng-keydown="$event.keyCode === 13 && chatInputCtrl.sendMessage()"/>
     <icon-button
             class="chat-input__send-btn"
             icon="send"

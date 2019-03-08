@@ -3,7 +3,8 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('HomeController', ['UserService', 'AuthService', 'MessageService', '$scope', function HomeController (UserService, AuthService, MessageService, $scope) {
+    webchat.controller('HomeController', ['UserService', 'AuthService', 'MessageService', '$scope', 'NavbarManagementService',
+        function HomeController (UserService, AuthService, MessageService, $scope, NavbarManagementService) {
         const homeCtrl = this;
 
         homeCtrl.$onInit = () => {
@@ -36,6 +37,9 @@
 
         homeCtrl.openChat = (user) => {
             homeCtrl.currentUser = user;
+            if (Utils.isMobileScreen()) {
+                NavbarManagementService.toggleSidenav('left');
+            }
         };
 
         homeCtrl.chatCreated = (e) => {

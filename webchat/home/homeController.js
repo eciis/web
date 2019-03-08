@@ -19,20 +19,18 @@
         homeCtrl.getUserList = (users) => {
             const parsedUsers = [];
 
-            if (users.forEach) {
-                users.forEach(userKey => {
-                    if (userKey !== homeCtrl.client.id) {
-                        if (!_.has(homeCtrl.cachedUsers, userKey)) {
-                            UserService.getUser(userKey).then(user => {
-                                homeCtrl.cachedUsers[userKey] = user;
-                                parsedUsers.push(homeCtrl.cachedUsers[userKey]);
-                            });
-                        } else {
+            _.forEach(users, userKey => {
+                if (userKey !== homeCtrl.client.id) {
+                    if (!_.has(homeCtrl.cachedUsers, userKey)) {
+                        UserService.getUser(userKey).then(user => {
+                            homeCtrl.cachedUsers[userKey] = user;
                             parsedUsers.push(homeCtrl.cachedUsers[userKey]);
-                        }
+                        });
+                    } else {
+                        parsedUsers.push(homeCtrl.cachedUsers[userKey]);
                     }
-                });
-            }
+                }
+            });
             homeCtrl.contacts = parsedUsers;
         };
 

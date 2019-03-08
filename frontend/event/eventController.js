@@ -55,14 +55,14 @@
                         eventCtrl.events.push(event);
                     });
                 }
-
-                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
                 
                 if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && !eventCtrl.institutionKey) {
                     eventCtrl.events = eventCtrl.events.filter(event => {
                         const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
                         return institution && institution.enable;
                     });
+                } else {
+                    eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
                 }
 
                 eventCtrl.isLoadingEvents = false;

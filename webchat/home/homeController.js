@@ -3,7 +3,7 @@
 
     const webchat = angular.module('webchat');
 
-    webchat.controller('HomeController', ['UserService', 'AuthService', 'WebchatService', 'MessageService', '$scope', function HomeController (UserService, AuthService, WebchatService, MessageService, $scope) {
+    webchat.controller('HomeController', ['UserService', 'AuthService', 'MessageService', '$scope', function HomeController (UserService, AuthService, MessageService, $scope) {
         const homeCtrl = this;
 
         homeCtrl.$onInit = () => {

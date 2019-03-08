@@ -39,3 +39,8 @@
     justify-content: end;
     margin-bottom: 10px;
 }
+
+.filter-cancel-button {
+    color: white;
+    background-color: #7F7F7F;
+}

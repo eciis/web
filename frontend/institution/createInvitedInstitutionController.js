@@ -19,7 +19,6 @@
             ctrl.currentStep === 0 ? window.history.back() : ctrl.previousStep();
           }
 
-          // loadInstitution
           ctrl.loadInstitution = () => {
             InstitutionService.getInstitution(ctrl.institutionKey).then(res => {
               ctrl.newInstitution = res;
@@ -36,9 +35,6 @@
             })
           }
 
-          // isCurrentStepValid
-          // isValidAddress
-          // getFields
           ctrl.isCurrentStepValid = () => {
             const step = ctrl.currentStep;
             const institution = ctrl.newInstitution;
@@ -76,7 +72,6 @@
             return stepValidation[step];
           };
 
-          // nextStep
           ctrl.nextStep = () => {
             if (ctrl.isCurrentStepValid()) {
               ctrl.currentStep += 1;
@@ -85,7 +80,6 @@
             }
           }
 
-          // previousStep
           ctrl.previousStep = () => {
             if (ctrl.currentStep === 0) return;
             ctrl.currentStep -= 1;
@@ -102,10 +96,22 @@
             }
           })
 
+          /**
+           * Callback when the photo is changed on institutionInfo.component
+           *
+           * ctrl.photoSrc is needed to save the image later (when the Institution is finally saved).
+           */
           ctrl.onNewPhoto = (photoSrc) => {
             ctrl.photoSrc = photoSrc;
           }
 
+          /**
+           * Submits current institution info and tries to save it.
+           * Calls a chain of promises to deal with Institution saving, updating,
+           *  and User updating.
+           *
+           * @params {Event} event - current click event
+           */
           ctrl.submit = (event) => {
             const newInstitution = new Institution(ctrl.newInstitution);
 
@@ -132,6 +138,13 @@
             }
           }
 
+          /**
+           * Saves a image file as profile for the current institution.
+           * If src is non existant (meaning user has not chosen a new profile picture),
+           * this method bails out and resolves a Promise with nothing.
+           * Otherwise, sets the Image through ImageService and resolves it.
+           * @param {Image} src - current institutions image file (resized)
+           */
           function saveProfileImage(src) {
             if (!src) {
               return Promise.resolve()
@@ -143,6 +156,11 @@
             });
           }
 
+          /**
+           * Reloads the current user through AuthService, as needed to set this new Institution
+           * as the User's current institution and update this info through the app and local storage.
+           * Then, sends the user back to STATE.HOME with a confirmation message.
+           */
           function reloadAndRedirectHome() {
             AuthService.reload().then(() => {
               $state.go(STATES.HOME).then(() => {
@@ -157,6 +175,13 @@
             });
           }
 
+          /**
+           * Shows a confirmation dialog asking the user about saving this new institution.
+           * @param {Event} event - click event from DOM
+           * @param {DOMElement} parent - parent element for the modal
+           *
+           * @returns {Promise} $mdDialog Promise
+           */
           function showConfirmationDialog(event, parent) {
             const confirm = $mdDialog.confirm(event)
               .parent(parent)
@@ -170,6 +195,15 @@
             return $mdDialog.show(confirm);
           }
 
+          /**
+           * Saves a (stub) institution, then promptly update it with info from the previous forms.
+           * Calls #updateUser at the end.
+           * @param {string} inviteKey - of current institution
+           * @param {String} instKey - of current institution
+           * @param {String} senderName - name of the current user
+           *
+           * @return {Promise} - InstitutionService#update promise.
+           */
           function saveAndUpdateInst(inviteKey, instKey, senderName) {
             const patch = ObserverRecorderService.generate(observer);
             const body = { sender_name: senderName }
@@ -181,6 +215,15 @@
             });
           }
 
+          /**
+           * Updates the current User, setting up the created institution (and it as user's current),
+           * removing its invite key and saving it through AuthService.
+           * @param {String} key - invite key
+           * @param {Institution} inst - created institution
+           *
+           * Replaces:
+           * #updateUser
+           */
           function updateUser(key, inst) {
             ctrl.user.removeInvite(key);
             ctrl.user.institutions.push(inst);
@@ -191,6 +234,13 @@
             AuthService.save();
           }
 
+          /**
+           * Creates a new "empty" profile for the institution.
+           * @param {Institution} inst - Institution to generate profile
+           *
+           * Replaces:
+           * #createProfile
+           */
           function createProfile(inst) {
             return {
               email: null,
@@ -205,9 +255,15 @@
             };
           }
 
-          // main()
-          // initController()
-          // setDefaultPhotoUrl
+          /**
+           * Initializes the controller, setting current user and institution key.
+           * Redirects if there's no institution key.
+           *
+           * Replaces:
+           * #main
+           * #initController
+           * #setDefaultPhotoUrl
+           */
           ctrl.$onInit = () => {
             ctrl.user = AuthService.getCurrentUser();
             ctrl.institutionKey = $state.params.institutionKey;

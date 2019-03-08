@@ -260,7 +260,7 @@
                 spyOn(utilsService, 'selectNavOption');
                 institutionCtrl.goToEvents(first_institution.key);
                 expect(utilsService.selectNavOption).toHaveBeenCalledWith(
-                    states.EVENTS,
+                    states.INST_EVENTS,
                     {
                         institutionKey: first_institution.key,
                     }

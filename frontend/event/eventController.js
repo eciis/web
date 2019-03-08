@@ -56,8 +56,9 @@
                     });
                 }
 
-                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey)
-                                .filter(event => {
+                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
+                
+                eventCtrl.events = !eventCtrl.institutionKey && eventCtrl.events.filter(event => {
                     const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
                     return institution && institution.enable;
                 });
@@ -66,7 +67,7 @@
             }, function error() {
                 $state.go(STATES.HOME);
             });
-        }
+        };
 
         eventCtrl.newEvent = function newEvent(event) {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {

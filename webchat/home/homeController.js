@@ -38,7 +38,6 @@
 
         homeCtrl.openChat = (user) => {
             homeCtrl.currentUser = user;
-            console.log(homeCtrl.client.chats[user.key]);
         };
 
         homeCtrl.chatCreated = (e) => {
@@ -54,7 +53,6 @@
 
         homeCtrl.stateChange = (state) => {
             homeCtrl.state = state;
-            console.log(state);
             $scope.$apply();
         };
 

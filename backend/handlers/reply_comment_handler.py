@@ -11,6 +11,7 @@ from utils import Utils
 from service_messages import send_message_notification
 from custom_exceptions import NotAuthorizedException
 from custom_exceptions import EntityException
+from service_entities import enqueue_task
 
 from . import BaseHandler
 from models import Comment
@@ -81,6 +82,12 @@ class ReplyCommentHandler(BaseHandler):
                 entity_key=post.key.urlsafe(),
                 message=notification_message
             )
+
+            enqueue_task('send-push-notification', {
+                'type': notification_type,
+                'entity': post.key.urlsafe(),
+                'receivers': [comment.get('author_key')]
+            })
 
         self.response.write(json.dumps(Utils.toJson(reply)))
 

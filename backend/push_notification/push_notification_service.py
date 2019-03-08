@@ -32,6 +32,13 @@ class NotificationType(Enum):
     remove_institution_link = 'REMOVE_INSTITUTION_LINK'
     create_post = 'CREATE_POST'
     delete_post = 'DELETE_POST'
+    reply_comment = 'REPLY_COMMENT'
+    deleted_user = 'DELETED_USER'
+    left_institution = 'LEFT_INSTITUTION'
+    invite = 'INVITE'
+    deleted_institution = 'DELETED_INSTITUTION'
+    deleted_event = 'DELETED_EVENT'
+    updated_event = 'UPDATED_EVENT'
 
 class NotificationProperties(object):
     """This class has several private
@@ -61,7 +68,14 @@ class NotificationProperties(object):
             NotificationType.delete_member: self.__get_delete_member_props,
             NotificationType.remove_institution_link: self.__get_remove_inst_link_props,
             NotificationType.create_post: self.__get_create_post_props,
-            NotificationType.delete_post: self.__get_delete_post_props
+            NotificationType.delete_post: self.__get_delete_post_props,
+            NotificationType.reply_comment: self.__get_reply_comment_props,
+            NotificationType.deleted_user: self.__get_deleted_user_props,
+            NotificationType.left_institution: self.__get_left_institution_props,
+            NotificationType.invite: self.__get_invite_props,
+            NotificationType.deleted_institution: self.__get_deleted_institution_props,
+            NotificationType.deleted_event: self.__get_deleted_event_props,
+            NotificationType.updated_event: self.__get_updated_event_props
         }
         self.entity = entity
         self.notification_method = types[_type] 
@@ -182,4 +196,63 @@ class NotificationProperties(object):
             'title': 'Post deletado',
             'body': '%s deletou seu post' %admin_name,
             'click_action': url
+        }
+    
+    def __get_reply_comment_props(self):
+        """."""
+        url = '/posts/%s' %self.entity.key.urlsafe()
+
+        return {
+            'title': 'Novo comentário',
+            'body': 'Seu comentário tem uma nova resposta',
+            'click_action': url
+        }
+    
+    def __get_deleted_user_props(self):
+        """."""
+        return {
+            'title': 'Usuário inativo',
+            'body': '%s não está mais ativo na plataforma' %self.entity.name,
+            'click_action': '/'
+        }
+
+    def __get_left_institution_props(self):
+        """."""
+        return {
+            'title': 'Remoção de vínculo de membro',
+            'body': '%s removeu o vínculo com uma das instituições que você administra' %self.entity.name,
+            'click_action': '/'
+        }
+    
+    def __get_invite_props(self):
+        """."""
+        url = '%s/new_invite' %self.entity.key.urlsafe()
+        return {
+            'title': 'Novo convite',
+            'body': 'Você tem um novo convite',
+            'click_action': url
+        }
+    
+    def __get_deleted_institution_props(self):
+        """."""
+        return {
+            'title': 'Instituição removida',
+            'body': 'A instituição %s foi removida' %self.entity.name,
+            'click_action': '/'
+        }
+    
+    def __get_deleted_event_props(self):
+        """."""
+        return {
+            'title': 'Evento removido',
+            'body': 'O evento %s foi removido' %self.entity.title,
+            'click_action': '/'
+        }
+    
+    def __get_updated_event_props(self):
+        """."""
+        return {
+            'title': 'Evento editado',
+            'body': 'O evento %s foi editado' %self.entity.title,
+            'click_action': '/event/%s/details' %self.entity.key.urlsafe()
         }

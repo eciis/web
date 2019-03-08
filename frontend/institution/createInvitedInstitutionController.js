@@ -2,12 +2,14 @@
 (function() {
   angular.module('app')
     .controller('CreateInvitedInstitutionController',
-      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService',
-        function (STATES, $state, AuthService, InstitutionService, MessageService) {
+      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService', '$mdDialog', 'ObserverRecorderService',
+        function (STATES, $state, AuthService, InstitutionService, MessageService, $mdDialog, ObserverRecorderService) {
           const ctrl = this;
+          let observer;
           ctrl.loading = true;
           ctrl.currentStep = 0;
           ctrl.newInstitution = {};
+          ctrl.user = {};
 
           ctrl.stepColor = (step) => {
             return ctrl.currentStep === step ? 'light-green-500' : 'grey-500';
@@ -22,6 +24,7 @@
             InstitutionService.getInstitution(ctrl.institutionKey).then(res => {
               ctrl.newInstitution = res;
               ctrl.suggestedName = res.name;
+              observer = ObserverRecorderService.register(ctrl.newInstitution);
 
               // Set default values
               ctrl.newInstitution.address = new Address(res.address);
@@ -75,7 +78,7 @@
 
           // nextStep
           ctrl.nextStep = () => {
-            if (true) {
+            if (ctrl.isCurrentStepValid()) {
               ctrl.currentStep += 1;
             } else {
               MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
@@ -103,10 +106,88 @@
             ctrl.photoSrc = photoSrc;
           }
 
+          ctrl.submit = (event) => {
+            const newInstitution = new Institution(ctrl.newInstitution);
+            let promise;
+
+            if (ctrl.isCurrentStepValid() && newInstitution.isValid()) {
+              const parent = angular.element('#create-inst-content');
+              const confirm = $mdDialog.confirm(event)
+                .parent(parent)
+                .clickOutsideToClose(true)
+                .title('FINALIZAR')
+                .textContent('Você deseja finalizar e salvar os dados da instituição?')
+                .ariaLabel('Finalizar')
+                .targetEvent(event)
+                .ok('Sim')
+                .cancel('Não');
+              promise = $mdDialog.show(confirm);
+              promise.then(() => {
+                ctrl.loadingSaveInstitution = true;
+                ctrl.completeInstitutionCreation().then((r) => {
+                  AuthService.reload().then(() => {
+                    $state.go(STATES.HOME).then(() => {
+                      const alert = $mdDialog.alert({
+                        title: 'INSTITUIÇÃO CRIADA',
+                        textContent: 'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.',
+                        ok: 'Fechar'
+                      });
+                      $mdDialog.show(alert);
+                    });
+                });
+                  });
+              }).catch(e => {
+                MessageService.showToast('Cancelado');
+              })
+            } else {
+              MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            }
+            return promise;
+          }
+
+          ctrl.completeInstitutionCreation = () => {
+            const inviteKey = $state.params.inviteKey;
+            const institutionKey = ctrl.institutionKey;
+            const patch = ObserverRecorderService.generate(observer);
+            const body = { sender_name: $state.params.senderName }
+
+            return InstitutionService.save(body, institutionKey, inviteKey).then((savedInst)=> {
+              return InstitutionService.update(institutionKey, patch).then((r) => {
+                updateUser(inviteKey, r);
+                return r;
+              });
+            });
+          }
+
+          function updateUser(key, inst) {
+            ctrl.user.removeInvite(key);
+            ctrl.user.institutions.push(inst);
+            ctrl.user.institutions_admin.push(inst.key);
+            ctrl.user.follow(inst);
+            ctrl.user.addProfile(createProfile(inst));
+            ctrl.user.changeInstitution(inst);
+            AuthService.save();
+          }
+
+          function createProfile(inst) {
+            return {
+              email: null,
+              institution_key: inst.key,
+              institution: {
+                name: inst.name,
+                photo_url: inst.photo_url,
+              },
+              office: 'Administrador',
+              phone: null,
+              color: 'teal'
+            };
+          }
+
           // main()
           // initController()
           // setDefaultPhotoUrl
           ctrl.$onInit = () => {
+            ctrl.user = AuthService.getCurrentUser();
             ctrl.institutionKey = $state.params.institutionKey;
             if (ctrl.institutionKey) {
               ctrl.loadInstitution(ctrl.institutionKey)

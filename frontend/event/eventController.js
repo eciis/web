@@ -278,15 +278,23 @@
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
         };
 
+        /**
+         * This function applies the modifications made
+         * to the event filter by institution,
+         * reloading events and filtering.
+         */
         eventCtrl.confirmFilter = function confirmFilter() {
             eventCtrl.events = [];
-            eventCtrl.isFiltering = false;
             eventCtrl._actualPage = 0;
             eventCtrl._moreEvents = true;
             eventCtrl.isLoadingEvents = true;
+            eventCtrl.cancelFilter();
             return eventCtrl.loadMoreEvents();
         };
 
+        /**
+         * This function cancels the filter run.
+         */
         eventCtrl.cancelFilter = function cancelFilter() {
             eventCtrl.isFiltering = false;
         };

@@ -98,3 +98,14 @@ md-content.grid-fill-screen {
 #create-inst-content button.md-primary {
   color: #009688 !important;
 }
+
+.loading-container {
+  display: grid;
+  height: 10em;
+  align-content: center;
+  justify-content: center;
+}
+
+.loading-container load-circle svg path {
+  stroke: #009688 !important;
+}

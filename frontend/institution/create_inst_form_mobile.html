@@ -10,7 +10,10 @@
     </div>
     <!-- CARD -->
     <div id='create-inst-card' class='ec-card'>
-      <div id='create-inst-card-content'>
+      <div ng-if="ctrl.loading" class='loading-container'>
+        <load-circle></load-circle>
+      </div>
+      <div ng-if='!ctrl.loading' id='create-inst-card-content'>
         <h1> {{ ctrl.currentStepLabel }} </h1>
         <!-- FORMS -->
         <div id='form-switch' ng-switch='ctrl.currentStep'>

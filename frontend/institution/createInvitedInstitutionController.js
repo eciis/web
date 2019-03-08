@@ -108,53 +108,63 @@
 
           ctrl.submit = (event) => {
             const newInstitution = new Institution(ctrl.newInstitution);
-            let promise;
 
             if (ctrl.isCurrentStepValid() && newInstitution.isValid()) {
-              const parent = angular.element('#create-inst-content');
-              const confirm = $mdDialog.confirm(event)
-                .parent(parent)
-                .clickOutsideToClose(true)
-                .title('FINALIZAR')
-                .textContent('Você deseja finalizar e salvar os dados da instituição?')
-                .ariaLabel('Finalizar')
-                .targetEvent(event)
-                .ok('Sim')
-                .cancel('Não');
-              promise = $mdDialog.show(confirm);
-              promise.then(() => {
-                ctrl.loadingSaveInstitution = true;
-                ctrl.completeInstitutionCreation().then((r) => {
-                  AuthService.reload().then(() => {
-                    $state.go(STATES.HOME).then(() => {
-                      const alert = $mdDialog.alert({
-                        title: 'INSTITUIÇÃO CRIADA',
-                        textContent: 'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.',
-                        ok: 'Fechar'
-                      });
-                      $mdDialog.show(alert);
+              const inviteKey = $state.params.inviteKey;
+              const instKey = ctrl.institutionKey;
+              const senderName = $state.params.senderName;
+              const dialogParent = angular.element('#create-inst-content');
+              showConfirmationDialog(event, dialogParent)
+                .then(() => {
+                  ctrl.loading = true;
+                  saveAndUpdateInst(inviteKey, instKey, senderName)
+                    .then(() => {
+                      reloadAndRedirectHome();
                     });
-                });
-                  });
-              }).catch(e => {
-                MessageService.showToast('Cancelado');
-              })
+                }).catch(e => {
+                  ctrl.loading = false;
+                  MessageService.showToast(e);
+                })
             } else {
               MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
             }
-            return promise;
           }
 
-          ctrl.completeInstitutionCreation = () => {
-            const inviteKey = $state.params.inviteKey;
-            const institutionKey = ctrl.institutionKey;
-            const patch = ObserverRecorderService.generate(observer);
-            const body = { sender_name: $state.params.senderName }
+          function reloadAndRedirectHome() {
+            AuthService.reload().then(() => {
+              $state.go(STATES.HOME).then(() => {
+                ctrl.loading = false;
+                const alert = $mdDialog.alert({
+                  title: 'INSTITUIÇÃO CRIADA',
+                  textContent: 'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.',
+                  ok: 'Fechar'
+                });
+                $mdDialog.show(alert);
+              });
+            });
+          }
 
-            return InstitutionService.save(body, institutionKey, inviteKey).then((savedInst)=> {
-              return InstitutionService.update(institutionKey, patch).then((r) => {
-                updateUser(inviteKey, r);
-                return r;
+          function showConfirmationDialog(event, parent) {
+            const confirm = $mdDialog.confirm(event)
+              .parent(parent)
+              .clickOutsideToClose(true)
+              .title('FINALIZAR')
+              .textContent('Você deseja finalizar e salvar os dados da instituição?')
+              .ariaLabel('Finalizar')
+              .targetEvent(event)
+              .ok('Sim')
+              .cancel('Não');
+            return $mdDialog.show(confirm);
+          }
+
+          function saveAndUpdateInst(inviteKey, instKey, senderName) {
+            const patch = ObserverRecorderService.generate(observer);
+            const body = { sender_name: senderName }
+
+            return InstitutionService.save(body, instKey, inviteKey).then((savedInst)=> {
+              console.log(patch);
+              return InstitutionService.update(instKey, patch).then((updatedInst) => {
+                updateUser(inviteKey, updatedInst);
               });
             });
           }

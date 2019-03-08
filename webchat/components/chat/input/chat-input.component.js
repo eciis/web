@@ -34,6 +34,11 @@
                 chatInputCtrl.msg = '';
             }
         };
+
+        chatInputCtrl.inputDisabled = () => {
+            return !_.includes(['connected', 'complete'], chatInputCtrl.state);
+        };
+
     }
 
 })();

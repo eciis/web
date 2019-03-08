@@ -15,6 +15,7 @@
     height: 70%;
     margin: 0 0 0 10px;
     background: #FFFFFF;
+    min-height: 36px;
 }
 
 .chat-input__text:disabled {

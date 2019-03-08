@@ -1,40 +1,67 @@
-<md-content class="user-profile__container custom-scrollbar">
-    <div class="user-profile__header">
-        <div class="user-profile__header--background">
-            <div class="user-profile__header--shadow">
+<white-toolbar title="MEU PERFIL" primary-button-icon="keyboard_arrow_left" 
+    right-button="configProfileCtrl.saveButton"></white-toolbar>
+
+<md-content class="config-profile__container hide-scrollbar-mobile">
+    <div class="config-profile__header">
+        <div class="config-profile__header--background">
+            <div class="config-profile__header--shadow" ng-if="!configProfileCtrl.canEdit()">
                 <md-button class="md-icon-button" ng-click="configProfileCtrl.goBack()">
-                    <md-icon class="user-profile__back__icon">arrow_back</md-icon>
+                    <md-icon class="config-profile__back__icon">arrow_back</md-icon>
                 </md-button>
             </div>
         </div>
-        <img class="user-profile__avatar user-profile__avatar--position" ng-src="{{ configProfileCtrl.photo_url }}">
+        
+        <img class="config-profile__avatar config-profile__avatar--position" ng-src="{{ configProfileCtrl.getPhoto() }}">
+        
+        <md-button id="config-profile__camera__button" class="md-icon-button"
+            ng-show="configProfileCtrl.canEdit()"
+            ng-model="configProfileCtrl.file" ngf-pattern="'image/*'"
+            ngf-accept="'image/*'" ngf-max-size="5MB"
+            ngf-select="configProfileCtrl.cropImage(configProfileCtrl.file, $event)">
+            <md-icon id="config-profile__photo__icon">photo_camera</md-icon>
+        </md-button>
     </div>
     
-    <div class="user-profile__info">
-        <p class="user-profile__info--name responsive__title">
+    <div class="config-profile__info" ng-if="!configProfileCtrl.canEdit()">
+        <p class="config-profile__info--name responsive__title">
             {{ configProfileCtrl.showProperty(configProfileCtrl.user.name) }}
         </p>
         
-        <hr class="user-profile__info--divider"></hr>
+        <hr class="config-profile__info--divider"></hr>
         
-        <div class="user-profile__info--data">
+        <div class="config-profile__info--data">
             <span>e-mail:</span>
-            <p class="user-profile__info--item">{{ configProfileCtrl.showProperty(configProfileCtrl.user.email[0]) }}</p>
-            <span>cpf:</span>
-            <p class="user-profile__info--item">{{ configProfileCtrl.showProperty(configProfileCtrl.user.cpf) }}</p>
+            <p class="config-profile__info--item">{{ configProfileCtrl.showProperty(configProfileCtrl.user.email[0]) }}</p>
         </div>
     </div>
 
-    <p class="user-profile__section__title">Vínculos Institucionais</p>
-    <div class="user-profile__content">
-        <div class="user-profile__data" 
-            ng-repeat="prof in configProfileCtrl.user.institution_profiles track by prof.institution_key">
-            <img class="user-profile__avatar" ng-src="{{ prof.institution.photo_url }}"/>
-            <div>
-                <p class="responsive__title">{{prof.institution.name}}</p>
-                <user-profile-info office="prof.office" phone="prof.phone" email="prof.email"></user-profile-info>
-            </div>
-            <md-divider></md-divider>
-        </div>
+    <div class="config-profile__form" ng-if="configProfileCtrl.canEdit()">
+        <md-input-container>
+          <label>NOME</label>
+          <input ng-model="configProfileCtrl.newUser.name" required>
+        </md-input-container>
+        <md-input-container>
+          <label>E-MAIL DE CADASTRO</label>
+          <input ng-model="configProfileCtrl.newUser.email[0]" type="email" disabled>
+        </md-input-container>
+        <md-input-container>
+        <label>CPF</label>
+        <input name="CPF" ng-model="configProfileCtrl.newUser.cpf" placeholder="123.456.789-00"
+          mask="999.999.999-99" ng-pattern="configProfileCtrl.cpfRegex" required>
+        </md-input-container>
+        <md-input-container>
+            <md-switch md-invert
+                       ng-model="configProfileCtrl.pushNotification"
+                       ng-change="configProfileCtrl.pushChange()">
+                <p class="">NOTIFICAÇÕES NO DISPOSITIVO </p>
+            </md-switch>
+        </md-input-container>
+
     </div>
+
+    <user-profiles 
+        profiles="configProfileCtrl.user.institution_profiles" 
+        edit-mode="configProfileCtrl.canEdit()"
+        on-click="configProfileCtrl.editProfile">
+    </user-profiles>
 </md-content>

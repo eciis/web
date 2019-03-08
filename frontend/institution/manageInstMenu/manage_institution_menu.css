@@ -1,0 +1,42 @@
+.manage-inst-menu__toolbar {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+}
+
+.manage-inst-menu__toolbar--title {
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+.manage-inst-menu {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 2em auto;
+}
+
+.manage-inst-menu #buttons-navbar-inst-container {
+    display: none;
+}
+
+.manage-inst-menu__divider {
+    border: none;
+    background-color: #84C45E;
+    height: 4px;
+    width: 30%;
+    align-self: center;
+}
+
+.manage-inst-menu__option {
+    background: #009688;
+    color: white;
+    text-align: start;
+    width: 90%;
+    justify-self: center;
+}
+
+.manage-inst-menu__option > md-icon {
+    color: white;
+    margin: 0 0.5em;
+}

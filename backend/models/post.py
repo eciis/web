@@ -370,7 +370,11 @@ class Post(PolyModel):
             current_institution_key=current_institution_key,
             sender_institution_key=sender_institution_key or current_institution_key
         )
-
+    
+    def __getitem__(self, key):
+        if key in self.to_dict():
+            return self.to_dict()[key]
+        super(Post, self).__getitem__(attr, value)
 
     @staticmethod
     def is_hidden(post):

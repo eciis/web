@@ -4,6 +4,7 @@
 from google.appengine.api import search
 from . import SearchDocument
 from utils import text_normalize
+import json
 
 __all__ = ['SearchInstitution']
 
@@ -42,7 +43,6 @@ class SearchInstitution(SearchDocument):
             admin = institution.email
             if institution.admin:
                 admin = institution.admin.get().email[0]
-
             content = {
                 'id': institution.key.urlsafe(),
                 'name': institution.name,
@@ -53,7 +53,10 @@ class SearchInstitution(SearchDocument):
                 'actuation_area': institution.actuation_area,
                 'legal_nature': institution.legal_nature,
                 'federal_state': institution.address and institution.address.federal_state,
-                'description': institution.description
+                'description': institution.description,
+                'creation_date': institution.creation_date.isoformat(),
+                'address': institution.address and json.dumps(dict(institution.address)),
+                'photo_url': institution.photo_url
             }
             # Make the structure of the document by setting the fields and its id.
             document = search.Document(
@@ -71,7 +74,10 @@ class SearchInstitution(SearchDocument):
                     search.TextField(name='legal_nature',
                                          value=content['legal_nature']),
                     search.TextField(name='federal_state', value=content['federal_state']),
-                    search.TextField(name='description', value=content['description'])
+                    search.TextField(name='description', value=content['description']),
+                    search.TextField(name='creation_date', value=content['creation_date']),
+                    search.TextField(name='address', value=content['address']),
+                    search.TextField(name='photo_url', value=content['photo_url'])
                 ]
             )
             self.saveDocument(document)
@@ -84,7 +90,8 @@ class SearchInstitution(SearchDocument):
         index = search.Index(self.index_name)
         query_options = search.QueryOptions(
             returned_fields=['name', 'state', 'email', 'admin', 'acronym',
-                             'actuation_area', 'legal_nature', 'federal_state', 'description']
+                             'actuation_area', 'legal_nature', 'federal_state', 
+                             'description', 'creation_date', 'address', 'photo_url']
         )
         query = search.Query(
             query_string=query_string, options=query_options)

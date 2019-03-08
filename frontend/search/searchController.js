@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window, STATES, $http, EventService) {
+        brCidadesEstados, HttpService, $mdDialog, $window, STATES, $http, AuthService, EventService) {
 
         var searchCtrl = this;
 
@@ -18,6 +18,9 @@
         var actuationAreas;
         var legalNatures;
         searchCtrl.loading = false;
+        searchCtrl.hasChanges = false;
+        searchCtrl.hasNotSearched = true;
+        searchCtrl.user = AuthService.getCurrentUser();
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
@@ -35,9 +38,14 @@
                 promise.then(function success(response) {
                     searchCtrl.institutions = response;
                     searchCtrl.loading = true;
+                    searchCtrl.hasChanges = true;
                 });
             }
             return promise;
+        };
+
+        searchCtrl.setHasChanges = () => {
+            searchCtrl.hasChanges = Boolean(searchCtrl.search_keyword);
         };
 
         searchCtrl.clearFilters = function clearFilters() {
@@ -60,15 +68,14 @@
         searchCtrl.search = function search(ev, type) {
             if (searchCtrl.search_keyword) {
                 let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, type || 'institution');
-
                 promise.then(() => {
-                    if (Utils.isMobileScreen()) {
-                        searchCtrl.showSearchFromMobile(ev);
-                    }
+                    searchCtrl.setupResultsInMobile();
                 });
                 refreshPreviousKeyword();
 
                 return promise;
+            } else {
+                searchCtrl.setupResultsInMobile();
             }
         };
 
@@ -86,18 +93,18 @@
         };
 
         /**
-         * Open up a mdDialog to show the search result in a mobile fone
-         * @param {Event} ev 
+         * Change the title position and the flag that decides
+         * if the results gotta be shown or not.
          */
-        searchCtrl.showSearchFromMobile = (ev) => {
-            $mdDialog.show({
-                controller: SearchDialogController,
-                controllerAs: "searchCtrl",
-                templateUrl: '/app/search/search_dialog.html',
-                parent: angular.element(document.body),
-                targetEvent: ev,
-                clickOutsideToClose: true,
-            });
+        searchCtrl.setupResultsInMobile = () => {
+            if (searchCtrl.isMobileScreen()) {
+                const title = document.getElementById('search-title');
+                if (title) {
+                    title.style.marginTop = '1em';
+                }
+
+                searchCtrl.hasNotSearched = false;
+            }
         };
         
         /**

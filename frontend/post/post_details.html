@@ -6,7 +6,7 @@
   </div>
 </div>
 <md-card ng-class="postDetailsCtrl.getCSSClassPost()"
-  ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()">
+  ng-hide="postDetailsCtrl.isHidden() || postDetailsCtrl.isPostEmpty()" id="post-container">
   <!-- HEADER -->
   <div ng-if="postDetailsCtrl.showSurvey() && postDetailsCtrl.timeHasBeenExpired(postDetailsCtrl.post)" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
@@ -41,7 +41,7 @@
         </span>
       </md-card-title-text>
     </md-card-title>
-    <md-menu md-offset="-200 45">
+    <md-menu md-offset="-200 45" ng-if="!postDetailsCtrl.isPostPage || !postDetailsCtrl.isMobileScreen()">
       <md-button class="md-icon-button" style="margin-right: -20px; margin-top: -15px" ng-click="$mdMenu.open(ev)">
         <md-icon>more_vert</md-icon>
       </md-button>
@@ -72,6 +72,18 @@
             title="Marcar interesse e receber notificações">
             <md-icon>bookmark</md-icon>
             Receber atualizações
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && !postDetailsCtrl.isFollowingEvent()">
+          <md-button aria-label="Favorite" ng-click="postDetailsCtrl.followEvent()" title="Receber notificações">
+            <md-icon>visibility</md-icon>
+            Receber atualizações do evento
+          </md-button>
+        </md-menu-item>
+        <md-menu-item ng-if="postDetailsCtrl.isSharedEvent() && postDetailsCtrl.isFollowingEvent()" title="Deixar de receber notificações">
+          <md-button style="text-overflow: ellipsis; overflow: hidden;" aria-label="Favorite" ng-click="postDetailsCtrl.unFollowEvent()">
+            <md-icon>visibility_off</md-icon>
+            <span>Deixar de receber atualizações do evento</span>
           </md-button>
         </md-menu-item>
         <md-menu-item ng-if="!postDetailsCtrl.isInstInactive() && postDetailsCtrl.showButtonEdit()">

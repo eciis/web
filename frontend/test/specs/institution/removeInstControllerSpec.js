@@ -146,4 +146,24 @@
             expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
         });
     });
+
+    describe('getTitle()', () => {
+      beforeEach(() => {
+        spyOn(removeInstCtrl, 'hasOneInstitution').and.callThrough();
+      });
+
+      afterEach(() => {
+        expect(removeInstCtrl.hasOneInstitution).toHaveBeenCalled();
+      });
+
+      it('should return the first option when the user has only one institution', () => {
+        removeInstCtrl.user.institutions = [first_institution];
+        expect(removeInstCtrl.getTitle()).toEqual("Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?");
+      });
+
+      it('should return the second option when the user has more than one institution', () => {
+        removeInstCtrl.user.institutions = [first_institution, sec_institution];
+        expect(removeInstCtrl.getTitle()).toEqual("Deseja remover esta instituição permanentemente ?");
+      });
+    });
 }));

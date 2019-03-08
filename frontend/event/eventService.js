@@ -43,5 +43,21 @@
         service.searchEvents = function searchEvents(value, state, type) {
             return HttpService.get(`/api/search/event?value=${value}&state=${state}&type=${type}`);
         };
+
+        /**
+         * Make the request to add the user as event's follower
+         * {String} eventKey -- the event urlsafe key.
+         */
+        service.addFollower = function (eventKey) {
+            return HttpService.post(`/api/events/${eventKey}/followers`);
+        };
+
+        /**
+         * Make the request to remove the user from event's followers list
+         * {String} eventKey -- the event urlsafe key.
+         */
+        service.removeFollower = function (eventKey) {
+            return HttpService.delete(`/api/events/${eventKey}/followers`);
+        };
     });
 })();

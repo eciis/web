@@ -90,7 +90,7 @@ class PostCollectionHandler(BaseHandler):
                 'sender_institution_key': shared_post.institution.urlsafe()
             }
 
-            enqueue_task('post-notification', params)
+            enqueue_task('multiple-notification', params)
         elif post.shared_event:
             shared_event = post.shared_event.get()
             if shared_event.author_key != user.key:

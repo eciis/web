@@ -33,6 +33,7 @@
             });
         };
         profileCtrl = createCtrl();
+
     }));
 
     describe('goToConfigProfile()', function() {
@@ -40,11 +41,12 @@
         beforeEach(function() {
             spyOn(mdDialog, 'cancel');
             spyOn(state, 'go');
+            profileCtrl.user = user;
             profileCtrl.goToConfigProfile();
         });
 
         it('should call state.go()', function() {
-            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE);
+            expect(state.go).toHaveBeenCalledWith(states.CONFIG_PROFILE, {userKey: user.key});
         });
 
         it('should call mdDialog.cancel()', function() {

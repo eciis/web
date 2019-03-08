@@ -1,0 +1,20 @@
+.search-field {
+    display: grid;
+}
+
+.search-field md-input-container {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.search-field md-input-container:not(.md-input-invalid).md-input-focused input,
+.search-field md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused input {
+    border-color:#707070;
+    border-width: 0 0 2px;
+}
+
+.search-field md-icon ,
+.search-field md-input-container.md-input-focused md-icon {
+    color: #707070;
+}

@@ -3,7 +3,7 @@
 (function () {
     angular
     .module('app')
-    .factory('HomeItemsFactory', function ($state, STATES, AuthService, $mdDialog, $window) {
+    .factory('HomeItemsFactory', function ($state, STATES, AuthService, $mdDialog, $window, SCREEN_SIZES) {
         const factory = {};
         const url_report = Config.SUPPORT_URL + "/report";
 
@@ -40,7 +40,7 @@
                     icon: 'account_box',
                     description: 'Meu Perfil',
                     stateName: 'CONFIG_PROFILE',
-                    onClick: () => $state.go(STATES.CONFIG_PROFILE)
+                    onClick: () => $state.go(STATES.CONFIG_PROFILE, {userKey: user.key})
                 },
                 {
                     icon: 'date_range',
@@ -62,7 +62,12 @@
                     showIf: () => user.isAdminOfCurrentInst(),
                     sectionTitle: 'INSTITUIÇÃO',
                     topDivider: true,
-                    onClick: () => $state.go(STATES.MANAGE_INST_EDIT, {institutionKey: getInstitutionKey()}),
+                    onClick: () => {
+                        const state = Utils.selectFieldBasedOnScreenSize(
+                            STATES.MANAGE_INST_EDIT, STATES.MANAGE_INST_MENU_MOB, SCREEN_SIZES.SMARTPHONE
+                        );
+                        $state.go(state, {institutionKey: getInstitutionKey()});
+                    },
                 },
                 {
                     icon: 'account_circle',

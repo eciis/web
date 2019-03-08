@@ -42,6 +42,10 @@
     width: 16%;
 }
 
+.margin-input-info{
+    margin-top: 9px;
+}
+
 .manage-member-content {
     overflow: auto;
     max-height: 220px;
@@ -55,6 +59,10 @@
 
 .manage-members-margin {
     margin-top: 5px;
+}
+
+.padding-div-info-admin{
+    padding-left: 15px;
 }
 
 @media screen and (min-width: 601px) {

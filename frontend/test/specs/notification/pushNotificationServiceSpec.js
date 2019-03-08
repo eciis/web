@@ -1,7 +1,7 @@
 'use strict';
 
 (describe('Test PushNotificationService', function () {
-    let service, messaging, defaultToken, notificationsRef, messageService, scope, $qMock;
+    let service, messaging, defaultToken, notificationsRef, messageService, scope, $qMock, authService;
 
     const fakeCallback = function fakeCallback(data) {
         return {
@@ -11,9 +11,11 @@
         };
     };
 
+    const TOKEN_OBJECT = {token: 'token'};
+
     beforeEach(module('app'));
 
-    beforeEach(inject(function (PushNotificationService, MessageService, $q, $rootScope) {
+    beforeEach(inject(function (PushNotificationService, MessageService, $q, $rootScope, AuthService) {
         service = PushNotificationService;
         messaging = firebase.messaging();
         messageService = MessageService;
@@ -22,12 +24,95 @@
         defaultToken = 'oaspkd-OPASKDAPO';
         scope = $rootScope.$new();
         $qMock = $q;
+        authService = AuthService;
+
+        spyOn(authService, 'getCurrentUser').and.callFake(() => new User({
+            key: 'aopskdpoaAPOSDKAPOKDPK'
+        }));
     }));
 
-    describe('requestNotificationPermission', () => {
+    describe('setupPushNotificationPermission', () => {
+        it('should call _initFirebaseArray', () => {
+            spyOn(service, '_initFirebaseArray');
+            service.setupPushNotificationPermission();
+            expect(service._initFirebaseArray).toHaveBeenCalled();
+        });
+    });
+
+    describe('isPushNotificationBlockedOnBrowser', () => {
+        it('should return true when the user has blocked notifications', () => {
+            Notification = {permission: 'denied'};
+
+            const result = service.isPushNotificationBlockedOnBrowser();
+
+            expect(result).toEqual(true);
+        });
+
+        it('should return false when the user has not blocked notifications', () => {
+            Notification = {permission: 'ask'};
+
+            const result = service.isPushNotificationBlockedOnBrowser();
+
+            expect(result).toEqual(false);
+        });
+    });
+
+    describe('isPushNotificationActive', () => {
+        it('should return true if the browser token is included in the firebaseArray', () => {
+            spyOn(service, '_getTokenObjectInFirebaseArray').and.callFake(() => $qMock.when(TOKEN_OBJECT));
+            let result;
+            service.isPushNotificationActive().then((isActive) => {
+                result = isActive;
+            });
+            scope.$apply();
+            expect(service._getTokenObjectInFirebaseArray).toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+        it('should return false if the browser token is not included in the firebaseArray', () => {
+            spyOn(service, '_getTokenObjectInFirebaseArray').and.callFake(() => $qMock.when());
+
+            let result;
+            service.isPushNotificationActive().then((isActive) => {
+                result = isActive;
+            });
+            scope.$apply();
+            expect(service._getTokenObjectInFirebaseArray).toHaveBeenCalled();
+            expect(result).toBe(false);
+        });
+    });
+
+    describe('unsubscribeUserNotification', () => {
+        it('should call _removeTokenFromFirebaseArray', () => {
+            spyOn(service, '_removeTokenFromFirebaseArray');
+            service.unsubscribeUserNotification();
+            expect(service._removeTokenFromFirebaseArray).toHaveBeenCalled();
+        });
+    });
+
+    describe('_removeTokenFromFirebaseArray', () => {
+        it('should call _getTokenObjectInFirebaseArray and remove object from firebase array', () => {
+            service._initFirebaseArray();
+            spyOn(service, '_getTokenObjectInFirebaseArray').and.callFake(() => $qMock.when(TOKEN_OBJECT));
+            spyOn(service.firebaseArrayNotifications, '$remove');
+            service.unsubscribeUserNotification();
+            scope.$apply();
+            expect(service._getTokenObjectInFirebaseArray).toHaveBeenCalled();
+            expect(service.firebaseArrayNotifications.$remove).toHaveBeenCalledWith(TOKEN_OBJECT);
+        });
+    });
+
+    describe('subscribeUserNotification', () => {
+        it('should call _requestNotificationPermission', () => {
+            spyOn(service, '_requestNotificationPermission');
+            service.subscribeUserNotification();
+            expect(service._requestNotificationPermission).toHaveBeenCalled();
+        });
+    });
+
+    describe('_requestNotificationPermission', () => {
         beforeEach(() => {
-            spyOn(service, '_hasNotificationPermission').and.returnValue(false);
-            spyOn(service._isMobile, 'any').and.returnValue(true);
+            spyOn(service, 'isPushNotificationBlockedOnBrowser').and.returnValue(false);
             spyOn(messaging, 'requestPermission');
             spyOn(messaging, 'getToken');
             spyOn(service, '_saveToken');
@@ -38,7 +123,7 @@
             messaging.getToken.and.callFake(fakeCallback);
             service._saveToken.and.callFake(fakeCallback);
 
-            service.requestNotificationPermission(new User({}));
+            service._requestNotificationPermission();
             scope.$digest();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
@@ -49,7 +134,7 @@
         it('should not call saveToken when the user does not enable notification', () => {
             messaging.requestPermission.and.callFake(() => $qMock.reject());
 
-            service.requestNotificationPermission();
+            service._requestNotificationPermission();
             scope.$digest();
 
             expect(messaging.requestPermission).toHaveBeenCalled();
@@ -70,24 +155,17 @@
         });
     });
 
-    describe('initFirebaseArray', () => {
+    describe('_initFirebaseArray', () => {
         it('should starts a firebaseArray', () => {
             expect(service.firebaseArrayNotifications).toBe(undefined);
-            service.currentUser = new User({
-                key: 'aopskdpoaAPOSDKAPOKDPK'
-            });
-
             service._initFirebaseArray();
-            
+
             expect(service.firebaseArrayNotifications).not.toBe(undefined);
         });
     });
 
-    describe('setToken', () => {
+    describe('_setToken', () => {
         beforeEach(() => {
-            service.currentUser = new User({
-                key: 'aopskdpoaAPOSDKAPOKDPK'
-            });
             service._initFirebaseArray();
         });
 
@@ -102,21 +180,21 @@
         });
     });
 
-    describe('hasNotificationPermission', () => {
-        it('should return true when the user has enabled notifications', () => {
-            Notification = {permission: 'granted'};
+    describe('_getTokenObjectInFirebaseArray', () => {
+        it('should return the object token corresponding to the messaging token', () => {
+            service._initFirebaseArray();
+            spyOn(service.firebaseArrayNotifications, '$loaded').and.callFake(() => $qMock.when([TOKEN_OBJECT]));
+            spyOn(messaging, 'getToken').and.callFake(() => $qMock.when(TOKEN_OBJECT.token));
 
-            const result = service._hasNotificationPermission();
+            let tokenObject;
+            service._getTokenObjectInFirebaseArray().then((result) => {
+                tokenObject = result;
+            });
+            scope.$apply();
 
-            expect(result).toEqual(true);
-        });
-
-        it('should return false when the user has not enabled notifications', () => {
-            Notification = {permission: 'ask'};
-            
-            const result = service._hasNotificationPermission();
-
-            expect(result).toEqual(false);
+            expect(tokenObject).toBe(TOKEN_OBJECT);
+            expect(messaging.getToken).toHaveBeenCalled();
+            expect(service.firebaseArrayNotifications.$loaded).toHaveBeenCalled();
         });
     });
 }));

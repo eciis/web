@@ -94,7 +94,8 @@ class LikePostHandlerTest(TestBaseHandler):
             'entity_key': self.post.key.urlsafe(),
             'entity_type': 'LIKE_POST',
             'current_institution': self.institution.key.urlsafe(),
-            'sender_institution_key': self.post.institution.urlsafe()
+            'sender_institution_key': self.post.institution.urlsafe(),
+            'field': 'subscribers'
         }
 
         push_not_params = {
@@ -104,7 +105,7 @@ class LikePostHandlerTest(TestBaseHandler):
         }
 
         calls = [
-            call('post-notification', post_not_params),
+            call('multiple-notification', post_not_params),
             call('send-push-notification', push_not_params)
         ]
 

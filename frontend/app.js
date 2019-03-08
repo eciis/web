@@ -84,17 +84,17 @@
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/institutions.html", 
-                            "app/institution/registered_institutions_mobile.html", 450),
+                            "app/institution/registered_institutions_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "AllInstitutionsController as allInstitutionsCtrl"
                     }
                 }
             })
             .state(STATES.EVENTS, {
-                url: "/events",
+                url: "/events?institutionKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/events.html",
-                            "app/event/events_mobile.html", 475),
+                            "app/event/events_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "EventController as eventCtrl",
                     }
                 }
@@ -123,7 +123,7 @@
                 }
             })
             .state(STATES.CONFIG_PROFILE, {
-                url: "/config_profile",
+                url: "/config_profile/:userKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
@@ -168,9 +168,21 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/followers.html",
-                            "app/institution/followers_mobile.html", 475),
+                            "app/institution/followers_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "FollowersInstController as followersCtrl"
                     }
+                }
+            })
+            .state(STATES.INST_DESCRIPTION, {
+                url: "/institution/:institutionKey/description",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/descriptionInst/description_inst.html",
+                        controller: "DescriptionInstController as descriptionCtrl"
+                    }
+                },
+                params: {
+                    institution: undefined
                 }
             })
             .state(STATES.INST_EVENTS, {
@@ -187,7 +199,7 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/members.html",
-                            "app/institution/members_mobile.html", 475),
+                            "app/institution/members_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "ManagementMembersController as membersCtrl"
                     }
                 }
@@ -197,7 +209,7 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/registration_data.html",
-                            "app/institution/registration_data_mobile.html", 475),
+                            "app/institution/registration_data_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -237,11 +249,24 @@
                     }
                 }
             })
+            .state(STATES.MANAGE_INST_MENU_MOB, {
+                url: "/menu",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/manageInstMenu/manage_institution_menu.html",
+                        controller: "ManageInstMenuController as manageInstMenuCtrl"
+                    }
+                }
+            })
             .state(STATES.MANAGE_INST_MEMBERS, {
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/management_members.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/manageMembers/management_members.html",
+                            "app/institution/manageMembers/management_members_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "ManagementMembersController as manageMemberCtrl"
                     }
                 }
@@ -259,8 +284,11 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
-                            "app/institution/edit_info_mobile.html", 475)
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/editInfo/edit_info.html",
+                            "app/institution/editInfo/edit_info_mobile.html", 
+                            SCREEN_SIZES.SMARTPHONE
+                        )
                     }
                 }
             })
@@ -525,7 +553,9 @@
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT,
-            STATES.SEARCH_EVENT
+            STATES.SEARCH_EVENT,
+            STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_MENU_MOB
         ];
 
         $transitions.onStart({

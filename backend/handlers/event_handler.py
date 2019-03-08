@@ -10,6 +10,7 @@ from utils import NotAuthorizedException
 from utils import json_response
 from util import JsonPatch
 from . import BaseHandler
+from service_entities import enqueue_task
 
 __all__ = ['EventHandler']
 
@@ -56,6 +57,19 @@ class EventHandler(BaseHandler):
         event.last_modified_by_name = user.name
         event.put()
 
+        params = {
+                'receiver_key': event.author_key.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': event.key.urlsafe(),
+                'entity_type': 'DELETED_EVENT',
+                'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': event.institution_key.urlsafe(),
+                'field': 'followers',
+                'title': event.title
+            }
+
+        enqueue_task('multiple-notification', params)
+
     @json_response
     @login_required
     def patch(self, user, event_urlsafe):
@@ -85,3 +99,16 @@ class EventHandler(BaseHandler):
 
         """Update event."""
         event.put()
+
+        params = {
+                'receiver_key': event.author_key.urlsafe(),
+                'sender_key': user.key.urlsafe(),
+                'entity_key': event.key.urlsafe(),
+                'entity_type': 'UPDATED_EVENT',
+                'current_institution': user.current_institution.urlsafe(),
+                'sender_institution_key': event.institution_key.urlsafe(),
+                'field': 'followers',
+                'title': event.title
+            }
+
+        enqueue_task('multiple-notification', params)

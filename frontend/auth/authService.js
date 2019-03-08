@@ -3,8 +3,8 @@
 
     var app = angular.module("app");
 
-    app.service("AuthService", function AuthService($q, $state, $window, UserService, 
-        MessageService, PushNotificationService, STATES) {
+    app.service("AuthService", ['$q', '$state', '$window', 'UserService', 'MessageService', 'STATES',
+        function AuthService($q, $state, $window, UserService, MessageService, STATES) {
         var service = this;
 
         var authObj = firebase.auth();
@@ -130,9 +130,7 @@
                 if (user.emailVerified) {
                     return user.getIdToken(true).then(function(idToken) {
                         return service.setupUser(idToken, user.emailVerified).then(function success(userInfo) {
-                            return PushNotificationService.requestNotificationPermission(service.getCurrentUser()).finally(() => {
-                                return userInfo;
-                            });
+                            return userInfo;
                         });
                     });
                 } else {
@@ -259,5 +257,5 @@
         }
 
         init();
-    });
+    }]);
 })();

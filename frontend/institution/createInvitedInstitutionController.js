@@ -2,8 +2,8 @@
 (function() {
   angular.module('app')
     .controller('CreateInvitedInstitutionController',
-      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService', '$mdDialog', 'ObserverRecorderService',
-        function (STATES, $state, AuthService, InstitutionService, MessageService, $mdDialog, ObserverRecorderService) {
+      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService', '$mdDialog', 'ObserverRecorderService', 'ImageService',
+        function (STATES, $state, AuthService, InstitutionService, MessageService, $mdDialog, ObserverRecorderService, ImageService) {
           const ctrl = this;
           let observer;
           ctrl.loading = true;
@@ -117,10 +117,12 @@
               showConfirmationDialog(event, dialogParent)
                 .then(() => {
                   ctrl.loading = true;
-                  saveAndUpdateInst(inviteKey, instKey, senderName)
-                    .then(() => {
-                      reloadAndRedirectHome();
-                    });
+                  saveProfileImage(ctrl.photoSrc).then(() => {
+                    saveAndUpdateInst(inviteKey, instKey, senderName)
+                      .then(() => {
+                        reloadAndRedirectHome();
+                      })
+                  })
                 }).catch(e => {
                   ctrl.loading = false;
                   MessageService.showToast(e);
@@ -128,6 +130,17 @@
             } else {
               MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
             }
+          }
+
+          function saveProfileImage(src) {
+            if (!src) {
+              return Promise.resolve()
+            }
+
+            return ImageService.saveImage(src).then(data => {
+              ctrl.newInstitution.photo_url = data.url;
+              return Promise.resolve();
+            });
           }
 
           function reloadAndRedirectHome() {
@@ -162,7 +175,6 @@
             const body = { sender_name: senderName }
 
             return InstitutionService.save(body, instKey, inviteKey).then((savedInst)=> {
-              console.log(patch);
               return InstitutionService.update(instKey, patch).then((updatedInst) => {
                 updateUser(inviteKey, updatedInst);
               });
@@ -201,7 +213,6 @@
             ctrl.institutionKey = $state.params.institutionKey;
             if (ctrl.institutionKey) {
               ctrl.loadInstitution(ctrl.institutionKey)
-            // handle if its not a institution invite
             } else {
               $state.go(STATES.HOME);
             }

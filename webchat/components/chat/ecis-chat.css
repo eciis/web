@@ -2,7 +2,7 @@
     height: 100%;
     background: #EEEEEE;
     display: grid;
-    grid-template-rows: 64px calc(100% - 64px - 48px) 48px;
+    grid-template-rows: max-content 1fr max-content;
     grid-template-areas:
         'header'
         'body'

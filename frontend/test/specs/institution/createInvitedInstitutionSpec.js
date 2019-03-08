@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('Test CreateInvitedInstitutionController', function() {
+describe('Test CreateInvitedInstitutionController', function() {
   let state, statesConst, scope, institutionService, inviteService,
     httpBackend, authService, ctrl, imageService;
 

@@ -255,9 +255,23 @@
                 expect(institutionService.update).toHaveBeenCalled();
             });
         });
+
         describe('goToEvents', function() {
-            it('should call state.go with the right params', function(){
+            it('should call state.go with the INST_EVENTS on desktop', function(){
                 spyOn(utilsService, 'selectNavOption');
+                spyOn(Utils, 'isMobileScreen').and.returnValue(false);
+                institutionCtrl.goToEvents(first_institution.key);
+                expect(utilsService.selectNavOption).toHaveBeenCalledWith(
+                    states.INST_EVENTS,
+                    {
+                        institutionKey: first_institution.key,
+                    }
+                );
+            });
+
+            it('should call state.go with the EVENTS on mobile', function(){
+                spyOn(utilsService, 'selectNavOption');
+                spyOn(Utils, 'isMobileScreen').and.returnValue(true);
                 institutionCtrl.goToEvents(first_institution.key);
                 expect(utilsService.selectNavOption).toHaveBeenCalledWith(
                     states.EVENTS,
@@ -267,6 +281,7 @@
                 );
             });
         });
+
         describe('goToLinks()', function() {
             it('should call state.go', function() {
                 spyOn(state, 'go');

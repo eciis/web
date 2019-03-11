@@ -7,8 +7,37 @@
 
 <md-content class="manage-institution hide-scrollbar-mobile">
     <div class="manage-institution__cards">
-        <clickable-card icon="send" title="Convidar Instituição">
-            <div class="manage-institution__card__content manage-institution__send__invites">
+        <clickable-card icon="send" title="Convidar Instituição" is-open="true">
+            <div class="manage-institution__card__content">
+                <form name="inviteInstForm" class="manage-institution__form">
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="inviteInstHierCtrl.invite.suggestion_institution_name"
+                            placeholder="Nome da Instituição convidada"
+                            class="green-input" required>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="inviteInstHierCtrl.invite.invitee" placeholder="E-mail da instituição" 
+                            type="email" class="green-input" required>
+                    </md-input-container>
+                    <p>Qual a conexão da instituição <b>{{inviteInstHierCtrl.invite.suggestion_institution_name}} 
+                        </b>com<b> {{inviteInstHierCtrl.institution.name}} </b> ?
+                    </p>
+                    <md-radio-group ng-model="inviteInstHierCtrl.invite.type_of_invite" required>
+                        <md-radio-button value="INSTITUTION_PARENT" class="md-primary green-input">É uma instituição superior</md-radio-button>
+                        <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma instituição subordinada</md-radio-button>
+                    </md-radio-group>
+                </form>
+                <div class="manage-institution__form__btns" ng-if="!manageMemberCtrl.isLoadingInvite">
+                    <md-button class="manage-institution__btn" ng-click="inviteInstHierCtrl.cancelInvite()"
+                        ng-disabled="inviteInstForm.$pristine">
+                        CANCELAR
+                    </md-button>
+                    <md-button class="manage-institution__btn" ng-click="inviteInstHierCtrl.checkInstInvite($event)"
+                        ng-disabled="inviteInstForm.$invalid">
+                        ENVIAR
+                    </md-button>
+                </div>
+                <load-circle ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
             </div>
         </clickable-card>
 

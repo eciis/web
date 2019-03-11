@@ -28,23 +28,17 @@
     grid-row-gap: 1em;
 }
 
-/* Send invites section */
-.manage-institution__send__invites > h3,
-.manage-institution__send__invites > p {
-    margin: 0;
-}
-
-.manage-institution__send__invites > .description {
-    font-size: 0.9em;
+.manage-institution__form {
     color: grey;
+    font-size: 0.9em;
 }
 
-.manage-institution__send__invites > .subtitle {
-    font-size: 0.8em;
-    font-weight: 500;
+.manage-institution__form__btns {
+    text-align: end;
+    margin-bottom: 1em;
 }
 
-.manage-institution__send__invites md-input-container {
+.manage-institution__form md-input-container {
     padding-right: 0;
     margin: 0;
     color: #9E9E9E;

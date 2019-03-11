@@ -954,9 +954,17 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   }
 
 md-input-container:not(.md-input-invalid).md-input-focused .green-input,
-    md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused .green-input {
+md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused .green-input {
     border-color:#009688;
     border-width: 0 0 2px;
+}
+
+md-radio-button:not([disabled]).md-primary .md-on {
+    background-color: teal;
+}
+
+md-radio-group:not([disabled]) .md-primary.md-checked .md-off {
+    border-color: teal;
 }
 
 .shared-survey{

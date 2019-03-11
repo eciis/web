@@ -84,7 +84,9 @@
                         icon="account_balance"
                         title="inviteInstHierCtrl.getReqInstName(instRequest)"
                         subtitle="inviteInstHierCtrl.showMessage(instRequest)"
-                        right-icon-btns="[]">
+                        right-icon-btns="[
+                            inviteInstHierCtrl.createIconBtn('error', inviteInstHierCtrl.analyseRequest, [$event, instRequest]),       
+                        ]">
                     </entity-showcase>
                 </md-content>
             </div>

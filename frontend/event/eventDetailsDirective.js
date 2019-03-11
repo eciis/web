@@ -16,7 +16,10 @@
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
-                templateUrl: 'app/post/share_post_dialog.html',
+                templateUrl: Utils.selectFieldBasedOnScreenSize(
+                    'app/post/share_post_dialog.html',
+                    'app/post/share_post_dialog_mobile.html'
+                ),
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true,

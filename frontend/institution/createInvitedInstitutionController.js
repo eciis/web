@@ -153,7 +153,6 @@
 
             return ImageService.saveImage(src).then(data => {
               ctrl.newInstitution.photo_url = data.url;
-              return Promise.resolve();
             });
           }
 

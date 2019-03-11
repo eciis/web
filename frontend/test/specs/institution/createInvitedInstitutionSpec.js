@@ -83,8 +83,6 @@ describe('Test CreateInvitedInstitutionController', function() {
       institutionService,
       imageService
     });
-
-    // httpBackend.flush();
   }));
 
   describe('$onInit', () => {

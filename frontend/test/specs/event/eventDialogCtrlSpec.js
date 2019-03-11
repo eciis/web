@@ -3,7 +3,7 @@
 (describe('Test EventDialogController', function() {
 
   let controller, scope, httpBackend, rootScope, imageService, eventService,
-    messageService, newCtrl, state, mdDialog, states, deferred;
+    messageService, newCtrl, state, mdDialog, states, deferred, stateLinkRequestService, stateLinks;
 
   const
     splab = {name: 'Splab', key: '098745'},
@@ -48,7 +48,8 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, AuthService,
-        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES, $q) {
+        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES, $q,
+        StateLinkRequestService, STATE_LINKS) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -60,6 +61,8 @@
       mdDialog = $mdDialog;
       states = STATES;
       deferred = $q.defer();
+      stateLinkRequestService = StateLinkRequestService;
+      stateLinks = STATE_LINKS;
       AuthService.login(user);
       controller = newCtrl('EventDialogController', {
             scope: scope,
@@ -73,6 +76,7 @@
       controller.events = [];
       controller.$onInit();
       httpBackend.when('GET', 'app/institution/countries.json').respond(200);
+      httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
       httpBackend.flush();
   }));
 
@@ -626,6 +630,11 @@
             address: {
               country: "Brasil"
         }});
+      });
+      it('should call showLinkRequestDialog', function () {
+          spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+          controller.$onInit();
+          expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.CREATE_EVENT, states.EVENTS);
       });
     });
   });

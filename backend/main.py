@@ -47,6 +47,7 @@ from handlers import InstitutionParentHandler
 from handlers import InstitutionChildrenHandler
 from handlers import EventFollowersHandler
 from handlers import FeatureToggleHandler
+from handlers import CurrentStateEmailRequestHandler
 
 methods = set(webapp2.WSGIApplication.allowed_methods)
 methods.add('PATCH')
@@ -100,6 +101,7 @@ app = webapp2.WSGIApplication([
     ("/api/user/timeline.*", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),
     ("/api/feature-toggle.*", FeatureToggleHandler),
+    ("/api/email/current-state", CurrentStateEmailRequestHandler),
     ("/login", LoginHandler),
     ("/logout", LogoutHandler),
     ("/api/.*", ErroHandler)

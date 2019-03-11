@@ -1,0 +1,46 @@
+.request-user__avatar{
+    grid-area: avatar;
+    height: 3em;
+    width: 3em;
+    border-radius: 50%;
+}
+
+.request-user__description-dialog{
+    margin: 0;
+    color: #707070;
+}
+
+.request-user__margin-user{
+    margin: 0 0 8px 0;
+}
+
+.request-user__requester-entity{
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-template-rows: max-content max-content max-content;
+    grid-template-areas:
+            'avatar title'
+            'avatar subtitle'
+            'avatar sub';
+    grid-gap: 0 0.6rem;
+    padding: 0.6rem;
+    align-items: center;
+    background-color: #E0E0E0;
+}
+
+.request-user__title {
+    grid-area: title;
+    line-height: 1rem;
+}
+
+.request-user__subtitle {
+    grid-area: subtitle;
+    font-size: 0.8em;
+    line-height: 1rem;
+}
+
+.request-user__sub{
+    grid-area: sub;
+    font-size: 0.8em;
+    line-height: 1rem;
+}

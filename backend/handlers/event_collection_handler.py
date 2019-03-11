@@ -56,8 +56,8 @@ def get_filtered_events(filters, user):
         december = month == 12
         begin_selected_month_utc = datetime(year, month, 1, 3)
         end_selected_month_utc = datetime(year if not december else year+1, month+1 if not december else 1, 1, 3)
-        query = ndb.gql("SELECT __key__ FROM Event WHERE institution_key IN :1 AND state =:2 AND start_time < DATETIME(:3)",
-            user.follows, 'published', end_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
+        query = ndb.gql("SELECT __key__ FROM Event WHERE institution_key IN :1 AND start_time < DATETIME(:2)",
+            user.follows, end_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S"))
         if query.count() > 0:
             return ndb.gql("SELECT * FROM Event WHERE __key__ IN :1 AND end_time >= DATETIME(:2)",
                 query.fetch(), begin_selected_month_utc.strftime("%Y-%m-%d %H:%M:%S")).order(Event.end_time, Event.key)

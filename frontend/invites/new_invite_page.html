@@ -46,26 +46,26 @@
               <!-- USER INFORMATION -->
               <div layout="column" ng-if="newInviteCtrl.isUserInfoImcomplete()"
                style="margin-top:7px;">
-                <md-input-container ng-if="newInviteCtrl.checkUserName()" class="no-margin">
+                <md-input-container ng-if="newInviteCtrl.checkUserName()" class="zero-margin">
                   <label>Seu Nome</label>
                 <input ng-model="newInviteCtrl.user_name" name="nome" required>
                 </md-input-container>
-                <md-input-container class="no-margin">
+                <md-input-container class="zero-margin">
                   <label>Email institucional</label>
                   <input ng-model="newInviteCtrl.email" type="email" name="email">
                 </md-input-container>
-                <md-input-container class="no-margin">
+                <md-input-container class="zero-margin">
                   <label>Cargo institucional</label>
                   <input name="cargo" ng-model="newInviteCtrl.office" required>
                 </md-input-container>
                 <div layout="row">
-                  <md-input-container flex="70" class="no-margin">
+                  <md-input-container flex="70" class="zero-margin">
                     <label>Telefone institucional</label>
                     <input ng-pattern="newInviteCtrl.phoneRegex" ng-model="newInviteCtrl.phone"
                       placeholder="99 9999-99999" mask="99 9999-99999" mask-validate='false'
                       name="telefone">
                   </md-input-container>
-                  <md-input-container flex="30" class="no-margin">
+                  <md-input-container flex="30" class="zero-margin">
                     <label>Ramal</label>
                     <input ng-model="newInviteCtrl.branch_line" placeholder="999" name="ramal">
                   </md-input-container>
@@ -73,7 +73,7 @@
               </div>
             </div>
         </div>
-        <md-card-actions layout="row" layout-align="end center" class="no-margin">
+        <md-card-actions layout="row" layout-align="end center" class="zero-margin">
           <md-button ng-if="!newInviteCtrl.acceptedInvite" ng-click="newInviteCtrl.rejectInvite($event)"
             md-colors="{background: 'teal-500'}">
             Rejeitar
@@ -88,7 +88,7 @@
       </form>
     </md-card-content>
   </md-card>
-  <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" class="no-margin">
+  <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" class="zero-margin">
     <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center center">
         <div align="center">
           <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">

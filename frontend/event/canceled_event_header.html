@@ -1,0 +1,8 @@
+<span layout="row">
+    <md-icon class="event-canceled-icon">highlight_off</md-icon>
+    <div>
+        <h5 class="event-canceled-tag">ESTE EVENTO FOI CANCELADO</h5>
+        <h6 class="event-canceled-subtitle">por {{canceledEventCtrl.getNameOfLastModified()}} &bull;
+            {{canceledEventCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats}} </h6>
+    </div>
+</span> 

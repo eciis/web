@@ -14,3 +14,14 @@
 .analyse-request__margin-bottom{
     margin:0 0 8px 0;
 }
+
+.analyse-request__children-inst{
+    display: grid;
+    grid-template-columns: 25px auto;
+}
+
+@media screen and (max-width: 420px){
+    .analyse-request__children-inst{
+        grid-template-columns: 15px auto;
+    }
+}

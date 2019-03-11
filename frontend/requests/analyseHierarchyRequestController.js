@@ -28,6 +28,15 @@
             analyseHierReqCtrl.child = child;
         })();
 
+        analyseHierReqCtrl.showButtonAccept = function(){
+            return !analyseHierReqCtrl.hasToRemoveLink || 
+                analyseHierReqCtrl.hasToRemoveLink && analyseHierReqCtrl.analyseInstitutions;
+        }
+
+        analyseHierReqCtrl.isDescriptionRemoveLink = function(){
+            return analyseHierReqCtrl.hasToRemoveLink && !analyseHierReqCtrl.analyseInstitutions;
+        }
+
         analyseHierReqCtrl.confirmRequest = function confirmRequest() {
             analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();
         };

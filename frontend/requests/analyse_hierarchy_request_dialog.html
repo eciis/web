@@ -1,4 +1,4 @@
-<md-dialog flex-sm="80" flex-xs="90" flex-gt-sm="50">
+<md-dialog class="analyse_request__dialog" flex-sm="80" flex-xs="90" flex-gt-sm="50">
     <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;"
     ng-if="!analyseHierReqCtrl.showProcessingMessage()">
         <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
@@ -8,7 +8,7 @@
                 <b>{{ analyseHierReqCtrl.parent.name }}</b>. Clique em aceitar, caso não queira se vincular a esta instituição clique em rejeitar.
             </p>
         </div>
-        <div ng-if="analyseHierReqCtrl.hasToRemoveLink">
+        <div ng-if="analyseHierReqCtrl.isDescriptionRemoveLink()">
             <h3>Confirmar remoção de vínculo existente</h3>
             <p class="analyse_request__description">
                 Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de <b>{{ analyseHierReqCtrl.parent.name }}</b>
@@ -20,8 +20,7 @@
             <h4>Vínculo Atual</h4>
             <div layout="column">
                 <entity-showcase
-                    style="margin: 0 0 8px 0;"
-                    class="fill-width"
+                    class="fill-width analyse_request__margin_bottom"
                     avatar="analyseHierReqCtrl.child.parent_institution.photo_url || 'app/images/institution.png'"
                     title="analyseHierReqCtrl.child.parent_institution.name"
                     subtitle="analyseHierReqCtrl.child.parent_institution.institutional_email">
@@ -44,8 +43,8 @@
             <h4>Vínculo Futuro</h4>
 
             <div layout="column">
-                <entity-showcase style="margin:0 0 8px 0"
-                    class="fill-width"
+                <entity-showcase
+                    class="fill-width analyse_request__margin_bottom"
                     avatar="analyseHierReqCtrl.parent.photo_url || 'app/images/institution.png'"
                     title="analyseHierReqCtrl.parent.name"
                     subtitle="analyseHierReqCtrl.parent.institutional_email">
@@ -72,10 +71,11 @@
             md-colors="{color: 'default-teal-500'}"> Rejeitar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
             md-colors="{color: 'default-teal-500'}"
-            ng-if="analyseHierReqCtrl.hasToRemoveLink"> Aceitar
-        <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
+            ng-if="analyseHierReqCtrl.showButtonAccept()"> Aceitar</md-button>
+        <md-button class="md-primary"
+            ng-click="analyseHierReqCtrl.analyseInstitutions = true" 
             md-colors="{color: 'default-teal-500'}"
-            ng-if="!analyseHierReqCtrl.hasToRemoveLink"> Avançar
+            ng-if="analyseHierReqCtrl.isDescriptionRemoveLink()"> Avançar
         </md-button>
     </md-dialog-actions>
 

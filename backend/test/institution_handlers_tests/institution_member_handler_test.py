@@ -55,11 +55,12 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         cls.second_user.put()
         # create headers
         cls.headers = {'Institution-Authorization': cls.institution.key.urlsafe()}
-
+    
+    @patch('handlers.institution_members_handler.enqueue_task')
     @patch('handlers.institution_members_handler.send_message_notification')
     @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_with_notification(self, verify_token, send_email, send_message_notification):
+    def test_delete_with_notification(self, verify_token, send_email, send_message_notification, enqueue_task):
         """Test if a notification is sent when the member is deleted."""
         # Set up the second_user
         self.second_user.institutions = [self.institution.key, self.other_institution.key]
@@ -98,11 +99,17 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
         )
         # Assert that send_email has been called
         send_email.assert_called()
-
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'DELETE_MEMBER',
+            'receivers': [self.second_user.key.urlsafe()],
+            'entity': self.institution.key.urlsafe()
+        })
+ 
+    @patch('handlers.institution_members_handler.enqueue_task')
     @patch('handlers.institution_members_handler.send_message_notification')
     @patch('handlers.institution_members_handler.RemoveMemberEmailSender.send_email')
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
-    def test_delete_member_with_one_institution(self, verify_token, send_email, send_message_notification):
+    def test_delete_member_with_one_institution(self, verify_token, send_email, send_message_notification, enqueue_task):
         """Test delete a member that belongs to only one institution."""
         # new user
         third_user = mocks.create_user()
@@ -124,6 +131,12 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
         # Assert that send_email has been called
         send_email.assert_called()
+        send_email.assert_called()
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'DELETE_MEMBER',
+            'receivers': [third_user.key.urlsafe()],
+            'entity': self.institution.key.urlsafe()
+        })
 
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_delete(self, verify_token):

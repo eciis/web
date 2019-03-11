@@ -242,9 +242,10 @@ class PostHandlerTest(TestBaseHandler):
             exception_message,
             expected_alert + raises_context_message)
     
+    @patch('handlers.post_handler.enqueue_task')
     @patch('handlers.post_handler.send_message_notification')
     @patch('util.login_service.verify_token', return_value={'email': 'first_user@gmail.com'})
-    def test_delete_with_admin(self, verify_token, mock_method):
+    def test_delete_with_admin(self, verify_token, mock_method, enqueue_task):
         """Test delete a post with admin."""
         self.first_user.add_permission(
             "remove_posts", self.institution.key.urlsafe())
@@ -260,6 +261,12 @@ class PostHandlerTest(TestBaseHandler):
                          "The post's state must be deleted")
         
         mock_method.assert_called()
+
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'DELETE_POST',
+            'entity': self.second_user_post.key.urlsafe(),
+            'receivers': [self.second_user_post.author.urlsafe()]
+        })
 
     @patch('util.login_service.verify_token', return_value={'email': 'second_user@ccc.ufcg.edu.br'})
     def test_delete_without_admin(self, verify_token):

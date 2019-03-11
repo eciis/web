@@ -94,10 +94,11 @@ class UserHandlerTest(TestBaseHandler):
             user['institutions_admin'], [inst_admin_url], 
             "The institutions_admin is different from the expected one"
         )
-
+    
+    @patch('handlers.user_handler.enqueue_task')
     @patch('handlers.user_handler.send_message_notification')
     @patch('util.login_service.verify_token')
-    def test_delete(self, verify_token, send_notification):
+    def test_delete(self, verify_token, send_notification, enqueue_task):
         """Test the user_handler's delete method."""
         verify_token._mock_return_value = {'email': self.other_user.email[0]}
         # check the user properties before delete it
@@ -143,6 +144,8 @@ class UserHandlerTest(TestBaseHandler):
         self.assertEquals(self.other_user.institution_profiles, [], "User permissions should be empty")
 
         send_notification.assert_called()
+
+        enqueue_task.assert_called()
 
 
     @patch('util.login_service.verify_token')

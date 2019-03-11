@@ -31,7 +31,8 @@
               ctrl.newInstitution.photo_url = ctrl.newInstitution.photo_url || 'app/images/institution.png';
               ctrl.loading = false;
             }, e => {
-              ctrl.loading = true;
+              ctrl.loading = false;
+              MessageService.showToast(e);
             })
           }
 

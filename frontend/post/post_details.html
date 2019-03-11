@@ -108,7 +108,7 @@
   <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
 
   <!-- BODY SHARED POST -->
-  <md-card md-colors="{background: 'default-grey-100'}" ng-if="postDetailsCtrl.showSharedPost()">
+  <md-card md-colors="{background: 'default-grey-300'}" ng-if="postDetailsCtrl.showSharedPost() && false">
     <div ng-if="postDetailsCtrl.isSharedSurveyExpired()" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.shared_post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
     </div>
@@ -150,6 +150,7 @@
         user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
     </md-card-content>
   </md-card>
+  <shared-post post="postDetailsCtrl.post"></shared-post>
 
   <!-- BODY POST -->
   <img ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post)" ng-src="{{ postDetailsCtrl.post.photo_url }}"

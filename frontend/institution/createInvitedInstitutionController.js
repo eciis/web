@@ -162,12 +162,18 @@
            * Then, sends the user back to STATE.HOME with a confirmation message.
            */
           function reloadAndRedirectHome() {
+            // Check if institution is currently a superior
+            const message = ctrl.newInstitution.children_institutions.length > 0 ?
+              'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.'
+              :
+              'A instituição foi criada e ja se encontra habilitada na Plataforma Virtual CIS.'
+
             AuthService.reload().then(() => {
               $state.go(STATES.HOME).then(() => {
                 ctrl.loading = false;
                 const alert = $mdDialog.alert({
                   title: 'INSTITUIÇÃO CRIADA',
-                  textContent: 'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.',
+                  textContent: message,
                   ok: 'Fechar'
                 });
                 $mdDialog.show(alert);

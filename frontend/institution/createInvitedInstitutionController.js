@@ -10,6 +10,7 @@
           ctrl.currentStep = 0;
           ctrl.newInstitution = {};
           ctrl.user = {};
+          ctrl.invite = {};
 
           ctrl.stepColor = (step) => {
             return ctrl.currentStep === step ? 'light-green-500' : 'grey-500';
@@ -163,7 +164,7 @@
            */
           function reloadAndRedirectHome() {
             // Check if institution is currently a superior
-            const message = ctrl.newInstitution.children_institutions.length > 0 ?
+            const message = _.isEqual(ctrl.invite.type_of_invite, 'INSTITUTION_PARENT') ?
               'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.'
               :
               'A instituição foi criada e ja se encontra habilitada na Plataforma Virtual CIS.'
@@ -273,6 +274,8 @@
           ctrl.$onInit = () => {
             ctrl.user = AuthService.getCurrentUser();
             ctrl.institutionKey = $state.params.institutionKey;
+            const inviteKey = $state.params.inviteKey;
+            ctrl.invite = _.find(ctrl.user.invites, i => _.isEqual(i.key, inviteKey));
             if (ctrl.institutionKey) {
               ctrl.loadInstitution(ctrl.institutionKey)
             } else {

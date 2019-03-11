@@ -33,7 +33,6 @@
          * 
          */
         analyseHierReqCtrl.showButtonAccept = function(){
-            console.log();
             return !analyseHierReqCtrl.hasToRemoveLink || 
                 analyseHierReqCtrl.hasToRemoveLink && analyseHierReqCtrl.analyseInstitutions;
         };

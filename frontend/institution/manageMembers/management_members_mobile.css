@@ -62,3 +62,24 @@
     grid-row-gap: 0.5em;
     max-height: 18em;
 }
+
+
+@media screen and (max-width: 361px) {
+    .remove-member-title{
+        font-size: 15px;
+    }
+
+    .remove-member-name-user{
+        font-size: 13px;
+    }
+}
+
+@media screen and (min-width: 361px) and (max-width: 460px) {
+    .remove-member-title{
+        font-size: 16px;
+    }
+
+    .remove-member-name-user{
+        font-size: 14px;
+    }
+}

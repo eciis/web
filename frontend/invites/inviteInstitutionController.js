@@ -127,9 +127,9 @@
                 .clickOutsideToClose(false)
                 .title('Reenviar convite')
                 .textContent('Você deseja reenviar o convite?')
-                .ariaLabel('Reenviar convite')
+                .ariaLabel('Reenviar')
                 .targetEvent(event)
-                .ok('Reenviar convite')
+                .ok('Reenviar')
                 .cancel('Cancelar');
             var promise = $mdDialog.show(confirm);
             promise.then(function () {

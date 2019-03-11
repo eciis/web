@@ -72,7 +72,7 @@
          */
         regInstCtrl.goToInst = () => {
             $state.go(STATES.INST_TIMELINE, 
-                { institutionKey: regInstCtrl.institution.key });
+                { institutionKey: regInstCtrl.institution.key || regInstCtrl.institution.id });
         };
 
         /**
@@ -81,6 +81,13 @@
          */
         regInstCtrl.hasSeenInstitution = function hasSeenInstitution() {
             return regInstCtrl.user.last_seen_institutions && regInstCtrl.user.last_seen_institutions > regInstCtrl.institution.creation_date;
+        };
+
+        regInstCtrl.$onInit = () => {
+            const address = regInstCtrl.institution.address;
+            if (_.isString(address)) {
+                regInstCtrl.institution.address = JSON.parse(address);
+            }
         };
     });
 })();

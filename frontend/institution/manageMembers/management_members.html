@@ -23,9 +23,9 @@
         <p style="font-size: 10px; margin-bottom: 0; margin-top:30px;" md-colors="{color: 'grey-700'}">Endereço de e-mail</p>
         <form name="sendInviteForm" ng-submit="manageMemberCtrl.sendUserInvite()">
           <md-content style="max-height: 250px" class="custom-scrollbar">
-            <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="inputEmail"
+            <md-input-container md-no-float class="md-block md-icon-right md-icon-float" class="green-input"
               ng-repeat="currentEmail in manageMemberCtrl.emails" style="height:20px;"  md-colors="{color: 'grey-500'}">
-              <input class="inputEmail" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
+              <input class="green-input" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" md-maxlength="120"
                 type="email" name="email" placeholder="+ Adicionar um endereço de e-mail..." style="height:20px;">
             </md-input-container>
           </md-content>

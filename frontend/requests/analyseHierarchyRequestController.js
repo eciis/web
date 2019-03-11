@@ -6,6 +6,7 @@
     app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(request,
          RequestInvitationService, InstitutionService, MessageService, $mdDialog) {
         const analyseHierReqCtrl = this;
+        analyseHierReqCtrl.analyseInstitutions = false;
     
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";

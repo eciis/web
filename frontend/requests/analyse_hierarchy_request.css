@@ -1,11 +1,16 @@
-.analyse_request__description{
+.analyse-request__description{
     color: #707070;
 }
 
-.analyse_request__dialog{
+.analyse-request__dialog{
     max-height: 90%;
 }
 
-.analyse_request__margin_bottom{
+.analyse-request__green-bar{
+    width: 8px;
+    background-color: #009688;
+}
+
+.analyse-request__margin-bottom{
     margin:0 0 8px 0;
 }

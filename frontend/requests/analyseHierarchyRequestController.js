@@ -28,14 +28,22 @@
             analyseHierReqCtrl.child = child;
         })();
 
+        /** Show button accept if hasn't link to remove or
+         *  if user in display on analyse institution hierarchie. 
+         * 
+         */
         analyseHierReqCtrl.showButtonAccept = function(){
+            console.log();
             return !analyseHierReqCtrl.hasToRemoveLink || 
                 analyseHierReqCtrl.hasToRemoveLink && analyseHierReqCtrl.analyseInstitutions;
-        }
+        };
 
-        analyseHierReqCtrl.isDescriptionRemoveLink = function(){
+        /** Show description that informes to user that
+         * he's need remove old link before accept new link;
+         */
+        analyseHierReqCtrl.showDescToRemoveLink = function(){
             return analyseHierReqCtrl.hasToRemoveLink && !analyseHierReqCtrl.analyseInstitutions;
-        }
+        };
 
         analyseHierReqCtrl.confirmRequest = function confirmRequest() {
             analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();

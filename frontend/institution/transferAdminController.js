@@ -20,6 +20,13 @@
             return false;
         };
 
+        /** Get class of element HTML that show member entity.
+         *  The class is defined according if member is selected.
+         */
+        transferAdminCtrl.getClass = function getClass(member){
+            return (member === transferAdminCtrl.selectedMember) ? "small-avatar": "small-avatar white-background";
+        }
+
         transferAdminCtrl.selectMember = function selectMember(member) {
             transferAdminCtrl.selectedMember = member;
             transferAdminCtrl.member = member.email[0];

@@ -96,6 +96,29 @@
         manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
             ProfileService.showProfile(userKey, ev, manageMemberCtrl.institution.key);
         };
+        
+        /**
+         * Returns the default image for an user avatar
+         */
+        manageMemberCtrl.getDefaultAvatar = () => "app/images/avatar.png";
+        
+        /**
+         * Returns a message that indicates the name 
+         * of the user who sent the given invite
+         */
+        manageMemberCtrl.getInviteSubtitle = (invite) => `Convidado por: ${invite.sender_name}`;
+
+        /**
+         * Constructs the object that will be used to create a button
+         * in the entity-showcase component
+         */
+        manageMemberCtrl.getEntityShowcaseBtn = (icon, color, action, params) => {
+            return {
+                icon: icon,
+                iconColor: color,
+                action: () => action(...params)
+            };
+        };
 
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {
             manageMemberCtrl.invite.institution_key = currentInstitutionKey;
@@ -179,10 +202,10 @@
         }
 
         manageMemberCtrl._getMembers = () => {
-            InstitutionService.getMembers(currentInstitutionKey).then(function success(response) {
-                manageMemberCtrl.members = Utils.isMobileScreen(475) ?
-                    Utils.groupUsersByInitialLetter(response) : response;
-                getAdmin(response);
+            InstitutionService.getMembers(currentInstitutionKey)
+            .then(function success(response) {
+                manageMemberCtrl.members = response;
+                manageMemberCtrl._getAdmin(response);
                 manageMemberCtrl.isLoadingMembers = false;
             }, function error() {
                 manageMemberCtrl.isLoadingMembers = true;
@@ -196,7 +219,7 @@
             });
         }
 
-        function getAdmin(members) {
+        manageMemberCtrl._getAdmin = (members) => {
             manageMemberCtrl.institution.admin = _.find(members, 
                 function(member){
                     return member.key === manageMemberCtrl.institution.admin.key;
@@ -237,9 +260,9 @@
                 .clickOutsideToClose(false)
                 .title('Reenviar convite')
                 .textContent('Você deseja reenviar o convite?')
-                .ariaLabel('Reenviar convite')
+                .ariaLabel('Reenviar')
                 .targetEvent(event)
-                .ok('Reenviar convite')
+                .ok('Reenviar')
                 .cancel('Cancelar');
             var promise = $mdDialog.show(confirm);
             promise.then(function () {

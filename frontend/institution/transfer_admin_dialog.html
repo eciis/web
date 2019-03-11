@@ -1,24 +1,18 @@
-<md-dialog flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
- <md-dialog-content layout="row" layout-align="center center">
+<md-dialog style="max-height: 90%" flex-gt-md="40" flex-md="70" flex-sm="80" flex-xs="95">
+ <md-dialog-content layout="row" layout-align="center start">
     <div layout="column" flex="90">
         <h3>Transferir administração</h3>
         <p>Cada institutição precisa ter um administrador na plataforma CIS.
             Escolha abaixo um novo administrador para sua instituição:
         </p>
-        <md-input-container>
-            <input aria-label="Search member" ng-model="transferAdminCtrl.member"/>
-            <md-icon>search</md-icon>
-        </md-input-container>
+        <search-field keyword="transferAdminCtrl.member"></search-field>
         <md-list ng-if="transferAdminCtrl.member != null">
-            <md-list-item class="list-item-dense" md-colors="{background: 'default-grey-300'}"
-                ng-repeat="member in members = (transferAdminCtrl.institution_members | filter: transferAdminCtrl.searchMember)" 
-                ng-click="transferAdminCtrl.selectMember(member)" flex-xs>
-                <img title="{{member.name}}" ng-src="{{member.photo_url}}" class="md-avatar" style="margin: 0 15px 0 -15px; width: 60px; height: 60px;"/>
-                <div layout="column" ng-click="transferAdminCtrl.selectMember(member)">
-                    <b style="position: relative; margin-top: 20px; font-size: 15px;">{{ member.name }}</b>
-                    <span style="position: relative; bottom: 20px; font-size: 15px;">{{ member.email[0]}}</span>
-                </div>
-            </md-list-item>
+            <entity-showcase ng-class="transferAdminCtrl.getClass(member)"
+                ng-repeat="member in transferAdminCtrl.institution_members | filter: transferAdminCtrl.member" 
+                avatar="member.photo_url"
+                title="member.name"
+                subtitle="member.email[0]"
+                ng-click="transferAdminCtrl.selectMember(member)">
             <md-list-item ng-if="members.length === 0">
                 <div layout="row" layout-align="center" flex="100">
                     <p>Nenhum membro foi encontrado com esse nome ou email.</p>
@@ -28,10 +22,10 @@
     </div>
  </md-dialog-content>
  <md-dialog-actions>
-     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.cancel()">
+     <md-button md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.cancel()">
         CANCELAR
      </md-button>
-     <md-button class="md-raised" md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
+     <md-button md-colors="{color: 'default-teal-500'}" ng-click="transferAdminCtrl.confirm()">
         CONFIRMAR
     </md-button>
  </md-dialog-actions>

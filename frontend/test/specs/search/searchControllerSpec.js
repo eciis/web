@@ -95,15 +95,13 @@
                         }
                     };
                 });
-                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
-                spyOn(mdDialog, 'show');
+                spyOn(searchCtrl, 'setupResultsInMobile').and.callThrough();
 
                 searchCtrl.search_keyword = 'splab';
                 searchCtrl.search();
 
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
-                expect(searchCtrl.showSearchFromMobile).toHaveBeenCalled();
-                expect(mdDialog.show).toHaveBeenCalled();
+                expect(searchCtrl.setupResultsInMobile).toHaveBeenCalled();
             });
 
             it('should call makeSearch(); not mobile screen', () => {
@@ -114,17 +112,13 @@
                         }
                     };
                 });
-                spyOn(searchCtrl, 'showSearchFromMobile').and.callThrough();
-                spyOn(mdDialog, 'show');
                 spyOn(Utils, 'isMobileScreen').and.returnValue(false);
 
                 searchCtrl.search_keyword = 'splab';
                 searchCtrl.search();
 
                 expect(searchCtrl.makeSearch).toHaveBeenCalled();
-                expect(searchCtrl.showSearchFromMobile).not.toHaveBeenCalled();
-                expect(mdDialog.show).not.toHaveBeenCalled();
-            })
+            });
         });
 
         describe('makeSearch()', function() {
@@ -183,14 +177,6 @@
             });
         });
 
-        describe('showSearchFromMobile', () => {
-            it('should call mdDialog.show', () => {
-                spyOn(mdDialog, 'show');
-                searchCtrl.showSearchFromMobile();
-                expect(mdDialog.show).toHaveBeenCalled();
-            });
-        });
-
         describe('leaveMobileSearchPage()', () => {
             it('should call window.history.back', () => {
                 spyOn(window.history, 'back');
@@ -219,6 +205,26 @@
                 searchCtrl.hasChanges = true;
                 searchCtrl.setHasChanges();
                 expect(searchCtrl.hasChanges).toEqual(false);
+            });
+        });
+
+        describe('setupResultsInMobile()', () => {
+            it('should unset hasNotSearched when is a mobile screen', () => {
+                window.screen = {width: 200};
+                expect(searchCtrl.hasNotSearched).toEqual(true);
+
+                searchCtrl.setupResultsInMobile();
+
+                expect(searchCtrl.hasNotSearched).toEqual(false);
+            });
+
+            it('should not unset hasNotSearched when is not a mobile screen', () => {
+                window.screen = { width: 1000 };
+                expect(searchCtrl.hasNotSearched).toEqual(true);
+
+                searchCtrl.setupResultsInMobile();
+
+                expect(searchCtrl.hasNotSearched).toEqual(true);
             });
         });
     });

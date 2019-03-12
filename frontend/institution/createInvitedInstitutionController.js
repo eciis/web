@@ -21,7 +21,7 @@
           }
 
           ctrl.loadInstitution = () => {
-            InstitutionService.getInstitution(ctrl.institutionKey).then(res => {
+            return InstitutionService.getInstitution(ctrl.institutionKey).then(res => {
               ctrl.newInstitution = res;
               ctrl.suggestedName = res.name;
               observer = ObserverRecorderService.register(ctrl.newInstitution);

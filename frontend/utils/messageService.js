@@ -44,16 +44,22 @@
         };
 
         service.showToast = function showToast(message) {
-            message = customMessage(message);
-            $mdToast.show(
-                $mdToast.simple()
-                    .textContent(message)
-                    .action('FECHAR')
-                    .highlightAction(true)
-                    .hideDelay(5000)
-                    .position('bottom right')
-            );
+            if(! hideToast(message)) {
+              message = customMessage(message);
+              $mdToast.show(
+                  $mdToast.simple()
+                      .textContent(message)
+                      .action('FECHAR')
+                      .highlightAction(true)
+                      .hideDelay(5000)
+                      .position('bottom right')
+              );
+            }
         };
+
+        function hideToast (message) {
+          return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && message.includes('sucesso');
+        }
 
         function customMessage(message) {
             return (message && msg[message.code]) || msg[message] || message;

@@ -4,7 +4,10 @@
         {{ entityShowcaseCtrl.icon }}
     </md-icon>
     <span class="entity-showcase__title responsive__title">{{entityShowcaseCtrl.title }}</span>
-    <span class="entity-showcase__subtitle responsive__title">{{entityShowcaseCtrl.subtitle }}</span>
+    <div class="entity-showcase__subtitles-container">
+        <span class="entity-showcase__subtitle responsive__title"
+            ng-repeat="subtitle in entityShowcaseCtrl.getSubtitles()">{{subtitle }}</span>
+    </div>
     <div class="entity-showcase__right-icon-buttons">
         <icon-button
             ng-repeat="rightIconBtn in entityShowcaseCtrl.rightIconBtns"

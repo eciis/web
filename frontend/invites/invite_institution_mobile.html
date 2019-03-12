@@ -6,7 +6,7 @@
 
 <md-content class="invite-inst">
     <div class="invite-inst__cards">
-        <clickable-card icon="send" title="Convidar Instituição" is-open="true">
+        <clickable-card icon="send" title="Convidar Instituição">
             <div class="invite-inst__card__content">
                 <form name="inviteInstForm">
                     <md-input-container md-no-float class="md-block">
@@ -32,7 +32,23 @@
                 </div>
             </div>
         </clickable-card>
-        <clickable-card icon="email" title="Convites Enviados"></clickable-card>
+
+        <clickable-card icon="email" title="Convites Enviados" is-open="true">
+            <div class="invite-inst__card__content">
+                <search-field keyword="searchInviteSent"></search-field>
+                <md-content class="invite-inst__list custom-scrollbar">
+                    <entity-showcase ng-repeat="invite in inviteInstCtrl.sent_invitations | filter: searchInviteSent"
+                        icon="account_balance"
+                        title="invite.stub_institution.name || invite.suggestion_institution_name"
+                        subtitles-list="[invite.invitee, 'Convidado por: '+ invite.sender_name]"
+                        right-icon-btns="[
+                            inviteInstCtrl.createIconBtn('send',null, inviteInstCtrl.resendInvite, [invite.key, $event])
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+        
         <clickable-card icon="announcement" title="Convites Requisitados"></clickable-card>
         <clickable-card icon="check_circle" title="Convites Aceitos"></clickable-card>
     </div>

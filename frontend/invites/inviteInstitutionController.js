@@ -191,8 +191,18 @@
 
         inviteInstCtrl.$onInit = () => {
             if (Utils.isMobileScreen()) {
-                  StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.INVITE_INSTITUTION, STATES.HOME);
+                //   StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.INVITE_INSTITUTION, STATES.HOME);
             }
+        };
+
+        inviteInstCtrl.createIconBtn = (icon, color, action, params, hideBtn) => {
+            const greyColor = '#9E9E9E';
+            return {
+                icon: icon,
+                iconColor: color || greyColor,
+                action: () => action(...params),
+                showIf: () => hideBtn === undefined ? true : hideBtn
+            };
         };
 
         (function main() {

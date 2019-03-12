@@ -43,13 +43,23 @@
         };
 
         homeCtrl.chatCreated = (e) => {
-            UserService.getUser(e.id).then(user => {
-                homeCtrl.currentChat = e.chat;
-                homeCtrl.currentUser = user;
-                homeCtrl.currentChat.on('ice-connection-changed', homeCtrl.stateChange);
-                homeCtrl.currentChat.on('msg-list-updated', list => {
-                    $scope.$apply();
-                });
+            homeCtrl.currentUser = homeCtrl.getUser(e.id);
+            homeCtrl.currentChat = e.chat;
+
+            const selfie = document.getElementById('video-selfie');
+            selfie.srcObject = homeCtrl.currentChat.selfStream;
+            selfie.play().then().catch(e => console.log('cant play video: ', e));
+
+            homeCtrl.currentChat.on('ice-connection-changed', homeCtrl.stateChange);
+            homeCtrl.currentChat.on('msg-list-updated', list => {
+                $scope.$apply();
+            });
+
+            homeCtrl.currentChat.on('track-received', ev => {
+                const el = document.getElementById('video-remote');
+                el.srcObject = ev.streams[0];
+                el.play().then().catch(e => console.log('cant play video: ', e));
+                $scope.$apply();
             });
         };
 
@@ -59,18 +69,35 @@
         };
 
         homeCtrl.call = (user) => {
-            homeCtrl.client.requestCall(user.key);
-            homeCtrl.openChat(user);
+            getMedia().then(stream => {
+                homeCtrl.client.requestCall(user.key, stream);
+            });
         };
 
         homeCtrl.promptCall = (id) => {
-            UserService.getUser(id).then(user => {
-                MessageService.showConfirmationDialog({}, "Ligação recebida", `Ligação de ${user.name}. Aceitar?`).then(answer => {
-                    if (answer) {
-                        homeCtrl.client.acceptCall(id);
-                    }
-                });
+            const user = homeCtrl.getUser(id);
+
+            MessageService.showConfirmationDialog({}, "Ligação recebida", `Ligação de ${user.name}. Aceitar?`).then(answer => {
+                if (answer) {
+                    homeCtrl.openChat(user);
+                    getMedia().then(stream => {
+                        homeCtrl.client.acceptCall(id, stream);
+                    });
+                }
             });
+        };
+
+        function getMedia() {
+            return new Promise((resolve, reject) => {
+                let stream;
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(s => {
+                    stream = s;
+                }).catch(e => console.log(e)).finally(() => resolve(stream));
+            });
+        }
+
+        homeCtrl.getUser = (id) => {
+            return homeCtrl.cachedUsers[id];
         };
     }]);
 })();

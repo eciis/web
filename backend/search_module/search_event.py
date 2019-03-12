@@ -44,8 +44,12 @@ class SearchEvent(SearchDocument):
             content = {
                 'id': event.key.urlsafe(),
                 'state': event.state,
+                'title': event.title,
                 'institution_name': event.institution_name,
+                'institution_key': event.institution_key.urlsafe(),
+                'photo_url': event.photo_url,
                 'institution_acronym': event.institution_acronym,
+                'start_time': event.start_time.isoformat(),
                 'country': event.address and event.address.country,
                 'federal_state': event.address and event.address.federal_state,
                 'city': event.address and event.address.city
@@ -57,8 +61,12 @@ class SearchEvent(SearchDocument):
                 doc_id=content['id'],
                 fields=[
                     search.TextField(name='state', value=content['state']),
+                    search.TextField(name='title', value=content['title']),
                     search.TextField(name='institution_name', value=content['institution_name']),
+                    search.TextField(name='institution_key', value=content['institution_key']),
+                    search.TextField(name='photo_url', value=content['photo_url']),
                     search.TextField(name='institution_acronym', value=content['institution_acronym']),
+                    search.TextField(name='start_time', value=content['start_time']),
                     search.TextField(name='country', value=content['country']),
                     search.TextField(name='federal_state', value=content['federal_state']),
                     search.TextField(name='city', value=content['city'])
@@ -73,8 +81,8 @@ class SearchEvent(SearchDocument):
         query_string = self.makeQueryStr(value, state)
         index = search.Index(self.index_name)
         query_options = search.QueryOptions(
-            returned_fields=['institution_name', 'institution_acronym',
-                'country', 'federal_state', 'city']
+            returned_fields=['state', 'title', 'institution_key', 'photo_url', 'institution_name',
+                'institution_acronym', 'start_time', 'country', 'federal_state', 'city']
         )
         query = search.Query(
             query_string=query_string, options=query_options)
@@ -115,8 +123,8 @@ class SearchEvent(SearchDocument):
         and the fields won't be considered.
         """
         # add a new field here
-        fields = ['institution_name', 'institution_acronym',
-                'country', 'federal_state', 'city']
+        fields = ['state', 'institution_name', 'start_time',
+                'institution_acronym', 'country', 'federal_state', 'city']
         fields_values = []
 
         if value:

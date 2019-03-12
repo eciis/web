@@ -31,6 +31,7 @@
                 promise.then(function success(response) {
                     searchCtrl.events = response;
                     searchCtrl.loading = true;
+                    searchCtrl.hasChanges = true;
                     console.log(response);
                 });
             } else {
@@ -85,9 +86,9 @@
             }
         };
 
-        searchCtrl.searchBy = function searchBy(search) {
+        searchCtrl.searchBy = function searchBy(search, type) {
             if (keywordHasChanges()) {
-                searchCtrl.makeSearch(search, 'institution');
+                searchCtrl.makeSearch(search, type || 'institution');
                 refreshPreviousKeyword();
             }
         };

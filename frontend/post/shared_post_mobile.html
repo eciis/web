@@ -2,16 +2,16 @@
     <div ng-if="postDetailsCtrl.isSharedSurveyExpired()" class="expired-survey">
       <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.shared_post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
     </div>
-    <div style="display: grid; grid-template-columns: min-content 1fr; padding: 8px 8px 0 8px; grid-column-gap: 10px;">
-        <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" style="border-radius: 50%;" class="md-user-avatar img-post-shadow"/>
-        <div style="display: grid; grid-template-rows: auto auto; font-size: 14px;">
+    <div class="shared-post__header">
+        <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-user-avatar img-post-shadow shared-post__img"/>
+        <div class="shared-post__title">
             <a href class="hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.shared_post.institution_key)" style="font-weight: bold;">
             {{ postDetailsCtrl.post.shared_post.institution_name }}</a>
-            <span style="color: rgb(117, 117, 117);">por {{ postDetailsCtrl.post.shared_post.author }}</span>
+            <span>por {{ postDetailsCtrl.post.shared_post.author }}</span>
         </div>
     </div>
     <deleted-post message="ESTA PUBLICAÇÃO FOI REMOVIDA" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"></deleted-post>
-    <div layout="column" ng-class="postDetailsCtrl.post.shared_post.type_survey ? 'shared-survey' : ''" style="padding: 16px;">
+    <div layout="column" ng-class="postDetailsCtrl.post.shared_post.type_survey ? 'shared-survey' : ''" class="shared-post__body">
       <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)"
         style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
       <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post.shared_post)">

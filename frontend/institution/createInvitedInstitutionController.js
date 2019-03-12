@@ -139,13 +139,12 @@
               const instKey = ctrl.institutionKey;
               const senderName = $state.params.senderName;
               const dialogParent = angular.element('#create-inst-content');
-              showConfirmationDialog(event, dialogParent)
+              return showConfirmationDialog(event, dialogParent)
                 .then(() => {
                   ctrl.loading = true;
-                  saveProfileImage(ctrl.photoSrc).then(() => {
-                    saveAndUpdateInst(inviteKey, instKey, senderName)
-                      .then(() => {
-                        reloadAndRedirectHome();
+                  return saveProfileImage(ctrl.photoSrc).then(() => {
+                    return saveAndUpdateInst(inviteKey, instKey, senderName) .then(() => {
+                        return reloadAndRedirectHome();
                       })
                   })
                 }).catch(e => {
@@ -188,15 +187,15 @@
               :
               'A instituição foi criada e ja se encontra habilitada na Plataforma Virtual CIS.'
 
-            AuthService.reload().then(() => {
-              $state.go(STATES.HOME).then(() => {
+            return AuthService.reload().then(() => {
+              return $state.go(STATES.HOME).then(() => {
                 ctrl.loading = false;
                 const alert = $mdDialog.alert({
                   title: 'INSTITUIÇÃO CRIADA',
                   textContent: message,
                   ok: 'Fechar'
                 });
-                $mdDialog.show(alert);
+                return $mdDialog.show(alert);
               });
             });
           }
@@ -234,7 +233,7 @@
             const patch = ObserverRecorderService.generate(observer);
             const body = { sender_name: senderName }
 
-            return InstitutionService.save(body, instKey, inviteKey).then((savedInst)=> {
+            return InstitutionService.save(body, instKey, inviteKey).then(()=> {
               return InstitutionService.update(instKey, patch).then((updatedInst) => {
                 updateUser(inviteKey, updatedInst);
               });

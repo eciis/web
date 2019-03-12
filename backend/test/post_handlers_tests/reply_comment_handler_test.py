@@ -58,10 +58,11 @@ class ReplyCommentHandlerTest(TestBaseHandler):
         cls.user_post = cls.user_post.key.get()
         cls.user_post.put()
 
-
+    
+    @patch('handlers.reply_comment_handler.enqueue_task')
     @patch('handlers.reply_comment_handler.send_message_notification')
     @patch('util.login_service.verify_token', return_value={'email': THIRD_USER_EMAIL})
-    def test_post(self, verify_token, send_message_notification):
+    def test_post(self, verify_token, send_message_notification, enqueue_task):
         """Reply a comment of post"""
         # Verify size of list
         other_user_comment = self.user_post.get_comment(self.other_user_comment.id)
@@ -123,6 +124,12 @@ class ReplyCommentHandlerTest(TestBaseHandler):
             )
         ]
         send_message_notification.assert_has_calls(calls)
+
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'REPLY_COMMENT',
+            'receivers': [self.other_user.key.urlsafe()],
+            'entity': self.user_post.key.urlsafe()
+        })
     
     @patch('handlers.reply_comment_handler.send_message_notification')
     @patch('util.login_service.verify_token', return_value={'email': THIRD_USER_EMAIL})

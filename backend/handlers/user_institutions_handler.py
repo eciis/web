@@ -10,6 +10,7 @@ from utils import json_response
 from send_email_hierarchy import LeaveInstitutionEmailSender
 from service_messages import send_message_notification
 from util import get_subject 
+from service_entities import enqueue_task
 
 from . import BaseHandler
 
@@ -59,3 +60,9 @@ class UserInstitutionsHandler(BaseHandler):
             entity_key=institution.key.urlsafe(),
             message=notification_message
         )
+
+        enqueue_task('send-push-notification', {
+            'type': 'LEFT_INSTITUTION',
+            'receivers': [admin.key.urlsafe()],
+            'entity': user.key.urlsafe()
+        })

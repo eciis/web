@@ -20,10 +20,11 @@ class UserInstitutionsHandlerTest(TestBaseHandler):
              ], debug=True)
         cls.testapp = cls.webtest.TestApp(app)
         initModels(cls)
-
+    
+    @patch('handlers.user_institutions_handler.enqueue_task')
     @patch('handlers.user_institutions_handler.LeaveInstitutionEmailSender.send_email')
     @patch('util.login_service.verify_token', return_value={'email': 'second_user@gmail.com'})
-    def test_delete(self, verify_token, send_email):
+    def test_delete(self, verify_token, send_email, enqueue_task):
         """Test delete."""
         # Assert the initial conditions
         self.assertTrue(self.second_user.key in self.institution.members)
@@ -46,6 +47,12 @@ class UserInstitutionsHandlerTest(TestBaseHandler):
 
         # Assert that send_email has been called
         send_email.assert_called()
+
+        enqueue_task.assert_called_with('send-push-notification', {
+            'type': 'LEFT_INSTITUTION',
+            'receivers': [self.institution.admin.urlsafe()],
+            'entity': self.second_user.key.urlsafe()
+        })
 
 
 def initModels(cls):

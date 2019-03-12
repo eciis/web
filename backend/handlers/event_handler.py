@@ -70,6 +70,12 @@ class EventHandler(BaseHandler):
 
         enqueue_task('multiple-notification', params)
 
+        enqueue_task('send-push-notification', {
+            'type': 'DELETED_EVENT',
+            'receivers': [follower.urlsafe() for follower in event.followers],
+            'entity': event.key.urlsafe()
+        })
+
     @json_response
     @login_required
     def patch(self, user, event_urlsafe):
@@ -112,3 +118,9 @@ class EventHandler(BaseHandler):
             }
 
         enqueue_task('multiple-notification', params)
+
+        enqueue_task('send-push-notification', {
+            'type': 'UPDATED_EVENT',
+            'receivers': [follower.urlsafe() for follower in event.followers],
+            'entity': event.key.urlsafe()
+        })

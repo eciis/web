@@ -11,6 +11,7 @@ from utils import json_response
 from models import InstitutionProfile
 from service_messages import send_message_notification
 from util import JsonPatch
+from service_entities import enqueue_task
 
 from . import BaseHandler
 
@@ -60,6 +61,12 @@ def notify_admins(user):
             entity_key=institution_key.urlsafe(),
             message=notification_message
         )
+
+        enqueue_task('send-push-notification', {
+            'receivers': [admin_key.urlsafe()],
+            'type': 'DELETED_USER',
+            'entity': user.key.urlsafe()
+        })
 
 
 class UserHandler(BaseHandler):

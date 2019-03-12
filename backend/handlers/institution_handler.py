@@ -242,3 +242,9 @@ class InstitutionHandler(BaseHandler):
             "entity": json.dumps(notification_entity)
         }
         enqueue_task('notify-followers', notification_params)
+
+        enqueue_task('send-push-notification', {
+            'type': 'DELETED_INSTITUTION',
+            'receivers': [follower.urlsafe() for follower in institution.followers],
+            'entity': institution.key.urlsafe()
+        })

@@ -101,3 +101,9 @@ class InstitutionParentHandler(BaseHandler):
             entity_key=institution_children.key.urlsafe(),
             message=notification_message
         )
+
+        enqueue_task('send-push-notification', {
+            'type': notification_type,
+            'receivers': [admin.urlsafe()],
+            'entity': institution_children.key.urlsafe()
+        })

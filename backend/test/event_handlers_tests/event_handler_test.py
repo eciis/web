@@ -6,7 +6,7 @@ from models import User
 from models import Institution
 from models import Event
 from handlers.event_handler import EventHandler
-from mock import patch
+from mock import patch, call
 
 import datetime
 import json
@@ -69,7 +69,18 @@ class EventHandlerTest(TestBaseHandler):
             'title': self.event.title
         }
 
-        enqueue_task.assert_called_with('multiple-notification', not_params)
+        push_not_queue_call_params = {
+            'type': 'DELETED_EVENT',
+            'receivers': [follower.urlsafe() for follower in self.event.followers],
+            'entity': self.event.key.urlsafe()
+        }
+
+        calls = [
+            call('multiple-notification', not_params),
+            call('send-push-notification', push_not_queue_call_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
         # Refresh event
         self.event = self.event.key.get()
@@ -208,7 +219,18 @@ class EventHandlerTest(TestBaseHandler):
             'title': self.event.title
         }
 
-        enqueue_task.assert_called_with('multiple-notification', not_params)
+        push_not_queue_call_params = {
+            'type': 'UPDATED_EVENT',
+            'receivers': [follower.urlsafe() for follower in self.event.followers],
+            'entity': self.event.key.urlsafe()
+        }
+
+        calls = [
+            call('multiple-notification', not_params),
+            call('send-push-notification', push_not_queue_call_params)
+        ]
+
+        enqueue_task.assert_has_calls(calls)
 
     @patch('util.login_service.verify_token', return_value={'email': 'user@gmail.com'})
     def test_patch_on_event_outdated(self, verify_token):

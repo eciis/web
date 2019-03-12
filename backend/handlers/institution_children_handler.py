@@ -11,7 +11,6 @@ from send_email_hierarchy import RequestLinkEmailSender
 
 from models import Institution
 
-from service_messages import send_message_notification
 from service_entities import enqueue_task
 from util import get_subject
 

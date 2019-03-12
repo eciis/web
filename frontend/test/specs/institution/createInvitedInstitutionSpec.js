@@ -128,7 +128,7 @@ describe('Test CreateInvitedInstitutionController', function() {
     });
   });
 
-  describe('nextStep', () => {
+  describe('isCurrentStepValid', () => {
     beforeEach(() => {
       // Assign a valid institution,
       // so we can both test acceptance,
@@ -136,100 +136,82 @@ describe('Test CreateInvitedInstitutionController', function() {
       ctrl.newInstitution = institution;
     });
 
-    describe('rejections', () => {
+    describe('first step', () => {
+      describe('when country is Brasil', () => {
+        beforeEach(() => {
+          ctrl.newInstitution.address = {
+            country: 'Brasil',
+            street: 'Street',
+            federal_state: 'State',
+            neighbourhood: 'Neighbourhood',
+            city: 'City',
+            cep: '12345-768'
+          }
 
-      describe('first step', () => {
-        describe('when country is Brasil', () => {
-          beforeEach(() => {
-            ctrl.newInstitution.address = {
-              country: 'Brasil',
-              street: 'Street',
-              federal_state: 'State',
-              neighbourhood: 'Neighbourhood',
-              city: 'City',
-              cep: '12345-768'
-            }
-          });
+          ctrl.currentStep = 0;
+        });
 
-          it('should reject empty street', () => {
-            ctrl.newInstitution.address.street = '';
-            ctrl.nextStep();
-            expect(ctrl.currentStep).toEqual(0);
-          });
+        it('should reject empty street', () => {
+          ctrl.newInstitution.address.street = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
 
-          it('should reject empty city', () => {
-            ctrl.newInstitution.address.city = '';
-            ctrl.nextStep();
-            expect(ctrl.currentStep).toEqual(0);
-          });
+        it('should reject empty city', () => {
+          ctrl.newInstitution.address.city = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
 
-          it('should reject empty state', () => {
-            ctrl.newInstitution.address.federal_state = '';
-            ctrl.nextStep();
-            expect(ctrl.currentStep).toEqual(0);
-          });
+        it('should reject empty state', () => {
+          ctrl.newInstitution.address.federal_state = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
 
-          it('should reject empty neighbourhood', () => {
-            ctrl.newInstitution.address.cep = '';
-            ctrl.nextStep();
-            expect(ctrl.currentStep).toEqual(0);
-          });
+        it('should reject empty neighbourhood', () => {
+          ctrl.newInstitution.address.cep = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
 
-          it('should reject empty cep', () => {
-            ctrl.newInstitution.address.cep = '';
-            ctrl.nextStep();
-            expect(ctrl.currentStep).toEqual(0);
-          });
+        it('should reject empty cep', () => {
+          ctrl.newInstitution.address.cep = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
+
+        it('should accept a complete address', () => {
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeTruthy();
         });
       });
 
-      it('should reject invalid first step', () => {
-        expect(ctrl.currentStep).toEqual(0);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(0);
-      });
+      describe('when its a foreign country', () => {
+        beforeEach(() => {
+          ctrl.newInstitution.address = {
+            country: 'Argentina',
+            street: '',
+            federal_state: '',
+            neighbourhood: '',
+            city: '',
+            cep: ''
+          };
+          ctrl.currentStep = 0;
+        });
 
-      it('should reject invalid second step', () => {
-        ctrl.currentStep = 1;
-        expect(ctrl.currentStep).toEqual(1);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(1);
-      });
+        it('should reject a empty country', () => {
+          ctrl.newInstitution.address.country = '';
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeFalsy();
+        });
 
-      it('should reject invalid third step', () => {
-        ctrl.currentStep = 2;
-        expect(ctrl.currentStep).toEqual(2);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(2);
-      });
-    });
-
-    describe('acceptations', () => {
-      beforeEach(() => {
-        ctrl.newInstitution = institution;
-      });
-
-      it('should accept valid first step', () => {
-        expect(ctrl.currentStep).toEqual(0);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(1);
-      });
-
-      it('should accept valid second step', () => {
-        ctrl.currentStep = 1;
-        expect(ctrl.currentStep).toEqual(1);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(2);
-      });
-
-      it('should accept valid third step', () => {
-        ctrl.currentStep = 2;
-        expect(ctrl.currentStep).toEqual(2);
-        ctrl.nextStep();
-        expect(ctrl.currentStep).toEqual(3);
+        it('should accept an address with only its country present', () => {
+          const validation = ctrl.isCurrentStepValid();
+          expect(validation).toBeTruthy();
+        });
       });
     });
   });
-
 });
 

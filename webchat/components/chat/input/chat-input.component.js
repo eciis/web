@@ -18,7 +18,7 @@
 
         chatInputCtrl.getStateStyle = () => {
             const state = chatInputCtrl.getState();
-            if (_.includes(['connected', 'complete'], state)) {
+            if (_.includes(['connected', 'completed'], state)) {
                 return 'lawngreen';
             } else if (_.includes(['failed', 'disconnected', 'closed'], state)) {
                 return 'red';
@@ -36,7 +36,7 @@
         };
 
         chatInputCtrl.inputDisabled = () => {
-            return !_.includes(['connected', 'complete'], chatInputCtrl.state);
+            return !_.includes(['connected', 'completed'], chatInputCtrl.state);
         };
 
     }

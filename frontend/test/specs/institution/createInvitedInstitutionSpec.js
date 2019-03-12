@@ -67,8 +67,9 @@ describe('Test CreateInvitedInstitutionController', function() {
 
   beforeEach(module('app'));
 
-  beforeEach(inject(($controller, $httpBackend, $state, STATES, InviteService, InstitutionService, AuthService, ImageService) => {
+  beforeEach(inject(($controller, $httpBackend, $state, STATES, InviteService, InstitutionService, AuthService, ImageService, $rootScope) => {
     state = $state;
+    scope = $rootScope.$new();
     statesConst = STATES;
     authService = AuthService;
     imageService = ImageService;
@@ -86,27 +87,13 @@ describe('Test CreateInvitedInstitutionController', function() {
   }));
 
   describe('$onInit', () => {
-    it('should load the institution default data', () => {
-      spyOn(institutionService, 'getInstitution').and.callFake(() => {
-        return {
-          then: callback => {
-            return callback(emptyInstitution);
-          },
-        }
-      })
+    it('should call initialization methods when theres a inst key', () => {
+      spyOn(ctrl, 'loadInstitution').and.callFake(() => Promise.resolve());
+      spyOn(authService, 'getCurrentUser').and.callFake(() => Promise.resolve());
 
       ctrl.$onInit();
-      expect(ctrl.newInstitution).toEqual(emptyInstitution);
-      expect(ctrl.suggestedName).toEqual(emptyInstitution.name);
-      expect(ctrl.newInstitution.photo_url).toEqual('app/images/institution.png');
-      const newAddress = ctrl.newInstitution.address;
-      _.mapKeys(newAddress, (value, key) => {
-        if (key === 'country') {
-          expect(value).toEqual('Brasil');
-        } else {
-          expect(value).toEqual('');
-        }
-      });
+      expect(authService.getCurrentUser).toHaveBeenCalled();
+      expect(ctrl.loadInstitution).toHaveBeenCalled();
     });
 
     it('should redirect to STATES.HOME when theres no institution key', () => {
@@ -117,17 +104,83 @@ describe('Test CreateInvitedInstitutionController', function() {
     });
   });
 
-  describe('nextStep', () => {
-    describe('rejections', () => {
-      beforeEach(() => {
-        spyOn(institutionService, 'getInstitution').and.callFake(() => {
-          return {
-            then: callback => {
-              return callback(emptyInstitution);
-            },
+  describe('loadInstitution', () => {
+    it('should load default institution data', (done) => {
+      spyOn(institutionService, 'getInstitution').and.callFake(() => Promise.resolve(emptyInstitution));
+      ctrl.institutionKey = 'inst-key';
+
+      ctrl.loadInstitution().then(() => {
+        expect(institutionService.getInstitution).toHaveBeenCalledWith(institution.key);
+        expect(ctrl.newInstitution).toBe(emptyInstitution);
+        expect(ctrl.suggestedName).toEqual(emptyInstitution.name);
+        expect(ctrl.newInstitution.photo_url).toEqual('app/images/institution.png');
+        const newAddress = ctrl.newInstitution.address;
+        _.mapKeys(newAddress, (value, key) => {
+          if (key === 'country') {
+            expect(value).toEqual('Brasil');
+          } else {
+            expect(value).toEqual('');
           }
-        })
-        ctrl.$onInit();
+        });
+
+        done();
+      });
+    });
+  });
+
+  describe('nextStep', () => {
+    beforeEach(() => {
+      // Assign a valid institution,
+      // so we can both test acceptance,
+      // and strip values to test for rejections
+      ctrl.newInstitution = institution;
+    });
+
+    describe('rejections', () => {
+
+      describe('first step', () => {
+        describe('when country is Brasil', () => {
+          beforeEach(() => {
+            ctrl.newInstitution.address = {
+              country: 'Brasil',
+              street: 'Street',
+              federal_state: 'State',
+              neighbourhood: 'Neighbourhood',
+              city: 'City',
+              cep: '12345-768'
+            }
+          });
+
+          it('should reject empty street', () => {
+            ctrl.newInstitution.address.street = '';
+            ctrl.nextStep();
+            expect(ctrl.currentStep).toEqual(0);
+          });
+
+          it('should reject empty city', () => {
+            ctrl.newInstitution.address.city = '';
+            ctrl.nextStep();
+            expect(ctrl.currentStep).toEqual(0);
+          });
+
+          it('should reject empty state', () => {
+            ctrl.newInstitution.address.federal_state = '';
+            ctrl.nextStep();
+            expect(ctrl.currentStep).toEqual(0);
+          });
+
+          it('should reject empty neighbourhood', () => {
+            ctrl.newInstitution.address.cep = '';
+            ctrl.nextStep();
+            expect(ctrl.currentStep).toEqual(0);
+          });
+
+          it('should reject empty cep', () => {
+            ctrl.newInstitution.address.cep = '';
+            ctrl.nextStep();
+            expect(ctrl.currentStep).toEqual(0);
+          });
+        });
       });
 
       it('should reject invalid first step', () => {

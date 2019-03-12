@@ -158,7 +158,6 @@ class NotificationProperties(object):
         }
     
     def __get_delete_member_props(self):
-        """."""
         url = '/institution/%s/home' %self.entity.key.urlsafe()
 
         return {
@@ -168,7 +167,6 @@ class NotificationProperties(object):
         }
     
     def __get_remove_inst_link_props(self):
-        """."""
         url = '/institution/%s/inviteInstitution' %self.entity.key.urlsafe()
 
         return {
@@ -178,7 +176,6 @@ class NotificationProperties(object):
         }
 
     def __get_create_post_props(self):
-        """."""
         url = '/posts/%s' %self.entity.key.urlsafe()
 
         return {
@@ -188,7 +185,6 @@ class NotificationProperties(object):
         }
     
     def __get_delete_post_props(self):
-        """."""
         url = '/'
         admin_name = self.entity.institution.get().admin.get().name
 
@@ -199,7 +195,6 @@ class NotificationProperties(object):
         }
     
     def __get_reply_comment_props(self):
-        """."""
         url = '/posts/%s' %self.entity.key.urlsafe()
 
         return {
@@ -209,7 +204,6 @@ class NotificationProperties(object):
         }
     
     def __get_deleted_user_props(self):
-        """."""
         return {
             'title': 'Usuário inativo',
             'body': '%s não está mais ativo na plataforma' %self.entity.name,
@@ -217,7 +211,6 @@ class NotificationProperties(object):
         }
 
     def __get_left_institution_props(self):
-        """."""
         return {
             'title': 'Remoção de vínculo de membro',
             'body': '%s removeu o vínculo com uma das instituições que você administra' %self.entity.name,
@@ -225,7 +218,6 @@ class NotificationProperties(object):
         }
     
     def __get_invite_props(self):
-        """."""
         url = '%s/new_invite' %self.entity.key.urlsafe()
         return {
             'title': 'Novo convite',
@@ -234,7 +226,6 @@ class NotificationProperties(object):
         }
     
     def __get_deleted_institution_props(self):
-        """."""
         return {
             'title': 'Instituição removida',
             'body': 'A instituição %s foi removida' %self.entity.name,
@@ -242,7 +233,6 @@ class NotificationProperties(object):
         }
     
     def __get_deleted_event_props(self):
-        """."""
         return {
             'title': 'Evento removido',
             'body': 'O evento %s foi removido' %self.entity.title,
@@ -250,7 +240,6 @@ class NotificationProperties(object):
         }
     
     def __get_updated_event_props(self):
-        """."""
         return {
             'title': 'Evento editado',
             'body': 'O evento %s foi editado' %self.entity.title,

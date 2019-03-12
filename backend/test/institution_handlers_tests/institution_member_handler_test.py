@@ -131,7 +131,7 @@ class InstitutionMemberHandlerTest(TestBaseHandler):
 
         # Assert that send_email has been called
         send_email.assert_called()
-        send_email.assert_called()
+
         enqueue_task.assert_called_with('send-push-notification', {
             'type': 'DELETE_MEMBER',
             'receivers': [third_user.key.urlsafe()],

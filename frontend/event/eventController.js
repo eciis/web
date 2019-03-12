@@ -17,6 +17,8 @@
         eventCtrl.selectedYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
+        eventCtrl.isFiltering = false;
+        eventCtrl.institutionsFilter = [];
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
 
@@ -53,14 +55,22 @@
                         eventCtrl.events.push(event);
                     });
                 }
+                
+                if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && !eventCtrl.institutionKey) {
+                    eventCtrl.events = eventCtrl.events.filter(event => {
+                        const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
+                        return institution && institution.enable;
+                    });
+                } else {
+                    eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
+                }
 
-                eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {
                 $state.go(STATES.HOME);
             });
-        }
+        };
 
         eventCtrl.newEvent = function newEvent(event) {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
@@ -107,18 +117,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
-        };
-
-        /**
-         * Get the color of institutional profile of the user
-         * @param {object} event - The current event
-         */
-        eventCtrl.getProfileColor = (event) => {
-            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
-                return prof.institution_key === event.institution_key;
-            });
-            return _.get(_.first(profile), 'color', 'teal');
+            event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
         };
 
         /**
@@ -172,8 +171,8 @@
          * @private
          */
         eventCtrl._getEventsByDay = () => {
+            eventCtrl.eventsByDay = [];
             if(eventCtrl.events.length > 0 && eventCtrl.selectedMonth) {
-                eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
                 _.forEach(eventCtrl.events, function(event) {
                     eventCtrl._distributeEvents(event, eventsByDay);
@@ -214,7 +213,7 @@
                 eventCtrl.loadMoreEvents();
             });
         };
-        
+ 
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */
@@ -252,10 +251,13 @@
                     title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 
                         eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
                 },
-                {
-                    title: 'Filtrar por instituição', action: () => {}
-                }
-            ]
+            ];
+
+            if (!eventCtrl.institutionKey) {
+                toolbarMenuGeneralOptions.options.push({
+                    title: 'Filtrar por instituição', action: () => {eventCtrl.isFiltering = true;}
+                });
+            }
             
             return toolbarMenuGeneralOptions;
         };
@@ -268,6 +270,27 @@
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
         };
 
+        /**
+         * This function applies the modifications made
+         * to the event filter by institution,
+         * reloading events and filtering.
+         */
+        eventCtrl.confirmFilter = function confirmFilter() {
+            eventCtrl.events = [];
+            eventCtrl._actualPage = 0;
+            eventCtrl._moreEvents = true;
+            eventCtrl.isLoadingEvents = true;
+            eventCtrl.cancelFilter();
+            return eventCtrl.loadMoreEvents();
+        };
+
+        /**
+         * This function cancels the filter run.
+         */
+        eventCtrl.cancelFilter = function cancelFilter() {
+            eventCtrl.isFiltering = false;
+        };
+
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
             getCurrentInstitution();
@@ -275,6 +298,13 @@
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths().then(() => {
                     eventCtrl.setupToolbarFields();
+                });
+
+                eventCtrl.institutionsFilter = eventCtrl.user.follows.map(institution => {
+                    return {
+                        name: institution.name,
+                        enable: true
+                    };
                 });
             } else {
                 eventCtrl.loadMoreEvents();

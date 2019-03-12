@@ -3,6 +3,7 @@
 (describe('Test InviteInstitutionController', function() {
 
     var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
+    let stateLinkRequestService, states, stateLinks;
 
     var institution = {
             name: 'institution',
@@ -39,7 +40,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdDialog,
-        InviteService, AuthService, InstitutionService, RequestInvitationService) {
+        InviteService, AuthService, InstitutionService, RequestInvitationService, StateLinkRequestService, STATE_LINKS, STATES) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -47,6 +48,9 @@
         inviteService = InviteService;
         instService = InstitutionService;
         requestInvitationService = RequestInvitationService;
+        stateLinkRequestService = StateLinkRequestService;
+        stateLinks = STATE_LINKS;
+        states = STATES;
 
         AuthService.login(user);
 
@@ -56,6 +60,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+        httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
 
         createCtrl = function() {
             return $controller('InviteInstitutionController',
@@ -208,6 +213,14 @@
                 expect(request.status).toBe('accepted');
                 expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
             });
+        });
+    });
+
+    describe('$onInit', function () {
+        it('should call showLinkRequestDialog if in mobile screen', function () {
+            spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+            inviteinstitutionCtrl.$onInit();
+            expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.INVITE_INSTITUTION, states.HOME);
         });
     });
 }));

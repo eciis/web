@@ -44,3 +44,14 @@
 .entity-showcase__right-icon-buttons {
     grid-area: right-icon-buttons;
 }
+
+.white-background .entity-showcase{
+    background-color: white;
+}
+
+@media screen and (max-width: 320px) {
+    .small-avatar .entity-showcase__avatar{
+        height: 2.5em;
+        width: 2.5em;
+    }
+}

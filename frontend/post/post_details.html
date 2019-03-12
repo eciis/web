@@ -108,48 +108,6 @@
   <event-details ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
 
   <!-- BODY SHARED POST -->
-  <md-card md-colors="{background: 'default-grey-300'}" ng-if="postDetailsCtrl.showSharedPost() && false">
-    <div ng-if="postDetailsCtrl.isSharedSurveyExpired()" class="expired-survey">
-      <b style="color: white;">ENQUETE FINALIZADA | {{postDetailsCtrl.post.shared_post.deadline | amUtc | amLocal | amCalendar:referenceTime:formats}}</b>
-    </div>
-    <md-card-header>
-      <md-card-avatar style="margin-right: 12px;">
-        <img ng-src="{{ postDetailsCtrl.post.shared_post.institution_image }}" class="md-user-avatar img-post-shadow"/>
-      </md-card-avatar>
-      <md-card-header-text>
-        <a href class="md-title hyperlink" ng-click="postDetailsCtrl.goToInstitution(postDetailsCtrl.post.shared_post.institution_key)">
-          {{ postDetailsCtrl.post.shared_post.institution_name }}</a>
-        <span class="md-subhead">por {{ postDetailsCtrl.post.shared_post.author }}</span>
-      </md-card-header-text>
-    </md-card-header>
-    <deleted-post message="ESTA PUBLICAÇÃO FOI REMOVIDA" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_post)"></deleted-post>
-    <md-card-content layout="column" ng-class="postDetailsCtrl.post.shared_post.type_survey ? 'shared-survey' : ''">
-      <img class="md-card-image" ng-if="postDetailsCtrl.showImage(postDetailsCtrl.post.shared_post)"
-        style="width: 100%; height: auto;" ng-src="{{ postDetailsCtrl.post.shared_post.photo_url }}"/>
-      <div class="youtube-player" ng-if="postDetailsCtrl.showVideo(postDetailsCtrl.post.shared_post)">
-        <iframe ng-src="{{ postDetailsCtrl.getVideoUrl(postDetailsCtrl.post.shared_post) }}"></iframe>
-      </div>
-      <p></p>
-      <a ng-if="!postDetailsCtrl.isSharedSurvey()" href class="md-title hyperlink"
-        ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
-        <span class="md-headline">{{ postDetailsCtrl.post.shared_post.title }}</span>
-      </a>
-      <p class="text" ng-if="postDetailsCtrl.showSharedPostText()"
-        ng-bind-html="postDetailsCtrl.postToURL(postDetailsCtrl.post.shared_post).text" ></p>
-      <div layout="row" layout-align="end-center"
-        ng-if="postDetailsCtrl.isLongPostTimeline(postDetailsCtrl.post.shared_post.text)">
-        <a href class="md-text hyperlink"
-          ng-click="postDetailsCtrl.goToPost(postDetailsCtrl.post.shared_post)">
-          <md-icon>more_horiz</md-icon>
-        </a>
-      </div>
-      <pdf-view ng-if="postDetailsCtrl.showSharedPostText()"
-        pdf-files='postDetailsCtrl.post.shared_post.pdf_files' is-editing="false"></pdf-view>
-      <survey-details ng-if="postDetailsCtrl.isSharedSurvey()"
-        post="postDetailsCtrl.post.shared_post"
-        user="postDetailsCtrl.user" reload-post="postDetailsCtrl.reloadPost" isdialog="false"></survey-details>
-    </md-card-content>
-  </md-card>
   <shared-post post="postDetailsCtrl.post"></shared-post>
 
   <!-- BODY POST -->

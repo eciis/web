@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("MessageService", function MessageService($mdToast, $mdDialog) {
+    app.service("MessageService", function MessageService($mdToast, $mdDialog, SCREEN_SIZES) {
         var service = this;
 
         var msg = {

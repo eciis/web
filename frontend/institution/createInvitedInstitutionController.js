@@ -20,6 +20,13 @@
             ctrl.currentStep === 0 ? window.history.back() : ctrl.previousStep();
           }
 
+          /**
+           * Loads the "empty" institution from InstitutionService and sets its default values.
+           * This consists of a address with Brasil as a country, and the suggested name from inviter.
+           * Sets an ObserverRecorderService required to generate a json patch later (when the institution is finally saved);
+           *
+           * @returns {Promise} - InstituionService promise;
+           */
           ctrl.loadInstitution = () => {
             return InstitutionService.getInstitution(ctrl.institutionKey).then(res => {
               ctrl.newInstitution = res;
@@ -37,6 +44,16 @@
             })
           }
 
+          /**
+           * Validates the current form step, based on required fields.
+           * 1st step: requires a valid address. For institutions on Brazil,
+           * this requires a valid street, federal_state, neighbourhood, city and cep.
+           * For foreign institutions, this only requires a country.
+           * 2nd step: requires a name, institutional_email, legal_nature and actuation_area.
+           * 3rd step: requires a description and a leader.
+           *
+           * @returns {Boolean} - if the step is valid or not
+           */
           ctrl.isCurrentStepValid = () => {
             const step = ctrl.currentStep;
             const institution = ctrl.newInstitution;
@@ -146,6 +163,8 @@
            * this method bails out and resolves a Promise with nothing.
            * Otherwise, sets the Image through ImageService and resolves it.
            * @param {Image} src - current institutions image file (resized)
+           *
+           * @returns {Promise} - a Promise resolving with nothing
            */
           function saveProfileImage(src) {
             if (!src) {
@@ -247,6 +266,8 @@
            *
            * Replaces:
            * #createProfile
+           *
+           * @returns {Object} - An empty institution profile
            */
           function createProfile(inst) {
             return {

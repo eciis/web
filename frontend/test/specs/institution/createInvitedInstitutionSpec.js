@@ -38,7 +38,7 @@ describe('Test CreateInvitedInstitutionController', function() {
 
   const institutions = [{
     name: 'Splab',
-    key: 'institutuion_key',
+    key: 'institution_key',
     portfolio_url: '',
     followers: [],
     members: []
@@ -55,7 +55,7 @@ describe('Test CreateInvitedInstitutionController', function() {
   const userData = {
     name: 'name',
     key: 'user-key',
-    current_institution: {key: "institutuion_key"},
+    current_institution: {key: "institution_key"},
     institutions: institutions,
     institutions_admin: [],
     follows: institutions,
@@ -133,7 +133,7 @@ describe('Test CreateInvitedInstitutionController', function() {
       // Assign a valid institution,
       // so we can both test acceptance,
       // and strip values to test for rejections
-      ctrl.newInstitution = institution;
+      ctrl.newInstitution = _.cloneDeep(institution);
     });
 
     describe('first step', () => {
@@ -200,7 +200,7 @@ describe('Test CreateInvitedInstitutionController', function() {
           ctrl.currentStep = 0;
         });
 
-        it('should reject a empty country', () => {
+        it('should reject an empty country', () => {
           ctrl.newInstitution.address.country = '';
           const validation = ctrl.isCurrentStepValid();
           expect(validation).toBeFalsy();
@@ -210,6 +210,64 @@ describe('Test CreateInvitedInstitutionController', function() {
           const validation = ctrl.isCurrentStepValid();
           expect(validation).toBeTruthy();
         });
+      });
+    });
+
+    describe('second step', () => {
+      beforeEach(() => {
+        ctrl.currentStep = 1;
+      });
+
+      it('should reject an empty name', () => {
+        ctrl.newInstitution.name = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should reject an empty actuation_area', () => {
+        ctrl.newInstitution.actuation_area = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should reject an empty legal_nature', () => {
+        ctrl.newInstitution.legal_nature = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should reject an empty institutional_email', () => {
+        ctrl.newInstitution.institutional_email = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should accept a complete institution', () => {
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeTruthy();
+      });
+    });
+
+    describe('third step', () => {
+      beforeEach(() => {
+        ctrl.currentStep = 2;
+      });
+
+      it('should reject an empty description', () => {
+        ctrl.newInstitution.description = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should reject an empty leader', () => {
+        ctrl.newInstitution.description = '';
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeFalsy();
+      });
+
+      it('should accept a complete institution', () => {
+        const validation = ctrl.isCurrentStepValid();
+        expect(validation).toBeTruthy();
       });
     });
   });

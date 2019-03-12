@@ -24,11 +24,13 @@
          * {string} nextTab
          */
         allInstitutionsCtrl.changeTab = function changeTab(nextTab) {
-            allInstitutionsCtrl.currentTab = (
-              possibleTabs.includes(nextTab) ? nextTab : allInstitutionsCtrl.currentTab);
-            
-            currentPage = 0;
-            loadInstitutions();
+            if (nextTab !== allInstitutionsCtrl.currentTab) {
+                allInstitutionsCtrl.currentTab = (
+                possibleTabs.includes(nextTab) ? nextTab : allInstitutionsCtrl.currentTab);
+
+                currentPage = 0;
+                loadInstitutions();
+            }
         };
 
         /**

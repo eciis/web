@@ -4,6 +4,7 @@
 from google.appengine.api import search
 from . import SearchDocument
 from utils import text_normalize
+import json
 from datetime import datetime
 
 __all__ = ['SearchEvent']
@@ -21,6 +22,11 @@ def event_has_changes(fields, entity):
                 return True
 
         return False
+
+def get_date_string_without_utc(event_date):
+    """It returns only the date string without hours or hours with incorrect UTC."""
+    return datetime(event_date.year, event_date.month, event_date.day,
+                event_date.hour - 3).isoformat().split("T")[0]
 
 class SearchEvent(SearchDocument):
     """Search event's model."""
@@ -49,11 +55,13 @@ class SearchEvent(SearchDocument):
                 'institution_key': event.institution_key.urlsafe(),
                 'photo_url': event.photo_url,
                 'institution_acronym': event.institution_acronym,
-                'start_time': event.start_time.isoformat(),
+                'start_time': get_date_string_without_utc(event.start_time),
+                'address': event.address and json.dumps(dict(event.address)),
                 'country': event.address and event.address.country,
                 'federal_state': event.address and event.address.federal_state,
                 'city': event.address and event.address.city
             }
+
             # Make the structure of the document by setting the fields and its id.
             document = search.Document(
                 # The document's id is the same of the event's one,
@@ -67,6 +75,7 @@ class SearchEvent(SearchDocument):
                     search.TextField(name='photo_url', value=content['photo_url']),
                     search.TextField(name='institution_acronym', value=content['institution_acronym']),
                     search.TextField(name='start_time', value=content['start_time']),
+                    search.TextField(name='address', value=content['address']),
                     search.TextField(name='country', value=content['country']),
                     search.TextField(name='federal_state', value=content['federal_state']),
                     search.TextField(name='city', value=content['city'])
@@ -82,7 +91,7 @@ class SearchEvent(SearchDocument):
         index = search.Index(self.index_name)
         query_options = search.QueryOptions(
             returned_fields=['state', 'title', 'institution_key', 'photo_url', 'institution_name',
-                'institution_acronym', 'start_time', 'country', 'federal_state', 'city']
+                'institution_acronym', 'start_time', 'address', 'country', 'federal_state', 'city']
         )
         query = search.Query(
             query_string=query_string, options=query_options)

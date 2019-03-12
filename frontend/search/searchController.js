@@ -53,6 +53,7 @@
             searchCtrl.searchActuation = "";
             searchCtrl.searchNature = "";
             searchCtrl.searchState = "";
+            searchCtrl.searchDate = "";
             searchCtrl.institutions = [];
         };
 

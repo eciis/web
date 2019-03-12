@@ -20,7 +20,12 @@
     <div ng-if="searchCtrl.hasNotSearched">
         <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
             <md-input-container>
-                <md-select ng-model="searchCtrl.searchState" placeholder="ESTADO" class="search-by-mobile">
+                <input mdc-datetime-picker="" ng-model="searchCtrl.searchDate" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
+                    placeholder="DATA DO EVENTO" class="md-input" today-text="Hoje" cancel-text="Cancelar"
+                    ng-change="searchCtrl.searchBy(searchCtrl.searchDate.toISOString().split('T')[0], 'event')"/>
+            </md-input-container>
+            <md-input-container>
+                <md-select placeholder="ESTADO" ng-model="searchCtrl.searchState" class="search-by-mobile">
                     <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome, 'event')">
                         {{state.nome}}
                     </md-option>

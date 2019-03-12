@@ -24,6 +24,7 @@ from google.appengine.api import search
 
 INDEX_INSTITUTION = 'institution'
 INDEX_USER = 'user'
+INDEX_EVENT = 'event'
 TEXT = 'At vero eos et accusamus et iusto odio dignissimos \
         ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti \
         quos dolores et quas molestias excepturi sint occaecati cupiditate \
@@ -182,7 +183,8 @@ def clear_data_store():
     delete_all_in_index(index_institution)
     index_user = search.Index(name=INDEX_USER)
     delete_all_in_index(index_user)
-
+    index_event = search.Index(name=INDEX_EVENT)
+    delete_all_in_index(index_event)
 
 class BaseHandler(webapp2.RequestHandler):
     """Base Handler."""

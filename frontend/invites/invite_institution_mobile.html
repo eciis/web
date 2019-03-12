@@ -6,7 +6,32 @@
 
 <md-content class="invite-inst">
     <div class="invite-inst__cards">
-        <clickable-card icon="send" title="Convidar Instituição"></clickable-card>
+        <clickable-card icon="send" title="Convidar Instituição" is-open="true">
+            <div class="invite-inst__card__content">
+                <form name="inviteInstForm">
+                    <md-input-container md-no-float class="md-block">
+                        <input placeholder="Nome da instituição convidada" class="green-input" type="text"
+                            ng-model="inviteInstCtrl.invite.suggestion_institution_name" 
+                            aria-label="Nome da instituição convidada" required>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block">
+                        <input placeholder="E-mail da instituição" class="green-input" type="email"
+                            ng-model="inviteInstCtrl.invite.invitee" 
+                            aria-label="E-mail da instituição" required>
+                    </md-input-container>
+                </form>
+                <div class="invite-inst__btns">
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstForm.$pristine"
+                        ng-click="inviteInstCtrl.cancelInvite()">
+                        CANCELAR
+                    </md-button>
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstForm.$invalid"
+                        ng-click="inviteInstCtrl.checkInstInvite($event)">
+                        ENVIAR
+                    </md-button>
+                </div>
+            </div>
+        </clickable-card>
         <clickable-card icon="email" title="Convites Enviados"></clickable-card>
         <clickable-card icon="announcement" title="Convites Requisitados"></clickable-card>
         <clickable-card icon="check_circle" title="Convites Aceitos"></clickable-card>

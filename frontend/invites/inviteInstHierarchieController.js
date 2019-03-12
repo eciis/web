@@ -357,6 +357,14 @@
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
         };
 
+        /**
+         * Gets the correspondent link status message depending on the 
+         * the link status itself and on whether the given institution
+         * is active or not
+         * @param {object} - institution that is linked with the user's current institution
+         * @param {boolean} - isParent flag, if true indicates that the given institution is parent
+         * of the user's current institution
+         */
         inviteInstHierCtrl.getStatusMsg = (institution, isParent) => {
             const status = isParent ? inviteInstHierCtrl.linkParentStatus() : inviteInstHierCtrl.linkChildrenStatus(institution);
             if(inviteInstHierCtrl.isActive(institution)) {
@@ -417,6 +425,14 @@
           return Utils.limitString(string, size);
         };
 
+        /**
+         * Generates an object with the properties used to create an rightIconBtn
+         * in the EntityShowCase component
+         * @param {string} - icon tho be showed as a button
+         * @param {function} - action function to be called when the button is clicked
+         * @param {array} - params that will be necessary to action function to be called
+         * @param {boolean} - hideBtn flag used to hide the button if true
+         */
         inviteInstHierCtrl.createIconBtn = (icon, action, params, hideBtn) => {
             return {
                 icon: icon,

@@ -639,6 +639,6 @@
     }
 
     (function main() {
-        // initServiceWorker();
+        initServiceWorker();
     })();
 })();

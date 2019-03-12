@@ -1,0 +1,46 @@
+.filter-container {
+    display: grid;
+    grid-template-rows: 1fr min-content;
+    height: 100%;
+    max-height: 100%;
+}
+
+.filter-items-container {
+    max-height: 100%;
+    overflow-y: scroll;
+}
+
+.filter-items-container > h3 {
+    text-align: center;
+}
+
+.filter-items-container > div {
+    display: grid;
+    grid-auto-rows: 1fr;
+}
+
+.filter-item {
+    display: grid;
+    grid-template-columns: 20px auto;
+    grid-column-gap: 10px;
+    padding: 0 16px;
+    margin: 8px 0;
+    align-items: center;
+}
+
+.filter-item > md-checkbox {
+    margin: 0; 
+    text-align: center;
+}
+
+.filter-buttons-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: end;
+    margin-bottom: 10px;
+}
+
+.filter-cancel-button {
+    color: white;
+    background-color: #7F7F7F;
+}

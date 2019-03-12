@@ -93,5 +93,11 @@
             }
             return text && text.replace(URL_PATTERN, REPLACE_URL);
         };
+
+        shareCtrl.$onInit = () => {
+            const type = shareCtrl.isEvent() ? 'evento' : 'post';
+            shareCtrl.title = `Compartilhar ${type}`;
+            shareCtrl.subtitle = `Você deseja compartilhar esse ${type}?`;
+        };
     });
 })();

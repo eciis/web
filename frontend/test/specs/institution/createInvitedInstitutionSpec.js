@@ -2,7 +2,7 @@
 
 describe('Test CreateInvitedInstitutionController', function() {
   let state, statesConst, scope, institutionService, inviteService,
-    httpBackend, authService, ctrl, imageService;
+    authService, ctrl, imageService, mdDialog, observerRecorderService;
 
   const address = {
     cep: "11111-000",
@@ -67,14 +67,15 @@ describe('Test CreateInvitedInstitutionController', function() {
 
   beforeEach(module('app'));
 
-  beforeEach(inject(($controller, $httpBackend, $state, STATES, InviteService, InstitutionService, AuthService, ImageService, $rootScope) => {
+  beforeEach(inject(($controller, $httpBackend, $state, STATES, InviteService, InstitutionService, AuthService, ImageService, $rootScope, $mdDialog, ObserverRecorderService) => {
     state = $state;
     scope = $rootScope.$new();
     statesConst = STATES;
     authService = AuthService;
     imageService = ImageService;
     institutionService = InstitutionService;
-    httpBackend = $httpBackend;
+    mdDialog = $mdDialog;
+    observerRecorderService = ObserverRecorderService;
     authService.login(userData);
     state.params.institutionKey = institution.key;
 
@@ -268,6 +269,77 @@ describe('Test CreateInvitedInstitutionController', function() {
       it('should accept a complete institution', () => {
         const validation = ctrl.isCurrentStepValid();
         expect(validation).toBeTruthy();
+      });
+    });
+  });
+
+  describe('submit', () => {
+    let patch;
+
+    beforeEach(() => {
+      ctrl.newInstitution = _.cloneDeep(institution);
+      ctrl.photoSrc = 'some_image_data';
+      ctrl.institutionKey = ctrl.newInstitution.key;
+
+      // Hard code photo_url so the returned patch is equal to later patch
+      ctrl.newInstitution.photo_url = 'imageurl';
+      patch = jsonpatch.compare(emptyInstitution, ctrl.newInstitution);
+
+      spyOn(mdDialog, 'show').and.callFake(() => Promise.resolve());
+      spyOn(angular, 'element');
+      spyOn(observerRecorderService, 'generate').and.returnValues(patch);
+      spyOn(imageService, 'saveImage').and.callFake(() => {
+        return Promise.resolve({ url: 'imageurl' });
+      });
+
+      spyOn(institutionService, 'save').and.callFake(() => {
+        return Promise.resolve();
+      });
+
+      spyOn(institutionService, 'update').and.callFake(() => {
+        return Promise.resolve(ctrl.newInstitution);
+      });
+
+      spyOn(state, 'go')
+      spyOn(authService, 'save');
+      spyOn(authService, 'reload').and.callFake(() => {
+        return Promise.resolve();
+      });
+
+      ctrl.user = new User(userData);
+      spyOn(ctrl.user, 'removeInvite');
+      spyOn(ctrl.user, 'follow');
+      spyOn(ctrl.user, 'addProfile');
+      spyOn(ctrl.user, 'changeInstitution');
+    });
+
+    it('correctly save institution data', (done) => {
+      ctrl.submit({}).then(() => {
+        expect(imageService.saveImage).toHaveBeenCalledWith('some_image_data');
+        expect(ctrl.newInstitution.photo_url).toEqual('imageurl');
+        expect(observerRecorderService.generate).toHaveBeenCalled();
+        expect(institutionService.save).toHaveBeenCalled();
+
+        // Needed here so image url replacing is correctly tested
+        patch = jsonpatch.compare(emptyInstitution, ctrl.newInstitution);
+        expect(institutionService.update).toHaveBeenCalledWith(ctrl.newInstitution.key, patch);
+        expect(state.go).toHaveBeenCalled();
+        expect(authService.reload).toHaveBeenCalled();
+        done();
+      });
+    });
+
+    it('updates user data', (done) => {
+      state.params.inviteKey = invite.key;
+
+      ctrl.submit({}).then(() => {
+        expect(ctrl.user.removeInvite).toHaveBeenCalledWith(invite.key);
+        expect(ctrl.user.follow).toHaveBeenCalledWith(ctrl.newInstitution);
+        expect(ctrl.user.addProfile).toHaveBeenCalled();
+        expect(ctrl.user.changeInstitution).toHaveBeenCalledWith(ctrl.newInstitution);
+        expect(ctrl.user.institutions).toContain(ctrl.newInstitution);
+        expect(ctrl.user.institutions_admin).toContain(ctrl.newInstitution.key);
+        done();
       });
     });
   });

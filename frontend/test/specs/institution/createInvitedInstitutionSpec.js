@@ -4,16 +4,6 @@ describe('Test CreateInvitedInstitutionController', function() {
   let state, statesConst, scope, institutionService, inviteService,
     authService, ctrl, imageService, mdDialog, observerRecorderService;
 
-  const address = {
-    cep: "11111-000",
-    city: "city",
-    country: "Country",
-    neighbourhood: "neighbourhood",
-    number: "555",
-    state: "State",
-    street: "Street x"
-  };
-
   const institution = {
     name: "name",
     photo_url: "imagens/test",
@@ -25,7 +15,7 @@ describe('Test CreateInvitedInstitutionController', function() {
     actuation_area: "government agencies",
     phone_number: "phone",
     cnpj: "cnpj",
-    address: new Address(address),
+    address: {},
     leader: "leader name",
     institutional_email: "email@institutional.com",
     description: "teste"

@@ -3,8 +3,11 @@
 
     const app = angular.module('app');
 
-    app.service('MessageService', ['$mdToast', 'SCREEN_SIZES', function($mdToast, SCREEN_SIZES) {
+    app.service('MessageService', ['$mdToast', function($mdToast) {
         const service = this;
+        const SCREEN_SIZES = {
+            SMARTPHONE: 475
+        };
 
         /**
          * This function displays a small dialog containing the received message per parameter.

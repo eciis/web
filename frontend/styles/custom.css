@@ -537,6 +537,15 @@ a:active {
    border: 2px solid #EFEBE9;
 }
 
+@media screen and (max-width: 420px) {
+    .notification-badge[data-badge]:after {
+        background: #27e627;
+        width: 11px;
+        height: 11px;
+        border: none;
+    }
+}
+
 .counter-of-notifications {
     position:relative;
 }

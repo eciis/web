@@ -1,0 +1,30 @@
+<div>
+    <img style="width: 100%;" ng-if="eventDetailsCtrl.showImage"
+        style="background-color: white;" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
+    <div style="display: grid; grid-template-columns: max-content 1fr;">
+        <div style="display: grid; grid-template-rows: auto auto auto; justify-content: center; justify-items: center; align-content: center; color: white; background-color: #8CC04E; padding: 8px;">
+            <h3 style="font-weight: bold; margin: 0;" ng-if="!eventDetailsCtrl.endInTheSameDay()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h3>
+            <h3 style="font-weight: bold; margin: 0;" ng-if="eventDetailsCtrl.endInTheSameDay()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h3>
+            
+            <md-divider style="border: 1px; border-style: solid; width: 100%;"></md-divider>
+            
+            
+            <h3 ng-if="eventDetailsCtrl.endInOtherMonth()" style="margin: 0;">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+            | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+            </h3>
+            <h3 ng-if="!eventDetailsCtrl.endInOtherMonth()" style="margin: 0;">
+                {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
+            </h3>
+        </div>
+        <div style="background-color: #199688; display: grid; grid-template-rows: auto auto; align-content: space-around; padding: 8px;">
+            <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
+                <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+            </a>
+            <span style="color: white; margin-top: auto;" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 <div class="clickable-card">
     <div ng-click="clickableCardCtrl.onClick()" class="clickable-card__toolbar">
-        <md-icon id="clickable-card__icon--start">{{clickableCardCtrl.icon}}</md-icon>
+        <md-icon id="clickable-card__icon--start" data-badge 
+          ng-class="clickableCardCtrl.showNotification ? 'notification-badge' : ''">{{clickableCardCtrl.icon}}</md-icon>
         <span class="clickable-card__title responsive__title"> {{ clickableCardCtrl.title}} </span>
         <md-icon id="clickable-card__icon--end">{{ clickableCardCtrl.isOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</md-icon>
     </div>

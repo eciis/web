@@ -539,7 +539,7 @@ a:active {
 
 @media screen and (max-width: 420px) {
     .notification-badge[data-badge]:after {
-        background: #27e627;
+        background: #84C45E;
         width: 11px;
         height: 11px;
         border: none;

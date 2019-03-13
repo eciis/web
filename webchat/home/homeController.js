@@ -79,7 +79,7 @@
 
             MessageService.showConfirmationDialog({}, "Ligação recebida", `Ligação de ${user.name}. Aceitar?`).then(answer => {
                 if (answer) {
-                    homeCtrl.openChat(user);
+                    homeCtrl.currentUser = user;
                     getMedia().then(stream => {
                         homeCtrl.client.acceptCall(id, stream);
                     });

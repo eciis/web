@@ -48,8 +48,9 @@
                     icon="account_balance"
                     title="inviteInstHierCtrl.institution.parent_institution.name"
                     subtitle="inviteInstHierCtrl.getStatusMsg(inviteInstHierCtrl.institution.parent_institution, true)"
+                    left-action="inviteInstHierCtrl.goToActiveInst(inviteInstHierCtrl.institution.parent_institution)"
                     right-icon-btns="[
-                        inviteInstHierCtrl.createIconBtn('more_vert', 
+                        inviteInstHierCtrl.createIconBtn('link', 
                             inviteInstHierCtrl.removeLink, [inviteInstHierCtrl.institution.parent_institution, true, $event])
                     ]">
                 </entity-showcase>
@@ -65,6 +66,7 @@
                         icon="account_balance"
                         title="subInst.name"
                         subtitle="inviteInstHierCtrl.getStatusMsg(subInst, false)"
+                        left-action="inviteInstHierCtrl.goToActiveInst(subInst)"
                         right-icon-btns="[
                             inviteInstHierCtrl.createIconBtn('link', inviteInstHierCtrl.removeLink, [subInst, false, $event]),
                             inviteInstHierCtrl.createIconBtn('delete', inviteInstHierCtrl.removeChild, [subInst], inviteInstHierCtrl.canRemoveInst(subInst))
@@ -84,6 +86,7 @@
                         icon="account_balance"
                         title="inviteInstHierCtrl.getReqInstName(instRequest)"
                         subtitle="inviteInstHierCtrl.showMessage(instRequest)"
+                        left-action="inviteInstHierCtrl.goToActiveInst(instRequest)"
                         right-icon-btns="[
                             inviteInstHierCtrl.createIconBtn('error', inviteInstHierCtrl.analyseRequest, [$event, instRequest]),       
                         ]">

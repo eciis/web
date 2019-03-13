@@ -55,7 +55,8 @@
             );
         };
 
-        /** Show toast with infomation message when not in mobile. 
+        /** Show toast with infomation message when not in mobile or when the flag
+         *  force show is true. 
          */
         service.showInfoToast = function showInfoToast(message, forceShow){
             let shouldShow = !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) || forceShow;

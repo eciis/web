@@ -28,7 +28,8 @@
             iconOff: '@',
             iconColorOn: '@',
             iconColorOff: '@',
-            action: '<',
+            actionOn: '<',
+            actionOff: '<',
         },
     });
 
@@ -40,13 +41,14 @@
                 active: true,
                 iconColorOn: "#EEE",
                 iconColorOff: "#EEE",
-                action: () => {}
+                actionOn: () => {},
+                actionOff: () => {},
             });
         };
 
         toggleButtonCtrl.toggle = () => {
             toggleButtonCtrl.active = !toggleButtonCtrl.active;
-            toggleButtonCtrl.action();
+            toggleButtonCtrl.activeActionFunc();
         };
 
         Object.defineProperty(toggleButtonCtrl, 'activeIcon', {
@@ -58,6 +60,12 @@
         Object.defineProperty(toggleButtonCtrl, 'activeIconColor', {
             get: () => {
                 return toggleButtonCtrl.active ? toggleButtonCtrl.iconColorOn : toggleButtonCtrl.iconColorOff;
+            },
+        });
+
+        Object.defineProperty(toggleButtonCtrl, 'activeActionFunc', {
+            get: () => {
+                return toggleButtonCtrl.active ? toggleButtonCtrl.actionOn : toggleButtonCtrl.actionOff;
             },
         });
     }

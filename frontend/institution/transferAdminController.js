@@ -53,13 +53,13 @@
                     InviteService.sendInviteUser({invite_body: invite}).then(function success() {
                         invite.status = 'sent';
                         $mdDialog.hide(invite);
-                        MessageService.showToast("Convite enviado com sucesso!");
+                        MessageService.showInfoToast("Convite enviado com sucesso!");
                     });
                 } else {
-                    MessageService.showToast('Você já é administrador da instituição, selecione outro membro!');
+                    MessageService.showErrorToast('Você já é administrador da instituição, selecione outro membro!');
                 }
             } else {
-                MessageService.showToast('Selecione um memebro!');
+                MessageService.showErrorToast('Selecione um memebro!');
             }
         };
     });

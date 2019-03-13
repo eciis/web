@@ -19,7 +19,7 @@
 
         requestController.acceptRequest = function acceptRequest() {
             resolveRequest().then(function success() {
-                MessageService.showToast("Solicitação aceita!");
+                MessageService.showInfoToast("Solicitação aceita!");
                 request.status = 'accepted';
                 requestController.hideDialog();
                 refreshUser();
@@ -47,13 +47,13 @@
             deleteRequest().then(function success() {
                 request.status = 'rejected';
                 requestController.hideDialog();
-                MessageService.showToast("Solicitação rejeitada!");
+                MessageService.showInfoToast("Solicitação rejeitada!");
             });
         };
 
         requestController.cancelReject = function cancelReject() {
             $mdDialog.cancel();
-            MessageService.showToast('Cancelado');
+            MessageService.showInfoToast('Cancelado');
         };
 
         function deleteRequest() {
@@ -123,7 +123,7 @@
             const institutionLinkKey = requestController.children.parent_institution.key;
 
             InstitutionService.removeLink(institutionKey, institutionLinkKey, isParent).then(function success() {
-                MessageService.showToast('Vínculo removido.');
+                MessageService.showInfoToast('Vínculo removido.');
                 delete requestController.children.parent_institution;
             });
         };

@@ -163,23 +163,23 @@
         expect(eventService.createEvent).toHaveBeenCalledWith(event);
       });
 
-      describe('MessageService.showToast()', () => {
+      describe('MessageService.showErrorToast()', () => {
 
         it('should be invalid, because title is undefined', () => {
           controller.event.title = undefined;
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           controller.save();
           scope.$apply();
-          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+          expect(messageService.showErrorToast).toHaveBeenCalledWith('Evento inválido!');
         });
 
         it('should be invalid, because local is undefined', () => {
           controller.event.title = "Inauguration";
           controller.event.local = undefined;
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           controller.save();
           scope.$apply();
-          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+          expect(messageService.showErrorToast).toHaveBeenCalledWith('Evento inválido!');
         });
       });
 
@@ -259,11 +259,11 @@
             controller.steps = [true, false, false];
         });
 
-        it('should call showToast', () => {
-            spyOn(messageService, 'showToast');
+        it('should call showErrorToast', () => {
+            spyOn(messageService, 'showErrorToast');
             controller.event.address = {country: 'Brasil'};
             controller.nextStep();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showErrorToast).toHaveBeenCalled();
         });
 
         it('should not pass from first step', () => {
@@ -550,15 +550,15 @@
       });
 
       describe('in fail case', () => {
-        it('Should call messageService.showToast and state.go', () => {
+        it('Should call messageService.showErrorToast and state.go', () => {
           spyOn(eventService, 'getEvent').and.returnValue(deferred.promise);
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           spyOn(state, 'go');
           deferred.reject();
           controller._loadEvent(event.key);
           scope.$apply();
           expect(state.go).toHaveBeenCalledWith(states.HOME);
-          expect(messageService.showToast).toHaveBeenCalledWith("Erro ao carregar evento.");
+          expect(messageService.showErrorToast).toHaveBeenCalledWith("Erro ao carregar evento.");
         });
       });
     });

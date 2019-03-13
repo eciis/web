@@ -23,14 +23,14 @@
                 AuthService.save();
                 processCtrl.typeOfDialog = processCtrl.VIEW_INVITE_INVITEE;
                 processCtrl.isAccepting = true;
-                MessageService.showToast('Convite aceito com sucesso!');
+                MessageService.showInfoToast('Convite aceito com sucesso!');
             });
         };
 
         processCtrl.reject = function reject() {
             InviteService.rejectInviteUserAdm(processCtrl.invite.key).then(function success() {
                 processCtrl.close();
-                MessageService.showToast('Convite recusado!');
+                MessageService.showInfoToast('Convite recusado!');
             });
         };
         

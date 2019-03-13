@@ -40,7 +40,7 @@
                 configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -55,7 +55,7 @@
                     });
                 });
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -72,11 +72,11 @@
                     });
                 } else {
                     service.sendEmailVerification(user);
-                    MessageService.showToast("Seu email precisa ser verificado.");
+                    MessageService.showErrorToast("Seu email precisa ser verificado.");
                     deferred.reject("Email not verified.");
                 }
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -92,7 +92,7 @@
                     deferred.resolve(userInfo);
                 });
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -141,7 +141,7 @@
         service.resetPassword = function resetPassword(email) {
             authObj.$sendPasswordResetEmail(email).then(
             function success() {
-                MessageService.showToast('Você receberá um email para redefinir sua senha.');
+                MessageService.showInfoToast('Você receberá um email para redefinir sua senha.');
             }, function error(error) {
                 console.error(error);
             });

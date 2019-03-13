@@ -90,7 +90,7 @@
             _.remove(manageMemberCtrl.members, function(member) {
                 return member.key === member_obj.key;
             });
-            MessageService.showToast("Membro removido com sucesso.");
+            MessageService.showInfoToast("Membro removido com sucesso.");
         };
 
         manageMemberCtrl.showUserProfile = function showUserProfile(userKey, ev) {
@@ -142,13 +142,13 @@
                     manageMemberCtrl.showInvites = true; 
                     manageMemberCtrl.showSendInvite = false;
                     manageMemberCtrl.isLoadingInvite = false;
-                    MessageService.showToast(responseData.msg);
+                    MessageService.showInfoToast(responseData.msg);
                 }, function error() {
                     manageMemberCtrl.isLoadingInvite = false;
                 });
                 return promise;
             } else if(!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             }
         };
 
@@ -267,10 +267,10 @@
             var promise = $mdDialog.show(confirm);
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
-                    MessageService.showToast("Convite reenviado com sucesso.");
+                    MessageService.showInfoToast("Convite reenviado com sucesso.");
                 });
             }, function () {
-                MessageService.showToast('Cancelado.');
+                MessageService.showInfoToast('Cancelado.');
             });
             return promise;
         };
@@ -301,13 +301,13 @@
 
         manageMemberCtrl.isValidAllEmails = function isValidAllEmails(emails) {
             if(_.size(emails) === 0 ){
-                MessageService.showToast("Insira pelo menos um email.");
+                MessageService.showErrorToast("Insira pelo menos um email.");
                 return false;
             }
     
             var correctArray = manageMemberCtrl.removePendingAndMembersEmails(emails);
             if(!_.isEqual(correctArray, emails)){
-                MessageService.showToast("E-mails selecionados já foram convidados, " +
+                MessageService.showErrorToast("E-mails selecionados já foram convidados, " +
                                 "requisitaram ser membro ou pertencem a algum" +
                                 " membro da instituição.");
                 return false;
@@ -334,7 +334,7 @@
         manageMemberCtrl.addCSV = function addCSV(files, ev) {
             var file = files[0];
             if(file && (file.size > MAXIMUM_CSV_SIZE)) {
-                MessageService.showToast('O arquivo deve ser um CSV menor que 5 Mb');
+                MessageService.showErrorToast('O arquivo deve ser um CSV menor que 5 Mb');
             } else {
                 var reader = new FileReader();
                 reader.onload = function(e) {

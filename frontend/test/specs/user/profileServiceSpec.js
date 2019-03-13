@@ -62,7 +62,7 @@
             spyOn(mdDialog, 'show').and.returnValue(q.when());
             spyOn(mdDialog, 'confirm').and.callThrough();
             spyOn(profileService, '_deleteInstitution');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
         });
         
         it(`should show a confirm dialog and remove 
@@ -88,7 +88,7 @@
             expect(mdDialog.confirm).not.toHaveBeenCalled();
             expect(mdDialog.show).not.toHaveBeenCalled();
             const msg = 'Desvínculo não permitido. Você é administrador dessa instituição.';
-            expect(messageService.showToast).toHaveBeenCalledWith(msg);
+            expect(messageService.showErrorToast).toHaveBeenCalledWith(msg);
         });
     });
 

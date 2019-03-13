@@ -42,9 +42,9 @@
             invite = new Invite(inviteInstCtrl.invite);
 
             if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             } else if (!inviteInstCtrl.user.hasPermission('analyze_request_inst')) {
-                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
+                MessageService.showErrorToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -93,7 +93,7 @@
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showInfoToast('Convite enviado com sucesso!');
                 });
             return promise;
         };
@@ -134,10 +134,10 @@
             var promise = $mdDialog.show(confirm);
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
-                    MessageService.showToast("Convite reenviado com sucesso.");
+                    MessageService.showInfoToast("Convite reenviado com sucesso.");
                 });
             }, function () {
-                MessageService.showToast('Cancelado.');
+                MessageService.showInfoToast('Cancelado.');
             });
             return promise;
         };

@@ -41,10 +41,10 @@
                             POST_EVENTS.DELETED_POST_EVENT_TO_UP, 
                             postDetailsCtrl.post
                         );
-                    MessageService.showToast('Post excluído com sucesso');
+                    MessageService.showInfoToast('Post excluído com sucesso');
                 });
             }, function() {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
         };
 
@@ -190,7 +190,7 @@
         postDetailsCtrl.copyLink = function copyLink(){
             var url = Utils.generateLink(URL_POST + postDetailsCtrl.post.key);
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado");
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -247,14 +247,14 @@
 
         postDetailsCtrl.addSubscriber = function addSubscriber() {
             PostService.addSubscriber(postDetailsCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi marcado como de seu interesse.');
+                MessageService.showInfoToast('Esse post foi marcado como de seu interesse.');
                 postDetailsCtrl.post.subscribers.push(postDetailsCtrl.user.key);
             });
         };
 
         postDetailsCtrl.removeSubscriber = function removeSubscriber() {
             PostService.removeSubscriber(postDetailsCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
+                MessageService.showInfoToast('Esse post foi removido dos posts de seu interesse.');
                 _.remove(postDetailsCtrl.post.subscribers, function(userKey) {
                     return userKey === postDetailsCtrl.user.key;
                 });
@@ -302,7 +302,7 @@
         postDetailsCtrl.followEvent = () => {
             EventService.addFollower(postDetailsCtrl.post.shared_event.key).then(() => {
                 postDetailsCtrl.post.shared_event.addFollower(postDetailsCtrl.user.key);
-                MessageService.showToast('Você receberá as atualizações desse evento.');
+                MessageService.showInfoToast('Você receberá as atualizações desse evento.');
             });
         };
 
@@ -313,7 +313,7 @@
         postDetailsCtrl.unFollowEvent = () => {
             EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
                 postDetailsCtrl.post.shared_event.removeFollower(postDetailsCtrl.user.key);
-                MessageService.showToast('Você não receberá as atualizações desse evento.');
+                MessageService.showInfoToast('Você não receberá as atualizações desse evento.');
             });
         };
 
@@ -479,7 +479,7 @@
                     $state.go(STATES.HOME);
                 });
             } else {
-                MessageService.showToast("Comentário não pode ser vazio.");
+                MessageService.showErrorToast("Comentário não pode ser vazio.");
             }
             return promise;
         };

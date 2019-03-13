@@ -50,7 +50,7 @@
                     userReqFormCtrl.isRequestSent = true;
                 })
                 .catch(_ => {
-                    MessageService.showToast("Um erro ocorreu. Verifique as informações e tente novamente");
+                    MessageService.showErrorToast("Um erro ocorreu. Verifique as informações e tente novamente");
                 });
         };
 
@@ -84,7 +84,7 @@
          */
         userReqFormCtrl._verifyAndSendRequest = function () {
             if (userReqFormCtrl._wasInstRequested()) {
-                MessageService.showToast("Você já solicitou para fazer parte dessa instituição.");
+                MessageService.showErrorToast("Você já solicitou para fazer parte dessa instituição.");
             } else {
                 userReqFormCtrl.sendRequest();
             }

@@ -21,7 +21,7 @@
             var post = new Post({}, eventCtrl.user.current_institution.key);
             post.shared_event = event.key;
             PostService.createPost(post).then(function success(response) {
-                MessageService.showToast('Evento compartilhado com sucesso!');
+                MessageService.showInfoToast('Evento compartilhado com sucesso!');
             });
         };
 

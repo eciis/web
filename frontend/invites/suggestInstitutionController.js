@@ -94,7 +94,7 @@
             const isChild = isChildFromBottomUpPerspective && isChildFromTopDownPerspective;
 
             if (isParent || isChild) {
-                MessageService.showToast('As instituições já estão conectadas');
+                MessageService.showErrorToast('As instituições já estão conectadas');
                 return true;
             }
             return false;
@@ -102,7 +102,7 @@
 
         function isPedingRequest() {
             if (_.includes(_.map(suggestInstCtrl.requested_invites, getInstKeyFromInvite), suggestInstCtrl.chosen_institution)) {
-                MessageService.showToast('Esta instituição tem uma requisição de vínculo pendente. Aceite ou rejeite a requisição');
+                MessageService.showErrorToast('Esta instituição tem uma requisição de vínculo pendente. Aceite ou rejeite a requisição');
                 return true;
             }
             return false;
@@ -110,7 +110,7 @@
 
         function isSelf() {
             if (suggestInstCtrl.institution.key === suggestInstCtrl.chosen_institution) {
-                MessageService.showToast('A instituição convidada não pode ser ela mesma');
+                MessageService.showErrorToast('A instituição convidada não pode ser ela mesma');
                 return true;
             }
             return false;
@@ -121,7 +121,7 @@
             _.forEach(suggestInstCtrl.institution.sent_invitations, function(invite) {
                 if ((invite.type_of_invite === "REQUEST_INSTITUTION_PARENT" || invite.type_of_invite === "REQUEST_INSTITUTION_CHILDREN") &&
                     invite.institution_requested_key === suggestInstCtrl.chosen_institution && invite.status === "sent") {
-                    MessageService.showToast('Esta instituição já foi convidada, mas seu convite está pendente');
+                    MessageService.showErrorToast('Esta instituição já foi convidada, mas seu convite está pendente');
                     result = true;
                 }
             });

@@ -83,10 +83,10 @@
                     .then(function () {
                         service._deleteInstitution(institution.key);
                     }, function () {
-                        MessageService.showToast('Cancelado');
+                        MessageService.showInfoToast('Cancelado');
                     });
             } else {
-                MessageService.showToast('Desvínculo não permitido. Você é administrador dessa instituição.');
+                MessageService.showErrorToast('Desvínculo não permitido. Você é administrador dessa instituição.');
             }
         };
         /**

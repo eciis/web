@@ -28,10 +28,10 @@
                 feature.isLoading = true;
                 return ManageTogglesService.saveFeature(feature)
                     .then(response => {
-                        MessageService.showToast("Alterações salvas com sucesso.");
+                        MessageService.showInfoToast("Alterações salvas com sucesso.");
                         return response;
                     }).catch(response => {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showErrorToast(response.data.msg);
                     }).finally(function() {
                         feature.isLoading = false;
                     });
@@ -45,7 +45,7 @@
                 manageTogglesCtrl.features = features;
                 return features;
             }).catch(response => {
-                MessageService.showToast(response.data.msg);
+                MessageService.showErrorToast(response.data.msg);
             });
         }
 

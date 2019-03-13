@@ -43,22 +43,24 @@
             "Error! The user is the author": "O usuário é o autor do evento."
         };
 
-        service.showToast = function showToast(message) {
-            if(! hideToast(message)) {
-              message = customMessage(message);
-              $mdToast.show(
-                  $mdToast.simple()
-                      .textContent(message)
-                      .action('FECHAR')
-                      .highlightAction(true)
-                      .hideDelay(5000)
-                      .position('bottom right')
-              );
-            }
+        function showToast(message) {
+            message = customMessage(message);
+            $mdToast.show(
+                $mdToast.simple()
+                    .textContent(message)
+                    .action('FECHAR')
+                    .highlightAction(true)
+                    .hideDelay(5000)
+                    .position('bottom right')
+            );
         };
 
-        function hideToast (message) {
-          return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && message.includes('sucesso');
+        service.showInfoToast = function showInfoToast(message){
+            !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && showToast(message);
+        }
+
+        service.showErrorToast = function showErrorToast(message){
+            showToast(message);
         }
 
         function customMessage(message) {

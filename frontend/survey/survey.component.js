@@ -79,7 +79,7 @@
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
                     $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
-                    MessageService.showToast('Postado com sucesso!');
+                    MessageService.showInfoToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     const postAuthorPermissions = ["remove_post"];
                     surveyCtrl.user.addPermissions(postAuthorPermissions, response.key);
@@ -93,7 +93,7 @@
                 });
                 return promise;
             } else {
-                MessageService.showToast("Enquete deve ter no mínimo 2 opções e data limite definida");
+                MessageService.showErrorToast("Enquete deve ter no mínimo 2 opções e data limite definida");
             }
         };
 

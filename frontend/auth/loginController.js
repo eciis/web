@@ -26,7 +26,7 @@
             promise.then(function success() {
                 redirectTo(redirectPath);
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
             return promise;
         };
@@ -43,7 +43,7 @@
                     redirectTo(redirectPath);
                 }
             ).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 

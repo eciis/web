@@ -103,12 +103,12 @@
 
             it('should show an error message when the request fails', function () {
                 expect(userReqFormCtrl.isRequestSent).toBeFalsy();
-                spyOn(messageService, 'showToast');
+                spyOn(messageService, 'showErrorToast');
                 deferred.reject();
                 userReqFormCtrl.sendRequest();
                 scope.$apply();
                 const msg = "Um erro ocorreu. Verifique as informações e tente novamente";
-                expect(messageService.showToast).toHaveBeenCalledWith(msg)
+                expect(messageService.showErrorToast).toHaveBeenCalledWith(msg)
                 expect(userReqFormCtrl.isRequestSent).toBeFalsy();
             });
         });
@@ -159,10 +159,10 @@
             it(`should show a message when the institution
                 has already been requested by the user`, function () {
                 spyOn(userReqFormCtrl, '_wasInstRequested').and.returnValue(true);
-                spyOn(messageService, 'showToast');
+                spyOn(messageService, 'showErrorToast');
                 userReqFormCtrl._verifyAndSendRequest();
                 const msg = "Você já solicitou para fazer parte dessa instituição.";
-                expect(messageService.showToast).toHaveBeenCalledWith(msg)
+                expect(messageService.showErrorToast).toHaveBeenCalledWith(msg)
             });
 
             it(`should send the request when the institution

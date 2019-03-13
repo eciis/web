@@ -13,7 +13,7 @@
             var diff = jsonpatch.compare(colorPickerCtrl.user, colorPickerCtrl.newUser);
             var promise = ProfileService.editProfile(diff);
             promise.then(function success() {
-                MessageService.showToast('Cor salva com sucesso');
+                MessageService.showInfoToast('Cor salva com sucesso');
                 colorPickerCtrl.user.institution_profiles = colorPickerCtrl.newUser.institution_profiles;
                 $mdDialog.cancel();
                 AuthService.save();

@@ -84,7 +84,7 @@
                 ImageService.readFile(data, setImage);
                 configInstCtrl.file = null;
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
             return promise;
         };
@@ -122,10 +122,10 @@
                     configInstCtrl.loadingSaveInstitution = true;
                     updateInstitution();
                 }, function error() {
-                    MessageService.showToast('Cancelado');
+                    MessageService.showInfoToast('Cancelado');
                 });
             } else {
-                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+                MessageService.showErrorToast("Campos obrigatórios não preenchidos corretamente.");
             }
             return promise;
         };
@@ -139,7 +139,7 @@
                         configInstCtrl.newInstitution.photo_url = data.url;
                         defer.resolve();
                     }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showErrorToast(response.data.msg);
                         defer.reject();
                 });
             } else {
@@ -157,7 +157,7 @@
                         currentPortfoliourl = data.url;
                         defer.resolve();
                     }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showErrorToast(response.data.msg);
                         defer.reject();
                 });
             } else {
@@ -184,7 +184,7 @@
                 $q.resolve(promise);
             }, function error(response) {
                 configInstCtrl.isSubmitting = false;
-                MessageService.showToast(response.data.msg);
+                MessageService.showErrorToast(response.data.msg);
                 $q.reject(promise);
             });
             return promise;
@@ -253,7 +253,7 @@
         function saveRequestInst() {
             RequestInvitationService.sendRequestInst(configInstCtrl.newInstitution).then(
                 function success() {
-                    MessageService.showToast("Pedido enviado com sucesso!");
+                    MessageService.showInfoToast("Pedido enviado com sucesso!");
                     configInstCtrl.nextStep();
             });
         }
@@ -264,7 +264,7 @@
             AuthService.save();
             changeInstitution(institution);
             configInstCtrl.loadingSaveInstitution = false;
-            MessageService.showToast('Dados da instituição salvos com sucesso.');
+            MessageService.showInfoToast('Dados da instituição salvos com sucesso.');
             showHierarchyDialog(institution);
             $state.go(STATES.HOME);
         }
@@ -294,7 +294,7 @@
                 var nextStep = currentStep + 1;
                 configInstCtrl.steps[nextStep] = true;
             } else {
-                MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+                MessageService.showErrorToast("Campos obrigatórios não preenchidos corretamente.");
             }
         };
 

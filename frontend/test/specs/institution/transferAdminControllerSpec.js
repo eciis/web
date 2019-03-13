@@ -83,7 +83,8 @@
             });
 
             spyOn(mdDialog, 'hide').and.callFake(function() {});
-            spyOn(messageService, 'showToast').and.callFake(function() {});
+            spyOn(messageService, 'showErrorToast').and.callFake(function() {});
+            spyOn(messageService, 'showInfoToast').and.callFake(function() {});
         });
 
         it('Should not send the invitation.', function() {
@@ -103,7 +104,7 @@
             transferAdminCtrl.selectMember(user);
             transferAdminCtrl.confirm();
 
-            expect(messageService.showToast).toHaveBeenCalledWith("Você já é administrador da instituição, selecione outro membro!");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Você já é administrador da instituição, selecione outro membro!");
         });
 
         it('Should must send the invitation.', function() {
@@ -125,14 +126,14 @@
 
             expect(inviteService.sendInviteUser).toHaveBeenCalledWith({invite_body: invite});
             expect(mdDialog.hide).toHaveBeenCalledWith(invite);
-            expect(messageService.showToast).toHaveBeenCalledWith("Convite enviado com sucesso!");
+            expect(messageService.showInfoToast).toHaveBeenCalledWith("Convite enviado com sucesso!");
         });
 
         it('Should not be sent if there is no member selected.', function() {
             transferAdminCtrl.confirm();
             expect(inviteService.sendInviteUser).not.toHaveBeenCalled();
             expect(mdDialog.hide).not.toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalledWith("Selecione um memebro!");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Selecione um memebro!");
         });
     });
 }));

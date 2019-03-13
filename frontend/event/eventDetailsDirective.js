@@ -36,14 +36,14 @@
             dialog.then(function () {
                 deleteEvent(eventCtrl.event);
             }, function () {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
         };
 
         function deleteEvent() {
             let promise = EventService.deleteEvent(eventCtrl.event);
             promise.then(function success() {
-                MessageService.showToast('Evento removido com sucesso!');
+                MessageService.showInfoToast('Evento removido com sucesso!');
                 eventCtrl.event.state = "deleted";
                 $state.go(STATES.EVENTS);
             });
@@ -163,7 +163,7 @@
         eventCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink(`/event/${eventCtrl.event.key}/details`);
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado");
         };
 
         /**
@@ -193,7 +193,7 @@
         eventCtrl.addFollower = () => {
             return EventService.addFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.addFollower(eventCtrl.user.key);
-                MessageService.showToast('Você receberá as atualizações desse evento.');
+                MessageService.showInfoToast('Você receberá as atualizações desse evento.');
             });
         };
 
@@ -203,7 +203,7 @@
         eventCtrl.removeFollower = () => {
             return EventService.removeFollower(eventCtrl.event.key).then(() => {
                 eventCtrl.event.removeFollower(eventCtrl.user.key);
-                MessageService.showToast('Você não receberá as atualizações desse evento.');
+                MessageService.showInfoToast('Você não receberá as atualizações desse evento.');
             });
         };
 
@@ -218,7 +218,7 @@
             return EventService.getEvent(eventKey).then(function success(response) {
                 eventCtrl.event = new Event(response);
             }, function error(response) {
-                MessageService.showToast(response);
+                MessageService.showErrorToast(response);
                 $state.go(STATES.HOME);
             });
         }

@@ -61,7 +61,7 @@
                 .then(function () {                    
                     commentCtrl.addLike();
                 }).catch(function () {
-                    MessageService.showToast("Não foi possível curtir o comentário");
+                    MessageService.showErrorToast("Não foi possível curtir o comentário");
                 }).finally(function () {
                     commentCtrl.saving = false;
                 });
@@ -73,7 +73,7 @@
                 .then(function sucess() {
                     commentCtrl.removeLike();
                 }).catch(function error() {
-                    MessageService.showToast("Não foi possível descurtir o comentário");
+                    MessageService.showErrorToast("Não foi possível descurtir o comentário");
                 }).finally(function() {
                     commentCtrl.saving = false;
                 });
@@ -88,7 +88,7 @@
                 ).then(function success(data) {
                     commentCtrl.comment.replies[data.id] = data;
                 }).catch(function error() {
-                    MessageService.showToast("Não foi possível responder ao comentário");
+                    MessageService.showErrorToast("Não foi possível responder ao comentário");
                 }).finally(function() {
                     commentCtrl.newReply = null;
                     commentCtrl.saving = false;
@@ -100,7 +100,7 @@
             CommentService.deleteReply(commentCtrl.post.key, commentCtrl.comment.id, commentCtrl.replyId)
                 .then(function success() {
                     delete commentCtrl.comment.replies[commentCtrl.replyId];
-                    MessageService.showToast('Comentário excluído com sucesso');
+                    MessageService.showInfoToast('Comentário excluído com sucesso');
                 });
         };
 
@@ -108,7 +108,7 @@
             CommentService.deleteComment(commentCtrl.post.key, commentCtrl.comment.id).then(
                 function success() {
                     commentCtrl.post.deleteComment(commentCtrl.comment.id);
-                    MessageService.showToast('Comentário excluído com sucesso');
+                    MessageService.showInfoToast('Comentário excluído com sucesso');
                 });
         };
 
@@ -118,7 +118,7 @@
             ).then(function () {
                 commentCtrl.onDelete();
             }).catch(function () {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
         };
 

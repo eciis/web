@@ -39,7 +39,7 @@
             .then(function success() {
                 regInstCtrl.user.follow(regInstCtrl.institution);
                 AuthService.save();
-                MessageService.showToast("Seguindo " + regInstCtrl.institution.name);
+                MessageService.showInfoToast("Seguindo " + regInstCtrl.institution.name);
             });
         };
 

@@ -44,7 +44,7 @@
         shareCtrl.share = function share() {
             makePost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
-                MessageService.showToast('Compartilhado com sucesso!');
+                MessageService.showInfoToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
                 shareCtrl.addPostTimeline(response);
                 const postAuthorPermissions = ["remove_post"];

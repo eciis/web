@@ -28,7 +28,7 @@
         postCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink('/post/' + postCtrl.post.key);
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado");
         };
 
         /**
@@ -75,7 +75,7 @@
          */
         postCtrl.addSubscriber = function addSubscriber() {
             PostService.addSubscriber(postCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi marcado como de seu interesse.');
+                MessageService.showInfoToast('Esse post foi marcado como de seu interesse.');
                 postCtrl.post.subscribers.push(postCtrl.user.key);
             });
         };
@@ -86,7 +86,7 @@
          */
         postCtrl.removeSubscriber = function removeSubscriber() {
             PostService.removeSubscriber(postCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
+                MessageService.showInfoToast('Esse post foi removido dos posts de seu interesse.');
                 _.remove(postCtrl.post.subscribers, function (userKey) {
                     return userKey === postCtrl.user.key;
                 });

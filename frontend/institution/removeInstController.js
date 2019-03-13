@@ -25,7 +25,7 @@
                 } else {
                     $state.go(STATES.HOME);
                 }
-                MessageService.showToast("Instituição removida com sucesso.");
+                MessageService.showInfoToast("Instituição removida com sucesso.");
             });
         };
 

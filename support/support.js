@@ -177,7 +177,7 @@
             }
         }, function(transition) {
             AuthService.logout();
-            MessageService.showToast("Você ainda não tem uma conta ativa na plataforma.");
+            MessageService.showErrorToast("Você ainda não tem uma conta ativa na plataforma.");
         });
     });
 })();

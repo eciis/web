@@ -36,13 +36,13 @@
                 function success() {
                     request.status = 'rejected';
                     $mdDialog.cancel();
-                    MessageService.showToast('Solicitação rejeitada com sucesso');
+                    MessageService.showInfoToast('Solicitação rejeitada com sucesso');
                 });
         };
 
         analyseHierReqCtrl.close = function close() {
             $mdDialog.hide();
-            MessageService.showToast('Solicitação aceita com sucesso');
+            MessageService.showInfoToast('Solicitação aceita com sucesso');
         };
 
         analyseHierReqCtrl.showProcessingMessage = function showProcessingMessage() {

@@ -261,13 +261,13 @@
     describe('copyLink()', () => {
         it('should call toClipboard', () => {
             spyOn(clipboard, 'toClipboard');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             
             eventCtrl.event = new Event({key: 'aposdkspoakdposa'});
             eventCtrl.copyLink();
 
             expect(clipboard.toClipboard).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
        });
     });
 
@@ -304,7 +304,7 @@
             spyOn(eventService, 'addFollower').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
             spyOn(eventCtrl.event, 'addFollower').and.callThrough();
 
@@ -312,7 +312,7 @@
             scope.$apply();
 
             expect(eventService.addFollower).toHaveBeenCalledWith(eventCtrl.event.key);
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
             expect(eventCtrl.event.addFollower).toHaveBeenCalled();
             expect(eventCtrl.event.followers).toEqual([user.key]);
         });
@@ -340,7 +340,7 @@
             spyOn(eventService, 'removeFollower').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             eventCtrl.event = new Event({ key: 'aopskdopas-OKAPODKAOP', followers: [] });
             spyOn(eventCtrl.event, 'removeFollower').and.callThrough();
 
@@ -348,7 +348,7 @@
             scope.$apply();
 
             expect(eventService.removeFollower).toHaveBeenCalledWith(eventCtrl.event.key);
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Você não receberá as atualizações desse evento.');
             expect(eventCtrl.event.removeFollower).toHaveBeenCalled();
         });
 

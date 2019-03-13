@@ -73,6 +73,7 @@
     describe('Test save', function() {
         beforeEach(function() {
             spyOn(messageService, 'showInfoToast');
+            spyOn(messageService, 'showErrorToast');
         });
 
         it('Should be call messageService.saveFeature', function(done) {

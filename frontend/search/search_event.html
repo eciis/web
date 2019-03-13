@@ -25,9 +25,25 @@
                     ng-change="searchCtrl.searchBy(searchCtrl.searchDate.toISOString().split('T')[0], 'event')"/>
             </md-input-container>
             <md-input-container>
-                <md-select placeholder="ESTADO" ng-model="searchCtrl.searchState" class="search-by-mobile">
-                    <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state.nome" ng-click="searchCtrl.searchBy(state.nome, 'event')">
+                <md-select placeholder="PAÍS" ng-model="searchCtrl.searchCountry" class="search-by-mobile">
+                    <md-option ng-repeat="country in searchCtrl.countries" ng-value="country.nome_pais" ng-click="searchCtrl.searchBy(country.nome_pais, 'event')">
+                        {{country.nome_pais}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <md-select placeholder="ESTADO" ng-model="searchCtrl.searchState" class="search-by-mobile"
+                ng-change="searchCtrl.getCitiesByState()">
+                    <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state"
+                    ng-click="searchCtrl.searchBy(state.nome, 'event')">
                         {{state.nome}}
+                    </md-option>
+                </md-select>
+            </md-input-container>
+            <md-input-container>
+                <md-select placeholder="CIDADE" ng-model="searchCtrl.searchCity" class="search-by-mobile">
+                    <md-option ng-repeat="city in searchCtrl.cities" ng-value="city" ng-click="searchCtrl.searchBy(city, 'event')">
+                        {{city}}
                     </md-option>
                 </md-select>
             </md-input-container>

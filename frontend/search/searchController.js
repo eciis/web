@@ -25,23 +25,13 @@
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
             const valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
-            let promise;
-            if (type === 'event') {
-                promise = EventService.searchEvents(valueOrKeyword, "published", type);
-                promise.then(function success(response) {
-                    searchCtrl.events = response;
-                    searchCtrl.loading = true;
-                    searchCtrl.hasChanges = true;
-                    console.log(response);
-                });
-            } else {
-                promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
-                promise.then(function success(response) {
-                    searchCtrl.institutions = response;
-                    searchCtrl.loading = true;
-                    searchCtrl.hasChanges = true;
-                });
-            }
+            let promise = type === "event" ? EventService.searchEvents(valueOrKeyword, "published", type)
+                    : InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
+            promise.then(function success(response) {
+                type === "event" ? searchCtrl.events = response : searchCtrl.institutions = response;
+                searchCtrl.loading = true;
+                searchCtrl.hasChanges = true;
+            });
             return promise;
         };
 
@@ -54,6 +44,8 @@
             searchCtrl.searchNature = "";
             searchCtrl.searchState = "";
             searchCtrl.searchDate = "";
+            searchCtrl.searchCoutry = "";
+            searchCtrl.searchCity = "";
             searchCtrl.institutions = [];
         };
 
@@ -123,6 +115,14 @@
             return Utils.isMobileScreen();
         };
         
+        /**
+         * Go to the page of a specific event
+         * @param {object} event - The current event
+         */
+        searchCtrl.goToEvent = (event) => {
+            event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.id });
+        };
+
         /**
          * A simple function that works like a controller to the
          * search_dialog.html.
@@ -198,7 +198,7 @@
         }
 
         searchCtrl.getCitiesByState = () => {
-            searchCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(searchCtrl.selectedFederalState.sigla);
+            searchCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(searchCtrl.searchState.sigla);
         };
 
         function loadBrazilianFederalStates() {

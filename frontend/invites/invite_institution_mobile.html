@@ -35,21 +35,40 @@
 
         <clickable-card icon="email" title="Convites Enviados" is-open="true">
             <div class="invite-inst__card__content">
-                <search-field keyword="searchInviteSent"></search-field>
+                <search-field keyword="searchSentInvites"></search-field>
                 <md-content class="invite-inst__list custom-scrollbar">
-                    <entity-showcase ng-repeat="invite in inviteInstCtrl.sent_invitations | filter: searchInviteSent"
+                    <entity-showcase ng-repeat="invite in inviteInstCtrl.sent_invitations | filter: searchSentInvites"
                         icon="account_balance"
                         title="invite.stub_institution.name || invite.suggestion_institution_name"
-                        subtitles-list="[invite.invitee, 'Convidado por: '+ invite.sender_name]"
+                        subtitles-list="[
+                            invite.invitee, 
+                            'Convidado por: '+ invite.sender_name
+                        ]"
                         right-icon-btns="[
-                            inviteInstCtrl.createIconBtn('send',null, inviteInstCtrl.resendInvite, [invite.key, $event])
+                            inviteInstCtrl.createIconBtn('send', null, inviteInstCtrl.resendInvite, [invite.key, $event])
                         ]">
                     </entity-showcase>
                 </md-content>
             </div>
         </clickable-card>
         
-        <clickable-card icon="announcement" title="Convites Requisitados"></clickable-card>
+        <clickable-card icon="announcement" title="Convites Requisitados">
+            <search-field keyword="searchSentRequests"></search-field>
+            <md-content class="invite-inst__list custom-scrollbar">
+                <entity-showcase ng-repeat="request in inviteInstCtrl.sent_requests | filter: searchSentRequests"
+                    icon="account_balance"
+                    title="request.stub_institution.name || request.suggestion_institution_name"
+                    subtitles-list="[
+                        'Requisitado por: '+ request.sender_name, 
+                        'E-mail: ' + request.invitee
+                    ]"
+                    right-icon-btns="[
+                        inviteInstCtrl.createIconBtn('error', '#009688', inviteInstCtrl.showPendingRequestDialog, [$event, request.key])
+                    ]">
+                </entity-showcase>
+            </md-content>
+        </clickable-card>
+
         <clickable-card icon="check_circle" title="Convites Aceitos"></clickable-card>
     </div>
 </md-content>

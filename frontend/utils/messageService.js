@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("MessageService", function MessageService($mdToast, $mdDialog, SCREEN_SIZES) {
+    app.service("MessageService",['$mdToast', '$mdDialog', 'SCREEN_SIZES', function MessageService($mdToast, $mdDialog, SCREEN_SIZES) {
         var service = this;
 
         var msg = {
@@ -55,10 +55,14 @@
             );
         };
 
+        /** Show toast with infomation message when not in mobile. 
+         */
         service.showInfoToast = function showInfoToast(message){
             !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && showToast(message);
         }
 
+        /** Show toast with error message. 
+         */
         service.showErrorToast = function showErrorToast(message){
             showToast(message);
         }
@@ -100,5 +104,5 @@
                 clickOutsideToClose:true
             });
         }
-    });
+    }]);
 })();

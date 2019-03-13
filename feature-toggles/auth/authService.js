@@ -111,7 +111,7 @@
                 service.isLoadingUser = false;
                 if (!userInfo.hasPermission('analyze_request_inst')) {
                     service.logout();
-                    MessageService.showErrorToast("Você não possui permissão para acessar esta página.");
+                    MessageService.showToast("Você não possui permissão para acessar esta página.");
                 }
             });
         }

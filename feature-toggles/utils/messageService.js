@@ -3,14 +3,14 @@
 
     const app = angular.module('app');
 
-    app.service('MessageService', ['$mdToast', function($mdToast) {
+    app.service('MessageService', ['$mdToast', 'SCREEN_SIZES', function($mdToast, SCREEN_SIZES) {
         const service = this;
 
         /**
          * This function displays a small dialog containing the received message per parameter.
          * @param {String} message - Message to show
          */
-        service.showToast = function showToast(message) {
+        function showToast(message) {
             $mdToast.show(
                 $mdToast.simple()
                     .textContent(message)
@@ -20,5 +20,17 @@
                     .position('bottom right')
             );
         };
+
+        /** Show toast with infomation message when not in mobile. 
+         */
+        service.showInfoToast = function showInfoToast(message){
+            !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && showToast(message);
+        }
+
+        /** Show toast with error message. 
+         */
+        service.showErrorToast = function showErrorToast(message){
+            showToast(message);
+        }
     }]);
 })();

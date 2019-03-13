@@ -133,7 +133,7 @@
             transferAdminCtrl.confirm();
             expect(inviteService.sendInviteUser).not.toHaveBeenCalled();
             expect(mdDialog.hide).not.toHaveBeenCalled();
-            expect(messageService.showErrorToast).toHaveBeenCalledWith("Selecione um memebro!");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Selecione um membro!");
         });
     });
 }));

@@ -59,7 +59,7 @@
                     MessageService.showErrorToast('Você já é administrador da instituição, selecione outro membro!');
                 }
             } else {
-                MessageService.showErrorToast('Selecione um memebro!');
+                MessageService.showErrorToast('Selecione um membro!');
             }
         };
     });

@@ -28,7 +28,7 @@
         institutionCardCtrl.copyLink = function copyLink(){
             var url = Utils.generateLink(URL_INSTITUTION + institutionCardCtrl.institution.key + "/home");
             ngClipboard.toClipboard(url);
-            MessageService.showInfoToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         institutionCardCtrl.showFollowButton = function showFollowButton() {
@@ -55,7 +55,7 @@
                 promise.then(function success(){
                     institutionCardCtrl.user.unfollow(institutionCardCtrl.institution);
                     AuthService.save();
-                    MessageService.showInfoToast("Deixou de seguir "+institutionCardCtrl.institution.name);
+                    MessageService.showInfoToast("Deixou de seguir "+institutionCardCtrl.institution.name, true);
                 });
                 return promise;
             }

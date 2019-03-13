@@ -57,8 +57,9 @@
 
         /** Show toast with infomation message when not in mobile. 
          */
-        service.showInfoToast = function showInfoToast(message){
-            !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && showToast(message);
+        service.showInfoToast = function showInfoToast(message, forceShow){
+            let shouldShow = !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) || forceShow;
+            shouldShow && showToast(message);
         }
 
         /** Show toast with error message. 

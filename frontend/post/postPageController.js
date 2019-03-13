@@ -28,7 +28,7 @@
         postCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink('/post/' + postCtrl.post.key);
             ngClipboard.toClipboard(url);
-            MessageService.showInfoToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         /**

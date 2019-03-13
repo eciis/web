@@ -163,7 +163,7 @@
         eventCtrl.copyLink = function copyLink() {
             var url = Utils.generateLink(`/event/${eventCtrl.event.key}/details`);
             ngClipboard.toClipboard(url);
-            MessageService.showInfoToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         /**

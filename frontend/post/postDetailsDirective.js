@@ -190,7 +190,7 @@
         postDetailsCtrl.copyLink = function copyLink(){
             var url = Utils.generateLink(URL_POST + postDetailsCtrl.post.key);
             ngClipboard.toClipboard(url);
-            MessageService.showInfoToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {

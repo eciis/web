@@ -72,7 +72,7 @@
 
                     if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)){
                         const content = element[0];
-                        const limitScrol =  30;
+                        const limitScrol =  50;
     
                         const hideTopDynamically = hideTop && inStateArray(scope.STATES_DINAMICALLY_TOP);
                         const hideBottomDynamically = hideBottom && inStateArray(scope.STATES_DINAMICALLY_BOTTOM);

@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window, STATES, $http, AuthService, EventService) {
+        brCidadesEstados, HttpService, $mdDialog, $window, STATES, AuthService, EventService) {
 
         var searchCtrl = this;
 
@@ -195,8 +195,8 @@
         }
 
         function loadCountries() {
-            $http.get('app/institution/countries.json').then(function success(response) {
-                searchCtrl.countries = response.data;
+            HttpService.get('app/institution/countries.json').then(function success(response) {
+                searchCtrl.countries = response;
             });
         }
 

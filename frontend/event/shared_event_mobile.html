@@ -1,5 +1,5 @@
 <div>
-    <div class="shared-event__image-container" ng-if="eventDetailsCtrl.showImage">
+    <div class="shared-event__image-container" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__image-container--canceled' : ''" ng-if="eventDetailsCtrl.showImage">
         <img class="shared-event__image-container__img" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
 
         <div class="shared-event__canceled" ng-if="eventDetailsCtrl.isDeleted()">

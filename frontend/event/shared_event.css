@@ -2,6 +2,10 @@
     position: relative;
 }
 
+.shared-event__image-container--canceled {
+    min-height: 100px;
+}
+
 .shared-event__image-container__img {
     width: 100%;
     background-color: white;

@@ -139,18 +139,18 @@
               const instKey = ctrl.institutionKey;
               const senderName = $state.params.senderName;
               const dialogParent = angular.element('#create-inst-content');
-              return showConfirmationDialog(event, dialogParent)
-                .then(() => {
-                  ctrl.loading = true;
-                  return saveProfileImage(ctrl.photoSrc).then(() => {
-                    return saveAndUpdateInst(inviteKey, instKey, senderName) .then(() => {
-                        return reloadAndRedirectHome();
-                      })
-                  })
-                }).catch(e => {
-                  ctrl.loading = false;
-                  MessageService.showToast(e);
-                })
+
+              return showConfirmationDialog(event, dialogParent).then(() => {
+                ctrl.loading = true;
+                return saveProfileImage(ctrl.photoSrc);
+              }).then(() => {
+                return saveAndUpdateInst(inviteKey, instKey, senderName);
+              }).then(() => {
+                return reloadAndRedirectHome();
+              }).catch(e => {
+                ctrl.loading = false;
+                MessageService.showToast(e);
+              })
             } else {
               MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
             }

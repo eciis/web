@@ -10,6 +10,8 @@
             user: '<',
             callFunc: '<',
             state: '<',
+            selfieStream: '<',
+            remoteStream: '<',
         },
     });
 

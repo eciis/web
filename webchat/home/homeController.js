@@ -46,9 +46,7 @@
             homeCtrl.currentUser = homeCtrl.getUser(e.id);
             homeCtrl.currentChat = e.chat;
 
-            const selfie = document.getElementById('video-selfie');
-            selfie.srcObject = homeCtrl.currentChat.selfStream;
-            selfie.play().then().catch(e => console.log('cant play video: ', e));
+            homeCtrl.selfieStream = homeCtrl.currentChat.selfStream;
 
             homeCtrl.currentChat.on('ice-connection-changed', homeCtrl.stateChange);
             homeCtrl.currentChat.on('msg-list-updated', list => {
@@ -56,10 +54,7 @@
             });
 
             homeCtrl.currentChat.on('track-received', ev => {
-                const el = document.getElementById('video-remote');
-                el.srcObject = ev.streams[0];
-                el.play().then().catch(e => console.log('cant play video: ', e));
-                $scope.$apply();
+                homeCtrl.remoteStream = ev.streams[0];
             });
         };
 

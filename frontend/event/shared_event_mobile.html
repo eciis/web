@@ -1,13 +1,12 @@
 <div>
     <div class="shared-event__image-container" ng-if="eventDetailsCtrl.showImage">
-        <img style="width: 100%;"
-            style="background-color: white;" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
+        <img class="shared-event__image-container__img" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
 
         <div class="shared-event__canceled" ng-if="eventDetailsCtrl.isDeleted()">
             <div class="shared-event__canceled-box">
                 <md-icon class="shared-event__canceled-box__icon">cancel</md-icon>
-                <p style="grid-area: title; margin: 0;">ESTE EVENTO FOI CANCELADO</p>
-                <p style="grid-area: user; margin: 0; font-size: 11px;">
+                <p class="shared-event__canceled-box__title">ESTE EVENTO FOI CANCELADO</p>
+                <p class="shared-event__canceled-box__body">
                     {{eventDetailsCtrl.event.last_modified_by == eventDetailsCtrl.event.author ? 'por' : 'pelo administrador'}} 
                     {{eventDetailsCtrl.event.last_modified_by}}
                     {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
@@ -17,19 +16,19 @@
     </div>
     <div class="shared-event__info">
         <div class="shared-event__info__date" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info__date--canceled' : 'shared-event__info__date--active'">
-            <h3 style="font-weight: bold; margin: 0;" ng-if="!eventDetailsCtrl.endInTheSameDay()">
+            <h3 ng-if="!eventDetailsCtrl.endInTheSameDay()">
             {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
             A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h3>
-            <h3 style="font-weight: bold; margin: 0;" ng-if="eventDetailsCtrl.endInTheSameDay()">
+            <h3 ng-if="eventDetailsCtrl.endInTheSameDay()">
             {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h3>
             
-            <md-divider style="border: 1px; border-style: solid; width: 100%;"></md-divider>
+            <md-divider class="shared-event__info__date__divider"></md-divider>
             
-            <h3 ng-if="eventDetailsCtrl.endInOtherMonth()" style="margin: 0;">
+            <h3 ng-if="eventDetailsCtrl.endInOtherMonth()">
             {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
             | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
             </h3>
-            <h3 ng-if="!eventDetailsCtrl.endInOtherMonth()" style="margin: 0;">
+            <h3 ng-if="!eventDetailsCtrl.endInOtherMonth()">
                 {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
             </h3>
         </div>

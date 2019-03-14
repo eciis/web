@@ -154,6 +154,10 @@
             return promise;
         }
 
+        newInviteCtrl.showMobileInstInviteScreen = () => {
+          return Utils.isMobileScreen() && !newInviteCtrl.isInviteUser();
+        };
+
         function showAlert(event) {
             $mdDialog.show({
                 templateUrl: 'app/invites/welcome_dialog.html',

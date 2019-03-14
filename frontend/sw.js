@@ -7,7 +7,9 @@
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.
-    const CACHE_SUFIX = 'dev';
+    const CACHE_SUFIX = 'merging-push-notifications';
+
+    const openedNotifications = {};
 
     let messaging;
 
@@ -58,21 +60,25 @@
             };
 
             const body = JSON.parse(options.body);
-            options.body = body.data;
+
             options.tag = body.type;
+            options.vibrate = [100, 50, 100];
+            options.badge = options.icon;
+
+            if(!openedNotifications[options.tag]) {
+              openedNotifications[options.tag] = 1;
+            } else {
+              openedNotifications[options.tag] +=1
+            }
+
+            options.body = `${body.data} (${openedNotifications[options.tag]})`;
+
+            event.waitUntil(self.registration.showNotification(options.title, options));
         }
 
-        options.vibrate = [100, 50, 100];
-        options.badge = options.icon;
-        console.log(event.data.json());
-        console.log(event.data.json().notification);
-         
-        console.log(options.tag);
-        self.registration.getNotifications().then(data => {
-          console.log(data);
-        });
+        
 
-        event.waitUntil(self.registration.showNotification(options.title, options));
+        
     });
 
     /**
@@ -85,11 +91,13 @@
         const { notification } = event;
 
         const { action } = event;
+        
         if(action !== 'close') {
             const { url } = notification.data;
             clients.openWindow(url);
         }
-        
+
+        openedNotifications[notification.tag] = 0;
         notification.close();
     });
 

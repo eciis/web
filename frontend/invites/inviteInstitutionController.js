@@ -31,6 +31,11 @@
             inviteInstCtrl.invite = {};
         };
 
+        inviteInstCtrl.resetForm = () => {
+            inviteInstCtrl.inviteInstForm.$setPristine();
+            inviteInstCtrl.inviteInstForm.$setUntouched();
+        };
+
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
             var promise;
             var currentInstitutionKey = inviteInstCtrl.user.current_institution.key;
@@ -80,6 +85,8 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
+            }).then(_ => {
+                inviteInstCtrl.resetForm();
             });
         };
 
@@ -93,6 +100,7 @@
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
+                    inviteInstCtrl.resetForm();
                     MessageService.showToast('Convite enviado com sucesso!');
                 });
             return promise;

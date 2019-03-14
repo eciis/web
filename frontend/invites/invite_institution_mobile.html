@@ -8,7 +8,7 @@
     <div class="invite-inst__cards">
         <clickable-card icon="send" title="Convidar Instituição">
             <div class="invite-inst__card__content">
-                <form name="inviteInstForm">
+                <form name="inviteInstCtrl.inviteInstForm">
                     <md-input-container md-no-float class="md-block">
                         <input placeholder="Nome da instituição convidada" class="green-input" type="text"
                             ng-model="inviteInstCtrl.invite.suggestion_institution_name" 
@@ -21,12 +21,12 @@
                     </md-input-container>
                 </form>
                 <div class="invite-inst__btns">
-                    <md-button class="invite-inst__btn" ng-disabled="inviteInstForm.$pristine"
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstCtrl.inviteInstForm.$pristine"
                         ng-click="inviteInstCtrl.cancelInvite()">
                         CANCELAR
                     </md-button>
-                    <md-button class="invite-inst__btn" ng-disabled="inviteInstForm.$invalid"
-                        ng-click="inviteInstCtrl.checkInstInvite($event)">
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstCtrl.inviteInstForm.$invalid"
+                        ng-click="inviteInstCtrl.checkInstInvite($event)>
                         ENVIAR
                     </md-button>
                 </div>
@@ -77,6 +77,9 @@
                     title="acceptedInvites.stub_institution.name"
                     subtitles-list="[
                         'Nome sugerido: '+ acceptedInvites.suggestion_institution_name, 
+                    ]"
+                    right-icon-btns="[
+                        inviteInstCtrl.createIconBtn('more_vert', null, inviteInstCtrl.goToInst, [invite.stub_institution.key])
                     ]">
                 </entity-showcase>
             </md-content>

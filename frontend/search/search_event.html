@@ -39,7 +39,7 @@
 
         <md-input-container class="search-event-input-container">
             <md-select placeholder="CIDADE" ng-model="searchCtrl.searchCity"
-                class="search-by-mobile" ng-disabled="searchCtrl.isAnotherCountry() || searchCtrl.searchState">
+                class="search-by-mobile" ng-disabled="searchCtrl.isAnotherCountry() || !searchCtrl.searchState">
                 <md-option ng-repeat="city in searchCtrl.cities" ng-value="city" ng-click="searchCtrl.searchBy(city, 'event')">
                     {{city}}
                 </md-option>

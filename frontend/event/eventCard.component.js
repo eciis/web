@@ -1,8 +1,9 @@
 "use strict";
 
 (function() {
+    const app = angular.module("app");
 
-    function EventCardController(AuthService) {
+    app.controller("EventCardController", function EventCardController(AuthService) {
         const eventCardCtrl = this;
         
         eventCardCtrl.user = AuthService.getCurrentUser();
@@ -16,13 +17,18 @@
             });
             return _.get(_.first(profile), 'color', 'teal');
         };
-    };
 
-     angular
-    .module("app")
-    .component("eventCard", {
+        eventCardCtrl.$onInit = () => {
+            const address = eventCardCtrl.event.address;
+            if (_.isString(address)) {
+                eventCardCtrl.event.address = JSON.parse(address);
+            }
+        };
+    });
+
+    app.component("eventCard", {
         templateUrl: 'app/event/event_card.html',
-        controller: ['AuthService', EventCardController],
+        controller: 'EventCardController',
         controllerAs: 'eventCardCtrl',
         bindings: {
             event: '<',

@@ -54,7 +54,8 @@ class SearchEvent(SearchDocument):
                 'institution_key': event.institution_key.urlsafe(),
                 'photo_url': event.photo_url,
                 'institution_acronym': event.institution_acronym,
-                'start_time': get_date_string(event.start_time),
+                'start_time': event.start_time.isoformat(),
+                'date': get_date_string(event.start_time),
                 'address': event.address and json.dumps(dict(event.address)),
                 'country': event.address and event.address.country,
                 'federal_state': event.address and event.address.federal_state,
@@ -74,6 +75,7 @@ class SearchEvent(SearchDocument):
                     search.TextField(name='photo_url', value=content['photo_url']),
                     search.TextField(name='institution_acronym', value=content['institution_acronym']),
                     search.TextField(name='start_time', value=content['start_time']),
+                    search.TextField(name='date', value=content['date']),
                     search.TextField(name='address', value=content['address']),
                     search.TextField(name='country', value=content['country']),
                     search.TextField(name='federal_state', value=content['federal_state']),
@@ -90,7 +92,7 @@ class SearchEvent(SearchDocument):
         index = search.Index(self.index_name)
         query_options = search.QueryOptions(
             returned_fields=['state', 'title', 'institution_key', 'photo_url', 'institution_name',
-                'institution_acronym', 'start_time', 'address', 'country', 'federal_state', 'city']
+                'institution_acronym', 'start_time', 'address']
         )
         query = search.Query(
             query_string=query_string, options=query_options)
@@ -131,7 +133,7 @@ class SearchEvent(SearchDocument):
         and the fields won't be considered.
         """
         # add a new field here
-        fields = ['state', 'institution_name', 'start_time',
+        fields = ['state', 'institution_name', 'date',
                 'institution_acronym', 'country', 'federal_state', 'city']
         fields_values = []
 

@@ -3,7 +3,7 @@
 (function() {
     var app = angular.module("app");
 
-    app.service("MessageService", function MessageService($mdToast, $mdDialog) {
+    app.service("MessageService",['$mdToast', '$mdDialog', 'SCREEN_SIZES', function MessageService($mdToast, $mdDialog, SCREEN_SIZES) {
         var service = this;
 
         var msg = {
@@ -43,7 +43,7 @@
             "Error! The user is the author": "O usuário é o autor do evento."
         };
 
-        service.showToast = function showToast(message) {
+        function showToast(message) {
             message = customMessage(message);
             $mdToast.show(
                 $mdToast.simple()
@@ -54,6 +54,20 @@
                     .position('bottom right')
             );
         };
+
+        /** Show toast with infomation message when not in mobile or when the flag
+         *  force show is true. 
+         */
+        service.showInfoToast = function showInfoToast(message, forceShow){
+            let shouldShow = !Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) || forceShow;
+            shouldShow && showToast(message);
+        }
+
+        /** Show toast with error message. 
+         */
+        service.showErrorToast = function showErrorToast(message){
+            showToast(message);
+        }
 
         function customMessage(message) {
             return (message && msg[message.code]) || msg[message] || message;
@@ -92,5 +106,5 @@
                 clickOutsideToClose:true
             });
         }
-    });
+    }]);
 })();

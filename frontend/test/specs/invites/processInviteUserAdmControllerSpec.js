@@ -102,7 +102,7 @@
                 };
             });
 
-            spyOn(messageService, 'showToast').and.callFake(function(){});
+            spyOn(messageService, 'showInfoToast').and.callFake(function(){});
         });
 
         it('Should accept the invitation to become an administrator', function() {
@@ -117,7 +117,7 @@
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
         });
 
         it('Should add super user permissions of old admin', function() {
@@ -141,7 +141,7 @@
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
         });
 
         it('Should not add super user permissions of old admin', function() {
@@ -165,7 +165,7 @@
             expect(processInviteUserAdmCtrl.typeOfDialog).toEqual('VIEW_ACCEPTED_INVITATION_INVITEE');
             expect(processInviteUserAdmCtrl.isAccepting).toBeTruthy();
             expect(inviteService.acceptInviteUserAdm).toHaveBeenCalledWith(invite.key);
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Convite aceito com sucesso!');
         });
     });
 
@@ -179,7 +179,7 @@
                 };
             });
 
-            spyOn(messageService, 'showToast').and.callFake(function(){});
+            spyOn(messageService, 'showInfoToast').and.callFake(function(){});
             spyOn(mdDialog, 'hide').and.callFake(function(){});
         });
 
@@ -188,7 +188,7 @@
             user = JSON.parse(window.localStorage.userInfo);
 
             expect(user.institutions_admin).toEqual([]);
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite recusado!');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Convite recusado!');
             expect(inviteService.rejectInviteUserAdm).toHaveBeenCalledWith(invite.key);
             expect(mdDialog.hide).toHaveBeenCalled();
         });

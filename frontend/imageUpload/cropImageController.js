@@ -56,7 +56,7 @@
             if(ImageService.isValidImage(image_file)) {
                 readImage(image_file);
             } else {
-                MessageService.showToast("Imagem deve ser jpg ou png e menor que 5 Mb");
+                MessageService.showErrorToast("Imagem deve ser jpg ou png e menor que 5 Mb");
                 cropImgCtrl.cancelCrop();
             }
         })();

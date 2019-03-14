@@ -90,7 +90,7 @@
             spyOn(observerRecorderService, 'generate').and.returnValue(patch);
             spyOn(profileService, 'editProfile').and.returnValue(q.when());
             spyOn(authService, 'save');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             spyOn(mdDialog, 'hide');
 
             editProfileCtrl.edit();
@@ -98,7 +98,7 @@
 
             expect(observerRecorderService.generate).toHaveBeenCalled();
             expect(profileService.editProfile).toHaveBeenCalledWith(patch);
-            expect(messageService.showToast).toHaveBeenCalledWith('Perfil editado com sucesso');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Perfil editado com sucesso');
             expect(authService.save).toHaveBeenCalled();
             expect(mdDialog.hide).toHaveBeenCalled();
         });
@@ -120,13 +120,13 @@
             editProfileCtrl.profile.office = undefined;
             spyOn(observerRecorderService, 'generate');
             spyOn(profileService, 'editProfile');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
 
             editProfileCtrl.edit();
 
             expect(observerRecorderService.generate).not.toHaveBeenCalled();
             expect(profileService.editProfile).not.toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalledWith('O cargo é obrigatório.');
+            expect(messageService.showErrorToast).toHaveBeenCalledWith('O cargo é obrigatório.');
         });
     });
 

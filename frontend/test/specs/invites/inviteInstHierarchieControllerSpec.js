@@ -124,20 +124,20 @@
 
     describe('checkInstInvite', function() {
         beforeEach(function() {
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
         });
         
-        it('should call showToast with invalid invite message', function () {
+        it('should call showErrorToast with invalid invite message', function () {
             inviteInstHierarchieCtrl.invite = {};
             inviteInstHierarchieCtrl.checkInstInvite('$event');
-            expect(messageService.showToast).toHaveBeenCalledWith('Convite inválido!');
+            expect(messageService.showErrorToast).toHaveBeenCalledWith('Convite inválido!');
         });
 
-        it('should call showToast with institution has already have a parent message', function() {
+        it('should call showErrorToast with institution has already have a parent message', function() {
             inviteInstHierarchieCtrl.invite = invite;
             inviteInstHierarchieCtrl.hasParent = true;
             inviteInstHierarchieCtrl.checkInstInvite('$event');
-            expect(messageService.showToast).toHaveBeenCalledWith("Já possui instituição superior");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Já possui instituição superior");
         });
 
         it('should call searchInstitutions', function(done) {
@@ -184,12 +184,12 @@
         });
 
         it('should call sendInviteHierarchy', function() {
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             inviteInstHierarchieCtrl.institution.sent_invitations = [];
             inviteInstHierarchieCtrl.sendInstInvite(invite);
             expect(inviteInstHierarchieCtrl.showParentHierarchie).toBeTruthy();
             expect(inviteService.sendInviteHierarchy).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Convite enviado com sucesso!');
         });
     });
 
@@ -252,11 +252,11 @@
         });
 
         it('should not go', function() {
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
             spyOn(state, 'go');
             institution.state = 'inactive';
             inviteInstHierarchieCtrl.goToActiveInst(institution);
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showErrorToast).toHaveBeenCalledWith('Institutição inativa!');
             expect(state.go).not.toHaveBeenCalled();
         });
     });

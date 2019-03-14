@@ -28,7 +28,7 @@
         institutionCardCtrl.copyLink = function copyLink(){
             var url = Utils.generateLink(URL_INSTITUTION + institutionCardCtrl.institution.key + "/home");
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         institutionCardCtrl.showFollowButton = function showFollowButton() {
@@ -40,7 +40,7 @@
         institutionCardCtrl.follow = function follow(){
             var promise = InstitutionService.follow(institutionCardCtrl.institution.key);
             promise.then(function success(){
-                MessageService.showToast("Seguindo "+ institutionCardCtrl.institution.name);
+                MessageService.showInfoToast("Seguindo "+ institutionCardCtrl.institution.name);
                 institutionCardCtrl.user.follow(institutionCardCtrl.institution);
                 AuthService.save();
             });
@@ -49,13 +49,13 @@
 
         institutionCardCtrl.unfollow = function unfollow() {
             if (institutionCardCtrl.user.isMember(institutionCardCtrl.institution.key)){
-                MessageService.showToast("Você não pode deixar de seguir " + institutionCardCtrl.institution.name);
+                MessageService.showErrorToast("Você não pode deixar de seguir " + institutionCardCtrl.institution.name);
             } else {
                 var promise = InstitutionService.unfollow(institutionCardCtrl.institution.key);
                 promise.then(function success(){
                     institutionCardCtrl.user.unfollow(institutionCardCtrl.institution);
                     AuthService.save();
-                    MessageService.showToast("Deixou de seguir "+institutionCardCtrl.institution.name);
+                    MessageService.showInfoToast("Deixou de seguir "+institutionCardCtrl.institution.name, true);
                 });
                 return promise;
             }

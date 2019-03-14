@@ -86,14 +86,14 @@
             spyOn(authService, 'save');
             spyOn(removeInstCtrl, 'closeDialog');
             spyOn(state, 'go');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             removeInstCtrl.removeInst();
             expect(institutionService.removeInstitution).toHaveBeenCalled();
             expect(removeInstCtrl.user.institutions).toEqual([sec_institution]);
             expect(authService.save).toHaveBeenCalled();
             expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Instituição removida com sucesso.');
         });
 
         it('should call authService.logout()', function() {

@@ -37,7 +37,7 @@
                 postCtrl.deletePreviousImage = true;
                 postCtrl.file = null;
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -61,7 +61,7 @@
 
         postCtrl.addPdf = function addPdf(files) {
             if(files[0].size > MAXIMUM_PDF_SIZE) {
-                MessageService.showToast('O arquivo deve ser um pdf menor que 5 Mb');
+                MessageService.showErrorToast('O arquivo deve ser um pdf menor que 5 Mb');
             } else {
                 postCtrl.pdfFiles = files;
             }      
@@ -136,7 +136,7 @@
                         }
                         deferred.resolve();
                     }, function error(response) {
-                        MessageService.showToast(response);
+                        MessageService.showErrorToast(response);
                         deferred.reject();
                 });
             } else {
@@ -200,7 +200,7 @@
                 saveEditedPost(originalPost);
             }, function error(error) {
                 postCtrl.loadingPost = false;
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -229,7 +229,7 @@
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
                         $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
-                        MessageService.showToast('Postado com sucesso!');
+                        MessageService.showInfoToast('Postado com sucesso!');
                         changeTimelineToStart();
                         $mdDialog.hide();
                         postCtrl.loadingPost = false;
@@ -243,7 +243,7 @@
                         });
                     });
                 } else {
-                    MessageService.showToast('Post inválido!');
+                    MessageService.showErrorToast('Post inválido!');
                 }
             });
             postCtrl.post.photo_url = null;
@@ -290,14 +290,14 @@
                     PostService.save(postCtrl.post.key, patch).then(function success() {
                         deleteFiles().then(function success() {
                             postCtrl.deletedFiles = [];
-                            MessageService.showToast('Publicação editada com sucesso!');
+                            MessageService.showInfoToast('Publicação editada com sucesso!');
                             $mdDialog.hide(postCtrl.post);
                         }, function error(response) {
                             $mdDialog.cancel();
                         });
                     });
                 } else {
-                    MessageService.showToast('Edição inválida!');
+                    MessageService.showErrorToast('Edição inválida!');
                 }
             });
         }

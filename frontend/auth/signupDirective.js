@@ -14,7 +14,7 @@
             }
             var newUser = controller.newUser;
             if (newUser.password !== newUser.verifypassword) {
-                MessageService.showToast("Senhas incompatíveis");
+                MessageService.showErrorToast("Senhas incompatíveis");
                 return;
             }
             AuthService.signupWithEmailAndPassword(

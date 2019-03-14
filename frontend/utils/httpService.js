@@ -42,7 +42,7 @@
             }).then(function success(response) {
                 deferred.resolve(response.data);
             }, function error(response) {
-                MessageService.showToast(response.data.msg);
+                MessageService.showErrorToast(response.data.msg);
                 deferred.reject(response);
             });
 

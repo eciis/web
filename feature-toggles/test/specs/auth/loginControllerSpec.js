@@ -85,15 +85,15 @@
             scope.$apply();
         });
 
-        it('Should be call messageService.showToast if login is not successful', function(done) {
+        it('Should be call messageService.showErrorToast if login is not successful', function(done) {
             spyOn(authService, 'loginWithGoogle').and.callFake(function() {
                 return q.reject('Login failed');
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
 
             logginCtrl.loginWithGoogle().then(function() {
                 expect(authService.loginWithGoogle).toHaveBeenCalled();
-                expect(messageService.showToast).toHaveBeenCalledWith('Login failed');
+                expect(messageService.showErrorToast).toHaveBeenCalledWith('Login failed');
                 done();
             });
 
@@ -117,15 +117,15 @@
             scope.$apply();
         });
 
-        it('Should be call messageService.showToast if login is not successful', function(done) {
+        it('Should be call messageService.showErrorToast if login is not successful', function(done) {
             spyOn(authService, 'loginWithEmailAndPassword').and.callFake(function() {
                 return q.reject('Login failed');
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
 
             logginCtrl.loginWithEmailPassword().then(function() {
                 expect(authService.loginWithEmailAndPassword).toHaveBeenCalledWith(logginCtrl.user.email, logginCtrl.user.password);
-                expect(messageService.showToast).toHaveBeenCalledWith('Login failed');
+                expect(messageService.showErrorToast).toHaveBeenCalledWith('Login failed');
                 done();
             });
 

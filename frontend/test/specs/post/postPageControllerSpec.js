@@ -95,13 +95,13 @@
         it('should call toClipboard', () => {
             spyOn(Utils, 'generateLink');
             spyOn(clipboard, 'toClipboard');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
 
             postCtrl.copyLink();
 
             expect(Utils.generateLink).toHaveBeenCalled();
             expect(clipboard.toClipboard).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
         });
     });
 
@@ -124,13 +124,13 @@
             spyOn(postService, 'addSubscriber').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
 
             postCtrl.addSubscriber();
             scope.$apply();
 
             expect(postService.addSubscriber).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
             expect(postCtrl.post.subscribers).toEqual([postCtrl.user.key]);
         });
     });
@@ -140,13 +140,13 @@
             spyOn(postService, 'removeSubscriber').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
 
             postCtrl.removeSubscriber();
             scope.$apply();
 
             expect(postService.removeSubscriber).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
         });
     });
 

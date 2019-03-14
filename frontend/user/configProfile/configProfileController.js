@@ -61,7 +61,7 @@
                 ImageService.readFile(data, setImage);
                 configProfileCtrl.file = null;
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -111,10 +111,10 @@
                 return UserService.save(patch)
                     .then(() => {
                         AuthService.save();
-                        MessageService.showToast("Edição concluída com sucesso");
+                        MessageService.showInfoToast("Edição concluída com sucesso");
                     });
             } 
-            MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+            MessageService.showErrorToast("Campos obrigatórios não preenchidos corretamente.");
             return $q.when();
         }
 
@@ -167,11 +167,11 @@
                     configProfileCtrl.user.state = 'inactive';
                     deleteUser();
                 }, function () {
-                    MessageService.showToast('Cancelado');
+                    MessageService.showInfoToast('Cancelado');
                 });
                 return promise;
             } else {
-                MessageService.showToast('Não é possível excluir sua conta enquanto você for administrador de uma instituição.');
+                MessageService.showErrorToast('Não é possível excluir sua conta enquanto você for administrador de uma instituição.');
             }
         };
 

@@ -50,7 +50,7 @@
                 setItems();
             })
             .catch(err => {
-                MessageService.showToast("Um erro ocorreu. Não foi possível carregar a instituição.");
+                MessageService.showErrorToast("Um erro ocorreu. Não foi possível carregar a instituição.");
             });
         };
 

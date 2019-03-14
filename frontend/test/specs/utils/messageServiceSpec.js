@@ -35,7 +35,7 @@
                 expect(mdToast.show).toHaveBeenCalled();
             });
 
-            it('should not call mdToast.show', function() {
+            it('should call mdToast.show', function() {
                 window.screen = { width: 200 };
                 spyOn(mdToast, 'show').and.callThrough();
                 service.showErrorToast("");

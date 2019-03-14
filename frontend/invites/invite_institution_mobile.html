@@ -73,15 +73,13 @@
         <clickable-card icon="check_circle" title="Convites Aceitos">
             <search-field keyword="searchAcceptedInvite"></search-field>
             <md-content class="invite-inst__list custom-scrollbar">
-                <entity-showcase ng-repeat="acceptedInvites in inviteInstCtrl.accepted_invitations | filter: searchAcceptedInvite"
+                <entity-showcase ng-repeat="acceptedInvite in inviteInstCtrl.accepted_invitations | filter: searchAcceptedInvite"
                     icon="account_balance"
-                    title="acceptedInvites.stub_institution.name"
+                    title="acceptedInvite.stub_institution.name"
                     subtitles-list="[
-                        'Nome sugerido: '+ acceptedInvites.suggestion_institution_name, 
+                        'Nome sugerido: '+ acceptedInvite.suggestion_institution_name, 
                     ]"
-                    right-icon-btns="[
-                        inviteInstCtrl.createIconBtn('more_vert', null, inviteInstCtrl.goToInst, [invite.stub_institution.key])
-                    ]">
+                    left-action="inviteInstCtrl.goToActiveInst(acceptedInvite.stub_institution)">
                 </entity-showcase>
             </md-content>
         </clickable-card>

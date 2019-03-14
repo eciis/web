@@ -22,6 +22,10 @@
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
 
+        inviteInstCtrl.$onInit = () => {
+            inviteInstCtrl._loadSentInvitations();
+            inviteInstCtrl._loadSentRequests();
+        };
 
         inviteInstCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
@@ -201,9 +205,12 @@
             }
         }
 
-        inviteInstCtrl.$onInit = () => {
-            inviteInstCtrl._loadSentInvitations();
-            inviteInstCtrl._loadSentRequests();
+        inviteInstCtrl.goToActiveInst = (institution) => {
+            if (institution.state === "active") {
+                inviteInstCtrl.goToInst(institution.key);
+            } else {
+                MessageService.showToast("Institutição inativa!");
+            }
         };
 
         inviteInstCtrl.createIconBtn = (icon, color, action, params, hideBtn) => {

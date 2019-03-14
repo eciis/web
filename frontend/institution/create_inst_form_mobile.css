@@ -75,7 +75,7 @@ md-content.grid-fill-screen {
 }
 
 #create-inst-card-content > h1 {
-  font-size: 1em;
+  font-size: 1.2em;
   font-weight: 500;
   text-transform: uppercase;
   justify-self: start;
@@ -93,7 +93,7 @@ md-content.grid-fill-screen {
 
 #form-switch {
   width: 100%;
-  margin-top: 0.6em;
+  margin-top: 1em;
 }
 
 #create-inst-content button.md-primary {

@@ -4,11 +4,11 @@
     <div class="search-mobile-options-title search-event-header" id="search-title" layout="row" layout-align="space-between">
         <b>Pesquisa avançada</b>
         <md-icon md-colors="{color: 'light-green-500'}" ng-if="!searchCtrl.hasNotSearched"
-            ng-click="searchCtrl.hasNotSearched = true; searchCtrl.clearFilters(); searchCtrl.refreshPreviousKeyword(); searchCtrl.search_keyword = ''">
+            ng-click="searchCtrl.closeSearchResult()">
             arrow_drop_down
         </md-icon>
     </div>
-    <div ng-if="searchCtrl.hasNotSearched" layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
+    <div ng-if="searchCtrl.hasNotSearched" layout="column" layout-align="center center" class="search-mobile-options search-event-scroll">
         <md-input-container class="search-mobile-input search-event-input-container" md-no-float>
             <p class="search-event-title">INSTITUIÇÃO</p>
             <input type="text" class="search-event-input" ng-model="searchCtrl.search_keyword"

@@ -126,6 +126,13 @@
 
         searchCtrl.isAnotherCountry = () => searchCtrl.searchCountry !== "Brasil";
 
+        searchCtrl.closeSearchResult = () => {
+            searchCtrl.search_keyword = '';
+            searchCtrl.hasNotSearched = true;
+            searchCtrl.clearFilters();
+            searchCtrl.refreshPreviousKeyword();
+        };
+
         /**
          * A simple function that works like a controller to the
          * search_dialog.html.

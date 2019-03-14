@@ -173,3 +173,7 @@
 .search-event-header {
   margin-top: 1.2em;
 }
+
+.search-event-scroll {
+  overflow: scroll;
+}

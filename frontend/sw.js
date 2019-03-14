@@ -7,7 +7,7 @@
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.
-    const CACHE_SUFIX = 'master';
+    const CACHE_SUFIX = 'dev';
 
     let messaging;
 
@@ -56,10 +56,21 @@
             options.data = {
                 url: options.click_action
             };
+
+            const body = JSON.parse(options.body);
+            options.body = body.data;
+            options.tag = body.type;
         }
 
         options.vibrate = [100, 50, 100];
         options.badge = options.icon;
+        console.log(event.data.json());
+        console.log(event.data.json().notification);
+         
+        console.log(options.tag);
+        self.registration.getNotifications().then(data => {
+          console.log(data);
+        });
 
         event.waitUntil(self.registration.showNotification(options.title, options));
     });

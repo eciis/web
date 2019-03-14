@@ -154,21 +154,4 @@
       <md-icon>keyboard_arrow_left</md-icon>
     </md-button>
     </md-card>
-
-    <!-- CONVITE JA PROCESSADO -->
-    <md-card ng-if="newInviteCtrl.isAlreadyProcessed" flex-xs="80" flex-sm="70" flex-gt-sm="50" class="no-margin">
-      <md-card-content style="background-color:#FFFFFF;" layout="column" layout-align="center center">
-        <div align="center">
-          <img src="app/images/logowithname.png" aria-label="e-CIS Logo" style="width: 50%;">
-        </div>
-        <div>
-          <p>Este convite já foi processado!</p>
-        </div>
-      </md-card-content>
-      <md-card-actions layout="row" layout-align="end center">
-        <md-button ng-click="newInviteCtrl.goToHome()"  md-colors="{background: 'teal-500'}">
-          VOLTAR
-        </md-button>
-      </md-card-actions>
-    </md-card>
 </md-content>

@@ -155,7 +155,7 @@
         }
 
         newInviteCtrl.showMobileInstInviteScreen = () => {
-          return Utils.isMobileScreen() && !newInviteCtrl.isInviteUser();
+          return Utils.isMobileScreen() && !newInviteCtrl.isInviteUser() && !newInviteCtrl.isAlreadyProcessed;
         };
 
         function showAlert(event) {

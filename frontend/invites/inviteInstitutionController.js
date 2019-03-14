@@ -4,7 +4,7 @@
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
-        STATES, $mdDialog, MessageService, StateLinkRequestService, STATE_LINKS) {
+        STATES, $mdDialog, MessageService, EntityShowcase, STATE_LINKS) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -213,14 +213,8 @@
             }
         };
 
-        inviteInstCtrl.createIconBtn = (icon, color, action, params, hideBtn) => {
-            const greyColor = '#9E9E9E';
-            return {
-                icon: icon,
-                iconColor: color || greyColor,
-                action: () => action(...params),
-                showIf: () => hideBtn === undefined ? true : hideBtn
-            };
+        inviteInstCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args)
         };
 
     });

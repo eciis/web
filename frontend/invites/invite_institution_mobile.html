@@ -52,7 +52,7 @@
             </div>
         </clickable-card>
         
-        <clickable-card icon="announcement" title="Convites Requisitados"  is-open="true">
+        <clickable-card icon="announcement" title="Convites Requisitados" show-notification="inviteInstCtrl.hasNewRequests()">
             <search-field keyword="searchSentRequests"></search-field>
             <md-content class="invite-inst__list custom-scrollbar">
                 <entity-showcase ng-repeat="request in inviteInstCtrl.sent_requests | filter: searchSentRequests"

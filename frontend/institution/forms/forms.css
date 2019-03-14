@@ -67,6 +67,8 @@ last-info-form #last-info-form {
   border: 1px solid;
   border-color: #ccc;
   border-radius: 0.4em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 #last-info-form #description textarea {

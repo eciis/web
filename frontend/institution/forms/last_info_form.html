@@ -1,15 +1,16 @@
 <form id="last-info-form" name="lastInfo" class='ec-form'>
   <md-input-container id='description'>
     <!-- Empty label prevents placeholder from becoming a label -->
-    <label></label>
+    <label style='margin-bottom: 1em;'>Descrição</label>
     <textarea name='description'
               placeholder='Uma breve descrição sobre sua instituição'
               md-no-auto-grow
               md-no-resize
               ng-model="ctrl.institution.description"
-              maxlength="1100"></textarea>
+              maxlength="1100"
+              required></textarea>
   </md-input-container>
-  <md-input-container>
+  <md-input-container style='margin-top: 1.2em;'>
     <label>Site institucional</label>
     <input type="text" name="site"
                        ng-model="ctrl.institution.website_url">

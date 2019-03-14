@@ -37,7 +37,7 @@ address-form #address-form {
   grid-area: cep;
 }
 
-.state-required {
+.field-required {
   font-size: 0.6em;
   line-height: 1em;
   overflow: visible;
@@ -72,4 +72,25 @@ last-info-form #last-info-form {
 #last-info-form #description textarea {
   height: 100% !important;
   border: 0 !important;
+}
+
+.ec-form md-input-container {
+  margin: 0.2em 0 0.2em 0;
+}
+
+.ec-form md-input-container.md-input-focused input {
+  border-color: #009688;
+}
+
+.ec-form .md-select-icon {
+  color: #8cbf4d;
+}
+
+.ec-form md-input-container .md-errors-spacer {
+  height: 0.2em;
+}
+
+.ec-form md-input-container label {
+  color: #1f6357;
+  font-weight: 500;
 }

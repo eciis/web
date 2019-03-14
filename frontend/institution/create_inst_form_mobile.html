@@ -1,0 +1,56 @@
+<md-content md-colors='{background: "teal-500"}' class='grid-fill-screen'>
+  <div id="create-inst-content">
+    <!-- STEP COUNTER -->
+    <div id='form-steps'>
+      <span md-colors='{background: "{{ctrl.stepColor(0)}}"}'><p>{{ 1 }}</p></span>
+      <hr>
+      <span md-colors='{background: "{{ctrl.stepColor(1)}}"}'><p>{{ 2 }}</p></span>
+      <hr>
+      <span md-colors='{background: "{{ctrl.stepColor(2)}}"}'><p>{{ 3 }}</p></span>
+    </div>
+    <!-- CARD -->
+    <div id='create-inst-card' class='ec-card'>
+      <div ng-if="ctrl.loading" class='loading-container'>
+        <load-circle></load-circle>
+      </div>
+      <div ng-if='!ctrl.loading' id='create-inst-card-content'>
+        <h1> {{ ctrl.currentStepLabel }} </h1>
+        <!-- FORMS -->
+        <div id='form-switch' ng-switch='ctrl.currentStep'>
+          <!-- DADOS CADASTRAIS -->
+          <address-form ng-switch-when='0'
+                        address='ctrl.newInstitution.address'>
+          </address-form>
+          <!-- DADOS DA INSTITUICAO -->
+          <institution-form ng-switch-when='1'
+                            institution='ctrl.newInstitution'
+                            on-new-photo='ctrl.onNewPhoto(photoSrc)'>
+          </institution-form>
+          <!-- FINALIZAR CADASTRO -->
+          <last-info-form ng-switch-when='2'
+                             institution='ctrl.newInstitution'>
+          </last-info-form>
+        </div>
+        <!-- PROXIMO / FINALIZAR -->
+        <md-button class='md-raised' id='forward-button'
+                   ng-if='ctrl.currentStep !== 2'
+                   md-colors='{background: "teal-500"}'
+                   ng-click='ctrl.nextStep()'>
+          Próximo
+        </md-button>
+        <md-button class='md-raised' id='forward-button'
+                   ng-if='ctrl.currentStep === 2'
+                   md-colors='{background: "teal-500"}'
+                   ng-click='ctrl.submit($event)'>
+          Finalizar
+        </md-button>
+        <!-- VOLTAR -->
+        <md-button class='md-fab' id='back-button'
+                   md-colors='{background: "light-green-500"}'
+                   ng-click='ctrl.backButton()'>
+          <md-icon>keyboard_arrow_left</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </div>
+</md-content>

@@ -38,7 +38,7 @@
             title: "<",
             subtitle: "<",
             subtitlesList: "<",
-            leftAction: "<",
+            leftAction: "&",
             rightIconBtns: "<",
         },
     });

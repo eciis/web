@@ -4,6 +4,15 @@ describe('Test CreateInvitedInstitutionController', function() {
   let state, statesConst, scope, institutionService, inviteService,
     authService, ctrl, imageService, mdDialog, observerRecorderService;
 
+  const address = {
+    country: 'Brasil',
+    street: 'Street',
+    federal_state: 'State',
+    neighbourhood: 'Neighbourhood',
+    city: 'City',
+    cep: '12345-768'
+  }
+
   const institution = {
     name: "name",
     photo_url: "imagens/test",
@@ -15,7 +24,7 @@ describe('Test CreateInvitedInstitutionController', function() {
     actuation_area: "government agencies",
     phone_number: "phone",
     cnpj: "cnpj",
-    address: {},
+    address: new Address(address),
     leader: "leader name",
     institutional_email: "email@institutional.com",
     description: "teste"
@@ -130,15 +139,6 @@ describe('Test CreateInvitedInstitutionController', function() {
     describe('first step', () => {
       describe('when country is Brasil', () => {
         beforeEach(() => {
-          ctrl.newInstitution.address = {
-            country: 'Brasil',
-            street: 'Street',
-            federal_state: 'State',
-            neighbourhood: 'Neighbourhood',
-            city: 'City',
-            cep: '12345-768'
-          }
-
           ctrl.currentStep = 0;
         });
 

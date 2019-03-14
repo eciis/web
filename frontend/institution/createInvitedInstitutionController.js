@@ -2,8 +2,8 @@
 (function() {
   angular.module('app')
     .controller('CreateInvitedInstitutionController',
-      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService', '$mdDialog', 'ObserverRecorderService', 'ImageService',
-        function (STATES, $state, AuthService, InstitutionService, MessageService, $mdDialog, ObserverRecorderService, ImageService) {
+      ['STATES', '$state', 'AuthService', 'InstitutionService', 'MessageService', '$mdDialog', 'ObserverRecorderService', 'ImageService', 'InviteService',
+        function (STATES, $state, AuthService, InstitutionService, MessageService, $mdDialog, ObserverRecorderService, ImageService, InviteService) {
           const ctrl = this;
           let observer;
           ctrl.loading = true;
@@ -295,7 +295,9 @@
             ctrl.user = AuthService.getCurrentUser();
             ctrl.institutionKey = $state.params.institutionKey;
             const inviteKey = $state.params.inviteKey;
-            ctrl.invite = _.find(ctrl.user.invites, i => _.isEqual(i.key, inviteKey));
+            InviteService.getInvite(inviteKey).then(res => {
+              ctrl.invite = res;
+            })
             if (ctrl.institutionKey) {
               ctrl.loadInstitution(ctrl.institutionKey)
             } else {

@@ -71,6 +71,7 @@
         };
         state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
+        inviteinstitutionCtrl.$onInit();
         httpBackend.flush();
     }));
 
@@ -218,9 +219,11 @@
 
     describe('$onInit', function () {
         it('should call showLinkRequestDialog if in mobile screen', function () {
-            spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+            spyOn(inviteinstitutionCtrl, '_loadSentRequests');
+            spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
             inviteinstitutionCtrl.$onInit();
-            expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.INVITE_INSTITUTION, states.HOME);
+            expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
+            expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
         });
     });
 }));

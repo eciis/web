@@ -153,7 +153,7 @@
             angular.element($cancelButton).addClass('green-button-text');
         }
 
-        function loadSentRequests() {
+        inviteInstCtrl._loadSentRequests = () => {
             var institution_key = inviteInstCtrl.user.current_institution.key;
             RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
@@ -163,7 +163,7 @@
             });
         }
         
-        function loadSentInvitations() {
+        inviteInstCtrl._loadSentInvitations = () => {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 var requests = response;
                 getSentInvitations(requests);
@@ -194,9 +194,8 @@
         }
 
         inviteInstCtrl.$onInit = () => {
-            if (Utils.isMobileScreen()) {
-                //   StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.INVITE_INSTITUTION, STATES.HOME);
-            }
+            inviteInstCtrl._loadSentInvitations();
+            inviteInstCtrl._loadSentRequests();
         };
 
         inviteInstCtrl.createIconBtn = (icon, color, action, params, hideBtn) => {
@@ -209,9 +208,5 @@
             };
         };
 
-        (function main() {
-            loadSentInvitations();
-            loadSentRequests();
-        })();
     });
 })();

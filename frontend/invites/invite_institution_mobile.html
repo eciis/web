@@ -33,7 +33,7 @@
             </div>
         </clickable-card>
 
-        <clickable-card icon="email" title="Convites Enviados" is-open="true">
+        <clickable-card icon="email" title="Convites Enviados">
             <div class="invite-inst__card__content">
                 <search-field keyword="searchSentInvites"></search-field>
                 <md-content class="invite-inst__list custom-scrollbar">
@@ -52,18 +52,18 @@
             </div>
         </clickable-card>
         
-        <clickable-card icon="announcement" title="Convites Requisitados">
+        <clickable-card icon="announcement" title="Convites Requisitados"  is-open="true">
             <search-field keyword="searchSentRequests"></search-field>
             <md-content class="invite-inst__list custom-scrollbar">
                 <entity-showcase ng-repeat="request in inviteInstCtrl.sent_requests | filter: searchSentRequests"
                     icon="account_balance"
-                    title="request.stub_institution.name || request.suggestion_institution_name"
+                    title="request.institution.name || request.requested_inst_name"
                     subtitles-list="[
                         'Requisitado por: '+ request.sender_name, 
-                        'E-mail: ' + request.invitee
+                        'E-mail: ' + request.sender[0]
                     ]"
                     right-icon-btns="[
-                        inviteInstCtrl.createIconBtn('error', '#009688', inviteInstCtrl.showPendingRequestDialog, [$event, request.key])
+                        inviteInstCtrl.createIconBtn('error', '#009688', inviteInstCtrl.showPendingRequestDialog, [$event, request])
                     ]">
                 </entity-showcase>
             </md-content>

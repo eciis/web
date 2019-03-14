@@ -74,11 +74,15 @@
 
             MessageService.showConfirmationDialog({}, "Ligação recebida", `Ligação de ${user.name}. Aceitar?`).then(answer => {
                 if (answer) {
-                    homeCtrl.currentUser = user;
-                    getMedia().then(stream => {
-                        homeCtrl.client.acceptCall(id, stream);
-                    });
+                    homeCtrl.acceptCall(user, id);
                 }
+            });
+        };
+
+        homeCtrl.acceptCall = (user, id) => {
+            homeCtrl.currentUser = user;
+            getMedia().then(stream => {
+                homeCtrl.client.acceptCall(id, stream);
             });
         };
 

@@ -1,11 +1,11 @@
-<div class="chat-body__container custom-scrollbar" scroll-glue="glued">
+<div class="chat-body__messages-container custom-scrollbar" scroll-glue="glued" ng-show="!chatBodyCtrl.videoActive">
     <chat-message
             class="chat-body__message"
             ng-repeat="message in chatBodyCtrl.messages"
             message-obj="message">
     </chat-message>
 </div>
-<div class="chat-body__video-container">
+<div class="chat-body__video-container" ng-show="chatBodyCtrl.videoActive">
     <video id="video-remote" autoplay></video>
     <video id="video-selfie" autoplay></video>
 </div>

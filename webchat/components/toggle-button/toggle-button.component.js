@@ -47,8 +47,8 @@
         };
 
         toggleButtonCtrl.toggle = () => {
-            toggleButtonCtrl.active = !toggleButtonCtrl.active;
             toggleButtonCtrl.activeActionFunc();
+            toggleButtonCtrl.active = !toggleButtonCtrl.active;
         };
 
         Object.defineProperty(toggleButtonCtrl, 'activeIcon', {

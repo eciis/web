@@ -9,11 +9,14 @@
             user: "<",
             chat: "<",
             callFunc: "<",
+            enableVideoFunc: '<',
+            disableVideoFunc: '<',
         },
     });
 
     function chatHeaderController() {
         const chatHeaderCtrl = this;
+
     }
 
 })();

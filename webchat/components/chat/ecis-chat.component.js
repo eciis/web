@@ -25,6 +25,17 @@
         ecisChatCtrl.call = () => {
             ecisChatCtrl.callFunc(ecisChatCtrl.user);
         };
+
+        ecisChatCtrl.disableVideo = () => {
+            ecisChatCtrl.videoActive = false;
+            console.log('disabled');
+        };
+
+        ecisChatCtrl.enableVideo = () => {
+            ecisChatCtrl.videoActive = true;
+            console.log('enabled');
+        };
+
     }
 
 })();

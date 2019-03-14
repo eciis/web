@@ -7,6 +7,8 @@
         controllerAs: "chatButtonsCtrl",
         bindings: {
             callFunc: "<",
+            enableVideoFunc: "<",
+            disableVideoFunc: "<",
         },
     });
 

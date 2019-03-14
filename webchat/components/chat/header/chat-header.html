@@ -4,5 +4,8 @@
             avatar="{{ chatHeaderCtrl.user.photo_url }}"
             name="{{ chatHeaderCtrl.user.name }}"
             text="{{ chatHeaderCtrl.user.email[0] }}"></user-description>
-    <chat-buttons class="chat-header__buttons" call-func="chatHeaderCtrl.callFunc"></chat-buttons>
+    <chat-buttons class="chat-header__buttons"
+                  call-func="chatHeaderCtrl.callFunc"
+                  enable-video-func="chatHeaderCtrl.enableVideoFunc"
+                  disable-video-func="chatHeaderCtrl.disableVideoFunc"></chat-buttons>
 </div>

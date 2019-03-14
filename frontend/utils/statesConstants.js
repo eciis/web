@@ -27,6 +27,7 @@
         MANAGE_INST_MENU_MOB: "app.manage_institution.menu",
         MANAGE_INST_MEMBERS: "app.manage_institution.members",
         MANAGE_INST_EDIT: "app.manage_institution.edit_info",
+        MANAGE_INST_LINKS: "app.manage_institution.links",
         MANAGE_INST_INVITE_INST: "app.manage_institution.invite_inst",
         EVENT_DETAILS: "app.user.event",
         NEW_INVITE: "new_invite",

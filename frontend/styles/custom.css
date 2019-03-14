@@ -537,6 +537,15 @@ a:active {
    border: 2px solid #EFEBE9;
 }
 
+@media screen and (max-width: 420px) {
+    .notification-badge[data-badge]:after {
+        background: #84C45E;
+        width: 11px;
+        height: 11px;
+        border: none;
+    }
+}
+
 .counter-of-notifications {
     position:relative;
 }
@@ -954,9 +963,17 @@ md-radio-button.md-default-theme.md-checked .md-off, md-radio-button.md-checked 
   }
 
 md-input-container:not(.md-input-invalid).md-input-focused .green-input,
-    md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused .green-input {
+md-input-container:not(.md-input-invalid).md-input-has-value.md-input-focused .green-input {
     border-color:#009688;
     border-width: 0 0 2px;
+}
+
+md-radio-button:not([disabled]).md-primary .md-on {
+    background-color: teal;
+}
+
+md-radio-group:not([disabled]) .md-primary.md-checked .md-off {
+    border-color: teal;
 }
 
 .shared-survey{
@@ -1129,6 +1146,10 @@ md-input-container:not(.md-input-invalid).md-input-focused .green-input,
 .custom-title {
     font-size: 20px;
     font-weight: 500;
+}
+
+.zero-margin{
+    margin: 0px;
 }
 
 /* Smartphones */

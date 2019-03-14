@@ -3,6 +3,12 @@
     padding: 1em 0;
 }
 
+.invite-inst__toolbar {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+}
+
 .invite-inst__toolbar__title {
     color: #737474;
     text-transform: uppercase;
@@ -13,7 +19,7 @@
     grid-row-start: 2;
     display: grid;
     grid-row-gap: 1em;
-    padding-top: 10%;
+    padding-top: 25%;
 }
 
 .invite-inst__card__content {

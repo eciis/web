@@ -104,8 +104,8 @@
   </survey-details>
 
   <!-- BODY SHARED EVENT -->
-  <deleted-post message="ESTE EVENTO FOI REMOVIDO" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post)"></deleted-post>
-  <event-details ng-if="postDetailsCtrl.showSharedEvent() && false" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>
+  <!--<deleted-post message="ESTE EVENTO FOI REMOVIDO" post="postDetailsCtrl.post" ng-if="postDetailsCtrl.isDeletedEvent(postDetailsCtrl.post) && !postDetailsCtrl.isDeleted(postDetailsCtrl.post) && false"></deleted-post>
+  <event-details ng-if="postDetailsCtrl.showSharedEvent() && false" event="postDetailsCtrl.post.shared_event" is-event-page=false></event-details>-->
   <shared-event ng-if="postDetailsCtrl.showSharedEvent()" event="postDetailsCtrl.post.shared_event"></shared-event>
 
   <!-- BODY SHARED POST -->

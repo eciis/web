@@ -3,14 +3,20 @@
         <img style="width: 100%;" ng-if="eventDetailsCtrl.showImage"
             style="background-color: white;" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
 
-        <div class="shared-event__canceled-box">
-            <md-icon class="shared-event__canceled-box__icon">cancel</md-icon>
-            <p style="grid-area: title; margin: 0;">ESTE EVENTO FOI CANCELADO</p>
-            <p style="grid-area: user; margin: 0;">por Administrador do CIS * Ontem às 22:32</p>
+        <div class="shared-event__canceled" ng-if="eventDetailsCtrl.isDeleted()">
+            <div class="shared-event__canceled-box">
+                <md-icon class="shared-event__canceled-box__icon">cancel</md-icon>
+                <p style="grid-area: title; margin: 0;">ESTE EVENTO FOI CANCELADO</p>
+                <p style="grid-area: user; margin: 0; font-size: 11px;">
+                    {{eventDetailsCtrl.event.last_modified_by == eventDetailsCtrl.event.author ? 'por' : 'pelo administrador'}} 
+                    {{eventDetailsCtrl.event.last_modified_by}}
+                    {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
+                </p>
+            </div>
         </div>
     </div>
-    <div style="display: grid; grid-template-columns: max-content 1fr;">
-        <div style="display: grid; grid-template-rows: auto auto auto; justify-content: center; justify-items: center; align-content: center; color: white; background-color: #8CC04E; padding: 8px;">
+    <div class="shared-event__info">
+        <div class="shared-event__info__date" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info__date--canceled' : 'shared-event__info__date--active'">
             <h3 style="font-weight: bold; margin: 0;" ng-if="!eventDetailsCtrl.endInTheSameDay()">
             {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
             A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h3>
@@ -27,7 +33,7 @@
                 {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
             </h3>
         </div>
-        <div style="background-color: #199688; display: grid; grid-template-rows: auto auto; align-content: space-around; padding: 8px;">
+        <div class="shared-event__info_name" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info_name--canceled' : 'shared-event__info_name--active'">
             <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
                 <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
             </a>

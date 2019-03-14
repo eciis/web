@@ -172,6 +172,10 @@
                 $state.go(STATES.HOME);
             });
         }
+
+        inviteInstCtrl.hasNewRequests = () => {
+            return inviteInstCtrl.sent_requests.length > 0;
+        };
         
         function getSentInvitations(requests) {
             var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');

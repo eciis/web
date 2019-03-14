@@ -59,7 +59,7 @@
                     icon="account_balance"
                     title="request.institution.name || request.requested_inst_name"
                     subtitles-list="[
-                        'Requisitado por: '+ request.sender_name, 
+                        'Requisitado por: '+ request.sender_name,
                         'E-mail: ' + request.sender[0]
                     ]"
                     right-icon-btns="[
@@ -69,6 +69,17 @@
             </md-content>
         </clickable-card>
 
-        <clickable-card icon="check_circle" title="Convites Aceitos"></clickable-card>
+        <clickable-card icon="check_circle" title="Convites Aceitos">
+            <search-field keyword="searchAcceptedInvite"></search-field>
+            <md-content class="invite-inst__list custom-scrollbar">
+                <entity-showcase ng-repeat="acceptedInvites in inviteInstCtrl.accepted_invitations | filter: searchAcceptedInvite"
+                    icon="account_balance"
+                    title="acceptedInvites.stub_institution.name"
+                    subtitles-list="[
+                        'Nome sugerido: '+ acceptedInvites.suggestion_institution_name, 
+                    ]">
+                </entity-showcase>
+            </md-content>
+        </clickable-card>
     </div>
 </md-content>

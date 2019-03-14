@@ -1,9 +1,8 @@
 "use strict";
 
 (function() {
-    const app = angular.module("app");
 
-    app.controller("EventCardController", function EventCardController(AuthService) {
+    function EventCardController(AuthService) {
         const eventCardCtrl = this;
         
         eventCardCtrl.user = AuthService.getCurrentUser();
@@ -20,15 +19,16 @@
 
         eventCardCtrl.$onInit = () => {
             const address = eventCardCtrl.event.address;
-            if (_.isString(address)) {
+            if (_.isString(address))
                 eventCardCtrl.event.address = JSON.parse(address);
-            }
         };
-    });
+    };
 
-    app.component("eventCard", {
+     angular
+    .module("app")
+    .component("eventCard", {
         templateUrl: 'app/event/event_card.html',
-        controller: 'EventCardController',
+        controller: ['AuthService', EventCardController],
         controllerAs: 'eventCardCtrl',
         bindings: {
             event: '<',

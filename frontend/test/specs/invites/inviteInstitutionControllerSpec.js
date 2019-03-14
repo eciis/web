@@ -1,6 +1,6 @@
 'use strict';
 
-(fdescribe('Test InviteInstitutionController', function() {
+(describe('Test InviteInstitutionController', function() {
 
     var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
     let stateLinkRequestService, states, stateLinks;

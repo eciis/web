@@ -106,10 +106,9 @@
   margin-top: -1.2em;
 }
 
-.search-event-title, .search-event-select-menu {
-  color: #004D40;
-  font-size: 0.8em;
-  margin-top: -0.1em;
+.search-event-title {
+  color: #009688;
+  font-size: 0.96em;
 }
 
 .search-event-title {

@@ -1,6 +1,6 @@
 <div>
-    <div class="shared-event__image-container">
-        <img style="width: 100%;" ng-if="eventDetailsCtrl.showImage"
+    <div class="shared-event__image-container" ng-if="eventDetailsCtrl.showImage">
+        <img style="width: 100%;"
             style="background-color: white;" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
 
         <div class="shared-event__canceled" ng-if="eventDetailsCtrl.isDeleted()">
@@ -35,9 +35,9 @@
         </div>
         <div class="shared-event__info_name" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info_name--canceled' : 'shared-event__info_name--active'">
             <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
-                <span style="color: white;">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+                <span class="shared-event__info_name-event">{{ eventDetailsCtrl.event.title | uppercase}}</span>
             </a>
-            <span style="color: white; margin-top: auto;" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+            <span class="shared-event__info_name-inst" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
         </div>
     </div>
 </div>

@@ -74,3 +74,16 @@
     background-color: #707070;
     color: #B5B5B5;
 }
+
+.shared-event__info_name-event {
+    color: white;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shared-event__info_name-inst {
+    color: white;
+}

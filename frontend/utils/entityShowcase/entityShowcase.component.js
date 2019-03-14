@@ -37,7 +37,7 @@
             icon: "@",
             title: "<",
             subtitle: "<",
-            leftAction: "<",
+            leftAction: "&",
             rightIconBtns: "<",
         },
     });

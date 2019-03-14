@@ -22,6 +22,7 @@
         controllerAs: 'clickableCardCtrl',
         bindings: {
             icon: '@',
+            showNotification: '<',
             title: '@',
             isOpen: '<'
         },

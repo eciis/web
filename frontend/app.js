@@ -244,7 +244,7 @@
                 url: "/institution/:institutionKey",
                 views: {
                     content: {
-                        templateUrl: "app/institution/management_institution_page.html",
+                        templateUrl: "app/institution/manageInstitution/management_institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -268,6 +268,15 @@
                             SCREEN_SIZES.SMARTPHONE
                         ),
                         controller: "ManagementMembersController as manageMemberCtrl"
+                    }
+                }
+            })
+            .state(STATES.MANAGE_INST_LINKS, {
+                url: "/links",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/manageInstitution/management_institution_mobile.html",
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
             })
@@ -555,6 +564,7 @@
             STATES.CREATE_EVENT,
             STATES.SEARCH_EVENT,
             STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_LINKS,
             STATES.MANAGE_INST_MENU_MOB
         ];
 

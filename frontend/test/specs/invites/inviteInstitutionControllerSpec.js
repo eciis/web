@@ -1,6 +1,6 @@
 'use strict';
 
-(describe('Test InviteInstitutionController', function() {
+(fdescribe('Test InviteInstitutionController', function() {
 
     var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
     let stateLinkRequestService, states, stateLinks;
@@ -32,6 +32,11 @@
         sender: 'admin',
         status: 'sent',
     }
+
+    const form = {
+        '$setPristine': () => {},
+        '$setUntouched': () => {}
+    };
 
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
@@ -72,6 +77,7 @@
         state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
         inviteinstitutionCtrl.$onInit();
+        inviteinstitutionCtrl.inviteInstForm = form;
         httpBackend.flush();
     }));
 
@@ -100,6 +106,7 @@
                         }
                     };
                 });
+                spyOn(inviteinstitutionCtrl, 'resetForm');
                 inviteinstitutionCtrl.invite = invite;
             });
 
@@ -108,6 +115,7 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
+                    expect(inviteinstitutionCtrl.resetForm).toHaveBeenCalled();
                     done();
                 });
             });

@@ -47,6 +47,7 @@
             searchCtrl.searchCoutry = "";
             searchCtrl.searchCity = "";
             searchCtrl.institutions = [];
+            searchCtrl.events = [];
         };
 
         /**
@@ -122,6 +123,8 @@
         searchCtrl.goToEvent = (event) => {
             event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.id });
         };
+
+        searchCtrl.isAnotherCountry = () => searchCtrl.searchCountry !== "Brasil";
 
         /**
          * A simple function that works like a controller to the

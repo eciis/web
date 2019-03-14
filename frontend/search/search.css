@@ -161,3 +161,16 @@
   grid-column-gap: 0.4em;
   margin-top: 1em;
 }
+
+.search-event-input-container {
+  padding: 0;
+  margin: 0;
+}
+
+.search-event-select-container {
+  margin-bottom: 2em;
+}
+
+.search-event-header {
+  margin-top: 1.2em;
+}

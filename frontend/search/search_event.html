@@ -1,61 +1,58 @@
 <white-toolbar title="PESQUISAR" primary-button-icon="close"></white-toolbar>
 
 <div style="overflow: scroll;">
-    <div class="search-mobile-options-title" id="search-title" layout="row" layout-align="space-between">
+    <div class="search-mobile-options-title search-event-header" id="search-title" layout="row" layout-align="space-between">
         <b>Pesquisa avançada</b>
         <md-icon md-colors="{color: 'light-green-500'}" ng-if="!searchCtrl.hasNotSearched"
             ng-click="searchCtrl.hasNotSearched = true; searchCtrl.clearFilters(); searchCtrl.refreshPreviousKeyword(); searchCtrl.search_keyword = ''">
             arrow_drop_down
         </md-icon>
     </div>
-    <div layout="row" layout-align="center" class="search-mobile-content" ng-if="searchCtrl.hasNotSearched">
-        <form layout="row" layout-align="center center">
-            <md-input-container class="search-mobile-input" md-no-float>
-                <p class="search-event-title">INSTITUIÇÃO</p>
-                <input type="text" class="search-event-input" ng-model="searchCtrl.search_keyword"
-                placeholder="Digite o nome ou sigla da instituição" ng-change="searchCtrl.setHasChanges()"/>
-            </md-input-container>
-        </form>
+    <div ng-if="searchCtrl.hasNotSearched" layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
+        <md-input-container class="search-mobile-input search-event-input-container" md-no-float>
+            <p class="search-event-title">INSTITUIÇÃO</p>
+            <input type="text" class="search-event-input" ng-model="searchCtrl.search_keyword"
+            placeholder="Digite o nome ou sigla da instituição" ng-change="searchCtrl.setHasChanges()"/>
+        </md-input-container>
+        <md-input-container class="search-event-input-container">
+            <input mdc-datetime-picker="" ng-model="searchCtrl.searchDate" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
+                placeholder="DATA DO EVENTO" class="search-event-input" today-text="Hoje" cancel-text="Cancelar"
+                ng-change="searchCtrl.searchBy(searchCtrl.searchDate.toISOString().split('T')[0], 'event')"/>
+        </md-input-container>
+        <md-input-container class="search-event-input-container search-event-select-container">
+            <md-select placeholder="PAÍS" ng-model="searchCtrl.searchCountry" class="search-by-mobile">
+                <md-option ng-repeat="country in searchCtrl.countries" ng-value="country.nome_pais" ng-click="searchCtrl.searchBy(country.nome_pais, 'event')">
+                    {{country.nome_pais}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container class="search-event-input-container search-event-select-container">
+            <md-select placeholder="ESTADO" ng-model="searchCtrl.searchState" class="search-by-mobile"
+            ng-change="searchCtrl.getCitiesByState()" ng-disabled="searchCtrl.isAnotherCountry()">
+                <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state"
+                ng-click="searchCtrl.searchBy(state.nome, 'event')">
+                    {{state.nome}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container class="search-event-input-container">
+            <md-select placeholder="CIDADE" ng-model="searchCtrl.searchCity"
+                class="search-by-mobile" ng-disabled="searchCtrl.isAnotherCountry() || searchCtrl.searchState">
+                <md-option ng-repeat="city in searchCtrl.cities" ng-value="city" ng-click="searchCtrl.searchBy(city, 'event')">
+                    {{city}}
+                </md-option>
+            </md-select>
+        </md-input-container>
     </div>
-    <div ng-if="searchCtrl.hasNotSearched">
-        <div layout="column" layout-align="center center" class="search-mobile-options" style="overflow: scroll">
-            <md-input-container>
-                <input mdc-datetime-picker="" ng-model="searchCtrl.searchDate" short-time="false" date="true" time="false" type="text" format="DD-MM-YYYY"
-                    placeholder="DATA DO EVENTO" class="md-input" today-text="Hoje" cancel-text="Cancelar"
-                    ng-change="searchCtrl.searchBy(searchCtrl.searchDate.toISOString().split('T')[0], 'event')"/>
-            </md-input-container>
-            <md-input-container>
-                <md-select placeholder="PAÍS" ng-model="searchCtrl.searchCountry" class="search-by-mobile">
-                    <md-option ng-repeat="country in searchCtrl.countries" ng-value="country.nome_pais" ng-click="searchCtrl.searchBy(country.nome_pais, 'event')">
-                        {{country.nome_pais}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container>
-                <md-select placeholder="ESTADO" ng-model="searchCtrl.searchState" class="search-by-mobile"
-                ng-change="searchCtrl.getCitiesByState()">
-                    <md-option ng-repeat="state in searchCtrl.brazilianFederalStates" ng-value="state"
-                    ng-click="searchCtrl.searchBy(state.nome, 'event')">
-                        {{state.nome}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-            <md-input-container>
-                <md-select placeholder="CIDADE" ng-model="searchCtrl.searchCity" class="search-by-mobile">
-                    <md-option ng-repeat="city in searchCtrl.cities" ng-value="city" ng-click="searchCtrl.searchBy(city, 'event')">
-                        {{city}}
-                    </md-option>
-                </md-select>
-            </md-input-container>
-        </div>
-        <div layout="row" layout-align="end center" class="search-mobile-action-buttons">
-            <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
-                CANCELAR
-            </md-button>
-            <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event, 'event')" ng-disabled="!searchCtrl.hasChanges">
-                PESQUISAR
-            </md-button>
-        </div>
+    <div layout="row" layout-align="end center" ng-if="searchCtrl.hasNotSearched"class="search-mobile-action-buttons">
+        <md-button md-colors="{background:'grey-500'}" ng-click="searchCtrl.leaveMobileSearchPage()">
+            CANCELAR
+        </md-button>
+        <md-button md-colors="{background:'teal-500'}" ng-click="searchCtrl.search($event, 'event')" ng-disabled="!searchCtrl.hasChanges">
+            PESQUISAR
+        </md-button>
     </div>
     <div ng-if="!searchCtrl.hasNotSearched">
         <div ng-if="searchCtrl.events.length > 0">

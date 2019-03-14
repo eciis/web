@@ -5,7 +5,7 @@ from google.appengine.api import search
 from . import SearchDocument
 from utils import text_normalize
 import json
-from datetime import datetime
+from datetime import timedelta
 
 __all__ = ['SearchEvent']
 
@@ -23,10 +23,9 @@ def event_has_changes(fields, entity):
 
         return False
 
-def get_date_string_without_utc(event_date):
-    """It returns only the date string without hours or hours with incorrect UTC."""
-    return datetime(event_date.year, event_date.month, event_date.day,
-                event_date.hour - 3).isoformat().split("T")[0]
+def get_date_string(event_date):
+    """It fix the utc for Brazil and returns only the date."""
+    return (event_date - timedelta(hours=3)).isoformat().split("T")[0]
 
 class SearchEvent(SearchDocument):
     """Search event's model."""
@@ -55,7 +54,7 @@ class SearchEvent(SearchDocument):
                 'institution_key': event.institution_key.urlsafe(),
                 'photo_url': event.photo_url,
                 'institution_acronym': event.institution_acronym,
-                'start_time': get_date_string_without_utc(event.start_time),
+                'start_time': get_date_string(event.start_time),
                 'address': event.address and json.dumps(dict(event.address)),
                 'country': event.address and event.address.country,
                 'federal_state': event.address and event.address.federal_state,

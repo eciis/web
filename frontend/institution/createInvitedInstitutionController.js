@@ -108,7 +108,7 @@
             get: function() {
               const labels = {
                 0: 'Dados Cadastrais',
-                1: 'Dados da Instituiçao',
+                1: 'Dados da Instituição',
                 2: 'Finalizar Cadastro',
               }
               return labels[ctrl.currentStep];

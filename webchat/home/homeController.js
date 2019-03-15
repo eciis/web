@@ -65,10 +65,10 @@
         homeCtrl.promptCall = (id) => {
             const user = homeCtrl.getUser(id);
 
-            MessageService.showConfirmationDialog({}, "Ligação recebida", `Ligação de ${user.name}. Aceitar?`).then(answer => {
-                if (answer) {
-                    homeCtrl.acceptCall(user, id);
-                }
+            MessageService.showConfirmationDialog({}, {
+                title: user.name,
+                subtitle: "Está te ligando você deseja atender essa ligação?",
+                confirmAction: () => homeCtrl.acceptCall(user, id),
             });
         };
 

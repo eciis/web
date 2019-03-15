@@ -28,18 +28,39 @@
             return (message && msg[message.code]) || msg[message] || message;
         }
 
-        service.showConfirmationDialog = function showConfirmationDialog(event, title, textContent) {
-            const confirm = $mdDialog.confirm()
-                .clickOutsideToClose(true)
-                .title(title)
-                .textContent(textContent)
-                .ariaLabel(title)
-                .targetEvent(event)
-                .ok('Ok')
-                .cancel('Cancelar');
+        service.showConfirmationDialog = function showConfirmationDialog(event, params) {
+            const dialog = {
+                templateUrl: "app/utils/confirm_dialog.html",
+                controller: dialogController,
+                controllerAs: 'dialogCtrl',
+                parent: angular.element(document.body),
+                targetEvent: event,
+                clickOutsideToClose:true,
+                locals: params,
+            };
 
-            return $mdDialog.show(confirm);
+            return $mdDialog.show(dialog);
         };
+
+        function dialogController (locals) {
+            const dialogCtrl = this;
+
+            dialogCtrl.$onInit = () => {
+                _.assign(dialogCtrl, locals);
+                _.defaults(dialogCtrl, {
+                    confirmAction: () => {},
+                    cancelText: "Cancelar",
+                    confirmText: "Confirmar",
+                });
+            };
+
+            dialogCtrl.cancelDialog = $mdDialog.cancel;
+
+            dialogCtrl.confirmDialog = () => {
+                dialogCtrl.confirmAction();
+                $mdDialog.hide();
+            };
+        }
 
         service.showMessageDialog = function (event, message) {
 

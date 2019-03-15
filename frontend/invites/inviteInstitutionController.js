@@ -4,7 +4,7 @@
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
-        STATES, $mdDialog, MessageService, StateLinkRequestService, STATE_LINKS) {
+        STATES, $mdDialog, MessageService, EntityShowcase, STATE_LINKS) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -22,6 +22,10 @@
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
 
+        inviteInstCtrl.$onInit = () => {
+            inviteInstCtrl._loadSentInvitations();
+            inviteInstCtrl._loadSentRequests();
+        };
 
         inviteInstCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
@@ -29,6 +33,11 @@
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
+        };
+
+        inviteInstCtrl.resetForm = () => {
+            inviteInstCtrl.inviteInstForm.$setPristine();
+            inviteInstCtrl.inviteInstForm.$setUntouched();
         };
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
@@ -80,6 +89,8 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
+            }).then(_ => {
+                inviteInstCtrl.resetForm();
             });
         };
 
@@ -93,6 +104,7 @@
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
+                    inviteInstCtrl.resetForm();
                     MessageService.showToast('Convite enviado com sucesso!');
                 });
             return promise;
@@ -153,7 +165,7 @@
             angular.element($cancelButton).addClass('green-button-text');
         }
 
-        function loadSentRequests() {
+        inviteInstCtrl._loadSentRequests = () => {
             var institution_key = inviteInstCtrl.user.current_institution.key;
             RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
@@ -163,7 +175,7 @@
             });
         }
         
-        function loadSentInvitations() {
+        inviteInstCtrl._loadSentInvitations = () => {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 var requests = response;
                 getSentInvitations(requests);
@@ -172,6 +184,10 @@
                 $state.go(STATES.HOME);
             });
         }
+
+        inviteInstCtrl.hasNewRequests = () => {
+            return inviteInstCtrl.sent_requests.length > 0;
+        };
         
         function getSentInvitations(requests) {
             var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
@@ -189,15 +205,17 @@
             }
         }
 
-        inviteInstCtrl.$onInit = () => {
-            if (Utils.isMobileScreen()) {
-                  StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.INVITE_INSTITUTION, STATES.HOME);
+        inviteInstCtrl.goToActiveInst = (institution) => {
+            if (institution.state === "active") {
+                inviteInstCtrl.goToInst(institution.key);
+            } else {
+                MessageService.showToast("Institutição inativa!");
             }
         };
 
-        (function main() {
-            loadSentInvitations();
-            loadSentRequests();
-        })();
+        inviteInstCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args)
+        };
+
     });
 })();

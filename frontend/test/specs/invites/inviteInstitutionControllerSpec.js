@@ -33,6 +33,11 @@
         status: 'sent',
     }
 
+    const form = {
+        '$setPristine': () => {},
+        '$setUntouched': () => {}
+    };
+
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
     var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution", key: '123'}, 'institution', institution.key);
@@ -71,6 +76,8 @@
         };
         state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
+        inviteinstitutionCtrl.$onInit();
+        inviteinstitutionCtrl.inviteInstForm = form;
         httpBackend.flush();
     }));
 
@@ -99,6 +106,7 @@
                         }
                     };
                 });
+                spyOn(inviteinstitutionCtrl, 'resetForm');
                 inviteinstitutionCtrl.invite = invite;
             });
 
@@ -107,6 +115,7 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
+                    expect(inviteinstitutionCtrl.resetForm).toHaveBeenCalled();
                     done();
                 });
             });
@@ -218,9 +227,11 @@
 
     describe('$onInit', function () {
         it('should call showLinkRequestDialog if in mobile screen', function () {
-            spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+            spyOn(inviteinstitutionCtrl, '_loadSentRequests');
+            spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
             inviteinstitutionCtrl.$onInit();
-            expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.INVITE_INSTITUTION, states.HOME);
+            expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
+            expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
         });
     });
 }));

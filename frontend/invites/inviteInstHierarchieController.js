@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService, STATES, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, RequestDialogService, $q) {
+        MessageService, RequestInvitationService, RequestDialogService, $q, EntityShowcase) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -424,22 +424,9 @@
         inviteInstHierCtrl.limitString = function limitString(string, size) {
           return Utils.limitString(string, size);
         };
-
-        /**
-         * Generates an object with the properties used to create an rightIconBtn
-         * in the EntityShowCase component
-         * @param {string} - icon tho be showed as a button
-         * @param {function} - action function to be called when the button is clicked
-         * @param {array} - params that will be necessary to action function to be called
-         * @param {boolean} - hideBtn flag used to hide the button if true
-         */
-        inviteInstHierCtrl.createIconBtn = (icon, action, params, hideBtn) => {
-            return {
-                icon: icon,
-                iconColor: '#009688',
-                action: () => action(...params),
-                showIf: () => hideBtn === undefined ? true : hideBtn
-            };
+   
+        inviteInstHierCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args);
         };
     });
 })();

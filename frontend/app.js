@@ -108,7 +108,10 @@
                 url: "/inviteInstitution",
                 views: {
                     user_content: {
-                        templateUrl: "app/invites/invite_institution.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/invites/invite_institution.html",
+                            "app/invites/invite_institution_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE),
                         controller: "InviteInstitutionController as inviteInstCtrl"
                     }
                 }

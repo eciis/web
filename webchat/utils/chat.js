@@ -25,10 +25,15 @@
         this.rpc.onicecandidate = e => this.emit('ice-candidate-discovered', e);
         this.sendChannel = this.rpc.createDataChannel('sendChannel');
         this.rpc.ondatachannel = this.handleDataChannel.bind(this);
-        this.rpc.ontrack = e => this.emit('track-received', e);
+        this.rpc.ontrack = this.handleTrack.bind(this);
         this.rpc.oniceconnectionstatechange = this.handleIceConnectionState.bind(this);
         this.rpc.onsignalingstatechange = this.handleState.bind(this);
         this._currentMessages = [];
+        this._remoteStream = {};
+      }
+
+      get remoteStream() {
+        return this._remoteStream;
       }
 
       get selfStream() {
@@ -171,6 +176,7 @@
        * @param {Event} e - event which contains the stream object and its tracks.
        */
       handleTrack(e) {
+        this._remoteStream = e.streams[0];
         this.emit('track-received', e);
       }
 

@@ -37,25 +37,18 @@
 
         homeCtrl.openChat = (user) => {
             homeCtrl.currentUser = user;
-            if (Utils.isMobileScreen()) {
-                NavbarManagementService.toggleSidenav('left');
-            }
+            homeCtrl.currentChat = homeCtrl.client.chats[user.key] || {};
+
         };
 
         homeCtrl.chatCreated = (e) => {
-            homeCtrl.currentUser = homeCtrl.getUser(e.id);
-            homeCtrl.currentChat = e.chat;
-
-            homeCtrl.selfieStream = homeCtrl.currentChat.selfStream;
+            homeCtrl.openChat(homeCtrl.getUser(e.id));
 
             homeCtrl.currentChat.on('ice-connection-changed', homeCtrl.stateChange);
             homeCtrl.currentChat.on('msg-list-updated', list => {
                 $scope.$apply();
             });
 
-            homeCtrl.currentChat.on('track-received', ev => {
-                homeCtrl.remoteStream = ev.streams[0];
-            });
         };
 
         homeCtrl.stateChange = (state) => {
@@ -80,7 +73,7 @@
         };
 
         homeCtrl.acceptCall = (user, id) => {
-            homeCtrl.currentUser = user;
+            homeCtrl.openChat(user);
             getMedia().then(stream => {
                 homeCtrl.client.acceptCall(id, stream);
             });

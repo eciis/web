@@ -22,17 +22,21 @@
         };
 
         const updateSelfieVideo = (changesObj) => {
-            if (_.has(changesObj, 'selfieStream.currentValue')) {
+            const canUpdate = _.get(changesObj, 'selfieStream.currentValue.active', false);
+
+            if (canUpdate) {
                 const selfieVideo = document.getElementById('video-selfie');
-                selfieVideo.srcObject = chatBodyCtrl.selfieStream;
+                selfieVideo.srcObject = changesObj.selfieStream.currentValue;
                 selfieVideo.play();
             }
         };
 
         const updateRemoteVideo = (changesObj) => {
-            if (_.has(changesObj, 'remoteStream.currentValue')) {
+            const canUpdate = _.get(changesObj, 'remoteStream.currentValue.active', false);
+
+            if (canUpdate) {
                 const remoteVideo = document.getElementById('video-remote');
-                remoteVideo.srcObject = chatBodyCtrl.remoteStream;
+                remoteVideo.srcObject = changesObj.remoteStream.currentValue;
                 remoteVideo.play();
             }
         };

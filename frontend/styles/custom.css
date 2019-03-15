@@ -1195,3 +1195,7 @@ md-input-container:not(.md-input-invalid).md-input-focused .green-input,
     max-height: 100%;
     overflow-y: auto;
 }
+
+side-menu {
+  z-index: 10;
+}

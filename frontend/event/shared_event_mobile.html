@@ -1,0 +1,42 @@
+<div>
+    <div class="shared-event__image-container" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__image-container--canceled' : ''" ng-if="eventDetailsCtrl.showImage">
+        <img class="shared-event__image-container__img" ng-src="{{ eventDetailsCtrl.event.photo_url }}"/>
+
+        <div class="shared-event__canceled" ng-if="eventDetailsCtrl.isDeleted()">
+            <div class="shared-event__canceled-box">
+                <md-icon class="shared-event__canceled-box__icon">cancel</md-icon>
+                <p class="shared-event__canceled-box__title">ESTE EVENTO FOI CANCELADO</p>
+                <p class="shared-event__canceled-box__body">
+                    {{eventDetailsCtrl.event.last_modified_by == eventDetailsCtrl.event.author ? 'por' : 'pelo administrador'}} 
+                    {{eventDetailsCtrl.event.last_modified_by}}
+                    {{eventDetailsCtrl.event.last_modified_date | amUtc | amLocal | amCalendar:referenceTime:formats }}.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="shared-event__info">
+        <div class="shared-event__info__date" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info__date--canceled' : 'shared-event__info__date--active'">
+            <h3 ng-if="!eventDetailsCtrl.endInTheSameDay()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}
+            A {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'DD' | uppercase}}</h3>
+            <h3 ng-if="eventDetailsCtrl.endInTheSameDay()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'DD'}}</h3>
+            
+            <md-divider class="shared-event__info__date__divider"></md-divider>
+            
+            <h3 ng-if="eventDetailsCtrl.endInOtherMonth()">
+            {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+            | {{eventDetailsCtrl.event.end_time | amUtc | amLocal | amDateFormat:'MMM' | uppercase}}
+            </h3>
+            <h3 ng-if="!eventDetailsCtrl.endInOtherMonth()">
+                {{eventDetailsCtrl.event.start_time | amUtc | amLocal | amDateFormat:'MMMM' | uppercase}}
+            </h3>
+        </div>
+        <div class="shared-event__info_name" ng-class="(eventDetailsCtrl.isDeleted()) ? 'shared-event__info_name--canceled' : 'shared-event__info_name--active'">
+            <a href class="md-title hyperlink" ng-click="eventDetailsCtrl.goToEvent(eventDetailsCtrl.event)">
+                <span class="shared-event__info_name-event">{{ eventDetailsCtrl.event.title | uppercase}}</span>
+            </a>
+            <span class="shared-event__info_name-inst" class="font-resp">Organizado por {{eventDetailsCtrl.event.institution_name}}</span>
+        </div>
+    </div>
+</div>

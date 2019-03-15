@@ -1,0 +1,119 @@
+.shared-event__image-container {
+    position: relative;
+}
+
+.shared-event__image-container--canceled {
+    min-height: 100px;
+}
+
+.shared-event__image-container__img {
+    width: 100%;
+    background-color: white;
+}
+
+.shared-event__canceled {
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    background-color: rgba(0,153,141,.85);
+    top: 0;
+    position: absolute;
+    z-index: 1;
+}
+
+.shared-event__canceled-box {
+    padding: 0 16px;
+    height: 100%;
+    display: grid;
+    color: white;
+    font-weight: bold;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    grid-template-areas: 'icon title' 'icon body';
+    grid-column-gap: 10px;
+}
+
+.shared-event__canceled-box__icon {
+    grid-area: icon;
+    width: 50px;
+    height: 50px;
+    font-size: 50px;
+    color: white;
+    margin: 0;
+}
+
+.shared-event__canceled-box__title {
+    grid-area: title;
+    margin: 0;
+}
+
+.shared-event__canceled-box__body {
+    grid-area: body;
+    margin: 0;
+    font-size: 11px;
+}
+
+.shared-event__info {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+}
+
+.shared-event__info__date {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    justify-content: center; justify-items: center;
+    align-content: center;
+    color: white;
+    background-color: #8CC04E;
+    padding: 8px;
+}
+
+.shared-event__info__date > h3 {
+    margin: 0;
+}
+
+.shared-event__info__date__divider {
+    border: 1px;
+    border-style: solid;
+    width: 100%;
+}
+
+.shared-event__info__date--active {
+    background-color: #8CC04E;
+}
+
+.shared-event__info__date--canceled {
+    background-color: #959595;
+}
+
+.shared-event__info_name {
+    background-color: #199688;
+    display: grid;
+    grid-template-rows: auto auto;
+    align-content: space-around;
+    padding: 8px;
+}
+
+.shared-event__info_name--active {
+    background-color: #199688;
+    color: white;
+}
+
+.shared-event__info_name--canceled {
+    background-color: #707070;
+    color: #B5B5B5;
+}
+
+.shared-event__info_name-event {
+    color: white;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shared-event__info_name-inst {
+    color: white;
+}

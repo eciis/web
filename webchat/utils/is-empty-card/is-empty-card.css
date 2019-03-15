@@ -1,16 +1,19 @@
 .is-empty-card__container {
     display: grid;
-    grid-template-rows: auto auto;
+    grid-template-rows: 1fr 1fr;
     grid-template-areas:
             'image'
             'text';
     width: 100%;
     height: 100%;
+    justify-content: center;
 }
 
 .is-empty-card__image {
     grid-area: image;
-    width: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    align-self: flex-end;
 }
 
 .is-empty-card__text {

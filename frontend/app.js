@@ -63,11 +63,11 @@
                 }
             })
             .state(STATES.SEARCH_EVENT, {
-                url: "/search_event/:search_keyword",
+                url: "/search_event",
                 views: {
                     user_content: {
                         templateUrl: "app/search/search_event.html",
-                        controller: "SearchController as searchCtrl"
+                        controller: "SearchEventController as searchCtrl"
                     }
                 }
             })

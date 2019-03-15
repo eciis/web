@@ -53,7 +53,6 @@
             "PRIVATE_NON-PROFIT": "Privada sem fins lucrativos",
             "PUBLIC": "Pública"
         });
-        httpBackend.expectGET('app/institution/countries.json').respond({});
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "error/user_inactive.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);

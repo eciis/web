@@ -3,19 +3,14 @@
 (function () {
     var app = angular.module('app');
 
-    app.controller("SearchController", function SearchController($state, InstitutionService,
-        brCidadesEstados, HttpService, $mdDialog, $window, STATES, AuthService) {
+    app.controller("SearchEventController", function SearchEventController(brCidadesEstados, HttpService,
+        $window, STATES, AuthService, EventService) {
 
         var searchCtrl = this;
 
-        searchCtrl.search_keyword = $state.params.search_keyword;
-        // This field allows the controller know when it has to go to the server to make the search.
+        searchCtrl.search_keyword = '';
         searchCtrl.previous_keyword = searchCtrl.search_keyword;
-        searchCtrl.institutions = [];
-        searchCtrl.actuationAreas = [];
-        searchCtrl.legalNature = [];
-        var actuationAreas;
-        var legalNatures;
+        searchCtrl.events = [];
         searchCtrl.loading = false;
         searchCtrl.hasChanges = false;
         searchCtrl.hasNotSearched = true;
@@ -23,10 +18,10 @@
 
         searchCtrl.makeSearch = function makeSearch(value, type) {
             searchCtrl.loading = false;
-            var valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
-            var promise = InstitutionService.searchInstitutions(valueOrKeyword, "active", type);
+            const valueOrKeyword = value ? value : (searchCtrl.search_keyword || "");
+            let promise = EventService.searchEvents(valueOrKeyword, "published", type);
             promise.then(function success(response) {
-                searchCtrl.institutions = response;
+                searchCtrl.events = response;
                 searchCtrl.loading = true;
                 searchCtrl.hasChanges = true;
             });
@@ -38,10 +33,11 @@
         };
 
         searchCtrl.clearFilters = function clearFilters() {
-            searchCtrl.searchActuation = "";
-            searchCtrl.searchNature = "";
             searchCtrl.searchState = "";
-            searchCtrl.institutions = [];
+            searchCtrl.searchDate = "";
+            searchCtrl.searchCountry = "";
+            searchCtrl.searchCity = "";
+            searchCtrl.events = [];
         };
 
         /**
@@ -54,29 +50,22 @@
          * @param {Event} ev : The event that is useful to deal with the mdDialog.
          * When the user isn't in a mobile its value is undefined. 
          */
-        searchCtrl.search = function search(ev) {
+        searchCtrl.search = function search() {
             if (searchCtrl.search_keyword) {
-                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
+                let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'event');
                 promise.then(() => {
                     searchCtrl.setupResultsInMobile();
                 });
                 refreshPreviousKeyword();
-
                 return promise;
             } else {
                 searchCtrl.setupResultsInMobile();
             }
         };
 
-        searchCtrl.goToInstitution = function goToInstitution(institutionId) {
-            if (institutionId) {
-                $state.go(STATES.INST_TIMELINE, { institutionKey: institutionId });
-            }
-        };
-
         searchCtrl.searchBy = function searchBy(search) {
             if (keywordHasChanges()) {
-                searchCtrl.makeSearch(search, 'institution');
+                searchCtrl.makeSearch(search, 'event');
                 refreshPreviousKeyword();
             }
         };
@@ -111,28 +100,21 @@
         };
         
         /**
-         * A simple function that works like a controller to the
-         * search_dialog.html.
+         * Go to the page of a specific event
+         * @param {object} event - The current event
          */
-        function SearchDialogController() {
-            const searchDialogCtrl = this;
+        searchCtrl.goToEvent = (event) => {
+            event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.id });
+        };
 
-            searchDialogCtrl.institutions = searchCtrl.institutions;
-            searchDialogCtrl.searchNature = searchCtrl.searchNature;
-            searchDialogCtrl.searchActuation = searchCtrl.searchActuation;
-            searchDialogCtrl.searchState = searchCtrl.searchState;
-            searchDialogCtrl.isLoading = searchCtrl.isLoading;
+        searchCtrl.isAnotherCountry = () => searchCtrl.searchCountry !== "Brasil";
 
-            /**
-             * Close the dialog and then call the regular goToInstitution
-             * function.
-             * @param {String} institutionId 
-             */
-            searchDialogCtrl.goToInstitution = (institutionId) => {
-                $mdDialog.cancel();
-                searchCtrl.goToInstitution(institutionId);
-            };
-        }
+        searchCtrl.closeSearchResult = () => {
+            searchCtrl.hasNotSearched = true;
+            searchCtrl.clearFilters();
+            refreshPreviousKeyword();
+            searchCtrl.search_keyword = '';
+        };
 
         /**
          * This function verifies if there is any changes in the search_keyword.
@@ -158,47 +140,30 @@
             return !searchCtrl.loading && searchCtrl.search_keyword;
         };
 
-        function getActuationAreas() {
-            HttpService.get('app/institution/actuation_area.json').then(function success(response) {
-                searchCtrl.actuationAreas = objectToObjectArray(response);
-                actuationAreas = response;
-            });
-        }
-
-        function getLegalNatures() {
-            HttpService.get('app/institution/legal_nature.json').then(function success(response) {
-                searchCtrl.legalNature = objectToObjectArray(response);
-                legalNatures = response;
-            });
-        }
-
         function loadSearch() {
             if (searchCtrl.search_keyword) {
                 searchCtrl.makeSearch(searchCtrl.search_keyword, 'institution');
             }
         }
 
+        function loadCountries() {
+            HttpService.get('app/institution/countries.json').then(function success(response) {
+                searchCtrl.countries = response;
+            });
+        }
+
+        searchCtrl.getCitiesByState = () => {
+            searchCtrl.cities = brCidadesEstados.buscarCidadesPorSigla(searchCtrl.searchState.sigla);
+        };
+
         function loadBrazilianFederalStates() {
             searchCtrl.brazilianFederalStates = brCidadesEstados.estados;
         }
 
-        function objectToObjectArray(object) {
-            var keys = _.keys(object);
-            var arrayToReturn = [];
-            _.forEach(keys, function (key) {
-                var current_obj = {}
-                current_obj.name = object[key];
-                current_obj.value = key;
-                arrayToReturn.push(current_obj);
-            });
-            return arrayToReturn;
-        }
-
         (function main() {
-            getActuationAreas();
-            getLegalNatures();
             loadSearch();
             loadBrazilianFederalStates();
+            loadCountries();
         })();
     });
 })();

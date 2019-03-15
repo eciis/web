@@ -306,18 +306,24 @@
 
         it('Should call _loadEvents with eventService.getEvents when key is null', () => {
             spyOn(eventCtrl, '_loadEvents');
+            const params = {
+                page: eventCtrl._actualPage, month: december, year: testYear 
+            }
             eventCtrl.institutionKey = null;
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents)
-                .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
+                .toHaveBeenCalledWith(eventService.getEvents, params);
         });
 
         it("Should call _loadEvents with eventService.getEvents when key isn't null", () => {
             spyOn(eventCtrl, '_loadEvents');
             eventCtrl.institutionKey = institution.key;
+            const params = {
+                page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey
+            }
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents)
-                .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
+                .toHaveBeenCalledWith(eventService.getInstEvents, params);
         });
     });
 

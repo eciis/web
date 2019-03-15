@@ -148,6 +148,10 @@
     justify-content: center;
 }
 
+.event-content-grid {
+    display: grid;
+}
+
 #menu-button {
     margin-left: auto; 
     width: 0.8em;

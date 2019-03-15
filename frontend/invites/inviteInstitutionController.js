@@ -111,8 +111,13 @@
         };
 
         inviteInstCtrl.showPendingRequestDialog = function showPendingRequestDialog(event, request) {
+            const template = Utils.selectFieldBasedOnScreenSize(
+                "app/requests/request_institution_processing.html",
+                "app/requests/request_institution_processing_mobile.html",
+                SCREEN_SIZES.SMARTPHONE
+            );
             $mdDialog.show({
-                templateUrl: "app/requests/request_institution_processing.html",
+                templateUrl: template,
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
                 parent: angular.element(document.body),

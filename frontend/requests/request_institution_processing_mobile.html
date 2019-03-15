@@ -1,0 +1,49 @@
+<md-dialog class="pending-inst-request">
+    <span class="title">Informações institucionais</span>
+    <md-content class="inst-data custom-scrollbar">
+        <div class="name_container">
+            <p>Nome</p>
+            <span class="name">{{ requestCtrl.parent.name }}</span>
+        </div>
+        <div class="actuation-containter">
+            <p>Áreas de Atuação</p>
+            <span>{{ requestCtrl.instActuationArea }}</span>
+        </div>
+        <div class="nature-container">
+            <p>Natureza Jurídica</p>
+            <span>{{ requestCtrl.instLegalNature }}</span>
+        </div>
+        <div class="country-container">
+            <p>País</p>
+            <span>{{ requestCtrl.parent.address.country }}</span>
+        </div>
+        <div class="state-container">
+            <p>Estado</p>
+            <span>{{ requestCtrl.parent.address.federal_state }}</span>
+        </div>
+        <div class="street-container">
+            <p>Rua</p>
+            <span>{{ requestCtrl.parent.address.street }}</span>
+        </div>
+        <div class="neighbourhood-container">
+            <p>Bairro</p>
+            <span>{{ requestCtrl.parent.address.neighbourhood }}</span>
+        </div>
+        <div class="number-container">
+            <p>Número</p>
+            <span>{{ requestCtrl.parent.address.number }}</span>
+        </div>
+        <div class="email-container">
+            <p>E-mail</p>
+            <span>{{ requestCtrl.parent.email }}</span>
+        </div>
+        <div class="leader-container">
+            <p>Responsável</p>
+            <span>{{ requestCtrl.parent.leader }}</span>
+        </div>
+    </md-content>
+    <div class="btns-container">
+        <md-button class="button" ng-click="requestCtrl.cancelReject()">RECUSAR</md-button>
+        <md-button class="button" ng-click="requestCtrl.confirmReject()">ACEITAR</md-button>
+    </div>
+</md-dialog>

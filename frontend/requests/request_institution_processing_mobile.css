@@ -1,0 +1,97 @@
+.pending-inst-request {
+    display: grid;
+    grid-row-gap: 1em;
+    padding: 1em;
+    max-width: 70%;
+    overflow-y: hidden;
+}
+
+.pending-inst-request > .title {
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.pending-inst-request > .inst-data {
+    max-height: 20em;
+    background: white;
+    padding-right: 0.3em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+            'name name'
+            'actuation actuation'
+            'nature nature'
+            'country state'
+            'street street'
+            'neighbourhood number'
+            'email email'
+            'leader leader';
+    align-items: initial;
+}
+
+.inst-data p {
+    font-size: 0.7em;
+    font-weight: 500;
+    margin-bottom: 0.2em;
+    color: #004D40;
+}
+
+.inst-data span {
+    font-size: 0.8em;
+    color: grey;
+}
+
+.name_container {
+    grid-area: name;
+}
+
+.name_container .name {
+    font-weight: 500;
+}
+
+.actuation-containter {
+    grid-area: actuation;
+}
+
+.nature-container {
+    grid-area: nature;
+}
+
+.country-container {
+    grid-area: country;
+}
+
+.state-container {
+    grid-area: state;
+}
+
+.street-container {
+    grid-area: street;
+}
+
+.neighbourhood-container {
+    grid-area: neighbourhood;
+}
+
+.number-container {
+    grid-area: number;
+}
+
+.email-container {
+    grid-area: email;
+}
+
+.leader-container {
+    grid-area: leader;
+}
+
+.pending-inst-request .btns-container {
+    text-align: end;
+    padding-top: 1em;
+}
+
+.pending-inst-request .button {
+    color: #07988B;
+    margin: auto;
+}

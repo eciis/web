@@ -43,7 +43,7 @@
               </div>
             </div>
         </md-dialog-content>
-        <md-dialog-actions style="border:0px" layout="row" ng-if="!requestCtrl.isRejecting">
+        <md-dialog-actions style="border:0px" layout="row">
           <md-button ng-click="requestCtrl.rejectRequest($event)" class="md-raised" md-colors="{background: 'default-teal-500'}">
             <span style="color: white;">RECUSAR</span>
           </md-button>
@@ -51,18 +51,6 @@
             <span style="color: white;">APROVAR</span>
           </md-button>
         </md-dialog-actions>
-        <md-card-content ng-if="requestCtrl.isRejecting" class="md-dialog-content">
-            <h4 style="margin: 0;">Rejeitar Instituição</h4>
-            <p>Tem certeza que deseja rejeitar?</p>
-          </md-card-content>
-          <md-dialog-actions ng-if="requestCtrl.isRejecting" layout="row" layout-align="end center" layout-wrap>
-            <md-button ng-click="requestCtrl.cancelReject()" class="md-raised" md-colors="{background: 'default-teal-500'}">
-              <span style="color: white;">CANCELAR</span>
-            </md-button>
-            <md-button ng-click="requestCtrl.confirmReject()" class="md-raised" md-colors="{background: 'default-teal-500'}">
-              <span style="color: white;">CONFIRMAR</span>
-            </md-button>
-          </md-dialog-actions>
       </md-dialog>
     </div>
   </div>

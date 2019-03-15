@@ -575,6 +575,11 @@ class UpdateHandler(BaseHandler):
             institution.creation_date = datetime.now()
             institution.put()
 
+        existing_events = Event.query().fetch()
+
+        for event in existing_events:
+            event.put()
+
         self.response.write("worked")
 
 

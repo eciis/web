@@ -10,4 +10,5 @@
             selfie-stream="homeCtrl.currentChat.selfieStream"
             remote-stream="homeCtrl.currentChat.remoteStream">
     </ecis-chat>
+    <is-empty-card text="Nenhum chat selecionado no momento." ng-if="!homeCtrl.currentUser"></is-empty-card>
 </div>

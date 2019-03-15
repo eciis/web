@@ -21,12 +21,13 @@
 }
 
 .chat-body__info-message {
+    text-align: center;
     background-color: lightgoldenrodyellow;
     width: fit-content;
     padding: 10px 20px;
     border-radius: 10px;
     align-self: center;
-    margin: 10px 0 auto 0;
+    margin: 10px 10px auto;
 }
 
 #video-remote {

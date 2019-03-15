@@ -144,7 +144,7 @@
 }
 
 .centralized-event-content {
-    display: flex;
+    display: grid;
     justify-content: center;
 }
 

@@ -20,6 +20,15 @@
     width: 100%;
 }
 
+.chat-body__info-message {
+    background-color: lightgoldenrodyellow;
+    width: fit-content;
+    padding: 10px 20px;
+    border-radius: 10px;
+    align-self: center;
+    margin: 10px 0 auto 0;
+}
+
 #video-remote {
     height: 100%;
     width: 100%;

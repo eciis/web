@@ -125,14 +125,14 @@
                 clickOutsideToClose:true,
                 locals: {
                     "request": request,
-                    "updateRequest": updateRequest
+                    "updateRequest": inviteInstCtrl._updateRequest
                 },
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
         
-        const updateRequest = (request, status) => {
+        inviteInstCtrl._updateRequest = (request, status) => {
             request.status = status;
             _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
         }

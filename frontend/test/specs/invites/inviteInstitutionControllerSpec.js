@@ -216,22 +216,42 @@
                         }
                     };
                 });
-                inviteinstitutionCtrl.sent_requests = [request];
                 inviteinstitutionCtrl.showPendingRequestDialog('$event', request);
                 expect(mdDialog.show).toHaveBeenCalled();
-                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('updateRequest', () => {
+            beforeEach(() => {
+                inviteinstitutionCtrl.sent_requests = [request];
+            });
+
+            afterEach(() => {
                 expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
+            })
+
+            it(`should set the request status to 'rejected'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "rejected");
+                expect(request.status).toBe('rejected');
+            });
+
+            it(`should set the request status to 'accepted'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "accepted");
+                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('$onInit', function () {
+            it('should call showLinkRequestDialog if in mobile screen', function () {
+                spyOn(inviteinstitutionCtrl, '_loadSentRequests');
+                spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
+                inviteinstitutionCtrl.$onInit();
+                expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
+                expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
             });
         });
     });
 
-    describe('$onInit', function () {
-        it('should call showLinkRequestDialog if in mobile screen', function () {
-            spyOn(inviteinstitutionCtrl, '_loadSentRequests');
-            spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
-            inviteinstitutionCtrl.$onInit();
-            expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
-            expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
-        });
-    });
 }));

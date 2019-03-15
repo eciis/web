@@ -111,23 +111,31 @@
         };
 
         inviteInstCtrl.showPendingRequestDialog = function showPendingRequestDialog(event, request) {
+            const template = Utils.selectFieldBasedOnScreenSize(
+                "app/requests/request_institution_processing.html",
+                "app/requests/request_institution_processing_mobile.html",
+                SCREEN_SIZES.SMARTPHONE
+            );
             $mdDialog.show({
-                templateUrl: "app/requests/request_institution_processing.html",
+                templateUrl: template,
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    "request": request
+                    "request": request,
+                    "updateRequest": inviteInstCtrl._updateRequest
                 },
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
-            }).then(function success() {
-                request.status = 'accepted';
-                _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
             });
         };
+        
+        inviteInstCtrl._updateRequest = (request, status) => {
+            request.status = status;
+            _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
+        }
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
             $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});

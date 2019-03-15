@@ -9,6 +9,8 @@
             callFunc: "<",
             enableVideoFunc: "<",
             disableVideoFunc: "<",
+            enableAudioFunc: "<",
+            disableAudioFunc: "<",
         },
     });
 

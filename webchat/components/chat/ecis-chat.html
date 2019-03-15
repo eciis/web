@@ -4,12 +4,15 @@
             user="ecisChatCtrl.user"
             call-func="ecisChatCtrl.call"
             enable-video-func="ecisChatCtrl.enableVideo"
-            disable-video-func="ecisChatCtrl.disableVideo">
+            disable-video-func="ecisChatCtrl.disableVideo"
+            enable-audio-func="ecisChatCtrl.enableAudio"
+            disable-audio-func="ecisChatCtrl.disableAudio">
     </chat-header>
     <chat-body
             class="chat__body"
             messages="ecisChatCtrl.chat.currentMessages"
             video-active="ecisChatCtrl.videoActive"
+            audio-active="ecisChatCtrl.audioActive"
             selfie-stream="ecisChatCtrl.selfieStream"
             remote-stream="ecisChatCtrl.remoteStream">
     </chat-body>

@@ -34,6 +34,14 @@
             ecisChatCtrl.videoActive = true;
         };
 
+        ecisChatCtrl.disableAudio = () => {
+            ecisChatCtrl.audioActive = false;
+        };
+
+        ecisChatCtrl.enableAudio = () => {
+            ecisChatCtrl.audioActive = true;
+        };
+
     }
 
 })();

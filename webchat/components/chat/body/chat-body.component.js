@@ -8,6 +8,7 @@
         bindings: {
             messages: '<',
             videoActive: '<',
+            audioActive: '<',
             selfieStream: '<',
             remoteStream: '<',
         },
@@ -19,6 +20,7 @@
         chatBodyCtrl.$onChanges = (changesObj) => {
             updateSelfieVideo(changesObj);
             updateRemoteVideo(changesObj);
+            updateRemoteAudio(changesObj);
         };
 
         const updateSelfieVideo = (changesObj) => {
@@ -38,6 +40,15 @@
                 const remoteVideo = document.getElementById('video-remote');
                 remoteVideo.srcObject = changesObj.remoteStream.currentValue;
                 remoteVideo.play();
+            }
+        };
+
+        const updateRemoteAudio = (changesObj) => {
+            const canUpdate = _.has(changesObj, 'audioActive');
+
+            if (canUpdate) {
+                const remoteVideo = document.getElementById('video-remote');
+                remoteVideo.muted = changesObj.audioActive.currentValue;
             }
         };
     }

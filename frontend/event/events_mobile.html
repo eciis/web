@@ -3,7 +3,7 @@
 <div style="overflow: scroll;" class="custom-scrollbar hide-scrollbar-mobile" ng-if="!eventCtrl.isFiltering">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content-grid">
+    <div ng-if="!eventCtrl.isLoadingEvents" class="event-content-grid">
       <entity-showcase
               class="fill-width"
               ng-if="eventCtrl.institutionKey"

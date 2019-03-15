@@ -152,6 +152,8 @@
             });
         }
 
+        requestController.showProperty = prop => Utils.showProperty(prop);
+
         (function main () {
             if(request.status == 'sent') loadInstitution();
         })();

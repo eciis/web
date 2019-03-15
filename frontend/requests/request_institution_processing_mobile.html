@@ -19,19 +19,19 @@
         </div>
         <div class="state-container">
             <p>Estado</p>
-            <span>{{ requestCtrl.parent.address.federal_state }}</span>
+            <span>{{ requestCtrl.showProperty(requestCtrl.parent.address.federal_state) }}</span>
         </div>
         <div class="street-container">
             <p>Rua</p>
-            <span>{{ requestCtrl.parent.address.street }}</span>
+            <span>{{ requestCtrl.showProperty(requestCtrl.parent.address.street) }}</span>
         </div>
         <div class="neighbourhood-container">
             <p>Bairro</p>
-            <span>{{ requestCtrl.parent.address.neighbourhood }}</span>
+            <span>{{ requestCtrl.showProperty(requestCtrl.parent.address.neighbourhood) }}</span>
         </div>
         <div class="number-container">
             <p>Número</p>
-            <span>{{ requestCtrl.parent.address.number }}</span>
+            <span>{{ requestCtrl.showProperty(requestCtrl.parent.address.number) }}</span>
         </div>
         <div class="email-container">
             <p>E-mail</p>

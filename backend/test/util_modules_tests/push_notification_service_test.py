@@ -33,8 +33,8 @@ class PushNotificationServiceTest(TestBase):
         self.assertEqual(notification_props['title'], 'Publicação curtida', 
             "The notification's title wasn't the expected one")
         self.assertEqual(
-            notification_props['body'], 'Uma publicação de seu interesse foi curtida', 
-            "The notification's body wasn't the expected one")
+            notification_props['body_message'], 'Uma publicação de seu interesse foi curtida', 
+            "The notification's body_message wasn't the expected one")
         self.assertEqual(notification_props['click_action'], url, 
             "The click_action's url wasn't the expected one")
     
@@ -61,8 +61,8 @@ class PushNotificationServiceTest(TestBase):
         self.assertEqual(notification_props['title'], 'Publicação comentada',
             "The notification's title wasn't the expected one")
         self.assertEqual(
-            notification_props['body'], 'Uma publicação do seu interesse foi comentada', 
-            "The notification's body wasn't the expected one")
+            notification_props['body_message'], 'Uma publicação do seu interesse foi comentada', 
+            "The notification's body_message wasn't the expected one")
         self.assertEqual(notification_props['click_action'], url, 
             "The click_action wasn't the expected one")
     
@@ -88,9 +88,9 @@ class PushNotificationServiceTest(TestBase):
 
         self.assertEqual(notification_props['title'], 'Novo convite',
             "The notification's title wasn't the expected one")
-        self.assertEqual(notification_props['body'], 
+        self.assertEqual(notification_props['body_message'], 
             'Você recebeu um novo convite para ser membro de uma instituição',
-            "The notification's body wasn't the expected one")
+            "The notification's body_message wasn't the expected one")
         self.assertEqual(notification_props['click_action'], url, 
             "The click_action wasn't the expected one")
     
@@ -103,8 +103,8 @@ class PushNotificationServiceTest(TestBase):
 
         self.assertEqual(notification_props['title'], 'Novo convite',
             "The notification's title wasn't the expected one")
-        self.assertEqual(notification_props['body'],
+        self.assertEqual(notification_props['body_message'],
             'Você recebeu um novo convite para ser administrador de uma instituição',
-            "The notification's body wasn't the expected one")
+            "The notification's body_message wasn't the expected one")
         self.assertEqual(notification_props['click_action'], url,
             "The click_action wasn't the expected one")

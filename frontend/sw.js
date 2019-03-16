@@ -7,7 +7,7 @@
     importScripts('app/firebase-config.js');
     importScripts('app/config.js');
     // if the line number of the code below changes, modify the /ecis script.
-    const CACHE_SUFIX = 'merging-push-notifications';
+    const CACHE_SUFIX = 'master';
 
     const openedNotifications = {};
 
@@ -74,11 +74,7 @@
             options.body = `${body.data} (${openedNotifications[options.tag]})`;
 
             event.waitUntil(self.registration.showNotification(options.title, options));
-        }
-
-        
-
-        
+          }
     });
 
     /**
@@ -91,7 +87,7 @@
         const { notification } = event;
 
         const { action } = event;
-        
+
         if(action !== 'close') {
             const { url } = notification.data;
             clients.openWindow(url);

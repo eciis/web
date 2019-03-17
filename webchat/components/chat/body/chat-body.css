@@ -22,7 +22,8 @@
 
 .chat-body__info-message {
     text-align: center;
-    background-color: lightgoldenrodyellow;
+    background-color: #009688;
+    color: white;
     width: fit-content;
     padding: 10px 20px;
     border-radius: 10px;

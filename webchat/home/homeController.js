@@ -52,7 +52,6 @@
         };
 
         homeCtrl.stateChange = (state) => {
-            homeCtrl.state = state;
             $scope.$apply();
         };
 

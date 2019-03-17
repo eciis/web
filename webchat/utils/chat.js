@@ -30,6 +30,7 @@
         this.rpc.onsignalingstatechange = this.handleState.bind(this);
         this._currentMessages = [];
         this._remoteStream = {};
+        this._connectionState = "";
       }
 
       get remoteStream() {
@@ -38,6 +39,10 @@
 
       get selfStream() {
         return this._selfStream;
+      }
+
+      get connectionState() {
+        return this._connectionState;
       }
 
       /**
@@ -119,7 +124,8 @@
        * @fires Chat#ice-connection-changed
        */
       handleIceConnectionState(ev) {
-        this.emit('ice-connection-changed', ev.target.iceConnectionState)
+        this._connectionState = ev.target.iceConnectionState;
+        this.emit('ice-connection-changed', ev.target.iceConnectionState);
       }
 
       /**

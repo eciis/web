@@ -7,6 +7,9 @@
     </chat-message>
 </div>
 <div class="chat-body__video-container" ng-show="chatBodyCtrl.videoActive">
-    <video id="video-remote" autoplay></video>
-    <video id="video-selfie" autoplay muted></video>
+    <div ng-show="chatBodyCtrl.remoteStream">
+        <video id="video-remote" autoplay></video>
+        <video id="video-selfie" autoplay muted></video>
+    </div>
+    <span class="chat-body__no-video-message" ng-show="!chatBodyCtrl.remoteStream">Nenhum vídeo está sendo recebido</span>
 </div>

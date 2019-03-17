@@ -13,6 +13,7 @@
 }
 
 .chat-body__video-container {
+    display: grid;
     background-color: darkgray;
     max-width: 100%;
     max-height: 100%;
@@ -29,6 +30,19 @@
     border-radius: 10px;
     align-self: center;
     margin: 10px 10px auto;
+}
+
+.chat-body__no-video-message {
+    background-color: #009688;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    height: fit-content;
+    width: fit-content;
+    margin: 10px;
+    text-align: center;
+    align-self: center;
+    justify-self: center;
 }
 
 #video-remote {

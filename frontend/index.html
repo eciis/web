@@ -41,7 +41,8 @@
   <link rel="stylesheet" type="text/css" href="app/user/userInactive/user_inactive.css">
   <link rel="stylesheet" type="text/css" href="app/user/searchInstitution/search_institution.css">
   <link rel="stylesheet" type="text/css" href="app/event/event.css">
-  <link rel="stylesheet" type="text/css" href="app/institution/management_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/manageInstitution/management_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/manageInstitution/management_institution_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/manageMembers/management_members_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/post/post_details.css">
   <link rel="stylesheet" type="text/css" href="app/post/create_post.css">
@@ -56,8 +57,11 @@
   <link rel="stylesheet" type="text/css" href="app/institution/registered_institutions_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/institution/list_users.css">
   <link rel="stylesheet" type="text/css" href="app/institution/base_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/create_inst_form_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/institution/forms/forms.css">
   <link rel="stylesheet" type="text/css" href="app/institution/descriptionInst/description_inst.css">
   <link rel="stylesheet" type="text/css" href="app/invites/new_invite.css">
+  <link rel="stylesheet" type="text/css" href="app/invites/invite_institution_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/sideMenu/side_menu.css">
   <link rel="stylesheet" type="text/css" href="app/user/user_profile.css">
   <link rel="stylesheet" type="text/css" href="app/user/user_profile_info.css">
@@ -73,6 +77,7 @@
   <link rel="stylesheet" type="text/css" href="app/toolbar/main_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/imageUpload/crop_image.css">
   <link rel="stylesheet" type="text/css" href="app/requests/request_invitation_dialog.css">
+  <link rel="stylesheet" type="text/css" href="app/requests/analyse_hierarchy_request.css">
   <link rel="stylesheet" type="text/css" href="app/requests/request_user_dialog.css">
   <link rel="stylesheet" type="text/css" href="app/toolbar/default_toolbar_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/home/color_picker.css">
@@ -82,8 +87,11 @@
   <link rel="stylesheet" type="text/css" href="app/utils/is-empty-card/is-empty-card.css">
   <link rel="stylesheet" type="text/css" href="app/utils/searchField/search_field.css">
   <link rel="stylesheet" type="text/css" href="app/utils/entityShowcase/entityShowcase.css">
+  <link rel="stylesheet" type="text/css" href="app/invites/new_invite_mobile.css">
   <link rel="stylesheet" type="text/css" href="app/post/shared_post.css">
   <link rel="stylesheet" type="text/css" href="app/event/filterEvents/filter_events_by_institution.css">
+  <link rel="stylesheet" type="text/css" href="app/requests/request_institution_processing_mobile.css">
+  <link rel="stylesheet" type="text/css" href="app/event/shared_event.css">
 </head>
 <body ng-app="app" ng-cloak layout="column">
 
@@ -240,6 +248,7 @@
   <script src="app/event/filterEvents/filterEventByInstitution.component.js"></script>
   <script src="app/event/eventCard.component.js"></script>
   <script src="app/event/canceledEventHeader.component.js"></script>
+  <script src="app/event/sharedEvent.component.js"></script>
 
   <!-- Institution Library -->
   <script src="app/institution/institutionController.js"></script>
@@ -258,6 +267,13 @@
   <script src="app/institution/institutionHeader.component.js"></script>
   <script src="app/institution/federal_state_acronym.js"></script>
   <script src="app/institution/listUsers.component.js"></script>
+  <script src="app/institution/createInvitedInstitutionController.js"></script>
+
+  <!-- Config Institution Form Components -->
+  <script src="app/institution/forms/addressForm.component.js"></script>
+  <script src="app/institution/forms/institutionForm.component.js"></script>
+  <script src="app/institution/forms/lastInfoForm.component.js"></script>
+
   <script src="app/institution/manageInstMenu/manageInstMenuController.js"></script>
   <script src="app/institution/manageMembers/managementMembersController.js"></script>
   <script src="app/institution/configInstitution/configInstDirective.js"></script>
@@ -302,6 +318,7 @@
 
   <!-- Search Library -->
   <script src="app/search/searchController.js"></script>
+  <script src="app/search/searchEventController.js"></script>
 
   <!-- Form Listener library -->
   <script src="app/utils/submitFormListenerService.js"></script>
@@ -323,6 +340,7 @@
 
   <!-- Institution Showcase component -->
   <script src="app/utils/entityShowcase/entityShowcase.component.js"></script>
+  <script src="app/utils/entityShowcase/entityShowcase.factory.js"></script>
 
   <!-- Icon Button Component -->
   <script src="app/utils/iconButton/iconButton.component.js"></script>

@@ -11,7 +11,7 @@
             <b>{{ eventCardCtrl.event.title | uppercase}}</b>
         </div>
         <div class="event-subtitle">
-            {{ eventCardCtrl.event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
+            {{ eventCardCtrl.event.start_time | amUtc | amLocal | amDateFormat:'HH:mm' }}
             {{ eventCardCtrl.event.address.city ? ' | ' + eventCardCtrl.event.address.city : ''}}
             <p class="event-inst-name"
                 ng-if="!eventCardCtrl.user.isMember(eventCardCtrl.event.institution_key)">

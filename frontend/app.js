@@ -62,6 +62,15 @@
                     }
                 }
             })
+            .state(STATES.SEARCH_EVENT, {
+                url: "/search_event",
+                views: {
+                    user_content: {
+                        templateUrl: "app/search/search_event.html",
+                        controller: "SearchEventController as searchCtrl"
+                    }
+                }
+            })
             .state(STATES.HOME, {
                 url: "/",
                 views: {
@@ -108,7 +117,10 @@
                 url: "/inviteInstitution",
                 views: {
                     user_content: {
-                        templateUrl: "app/invites/invite_institution.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/invites/invite_institution.html",
+                            "app/invites/invite_institution_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE),
                         controller: "InviteInstitutionController as inviteInstCtrl"
                     }
                 }
@@ -235,7 +247,7 @@
                 url: "/institution/:institutionKey",
                 views: {
                     content: {
-                        templateUrl: "app/institution/management_institution_page.html",
+                        templateUrl: "app/institution/manageInstitution/management_institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -259,6 +271,15 @@
                             SCREEN_SIZES.SMARTPHONE
                         ),
                         controller: "ManagementMembersController as manageMemberCtrl"
+                    }
+                }
+            })
+            .state(STATES.MANAGE_INST_LINKS, {
+                url: "/links",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/manageInstitution/management_institution_mobile.html",
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
             })
@@ -296,8 +317,8 @@
                 url: "/:key/new_invite",
                 views: {
                     main: {
-                        templateUrl: "app/invites/new_invite_page.html",
-                        controller: "NewInviteController as newInviteCtrl"
+                      templateUrl: "app/invites/new_invite_page.html",
+                      controller: "NewInviteController as newInviteCtrl"
                     }
                 }
             })
@@ -325,8 +346,9 @@
                 url: "/create_institution_form",
                 views: {
                     main: {
-                        templateUrl: "app/institution/create_inst_form.html",
-                        controller: "ConfigInstController as configInstCtrl"
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/create_inst_form.html",
+                          "app/institution/create_inst_form_mobile.html"),
+                        controller: Utils.selectFieldBasedOnScreenSize("ConfigInstController as configInstCtrl", "CreateInvitedInstitutionController as ctrl"),
                     }
                 },
                 params: {
@@ -544,7 +566,9 @@
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT,
+            STATES.SEARCH_EVENT,
             STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_LINKS,
             STATES.MANAGE_INST_MENU_MOB
         ];
 
@@ -609,7 +633,7 @@
                     });
                 }
             }).catch(function(message) {
-                MessageService.showToast(message);
+                MessageService.showErrorToast(message);
                 return transition.router.stateService.target(STATES.ERROR, {
                     "msg": "Desculpa! Este recurso ainda não está disponível.",
                     "status": "403"

@@ -33,6 +33,11 @@
         status: 'sent',
     }
 
+    const form = {
+        '$setPristine': () => {},
+        '$setUntouched': () => {}
+    };
+
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
     var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution", key: '123'}, 'institution', institution.key);
@@ -71,6 +76,8 @@
         };
         state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
+        inviteinstitutionCtrl.$onInit();
+        inviteinstitutionCtrl.inviteInstForm = form;
         httpBackend.flush();
     }));
 
@@ -99,6 +106,7 @@
                         }
                     };
                 });
+                spyOn(inviteinstitutionCtrl, 'resetForm');
                 inviteinstitutionCtrl.invite = invite;
             });
 
@@ -107,6 +115,7 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
+                    expect(inviteinstitutionCtrl.resetForm).toHaveBeenCalled();
                     done();
                 });
             });
@@ -207,20 +216,42 @@
                         }
                     };
                 });
-                inviteinstitutionCtrl.sent_requests = [request];
                 inviteinstitutionCtrl.showPendingRequestDialog('$event', request);
                 expect(mdDialog.show).toHaveBeenCalled();
-                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('updateRequest', () => {
+            beforeEach(() => {
+                inviteinstitutionCtrl.sent_requests = [request];
+            });
+
+            afterEach(() => {
                 expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
+            })
+
+            it(`should set the request status to 'rejected'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "rejected");
+                expect(request.status).toBe('rejected');
+            });
+
+            it(`should set the request status to 'accepted'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "accepted");
+                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('$onInit', function () {
+            it('should call showLinkRequestDialog if in mobile screen', function () {
+                spyOn(inviteinstitutionCtrl, '_loadSentRequests');
+                spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
+                inviteinstitutionCtrl.$onInit();
+                expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
+                expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
             });
         });
     });
 
-    describe('$onInit', function () {
-        it('should call showLinkRequestDialog if in mobile screen', function () {
-            spyOn(stateLinkRequestService, 'showLinkRequestDialog');
-            inviteinstitutionCtrl.$onInit();
-            expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.INVITE_INSTITUTION, states.HOME);
-        });
-    });
 }));

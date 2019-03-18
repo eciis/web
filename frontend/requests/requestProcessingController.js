@@ -4,7 +4,7 @@
     var app = angular.module('app');
 
     app.controller('RequestProcessingController', function RequestProcessingController(AuthService, RequestInvitationService,
-        MessageService, InstitutionService, request, $state, $mdDialog, STATES) {
+        MessageService, InstitutionService, request, updateRequest, $state, $mdDialog, STATES) {
         var requestController = this;
 
         var REQUEST_INSTITUTION = "REQUEST_INSTITUTION";
@@ -18,10 +18,11 @@
         requestController.isRejecting = false;
 
         requestController.acceptRequest = function acceptRequest() {
-            resolveRequest().then(function success() {
-                MessageService.showInfoToast("Solicitação aceita!");
-                request.status = 'accepted';
+            resolveRequest()
+            .then(function success() {
+                updateRequest(request, 'accepted');
                 requestController.hideDialog();
+                MessageService.showInfoToast("Solicitação aceita!");
                 refreshUser();
             });
         };
@@ -40,12 +41,23 @@
         }
 
         requestController.rejectRequest = function rejectRequest(event){
-            requestController.isRejecting = true;
+            const confirm = $mdDialog.confirm()
+                .title('Rejeitar Instituição')
+                .textContent('Tem certeza que deseja rejeitar?')
+                .targetEvent(event)
+                .ok('CONFIRMAR')
+                .cancel('CANCELAR');
+
+            $mdDialog
+                .show(confirm)
+                .then(requestController.confirmReject)
+                .catch(requestController.cancelReject);
         };
 
         requestController.confirmReject = function confirmReject() {
-            deleteRequest().then(function success() {
-                request.status = 'rejected';
+            deleteRequest()
+            .then(function success() {
+                updateRequest(request, 'rejected');
                 requestController.hideDialog();
                 MessageService.showInfoToast("Solicitação rejeitada!");
             });
@@ -151,6 +163,8 @@
                     requestController.parent.actuation_area);
             });
         }
+
+        requestController.showProperty = prop => Utils.showProperty(prop);
 
         (function main () {
             if(request.status == 'sent') loadInstitution();

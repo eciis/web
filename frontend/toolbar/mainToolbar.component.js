@@ -40,7 +40,11 @@
          * @param {object} params -- the state's params 
          */
         mainToolbarCtrl.changeState = (state, params) => {
-            $state.go(state, params);
+            if ($state.current.name === STATES.EVENTS) {
+                $state.go(STATES.SEARCH_EVENT, {search_keyword: ''});
+            } else {
+                $state.go(STATES.SEARCH, {search_keyword: ''});
+            }
         };
 
         /**

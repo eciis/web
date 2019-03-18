@@ -40,6 +40,10 @@
             return HttpService.get('app/utils/months.json');
         };
 
+        service.searchEvents = function searchEvents(value, state, type) {
+            return HttpService.get(`/api/search/event?value=${value}&state=${state}&type=${type}`);
+        };
+
         /**
          * Make the request to add the user as event's follower
          * {String} eventKey -- the event urlsafe key.

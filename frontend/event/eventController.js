@@ -21,12 +21,20 @@
         eventCtrl.institutionsFilter = [];
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-
             if (eventCtrl._moreEvents) {
-                const getEventsFunction = EventService.getEvents;
-                return eventCtrl._loadEvents(getEventsFunction,
-                    _.get(eventCtrl.selectedMonth, 'month'),
-                    eventCtrl.selectedYear);
+                const getEventsFunction = (eventCtrl.institutionKey) ?
+                    EventService.getInstEvents : EventService.getEvents;
+                const params = (eventCtrl.institutionKey) ?
+                    { 
+                        page: eventCtrl._actualPage,
+                        institutionKey:eventCtrl.institutionKey
+                    } :
+                    { 
+                        page: eventCtrl._actualPage,
+                        month: _.get(eventCtrl.selectedMonth, 'month'),
+                        year: eventCtrl.selectedYear
+                    };
+                return eventCtrl._loadEvents(getEventsFunction, params);
             }
             return $q.when();
         };
@@ -37,12 +45,11 @@
          * Get events from backend
          * @param {*} deferred The promise to resolve before get events from backend
          * @param {*} getEvents The function received to call and get events
-         * @param {*} month The month to filter the get of events
-         * @param {*} year The year to filter the get of events
+         * @param {*} params The params used of service
          * @private
          */
-        eventCtrl._loadEvents = (getEvents, month, year) => {
-            return getEvents({ page: eventCtrl._actualPage, month: month, year: year})
+        eventCtrl._loadEvents = (getEvents, params) => {
+            return getEvents(params)
                 .then(function success(response) {
                 eventCtrl._actualPage += 1;
                 eventCtrl._moreEvents = response.next;

@@ -37,7 +37,8 @@
             icon: "@",
             title: "<",
             subtitle: "<",
-            leftAction: "<",
+            subtitlesList: "<",
+            leftAction: "&",
             rightIconBtns: "<",
         },
     });
@@ -54,6 +55,10 @@
          */
         entityShowcaseCtrl.showIconBtn = iconBtn => {
             return iconBtn.showIf ? iconBtn.showIf() : true;
+        }
+
+        entityShowcaseCtrl.getSubtitles = () => {
+            return entityShowcaseCtrl.subtitlesList ? entityShowcaseCtrl.subtitlesList : [entityShowcaseCtrl.subtitle];
         }
     }
 

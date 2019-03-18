@@ -125,8 +125,7 @@
 
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
             return postDetailsCtrl.post.shared_event &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showSurvey = function showSurvey() {

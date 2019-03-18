@@ -34,9 +34,13 @@
     grid-area: title;
     line-height: 1rem;
 }
+.entity-showcase__subtitles-container {
+    grid-area: subtitle;
+    display: grid;
+    grid-template-rows: repeat(auto-fill, max-content);
+}
 
 .entity-showcase__subtitle {
-    grid-area: subtitle;
     font-size: 0.8em;
     line-height: 1rem;
 }
@@ -53,5 +57,9 @@
     .small-avatar .entity-showcase__avatar{
         height: 2.5em;
         width: 2.5em;
+    }
+
+    .entity-showcase__subtitle {
+        font-size: 0.7em;
     }
 }

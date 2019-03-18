@@ -100,6 +100,7 @@ app = webapp2.WSGIApplication([
     ("/api/user/institutions/(.*)", UserHandler),
     ("/api/user/timeline.*", UserTimelineHandler),
     ("/api/search/institution", SearchHandler),
+    ("/api/search/event", SearchHandler),
     ("/api/feature-toggle.*", FeatureToggleHandler),
     ("/api/email/current-state", CurrentStateEmailRequestHandler),
     ("/login", LoginHandler),

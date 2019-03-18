@@ -1,88 +1,92 @@
-<md-dialog flex-sm="80" flex-xs="100" flex-gt-sm="50">
+<md-dialog class="analyse-request__dialog" flex-sm="80" flex-xs="90" flex-gt-sm="50">
     <md-dialog-content class="md-dialog-content" layout-gt-sm="column" style="padding: 1em;"
     ng-if="!analyseHierReqCtrl.showProcessingMessage()">
         <div ng-if="!analyseHierReqCtrl.hasToRemoveLink">
             <h3> Confirmar vínculo </h3>
-            <p>
+            <p class="analyse-request__description">
                 Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de
-                <b>{{ analyseHierReqCtrl.parent.name }}</b>, clique em Confirmar. Caso queira rejeitar, clique em cancelar.
+                <b>{{ analyseHierReqCtrl.parent.name }}</b>, clique em aceitar. Caso não queira se vincular a esta instituição clique em rejeitar.
+            </p>
+
+            <div layout="column">
+                <entity-showcase
+                    class="fill-width analyse-request__margin-bottom"
+                    avatar="analyseHierReqCtrl.parent.photo_url || 'app/images/institution.png'"
+                    title="analyseHierReqCtrl.parent.name"
+                    subtitle="analyseHierReqCtrl.parent.institutional_email">
+                </entity-showcase>
+                <div class="analyse-request__children-inst">
+                    <div class="analyse-request__green-bar"></div>
+                    <entity-showcase
+                        class="fill-width"
+                        avatar="analyseHierReqCtrl.child.photo_url || 'app/images/avatar.png'"
+                        title="analyseHierReqCtrl.child.name || analyseHierReqCtrl.child.sender_name"
+                        subtitle="analyseHierReqCtrl.child.institutional_email">
+                    </entity-showcase>
+                </div>
+            </div>
+        </div>
+        <div ng-if="analyseHierReqCtrl.showDescToRemoveLink()">
+            <h3>Confirmar remoção de vínculo existente</h3>
+            <p class="analyse-request__description">
+                Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de <b>{{ analyseHierReqCtrl.parent.name }}</b>
+                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito. Clique em aceitar,
+                para visualizar a alteração de vínculo, caso não queira se vincular a esta instituição clique em rejeitar. 
             </p>
         </div>
-        <div ng-if="analyseHierReqCtrl.hasToRemoveLink">
-            <h3>Confirmar remoção de vínculo existente</h3>
-            <p>
-                Para aceitar o vínculo e tornar <b>{{ analyseHierReqCtrl.child.name }}</b> uma subornadinada de <b>{{ analyseHierReqCtrl.parent.name }}</b>
-                é necessário que o vínculo com <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b> seja desfeito. Clique em Confirmar,
-                para prosseguir, ou em Cancelar, para rejeitar o pedido. 
-            </p>
+        <div ng-if="analyseHierReqCtrl.analyseInstitutions">
             <h4>Vínculo Atual</h4>
             <div layout="column">
-                <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
-                <div>
-                    <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{analyseHierReqCtrl.child.parent_institution.photo_url || 'app/images/institution.png'}}"
-                    alt="{{analyseHierReqCtrl.child.parent_institution.name}}"></img>
-                </div>
-                <div layout="column" layout-align="center start">
-                    <b>{{ analyseHierReqCtrl.child.parent_institution.name }}</b>
-                    <span>{{ analyseHierReqCtrl.child.parent_institution.institutional_email }}</span>
-            </div>
-                </div>
-                <div layout="row">
-                <div flex="5" layout="row" layout-align="center">
-                    <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
-                </div>
-                <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
-                    <div>
-                    <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ analyseHierReqCtrl.child.photo_url || 'app/images/avatar.png'}}"
-                        alt="{{ analyseHierReqCtrl.child.name }}"></img>
-                    </div>
-                    <div layout="column" layout-align="center start">
-                    <b>{{ analyseHierReqCtrl.child.name || analyseHierReqCtrl.child.sender_name}}</b>
-                    <span>{{ analyseHierReqCtrl.child.institutional_email }}</span>
-                    <span>{{ analyseHierReqCtrl.child.office }}</span>
-                    </div>
-                </div>
+                <entity-showcase
+                    class="fill-width analyse-request__margin-bottom"
+                    avatar="analyseHierReqCtrl.child.parent_institution.photo_url || 'app/images/institution.png'"
+                    title="analyseHierReqCtrl.child.parent_institution.name"
+                    subtitle="analyseHierReqCtrl.child.parent_institution.institutional_email">
+                </entity-showcase>
+                <div class="analyse-request__children-inst">
+                    <div class="analyse-request__green-bar"></div>
+                    <entity-showcase
+                        class="fill-width"
+                        avatar="analyseHierReqCtrl.child.photo_url || 'app/images/avatar.png'"
+                        title="analyseHierReqCtrl.child.name || analyseHierReqCtrl.child.sender_name"
+                        subtitle="analyseHierReqCtrl.child.institutional_email">
+                    </entity-showcase>
                 </div>
             </div>
 
             <h4>Vínculo Futuro</h4>
-        </div>
 
-        <div layout="column">
-            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin style="margin: 0 0 8px 0;">
-            <div>
-                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{analyseHierReqCtrl.parent.photo_url || 'app/images/institution.png'}}"
-                alt="{{analyseHierReqCtrl.parent.name}}"></img>
-            </div>
-            <div layout="column" layout-align="center start">
-                <b>{{ analyseHierReqCtrl.parent.name }}</b>
-                <span>{{ analyseHierReqCtrl.parent.institutional_email }}</span>
-            </div>
-            </div>
-            <div layout="row">
-            <div flex="5" layout="row" layout-align="center">
-                <div style="width: 8px;" md-colors="{background: 'default-teal-500'}"></div>
-            </div>
-            <div layout="row" md-colors="{background: 'default-grey-200'}" layout-margin flex="95" style="margin: 0;">
-                <div>
-                <img style="width: 75px; height: 75px; border-radius: 50%;" ng-src="{{ analyseHierReqCtrl.child.photo_url || 'app/images/avatar.png'}}"
-                    alt="{{ analyseHierReqCtrl.child.name }}"></img>
+            <div layout="column">
+                <entity-showcase
+                    class="fill-width analyse-request__margin-bottom"
+                    avatar="analyseHierReqCtrl.parent.photo_url || 'app/images/institution.png'"
+                    title="analyseHierReqCtrl.parent.name"
+                    subtitle="analyseHierReqCtrl.parent.institutional_email">
+                </entity-showcase>
+                <div class="analyse-request__children-inst">
+                    <div class="analyse-request__green-bar"></div>
+                    <entity-showcase
+                        class="fill-width"
+                        avatar="analyseHierReqCtrl.child.photo_url || 'app/images/avatar.png'"
+                        title="analyseHierReqCtrl.child.name || analyseHierReqCtrl.child.sender_name"
+                        subtitle="analyseHierReqCtrl.child.institutional_email">
+                    </entity-showcase>
                 </div>
-                <div layout="column" layout-align="center start">
-                <b>{{ analyseHierReqCtrl.child.name || analyseHierReqCtrl.child.sender_name}}</b>
-                <span>{{ analyseHierReqCtrl.child.institutional_email }}</span>
-                <span>{{ analyseHierReqCtrl.child.office }}</span>
-                </div>
-            </div>
             </div>
         </div>
     </md-dialog-content>
     <md-dialog-actions ng-if="!analyseHierReqCtrl.showProcessingMessage()"
         layout="row" layout-align="end center" layout-wrap>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.rejectRequest()" 
-            md-colors="{color: 'default-teal-500'}"> Cancelar </md-button>
+            md-colors="{color: 'default-teal-500'}"> Rejeitar </md-button>
         <md-button class="md-primary" ng-click="analyseHierReqCtrl.confirmRequest()"
-            md-colors="{color: 'default-teal-500'}"> Confirmar </md-button>
+            md-colors="{color: 'default-teal-500'}"
+            ng-if="analyseHierReqCtrl.showButtonAccept()"> Aceitar</md-button>
+        <md-button class="md-primary"
+            ng-click="analyseHierReqCtrl.analyseInstitutions = true" 
+            md-colors="{color: 'default-teal-500'}"
+            ng-if="analyseHierReqCtrl.showDescToRemoveLink()"> Avançar
+        </md-button>
     </md-dialog-actions>
 
     <!-- ACCEPTED -->

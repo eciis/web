@@ -4,7 +4,7 @@
 
     app.controller("ManagementMembersController", function InviteUserController(
         InviteService, $state, $mdDialog, InstitutionService, AuthService, MessageService,
-        RequestInvitationService, ProfileService, STATES) {
+        RequestInvitationService, ProfileService, STATES, EntityShowcase) {
         var manageMemberCtrl = this;
         var MAX_EMAILS_QUANTITY = 10;
 
@@ -112,12 +112,8 @@
          * Constructs the object that will be used to create a button
          * in the entity-showcase component
          */
-        manageMemberCtrl.getEntityShowcaseBtn = (icon, color, action, params) => {
-            return {
-                icon: icon,
-                iconColor: color,
-                action: () => action(...params)
-            };
+        manageMemberCtrl.getEntityShowcaseBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args);
         };
 
         manageMemberCtrl.sendUserInvite = function sendInvite(loadedEmails) {

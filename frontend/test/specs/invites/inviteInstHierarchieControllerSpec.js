@@ -104,6 +104,7 @@
 
         state.params.institutionKey = institution.key;
         inviteInstHierarchieCtrl = createCtrl();
+        inviteInstHierarchieCtrl.$onInit();
 
         expect(requestInvitationService.getParentRequests).toHaveBeenCalled();
         expect(requestInvitationService.getChildrenRequests).toHaveBeenCalled();

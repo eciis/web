@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService, STATES, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, RequestDialogService, $q) {
+        MessageService, RequestInvitationService, RequestDialogService, $q, EntityShowcase) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -29,6 +29,10 @@
         inviteInstHierCtrl.existing_institutions = [];
         inviteInstHierCtrl.requested_invites = [];
         inviteInstHierCtrl.isLoadingSubmission = false;
+
+        inviteInstHierCtrl.$onInit = () => {
+            loadInstitution();
+        }
 
         inviteInstHierCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
@@ -202,7 +206,7 @@
         };
 
         inviteInstHierCtrl.isActive = function isActive(institution) {
-            return institution.state === ACTIVE;
+            return institution && institution.state === ACTIVE;
         };
 
         function loadInstitution() {
@@ -340,8 +344,7 @@
         inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
             var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
             var removeInstPermission = inviteInstHierCtrl.user.permissions.remove_inst;
-            return removeInstPermission
-                && removeInstPermission[institution.key] && hasChildrenLink;
+            return removeInstPermission && removeInstPermission[institution.key] && hasChildrenLink ? true : false;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
@@ -352,6 +355,23 @@
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
+        };
+
+        /**
+         * Gets the correspondent link status message depending on the 
+         * the link status itself and on whether the given institution
+         * is active or not
+         * @param {object} - institution that is linked with the user's current institution
+         * @param {boolean} - isParent flag, if true indicates that the given institution is parent
+         * of the user's current institution
+         */
+        inviteInstHierCtrl.getStatusMsg = (institution, isParent) => {
+            const status = isParent ? inviteInstHierCtrl.linkParentStatus() : inviteInstHierCtrl.linkChildrenStatus(institution);
+            if(inviteInstHierCtrl.isActive(institution)) {
+                return `Status do vínculo: ${status}`;
+            } else {
+                return "Instituição ainda não cadastrada na plataforma"
+            }
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
@@ -404,7 +424,9 @@
         inviteInstHierCtrl.limitString = function limitString(string, size) {
           return Utils.limitString(string, size);
         };
-
-        loadInstitution();
+   
+        inviteInstHierCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args);
+        };
     });
 })();

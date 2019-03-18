@@ -185,7 +185,7 @@
             const message = _.isEqual(ctrl.invite.type_of_invite, 'INSTITUTION_PARENT') ?
               'Estamos processando suas permissões hierárquicas. Em breve você receberá uma notificação e ficará habilitado para administrar a instituição e toda sua hierarquia na Plataforma Virtual CIS.'
               :
-              'A instituição foi criada e ja se encontra habilitada na Plataforma Virtual CIS.'
+              'A instituição foi criada e já se encontra habilitada na Plataforma Virtual CIS.'
 
             return AuthService.reload().then(() => {
               return $state.go(STATES.HOME).then(() => {

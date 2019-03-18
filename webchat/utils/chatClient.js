@@ -57,7 +57,7 @@
        * Starts a new connection with the websocket server.
        */
       startWebsocket() {
-        const websocket = `ws://${WEBSOCKET.hostname}:${WEBSOCKET.port}`;
+        const websocket = WEBSOCKET.url;
         this.ws = new WebSocket(websocket);
 
         // Sends a signin message to the websocket as soon as the websocket connects

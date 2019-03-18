@@ -20,7 +20,7 @@
 
 .registered-institution-cover div img {
     height: 5.5em;
-    width: 100%;
+    justify-self: center;
 }
 
 #registered-institution-img {
@@ -36,6 +36,7 @@
     height: 3em;
     width: 3em;
     border-radius: 50%;
+    background: white;
 }
 
 .registered-institution-content {

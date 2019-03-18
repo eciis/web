@@ -62,6 +62,15 @@
                     }
                 }
             })
+            .state(STATES.SEARCH_EVENT, {
+                url: "/search_event",
+                views: {
+                    user_content: {
+                        templateUrl: "app/search/search_event.html",
+                        controller: "SearchEventController as searchCtrl"
+                    }
+                }
+            })
             .state(STATES.HOME, {
                 url: "/",
                 views: {
@@ -75,17 +84,17 @@
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/institutions.html", 
-                            "app/institution/registered_institutions_mobile.html", 450),
+                            "app/institution/registered_institutions_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "AllInstitutionsController as allInstitutionsCtrl"
                     }
                 }
             })
             .state(STATES.EVENTS, {
-                url: "/events",
+                url: "/events?institutionKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/event/events.html",
-                            "app/event/events_mobile.html", 475),
+                            "app/event/events_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "EventController as eventCtrl",
                     }
                 }
@@ -108,13 +117,16 @@
                 url: "/inviteInstitution",
                 views: {
                     user_content: {
-                        templateUrl: "app/invites/invite_institution.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/invites/invite_institution.html",
+                            "app/invites/invite_institution_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE),
                         controller: "InviteInstitutionController as inviteInstCtrl"
                     }
                 }
             })
             .state(STATES.CONFIG_PROFILE, {
-                url: "/config_profile",
+                url: "/config_profile/:userKey",
                 views: {
                     user_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize(
@@ -159,9 +171,21 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/followers.html",
-                            "app/institution/followers_mobile.html", 475),
+                            "app/institution/followers_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "FollowersInstController as followersCtrl"
                     }
+                }
+            })
+            .state(STATES.INST_DESCRIPTION, {
+                url: "/institution/:institutionKey/description",
+                views: {
+                    institution_content: {
+                        templateUrl: "app/institution/descriptionInst/description_inst.html",
+                        controller: "DescriptionInstController as descriptionCtrl"
+                    }
+                },
+                params: {
+                    institution: undefined
                 }
             })
             .state(STATES.INST_EVENTS, {
@@ -178,7 +202,7 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/members.html",
-                            "app/institution/members_mobile.html", 475),
+                            "app/institution/members_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "ManagementMembersController as membersCtrl"
                     }
                 }
@@ -188,7 +212,7 @@
                 views: {
                     institution_content: {
                         templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/registration_data.html",
-                            "app/institution/registration_data_mobile.html", 475),
+                            "app/institution/registration_data_mobile.html", SCREEN_SIZES.SMARTPHONE),
                         controller: "InstitutionController as institutionCtrl"
                     }
                 }
@@ -223,8 +247,17 @@
                 url: "/institution/:institutionKey",
                 views: {
                     content: {
-                        templateUrl: "app/institution/management_institution_page.html",
+                        templateUrl: "app/institution/manageInstitution/management_institution_page.html",
                         controller: "InstitutionController as institutionCtrl"
+                    }
+                }
+            })
+            .state(STATES.MANAGE_INST_MENU_MOB, {
+                url: "/menu",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/manageInstMenu/manage_institution_menu.html",
+                        controller: "ManageInstMenuController as manageInstMenuCtrl"
                     }
                 }
             })
@@ -232,8 +265,21 @@
                 url: "/managementMembers",
                 views: {
                     content_manage_institution: {
-                        templateUrl: "app/institution/management_members.html",
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/manageMembers/management_members.html",
+                            "app/institution/manageMembers/management_members_mobile.html",
+                            SCREEN_SIZES.SMARTPHONE
+                        ),
                         controller: "ManagementMembersController as manageMemberCtrl"
+                    }
+                }
+            })
+            .state(STATES.MANAGE_INST_LINKS, {
+                url: "/links",
+                views: {
+                    content_manage_institution: {
+                        templateUrl: "app/institution/manageInstitution/management_institution_mobile.html",
+                        controller: "InviteInstHierarchieController as inviteInstHierCtrl"
                     }
                 }
             })
@@ -250,8 +296,11 @@
                 url: "/edit",
                 views: {
                     content_manage_institution: {
-                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/edit_info.html",
-                            "app/institution/edit_info_mobile.html", 475)
+                        templateUrl: Utils.selectFieldBasedOnScreenSize(
+                            "app/institution/editInfo/edit_info.html",
+                            "app/institution/editInfo/edit_info_mobile.html", 
+                            SCREEN_SIZES.SMARTPHONE
+                        )
                     }
                 }
             })
@@ -268,8 +317,8 @@
                 url: "/:key/new_invite",
                 views: {
                     main: {
-                        templateUrl: "app/invites/new_invite_page.html",
-                        controller: "NewInviteController as newInviteCtrl"
+                      templateUrl: "app/invites/new_invite_page.html",
+                      controller: "NewInviteController as newInviteCtrl"
                     }
                 }
             })
@@ -297,8 +346,9 @@
                 url: "/create_institution_form",
                 views: {
                     main: {
-                        templateUrl: "app/institution/create_inst_form.html",
-                        controller: "ConfigInstController as configInstCtrl"
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/create_inst_form.html",
+                          "app/institution/create_inst_form_mobile.html"),
+                        controller: Utils.selectFieldBasedOnScreenSize("ConfigInstController as configInstCtrl", "CreateInvitedInstitutionController as ctrl"),
                     }
                 },
                 params: {
@@ -515,7 +565,11 @@
      */
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
-            STATES.CREATE_EVENT
+            STATES.CREATE_EVENT,
+            STATES.SEARCH_EVENT,
+            STATES.INST_DESCRIPTION,
+            STATES.MANAGE_INST_LINKS,
+            STATES.MANAGE_INST_MENU_MOB
         ];
 
         $transitions.onStart({
@@ -556,6 +610,35 @@
             to: () => true
         }, function () {
             ObserverRecorderService.unobserveAll();
+        });
+    });
+
+    app.run(function featureToggleInterceptor(FeatureToggleService, MapStateToFeatureService, $transitions, STATES, MessageService) {
+        
+        $transitions.onBefore({
+            to: function(state) {
+                const stateName = state.name;
+                return MapStateToFeatureService.containsFeature(stateName);
+            }
+        }, function (transition) {
+            const targetStateName = transition.to().name;
+
+            return FeatureToggleService.isEnabled(MapStateToFeatureService.getFeatureByState(targetStateName)).then(function(enabled) {
+                if (enabled) {
+                    return transition;
+                } else {
+                    return transition.router.stateService.target(STATES.ERROR, {
+                        "msg": "Desculpa! Este recurso ainda não está disponível.",
+                        "status": "403"
+                    });
+                }
+            }).catch(function(message) {
+                MessageService.showErrorToast(message);
+                return transition.router.stateService.target(STATES.ERROR, {
+                    "msg": "Desculpa! Este recurso ainda não está disponível.",
+                    "status": "403"
+                });
+            });
         });
     });
 

@@ -256,35 +256,38 @@ class RemoveInstitutionHandler(BaseHandler):
         apply_remove_operation(remove_hierarchy, institution, user)
 
 
-class PostNotificationHandler(BaseHandler):
+class MultipleNotificationHandler(BaseHandler):
     """Handler that sends post's notifications to another queue."""
 
     def post(self):
         """Handle post requests."""
-        post_author_key = self.request.get('receiver_key')
+        author_key = self.request.get('receiver_key')
         sender_url_key = self.request.get('sender_key')
-        post_key = self.request.get('entity_key')
+        entity_key = self.request.get('entity_key')
         entity_type = self.request.get('entity_type')
         current_institution_key = ndb.Key(urlsafe=self.request.get('current_institution'))
         sender_inst_key = self.request.get('sender_institution_key') and ndb.Key(urlsafe=self.request.get('sender_institution_key'))
-        post = ndb.Key(urlsafe=post_key).get()
+        field = self.request.get('field')
+        entity = ndb.Key(urlsafe=entity_key).get()
+        entity_title = self.request.get('title') or None
 
-        notification_message = post.create_notification_message(
+        notification_message = entity.create_notification_message(
             ndb.Key(urlsafe=sender_url_key),
             current_institution_key,
             sender_inst_key
         )
-        subscribers =  [subscriber.urlsafe() for subscriber in post.subscribers]
+        subscribers =  [subscriber.urlsafe() for subscriber in entity[field]]
 
-        user_is_author = post_author_key == sender_url_key
+        user_is_author = author_key == sender_url_key
         for subscriber in subscribers:
             subscriber_is_sender = subscriber == sender_url_key
             if not (user_is_author and subscriber_is_sender) and not subscriber_is_sender:
                 send_message_notification(
                     receiver_key=subscriber,
                     notification_type=entity_type,
-                    entity_key=post_key,
-                    message=notification_message
+                    entity_key=entity_key,
+                    message=notification_message,
+                    entity={'key': entity_key, 'title': entity_title}
                 )
 
 
@@ -505,7 +508,7 @@ app = webapp2.WSGIApplication([
     ('/api/queue/send-notification', SendNotificationHandler),
     ('/api/queue/send-email', SendEmailHandler),
     ('/api/queue/remove-inst', RemoveInstitutionHandler),
-    ('/api/queue/post-notification', PostNotificationHandler),
+    ('/api/queue/multiple-notification', MultipleNotificationHandler),
     ('/api/queue/email-members', EmailMembersHandler),
     ('/api/queue/notify-followers', NotifyFollowersHandler),
     ('/api/queue/add-admin-permissions', AddAdminPermissionsInInstitutionHierarchy),

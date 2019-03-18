@@ -3,18 +3,19 @@
 (function () {
     angular
     .module('app')
-    .factory('ManageInstItemsFactory', function ($state, STATES, $mdDialog) {
+    .factory('ManageInstItemsFactory', function ($state, STATES, $mdDialog, SCREEN_SIZES) {
         const factory = {};
 
         const removeInstitution = (event, institution) => {
-            $mdDialog.show({
-                templateUrl: 'app/institution/removeInstDialog.html',
-                targetEvent: event,
-                clickOutsideToClose:true,
-                locals: { institution },
-                controller: "RemoveInstController",
-                controllerAs: 'removeInstCtrl'
-            });
+          $mdDialog.show({
+              templateUrl: Utils.selectFieldBasedOnScreenSize(
+                  'app/institution/removeInstDialog.html', 'app/institution/remove_inst_mobile.html', SCREEN_SIZES.SMARTPHONE),
+              targetEvent: event,
+              clickOutsideToClose:true,
+              locals: { institution },
+              controller: "RemoveInstController",
+              controllerAs: 'removeInstCtrl'
+          });
         };
         
         factory.getItems = institution => {
@@ -36,7 +37,14 @@
                     icon: 'account_balance',
                     description: 'Vínculos Institucionais',
                     stateName: 'MANAGE_INST_INVITE_INST',
-                    onClick: () => $state.go(STATES.MANAGE_INST_INVITE_INST, {institutionKey})
+                    onClick: () => {
+                        const state = Utils.selectFieldBasedOnScreenSize(
+                            STATES.MANAGE_INST_INVITE_INST,
+                            STATES.MANAGE_INST_LINKS,
+                            SCREEN_SIZES.SMARTPHONES
+                        );
+                        $state.go(state, {institutionKey});
+                    }
                 },
                 {
                     icon: 'delete',

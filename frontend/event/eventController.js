@@ -2,7 +2,7 @@
 (function() {
     var app = angular.module('app');
 
-    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES) {
+    app.controller("EventController", function EventController(EventService, $state, $mdDialog, AuthService, $q, STATES, SCREEN_SIZES, InstitutionService, $filter) {
         const eventCtrl = this;
         let content = document.getElementById("content");
 
@@ -17,14 +17,24 @@
         eventCtrl.selectedYear = null;
         eventCtrl.user = AuthService.getCurrentUser();
         eventCtrl.isLoadingEvents = true;
+        eventCtrl.isFiltering = false;
+        eventCtrl.institutionsFilter = [];
 
         eventCtrl.loadMoreEvents = function loadMoreEvents() {
-
             if (eventCtrl._moreEvents) {
-                const getEventsFunction = eventCtrl.institutionKey ? EventService.getInstEvents : EventService.getEvents;
-                return eventCtrl._loadEvents(getEventsFunction,
-                    _.get(eventCtrl.selectedMonth, 'month'),
-                    eventCtrl.selectedYear);
+                const getEventsFunction = (eventCtrl.institutionKey) ?
+                    EventService.getInstEvents : EventService.getEvents;
+                const params = (eventCtrl.institutionKey) ?
+                    { 
+                        page: eventCtrl._actualPage,
+                        institutionKey:eventCtrl.institutionKey
+                    } :
+                    { 
+                        page: eventCtrl._actualPage,
+                        month: _.get(eventCtrl.selectedMonth, 'month'),
+                        year: eventCtrl.selectedYear
+                    };
+                return eventCtrl._loadEvents(getEventsFunction, params);
             }
             return $q.when();
         };
@@ -35,13 +45,12 @@
          * Get events from backend
          * @param {*} deferred The promise to resolve before get events from backend
          * @param {*} getEvents The function received to call and get events
-         * @param {*} month The month to filter the get of events
-         * @param {*} year The year to filter the get of events
+         * @param {*} params The params used of service
          * @private
          */
-        eventCtrl._loadEvents = (getEvents, month, year) => {
-            return getEvents({ page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey,
-                month: month, year: year}).then(function success(response) {
+        eventCtrl._loadEvents = (getEvents, params) => {
+            return getEvents(params)
+                .then(function success(response) {
                 eventCtrl._actualPage += 1;
                 eventCtrl._moreEvents = response.next;
 
@@ -53,13 +62,22 @@
                         eventCtrl.events.push(event);
                     });
                 }
+                
+                if (Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE) && !eventCtrl.institutionKey) {
+                    eventCtrl.events = eventCtrl.events.filter(event => {
+                        const institution = _.find(eventCtrl.institutionsFilter, institution => institution.name === event.institution_name);
+                        return institution && institution.enable;
+                    });
+                } else {
+                    eventCtrl.events = $filter('filter')(eventCtrl.events, eventCtrl.institutionKey);
+                }
 
                 eventCtrl.isLoadingEvents = false;
                 eventCtrl._getEventsByDay();
             }, function error() {
                 $state.go(STATES.HOME);
             });
-        }
+        };
 
         eventCtrl.newEvent = function newEvent(event) {
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
@@ -106,18 +124,7 @@
          * @param {object} event - The current event
          */
         eventCtrl.goToEvent = (event) => {
-            $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
-        };
-
-        /**
-         * Get the color of institutional profile of the user
-         * @param {object} event - The current event
-         */
-        eventCtrl.getProfileColor = (event) => {
-            const profile = _.filter(eventCtrl.user.institution_profiles, function(prof) {
-                return prof.institution_key === event.institution_key;
-            });
-            return _.get(_.first(profile), 'color', 'teal');
+            event.state !== 'deleted' && $state.go(STATES.EVENT_DETAILS, { eventKey: event.key });
         };
 
         /**
@@ -171,8 +178,8 @@
          * @private
          */
         eventCtrl._getEventsByDay = () => {
+            eventCtrl.eventsByDay = [];
             if(eventCtrl.events.length > 0 && eventCtrl.selectedMonth) {
-                eventCtrl.eventsByDay = [];
                 let eventsByDay = {};
                 _.forEach(eventCtrl.events, function(event) {
                     eventCtrl._distributeEvents(event, eventsByDay);
@@ -213,7 +220,7 @@
                 eventCtrl.loadMoreEvents();
             });
         };
-        
+ 
         /**
          * Generate the menuItems that will live in the middle of the toolbar.
          */
@@ -251,10 +258,13 @@
                     title: 'Atualizar', action: () => { eventCtrl._moreEvents = true; 
                         eventCtrl._actualPage = 0; eventCtrl.events = []; eventCtrl.loadMoreEvents()}
                 },
-                {
-                    title: 'Filtrar por instituição', action: () => {}
-                }
-            ]
+            ];
+
+            if (!eventCtrl.institutionKey) {
+                toolbarMenuGeneralOptions.options.push({
+                    title: 'Filtrar por instituição', action: () => {eventCtrl.isFiltering = true;}
+                });
+            }
             
             return toolbarMenuGeneralOptions;
         };
@@ -267,15 +277,53 @@
             eventCtrl.toolbarItems = eventCtrl._getToolbarMobileMenuItems();
         };
 
+        /**
+         * This function applies the modifications made
+         * to the event filter by institution,
+         * reloading events and filtering.
+         */
+        eventCtrl.confirmFilter = function confirmFilter() {
+            eventCtrl.events = [];
+            eventCtrl._actualPage = 0;
+            eventCtrl._moreEvents = true;
+            eventCtrl.isLoadingEvents = true;
+            eventCtrl.cancelFilter();
+            return eventCtrl.loadMoreEvents();
+        };
+
+        /**
+         * This function cancels the filter run.
+         */
+        eventCtrl.cancelFilter = function cancelFilter() {
+            eventCtrl.isFiltering = false;
+        };
+
         eventCtrl.$onInit = () => {
             eventCtrl.institutionKey = $state.params.institutionKey;
+            getCurrentInstitution();
+
             if(Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE)) {
                 eventCtrl._getMonths().then(() => {
                     eventCtrl.setupToolbarFields();
+                });
+
+                eventCtrl.institutionsFilter = eventCtrl.user.follows.map(institution => {
+                    return {
+                        name: institution.name,
+                        enable: true
+                    };
                 });
             } else {
                 eventCtrl.loadMoreEvents();
             }
         };
+
+        function getCurrentInstitution() {
+            if (!_.isNil(eventCtrl.institutionKey)) {
+                InstitutionService.getInstitution(eventCtrl.institutionKey).then((institutionData) => {
+                    eventCtrl.institution = new Institution(institutionData);
+                });
+            }
+        }
     });
 })();

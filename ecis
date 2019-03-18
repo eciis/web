@@ -7,6 +7,9 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 # ----------------------------
 
+# import generate_config_file and generate_config_file_with_urls functions
+source generate_config.sh
+
 SYS_URL='http://localhost:8080'
 
 APP_YAML=app.yaml
@@ -14,21 +17,20 @@ FRONTEND_YAML=frontend/frontend.yaml
 BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 SUPPORT_YAML=support/support.yaml
+FEATURE_YAML=feature-toggles/feature.yaml
 WEBCHAT_YAML=webchat/webchat.yaml
 
-LANDINGPAGE_LOCAL="localhost:8080"
-FRONTEND_LOCAL="localhost:8081"
-BACKEND_LOCAL="localhost:8082"
-SUPPORT_LOCAL="localhost:8083"
-WEBCHAT_LOCAL="localhost:8084"
+config_files=(
+    "frontend/config.js"
+    "support/config.js"
+    "landing/config.js"
+    "feature-toggles/config.js"
+    "webchat/config.js"
+);
 
-FRONTEND_CONFIG_FILE="frontend/config.js"
-SUPPORT_CONFIG_FILE="support/config.js"
-LANDINGPAGE_CONFIG_FILE="landing/config.js"
-WEBCHAT_CONFIG_FILE="webchat/config.js"
 SW_FILE="frontend/sw.js"
 
-git update-index --skip-worktree $FRONTEND_CONFIG_FILE $SUPPORT_CONFIG_FILE $LANDINGPAGE_CONFIG_FILE $WEBCHAT_CONFIG_FILE
+git update-index --skip-worktree ${config_files[@]}
 
 PY_ENV=backend/py_env
 
@@ -56,87 +58,6 @@ function setup_app_version {
     APP_VERSION_FILE="backend/app_version.py"
     echo 'APP_VERSION = "'$1'"' > $APP_VERSION_FILE
     catch_error $? "Setup APP VERSION with success"
-}
-
-function set_service_url {
-    case "$1" in
-        local)
-            echo "http://$2";
-        ;;
-        deploy)
-            echo "https://$2"
-        ;;
-        *) echo "inválid option"; exit 1;
-        ;;
-    esac
-}
-
-function set_config_file {
-    line=$1;
-    service=$2;
-    url=$3;
-    service_name=$4;
-
-    tmpfile=$(mktemp)
-    sed "$line s|.*|    $service: '$url',|" $FRONTEND_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $FRONTEND_CONFIG_FILE
-    sed "$line s|.*|    $service: '$url',|" $SUPPORT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $SUPPORT_CONFIG_FILE
-    sed "$line s|.*|    $service: '$url',|" $LANDINGPAGE_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $LANDINGPAGE_CONFIG_FILE
-    sed "$line s|.*|    $service: '$url',|" $WEBCHAT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $WEBCHAT_CONFIG_FILE
-
-    catch_error $? "Frontend will use ${bold}$url${_bold} as $service_name."
-    catch_error $? "Support will use ${bold}$url${_bold} as $service_name."
-}
-
-function set_backend_url {
-    url=$(set_service_url $1 $2);
-    service="BACKEND_URL";
-    line=4;
-    service_name="backend";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_landingpage_url {
-    url=$(set_service_url $1 $2);
-    service="LANDINGPAGE_URL";
-    line=5;
-    service_name="landing page";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_support_url {
-    url=$(set_service_url $1 $2);
-    service="SUPPORT_URL";
-    line=6;
-    service_name="support";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_frontend_url {
-    url=$(set_service_url $1 $2);
-    service="FRONTEND_URL";
-    line=7;
-    service_name="frontend";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_webchat_url {
-    url=$(set_service_url $1 $2);
-    service="WEBCHAT_URL";
-    line=8;
-    service_name="webchat";
-    set_config_file $line $service $url $service_name;
-}
-
-function set_app_version_config {
-    tmpfile=$(mktemp)
-    sed "9s|.*|    APP_VERSION: '$1'|" $FRONTEND_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $FRONTEND_CONFIG_FILE
-    catch_error $? "APP VERSION on Frontend $1"
-    sed "9s|.*|    APP_VERSION: '$1'|" $SUPPORT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $SUPPORT_CONFIG_FILE
-    catch_error $? "APP VERSION on Support $1"
-    sed "9s|.*|    APP_VERSION: '$1'|" $LANDINGPAGE_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $LANDINGPAGE_CONFIG_FILE
-    catch_error $? "APP VERSION on LandingPage $1"
-    sed "9s|.*|    APP_VERSION: '$1'|" $WEBCHAT_CONFIG_FILE > "$tmpfile" && mv "$tmpfile" $WEBCHAT_CONFIG_FILE
-    catch_error $? "APP VERSION on LandingPage $1"
 }
 
 function set_cache_suffix_sw {
@@ -192,13 +113,13 @@ case "$1" in
     run)
         APP_VERSION=$(git branch | grep "*" | awk '{print $2}')
         set_cache_suffix_sw $APP_VERSION
-        set_app_version_config $APP_VERSION
 
         echo "=========== Cleaning Environment ==========="
         rm -rf $PY_ENV
         catch_error $? "Removed Pyenv Folder"
 
         rm -rf frontend/test/node_modules frontend/test/bower_components
+        rm -rf feature-toggles/test/node_modules feature-toggles/test/bower_components
         catch_error $? "Removed node_modules and bower_components"
 
         echo "=========== Starting Virtual Environment ==========="
@@ -225,11 +146,7 @@ case "$1" in
 
         setup_firebase_config development
 
-        set_backend_url local $BACKEND_LOCAL
-        set_landingpage_url local $LANDINGPAGE_LOCAL
-        set_support_url local $SUPPORT_LOCAL
-        set_frontend_url local $FRONTEND_LOCAL
-        set_webchat_url local $WEBCHAT_LOCAL
+        generate_config_file local $APP_VERSION ${config_files[@]}
 
         if [[ -n $2 ]] && [ $2 = "--enable_datastore_emulator" ] ; then
             gcloud beta emulators datastore start --host-port=0.0.0.0:8586 &
@@ -241,7 +158,7 @@ case "$1" in
         fi
 
         $(gcloud beta emulators datastore env-init)
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WEBCHAT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=$emulator $other_parameter
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=$emulator $other_parameter
         $(gcloud beta emulators datastore env-unset)
     ;;
 
@@ -254,7 +171,7 @@ case "$1" in
                 if [ "$3" == "--clean" ]; then
                     rm -rf node_modules bower_components
                 fi
-
+                
                 if [ ! -e node_modules ]; then
                     yarn add package.json
                     catch_error $? "Node modules installed with success"
@@ -279,7 +196,7 @@ case "$1" in
                 echo "=========== Starting Backend Tests ==========="
                 source $PY_ENV/bin/activate
                 setup_app_version "master"
-
+                
                 cd backend
                 echo 'FIREBASE_URL = "FIREBASE_URL"' > firebase_config.py
                 echo 'SERVER_KEY = "SERVER_KEY"' >> firebase_config.py
@@ -289,6 +206,25 @@ case "$1" in
                     TEST_NAME=$4
                 fi
                 python -m unittest discover -v -p $TEST_NAME
+            ;;
+            feature)
+                echo "=========== Starting Feature Toggles Tests Setup ==========="
+                cd feature-toggles/test
+
+                if [ "$3" == "--clean" ]; then
+                    rm -rf node_modules bower_components
+                fi
+                
+                if [ ! -e node_modules ]; then
+                    yarn
+                    catch_error $? "Node modules installed with success"
+                else
+                    log_message "Node modules already installed"
+                fi
+
+                echo "=========== Starting to run Feature Toggles Tests ==========="
+                karma start --single-run
+            ;;
         esac
     ;;
 
@@ -302,7 +238,6 @@ case "$1" in
         catch_error $? "Git checked out to tag $APP_VERSION"
 
         set_cache_suffix_sw $APP_VERSION
-        set_app_version_config $APP_VERSION
 
         echo "${bold}>> Select the application to deploy:${_bold}"
         options=("development-cis" "eciis-splab" "Other")
@@ -310,15 +245,19 @@ case "$1" in
         do
             case $opt in
                 "development-cis")
+                    ENV="dev"
                     APP_NAME="development-cis"
                     SUPPORT_DOMAIN="support-dot-$APP_NAME.appspot.com"
                     FRONTEND_DOMAIN="frontend-dot-$APP_NAME.appspot.com"
+                    FEATURE_DOMAIN="feature-dot-$APP_NAME.appspot.com"
                     break
                     ;;
                 "eciis-splab")
+                    ENV="prod"
                     APP_NAME="eciis-splab"
                     SUPPORT_DOMAIN="support.plataformacis.org"
                     FRONTEND_DOMAIN="frontend.plataformacis.org"
+                    FEATURE_DOMAIN="feature.plataformacis.org"
                     break
                     ;;
                 "Other")
@@ -345,9 +284,9 @@ case "$1" in
 
         DOMAIN="$APP_NAME.appspot.com"
         BACKEND_DOMAIN="backend-dot-$DOMAIN"
-
+        
         ENVIRONMENT="development"
-        read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT
+        read -p "${bold}Choose which environment to use: (development) ${_bold} " NEW_ENVIRONMENT 
         if [ "$NEW_ENVIRONMENT" != "" ]; then
             ENVIRONMENT=$NEW_ENVIRONMENT
         fi
@@ -360,29 +299,23 @@ case "$1" in
 
         if [ ! -z $2 ]; then
             version=$2
-            url=$version"."$BACKEND_DOMAIN
-            set_backend_url deploy $url
+            urls=(
+                $version"."$BACKEND_DOMAIN
+                $version"."$DOMAIN
+                $version"."$SUPPORT_DOMAIN
+                $version"."$FRONTEND_DOMAIN
+                $version"."$FEATURE_DOMAIN
+            )
 
-            url=$version"."$DOMAIN
-            set_landingpage_url deploy $url
-
-            url=$version"."$SUPPORT_DOMAIN
-            set_support_url deploy $url
-
-            url=$version"."$FRONTEND_DOMAIN
-            set_frontend_url deploy $url
-
+            generate_config_file_with_urls $APP_VERSION ${urls[@]} ${config_files[@]}
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
-                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML queue.yaml
+                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML queue.yaml
             fi
         else
-            set_backend_url deploy $BACKEND_DOMAIN
-            set_landingpage_url deploy $DOMAIN
-            set_support_url deploy $SUPPORT_DOMAIN
-            set_frontend_url deploy $FRONTEND_DOMAIN
-            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $WORKER_YAML
+            generate_config_file $ENV $APP_VERSION ${config_files[@]}
+            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML
         fi
 
         exit 0

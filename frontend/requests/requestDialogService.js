@@ -35,7 +35,7 @@
                     var request = new Invite(data);
                     selectDialogToShow(request, event, dialogProperties);
                 }, function error(response) {
-                    MessageService.showToast(response.data.msg);
+                    MessageService.showErrorToast(response.data.msg);
                 }
             );
         };

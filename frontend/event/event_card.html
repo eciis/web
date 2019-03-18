@@ -1,0 +1,23 @@
+<md-card>
+    <div class="event-preview event-preview-border" md-colors="{color: eventCardCtrl.getProfileColor(event)}">
+    <img ng-if="eventCardCtrl.event.state !== 'deleted'" ng-class="eventCardCtrl.event.photo_url ? 'event-preview-image' : 'event-preview-without-image'"
+    md-colors="{background: eventCardCtrl.getProfileColor()+'-500'}" class="md-card-image" ng-src="{{eventCardCtrl.event.photo_url}}">
+    <div ng-if="eventCardCtrl.event.state === 'deleted'" class="event-preview-image md-card-image"
+    md-colors="{background: eventCardCtrl.getProfileColor()+'-700'}">
+        <canceled-event-header event="eventCardCtrl.event"></canceled-event-header>
+    </div>
+    <div class="highlight">
+        <div class="event-title">
+            <b>{{ eventCardCtrl.event.title | uppercase}}</b>
+        </div>
+        <div class="event-subtitle">
+            {{ eventCardCtrl.event.start_time | amUtc | amLocal | amDateFormat:'HH:mm' }}
+            {{ eventCardCtrl.event.address.city ? ' | ' + eventCardCtrl.event.address.city : ''}}
+            <p class="event-inst-name"
+                ng-if="!eventCardCtrl.user.isMember(eventCardCtrl.event.institution_key)">
+                {{eventCardCtrl.event.institution_name || uppercase}}
+            </p>
+        </div>
+    </div>
+    </div>
+</md-card>

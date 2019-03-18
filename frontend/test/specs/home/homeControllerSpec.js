@@ -63,6 +63,7 @@
         spyOn($rootScope, '$on').and.callThrough();
 
         homeCtrl = createCtrl();
+        homeCtrl.$onInit();
         httpBackend.flush();
 
         expect($rootScope.$on).toHaveBeenCalled();

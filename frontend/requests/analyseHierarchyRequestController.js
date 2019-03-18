@@ -6,6 +6,7 @@
     app.controller('AnalyseHierarchyRequestController', function AnalyseHierarchyRequestController(request,
          RequestInvitationService, InstitutionService, MessageService, $mdDialog) {
         const analyseHierReqCtrl = this;
+        analyseHierReqCtrl.analyseInstitutions = false;
     
         const REQUEST_PARENT = "REQUEST_INSTITUTION_PARENT";
         const REQUEST_CHILDREN = "REQUEST_INSTITUTION_CHILDREN";
@@ -27,6 +28,22 @@
             analyseHierReqCtrl.child = child;
         })();
 
+        /** Show button accept if hasn't link to remove or
+         *  if user in display on analyse institution hierarchie. 
+         * 
+         */
+        analyseHierReqCtrl.showButtonAccept = function(){
+            return !analyseHierReqCtrl.hasToRemoveLink || 
+                analyseHierReqCtrl.hasToRemoveLink && analyseHierReqCtrl.analyseInstitutions;
+        };
+
+        /** Show description that informes to user that
+         * he's need remove old link before accept new link;
+         */
+        analyseHierReqCtrl.showDescToRemoveLink = function(){
+            return analyseHierReqCtrl.hasToRemoveLink && !analyseHierReqCtrl.analyseInstitutions;
+        };
+
         analyseHierReqCtrl.confirmRequest = function confirmRequest() {
             analyseHierReqCtrl.hasToRemoveLink ? confirmLinkRemoval() : acceptRequest();
         };
@@ -36,13 +53,13 @@
                 function success() {
                     request.status = 'rejected';
                     $mdDialog.cancel();
-                    MessageService.showToast('Solicitação rejeitada com sucesso');
+                    MessageService.showInfoToast('Solicitação rejeitada com sucesso');
                 });
         };
 
         analyseHierReqCtrl.close = function close() {
             $mdDialog.hide();
-            MessageService.showToast('Solicitação aceita com sucesso');
+            MessageService.showInfoToast('Solicitação aceita com sucesso');
         };
 
         analyseHierReqCtrl.showProcessingMessage = function showProcessingMessage() {

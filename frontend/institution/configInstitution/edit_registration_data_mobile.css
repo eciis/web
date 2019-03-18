@@ -1,0 +1,182 @@
+.edit-registration-half-init-grid, .edit-registration-half-end-grid, .edit-registration-location-grid {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    grid-template-rows: auto;
+    height: 87%;
+    width: 100%;
+}
+
+.edit-registration-location-grid {
+    grid-template-columns: 29% 27% 39%;
+}
+
+.edit-registration-neighbourhood {
+    width: 86% !important;
+}
+
+.edit-registration-icon, .edit-registration-portfolio {
+    color: white !important;
+}
+
+.edit-registration-img-margin {
+    margin-top: 5em;
+}
+
+.edit-registration-img, .edit-registration-img-button {
+    width: 11em !important;
+    height: 11em !important;
+}
+
+.edit-registration-img-button {
+    z-index: 0 !important;
+}
+
+.edit-registration-img {
+    border-radius: 50%;
+    margin-left: -0.4em;
+    opacity: 0.5;
+}
+
+.edit-registration-img-inside {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.edit-registration-img-icon {
+    font-size: 4em;
+    margin-left: 0.55em;
+}
+
+.edit-registration-img-text {
+    margin-top: 0.8em;
+}
+
+.edit-registration-message {
+    opacity: 0.9;
+    margin-top: -1.5em;
+    margin-left: 1.2em;
+    font-size: 0.6em;
+    color: red;
+}
+
+.edit-registration-portfolio {
+    width: 92%;
+    margin-left: 1.1em;
+    background-color: #84C45E !important;
+}
+
+.edit-registration-half-end-grid {
+    grid-template-columns: 60% 40%;
+}
+
+.edit-registration-data-acronym {
+    grid-column-start: 1;
+}
+
+.edit-registration-data-actuation {
+    grid-column-start: 2;
+}
+
+.edit-registration-data-name {
+    width: 90%;
+    margin-left: 1.2em;
+    font-size: 0.8em;
+}
+
+.edit-registration-site {
+    width: 74%;
+}
+
+.edit-registration-input-margin {
+    margin: -0.4em 0 0 1.2em;
+}
+
+.edit-registration-buttons {
+    margin-left: auto;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    align-self: end;
+    margin-right: 1em;
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.edit-registration-data-title, .edit-registration-select-menu {
+    color: #004D40;
+    font-size: 0.8em;
+    margin-top: -0.1em;
+}
+
+.edit-registration-data-title, .edit-registration-select-menu {
+    color: #004D40;
+}
+
+.edit-registration-select-menu {
+    margin: -0.3em 0em -2.35em 1.6em;
+    font-size: 0.7em;
+}
+
+.edit-registration-select-menu-size .md-select-menu-container {
+    width: 96%;
+}
+
+.edit-registration-data-input, .md-select-value {
+    border-color: #009688 !important;
+}
+
+.edit-registration-data-input {
+    margin-top: -1.2em !important;
+}
+
+.edit-registration-data-title {
+    margin-left: 0.17em;
+}
+
+.edit-registration-data-button {
+    margin-right: 1em;
+    margin-top: -2.4em;
+}
+
+.edit-registration-data-button span {
+    font-size: 0.8em;
+    align-self: start;
+}
+
+.edit-registration-data-button-title {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.edit-registration-actuation-area {
+    width: 86%;
+}
+
+.edit-registration-top-color, .edit-registration-back-button {
+    color:#707070
+}
+
+.edit-registration-top-icon {
+    font-size: 2.5em;
+}
+
+.edit-registration-back-button {
+    margin-bottom: 0.9em !important;
+    margin-left: -0.5em !important;
+}
+
+.edit-registration-cancel-button {
+    background-color: rgb(173, 169, 169);
+    color: white;
+}
+
+.edit-registration-data-top-bar {
+    height: 3em;
+    width: 100%;
+    align-items: center;
+    position: fixed;
+    background: white;
+    z-index: 3;
+    box-shadow: 0em 0.188em 0.375em grey;
+}

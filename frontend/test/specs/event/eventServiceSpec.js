@@ -133,5 +133,25 @@
                 httpBackend.flush();
                 expect($http.patch).toHaveBeenCalledWith(EVENT_URI + '/' + event.key, patch);
             });
+
+            describe('addFollower', () => {
+                it('should call post', () => {
+                    spyOn($http, 'post');
+
+                    service.addFollower('aposkpdoskpodkapd');
+
+                    expect($http.post).toHaveBeenCalledWith('/api/events/aposkpdoskpodkapd/followers');
+                });
+            });
+
+            describe('removeFollower', () => {
+                it('should call delete', () => {
+                    spyOn($http, 'delete');
+
+                    service.removeFollower('aposkpdoskpodkapd');
+
+                    expect($http.delete).toHaveBeenCalledWith('/api/events/aposkpdoskpodkapd/followers');
+                });
+            });
         });
 }));

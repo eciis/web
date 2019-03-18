@@ -20,6 +20,13 @@
             return false;
         };
 
+        /** Get class of element HTML that show member entity.
+         *  The class is defined according if member is selected.
+         */
+        transferAdminCtrl.getClass = function getClass(member){
+            return (member === transferAdminCtrl.selectedMember) ? "small-avatar": "small-avatar white-background";
+        }
+
         transferAdminCtrl.selectMember = function selectMember(member) {
             transferAdminCtrl.selectedMember = member;
             transferAdminCtrl.member = member.email[0];
@@ -46,13 +53,13 @@
                     InviteService.sendInviteUser({invite_body: invite}).then(function success() {
                         invite.status = 'sent';
                         $mdDialog.hide(invite);
-                        MessageService.showToast("Convite enviado com sucesso!");
+                        MessageService.showInfoToast("Convite enviado com sucesso!");
                     });
                 } else {
-                    MessageService.showToast('Você já é administrador da instituição, selecione outro membro!');
+                    MessageService.showErrorToast('Você já é administrador da instituição, selecione outro membro!');
                 }
             } else {
-                MessageService.showToast('Selecione um memebro!');
+                MessageService.showErrorToast('Selecione um membro!');
             }
         };
     });

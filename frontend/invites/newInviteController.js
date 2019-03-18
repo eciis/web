@@ -26,7 +26,7 @@
                     if (!userIsAMember()) {
                         newInviteCtrl.addInstitution(event);
                     } else {
-                        MessageService.showToast('Você já é membro dessa instituição');
+                        MessageService.showErrorToast('Você já é membro dessa instituição');
                         newInviteCtrl.deleteInvite();
                     }
                 }
@@ -106,7 +106,7 @@
                 promise.then(function() {
                    newInviteCtrl.deleteInvite();
                 }, function() {
-                    MessageService.showToast('Cancelado');
+                    MessageService.showInfoToast('Cancelado');
                 });
                 return promise;
         };
@@ -154,6 +154,10 @@
             return promise;
         }
 
+        newInviteCtrl.showMobileInstInviteScreen = () => {
+          return Utils.isMobileScreen() && !newInviteCtrl.isInviteUser() && !newInviteCtrl.isAlreadyProcessed;
+        };
+
         function showAlert(event) {
             $mdDialog.show({
                 templateUrl: 'app/invites/welcome_dialog.html',
@@ -195,7 +199,7 @@
 
         function isValidProfile() {
             if(!newInviteCtrl.office) {
-                MessageService.showToast("Cargo institucional deve ser preenchido.");
+                MessageService.showErrorToast("Cargo institucional deve ser preenchido.");
                 return false;
             }
             return true;

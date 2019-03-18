@@ -3,7 +3,7 @@
 describe('Test ConfigInstDirective', function() {
     var editInstCtrl, scope, institutionService, state, deferred;
     var mdToast, mdDialog, http, inviteService, httpBackend, imageService;
-    let authService, createCtrl, pdfService, messageService, states;
+    let authService, createCtrl, pdfService, messageService, states, stateLinkRequestService;
 
     var address = {
         cep: "11111-000",
@@ -84,7 +84,8 @@ describe('Test ConfigInstDirective', function() {
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $q, $state, $mdToast, STATES,
-        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService, MessageService) {
+        $rootScope, $mdDialog, $http, InstitutionService, InviteService, AuthService, PdfService, ImageService, MessageService,
+        StateLinkRequestService) {
         httpBackend = $httpBackend;
         httpBackend.expectGET('app/institution/legal_nature.json').respond(legal_nature);
         httpBackend.expectGET('app/institution/actuation_area.json').respond(actuation_area);
@@ -93,6 +94,8 @@ describe('Test ConfigInstDirective', function() {
         httpBackend.when('GET', 'main/main.html').respond(200);
         httpBackend.when('GET', 'home/home.html').respond(200);
         httpBackend.when('GET', 'auth/login.html').respond(200);
+        httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
+        httpBackend.when('GET', '/api/institutions/inst-key').respond(institution);
         scope = $rootScope.$new();
         state = $state;
         deferred = $q.defer();
@@ -106,6 +109,7 @@ describe('Test ConfigInstDirective', function() {
         pdfService = PdfService;
         http = $http;
         states = STATES;
+        stateLinkRequestService = StateLinkRequestService;
 
         authService.login(userData);
         state.params.institutionKey = institution.key;
@@ -158,6 +162,13 @@ describe('Test ConfigInstDirective', function() {
             editInstCtrl.user.invites = [invite];
             editInstCtrl.initController();
             expect(state.go).toHaveBeenCalledWith(states.SIGNIN);
+        });
+
+        it('should call showLinkRequestDialog', function () {
+            spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+            editInstCtrl.initController();
+            expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalled();
+            httpBackend.flush();
         });
 
         afterEach(function() {
@@ -305,11 +316,11 @@ describe('Test ConfigInstDirective', function() {
             expect(editInstCtrl.steps).toEqual([false, false, true]);
         });
 
-        it('should call showToast', function() {
-            spyOn(messageService, 'showToast');
+        it('should call showErrorToast', function() {
+            spyOn(messageService, 'showErrorToast');
             editInstCtrl.newInstitution.address = {};
             editInstCtrl.nextStep();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showErrorToast).toHaveBeenCalledWith('Campos obrigatórios não preenchidos corretamente.');
         });
 
         it('should not pass from first step', function() {

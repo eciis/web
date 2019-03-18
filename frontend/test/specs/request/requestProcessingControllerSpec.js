@@ -19,8 +19,8 @@
         "PRIVATE_COMPANY": "Empresa Privada",
     };
 
-    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend;
-    var authService, userService, messageService, request;
+    var requestInvitationService, institutionService, requestCtrl, scope, httpBackend, mdDialog;
+    var authService, userService, messageService, request, deferred;
 
     var newRequest = {
         key: 'request-key',
@@ -56,6 +56,10 @@
         }
     ];
 
+    const updateRequest = (req, status) => {
+        req.status = status;
+    };
+
     function callFake() {
         return {
             then: function(calback) {
@@ -66,8 +70,8 @@
 
     beforeEach(module('app'));
 
-    beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService,
-         RequestInvitationService, InstitutionService, UserService, MessageService) {
+    beforeEach(inject(function($controller, $rootScope, $httpBackend, AuthService, $q,
+         RequestInvitationService, InstitutionService, UserService, MessageService, $mdDialog) {
         
         requestInvitationService = RequestInvitationService;
         institutionService = InstitutionService;
@@ -76,6 +80,8 @@
         httpBackend = $httpBackend;
         authService = AuthService;
         scope = $rootScope.$new();
+        mdDialog = $mdDialog;
+        deferred = $q.defer();
         AuthService.login(user);
         request = Object.assign({}, newRequest);
 
@@ -91,7 +97,8 @@
             AuthService: authService,
             UserService: UserService,
             MessageService: messageService,
-            request: request
+            request: request,
+            updateRequest: updateRequest
         });
 
         httpBackend.flush();
@@ -146,7 +153,7 @@
             });
 
             spyOn(requestInvitationService, 'getRequest').and.callFake(callFake);
-            spyOn(messageService, 'showToast').and.callFake(callFake);  
+            spyOn(messageService, 'showInfoToast').and.callFake(callFake);  
             spyOn(requestCtrl, 'hideDialog').and.callFake(function() {});
         });
 
@@ -157,17 +164,36 @@
             requestCtrl.acceptRequest();
 
             expect(authService.getCurrentUser().permissions).toEqual(permissions);
-            expect(messageService.showToast).toHaveBeenCalledWith("Solicitação aceita!");
+            expect(messageService.showInfoToast).toHaveBeenCalledWith("Solicitação aceita!");
             expect(request.status).toEqual('accepted');
         });
     });
 
     describe('rejectRequest()', function() {
 
-        it('should set isRejecting to true', function() {
-            expect(requestCtrl.isRejecting).toBe(false);
-            requestCtrl.rejectRequest();
-            expect(requestCtrl.isRejecting).toBe(true);
+        beforeEach(() => {
+            spyOn(mdDialog, 'confirm').and.callThrough();
+            spyOn(mdDialog, 'show').and.returnValue(deferred.promise);
+            spyOn(requestCtrl, 'confirmReject');
+            spyOn(requestCtrl, 'cancelReject');
+        });
+
+        it('should confirm the dialog and call confirmReject', function() {
+            deferred.resolve();
+            requestCtrl.rejectRequest({});
+            scope.$apply();
+            expect(mdDialog.confirm).toHaveBeenCalled();
+            expect(mdDialog.show).toHaveBeenCalled();
+            expect(requestCtrl.confirmReject).toHaveBeenCalled();
+        });
+
+        it('should cancel the dialog and call cancelReject', function() {
+            deferred.reject();
+            requestCtrl.rejectRequest({});
+            scope.$apply();
+            expect(mdDialog.confirm).toHaveBeenCalled();
+            expect(mdDialog.show).toHaveBeenCalled();
+            expect(requestCtrl.cancelReject).toHaveBeenCalled();
         });
     });
 
@@ -250,11 +276,11 @@
                     }
                 };
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             requestCtrl.children.parent_institution = {key: 'poaskdoad-OPAKSDOAP'};
             requestCtrl.confirmLinkRemoval();
 
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
             expect(requestCtrl.children.parent_institution).toEqual(undefined);
         });
     });

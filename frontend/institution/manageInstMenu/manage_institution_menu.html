@@ -1,0 +1,24 @@
+<white-toolbar
+    primary-button-icon="close"
+    title="Gerenciar Instituição"
+    title-class="manage-inst-menu__toolbar--title"
+    menu-options="manageInstMenuCtrl.switchInstOptions"
+    class="manage-inst-menu__toolbar">
+</white-toolbar>
+
+<md-content class="manage-inst-menu hide-scrollbar-mobile">
+    <institution-header 
+        user="manageInstMenuCtrl.user"
+        institution="manageInstMenuCtrl.institution"
+        photo="manageInstMenuCtrl.institution.photo_url"
+        actions-buttons="manageInstMenuCtrl.getActionButtons">
+    </institution-header>
+
+    <hr class="manage-inst-menu__divider">
+
+    <md-button ng-repeat="option in manageInstMenuCtrl.options"
+        class="manage-inst-menu__option" ng-click="option.onClick()">
+        <md-icon>{{option.icon}}</md-icon>
+        <b>{{option.description}}</b>
+    </md-button>
+</md-content>

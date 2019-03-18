@@ -4,7 +4,8 @@
     var app = angular.module('app');
 
     app.controller('PostDetailsController', function(PostService, AuthService, CommentService, $state,
-        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, POST_EVENTS, STATES) {
+        $mdDialog, MessageService, ngClipboard, ProfileService, $rootScope, 
+        POST_EVENTS, STATES, EventService, SCREEN_SIZES) {
 
         var postDetailsCtrl = this;
 
@@ -40,10 +41,10 @@
                             POST_EVENTS.DELETED_POST_EVENT_TO_UP, 
                             postDetailsCtrl.post
                         );
-                    MessageService.showToast('Post excluído com sucesso');
+                    MessageService.showInfoToast('Post excluído com sucesso');
                 });
             }, function() {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
         };
 
@@ -124,8 +125,7 @@
 
         postDetailsCtrl.showSharedEvent = function showSharedEvent() {
             return postDetailsCtrl.post.shared_event &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post) &&
-                !postDetailsCtrl.isDeleted(postDetailsCtrl.post.shared_event);
+                !postDetailsCtrl.isDeleted(postDetailsCtrl.post);
         };
 
         postDetailsCtrl.showSurvey = function showSurvey() {
@@ -189,7 +189,7 @@
         postDetailsCtrl.copyLink = function copyLink(){
             var url = Utils.generateLink(URL_POST + postDetailsCtrl.post.key);
             ngClipboard.toClipboard(url);
-            MessageService.showToast("O link foi copiado");
+            MessageService.showInfoToast("O link foi copiado", true);
         };
 
         postDetailsCtrl.likeOrDislikePost = function likeOrDislikePost() {
@@ -229,7 +229,10 @@
             $mdDialog.show({
                 controller: "SharePostController",
                 controllerAs: "sharePostCtrl",
-                templateUrl: 'app/post/share_post_dialog.html',
+                templateUrl: Utils.selectFieldBasedOnScreenSize(
+                    'app/post/share_post_dialog.html',
+                    'app/post/share_post_dialog_mobile.html'
+                ),
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
@@ -243,14 +246,14 @@
 
         postDetailsCtrl.addSubscriber = function addSubscriber() {
             PostService.addSubscriber(postDetailsCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi marcado como de seu interesse.');
+                MessageService.showInfoToast('Esse post foi marcado como de seu interesse.');
                 postDetailsCtrl.post.subscribers.push(postDetailsCtrl.user.key);
             });
         };
 
         postDetailsCtrl.removeSubscriber = function removeSubscriber() {
             PostService.removeSubscriber(postDetailsCtrl.post.key).then(function success() {
-                MessageService.showToast('Esse post foi removido dos posts de seu interesse.');
+                MessageService.showInfoToast('Esse post foi removido dos posts de seu interesse.');
                 _.remove(postDetailsCtrl.post.subscribers, function(userKey) {
                     return userKey === postDetailsCtrl.user.key;
                 });
@@ -273,6 +276,44 @@
 
         postDetailsCtrl.getResponsiveTitleClass = function getResponsiveTitleClass() {
             return Utils.isLargerThanTheScreen(postDetailsCtrl.post.title) ? 'break' : 'no-break';
+        };
+
+        /**
+         * Checks if the post is actually an event that has been shared.
+         */
+        postDetailsCtrl.isSharedEvent = () => {
+            return postDetailsCtrl.post.shared_event; 
+        };
+
+        /**
+         * Checks if the user is following the event, if so
+         * the user will receive notifications related to the event.
+         */
+        postDetailsCtrl.isFollowingEvent = () => {
+            const eventFollowers = (postDetailsCtrl.post.shared_event && postDetailsCtrl.post.shared_event.followers) || [];
+            return eventFollowers.includes(postDetailsCtrl.user.key);
+        };
+
+        /**
+         * Add the user as an event's follower.
+         * Thus, the user will receive notifications related to the event.
+         */
+        postDetailsCtrl.followEvent = () => {
+            EventService.addFollower(postDetailsCtrl.post.shared_event.key).then(() => {
+                postDetailsCtrl.post.shared_event.addFollower(postDetailsCtrl.user.key);
+                MessageService.showInfoToast('Você receberá as atualizações desse evento.');
+            });
+        };
+
+        /**
+         * Remove the user from the event's followers list.
+         * Thus, the user won't receive any notification related to the event.
+         */
+        postDetailsCtrl.unFollowEvent = () => {
+            EventService.removeFollower(postDetailsCtrl.post.shared_event.key).then(() => {
+                postDetailsCtrl.post.shared_event.removeFollower(postDetailsCtrl.user.key);
+                MessageService.showInfoToast('Você não receberá as atualizações desse evento.');
+            });
         };
 
         function getOriginalPost(post){
@@ -437,7 +478,7 @@
                     $state.go(STATES.HOME);
                 });
             } else {
-                MessageService.showToast("Comentário não pode ser vazio.");
+                MessageService.showErrorToast("Comentário não pode ser vazio.");
             }
             return promise;
         };
@@ -449,6 +490,7 @@
         postDetailsCtrl.isPostEmpty = function  isPostEmpty() {
             return !postDetailsCtrl.post || _.isEmpty(postDetailsCtrl.post);
         };
+
 
         function isInstitutionAdmin() {
             return _.includes(_.map(postDetailsCtrl.user.institutions_admin, getKeyFromUrl), postDetailsCtrl.post.institution_key);
@@ -511,10 +553,23 @@
             return {background: color};
         };
 
+        /**
+         * Checks if the application is being used by a mobile device.
+         */
+        postDetailsCtrl.isMobileScreen = () => {
+            return Utils.isMobileScreen(SCREEN_SIZES.SMARTPHONE);
+        };
+
         function adjustText(text){
             return (!postDetailsCtrl.isPostPage && text) ?
                 Utils.limitString(text, LIMIT_POST_CHARACTERS) : text;
         }
+
+        postDetailsCtrl.$onInit = () => {
+            if (postDetailsCtrl.isSharedEvent()) {
+                postDetailsCtrl.post.shared_event = new Event(postDetailsCtrl.post.shared_event);
+            }
+        };
 
         postDetailsCtrl.$postLink = function() {
             if($state.params.focus){

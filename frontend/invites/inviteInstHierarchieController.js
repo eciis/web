@@ -5,7 +5,7 @@
 
     app.controller("InviteInstHierarchieController", function InviteInstHierarchieController(
         InviteService, STATES, $mdDialog, $state, AuthService, InstitutionService,
-        MessageService, RequestInvitationService, RequestDialogService, $q) {
+        MessageService, RequestInvitationService, RequestDialogService, $q, EntityShowcase) {
 
         var inviteInstHierCtrl = this;
         var institutionKey = $state.params.institutionKey;
@@ -30,6 +30,10 @@
         inviteInstHierCtrl.requested_invites = [];
         inviteInstHierCtrl.isLoadingSubmission = false;
 
+        inviteInstHierCtrl.$onInit = () => {
+            loadInstitution();
+        }
+
         inviteInstHierCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstHierCtrl[flagName] = !inviteInstHierCtrl[flagName];
         };
@@ -41,9 +45,9 @@
             inviteInstHierCtrl.invite.admin_key = inviteInstHierCtrl.user.key;
             invite = new Invite(inviteInstHierCtrl.invite);
             if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             } else if(inviteInstHierCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
-                MessageService.showToast("Já possui instituição superior");
+                MessageService.showErrorToast("Já possui instituição superior");
             } else {
                 var suggestionInstName = inviteInstHierCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -96,7 +100,7 @@
                     }
                     deferred.resolve();
                     inviteInstHierCtrl.isLoadingSubmission = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showInfoToast('Convite enviado com sucesso!');
                 }, function error() {
                     deferred.reject();
                     inviteInstHierCtrl.isLoadingSubmission = false;
@@ -110,7 +114,7 @@
             var deferred = $q.defer();
             
             sendRequest(invite).then(function success() {
-                MessageService.showToast('Convite enviado com sucesso!');
+                MessageService.showInfoToast('Convite enviado com sucesso!');
                 addInviteToRequests(invite);
                 if (invite.type_of_invite === REQUEST_PARENT) {
                     addParentInstitution(institutionRequestedKey);
@@ -193,7 +197,7 @@
             if (inviteInstHierCtrl.isActive(institution)) {
                 inviteInstHierCtrl.goToInst(institution.key);
             } else {
-                MessageService.showToast("Institutição inativa!");
+                MessageService.showErrorToast("Institutição inativa!");
             }
         };
 
@@ -202,7 +206,7 @@
         };
 
         inviteInstHierCtrl.isActive = function isActive(institution) {
-            return institution.state === ACTIVE;
+            return institution && institution.state === ACTIVE;
         };
 
         function loadInstitution() {
@@ -252,7 +256,7 @@
             var promise = $mdDialog.show(confirm);
             promise.then(function() {
                 InstitutionService.removeLink(inviteInstHierCtrl.institution.key, institution.key, isParent).then(function success() {
-                    MessageService.showToast('Conexão removida com sucesso');
+                    MessageService.showInfoToast('Conexão removida com sucesso');
                     if(isParent) {
                         inviteInstHierCtrl.hasParent = false;
                         inviteInstHierCtrl.institution.parent_institution = {};
@@ -261,7 +265,7 @@
                     }
                 });
             }, function() {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
             return promise;
         };
@@ -340,8 +344,7 @@
         inviteInstHierCtrl.canRemoveInst = function canRemoveInst(institution) {
             var hasChildrenLink = institution.parent_institution === inviteInstHierCtrl.institution.key;
             var removeInstPermission = inviteInstHierCtrl.user.permissions.remove_inst;
-            return removeInstPermission
-                && removeInstPermission[institution.key] && hasChildrenLink;
+            return removeInstPermission && removeInstPermission[institution.key] && hasChildrenLink ? true : false;
         };
 
         inviteInstHierCtrl.linkParentStatus = function linkParentStatus() {
@@ -352,6 +355,23 @@
 
         inviteInstHierCtrl.linkChildrenStatus = function linkChildrenStatus(institution) {
             return institution.parent_institution && institution.parent_institution === inviteInstHierCtrl.institution.key ? "confirmado" : "não confirmado";
+        };
+
+        /**
+         * Gets the correspondent link status message depending on the 
+         * the link status itself and on whether the given institution
+         * is active or not
+         * @param {object} - institution that is linked with the user's current institution
+         * @param {boolean} - isParent flag, if true indicates that the given institution is parent
+         * of the user's current institution
+         */
+        inviteInstHierCtrl.getStatusMsg = (institution, isParent) => {
+            const status = isParent ? inviteInstHierCtrl.linkParentStatus() : inviteInstHierCtrl.linkChildrenStatus(institution);
+            if(inviteInstHierCtrl.isActive(institution)) {
+                return `Status do vínculo: ${status}`;
+            } else {
+                return "Instituição ainda não cadastrada na plataforma"
+            }
         };
 
         inviteInstHierCtrl.analyseRequest = function analyseRequest(event, request) {
@@ -404,7 +424,9 @@
         inviteInstHierCtrl.limitString = function limitString(string, size) {
           return Utils.limitString(string, size);
         };
-
-        loadInstitution();
+   
+        inviteInstHierCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args);
+        };
     });
 })();

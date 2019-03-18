@@ -4,7 +4,7 @@
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
-        STATES, $mdDialog, MessageService) {
+        STATES, $mdDialog, MessageService, EntityShowcase, STATE_LINKS) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -22,6 +22,10 @@
 
         inviteInstCtrl.user = AuthService.getCurrentUser();
 
+        inviteInstCtrl.$onInit = () => {
+            inviteInstCtrl._loadSentInvitations();
+            inviteInstCtrl._loadSentRequests();
+        };
 
         inviteInstCtrl.toggleElement = function toggleElement(flagName) {
             inviteInstCtrl[flagName] = !inviteInstCtrl[flagName];
@@ -29,6 +33,11 @@
 
         inviteInstCtrl.cancelInvite = function cancelInvite() {
             inviteInstCtrl.invite = {};
+        };
+
+        inviteInstCtrl.resetForm = () => {
+            inviteInstCtrl.inviteInstForm.$setPristine();
+            inviteInstCtrl.inviteInstForm.$setUntouched();
         };
 
         inviteInstCtrl.checkInstInvite = function checkInstInvite(ev) {
@@ -42,9 +51,9 @@
             invite = new Invite(inviteInstCtrl.invite);
 
             if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             } else if (!inviteInstCtrl.user.hasPermission('analyze_request_inst')) {
-                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
+                MessageService.showErrorToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -80,6 +89,8 @@
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true
+            }).then(_ => {
+                inviteInstCtrl.resetForm();
             });
         };
 
@@ -93,29 +104,38 @@
                     inviteInstCtrl.sent_invitations.push(invite);
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    inviteInstCtrl.resetForm();
+                    MessageService.showInfoToast('Convite enviado com sucesso!');
                 });
             return promise;
         };
 
         inviteInstCtrl.showPendingRequestDialog = function showPendingRequestDialog(event, request) {
+            const template = Utils.selectFieldBasedOnScreenSize(
+                "app/requests/request_institution_processing.html",
+                "app/requests/request_institution_processing_mobile.html",
+                SCREEN_SIZES.SMARTPHONE
+            );
             $mdDialog.show({
-                templateUrl: "app/requests/request_institution_processing.html",
+                templateUrl: template,
                 controller: "RequestProcessingController",
                 controllerAs: "requestCtrl",
                 parent: angular.element(document.body),
                 targetEvent: event,
                 clickOutsideToClose:true,
                 locals: {
-                    "request": request
+                    "request": request,
+                    "updateRequest": inviteInstCtrl._updateRequest
                 },
                 openFrom: '#fab-new-post',
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
-            }).then(function success() {
-                request.status = 'accepted';
-                _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
             });
         };
+
+        inviteInstCtrl._updateRequest = (request, status) => {
+            request.status = status;
+            _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
+        }
 
         inviteInstCtrl.goToInst = function goToInst(institutionKey) {
             $state.go(STATES.INST_TIMELINE, {institutionKey: institutionKey});
@@ -127,17 +147,17 @@
                 .clickOutsideToClose(false)
                 .title('Reenviar convite')
                 .textContent('Você deseja reenviar o convite?')
-                .ariaLabel('Reenviar convite')
+                .ariaLabel('Reenviar')
                 .targetEvent(event)
-                .ok('Reenviar convite')
+                .ok('Reenviar')
                 .cancel('Cancelar');
             var promise = $mdDialog.show(confirm);
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
-                    MessageService.showToast("Convite reenviado com sucesso.");
+                    MessageService.showInfoToast("Convite reenviado com sucesso.");
                 });
             }, function () {
-                MessageService.showToast('Cancelado.');
+                MessageService.showInfoToast('Cancelado.');
             });
             return promise;
         };
@@ -153,7 +173,7 @@
             angular.element($cancelButton).addClass('green-button-text');
         }
 
-        function loadSentRequests() {
+        inviteInstCtrl._loadSentRequests = () => {
             var institution_key = inviteInstCtrl.user.current_institution.key;
             RequestInvitationService.getRequestsInst(institution_key).then(function success(requests) {
                 var isSentRequest = createRequestSelector('sent', 'REQUEST_INSTITUTION');
@@ -163,7 +183,7 @@
             });
         }
         
-        function loadSentInvitations() {
+        inviteInstCtrl._loadSentInvitations = () => {
             InviteService.getSentInstitutionInvitations().then(function success(response) {
                 var requests = response;
                 getSentInvitations(requests);
@@ -172,7 +192,11 @@
                 $state.go(STATES.HOME);
             });
         }
-        
+
+        inviteInstCtrl.hasNewRequests = () => {
+            return inviteInstCtrl.sent_requests.length > 0;
+        };
+
         function getSentInvitations(requests) {
             var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
             inviteInstCtrl.sent_invitations = requests.filter(isSentInvitation);
@@ -189,9 +213,17 @@
             }
         }
 
-        (function main() {
-            loadSentInvitations();
-            loadSentRequests();
-        })();
+        inviteInstCtrl.goToActiveInst = (institution) => {
+            if (institution.state === "active") {
+                inviteInstCtrl.goToInst(institution.key);
+            } else {
+                MessageService.showErrorToast("Institutição inativa!");
+            }
+        };
+
+        inviteInstCtrl.createIconBtn = (...args) => {
+            return EntityShowcase.createIconBtn(...args)
+        };
+
     });
 })();

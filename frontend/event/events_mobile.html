@@ -1,50 +1,38 @@
 <main-toolbar toolbar-menu-items="eventCtrl.toolbarItems" toolbar-general-options="eventCtrl.toolbarGeneralOptions"></main-toolbar>
 
-<div style="overflow: scroll">
+<div style="overflow: scroll;" class="custom-scrollbar hide-scrollbar-mobile" ng-if="!eventCtrl.isFiltering">
   <div flex layout="column">
     <load-circle flex add-layout-fill="true" ng-if="eventCtrl.isLoadingEvents"></load-circle>
-    <div ng-if="!eventCtrl.isLoadingEvents" class="centralized-event-content">
-      <md-content ng-if="eventCtrl.eventsByDay.length === 0">
-        <h4>Nenhum evento a ser exibido.</h4>
-      </md-content>
+    <div ng-if="!eventCtrl.isLoadingEvents" class="event-content-grid">
+      <entity-showcase
+              class="fill-width"
+              ng-if="eventCtrl.institutionKey"
+              avatar="eventCtrl.institution.photo_url"
+              title="eventCtrl.institution.name"
+              subtitle="eventCtrl.institution.address.city">
+      </entity-showcase>
+      <is-empty-card ng-if="eventCtrl.events.length === 0"
+                     text="Nenhum evento a ser exibido">
+      </is-empty-card>
     </div>
-    <md-content id="content" class="custom-scrollbar box">
+    <md-content id="content" class="box">
       <div ng-repeat="events in eventCtrl.eventsByDay"
         ng-if="eventCtrl.events.length > 0" class="events-grid events-grid-position">
           <div class="events-day-position event-day-properties">
             <span>{{events.day}}</span>
-            <p class="event-weekday">
-              {{eventCtrl.test(events.events[0])}}
-              {{events.events[0].start_time | amUtc | amDateFormat:'ddd' }}
-            </p>
+            <p class="event-weekday">{{events.events[0].start_time | amUtc | amDateFormat:'ddd'}}</p>
           </div>
           <div ng-repeat="event in events.events | orderBy:'start_time'" class="event-position"
             ng-click="eventCtrl.goToEvent(event)">
-                <md-card>
-                  <div class="event-preview event-preview-border" md-colors="{color: eventCtrl.getProfileColor(event)}">
-                    <img class="md-card-image event-preview-image" ng-src="{{event.photo_url}}">
-                    <div class="highlight">
-                        <div class="event-title">
-                          <b>{{ event.title | uppercase}}</b>
-                        </div>
-                        <div class="event-subtitle">
-                            {{ event.start_time | amUtc | amLocal | amDateFormat:'HH:mm'  }}
-                            {{ event.address.city ? ' | ' + event.address.city : ''}}
-                            <p class="event-inst-name"
-                              ng-if="!eventCtrl.user.isMember(event.institution_key)">
-                                {{event.institution_name || uppercase}}
-                          </p>
-                        </div>
-                    </div>
-                  </div>
-                </md-card>
+                <event-card event="event"></event-card>
           </div>
           <md-divider class="event-divider"></md-divider>
       </div>
     </md-content>
   </div>
 </div>
-<md-fab-speed-dial ng-if="!eventCtrl.institutionKey"
+
+<md-fab-speed-dial ng-if="!eventCtrl.institutionKey && !eventCtrl.isFiltering"
   id="fab-new-event" class="md-fab-bottom-right" hide-gt-sm>
   <md-fab-trigger>
     <md-button aria-label="menu" ng-click="eventCtrl.newEvent()"
@@ -53,3 +41,8 @@
     </md-button>
   </md-fab-trigger>
 </md-fab-speed-dial>
+
+<filter-events-by-institution ng-if="eventCtrl.isFiltering" filter-list='eventCtrl.institutionsFilter' 
+  cancel-action="eventCtrl.cancelFilter" confirm-action="eventCtrl.confirmFilter" 
+  style="max-height: 100%; height: 100%; overflow: scroll;">
+</filter-events-by-institution>

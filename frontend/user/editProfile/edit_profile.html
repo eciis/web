@@ -1,0 +1,51 @@
+<md-dialog flex-gt-md="30" flex-md="40" flex-gt-sm="50" flex-sm="50" flex-xs="100" id="dialog-response">
+    <md-dialog-content layout="column" class="custom-scrollbar" style="padding:0;">
+        <div class="card hovercard" id="cardhover-edit-profile" md-colors="{background: 'default-teal-600'}">
+            <div layout="row" layout-align="end">
+                <md-button class="sm-icon-button" ng-click="editProfileCtrl.closeDialog()">
+                    <md-icon>close</md-icon>
+                </md-button>
+            </div>
+            <div class="cardheader" layout="row"  layout-align="center start" id="cardheader-green-background">
+                <div class="avatar" id="cardheader-avatar">
+                    <img alt="Foto do Perfil" ng-src="{{ editProfileCtrl.profile.institution.photo_url }}"
+                    alt="{{editProfileCtrl.profile.institution.name}}" id="cardheader-image">
+                </div>
+            </div>
+            <div layout="column" id="content-dialog-background">
+                <h2 id="inst-name-profile">{{editProfileCtrl.profile.institution.name}}</h2>
+                <div id="input-edit-profile" md-theme="input">
+                    <md-input-container class="input-margin">
+                        <label>Email institucional</label>
+                        <input name="email" ng-model="editProfileCtrl.profile.email" type="email">
+                    </md-input-container>
+                    <md-input-container  class="input-margin">
+                        <label>Cargo</label>
+                        <input name="cargo" ng-model="editProfileCtrl.profile.office" required>
+                    </md-input-container>
+                    <div layout-gt-sm="row">
+                        <md-input-container class="input-margin" flex-gt-sm="70">
+                            <label>Telefone institucional</label>
+                            <input ng-model="editProfileCtrl.profile.phone" placeholder="99 9999-99999" 
+                                name="telefone" mask="99 9999-99999" mask-validate='false' ng-pattern="editProfileCtrl.phoneRegex">
+                        </md-input-container>
+                        <md-input-container class="input-margin" flex-gt-sm="30">
+                            <label>Ramal</label>
+                            <input name="ramal" ng-model="editProfileCtrl.profile.branch_line" placeholder="999">
+                        </md-input-container>
+                    </div>
+                    <div layout="row" layout-align="end center" style="padding-bottom:1em;">
+                        <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
+                        ng-click="editProfileCtrl.closeDialog()">
+                            Cancelar
+                        </md-button>
+                        <md-button class="md-raised" md-colors="{background: 'default-teal-600'}"
+                        ng-click="editProfileCtrl.edit()">
+                            Salvar
+                        </md-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </md-dialog-content>
+</md-dialog>

@@ -31,7 +31,7 @@
                 requestInvCtrl.currentUser.institutions_requested.push(requestInvCtrl.institutionSelect.key);
                 AuthService.save();
                 $mdDialog.hide();
-                MessageService.showToast("Pedido enviado com sucesso!");
+                MessageService.showInfoToast("Pedido enviado com sucesso!");
             }, function error() {
                 requestInvCtrl.cancelDialog();
             });
@@ -44,7 +44,7 @@
                                     .filter(request => request.status === "sent")
                                     .map(request => request.sender_key);
                 return !sender_keys.includes(requestInvCtrl.currentUser.key) ?
-                        requestInvCtrl.sendRequest() : MessageService.showToast("Usuário já solicitou fazer parte dessa instituição.");
+                        requestInvCtrl.sendRequest() : MessageService.showErrorToast("Usuário já solicitou fazer parte dessa instituição.");
             } else {
                 requestInvCtrl.sendRequest();
             }

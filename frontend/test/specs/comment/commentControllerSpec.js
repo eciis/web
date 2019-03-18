@@ -211,7 +211,7 @@
             commentCtrl.saving = true;
             spyOn(commentService, 'like').and.returnValue(deferred.promise);
             spyOn(commentCtrl, 'addLike').and.callThrough();
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
             expect(commentCtrl.numberOfLikes()).toEqual(0);
         });
 
@@ -235,7 +235,7 @@
             expect(commentService.like).toHaveBeenCalledWith(post.key, comment.id, null);
             expect(commentCtrl.addLike).not.toHaveBeenCalled();
             expect(commentCtrl.numberOfLikes()).toEqual(0);
-            expect(messageService.showToast).toHaveBeenCalledWith("Não foi possível curtir o comentário");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Não foi possível curtir o comentário");
         });
 
         it('should like the reply', function() {
@@ -260,7 +260,7 @@
             expect(commentService.like).toHaveBeenCalledWith(post.key, comment.id, reply.id);
             expect(commentCtrl.addLike).not.toHaveBeenCalled();
             expect(commentCtrl.numberOfLikes()).toEqual(0);
-            expect(messageService.showToast).toHaveBeenCalledWith("Não foi possível curtir o comentário");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Não foi possível curtir o comentário");
         });
     });
 
@@ -269,7 +269,7 @@
             commentCtrl.saving = true;
             spyOn(commentService, 'dislike').and.returnValue(deferred.promise);
             spyOn(commentCtrl, 'removeLike').and.callThrough();
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
         });
 
         afterEach(function() {
@@ -300,7 +300,7 @@
             expect(commentService.dislike).toHaveBeenCalledWith(post.key, comment.id, null);
             expect(commentCtrl.removeLike).not.toHaveBeenCalled();
             expect(commentCtrl.numberOfLikes()).toEqual(1);
-            expect(messageService.showToast).toHaveBeenCalledWith("Não foi possível descurtir o comentário");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Não foi possível descurtir o comentário");
         });
 
         it('should dislike the reply', function() {
@@ -327,7 +327,7 @@
             expect(commentService.dislike).toHaveBeenCalledWith(post.key, comment.id, null);
             expect(commentCtrl.removeLike).not.toHaveBeenCalled();
             expect(commentCtrl.numberOfLikes()).toEqual(1);
-            expect(messageService.showToast).toHaveBeenCalledWith("Não foi possível descurtir o comentário");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Não foi possível descurtir o comentário");
         });
     });
 
@@ -368,14 +368,14 @@
             commentCtrl.setReplyId();
             expect(commentCtrl.comment.replies).toEqual(replies);
             spyOn(commentService, 'deleteReply').and.callThrough();
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             httpBackend.expect(
                 'DELETE', POSTS_URI + '/' + post.key + '/comments/'+ comment.id +'/replies/'+ reply.id
             ).respond(reply);
             commentCtrl.deleteReply();
             httpBackend.flush();
             expect(commentService.deleteReply).toHaveBeenCalledWith(post.key, comment.id, reply.id);
-            expect(messageService.showToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
             expect(commentCtrl.comment.replies).toEqual({'nil-key': nilReply});
         });
     });
@@ -385,14 +385,14 @@
             commentCtrl.post.data_comments = [comment];
             expect(commentCtrl.post.data_comments).toEqual([comment]);
             spyOn(commentService, 'deleteComment').and.callThrough();
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             httpBackend.expect(
                 'DELETE', POSTS_URI + '/' + post.key + '/comments/' + comment.id
             ).respond(comment);
             commentCtrl.deleteComment();
             httpBackend.flush();
             expect(commentService.deleteComment).toHaveBeenCalledWith(post.key, comment.id);
-            expect(messageService.showToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Comentário excluído com sucesso');
             expect(commentCtrl.post.data_comments).toEqual([]);
         });
     });

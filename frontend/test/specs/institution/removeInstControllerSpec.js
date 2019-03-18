@@ -86,14 +86,14 @@
             spyOn(authService, 'save');
             spyOn(removeInstCtrl, 'closeDialog');
             spyOn(state, 'go');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             removeInstCtrl.removeInst();
             expect(institutionService.removeInstitution).toHaveBeenCalled();
             expect(removeInstCtrl.user.institutions).toEqual([sec_institution]);
             expect(authService.save).toHaveBeenCalled();
             expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
             expect(state.go).toHaveBeenCalled();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Instituição removida com sucesso.');
         });
 
         it('should call authService.logout()', function() {
@@ -145,5 +145,25 @@
             expect(state.go).toHaveBeenCalledWith('app.institution.timeline', {institutionKey: removeInstCtrl.institution.key});
             expect(removeInstCtrl.closeDialog).toHaveBeenCalled();
         });
+    });
+
+    describe('getTitle()', () => {
+      beforeEach(() => {
+        spyOn(removeInstCtrl, 'hasOneInstitution').and.callThrough();
+      });
+
+      afterEach(() => {
+        expect(removeInstCtrl.hasOneInstitution).toHaveBeenCalled();
+      });
+
+      it('should return the first option when the user has only one institution', () => {
+        removeInstCtrl.user.institutions = [first_institution];
+        expect(removeInstCtrl.getTitle()).toEqual("Ao remover essa instituição você perderá o acesso a plataforma. Deseja remover?");
+      });
+
+      it('should return the second option when the user has more than one institution', () => {
+        removeInstCtrl.user.institutions = [first_institution, sec_institution];
+        expect(removeInstCtrl.getTitle()).toEqual("Deseja remover esta instituição permanentemente ?");
+      });
     });
 }));

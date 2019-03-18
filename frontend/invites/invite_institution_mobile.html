@@ -1,0 +1,87 @@
+<white-toolbar 
+    primary-button-icon="keyboard_arrow_left"
+    title="Convites"
+    title-class="invite-inst__toolbar__title"
+    class="invite-inst__toolbar">
+</white-toolbar>
+
+<md-content class="invite-inst">
+    <div class="invite-inst__cards">
+        <clickable-card icon="send" title="Convidar Instituição">
+            <div class="invite-inst__card__content">
+                <form name="inviteInstCtrl.inviteInstForm">
+                    <md-input-container md-no-float class="md-block">
+                        <input placeholder="Nome da instituição convidada" class="green-input" type="text"
+                            ng-model="inviteInstCtrl.invite.suggestion_institution_name" 
+                            aria-label="Nome da instituição convidada" required>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block">
+                        <input placeholder="E-mail da instituição" class="green-input" type="email"
+                            ng-model="inviteInstCtrl.invite.invitee" 
+                            aria-label="E-mail da instituição" required>
+                    </md-input-container>
+                </form>
+                <div class="invite-inst__btns">
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstCtrl.inviteInstForm.$pristine"
+                        ng-click="inviteInstCtrl.cancelInvite()">
+                        CANCELAR
+                    </md-button>
+                    <md-button class="invite-inst__btn" ng-disabled="inviteInstCtrl.inviteInstForm.$invalid"
+                        ng-click="inviteInstCtrl.checkInstInvite($event)">
+                        ENVIAR
+                    </md-button>
+                </div>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="email" title="Convites Enviados">
+            <div class="invite-inst__card__content">
+                <search-field keyword="searchSentInvites"></search-field>
+                <md-content class="invite-inst__list custom-scrollbar">
+                    <entity-showcase ng-repeat="invite in inviteInstCtrl.sent_invitations | filter: searchSentInvites"
+                        icon="account_balance"
+                        title="invite.stub_institution.name || invite.suggestion_institution_name"
+                        subtitles-list="[
+                            invite.invitee, 
+                            'Convidado por: '+ invite.sender_name
+                        ]"
+                        right-icon-btns="[
+                            inviteInstCtrl.createIconBtn('send', null, inviteInstCtrl.resendInvite, [invite.key, $event])
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+        
+        <clickable-card icon="announcement" title="Convites Requisitados" show-notification="inviteInstCtrl.hasNewRequests()">
+            <search-field keyword="searchSentRequests"></search-field>
+            <md-content class="invite-inst__list custom-scrollbar">
+                <entity-showcase ng-repeat="request in inviteInstCtrl.sent_requests | filter: searchSentRequests"
+                    icon="account_balance"
+                    title="request.institution.name || request.requested_inst_name"
+                    subtitles-list="[
+                        'Requisitado por: '+ request.sender_name,
+                        'E-mail: ' + request.sender[0]
+                    ]"
+                    right-icon-btns="[
+                        inviteInstCtrl.createIconBtn('error', '#009688', inviteInstCtrl.showPendingRequestDialog, [$event, request])
+                    ]">
+                </entity-showcase>
+            </md-content>
+        </clickable-card>
+
+        <clickable-card icon="check_circle" title="Convites Aceitos">
+            <search-field keyword="searchAcceptedInvite"></search-field>
+            <md-content class="invite-inst__list custom-scrollbar">
+                <entity-showcase ng-repeat="acceptedInvite in inviteInstCtrl.accepted_invitations | filter: searchAcceptedInvite"
+                    icon="account_balance"
+                    title="acceptedInvite.stub_institution.name"
+                    subtitles-list="[
+                        'Nome sugerido: '+ acceptedInvite.suggestion_institution_name, 
+                    ]"
+                    left-action="inviteInstCtrl.goToActiveInst(acceptedInvite.stub_institution)">
+                </entity-showcase>
+            </md-content>
+        </clickable-card>
+    </div>
+</md-content>

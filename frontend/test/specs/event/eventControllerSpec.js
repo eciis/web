@@ -39,6 +39,8 @@
             'start_time': startDate,
             'end_time': endDate,
             'institution_key': institution.key,
+            'institution_name': institution.name,
+            'last_modified_by': 'User Test',
             'key': '12345'
         },
         other_event = {
@@ -49,6 +51,7 @@
             'start_time': startDate,
             'end_time': endDate,
             'institution_key': other_institution.key,
+            'institution_name': institution.name,
             'key': '54321'
         },
         requestEvent = {
@@ -268,19 +271,6 @@
         });
     });
 
-    describe('getProfileColor()', () => {
-
-        it('Should return the color if user is member of institution of event', () => {
-            eventCtrl.user = user;
-            expect(eventCtrl.getProfileColor(event)).toEqual(_.first(user.institution_profiles).color);
-        });
-
-        it('Should return a default color "teal" if user is not a member of institution of event', () => {
-            eventCtrl.user = {institution_profiles: []};
-            expect(eventCtrl.getProfileColor(event)).toEqual('teal');
-        });
-    });
-
     describe('loadFilteredEvents()', () => {
 
         it('Should reset moreEvents, actualPage and isAnotherMonth', () => {
@@ -314,20 +304,26 @@
             expect(eventCtrl._loadEvents).toHaveBeenCalled();
         });
 
-        it('Should call _loadEvents with eventService.getEvents', () => {
+        it('Should call _loadEvents with eventService.getEvents when key is null', () => {
             spyOn(eventCtrl, '_loadEvents');
+            const params = {
+                page: eventCtrl._actualPage, month: december, year: testYear 
+            }
             eventCtrl.institutionKey = null;
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents)
-                .toHaveBeenCalledWith(eventService.getEvents, december, testYear);
+                .toHaveBeenCalledWith(eventService.getEvents, params);
         });
 
-        it('Should call _loadEvents with eventService.getInstEvents', () => {
+        it("Should call _loadEvents with eventService.getEvents when key isn't null", () => {
             spyOn(eventCtrl, '_loadEvents');
             eventCtrl.institutionKey = institution.key;
+            const params = {
+                page: eventCtrl._actualPage, institutionKey: eventCtrl.institutionKey
+            }
             eventCtrl.loadMoreEvents();
             expect(eventCtrl._loadEvents)
-                .toHaveBeenCalledWith(eventService.getInstEvents, december, testYear);
+                .toHaveBeenCalledWith(eventService.getInstEvents, params);
         });
     });
 
@@ -367,19 +363,27 @@
         });
 
         it('Should to increase the events of controller if not is another month', () => {
-            eventCtrl._isAnotherMonth = false;
-            eventCtrl.events = requestEvent.events;
-            expect(eventCtrl.events.length).toEqual(2);
-            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
-            expect(eventCtrl.events.length).toEqual(4);
+            spyOn(Utils, 'isMobileScreen').and.callFake(() => true);
+            const ctrl = createCtrl();
+            ctrl.showImage = true;
+            ctrl.$onInit();
+            ctrl._isAnotherMonth = false;
+            ctrl.events = requestEvent.events;
+            expect(ctrl.events.length).toEqual(2);
+            ctrl._loadEvents(eventService.getEvents, december, testYear);
+            expect(ctrl.events.length).toEqual(4);
         });
 
         it('Should update the events of controller if is another month', () => {
-            eventCtrl._isAnotherMonth = true;
-            eventCtrl.events = [];
-            eventCtrl._loadEvents(eventService.getEvents, december, testYear);
-            expect(eventCtrl.events).toEqual(requestEvent.events);
-            expect(eventCtrl._isAnotherMonth).toBeFalsy();
+            spyOn(Utils, 'isMobileScreen').and.callFake(() => true);
+            const ctrl = createCtrl();
+            ctrl.showImage = true;
+            ctrl.$onInit();
+            ctrl._isAnotherMonth = true;
+            ctrl.events = [];
+            ctrl._loadEvents(eventService.getEvents, december, testYear);
+            expect(ctrl.events).toEqual(requestEvent.events);
+            expect(ctrl._isAnotherMonth).toBeFalsy();
         });
     });
 

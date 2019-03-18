@@ -19,6 +19,12 @@
     padding: 5px;
 }
 
+.base-content-inst{
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
 .timeline-z-index{
     z-index: 1;
 }
@@ -86,7 +92,11 @@
 .icon-button-menu-inst{
     color: #FFFFFF;
     font-size: 20px;
-    margin-left: 0.5em;
+    margin: 0;
+}
+
+.vert-button-navbar-inst {
+    display: inherit !important;
 }
 
 .institution-button-menu{
@@ -97,10 +107,6 @@
 
 .zero-height{
     height: 0px;
-}
-
-.btn-follow-unfollow{
-    margin-right: -20px;
 }
 
 #buttons-navbar-inst-container{
@@ -114,7 +120,7 @@
 #buttons-navbar-inst-container-end{
     padding-top: 5px;
     display: grid;
-    grid-template-columns: 107px auto auto;
+    grid-template-columns: min-content auto min-content;
     align-items: center;
     justify-content: end;
     overflow-x:hidden;
@@ -134,7 +140,8 @@
 }
 
 #btn-more{
-    width: 48px;
+    margin: 0;
+    padding: 0;
 }
 
 #btn-edit{
@@ -164,9 +171,6 @@
     }
     .button-navbar-inst{
         font-size: 12px;
-    }
-    #btn-more{
-        margin-left: -20px;
     }
 }
 

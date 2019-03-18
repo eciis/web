@@ -1,0 +1,111 @@
+<white-toolbar 
+    primary-button-icon="keyboard_arrow_left"
+    title="Gerenciar Membros"
+    title-class="manage-members__toolbar__title"
+    class="manage-members__toolbar">
+</white-toolbar>
+
+<md-content class="manage-members">
+    <div class="manage-members__cards">
+        <clickable-card icon="send" title="enviar convites">
+            <div class="manage-members__card__content manage-members__send__invites">
+                <h3>Convidar Membros</h3>
+                <p class="description">
+                    Coloque abaixo os endereços de e-mail das pessoas que você deseja convidar 
+                    para fazer parte da sua instituição na Plataforma CIS.
+                </p>
+                <p class="subtitle">Endereço de e-mail</p>
+                <form>
+                    <md-input-container md-no-float class="md-block md-icon-right md-icon-float"
+                        ng-repeat="currentEmail in manageMemberCtrl.emails">
+                        <input class="green-input" ng-model="currentEmail.email" ng-change="manageMemberCtrl.changeEmail(currentEmail)" 
+                            md-maxlength="120" type="email" name="email" placeholder="+ Adicionar e-mail">
+                    </md-input-container>
+                </form>
+                <md-button class="manage-members__btn" ng-click="manageMemberCtrl.sendUserInvite()" 
+                    ng-if="!manageMemberCtrl.isLoadingInvite">
+                    Enviar
+                </md-button>
+                <load-circle ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="account_circle" title="administrador">
+            <md-content class="manage-members__list custom-scrollbar">
+                <entity-showcase
+                    avatar="manageMemberCtrl.institution.admin.photo_url"
+                    title="manageMemberCtrl.institution.admin.name"
+                    subtitle="manageMemberCtrl.institution.admin.email[0]"
+                    right-icon-btns="[
+                        manageMemberCtrl.getEntityShowcaseBtn('more_vert', '#9E9E9E', manageMemberCtrl.showUserProfile, [manageMemberCtrl.user.current_institution.admin, $event])
+                    ]">
+                </entity-showcase>
+                <entity-showcase
+                    ng-repeat="invite in manageMemberCtrl.sentInvitationsAdm | orderBy:'status':true"
+                    ng-if="invite.status !== 'accepted'"
+                    avatar="manageMemberCtrl.getMemberPhotoUrl(invite.invitee_key)"
+                    title="manageMemberCtrl.getMemberName(invite.invitee_key)"
+                    subtitle="invite.invitee"
+                    right-icon-btns="[
+                        manageMemberCtrl.getEntityShowcaseBtn('error', '#9E9E9E', manageMemberCtrl.showUserProfile, [invite.invitee_key, $event])
+                    ]">
+                </entity-showcase>
+                <md-button class="manage-members__btn" 
+                    md-colors="{background: manageMemberCtrl.transferButtonColor}"
+                    ng-click="manageMemberCtrl.openTransferAdminDialog($event)"
+                    ng-disabled="manageMemberCtrl.disableTransferAdminButton()">
+                    Transferir
+                </md-button>
+            </md-content>
+        </clickable-card>
+
+        <clickable-card icon="account_circle" title="gerenciar membros">
+            <div class="manage-members__card__content">
+                <search-field keyword="searchMember"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="member in manageMemberCtrl.members | filter: searchMember" 
+                        avatar="member.photo_url"
+                        title="member.name"
+                        subtitle="member.email[0]"
+                        right-icon-btns="[
+                            manageMemberCtrl.getEntityShowcaseBtn('delete', '#9E9E9E', manageMemberCtrl.openRemoveMemberDialog, [$event, member]),
+                            manageMemberCtrl.getEntityShowcaseBtn('more_vert', '#9E9E9E', manageMemberCtrl.showUserProfile, [member.key, $event])
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="email" title="convites enviados">
+            <div class="manage-members__card__content">
+                <search-field keyword="searchInvite"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="invite in manageMemberCtrl.sent_invitations | filter: searchInvite" 
+                        avatar="manageMemberCtrl.getDefaultAvatar()"
+                        title="invite.invitee"
+                        subtitle="manageMemberCtrl.getInviteSubtitle(invite)"
+                        right-icon-btns="[
+                            manageMemberCtrl.getEntityShowcaseBtn('send', '#9E9E9E', manageMemberCtrl.resendInvite, [invite.key, $event])
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="feedback" title="convites requisitados" show-notification="manageMemberCtrl.hasRequested()">
+            <div class="manage-members__card__content">
+                <search-field keyword="searchRequest"></search-field>
+                <md-content class="manage-members__list custom-scrollbar">
+                    <entity-showcase ng-repeat="request in manageMemberCtrl.requests | filter: searchRequest" 
+                        avatar="manageMemberCtrl.getDefaultAvatar()"
+                        title="request.sender_name"
+                        subtitle="request.institutional_email"
+                        right-icon-btns="[
+                            manageMemberCtrl.getEntityShowcaseBtn('error', '#009688', manageMemberCtrl.openAcceptRequestDialog, [request, $event])
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+    </div>
+</md-content>

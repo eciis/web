@@ -3,7 +3,7 @@
 (describe('Test EventDialogController', function() {
 
   let controller, scope, httpBackend, rootScope, imageService, eventService,
-    messageService, newCtrl, state, mdDialog, states, deferred;
+    messageService, newCtrl, state, mdDialog, states, deferred, stateLinkRequestService, stateLinks;
 
   const
     splab = {name: 'Splab', key: '098745'},
@@ -48,7 +48,8 @@
   beforeEach(module('app'));
 
   beforeEach(inject(function($controller, $httpBackend, AuthService,
-        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES, $q) {
+        $rootScope, ImageService, EventService,  MessageService, $state, $mdDialog, STATES, $q,
+        StateLinkRequestService, STATE_LINKS) {
       imageService = ImageService;
       scope = $rootScope.$new();
       httpBackend = $httpBackend;
@@ -60,6 +61,8 @@
       mdDialog = $mdDialog;
       states = STATES;
       deferred = $q.defer();
+      stateLinkRequestService = StateLinkRequestService;
+      stateLinks = STATE_LINKS;
       AuthService.login(user);
       controller = newCtrl('EventDialogController', {
             scope: scope,
@@ -73,6 +76,7 @@
       controller.events = [];
       controller.$onInit();
       httpBackend.when('GET', 'app/institution/countries.json').respond(200);
+      httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
       httpBackend.flush();
   }));
 
@@ -159,23 +163,23 @@
         expect(eventService.createEvent).toHaveBeenCalledWith(event);
       });
 
-      describe('MessageService.showToast()', () => {
+      describe('MessageService.showErrorToast()', () => {
 
         it('should be invalid, because title is undefined', () => {
           controller.event.title = undefined;
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           controller.save();
           scope.$apply();
-          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+          expect(messageService.showErrorToast).toHaveBeenCalledWith('Evento inválido!');
         });
 
         it('should be invalid, because local is undefined', () => {
           controller.event.title = "Inauguration";
           controller.event.local = undefined;
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           controller.save();
           scope.$apply();
-          expect(messageService.showToast).toHaveBeenCalledWith('Evento inválido!');
+          expect(messageService.showErrorToast).toHaveBeenCalledWith('Evento inválido!');
         });
       });
 
@@ -255,11 +259,11 @@
             controller.steps = [true, false, false];
         });
 
-        it('should call showToast', () => {
-            spyOn(messageService, 'showToast');
+        it('should call showErrorToast', () => {
+            spyOn(messageService, 'showErrorToast');
             controller.event.address = {country: 'Brasil'};
             controller.nextStep();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showErrorToast).toHaveBeenCalled();
         });
 
         it('should not pass from first step', () => {
@@ -546,15 +550,15 @@
       });
 
       describe('in fail case', () => {
-        it('Should call messageService.showToast and state.go', () => {
+        it('Should call messageService.showErrorToast and state.go', () => {
           spyOn(eventService, 'getEvent').and.returnValue(deferred.promise);
-          spyOn(messageService, 'showToast');
+          spyOn(messageService, 'showErrorToast');
           spyOn(state, 'go');
           deferred.reject();
           controller._loadEvent(event.key);
           scope.$apply();
           expect(state.go).toHaveBeenCalledWith(states.HOME);
-          expect(messageService.showToast).toHaveBeenCalledWith("Erro ao carregar evento.");
+          expect(messageService.showErrorToast).toHaveBeenCalledWith("Erro ao carregar evento.");
         });
       });
     });
@@ -626,6 +630,11 @@
             address: {
               country: "Brasil"
         }});
+      });
+      it('should call showLinkRequestDialog', function () {
+          spyOn(stateLinkRequestService, 'showLinkRequestDialog');
+          controller.$onInit();
+          expect(stateLinkRequestService.showLinkRequestDialog).toHaveBeenCalledWith(stateLinks.CREATE_EVENT, states.EVENTS);
       });
     });
   });

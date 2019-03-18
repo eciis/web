@@ -3,6 +3,7 @@
 (describe('Test InviteInstitutionController', function() {
 
     var inviteinstitutionCtrl, httpBackend, scope, inviteService, createCtrl, state, instService, mdDialog, requestInvitationService;
+    let stateLinkRequestService, states, stateLinks;
 
     var institution = {
             name: 'institution',
@@ -32,6 +33,11 @@
         status: 'sent',
     }
 
+    const form = {
+        '$setPristine': () => {},
+        '$setUntouched': () => {}
+    };
+
     var INSTITUTION_SEARCH_URI = '/api/search/institution?value=';
 
     var invite = new Invite({invitee: "user@gmail.com", suggestion_institution_name : "New Institution", key: '123'}, 'institution', institution.key);
@@ -39,7 +45,7 @@
     beforeEach(module('app'));
 
     beforeEach(inject(function($controller, $httpBackend, $rootScope, $state, $mdDialog,
-        InviteService, AuthService, InstitutionService, RequestInvitationService) {
+        InviteService, AuthService, InstitutionService, RequestInvitationService, StateLinkRequestService, STATE_LINKS, STATES) {
         httpBackend = $httpBackend;
         scope = $rootScope.$new();
         state = $state;
@@ -47,6 +53,9 @@
         inviteService = InviteService;
         instService = InstitutionService;
         requestInvitationService = RequestInvitationService;
+        stateLinkRequestService = StateLinkRequestService;
+        stateLinks = STATE_LINKS;
+        states = STATES;
 
         AuthService.login(user);
 
@@ -56,6 +65,7 @@
         httpBackend.when('GET', "main/main.html").respond(200);
         httpBackend.when('GET', "home/home.html").respond(200);
         httpBackend.when('GET', "auth/login.html").respond(200);
+        httpBackend.when('GET', 'app/email/stateLinkRequest/stateLinkRequestDialog.html').respond(200);
 
         createCtrl = function() {
             return $controller('InviteInstitutionController',
@@ -66,6 +76,8 @@
         };
         state.params.institutionKey = institution.key;
         inviteinstitutionCtrl = createCtrl();
+        inviteinstitutionCtrl.$onInit();
+        inviteinstitutionCtrl.inviteInstForm = form;
         httpBackend.flush();
     }));
 
@@ -94,6 +106,7 @@
                         }
                     };
                 });
+                spyOn(inviteinstitutionCtrl, 'resetForm');
                 inviteinstitutionCtrl.invite = invite;
             });
 
@@ -102,6 +115,7 @@
                 var promise = inviteinstitutionCtrl.sendInstInvite(invite);
                 promise.then(function() {
                     expect(inviteService.sendInviteInst).toHaveBeenCalledWith(invite);
+                    expect(inviteinstitutionCtrl.resetForm).toHaveBeenCalled();
                     done();
                 });
             });
@@ -202,12 +216,42 @@
                         }
                     };
                 });
-                inviteinstitutionCtrl.sent_requests = [request];
                 inviteinstitutionCtrl.showPendingRequestDialog('$event', request);
                 expect(mdDialog.show).toHaveBeenCalled();
-                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('updateRequest', () => {
+            beforeEach(() => {
+                inviteinstitutionCtrl.sent_requests = [request];
+            });
+
+            afterEach(() => {
                 expect(inviteinstitutionCtrl.sent_requests).toEqual([]);
+            })
+
+            it(`should set the request status to 'rejected'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "rejected");
+                expect(request.status).toBe('rejected');
+            });
+
+            it(`should set the request status to 'accepted'
+                and remove it from the requests sent`, () => {
+                inviteinstitutionCtrl._updateRequest(request, "accepted");
+                expect(request.status).toBe('accepted');
+            });
+        });
+
+        describe('$onInit', function () {
+            it('should call showLinkRequestDialog if in mobile screen', function () {
+                spyOn(inviteinstitutionCtrl, '_loadSentRequests');
+                spyOn(inviteinstitutionCtrl, '_loadSentInvitations');
+                inviteinstitutionCtrl.$onInit();
+                expect(inviteinstitutionCtrl._loadSentRequests).toHaveBeenCalled();
+                expect(inviteinstitutionCtrl._loadSentInvitations).toHaveBeenCalled();
             });
         });
     });
+
 }));

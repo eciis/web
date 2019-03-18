@@ -1,0 +1,15 @@
+<div layout="row" flex md-colors="{background: 'grey-200'}" layout-align="center">
+  <!-- CONTENT -->
+  <div flex-lg="90" flex-gt-lg="70" flex layout="row" layout-align="space-between" md-colors="{background: 'grey-50'}">
+
+    <!-- LEFT SIDE PANEL -->
+    <side-menu type="MANAGE_INSTITUTION"></side-menu>
+
+    <!-- CONTENT -->
+    <div flex layout="row" layout-align="center">
+      <md-content id="content" flex-gt-md="95" flex class="body">
+        <div ui-view="content_manage_institution" flex layout="column"></div>
+      </md-content>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,8 @@ from service_messages import send_message_notification
 from service_messages import create_message
 from send_email_hierarchy import EmailSender
 from . import User       
-from util import get_subject      
+from util import get_subject
+from service_entities import enqueue_task      
 
 
 __all__ = ['Invite']
@@ -124,6 +125,12 @@ class Invite(PolyModel):
                 entity_key=entity_key,
                 message=notification_message
             )
+
+            enqueue_task('send-push-notification', {
+                'receivers': [receiver_key.urlsafe()],
+                'type': 'INVITE',
+                'entity': entity_key
+            })
 
     def make(self):
         """Create personalized json of invite."""

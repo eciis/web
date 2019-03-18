@@ -1,0 +1,98 @@
+address-form #address-form {
+  display: grid;
+  grid-template-areas:
+  "street street street"
+  "number neighbourhood neighbourhood"
+  "country state city"
+  "cep cep cep";
+  grid-template-columns: repeat(3, calc(100%/3));
+  grid-template-rows: repeat(4, 1fr);
+}
+
+#address-form #street {
+  grid-area: street;
+}
+
+#address-form #number {
+  grid-area: number;
+}
+
+#address-form #neighbourhood {
+  grid-area: neighbourhood;
+}
+
+#address-form #city {
+  grid-area: city;
+}
+
+#address-form #state {
+  grid-area: state;
+}
+
+#address-form #country {
+  grid-area: country;
+}
+
+#address-form #cep {
+  grid-area: cep;
+}
+
+.field-required {
+  font-size: 0.6em;
+  line-height: 1em;
+  overflow: visible;
+}
+
+.limit-md-select {
+  justify-self: center;
+  display: grid;
+}
+
+institution-form #institution-form {
+  display: grid;
+  grid-template-rows: auto repeat(7, 1fr);
+  height: 100%;
+  width: 100%;
+}
+
+last-info-form #last-info-form {
+  display: grid;
+  grid-template-rows: 8em 1fr 1fr;
+}
+
+#last-info-form md-input-container#description {
+  max-height: 80%;
+  height: 100%;
+  align-items: center;
+  border: 1px solid;
+  border-color: #ccc;
+  border-radius: 0.4em;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+#last-info-form #description textarea {
+  height: 100% !important;
+  border: 0 !important;
+}
+
+.ec-form md-input-container {
+  margin: 0.2em 0 0.2em 0;
+}
+
+.ec-form md-input-container.md-input-focused input {
+  border-color: #009688;
+}
+
+.ec-form .md-select-icon {
+  color: #8cbf4d;
+}
+
+.ec-form md-input-container .md-errors-spacer {
+  height: 0.2em;
+}
+
+.ec-form md-input-container label {
+  color: #1f6357;
+  font-weight: 500;
+}

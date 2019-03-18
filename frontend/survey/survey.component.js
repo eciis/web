@@ -46,11 +46,15 @@
             return screen.width < 600;
         };
 
-        /* This method add ids in each option and remove the options that are empty.*/
-        function modifyOptions(){
-            let id = 0;
-            surveyCtrl.options.map(option => option.text ? option.id = id++ : surveyCtrl.removeOption(option));
-        }
+        /**
+         * Remove empty objects in the options array and add 'id' property in all objects.
+         * @private
+         */
+        surveyCtrl._processOptions = () => {
+            surveyCtrl.options = surveyCtrl.options
+                .filter(option => option.text)
+                .map((option, index) => {option.id = index; return option;});
+        };
 
         function formateDate(){
             var date = surveyCtrl.post.deadline.toISOString();
@@ -62,7 +66,7 @@
         }
 
         function createSurvey(){
-            modifyOptions();
+            surveyCtrl._processOptions();
             getTypeSurvey();
             surveyCtrl.post.deadline && formateDate();
             surveyCtrl.post.options = surveyCtrl.options;
@@ -75,7 +79,7 @@
                 var promise = PostService.createPost(survey).then(function success(response) {
                     surveyCtrl.resetSurvey();
                     $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
-                    MessageService.showToast('Postado com sucesso!');
+                    MessageService.showInfoToast('Postado com sucesso!');
                     surveyCtrl.callback();
                     const postAuthorPermissions = ["remove_post"];
                     surveyCtrl.user.addPermissions(postAuthorPermissions, response.key);
@@ -89,7 +93,7 @@
                 });
                 return promise;
             } else {
-                MessageService.showToast("Enquete deve ter no mínimo 2 opções e data limite definida");
+                MessageService.showErrorToast("Enquete deve ter no mínimo 2 opções e data limite definida");
             }
         };
 

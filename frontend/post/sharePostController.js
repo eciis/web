@@ -44,7 +44,7 @@
         shareCtrl.share = function share() {
             makePost(shareCtrl.post);
             PostService.createPost(shareCtrl.newPost).then(function success(response) {
-                MessageService.showToast('Compartilhado com sucesso!');
+                MessageService.showInfoToast('Compartilhado com sucesso!');
                 $mdDialog.hide();
                 shareCtrl.addPostTimeline(response);
                 const postAuthorPermissions = ["remove_post"];
@@ -92,6 +92,12 @@
                 text = Utils.limitString(text, LIMIT_POST_CHARACTERS);
             }
             return text && text.replace(URL_PATTERN, REPLACE_URL);
+        };
+
+        shareCtrl.$onInit = () => {
+            const type = shareCtrl.isEvent() ? 'evento' : 'post';
+            shareCtrl.title = `Compartilhar ${type}`;
+            shareCtrl.subtitle = `Você deseja compartilhar esse ${type}?`;
         };
     });
 })();

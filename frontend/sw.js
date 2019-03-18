@@ -9,6 +9,8 @@
     // if the line number of the code below changes, modify the /ecis script.
     const CACHE_SUFIX = 'master';
 
+    const openedNotifications = {};
+
     let messaging;
 
     function setupFirebase() {
@@ -56,12 +58,23 @@
             options.data = {
                 url: options.click_action
             };
-        }
 
-        options.vibrate = [100, 50, 100];
-        options.badge = options.icon;
+            const body = JSON.parse(options.body);
 
-        event.waitUntil(self.registration.showNotification(options.title, options));
+            options.tag = body.type;
+            options.vibrate = [100, 50, 100];
+            options.badge = options.icon;
+
+            if(!openedNotifications[options.tag]) {
+              openedNotifications[options.tag] = 1;
+            } else {
+              openedNotifications[options.tag] +=1
+            }
+
+            options.body = `${body.data} (${openedNotifications[options.tag]})`;
+
+            event.waitUntil(self.registration.showNotification(options.title, options));
+          }
     });
 
     /**
@@ -74,11 +87,13 @@
         const { notification } = event;
 
         const { action } = event;
+
         if(action !== 'close') {
             const { url } = notification.data;
             clients.openWindow(url);
         }
-        
+
+        openedNotifications[notification.tag] = 0;
         notification.close();
     });
 

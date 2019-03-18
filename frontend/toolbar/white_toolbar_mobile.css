@@ -1,0 +1,49 @@
+.white-toolbar-mobile {
+  background-color: white;
+  box-shadow: 0px 3px 6px grey;
+  height: 60px;
+  width: 100%;
+  font-size: 20px;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 20% 50% auto;
+  align-items: center;
+}
+
+.toolbar-icon-alignment {
+    font-size: 2.5em;
+    line-height: inherit !important;
+}
+
+.edit-inst-toolbar-title {
+  color: grey;
+  font-size: 0.8em;
+  word-break: normal;
+  grid-column-end: 4 !important;
+  text-transform: uppercase;
+}
+
+.white-toolbar-menu-button {
+  grid-column-start: 3; 
+  grid-column-end: 4; 
+  justify-self: end; 
+  align-self: center;
+}
+
+.white-toolbar-title-container {
+  grid-column-start: 2; 
+  grid-column-end: 3;
+}
+
+.white-toolbar-menu-option-title {
+  margin-left: 0.5em;
+}
+
+.white-toolbar-menu-content {
+  width: 100%;
+}
+
+.white-toolbar__menu__item {
+  display: grid;
+  grid-template-columns: 10% auto;
+}

@@ -1,20 +1,17 @@
 <md-dialog flex flex-gt-md="40" layout="row"  layout-margin layout-padding> 
   <div flex>
     <div layout="row" layout-align="space-between start">
-      <span class="md-title">Deseja remover este membro de sua instituição?</span>
+      <span class="md-title remove-member-title">Deseja remover este membro de sua instituição?</span>
       <md-button class="md-icon-button md-secondary" style="margin: -8 -10 0 0" ng-click="removeMemberCtrl.cancel()">
         <md-icon style="color: #212121">close</md-icon>
       </md-button>
     </div>
     <div layout="column" style="margin-top: 1em">
-      <md-list-item class="md-3-line" md-colors="{background: 'default-grey-300'}" flex-xs> 
-        <img title="{{removeMemberCtrl.member.name}}" ng-src="{{removeMemberCtrl.member.photo_url}}"
-          class="md-avatar" style="width: 60px; height: 60px;"/>
-        <div class="md-list-item-text" layout="column">
-          <h3><b>{{ removeMemberCtrl.member.name | uppercase }}</b></h3>
-          <h4>{{ removeMemberCtrl.member.email[0]}}</h4>
-        </div>
-      </md-list-item>
+      <entity-showcase class="small-avatar"
+        avatar="removeMemberCtrl.member.photo_url"
+        title="removeMemberCtrl.member.name"
+        subtitle="removeMemberCtrl.member.email[0]">
+      </entity-showcase>
       <form name="saveForm" style="margin: 2em 0 -1em 0">
         <b>Motivo da remoção <b style="font-size: 10px;">(Opcional)</b></b>
         <md-input-container class="md-block">

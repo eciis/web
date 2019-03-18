@@ -1,0 +1,21 @@
+.shared-post__header {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    padding: 8px 8px 0 8px;
+    grid-column-gap: 10px;
+}
+
+.shared-post__img {
+    border-radius: 50%;
+}
+
+.shared-post__title {
+    display: grid;
+    grid-template-rows: auto auto;
+    font-size: 14px;
+    color: rgb(117, 117, 117);
+}
+
+.shared-post__body {
+    padding: 16px;
+}

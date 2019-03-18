@@ -193,8 +193,13 @@ class PostCollectionHandlerTest(TestBaseHandler):
                     'current_institution': self.institution.key.urlsafe()
                 }
             ),
+            call('send-push-notification', {
+                'type': 'CREATE_POST',
+                'entity': post.get('key'),
+                'receivers': [follower.urlsafe() for follower in self.post.institution.get().followers]
+            }),
             call(
-                'post-notification',
+                'multiple-notification',
                 {
                     'receiver_key': self.post.author.urlsafe(),
                     'sender_key': self.user.key.urlsafe(),

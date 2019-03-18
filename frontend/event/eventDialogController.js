@@ -4,7 +4,7 @@
     const app = angular.module("app");
 
     app.controller('EventDialogController', function EventDialogController(MessageService, brCidadesEstados,
-        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService) {
+        ImageService, AuthService, EventService, $mdMenu, $state, $rootScope, $mdDialog, $http, STATES, SCREEN_SIZES, ObserverRecorderService, StateLinkRequestService, STATE_LINKS) {
         var dialogCtrl = this;
 
         dialogCtrl.loading = false;
@@ -28,6 +28,10 @@
             addLinks();
             var callback = dialogCtrl.isEditing ? updateEvent : create;
             var saveImgPromise = saveImage(callback);
+        };
+
+        dialogCtrl.colorButtonSubmit = function colorButtonSubmit(formValid) {
+            return formValid ?'default-teal-500':'default-grey-400';
         };
 
         dialogCtrl.removeUrl = function (url, urlList) {
@@ -69,7 +73,7 @@
                         dialogCtrl.event.photo_url = data.url;
                         callback();
                     }, function error(response) {
-                        MessageService.showToast(response.data.msg);
+                        MessageService.showErrorToast(response.data.msg);
                     });
             } else {
                 callback();
@@ -85,12 +89,12 @@
                 EventService.editEvent(dialogCtrl.event.key, formatedPatch)
                     .then(function success() {
                         dialogCtrl.cancelCreation();
-                        MessageService.showToast('Evento editado com sucesso.');
+                        MessageService.showInfoToast('Evento editado com sucesso.');
                     }, function error() {
                         dialogCtrl.cancelCreation();
                     });
             } else {
-                MessageService.showToast('Evento inválido');
+                MessageService.showErrorToast('Evento inválido');
             }
         }
 
@@ -122,7 +126,7 @@
                 dialogCtrl.deletePreviousImage = true;
                 dialogCtrl.file = null;
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -205,7 +209,7 @@
                 var nextStep = currentStep + 1;
                 dialogCtrl.steps[nextStep] = true;
             } else {
-                MessageService.showToast(dialogCtrl._getRequiredFieldsMsg());
+                MessageService.showErrorToast(dialogCtrl._getRequiredFieldsMsg());
             }
         };
 
@@ -361,7 +365,8 @@
             dialogCtrl.startHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.startHour.setHours(8, 0, 0);
             dialogCtrl.addStartHour();
-            dialogCtrl.event.end_time = new Date(dialogCtrl.event.start_time);
+            dialogCtrl.event.end_time = _.isNil(dialogCtrl.event.end_time) ?
+                new Date(dialogCtrl.event.start_time) : dialogCtrl.event.end_time;
             dialogCtrl.endHour = new Date(dialogCtrl.event.start_time);
             dialogCtrl.endHour.setHours(18, 0, 0);
             dialogCtrl.addEndHour();
@@ -426,14 +431,14 @@
                     !isMobileScreen() && dialogCtrl.events.push(response);
                     dialogCtrl.user.addPermissions(['edit_post', 'remove_post'], response.key);
                     dialogCtrl.cancelCreation();
-                    MessageService.showToast('Evento criado com sucesso!');
+                    MessageService.showInfoToast('Evento criado com sucesso!');
                 }, function error() {
                     dialogCtrl.loading = false;
                     dialogCtrl.blockReturnButton = false;
                     $state.go(STATES.EVENTS);
                 });
             } else {
-                MessageService.showToast('Evento inválido!');
+                MessageService.showErrorToast('Evento inválido!');
             }
         }
 
@@ -495,7 +500,7 @@
                 dialogCtrl.isEditing = true;
                 dialogCtrl._loadStatesToEdit();
             }, function error(response) {
-                MessageService.showToast("Erro ao carregar evento.");
+                MessageService.showErrorToast("Erro ao carregar evento.");
                 $state.go(STATES.HOME);
             });
         }
@@ -504,14 +509,18 @@
             const address = { country: "Brasil" };
             getCountries();
             loadFederalStates();
-            initUrlFields();
             dialogCtrl._loadStateParams();
+            initUrlFields();
+
             if (dialogCtrl.event) {
                 dialogCtrl._loadStatesToEdit();
             } else if(!dialogCtrl.event && $state.params.eventKey) {
                 dialogCtrl._loadEvent($state.params.eventKey);
             } else {
                 dialogCtrl.event = { address: address };
+            }
+            if (Utils.isMobileScreen()) {
+                StateLinkRequestService.showLinkRequestDialog(STATE_LINKS.CREATE_EVENT, STATES.EVENTS);
             }
         };
     });

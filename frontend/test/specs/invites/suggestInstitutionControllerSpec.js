@@ -43,15 +43,6 @@
             inviteService: InviteService,
         });
 
-        httpBackend.expect('GET', '/api/invites/institution').respond([]);
-        httpBackend.expect('GET', '/api/institutions/requests/institution/1239').respond([]);
-        httpBackend.when('GET', "main/main.html").respond(200);
-        httpBackend.when('GET', "error/user_inactive.html").respond(200);
-        httpBackend.when('GET', 'invites/existing_institutions.html').respond(200);
-        httpBackend.when('GET', "home/home.html").respond(200);
-        httpBackend.when('GET', "auth/login.html").respond(200);
-        httpBackend.when('GET', "app/user/user_inactive.html").respond(200);
-
         createCtrl = function() {
             return $controller('SuggestInstitutionController', {
                 scope: scope,
@@ -65,13 +56,7 @@
         };
 
         suggestInstCtrl = createCtrl();
-        httpBackend.flush();
     }));
-
-    afterEach(function() {
-        httpBackend.verifyNoOutstandingExpectation();
-        httpBackend.verifyNoOutstandingRequest();
-    });
 
     describe('cancel()', function() {
         it('should call mdDialog.cancel()', function() {

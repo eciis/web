@@ -3,7 +3,7 @@
 
 from ..test_base_handler import TestBaseHandler
 from handlers import InstitutionParentHandler
-from mock import patch
+from mock import patch, call
 from .. import mocks
 import json
 
@@ -78,14 +78,24 @@ class InstitutionParentHandlerTest(TestBaseHandler):
             message=json.dumps(message)
         )
 
-        enqueue_task.assert_called_with(
-            'remove-admin-permissions',
+        calls = [
+            call('remove-admin-permissions',
             {
                 'institution_key': otherinst.key.urlsafe(),
                 'parent_key': institution.key.urlsafe(),
                 'notification_id': '01-938483948393'
-            }
-        )
+            }),
+            call(
+                'send-push-notification', {
+                    'type': 'REMOVE_INSTITUTION_LINK',
+                    'receivers': [otherinst.admin.urlsafe()],
+                    'entity': otherinst.key.urlsafe()
+
+                }
+            )
+        ]
+
+        enqueue_task.assert_has_calls(calls)
     
     @patch('util.login_service.verify_token')
     def test_delete_without_permission(self, verify_token):

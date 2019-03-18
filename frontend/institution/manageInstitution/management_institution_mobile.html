@@ -1,0 +1,98 @@
+<white-toolbar 
+    primary-button-icon="keyboard_arrow_left"
+    title="Vínculos Institucionais"
+    title-class="manage-institution__toolbar__title"
+    class="manage-institution__toolbar">
+</white-toolbar>
+
+<md-content class="manage-institution hide-scrollbar-mobile">
+    <div class="manage-institution__cards">
+        <clickable-card icon="send" title="Convidar Instituição">
+            <div class="manage-institution__card__content">
+                <form name="inviteInstForm" class="manage-institution__form">
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="inviteInstHierCtrl.invite.suggestion_institution_name"
+                            placeholder="Nome da Instituição convidada"
+                            class="green-input" required>
+                    </md-input-container>
+                    <md-input-container md-no-float class="md-block">
+                        <input ng-model="inviteInstHierCtrl.invite.invitee" placeholder="E-mail da instituição" 
+                            type="email" class="green-input" required>
+                    </md-input-container>
+                    <p>Qual a conexão da instituição <b>{{inviteInstHierCtrl.invite.suggestion_institution_name}} 
+                        </b>com<b> {{inviteInstHierCtrl.institution.name}} </b> ?
+                    </p>
+                    <md-radio-group ng-model="inviteInstHierCtrl.invite.type_of_invite" required>
+                        <md-radio-button value="INSTITUTION_PARENT" class="md-primary green-input">É uma instituição superior</md-radio-button>
+                        <md-radio-button value="INSTITUTION_CHILDREN" class="md-primary">É uma instituição subordinada</md-radio-button>
+                    </md-radio-group>
+                </form>
+                <div class="manage-institution__form__btns" ng-if="!manageMemberCtrl.isLoadingInvite">
+                    <md-button class="manage-institution__btn" ng-click="inviteInstHierCtrl.cancelInvite()"
+                        ng-disabled="inviteInstForm.$pristine">
+                        CANCELAR
+                    </md-button>
+                    <md-button class="manage-institution__btn" ng-click="inviteInstHierCtrl.checkInstInvite($event)"
+                        ng-disabled="inviteInstForm.$invalid">
+                        ENVIAR
+                    </md-button>
+                </div>
+                <load-circle ng-if="manageMemberCtrl.isLoadingInvite"></load-circle>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="account_balance" title="Hierarquia Superior">
+            <div class="manage-institution__card__content">
+                <entity-showcase
+                    ng-if="inviteInstHierCtrl.hasParent"
+                    icon="account_balance"
+                    title="inviteInstHierCtrl.institution.parent_institution.name"
+                    subtitle="inviteInstHierCtrl.getStatusMsg(inviteInstHierCtrl.institution.parent_institution, true)"
+                    left-action="inviteInstHierCtrl.goToActiveInst(inviteInstHierCtrl.institution.parent_institution)"
+                    right-icon-btns="[
+                        inviteInstHierCtrl.createIconBtn('link', 
+                            inviteInstHierCtrl.removeLink, [inviteInstHierCtrl.institution.parent_institution, true, $event])
+                    ]">
+                </entity-showcase>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="account_balance" title="Hierarquia Subordinada">
+            <div class="manage-institution__card__content">
+                <search-field keyword="searchSubordinate"></search-field>
+                <md-content class="manage-institution__list custom-scrollbar">
+                    <entity-showcase 
+                        ng-repeat="subInst in inviteInstHierCtrl.institution.children_institutions | filter: searchSubordinate" 
+                        icon="account_balance"
+                        title="subInst.name"
+                        subtitle="inviteInstHierCtrl.getStatusMsg(subInst, false)"
+                        left-action="inviteInstHierCtrl.goToActiveInst(subInst)"
+                        right-icon-btns="[
+                            inviteInstHierCtrl.createIconBtn('link', inviteInstHierCtrl.removeLink, [subInst, false, $event]),
+                            inviteInstHierCtrl.createIconBtn('delete', inviteInstHierCtrl.removeChild, [subInst], inviteInstHierCtrl.canRemoveInst(subInst))
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+
+        <clickable-card icon="feedback" title="Vínculos Pendentes" show-notification="inviteInstHierCtrl.hasRequested()">
+            <div class="manage-institution__card__content">
+                <search-field keyword="searchInstRequest"></search-field>
+                <md-content class="manage-institution__list custom-scrollbar">
+                    <entity-showcase 
+                        ng-repeat="instRequest in inviteInstHierCtrl.requested_invites | filter: searchInstRequest"
+                        ng-if="inviteInstHierCtrl.isReqSentToCurrentInst(instRequest)"
+                        icon="account_balance"
+                        title="inviteInstHierCtrl.getReqInstName(instRequest)"
+                        subtitle="inviteInstHierCtrl.showMessage(instRequest)"
+                        left-action="inviteInstHierCtrl.goToActiveInst(instRequest.institution)"
+                        right-icon-btns="[
+                            inviteInstHierCtrl.createIconBtn('error', inviteInstHierCtrl.analyseRequest, [$event, instRequest]),       
+                        ]">
+                    </entity-showcase>
+                </md-content>
+            </div>
+        </clickable-card>
+    </div>
+</md-content>

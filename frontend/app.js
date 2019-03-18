@@ -308,8 +308,8 @@
                 url: "/:key/new_invite",
                 views: {
                     main: {
-                        templateUrl: "app/invites/new_invite_page.html",
-                        controller: "NewInviteController as newInviteCtrl"
+                      templateUrl: "app/invites/new_invite_page.html",
+                      controller: "NewInviteController as newInviteCtrl"
                     }
                 }
             })
@@ -337,8 +337,9 @@
                 url: "/create_institution_form",
                 views: {
                     main: {
-                        templateUrl: "app/institution/create_inst_form.html",
-                        controller: "ConfigInstController as configInstCtrl"
+                        templateUrl: Utils.selectFieldBasedOnScreenSize("app/institution/create_inst_form.html",
+                          "app/institution/create_inst_form_mobile.html"),
+                        controller: Utils.selectFieldBasedOnScreenSize("ConfigInstController as configInstCtrl", "CreateInvitedInstitutionController as ctrl"),
                     }
                 },
                 params: {

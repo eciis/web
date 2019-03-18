@@ -1,0 +1,16 @@
+<md-sidenav
+        class="contacts-sidenav md-sidenav-left"
+        md-component-id="left"
+        md-is-locked-open="$mdMedia('gt-md')"
+        md-disable-backdrop
+        md-whiteframe="4">
+    <contacts-toolbar
+            class="contacts-sidenav__toolbar"
+            md-colors="{background: 'teal-700'}"
+            search-query="contactsSidenavCtrl.searchQuery"></contacts-toolbar>
+    <contacts-list
+            class="contacts-sidenav__list custom-scrollbar"
+            contacts="contactsSidenavCtrl.contacts"
+            open-chat="contactsSidenavCtrl.openChat"
+            search-query="contactsSidenavCtrl.searchQuery"></contacts-list>
+</md-sidenav>

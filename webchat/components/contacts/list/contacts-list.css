@@ -1,0 +1,11 @@
+.contacts-list__container {
+    padding: 0;
+}
+
+.contacts-list__contact {
+    font-size: 1.2em;
+}
+
+.contacts-list__no-contacts-msg {
+    text-align: center;
+}

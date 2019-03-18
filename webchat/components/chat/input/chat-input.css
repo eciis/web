@@ -1,0 +1,23 @@
+.chat-input__container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.chat-input__connection-state {
+    margin-left: 10px;
+}
+
+.chat-input__text {
+    width: 100%;
+    height: 70%;
+    margin: 0 0 0 10px;
+    background: #FFFFFF;
+    min-height: 36px;
+}
+
+.chat-input__text:disabled {
+    background: #dddddd;
+}

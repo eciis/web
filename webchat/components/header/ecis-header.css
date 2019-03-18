@@ -1,0 +1,27 @@
+.ecis-header {
+    padding: 0;
+    display: grid;
+    grid-template-columns: max-content max-content auto max-content;
+    grid-template-areas:
+        'toggle-btn logo user-description logout-btn';
+    align-itens: center;
+}
+
+.ecis-header__toggle-sidenav-btn {
+    grid-area: toggle-btn;
+}
+
+.ecis-header__logo {
+    grid-area: logo;
+}
+
+.ecis-header__current-user {
+    grid-area: user-description;
+    font-size: 1rem;
+    margin: 0 0.6em;
+    justify-self: flex-end;
+}
+
+.ecis-header__logout-btn {
+    grid-area: logout-btn;
+}

@@ -1,0 +1,41 @@
+<!-- login card -->
+<button class='card-back-button' id='login-card-back-button'
+  ng-click='ctrl.backButton()'>
+  <md-icon>keyboard_arrow_left</md-icon>
+</button>
+<card-content class='login-card-content'>
+  <img id='login-logo' src='/app/images/logowithname.png'/>
+  <md-progress-circular class='smooth-if' md-mode='indeterminate' ng-if='ctrl.isLoadingUser()'
+    md-diameter='96'>
+  </md-progress-circular>
+  <login-email-form class='smooth-if' ng-if='!ctrl.isLoadingUser()'>
+    <form class='login-form' ng-submit='ctrl.signIn()'>
+      <md-input-container class='form'>
+        <label>Email</label>
+        <input type='email' name='email' ng-model='ctrl.user.email' class='login-card-input' required='false'
+          aria-label='Email'>
+      </md-input-container>
+      <md-input-container class='form'>
+        <label>Senha</label>
+        <input type='password' name='password' ng-model='ctrl.user.password' class='login-card-input' required='false'
+          minlength='6' aria-label='Senha'>
+      </md-input-container>
+      <login-email-form-submit>
+        <md-button type='submit' class='md-raised md-primary push-right' md-colors='{background: "teal-500"}'>
+          Acessar
+        </md-button>
+      </login-email-form-submit>
+    </form>
+  </login-email-form>
+  <login-container class='smooth-if' ng-if='!ctrl.isLoadingUser()'>
+    <md-button class='login-btn' ng-click='ctrl.loginWithGoogle()' md-colors='{background: "red-500"}'>
+      <md-icon class='login-google-icon' md-svg-src='/app/icons/google-icon.svg'></md-icon>
+      <span>ACESSE COM GOOGLE</span>
+    </md-button>
+  </login-container>
+</card-content>
+<login-card-footer>
+  <md-button md-colors='{color: "teal-500"}' ng-click='ctrl.resetPassword()'>
+    Esqueceu a senha?
+  </md-button>
+</login-card-footer>

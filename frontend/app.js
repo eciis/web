@@ -62,6 +62,15 @@
                     }
                 }
             })
+            .state(STATES.SEARCH_EVENT, {
+                url: "/search_event",
+                views: {
+                    user_content: {
+                        templateUrl: "app/search/search_event.html",
+                        controller: "SearchEventController as searchCtrl"
+                    }
+                }
+            })
             .state(STATES.HOME, {
                 url: "/",
                 views: {
@@ -557,6 +566,7 @@
     app.run(function mobileInterceptor($transitions, $state, STATES, SCREEN_SIZES) {
         const permitted_routes = [
             STATES.CREATE_EVENT,
+            STATES.SEARCH_EVENT,
             STATES.INST_DESCRIPTION,
             STATES.MANAGE_INST_LINKS,
             STATES.MANAGE_INST_MENU_MOB

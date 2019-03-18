@@ -16,6 +16,12 @@
             });
             return _.get(_.first(profile), 'color', 'teal');
         };
+
+        eventCardCtrl.$onInit = () => {
+            const address = eventCardCtrl.event.address;
+            if (_.isString(address))
+                eventCardCtrl.event.address = JSON.parse(address);
+        };
     };
 
      angular

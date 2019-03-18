@@ -51,9 +51,9 @@
             invite = new Invite(inviteInstCtrl.invite);
 
             if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             } else if (!inviteInstCtrl.user.hasPermission('analyze_request_inst')) {
-                MessageService.showToast('Você não tem permissão para enviar este tipo de convite.');
+                MessageService.showErrorToast('Você não tem permissão para enviar este tipo de convite.');
             } else {
                 var suggestionInstName = inviteInstCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -105,7 +105,7 @@
                     inviteInstCtrl.showInvites = true;
                     inviteInstCtrl.showSendInvites = false;
                     inviteInstCtrl.resetForm();
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showInfoToast('Convite enviado com sucesso!');
                 });
             return promise;
         };
@@ -131,7 +131,7 @@
                 closeTo: angular.element(document.querySelector('#fab-new-post'))
             });
         };
-        
+
         inviteInstCtrl._updateRequest = (request, status) => {
             request.status = status;
             _.remove(inviteInstCtrl.sent_requests, (req) => request.key === req.key);
@@ -154,10 +154,10 @@
             var promise = $mdDialog.show(confirm);
             promise.then(function () {
                 InviteService.resendInvite(inviteKey).then(function success() {
-                    MessageService.showToast("Convite reenviado com sucesso.");
+                    MessageService.showInfoToast("Convite reenviado com sucesso.");
                 });
             }, function () {
-                MessageService.showToast('Cancelado.');
+                MessageService.showInfoToast('Cancelado.');
             });
             return promise;
         };
@@ -196,7 +196,7 @@
         inviteInstCtrl.hasNewRequests = () => {
             return inviteInstCtrl.sent_requests.length > 0;
         };
-        
+
         function getSentInvitations(requests) {
             var isSentInvitation = createRequestSelector('sent', 'INSTITUTION');
             inviteInstCtrl.sent_invitations = requests.filter(isSentInvitation);
@@ -217,7 +217,7 @@
             if (institution.state === "active") {
                 inviteInstCtrl.goToInst(institution.key);
             } else {
-                MessageService.showToast("Institutição inativa!");
+                MessageService.showErrorToast("Institutição inativa!");
             }
         };
 

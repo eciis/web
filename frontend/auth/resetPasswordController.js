@@ -20,7 +20,7 @@
                 resetCtrl.emailSent = true;
                 $scope.$apply();
             }).catch(_ => {
-                MessageService.showToast("Ocorreu um erro, verifique seu e-mail e tente novamente");
+                MessageService.showErrorToast("Ocorreu um erro, verifique seu e-mail e tente novamente");
             });
         };
         

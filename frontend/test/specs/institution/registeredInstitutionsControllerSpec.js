@@ -12,6 +12,7 @@ describe('registeredInstitutionController test', () => {
     });
 
     const institution = new Institution({
+        name: 'institution',
         key: 'sopdkfap-OPAKOPAKFPO',
         creation_date: new Date()
     });
@@ -66,13 +67,13 @@ describe('registeredInstitutionController test', () => {
                 }
             });
 
-            spyOn(msgService, 'showToast');
+            spyOn(msgService, 'showInfoToast');
 
             spyOn(authService, 'save');
 
             regInstCtrl.follow(regInstCtrl.institution.key);
 
-            expect(msgService.showToast).toHaveBeenCalled();
+            expect(msgService.showInfoToast).toHaveBeenCalledWith('Seguindo institution');
             expect(authService.save).toHaveBeenCalled();
             expect(instService.follow).toHaveBeenCalled();
 

@@ -45,9 +45,9 @@
             inviteInstHierCtrl.invite.admin_key = inviteInstHierCtrl.user.key;
             invite = new Invite(inviteInstHierCtrl.invite);
             if (!invite.isValid()) {
-                MessageService.showToast('Convite inválido!');
+                MessageService.showErrorToast('Convite inválido!');
             } else if(inviteInstHierCtrl.hasParent && invite.type_of_invite === INSTITUTION_PARENT) {
-                MessageService.showToast("Já possui instituição superior");
+                MessageService.showErrorToast("Já possui instituição superior");
             } else {
                 var suggestionInstName = inviteInstHierCtrl.invite.suggestion_institution_name;
                 promise = InstitutionService.searchInstitutions(suggestionInstName, INSTITUTION_STATE, 'institution');
@@ -100,7 +100,7 @@
                     }
                     deferred.resolve();
                     inviteInstHierCtrl.isLoadingSubmission = false;
-                    MessageService.showToast('Convite enviado com sucesso!');
+                    MessageService.showInfoToast('Convite enviado com sucesso!');
                 }, function error() {
                     deferred.reject();
                     inviteInstHierCtrl.isLoadingSubmission = false;
@@ -114,7 +114,7 @@
             var deferred = $q.defer();
             
             sendRequest(invite).then(function success() {
-                MessageService.showToast('Convite enviado com sucesso!');
+                MessageService.showInfoToast('Convite enviado com sucesso!');
                 addInviteToRequests(invite);
                 if (invite.type_of_invite === REQUEST_PARENT) {
                     addParentInstitution(institutionRequestedKey);
@@ -197,7 +197,7 @@
             if (inviteInstHierCtrl.isActive(institution)) {
                 inviteInstHierCtrl.goToInst(institution.key);
             } else {
-                MessageService.showToast("Institutição inativa!");
+                MessageService.showErrorToast("Institutição inativa!");
             }
         };
 
@@ -256,7 +256,7 @@
             var promise = $mdDialog.show(confirm);
             promise.then(function() {
                 InstitutionService.removeLink(inviteInstHierCtrl.institution.key, institution.key, isParent).then(function success() {
-                    MessageService.showToast('Conexão removida com sucesso');
+                    MessageService.showInfoToast('Conexão removida com sucesso');
                     if(isParent) {
                         inviteInstHierCtrl.hasParent = false;
                         inviteInstHierCtrl.institution.parent_institution = {};
@@ -265,7 +265,7 @@
                     }
                 });
             }, function() {
-                MessageService.showToast('Cancelado');
+                MessageService.showInfoToast('Cancelado');
             });
             return promise;
         };

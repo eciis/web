@@ -251,7 +251,7 @@
             spyOn(observerRecorderService, 'generate').and.returnValue(patch);
             spyOn(userService, 'save').and.returnValue(q.when());
             spyOn(authService, 'save');
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
 
             configCtrl._saveUser();
             scope.$apply();
@@ -259,15 +259,15 @@
             expect(observerRecorderService.generate).toHaveBeenCalled();
             expect(userService.save).toHaveBeenCalledWith(patch);
             expect(authService.save).toHaveBeenCalledWith();
-            expect(messageService.showToast).toHaveBeenCalledWith("Edição concluída com sucesso");
+            expect(messageService.showInfoToast).toHaveBeenCalledWith("Edição concluída com sucesso");
         });
 
         it("Should show a message when the user is invalid", function(){
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
             spyOn(configCtrl, '_saveImage').and.returnValue(Promise.resolve());
             spyOn(configCtrl.newUser, 'isValid').and.returnValue(false);
             configCtrl._saveUser().should.be.resolved;
-            expect(messageService.showToast).toHaveBeenCalledWith("Campos obrigatórios não preenchidos corretamente.");
+            expect(messageService.showErrorToast).toHaveBeenCalledWith("Campos obrigatórios não preenchidos corretamente.");
         });
     });
 

@@ -40,7 +40,7 @@
               ctrl.loading = false;
             }, e => {
               ctrl.loading = false;
-              MessageService.showToast(e);
+              MessageService.showErrorToast(e);
             })
           }
 
@@ -95,7 +95,7 @@
             if (ctrl.isCurrentStepValid()) {
               ctrl.currentStep += 1;
             } else {
-              MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+              MessageService.showErrorToast("Campos obrigatórios não preenchidos corretamente.");
             }
           }
 
@@ -149,10 +149,10 @@
                 return reloadAndRedirectHome();
               }).catch(e => {
                 ctrl.loading = false;
-                MessageService.showToast(e);
+                MessageService.showErrorToast(e);
               })
             } else {
-              MessageService.showToast("Campos obrigatórios não preenchidos corretamente.");
+              MessageService.showErrorToast("Campos obrigatórios não preenchidos corretamente.");
             }
           }
 

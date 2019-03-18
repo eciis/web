@@ -18,7 +18,7 @@
             if (emailExists) {
                 selectEmailsCtrl.selectedEmails.splice(index, 1);
             } else if (!selectEmailsCtrl.validateEmail(email)) {
-                MessageService.showToast("Não é possível selecionar esta opção. E-mail inválido.");
+                MessageService.showErrorToast("Não é possível selecionar esta opção. E-mail inválido.");
             } else {
                 selectEmailsCtrl.selectedEmails.push(email);
             }
@@ -54,13 +54,13 @@
                 if (!_.isEmpty(emails)) {
                     selectEmailsCtrl.sendUserInvite(emails);
                 } else {
-                    MessageService.showToast("E-mails selecionados já foram convidados, requisitaram ser membro ou pertencem a algum membro da instituição.");
+                    MessageService.showErrorToast("E-mails selecionados já foram convidados, requisitaram ser membro ou pertencem a algum membro da instituição.");
                 }
                 selectEmailsCtrl.closeDialog();
             } else if (selectEmailsCtrl.selectedEmails > MAX_EMAILS_QUANTITY) {
-                MessageService.showToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");
+                MessageService.showErrorToast("Limite máximo de " + MAX_EMAILS_QUANTITY + " e-mails selecionados excedido.");
             } else {
-                MessageService.showToast("Pelo menos um e-mail deve ser selecionado.");
+                MessageService.showErrorToast("Pelo menos um e-mail deve ser selecionado.");
             }
         };
 

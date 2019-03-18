@@ -16,7 +16,7 @@
             return AuthService.loginWithGoogle().then(function success() {
                 loginCtrl._redirectTo(redirectPath);
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -35,7 +35,7 @@
                     loginCtrl._redirectTo(redirectPath);
                 }
             ).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 

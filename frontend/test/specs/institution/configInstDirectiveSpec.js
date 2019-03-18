@@ -316,11 +316,11 @@ describe('Test ConfigInstDirective', function() {
             expect(editInstCtrl.steps).toEqual([false, false, true]);
         });
 
-        it('should call showToast', function() {
-            spyOn(messageService, 'showToast');
+        it('should call showErrorToast', function() {
+            spyOn(messageService, 'showErrorToast');
             editInstCtrl.newInstitution.address = {};
             editInstCtrl.nextStep();
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showErrorToast).toHaveBeenCalledWith('Campos obrigatórios não preenchidos corretamente.');
         });
 
         it('should not pass from first step', function() {

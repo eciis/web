@@ -114,7 +114,7 @@
                 configUser(userLoaded, firebaseUser);
                 deferred.resolve(userInfo);
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -160,7 +160,7 @@
                     deferred.resolve(userInfo);
                 });
             }).catch(function(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;
@@ -199,7 +199,7 @@
                 service.save();
                 deferred.resolve(userInfo);
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
                 deferred.reject(error);
             });
             return deferred.promise;

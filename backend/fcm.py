@@ -65,10 +65,15 @@ def send_push_notifications(data, tokens):
         tokens: The devices' tokens that will receive
         the notification.
     """
-    validate_object(data, ['title', 'body', 'click_action'])
+    validate_object(data, [
+      'title', 
+      'body_message', 
+      'click_action',
+      'type'
+    ])
 
     title = data['title']
-    body = data['body']
+    body = {'data': data['body_message'], 'type': data['type']}
     click_action = data['click_action']
     
     if tokens:

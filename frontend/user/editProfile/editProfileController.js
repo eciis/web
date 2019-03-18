@@ -44,13 +44,13 @@
                 if (!_.isEmpty(patch)) {
                     ProfileService.editProfile(patch)
                         .then(() => {
-                            MessageService.showToast('Perfil editado com sucesso');
+                            MessageService.showInfoToast('Perfil editado com sucesso');
                             AuthService.save();
                         });
                 }
                 $mdDialog.hide();
             } else {
-                MessageService.showToast('O cargo é obrigatório.');
+                MessageService.showErrorToast('O cargo é obrigatório.');
             }
         };
 

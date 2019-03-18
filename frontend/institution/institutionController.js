@@ -142,19 +142,19 @@
                 institutionCtrl.user.follow(institutionCtrl.institution);
                 institutionCtrl.isUserFollower = true;
                 AuthService.save();
-                MessageService.showToast("Seguindo "+ institutionCtrl.institution.name);
+                MessageService.showInfoToast("Seguindo "+ institutionCtrl.institution.name);
             });
             return promise;
         };
 
         institutionCtrl.unfollow = function unfollow() {
             if(institutionCtrl.user.isMember(institutionCtrl.institution.key)){
-                MessageService.showToast("Você não pode deixar de seguir " + institutionCtrl.institution.name);
+                MessageService.showErrorToast("Você não pode deixar de seguir " + institutionCtrl.institution.name);
             }
             else{
                 var promise = InstitutionService.unfollow(currentInstitutionKey);
                 promise.then(function success(){
-                    MessageService.showToast("Deixou de seguir "+institutionCtrl.institution.name);
+                    MessageService.showInfoToast("Deixou de seguir "+institutionCtrl.institution.name);
                     institutionCtrl.user.unfollow(institutionCtrl.institution);
                     institutionCtrl.isUserFollower = false;
                     AuthService.save();
@@ -339,7 +339,7 @@
                 institutionCtrl.file = null;
                 institutionCtrl.saveImage();
             }, function error(error) {
-                MessageService.showToast(error);
+                MessageService.showErrorToast(error);
             });
         };
 
@@ -349,7 +349,7 @@
                 ImageService.saveImage(institutionCtrl.cover_photo).then(function success(data) {
                     updateCoverImage(data);
                 }, function error(response) {
-                    MessageService.showToast(response.msg);
+                    MessageService.showErrorToast(response.msg);
                 });
             }
         };

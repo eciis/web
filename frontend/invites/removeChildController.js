@@ -29,7 +29,7 @@
                     AuthService.save();
                     removeChildFromParent();
                     removeChildCtrl.closeDialog();
-                    MessageService.showToast("Instituição removida com sucesso.");
+                    MessageService.showInfoToast("Instituição removida com sucesso.");
                 });
         };
     });

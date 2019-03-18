@@ -623,7 +623,7 @@
                     });
                 }
             }).catch(function(message) {
-                MessageService.showToast(message);
+                MessageService.showErrorToast(message);
                 return transition.router.stateService.target(STATES.ERROR, {
                     "msg": "Desculpa! Este recurso ainda não está disponível.",
                     "status": "403"

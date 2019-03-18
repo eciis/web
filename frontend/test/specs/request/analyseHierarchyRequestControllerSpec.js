@@ -66,7 +66,7 @@
             analyseHierReqCtrl = createCtrl(request);
             spyOn(requestInvitationService, 'acceptInstParentRequest').and.callFake(fakeCallback);
             spyOn(requestInvitationService, 'rejectInstParentRequest').and.callFake(fakeCallback);
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
         });
         
         describe('Test loadInstitutions', function () {
@@ -92,7 +92,7 @@
                 expect(requestInvitationService.rejectInstParentRequest).toHaveBeenCalledWith(request.key);
                 expect(request.status).toEqual('rejected');
                 expect(mdDialog.cancel).toHaveBeenCalled();
-                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
+                expect(messageService.showInfoToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
             });
         });
     });
@@ -104,7 +104,7 @@
             analyseHierReqCtrl = createCtrl(request);
             spyOn(requestInvitationService, 'acceptInstChildrenRequest').and.callFake(fakeCallback);
             spyOn(requestInvitationService, 'rejectInstChildrenRequest').and.callFake(fakeCallback);
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
         });
 
         describe('Test loadInstitutions', function () {
@@ -121,7 +121,7 @@
                 expect(requestInvitationService.rejectInstChildrenRequest).toHaveBeenCalledWith(request.key);
                 expect(request.status).toEqual('rejected');
                 expect(mdDialog.cancel).toHaveBeenCalled();
-                expect(messageService.showToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
+                expect(messageService.showInfoToast).toHaveBeenCalledWith('Solicitação rejeitada com sucesso');
             });
         });
 
@@ -140,7 +140,7 @@
                     expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
                     expect(request.status).toEqual('accepted');
                     expect(mdDialog.hide).toHaveBeenCalled();
-                    expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+                    expect(messageService.showInfoToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
                 });
             });
         });
@@ -174,7 +174,7 @@
                     expect(requestInvitationService.acceptInstChildrenRequest).toHaveBeenCalledWith(request.key);
                     expect(request.status).toEqual('accepted');
                     expect(mdDialog.hide).toHaveBeenCalled();
-                    expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+                    expect(messageService.showInfoToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
                 });
             });
         });
@@ -193,10 +193,10 @@
             expect(mdDialog.hide).toHaveBeenCalled();
         });
 
-        it('Should call MessageService.showToast', function() {
-            spyOn(messageService, 'showToast');
+        it('Should call MessageService.showInfoToast', function() {
+            spyOn(messageService, 'showInfoToast');
             analyseHierReqCtrl.close();
-            expect(messageService.showToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Solicitação aceita com sucesso');
         });
     });
 

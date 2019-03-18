@@ -43,7 +43,7 @@
         });
 
         it('Should be show error message', function(done) {
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showErrorToast');
             spyOn(manageTogglesServices, 'getAllFeatureToggles').and.callFake(function() {
                 return q.reject({
                     data: {
@@ -53,7 +53,7 @@
             });
 
             manageTogglesCtrl.$onInit().then(function() {
-                expect(messageService.showToast).toHaveBeenCalledWith('Request fail');
+                expect(messageService.showErrorToast).toHaveBeenCalledWith('Request fail');
                 done();
             });
 
@@ -72,7 +72,8 @@
 
     describe('Test save', function() {
         beforeEach(function() {
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
+            spyOn(messageService, 'showErrorToast');
         });
 
         it('Should be call messageService.saveFeature', function(done) {
@@ -86,7 +87,7 @@
             expect(feature.isLoading).toBeTruthy();            
             
             promise.then(function(response) {
-                expect(messageService.showToast).toHaveBeenCalledWith("Alterações salvas com sucesso.");
+                expect(messageService.showInfoToast).toHaveBeenCalledWith("Alterações salvas com sucesso.");
                 expect(manageTogglesServices.saveFeature).toHaveBeenCalledWith(feature);
                 expect(response).toEqual(feature);
                 expect(manageTogglesCtrl.isLoading).toBeFalsy();
@@ -110,7 +111,7 @@
             expect(feature.isLoading).toBeTruthy();            
             
             promise.then(function() {
-                expect(messageService.showToast).toHaveBeenCalledWith("Feature not found");
+                expect(messageService.showErrorToast).toHaveBeenCalledWith("Feature not found");
                 expect(manageTogglesCtrl.isLoading).toBeFalsy();
                 done();
             });

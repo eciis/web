@@ -153,7 +153,7 @@
             });
 
             spyOn(requestInvitationService, 'getRequest').and.callFake(callFake);
-            spyOn(messageService, 'showToast').and.callFake(callFake);  
+            spyOn(messageService, 'showInfoToast').and.callFake(callFake);  
             spyOn(requestCtrl, 'hideDialog').and.callFake(function() {});
         });
 
@@ -164,7 +164,7 @@
             requestCtrl.acceptRequest();
 
             expect(authService.getCurrentUser().permissions).toEqual(permissions);
-            expect(messageService.showToast).toHaveBeenCalledWith("Solicitação aceita!");
+            expect(messageService.showInfoToast).toHaveBeenCalledWith("Solicitação aceita!");
             expect(request.status).toEqual('accepted');
         });
     });
@@ -276,11 +276,11 @@
                     }
                 };
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             requestCtrl.children.parent_institution = {key: 'poaskdoad-OPAKSDOAP'};
             requestCtrl.confirmLinkRemoval();
 
-            expect(messageService.showToast).toHaveBeenCalled();
+            expect(messageService.showInfoToast).toHaveBeenCalled();
             expect(requestCtrl.children.parent_institution).toEqual(undefined);
         });
     });

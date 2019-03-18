@@ -103,7 +103,7 @@
                 spyOn(requestInvCtrl.currentUser.institutions_requested, 'push');
                 spyOn(mdDialog, 'hide').and.callFake(fakeCallback);
                 spyOn(authService, 'save').and.callFake(fakeCallback);
-                spyOn(messageService, 'showToast').and.callFake(fakeCallback);
+                spyOn(messageService, 'showInfoToast').and.callFake(fakeCallback);
                 promise = requestInvCtrl.sendRequest();
             });
 
@@ -128,9 +128,9 @@
                 });
             });
 
-            it('Should call MessageService.showToast()', function(done) {
+            it('Should call MessageService.showInfoToast()', function(done) {
                 promise.then(function() {
-                    expect(messageService.showToast).toHaveBeenCalledWith("Pedido enviado com sucesso!");
+                    expect(messageService.showInfoToast).toHaveBeenCalledWith("Pedido enviado com sucesso!");
                     done();
                 });
             });

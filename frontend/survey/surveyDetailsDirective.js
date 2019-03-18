@@ -67,11 +67,11 @@
                         surveyCtrl.reloadPost();
                     });
                 }, function() {
-                    MessageService.showToast('Cancelado');
+                    MessageService.showInfoToast('Cancelado');
                 });
                 return dialog;
             } else {
-                MessageService.showToast('Você precisa escolher alguma alternativa');
+                MessageService.showErrorToast('Você precisa escolher alguma alternativa');
             }         
         };
 
@@ -80,7 +80,7 @@
             promise.then(function sucess(response){
                 surveyCtrl.post = response;
                 addVote(surveyCtrl.optionsSelected);
-                MessageService.showToast('Voto computado');
+                MessageService.showInfoToast('Voto computado');
             });
             return promise;
         };

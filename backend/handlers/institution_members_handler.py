@@ -10,6 +10,7 @@ from utils import json_response
 from util import get_subject
 from service_messages import send_message_notification
 from send_email_hierarchy import RemoveMemberEmailSender
+from service_entities import enqueue_task
 
 from . import BaseHandler
 
@@ -70,3 +71,10 @@ class InstitutionMembersHandler(BaseHandler):
             'html': 'remove_member_email.html' if member.state != 'inactive' else 'inactive_user_email.html'
         })
         email_sender.send_email()
+
+
+        enqueue_task('send-push-notification', {
+            'type': 'DELETE_MEMBER',
+            'receivers': [member.key.urlsafe()],
+            'entity': institution.key.urlsafe()
+        })

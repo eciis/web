@@ -22,7 +22,7 @@
           });
         });
       }).catch(e => {
-        MessageService.showToast(e);
+        MessageService.showErrorToast(e);
         ctrl.pictureFile = null;
       });
     }

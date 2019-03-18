@@ -635,7 +635,7 @@
             spyOn(eventService, 'addFollower').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             postDetailsCtrl.post = new Post({
                 shared_event: new Event({followers: [], key: 'akaspo'})
             });
@@ -644,7 +644,7 @@
             scope.$apply();
 
             expect(eventService.addFollower).toHaveBeenCalledWith('akaspo');
-            expect(messageService.showToast).toHaveBeenCalledWith('Você receberá as atualizações desse evento.');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Você receberá as atualizações desse evento.');
             expect(postDetailsCtrl.post.shared_event.followers).toEqual([user.key]);
         });
     });
@@ -654,7 +654,7 @@
             spyOn(eventService, 'removeFollower').and.callFake(() => {
                 return q.when();
             });
-            spyOn(messageService, 'showToast');
+            spyOn(messageService, 'showInfoToast');
             postDetailsCtrl.post = new Post({
                 shared_event: new Event({ followers: [postDetailsCtrl.user.key], key:'aposkd' })
             });
@@ -663,7 +663,7 @@
             scope.$apply();
 
             expect(eventService.removeFollower).toHaveBeenCalledWith('aposkd');
-            expect(messageService.showToast).toHaveBeenCalledWith('Você não receberá as atualizações desse evento.');
+            expect(messageService.showInfoToast).toHaveBeenCalledWith('Você não receberá as atualizações desse evento.');
         });
     });
 

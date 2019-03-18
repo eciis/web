@@ -1212,3 +1212,7 @@ md-radio-group:not([disabled]) .md-primary.md-checked .md-off {
     max-height: 100%;
     overflow-y: auto;
 }
+
+side-menu {
+  z-index: 10;
+}

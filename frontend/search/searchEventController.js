@@ -55,8 +55,8 @@
                 let promise = searchCtrl.makeSearch(searchCtrl.search_keyword, 'event');
                 promise.then(() => {
                     searchCtrl.setupResultsInMobile();
+                    refreshPreviousKeyword();
                 });
-                refreshPreviousKeyword();
                 return promise;
             } else {
                 searchCtrl.setupResultsInMobile();

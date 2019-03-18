@@ -41,7 +41,7 @@ TEXT = 'At vero eos et accusamus et iusto odio dignissimos \
 features = [
     {
         "name": 'manage-inst-edit',
-        "enable_mobile": "DISABLED",
+        "enable_mobile": "ALL",
         "enable_desktop": "ALL",
         "translation_dict": {
             "pt-br": "Editar informações da instituição"

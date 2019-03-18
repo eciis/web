@@ -12,5 +12,5 @@
         </user-description>
         <md-divider></md-divider>
     </md-list-item>
-    <h2 class="contacts-list__no-contacts-msg" ng-show="!contactsListCtrl.contacts">Não há contatos online no momento.</h2>
+    <h2 class="contacts-list__no-contacts-msg" ng-show="contactsListCtrl.contacts.length === 0">Não há contatos online no momento.</h2>
 </md-list>

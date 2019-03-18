@@ -17,8 +17,7 @@
         });
 
     app.constant('WEBSOCKET', {
-      hostname: window.location.hostname,
-      port: 8090,
+      url: "ws://webchat-server-dot-development-cis.appspot.com/",
       maxRetries: 5,
     });
 

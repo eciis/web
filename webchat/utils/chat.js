@@ -25,14 +25,24 @@
         this.rpc.onicecandidate = e => this.emit('ice-candidate-discovered', e);
         this.sendChannel = this.rpc.createDataChannel('sendChannel');
         this.rpc.ondatachannel = this.handleDataChannel.bind(this);
-        this.rpc.ontrack = e => this.emit('track-received', e);
+        this.rpc.ontrack = this.handleTrack.bind(this);
         this.rpc.oniceconnectionstatechange = this.handleIceConnectionState.bind(this);
         this.rpc.onsignalingstatechange = this.handleState.bind(this);
         this._currentMessages = [];
+        this._remoteStream = {};
+        this._connectionState = "";
+      }
+
+      get remoteStream() {
+        return this._remoteStream;
       }
 
       get selfStream() {
         return this._selfStream;
+      }
+
+      get connectionState() {
+        return this._connectionState;
       }
 
       /**
@@ -114,7 +124,8 @@
        * @fires Chat#ice-connection-changed
        */
       handleIceConnectionState(ev) {
-        this.emit('ice-connection-changed', ev.target.iceConnectionState)
+        this._connectionState = ev.target.iceConnectionState;
+        this.emit('ice-connection-changed', ev.target.iceConnectionState);
       }
 
       /**
@@ -171,6 +182,7 @@
        * @param {Event} e - event which contains the stream object and its tracks.
        */
       handleTrack(e) {
+        this._remoteStream = e.streams[0];
         this.emit('track-received', e);
       }
 

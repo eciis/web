@@ -1,0 +1,4 @@
+<div class="chat-message__container" ng-class="{ 'chat-message--sent': chatMessageCtrl.messageSent() }">
+    <span class="chat-message__text">{{ chatMessageCtrl.messageObj.msg }}</span>
+    <span class="chat-message__time">{{ chatMessageCtrl.formattedTimestamp }}</span>
+</div>

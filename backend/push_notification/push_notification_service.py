@@ -100,8 +100,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Publicação curtida',
-            'body': 'Uma publicação de seu interesse foi curtida',
-            'click_action': url
+            'body_message': 'Uma publicação de seu interesse foi curtida',
+            'click_action': url,
+            'type': 'LIKE_POST'
         }
 
     def __get_comment_props(self):
@@ -117,8 +118,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Publicação comentada',
-            'body': 'Uma publicação do seu interesse foi comentada',
-            'click_action': url
+            'body_message': 'Uma publicação do seu interesse foi comentada',
+            'click_action': url,
+            'type': 'COMMENT'
         }
 
     def __get_invite_user_props(self):
@@ -129,8 +131,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Novo convite',
-            'body': 'Você recebeu um novo convite para ser membro de uma instituição',
-            'click_action': url
+            'body_message': 'Você recebeu um novo convite para ser membro de uma instituição',
+            'click_action': url,
+            'type': 'USER'
         }
 
     def __get_invite_user_adm_props(self):
@@ -141,8 +144,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Novo convite',
-            'body': 'Você recebeu um novo convite para ser administrador de uma instituição',
-            'click_action': url
+            'body_message': 'Você recebeu um novo convite para ser administrador de uma instituição',
+            'click_action': url,
+            'type': 'USER_ADM'
         }
 
     def __get_link_props(self):
@@ -153,8 +157,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Solicitação de vínculo',
-            'body': 'Uma instituição que você administra recebeu uma nova solicitação de vínculo',
-            'click_action': url
+            'body_message': 'Uma instituição que você administra recebeu uma nova solicitação de vínculo',
+            'click_action': url,
+            'type': 'LINK'
         }
     
     def __get_delete_member_props(self):
@@ -162,8 +167,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Remoção de vínculo',
-            'body': 'Você foi removido da instituição %s' %self.entity.name,
-            'click_action': url
+            'body_message': 'Você foi removido da instituição %s' %self.entity.name,
+            'click_action': url,
+            'type': 'DELETE_MEMBER'
         }
     
     def __get_remove_inst_link_props(self):
@@ -171,8 +177,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Remoção de vínculo',
-            'body': 'A instituição %s teve um de seus vínculos removidos' %self.entity.name,
-            'click_action': url
+            'body_message': 'A instituição %s teve um de seus vínculos removidos' %self.entity.name,
+            'click_action': url,
+            'type': 'REMOVE_INSTITUTION_LINK'
         }
 
     def __get_create_post_props(self):
@@ -180,8 +187,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Novo post criado',
-            'body': '%s criou um novo post' %self.entity.author.urlsafe(),
-            'click_action': url
+            'body_message': '%s criou um novo post' %self.entity.author.urlsafe(),
+            'click_action': url,
+            'type': 'CREATE_POST'
         }
     
     def __get_delete_post_props(self):
@@ -190,8 +198,9 @@ class NotificationProperties(object):
 
         return {
             'title': 'Post deletado',
-            'body': '%s deletou seu post' %admin_name,
-            'click_action': url
+            'body_message': '%s deletou seu post' %admin_name,
+            'click_action': url,
+            'type': 'DELETE_POST'
         }
     
     def __get_reply_comment_props(self):
@@ -199,49 +208,56 @@ class NotificationProperties(object):
 
         return {
             'title': 'Novo comentário',
-            'body': 'Seu comentário tem uma nova resposta',
-            'click_action': url
+            'body_message': 'Seu comentário tem uma nova resposta',
+            'click_action': url,
+            'type': 'REPLY_COMMENT'
         }
     
     def __get_deleted_user_props(self):
         return {
             'title': 'Usuário inativo',
-            'body': '%s não está mais ativo na plataforma' %self.entity.name,
-            'click_action': '/'
+            'body_message': '%s não está mais ativo na plataforma' %self.entity.name,
+            'click_action': '/',
+            'type': 'DELETED_USER'
         }
 
     def __get_left_institution_props(self):
         return {
             'title': 'Remoção de vínculo de membro',
-            'body': '%s removeu o vínculo com uma das instituições que você administra' %self.entity.name,
-            'click_action': '/'
+            'body_message': '%s removeu o vínculo com uma das instituições que você administra' %self.entity.name,
+            'click_action': '/',
+            'type': 'LEFT_INSTITUTION'
         }
     
     def __get_invite_props(self):
         url = '%s/new_invite' %self.entity.key.urlsafe()
         return {
             'title': 'Novo convite',
-            'body': 'Você tem um novo convite',
-            'click_action': url
+            'body_message': 'Você tem um novo convite',
+            'click_action': url,
+            'type': 'INVITE'
         }
     
     def __get_deleted_institution_props(self):
         return {
             'title': 'Instituição removida',
-            'body': 'A instituição %s foi removida' %self.entity.name,
-            'click_action': '/'
+            'body_message': 'A instituição %s foi removida' %self.entity.name,
+            'click_action': '/',
+            'type':'DELETED_INSTITUTION'
         }
     
     def __get_deleted_event_props(self):
         return {
             'title': 'Evento removido',
-            'body': 'O evento %s foi removido' %self.entity.title,
-            'click_action': '/'
+            'body_message': 'O evento %s foi removido' %self.entity.title,
+            'click_action': '/',
+            'type': 'DELETED_EVENT'
         }
     
     def __get_updated_event_props(self):
         return {
             'title': 'Evento editado',
-            'body': 'O evento %s foi editado' %self.entity.title,
-            'click_action': '/event/%s/details' %self.entity.key.urlsafe()
+            'body_message': 'O evento %s foi editado' %self.entity.title,
+            'click_action': '/event/%s/details' %self.entity.key.urlsafe(),
+            'type': 'UPDATED_EVENT'
         }

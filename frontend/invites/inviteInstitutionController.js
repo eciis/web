@@ -85,7 +85,8 @@
                 },
                 controller: 'SuggestInstitutionController',
                 controllerAs: 'suggestInstCtrl',
-                templateUrl: 'app/invites/existing_institutions.html',
+                templateUrl: Utils.selectFieldBasedOnScreenSize('app/invites/existing_institutions.html',
+                    'app/invites/existing_institutions_mobile.html', 475),
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true

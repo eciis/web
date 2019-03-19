@@ -91,6 +91,11 @@
       closeClient() {
         this.ws.onclose = () => {};
         this.ws.close();
+
+        // Closes all chats
+        Object.values(this.chats).forEach((chat) => {
+            chat.close();
+        });
       }
 
       /**

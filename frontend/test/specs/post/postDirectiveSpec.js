@@ -3,15 +3,16 @@
 (describe('Test PostDirective', function() {
     beforeEach(module('app'));
 
-    var postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
-    var user = {
+    let postCtrl, post, httpBackend, scope, deffered, mdDialog, rootScope, postService, mdToast, http, imageService;
+
+    let user = {
         name: 'name',
         current_institution: {key: "institutuion_key"},
         state: 'active',
         permissions: {}
     };
 
-    var options = [{'id' : 0,
+    let options = [{'id' : 0,
                     'text': 'Option number 1',
                     'number_votes': 0,
                     'voters': [] },
@@ -20,10 +21,16 @@
                     'number_votes': 0,
                     'voters': [] }];
 
-    var survey = { 'title' : 'The Survey',
+    let survey = { 'title' : 'The Survey',
                     'type_survey' : 'multiple_choice',
                     'options' : options
                     };
+
+    const saveForm = {
+        $invalid: false,
+        $setPristine: function() {},
+        $setUntouched: function() {}
+    }
 
     beforeEach(inject(function($controller, $httpBackend, HttpService, $q, $mdDialog,
             PostService, AuthService, $mdToast, $rootScope, ImageService) {
@@ -86,13 +93,13 @@
             post.title = undefined;
             postCtrl.post = new Post(post, {});
             var formInvalid = true;
-            expect(postCtrl.isValid(formInvalid)).toBeFalsy();
+            expect(postCtrl.isValid(postCtrl.post, formInvalid)).toBeFalsy();
         });
 
         it('should be valid', function() {
             postCtrl.post = new Post(post, {});
             var formInvalid = false;
-            expect(postCtrl.isValid(formInvalid)).toBeTruthy();
+            expect(postCtrl.isValid(postCtrl.post, formInvalid)).toBeTruthy();
         });
     });
 
@@ -101,6 +108,20 @@
             postCtrl.post = new Post(post, {});
             postCtrl.clearPost();
             expect(postCtrl.post).toEqual({});
+        });
+    });
+
+    describe('clearForm()', () => {
+        it('should call saveForm.$setPristine', () => {
+            spyOn(saveForm, '$setPristine');
+            postCtrl.clearForm(saveForm);
+            expect(saveForm.$setPristine).toHaveBeenCalled();
+        });
+
+        it('should call saveForm.$setUntouched', () => {
+            spyOn(saveForm, '$setUntouched');
+            postCtrl.clearForm(saveForm);
+            expect(saveForm.$setUntouched).toHaveBeenCalled();
         });
     });
 
@@ -130,7 +151,7 @@
             spyOn(postCtrl, 'clearPost');
             spyOn(mdDialog, 'hide');
             deffered.resolve(newPost);
-            postCtrl.createPost([]);
+            postCtrl.createPost(saveForm);
             scope.$apply();
             expect(postService.createPost).toHaveBeenCalledWith(newPost);
             expect(postCtrl.clearPost).toHaveBeenCalled();
@@ -140,7 +161,7 @@
 
         it('should not create a post when it is invalid', function() {
             postCtrl.post = {};
-            postCtrl.createPost();
+            postCtrl.createPost(saveForm);
             expect(postService.createPost).not.toHaveBeenCalled();
         });
     });
@@ -189,7 +210,7 @@
 
             var image = createImage(100);
             postCtrl.addImage(image);
-            postCtrl.createPost([]);
+            postCtrl.createPost(saveForm);
             scope.$apply();
 
             expect(postService.createPost).toHaveBeenCalled();

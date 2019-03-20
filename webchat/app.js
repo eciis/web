@@ -17,7 +17,7 @@
         });
 
     app.constant('WEBSOCKET', {
-      url: "ws://webchat-server-dot-development-cis.appspot.com/",
+      url: "wss://webchat-server-dot-development-cis.appspot.com/",
       maxRetries: 5,
     });
 

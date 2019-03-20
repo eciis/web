@@ -4,7 +4,7 @@
 
     app.controller("InviteInstitutionController", function InviteInstitutionController(
         InviteService, $state, AuthService, InstitutionService, RequestInvitationService,
-        STATES, $mdDialog, MessageService, EntityShowcase, STATE_LINKS) {
+        STATES, $mdDialog, MessageService, EntityShowcase, STATE_LINKS, SCREEN_SIZES) {
         var inviteInstCtrl = this;
 
         inviteInstCtrl.invite = {};
@@ -86,7 +86,7 @@
                 controller: 'SuggestInstitutionController',
                 controllerAs: 'suggestInstCtrl',
                 templateUrl: Utils.selectFieldBasedOnScreenSize('app/invites/existing_institutions.html',
-                    'app/invites/existing_institutions_mobile.html', 475),
+                    'app/invites/existing_institutions_mobile.html', SCREEN_SIZES.SMARTPHONE),
                 parent: angular.element(document.body),
                 targetEvent: ev,
                 clickOutsideToClose: true

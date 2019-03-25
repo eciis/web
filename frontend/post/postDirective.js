@@ -80,27 +80,15 @@
             });
         }
 
-        postCtrl.isValid = function isValid(formInvalid) {
-            if (postCtrl.user) {
-                var post;
-                if(!postCtrl.isEditing) {
-                    post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-                } else {
-                    post = postCtrl.post;
-                }
-                return post.isValid() && !formInvalid;
-            } else {
-                return false;
-            }
+        postCtrl.isValid = function isValid(post, formInvalid) {
+            return post.isValid() && !formInvalid;
         };
 
         postCtrl.save = function save(isEditing, originalPost, saveForm) {
-            saveForm.$setPristine();
-            saveForm.$setUntouched();
             if(isEditing) {
-                postCtrl.editPost(originalPost);
+                postCtrl.editPost(originalPost, saveForm);
             } else {
-                postCtrl.createPost();
+                postCtrl.createPost(saveForm);
             }
         };
 
@@ -193,11 +181,11 @@
             return deferred.promise;
         }
 
-        postCtrl.editPost = function editPost(originalPost) {
+        postCtrl.editPost = function editPost(originalPost, saveForm) {
             postCtrl.loadingPost = true;
             deleteImage(postCtrl.post).then(function success() {
                 postCtrl.loadingPost = false;
-                saveEditedPost(originalPost);
+                saveEditedPost(originalPost, saveForm);
             }, function error(error) {
                 postCtrl.loadingPost = false;
                 MessageService.showErrorToast(error);
@@ -220,14 +208,15 @@
             return deferred.promise;
         }
 
-        postCtrl.createPost = function createPost() {
+        postCtrl.createPost = function createPost(saveForm) {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(postCtrl.post, postCtrl.user.current_institution.key);
-                if (post.isValid()) {
+                if (postCtrl.isValid(post, saveForm.$invalid)) {
                     postCtrl.loadingPost = true;
                     PostService.createPost(post).then(function success(response) {
                         postCtrl.clearPost();
+                        postCtrl.clearForm(saveForm);
                         $rootScope.$emit(POST_EVENTS.NEW_POST_EVENT_TO_UP, new Post(response));
                         MessageService.showInfoToast('Postado com sucesso!');
                         changeTimelineToStart();
@@ -263,6 +252,13 @@
             postCtrl.hasVideo = false;
         };
 
+        postCtrl.clearForm = (saveForm) => {
+            if(saveForm) {
+                saveForm.$setPristine();
+                saveForm.$setUntouched();
+            }
+        };
+
         postCtrl.showVideo = function showVideo() {
             return postCtrl.post.title && postCtrl.post.video_url;
         };
@@ -281,15 +277,16 @@
             }
         };
 
-        function saveEditedPost(originalPost) {
+        function saveEditedPost(originalPost, saveForm) {
             var savePromises = [saveFiles(), saveImage()];
             $q.all(savePromises).then(function success() {
                 var post = new Post(originalPost, postCtrl.user.current_institution.key);
-                if (post.isValid()) {
+                if (postCtrl.isValid(post, saveForm.$invalid)) {
                     var patch = generatePatch(post, postCtrl.post);
                     PostService.save(postCtrl.post.key, patch).then(function success() {
                         deleteFiles().then(function success() {
                             postCtrl.deletedFiles = [];
+                            postCtrl.clearForm(saveForm);
                             MessageService.showInfoToast('Publicação editada com sucesso!');
                             $mdDialog.hide(postCtrl.post);
                         }, function error(response) {

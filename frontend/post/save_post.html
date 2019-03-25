@@ -28,7 +28,7 @@
                 <md-input-container ng-show="postCtrl.showVideoUrlField()" class="md-block" md-no-float>
                   <label>Link do Video</label>
                   <textarea class="create-post-textarea custom-scrollbar" ng-model="postCtrl.post.video_url"
-                    md-select-on-focus ng-pattern=postCtrl.videoRegex name="video">
+                    md-select-on-focus ng-pattern="postCtrl.videoRegex" name="video">
                   </textarea>
                   <div ng-messages="saveForm.video.$error">
                     <div ng-message="pattern">Link do Youtube inválido.</div>

@@ -202,6 +202,10 @@
         this._currentMessages.push(new ChatMessage(msgString));
       }
 
+      close() {
+        this.rpc.close();
+      }
+
       get currentMessages() {
         return this._currentMessages.sort((p, n) => p.timestamp - n.timestamp);
       }

@@ -1,0 +1,11 @@
+<md-dialog>
+    <gen-dialog title="{{suggestInstCtrl.titleMessage()}}" confirm-action="suggestInstCtrl.checkAndSendInvite">
+        <entity-showcase
+            ng-repeat="institution in suggestInstCtrl.institutions"
+            avatar="institution.photo_url"
+            title="institution.name"
+            subtitle="suggestInstCtrl.instStatusMessage(institution.admin, institution.state)"
+            ng-click="suggestInstCtrl.isActive(institution.state) && suggestInstCtrl.goToInstitution(institution.key)">
+        </entity-showcase>
+    </gen-dialog>
+</md-dialog>

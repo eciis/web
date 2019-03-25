@@ -1,0 +1,17 @@
+<div class="chat-body__messages-wrapper custom-scrollbar" scroll-glue="glued">
+    <div class="chat-body__messages-container " ng-show="!chatBodyCtrl.videoActive">
+        <span class="chat-body__info-message">Esta é uma conversa segura e não esta sendo gravada</span>
+        <chat-message
+                class="chat-body__message"
+                ng-repeat="message in chatBodyCtrl.messages"
+                message-obj="message">
+        </chat-message>
+    </div>
+</div>
+<div class="chat-body__video-container" ng-show="chatBodyCtrl.videoActive">
+    <div ng-show="chatBodyCtrl.remoteStream">
+        <video id="video-remote" autoplay></video>
+        <video id="video-selfie" autoplay muted></video>
+    </div>
+    <span class="chat-body__no-video-message" ng-show="!chatBodyCtrl.remoteStream">Nenhum vídeo está sendo recebido</span>
+</div>

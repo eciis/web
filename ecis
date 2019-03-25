@@ -18,12 +18,14 @@ BACKEND_YAML=backend/backend.yaml
 WORKER_YAML=backend/worker.yaml
 SUPPORT_YAML=support/support.yaml
 FEATURE_YAML=feature-toggles/feature.yaml
+WEBCHAT_YAML=webchat/webchat.yaml
 
 config_files=(
     "frontend/config.js"
     "support/config.js"
     "landing/config.js"
     "feature-toggles/config.js"
+    "webchat/config.js"
 );
 
 SW_FILE="frontend/sw.js"
@@ -156,7 +158,7 @@ case "$1" in
         fi
 
         $(gcloud beta emulators datastore env-init)
-        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=$emulator $other_parameter
+        dev_appserver.py $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML -A development-cis --support_datastore_emulator=$emulator $other_parameter
         $(gcloud beta emulators datastore env-unset)
     ;;
 
@@ -309,11 +311,11 @@ case "$1" in
             if [ ! -z $3 ]; then # Especified one or more yaml configuration files
                 gcloud app deploy --version $version --no-promote $3
             else
-                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML queue.yaml
+                gcloud app deploy --version $version --no-promote $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML queue.yaml
             fi
         else
             generate_config_file $ENV $APP_VERSION ${config_files[@]}
-            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WORKER_YAML
+            gcloud app deploy $APP_YAML $FRONTEND_YAML $BACKEND_YAML $SUPPORT_YAML $FEATURE_YAML $WEBCHAT_YAML $WORKER_YAML
         fi
 
         exit 0

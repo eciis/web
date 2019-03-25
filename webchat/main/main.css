@@ -1,0 +1,19 @@
+.main__container {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 64px calc(100% - 64px);
+    grid-template-areas:
+            'header'
+            'content';
+    animation-name: simple-fade-in;
+    animation-duration: 0.5s;
+}
+
+.main__header {
+    grid-area: header;
+}
+
+.main__content {
+    grid-area: content;
+}

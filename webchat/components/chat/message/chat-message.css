@@ -1,0 +1,29 @@
+.chat-message__container {
+    width: fit-content;
+    max-width: 60%;
+    padding: 5px 10px;
+    background: #FFFFFF;
+    margin: 2px 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-areas:
+        'text timestamp';
+}
+
+.chat-message__text {
+    grid-area: text;
+    word-break: break-word;
+}
+
+.chat-message__time {
+    grid-area: timestamp;
+    font-size: 0.8em;
+    align-self: flex-end;
+    margin: 0 10px;
+}
+
+.chat-message--sent {
+    margin-left: auto;
+}

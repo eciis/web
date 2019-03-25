@@ -1,0 +1,17 @@
+.chat-header__container {
+    display: grid;
+    grid-template-columns: auto max-content;
+    grid-template-areas:
+        'current-user video-buttons';
+    align-items: center;
+}
+
+.chat-header__current-user {
+    grid-area: current-user;
+    margin: 0 10px;
+    color: #EEEEEE;
+}
+
+.chat-header__buttons {
+    grid-area: video-buttons;
+}

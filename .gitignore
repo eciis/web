@@ -527,9 +527,11 @@ frontend/config.js
 support/config.js
 landing/config.js
 feature-toggles/config.js
+webchat/config.js
 
 frontend/firebase-config.js
 support/firebase-config.js
+webchat/firebase-config.js
 backend/firebase_config.py
 feature-toggles/firebase-config.js
 
@@ -550,3 +552,7 @@ backend/Pipfile
 frontend/test/package-lock.json
 frontend/test/yarn.lock
 feature-toggles/test/yarn.lock
+
+# Webchat tests
+webchat/test/package-lock.json
+frontend/test/yarn.lock

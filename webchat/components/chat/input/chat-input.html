@@ -1,0 +1,17 @@
+<div class="chat-input__container">
+    <p
+            ng-style='{color: chatInputCtrl.getStateStyle()}'
+            class="chat-input__connection-state">⬤</p>
+    <input
+            class="chat-input__text custom-input"
+            ng-model="chatInputCtrl.msg"
+            ng-keydown="$event.keyCode === 13 && chatInputCtrl.sendMessage()"
+            ng-disabled="chatInputCtrl.inputDisabled()"/>
+    <icon-button
+            class="chat-input__send-btn"
+            icon="send"
+            icon-color="#FFF"
+            action="chatInputCtrl.sendMessage"
+            disabled="chatInputCtrl.inputDisabled()">
+    </icon-button>
+</div>

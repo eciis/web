@@ -1,0 +1,14 @@
+<div class="home__content">
+    <contacts-sidenav class="home__sidenav" contacts="homeCtrl.contacts" open-chat="homeCtrl.openChat"></contacts-sidenav>
+    <ecis-chat
+            class="home__chat"
+            ng-if="homeCtrl.currentUser"
+            chat="homeCtrl.currentChat"
+            user="homeCtrl.currentUser"
+            call-func="homeCtrl.call"
+            state="homeCtrl.currentChat.connectionState"
+            selfie-stream="homeCtrl.currentChat.selfieStream"
+            remote-stream="homeCtrl.currentChat.remoteStream">
+    </ecis-chat>
+    <is-empty-card text="Nenhum chat selecionado no momento." ng-if="!homeCtrl.currentUser"></is-empty-card>
+</div>

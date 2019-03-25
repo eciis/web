@@ -1,0 +1,18 @@
+.custom-scrollbar::-webkit-scrollbar {
+    width: .3em;
+    height: .3em;
+}
+.custom-scrollbar::-webkit-scrollbar-button {
+    background: var(--custom-scrollbar-color);
+}
+.custom-scrollbar::-webkit-scrollbar-track-piece {
+    background: var(--custom-scrollbar-background);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--custom-scrollbar-color);
+}
+
+.custom-scrollbar {
+    scrollbar-color: #009688 #ccc;
+    scrollbar-width: thin;
+}

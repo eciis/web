@@ -1,0 +1,21 @@
+<div class="ecis-header md-toolbar-tools" layout-fill>
+    <icon-button
+            class="ecis-header__toggle-sidenav-btn hide-on-desktop"
+            icon="menu"
+            action="headerCtrl.toggleNavbar">
+    </icon-button>
+    <logo
+            class="ecis-header__logo">
+    </logo>
+    <user-description
+            class="ecis-header__current-user"
+            name="{{headerCtrl.user.name}}"
+            avatar="{{headerCtrl.user.photo_url}}"
+            text="{{headerCtrl.user.email[0]}}">
+    </user-description>
+    <icon-button
+            class="ecis-header__logout-btn"
+            icon="exit_to_app"
+            action="headerCtrl.logout">
+    </icon-button>
+</div>

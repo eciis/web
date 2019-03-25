@@ -7,6 +7,7 @@ config_local_list=(
     "http://localhost:8083"  #SUPPORT
     "http://localhost:8081"  #FRONTEND
     "http://localhost:8084"  #FEATURE
+    "http://localhost:8085"  #WEBCHAT
 );
 
 APP_DOMAIN="development-cis.appspot.com";
@@ -16,6 +17,7 @@ config_development_list=(
     "https://support-dot-$APP_DOMAIN"  #SUPPORT
     "https://frontend-dot-$APP_DOMAIN" #FRONTEND
     "https://feature-dot-$APP_DOMAIN"  #FEATURE
+    "https://webchat-dot-$APP_DOMAIN"  #WEBCHAT
 );
 
 APP_DOMAIN="plataformacis.org";
@@ -25,6 +27,7 @@ config_production_list=(
     "https://support.$APP_DOMAIN"                  #SUPPORT
     "https://frontend.$APP_DOMAIN"                 #FRONTEND
     "https://feature.$APP_DOMAIN"                  #FEATURE
+    "https://webchat.$APP_DOMAIN"                  #WEBCHAT
 );
 
 
@@ -42,7 +45,8 @@ var Config = {
     SUPPORT_URL: '$3',
     FRONTEND_URL: '$4',
     FEATURE_URL: '$5',
-    APP_VERSION: '$6'
+    WEBCHAT_URL: '$6',
+    APP_VERSION: '$7'
 };"
 
     echo "$config"
